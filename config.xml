@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson>
+  <disabledAdministrativeMonitors>
+    <string>jenkins.security.s2m.MasterKillSwitchWarning</string>
+  </disabledAdministrativeMonitors>
+  <version>1.642.1</version>
+  <numExecutors>2</numExecutors>
+  <mode>NORMAL</mode>
+  <useSecurity>true</useSecurity>
+  <authorizationStrategy class="hudson.security.AuthorizationStrategy$Unsecured"/>
+  <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
+    <domain>corp.audiocodes.com</domain>
+    <bindName>aws</bindName>
+    <bindPassword>LtIaoEeo43Scvla9clarOi/9mJwKcO3oJXlEpqc71P4=</bindPassword>
+    <server>aclads01:3269</server>
+    <groupLookupStrategy>AUTO</groupLookupStrategy>
+    <removeIrrelevantGroups>false</removeIrrelevantGroups>
+  </securityRealm>
+  <disableRememberMe>false</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
+  <workspaceDir>${ITEM_ROOTDIR}/workspace</workspaceDir>
+  <buildsDir>${ITEM_ROOTDIR}/builds</buildsDir>
+  <systemMessage> </systemMessage>
+  <markupFormatter class="hudson.markup.EscapedMarkupFormatter"/>
+  <jdks/>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds>
+    <com.nirima.jenkins.plugins.docker.DockerCloud plugin="docker-plugin@0.16.1-SNAPSHOT">
+      <name>DockerAC</name>
+      <templates>
+        <com.nirima.jenkins.plugins.docker.DockerTemplate>
+          <configVersion>2</configVersion>
+          <labelString>test_centos:java7</labelString>
+          <launcher class="com.nirima.jenkins.plugins.docker.launcher.DockerComputerSSHLauncher">
+            <sshConnector plugin="ssh-slaves@1.10">
+              <port>22</port>
+              <credentialsId>c1afc0c0-8ae7-4cfd-ac86-5f295ed013df</credentialsId>
+              <jvmOptions></jvmOptions>
+              <javaPath></javaPath>
+              <maxNumRetries>0</maxNumRetries>
+              <retryWaitTime>0</retryWaitTime>
+            </sshConnector>
+          </launcher>
+          <remoteFsMapping></remoteFsMapping>
+          <remoteFs>/home/jenkins</remoteFs>
+          <instanceCap>1</instanceCap>
+          <mode>NORMAL</mode>
+          <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
+          <numExecutors>1</numExecutors>
+          <dockerTemplateBase>
+            <image>arm-centos67-mariadb-activemq:1.1</image>
+            <dockerCommand>/root/start.sh</dockerCommand>
+            <lxcConfString></lxcConfString>
+            <hostname></hostname>
+            <dnsHosts/>
+            <volumes/>
+            <volumesFrom2/>
+            <environment/>
+            <bindPorts></bindPorts>
+            <bindAllPorts>false</bindAllPorts>
+            <privileged>false</privileged>
+            <tty>true</tty>
+            <extraHosts class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
+              <c class="list"/>
+              <list reference="../c"/>
+            </extraHosts>
+          </dockerTemplateBase>
+          <removeVolumes>true</removeVolumes>
+          <pullStrategy>PULL_LATEST</pullStrategy>
+        </com.nirima.jenkins.plugins.docker.DockerTemplate>
+      </templates>
+      <serverUrl>http://172.16.142.165:4243</serverUrl>
+      <connectTimeout>0</connectTimeout>
+      <readTimeout>0</readTimeout>
+      <credentialsId></credentialsId>
+      <containerCap>100</containerCap>
+    </com.nirima.jenkins.plugins.docker.DockerCloud>
+    <hudson.plugins.ec2.EC2Cloud plugin="ec2@1.31">
+      <name>ec2-AC_Cloud</name>
+      <useInstanceProfileForCredentials>false</useInstanceProfileForCredentials>
+      <accessId>AKIAJ6M6EXVNV7RMGJZQ</accessId>
+      <secretKey>5sTAiNNaR6A4LlvMVNPzTBkikYRCG8rRetSVJ4Ee4Kq5dYo9KvKfS4LDWbtGU0+Xi8I9fdK6XDlGuVg2ROO/EA==</secretKey>
+      <privateKey>
+        <privateKey>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</privateKey>
+      </privateKey>
+      <instanceCap>5</instanceCap>
+      <templates>
+        <hudson.plugins.ec2.SlaveTemplate>
+          <ami>ami-e23bda8d</ami>
+          <description>build slave for ARM project</description>
+          <zone>eu-central-1b</zone>
+          <securityGroups>Apps-Basic-SG</securityGroups>
+          <remoteFS>/home/centos/jenkinsslave</remoteFS>
+          <type>M4Large</type>
+          <ebsOptimized>true</ebsOptimized>
+          <labels>arm-build</labels>
+          <mode>EXCLUSIVE</mode>
+          <initScript></initScript>
+          <tmpDir></tmpDir>
+          <userData></userData>
+          <numExecutors>1</numExecutors>
+          <remoteAdmin>centos</remoteAdmin>
+          <jvmopts></jvmopts>
+          <subnetId>subnet-05e4727e</subnetId>
+          <idleTerminationMinutes>30</idleTerminationMinutes>
+          <iamInstanceProfile></iamInstanceProfile>
+          <useEphemeralDevices>false</useEphemeralDevices>
+          <customDeviceMapping></customDeviceMapping>
+          <instanceCap>5</instanceCap>
+          <stopOnTerminate>true</stopOnTerminate>
+          <tags>
+            <hudson.plugins.ec2.EC2Tag>
+              <name>Name</name>
+              <value>arm-build-dynamic-slave</value>
+            </hudson.plugins.ec2.EC2Tag>
+          </tags>
+          <usePrivateDnsName>false</usePrivateDnsName>
+          <associatePublicIp>false</associatePublicIp>
+          <useDedicatedTenancy>false</useDedicatedTenancy>
+          <amiType class="hudson.plugins.ec2.UnixData">
+            <rootCommandPrefix></rootCommandPrefix>
+            <sshPort>22</sshPort>
+          </amiType>
+          <launchTimeout>2147483647</launchTimeout>
+          <connectBySSHProcess>false</connectBySSHProcess>
+          <connectUsingPublicIp>false</connectUsingPublicIp>
+        </hudson.plugins.ec2.SlaveTemplate>
+      </templates>
+      <region>eu-central-1</region>
+    </hudson.plugins.ec2.EC2Cloud>
+  </clouds>
+  <quietPeriod>5</quietPeriod>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
+  <views>
+    <hudson.model.AllView>
+      <owner class="hudson" reference="../../.."/>
+      <name>All</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>ARM</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>armBackup</string>
+        <string>armBuildArm</string>
+        <string>armBuildarm-frontend</string>
+        <string>armBuildARM-UI</string>
+        <string>armBuildArm_master</string>
+        <string>armBuildVMs</string>
+        <string>armNightSanity</string>
+        <string>armPromoteVersion</string>
+        <string>armReleaseSanity</string>
+        <string>armReviewArm</string>
+        <string>armReviewarm-frontend</string>
+        <string>armReviewARM-UI</string>
+        <string>armReviewARMLicense</string>
+        <string>armReviewArmOracleLicense</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+    </listView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>IPPhone</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
+        <string>ippBuild_promoteVersion</string>
+        <string>ippBuildIPPhone</string>
+        <string>ippBuildIPPhone_multijob</string>
+        <string>ippCompileIPPhone</string>
+        <string>IPPhone_420HD</string>
+        <string>IPPhone_420HD_freestyle</string>
+        <string>IPPhone_420HD_getVersion</string>
+        <string>IPPhone_420HD_incVersion</string>
+        <string>IPPhone_Lync</string>
+        <string>IPPhone_NonLync</string>
+        <string>ippReviewIPPhone</string>
+        <string>ippReviewIPPhone_multijob</string>
+        <string>ippReviewIPPhone_OLD</string>
+        <string>IPPTEST</string>
+        <string>IPPTEST_2</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+    </listView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>tests</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>buildCalculator</string>
+        <string>echo123</string>
+        <string>testCppUnitTest</string>
+        <string>testDockerBuildStepPlugin</string>
+        <string>testParallelBuild</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+    </listView>
+  </views>
+  <primaryView>All</primaryView>
+  <slaveAgentPort>0</slaveAgentPort>
+  <label></label>
+  <nodeProperties/>
+  <globalNodeProperties/>
+  <noUsageStatistics>true</noUsageStatistics>
+</hudson>
