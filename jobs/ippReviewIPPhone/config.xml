@@ -112,7 +112,7 @@ sonar.analysis.mode=preview
 sonar.cxx.cppcheck.reportPath=cppcheck.xml
 sonar.report.export.path=sonar-report.json</properties>
       <javaOpts></javaOpts>
-      <additionalArguments></additionalArguments>
+      <additionalArguments>-X</additionalArguments>
       <jdk>(Inherit From Job)</jdk>
       <task></task>
     </hudson.plugins.sonar.SonarRunnerBuilder>
@@ -163,7 +163,7 @@ sonar.report.export.path=sonar-report.json</properties>
       </subJobConfigs>
       <severity>MINOR</severity>
       <changedLinesOnly>false</changedLinesOnly>
-      <newIssuesOnly>false</newIssuesOnly>
+      <newIssuesOnly>true</newIssuesOnly>
       <noIssuesToPostText>SonarQube violations have not been found.</noIssuesToPostText>
       <someIssuesToPostText>&lt;total_count&gt; SonarQube violations have been found.</someIssuesToPostText>
       <issueComment>&lt;severity&gt; SonarQube violation:
