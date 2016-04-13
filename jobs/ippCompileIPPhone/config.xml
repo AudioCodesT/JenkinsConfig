@@ -89,10 +89,8 @@
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 make auto AUTOPRD=$AUTOPRD FIRMWARE=ce4 LOG=0
-if [ $LOG == 0 ]; then
-  make binary;
-  make SUBVERSION=dummy;
-fi</command>
+make SUBVERSION=dummy;
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
