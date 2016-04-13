@@ -90,6 +90,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
+  <combinationFilter>!(AUTOPRD==&quot;405&quot; &amp;&amp; FIRMWARE==&quot;ec7&quot;) || !(LOG==&quot;1&quot; &amp;&amp; FIRMWARE==&quot;ec7&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
@@ -107,7 +108,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD FIRMWARE=ce4 LOG=$LOG
+make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
   make SUBVERSION=dummy;
@@ -149,7 +150,7 @@ fi</command>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img*=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}_${LOG}_build.tgz
+${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/${AUTOPRD}_${IPP_VER}_${FIRMWARE}_${LOG}_build.tgz
 ${WORKSPACE}/build/image/*$AUTOPRD*.bin*=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 </deployPattern>
       <resolvePattern></resolvePattern>
