@@ -74,7 +74,9 @@ git config --global user.email devops@audiocodes.com
 message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
 #git push origin master
-git push origin ${GERRIT_BRANCH}</command>
+git push origin ${GERRIT_BRANCH}
+
+# add logic to add tag</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
