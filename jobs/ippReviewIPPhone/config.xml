@@ -96,9 +96,9 @@ cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFi
     <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.3">
       <project></project>
       <properties># Required metadata
-sonar.projectKey=com.ac.ipp.new
-sonar.projectName=ipp13
-sonar.projectVersion=1.13
+sonar.projectKey=com.ac.ipp
+sonar.projectName=ipp
+sonar.projectVersion=1.0
 
 # Comma-separated paths to directories with sources (required)
 #sonar.sources=src/apps/pltool/main.c
@@ -112,7 +112,7 @@ sonar.analysis.mode=preview
 sonar.cxx.cppcheck.reportPath=cppcheck.xml
 sonar.report.export.path=sonar-report.json</properties>
       <javaOpts></javaOpts>
-      <additionalArguments>-X</additionalArguments>
+      <additionalArguments></additionalArguments>
       <jdk>(Inherit From Job)</jdk>
       <task></task>
     </hudson.plugins.sonar.SonarRunnerBuilder>
