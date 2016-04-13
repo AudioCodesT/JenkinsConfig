@@ -52,7 +52,7 @@
     </extensions>
   </scm>
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
-  <assignedNode>ipp</assignedNode>
+  <assignedNode>ipp_centos6</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -65,12 +65,21 @@
       <values>
         <string>405</string>
         <string>420HD</string>
+        <string>430HD</string>
+        <string>440HD</string>
+      </values>
+    </hudson.matrix.TextAxis>
+    <hudson.matrix.TextAxis>
+      <name>LOG</name>
+      <values>
+        <string>0</string>
+        <string>1</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp</string>
+        <string>ipp_centos6</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
