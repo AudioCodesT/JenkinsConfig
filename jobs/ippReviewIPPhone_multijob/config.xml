@@ -90,7 +90,7 @@
           <jobName>ippCompileIPPhone</jobName>
           <currParams>true</currParams>
           <exposedSCM>false</exposedSCM>
-          <disableJob>true</disableJob>
+          <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
@@ -102,7 +102,7 @@
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
-      <continuationCondition>SUCCESSFUL</continuationCondition>
+      <continuationCondition>COMPLETED</continuationCondition>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>Review Code</phaseName>
@@ -123,7 +123,7 @@
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
-      <continuationCondition>SUCCESSFUL</continuationCondition>
+      <continuationCondition>COMPLETED</continuationCondition>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
   </builders>
   <publishers/>
