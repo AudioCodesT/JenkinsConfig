@@ -61,7 +61,7 @@
     </extensions>
   </scm>
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
-  <assignedNode>ipp_centos6</assignedNode>
+  <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -95,11 +95,11 @@
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp_centos6</string>
+        <string>ipp-build</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(AUTOPRD==&quot;405&quot; &amp;&amp; FIRMWARE==&quot;ec7&quot;) &amp;&amp; !(LOG==&quot;1&quot; &amp;&amp; FIRMWARE==&quot;ec7&quot;)</combinationFilter>
+  <combinationFilter>!(AUTOPRD==&quot;405&quot; &amp;&amp; FIRMWARE==&quot;ec7&quot;) || !(LOG==&quot;1&quot; &amp;&amp; FIRMWARE==&quot;ec7&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
