@@ -97,7 +97,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(AUTOPRD==&quot;405&quot; &amp;&amp; FIRMWARE==&quot;ce7&quot;) || !(LOG==&quot;1&quot; &amp;&amp; FIRMWARE==&quot;ce7&quot;)</combinationFilter>
+  <combinationFilter>!(AUTOPRD==&quot;405&quot; &amp;&amp; FIRMWARE==&quot;ce7&quot;) &amp;&amp; !(LOG==&quot;1&quot; &amp;&amp; FIRMWARE==&quot;ce7&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
