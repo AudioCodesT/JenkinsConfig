@@ -56,6 +56,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="arm*">
         <permissions>
@@ -78,7 +79,9 @@
           <permission>hudson.model.Item.Build</permission>
           <permission>hudson.model.Item.Workspace</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>CI_ARM_developers</sid>
+        </assignedSIDs>
       </role>
     </roleMap>
   </authorizationStrategy>
