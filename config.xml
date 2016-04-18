@@ -11,48 +11,41 @@
     <roleMap type="globalRoles">
       <role name="admin" pattern=".*">
         <permissions>
-          <permission>hudson.model.Run.Artifacts</permission>
           <permission>hudson.scm.SCM.Tag</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Delete</permission>
           <permission>hudson.model.View.Delete</permission>
           <permission>hudson.model.Computer.Disconnect</permission>
-          <permission>hudson.model.Item.ExtendedRead</permission>
           <permission>hudson.model.Computer.Configure</permission>
           <permission>hudson.model.Run.Replay</permission>
           <permission>hudson.model.Item.Configure</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>hudson.model.View.Create</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.PushToBintray</permission>
-          <permission>hudson.model.View.Read</permission>
           <permission>hudson.model.Run.Delete</permission>
+          <permission>hudson.model.View.Read</permission>
           <permission>hudson.model.Hudson.UploadPlugins</permission>
-          <permission>hudson.model.Item.WipeOut</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>hudson.model.Computer.Connect</permission>
-          <permission>hudson.model.Computer.ExtendedRead</permission>
           <permission>hudson.model.Item.Discover</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Create</permission>
           <permission>hudson.model.Hudson.Read</permission>
-          <permission>hudson.model.Item.Delete</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
+          <permission>hudson.model.Item.Delete</permission>
           <permission>hudson.model.View.Configure</permission>
-          <permission>hudson.model.Hudson.ConfigureUpdateCenter</permission>
           <permission>hudson.model.Item.Release</permission>
-          <permission>org.jenkinsci.plugins.envinject.EnvInjectPlugin.ViewVars</permission>
+          <permission>hudson.model.Hudson.ConfigureUpdateCenter</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains</permission>
           <permission>hudson.model.Item.Move</permission>
           <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Hudson.Administer</permission>
-          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.UseItem</permission>
           <permission>hudson.model.Computer.Delete</permission>
           <permission>hudson.model.Hudson.RunScripts</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.Promote</permission>
-          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.UseOwn</permission>
           <permission>hudson.model.Computer.Create</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
-          <permission>hudson.model.Item.Build</permission>
           <permission>hudson.model.Item.Create</permission>
+          <permission>hudson.model.Item.Build</permission>
           <permission>hudson.model.Computer.Build</permission>
           <permission>hudson.model.Item.Cancel</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
@@ -61,6 +54,31 @@
         <assignedSIDs>
           <sid>amoss</sid>
         </assignedSIDs>
+      </role>
+    </roleMap>
+    <roleMap type="projectRoles">
+      <role name="ARM_DEV" pattern="ARM*">
+        <permissions>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
+      <role name="ARM_MANAGE" pattern="ARM*">
+        <permissions>
+          <permission>hudson.scm.SCM.Tag</permission>
+          <permission>hudson.model.Item.Release</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
+          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
+        </permissions>
+        <assignedSIDs/>
       </role>
     </roleMap>
   </authorizationStrategy>
