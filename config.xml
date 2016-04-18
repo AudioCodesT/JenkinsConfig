@@ -13,7 +13,9 @@
         <permissions>
           <permission>hudson.model.Hudson.Read</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>anonymous</sid>
+        </assignedSIDs>
       </role>
       <role name="admin" pattern=".*">
         <permissions>
@@ -65,6 +67,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="arm*">
         <permissions>
