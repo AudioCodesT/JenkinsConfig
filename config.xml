@@ -53,25 +53,12 @@
         </permissions>
         <assignedSIDs>
           <sid>amoss</sid>
-          <sid>natanm</sid>
           <sid>haggaip</sid>
+          <sid>natanm</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
-      <role name="natanm" pattern=".*">
-        <permissions>
-          <permission>hudson.model.Hudson.Administer</permission>
-        </permissions>
-        <assignedSIDs/>
-      </role>
-      <role name="shukyr" pattern=".*">
-        <permissions>
-          <permission>hudson.model.Hudson.Administer</permission>
-        </permissions>
-        <assignedSIDs/>
-      </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="arm*">
         <permissions>
