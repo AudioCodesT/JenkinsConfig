@@ -9,6 +9,12 @@
   <useSecurity>true</useSecurity>
   <authorizationStrategy class="com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy">
     <roleMap type="globalRoles">
+      <role name="ReadOnly" pattern=".*">
+        <permissions>
+          <permission>hudson.model.Hudson.Read</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
       <role name="admin" pattern=".*">
         <permissions>
           <permission>hudson.scm.SCM.Tag</permission>
@@ -53,8 +59,8 @@
         </permissions>
         <assignedSIDs>
           <sid>amoss</sid>
-          <sid>haggaip</sid>
           <sid>natanm</sid>
+          <sid>haggaip</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
