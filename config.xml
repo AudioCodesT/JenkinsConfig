@@ -63,7 +63,6 @@
           <sid>amoss</sid>
           <sid>natanm</sid>
           <sid>haggaip</sid>
-          <sid>shukyr</sid>
         </assignedSIDs>
       </role>
     </roleMap>
@@ -82,7 +81,9 @@
           <permission>hudson.model.Item.Workspace</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>CI_ARM_admins</sid>
+        </assignedSIDs>
       </role>
       <role name="ARM_DEVELOPERS" pattern="arm*">
         <permissions>
