@@ -61,13 +61,13 @@
         </permissions>
         <assignedSIDs>
           <sid>amoss</sid>
-          <sid>haggaip</sid>
           <sid>natanm</sid>
+          <sid>haggaip</sid>
         </assignedSIDs>
       </role>
     </roleMap>
     <roleMap type="projectRoles">
-      <role name="ARM_ADMINS" pattern="arm*">
+      <role name="ARM_ADMINS" pattern="(arm.*)">
         <permissions>
           <permission>hudson.scm.SCM.Tag</permission>
           <permission>hudson.model.Item.Release</permission>
