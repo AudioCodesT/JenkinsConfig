@@ -61,8 +61,8 @@
         </permissions>
         <assignedSIDs>
           <sid>amoss</sid>
-          <sid>natanm</sid>
           <sid>haggaip</sid>
+          <sid>natanm</sid>
         </assignedSIDs>
       </role>
     </roleMap>
@@ -87,7 +87,7 @@
           <sid>CI_ARM_admins</sid>
         </assignedSIDs>
       </role>
-      <role name="ARM_DEVELOPERS" pattern="arm*">
+      <role name="ARM_DEVELOPERS" pattern="(arm.*)">
         <permissions>
           <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Build</permission>
