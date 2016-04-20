@@ -62,8 +62,8 @@
         <assignedSIDs>
           <sid>yossim</sid>
           <sid>amoss</sid>
-          <sid>haggaip</sid>
           <sid>natanm</sid>
+          <sid>haggaip</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
@@ -106,7 +106,11 @@
         </assignedSIDs>
       </role>
       <role name="CI_IPP_DEVELOPERS" pattern="(ipp.*)">
-        <permissions/>
+        <permissions>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+        </permissions>
         <assignedSIDs>
           <sid>CI_IPP_developers</sid>
         </assignedSIDs>
