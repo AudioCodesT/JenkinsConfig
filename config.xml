@@ -62,8 +62,8 @@
         <assignedSIDs>
           <sid>yossim</sid>
           <sid>amoss</sid>
-          <sid>natanm</sid>
           <sid>haggaip</sid>
+          <sid>natanm</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
@@ -100,7 +100,21 @@
         </assignedSIDs>
       </role>
       <role name="CI_IPP_ADMINS" pattern="(ipp.*)">
-        <permissions/>
+        <permissions>
+          <permission>hudson.scm.SCM.Tag</permission>
+          <permission>hudson.model.Item.Release</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
+          <permission>hudson.model.Item.Create</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>hudson.model.Item.Configure</permission>
+          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
+        </permissions>
         <assignedSIDs>
           <sid>CI_IPP_admins</sid>
         </assignedSIDs>
