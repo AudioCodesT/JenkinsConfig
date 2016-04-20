@@ -43,7 +43,7 @@
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
     </extensions>
   </scm>
-  <assignedNode>ipp_centos6</assignedNode>
+  <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -101,8 +101,6 @@ git push origin ${GERRIT_BRANCH}
           <updateTag>false</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
-      <branchesToPush/>
-      <notesToPush/>
     </hudson.plugins.git.GitPublisher>
   </publishers>
   <buildWrappers/>
