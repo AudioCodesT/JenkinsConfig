@@ -45,7 +45,7 @@
   </scm>
   <assignedNode>ipp_centos6</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -101,6 +101,8 @@ git push origin ${GERRIT_BRANCH}
           <updateTag>false</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
+      <branchesToPush/>
+      <notesToPush/>
     </hudson.plugins.git.GitPublisher>
   </publishers>
   <buildWrappers/>
