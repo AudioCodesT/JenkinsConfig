@@ -53,7 +53,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>git checkout ${GERRIT_BRANCH}
-git pull</command>
+#git pull</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
