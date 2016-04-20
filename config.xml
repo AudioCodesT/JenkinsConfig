@@ -62,12 +62,13 @@
         <assignedSIDs>
           <sid>yossim</sid>
           <sid>amoss</sid>
-          <sid>haggaip</sid>
           <sid>natanm</sid>
+          <sid>haggaip</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="(arm.*)">
         <permissions>
@@ -101,11 +102,15 @@
       </role>
       <role name="CI_IPP_ADMINS" pattern="(ipp.*)">
         <permissions/>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>CI_IPP_admins</sid>
+        </assignedSIDs>
       </role>
       <role name="CI_IPP_DEVELOPERS" pattern="(ipp.*)">
         <permissions/>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>CI_IPP_developers</sid>
+        </assignedSIDs>
       </role>
     </roleMap>
   </authorizationStrategy>
