@@ -53,7 +53,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>git checkout ${GERRIT_BRANCH}
-#git pull</command>
+git pull</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
@@ -82,10 +82,8 @@ git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
 message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
-#git push origin master
 git push origin ${GERRIT_BRANCH}
-
-# add logic to add tag</command>
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -103,8 +101,6 @@ git push origin ${GERRIT_BRANCH}
           <updateTag>false</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
-      <branchesToPush/>
-      <notesToPush/>
     </hudson.plugins.git.GitPublisher>
   </publishers>
   <buildWrappers/>
