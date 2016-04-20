@@ -43,7 +43,7 @@
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
     </extensions>
   </scm>
-  <assignedNode>ipp-build</assignedNode>
+  <assignedNode>ipp_centos6</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -53,7 +53,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>git checkout ${GERRIT_BRANCH}
-#git pull</command>
+git pull</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
