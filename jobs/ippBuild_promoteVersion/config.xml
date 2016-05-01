@@ -66,7 +66,8 @@ mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped</command>
       <command># Get majoe and monir versions
 IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
-echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties</command>
+echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
+git tag $IPP_VER</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
@@ -92,15 +93,6 @@ git push origin ${GERRIT_BRANCH}
       <pushMerge>false</pushMerge>
       <pushOnlyIfSuccess>false</pushOnlyIfSuccess>
       <forcePush>false</forcePush>
-      <tagsToPush>
-        <hudson.plugins.git.GitPublisher_-TagToPush>
-          <targetRepoName>origin</targetRepoName>
-          <tagName>ipp-${IPP_VER}</tagName>
-          <tagMessage>automatic tag by Jenkins</tagMessage>
-          <createTag>true</createTag>
-          <updateTag>true</updateTag>
-        </hudson.plugins.git.GitPublisher_-TagToPush>
-      </tagsToPush>
     </hudson.plugins.git.GitPublisher>
   </publishers>
   <buildWrappers/>
