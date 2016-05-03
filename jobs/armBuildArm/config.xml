@@ -57,8 +57,8 @@
           <pattern>ARM/Arm</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -129,7 +129,7 @@
           </logTexts>
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | awk &apos;{print $2}&apos;); do kill -9 $pid; done&#xd;
+          <script>for pid in $(ps -ef | grep surefire | grep -v grep | awk &apos;{print }&apos;); do kill -9 $pid; done&#xd;
 </script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
