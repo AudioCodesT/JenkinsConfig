@@ -130,7 +130,7 @@
           </logTexts>
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | awk &apos;{print &apos;$2&apos;}&apos;); do kill -9 $pid; done&#xd;
+          <script>for pid in $(ps -ef | grep surefire | grep -v grep | awk &apos;{print &quot;$2&quot;}&apos;); do kill -9 $pid; done&#xd;
 </script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
