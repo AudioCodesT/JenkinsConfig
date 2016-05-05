@@ -84,7 +84,7 @@ git config --global user.email devops@audiocodes.com
 message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
 git push origin ${GERRIT_BRANCH}
-git push origin ${IPP_VER}
+#git push origin ${IPP_VER}
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -92,13 +92,13 @@ git push origin ${IPP_VER}
     <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
       <configVersion>2</configVersion>
       <pushMerge>false</pushMerge>
-      <pushOnlyIfSuccess>false</pushOnlyIfSuccess>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
       <forcePush>false</forcePush>
       <tagsToPush>
         <hudson.plugins.git.GitPublisher_-TagToPush>
           <targetRepoName>origin</targetRepoName>
           <tagName>${IPP_VER}</tagName>
-          <tagMessage>${IPP_VER}</tagMessage>
+          <tagMessage>Jenkins automating tag</tagMessage>
           <createTag>true</createTag>
           <updateTag>true</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
