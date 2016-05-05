@@ -36,8 +36,7 @@
   </axes>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>&#xd;
-AtaExec.tcl</command>
+      <command>tclsh AtaExec -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.56.img</command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers/>
