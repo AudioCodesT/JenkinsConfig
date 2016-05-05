@@ -126,13 +126,7 @@
       <continuationCondition>COMPLETED</continuationCondition>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
   </builders>
-  <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>shuky.riechard@audiocodes.com</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
   <pollSubjobs>false</pollSubjobs>
 </com.tikal.jenkins.plugins.multijob.MultiJobProject>
