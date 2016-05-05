@@ -94,6 +94,15 @@ git push origin ${IPP_VER}
       <pushMerge>false</pushMerge>
       <pushOnlyIfSuccess>false</pushOnlyIfSuccess>
       <forcePush>false</forcePush>
+      <tagsToPush>
+        <hudson.plugins.git.GitPublisher_-TagToPush>
+          <targetRepoName>origin</targetRepoName>
+          <tagName>${IPP_VER}</tagName>
+          <tagMessage>${IPP_VER}</tagMessage>
+          <createTag>true</createTag>
+          <updateTag>true</updateTag>
+        </hudson.plugins.git.GitPublisher_-TagToPush>
+      </tagsToPush>
     </hudson.plugins.git.GitPublisher>
   </publishers>
   <buildWrappers/>
