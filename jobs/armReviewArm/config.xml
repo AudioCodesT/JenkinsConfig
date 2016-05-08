@@ -131,7 +131,7 @@
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
           <script>#for pid in $(ps -ef | grep surefire | grep -v grep | awk &apos;{print }&apos;); do kill -9 $pid; done&#xd;
-for pid in $(ps -ef | grep surefire | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
+for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
