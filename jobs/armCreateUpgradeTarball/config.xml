@@ -91,8 +91,8 @@ cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/RoutingManager/RoutingManage
 #copy whtchdog file
 cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/Watchdog/watchdog.pl .
 #copy conversions folder
-mkdir /home
-mkdir /home/upgrade
+mkdir home
+mkdir home/upgrade
 cp -R ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/src/main/resources/upgrade/conversions home/upgrade/
 
 #create tar.gz
