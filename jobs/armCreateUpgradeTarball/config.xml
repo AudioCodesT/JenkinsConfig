@@ -43,7 +43,52 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#run the script that collect all files and creates tarball</command>
+      <command>#run the script that collect all files and creates tarball
+#!/bin/sh
+#This script purpose is to create an Upgrade tarball from a given version
+
+#verify argument was provided
+if [ $# -eq 0 ]
+  then
+    echo &quot;Please supply Version Name (e.g. 7.0.21.0)&quot;  &gt;&amp;3
+	exit
+fi
+
+# set logger ###############
+exec 3&gt;&amp;1 4&gt;&amp;2
+trap &apos;exec 2&gt;&amp;4 1&gt;&amp;3&apos; 0 1 2 3
+exec 1&gt;aws_createUpgradeTarball_log.out 2&gt;&amp;1
+# Everything below will go to the file &apos;aws_createUpgradeTarball_log.out&apos;:
+
+VERSION_NAME=$1
+
+# Artifactory location
+artifactoryServer=https://artifactory
+artifactoryRepo=libs-release-local
+
+mkdir upgrade
+cd upgrade
+#download all 4 war files
+wars=( TopologyManagement RoutingManager arm-frontend ARM-UI )
+for i in &quot;${wars[@]}&quot;
+do
+	url=$artifactoryServer/$artifactoryRepo/com/ac/arm/$i/$VERSION_NAME/$i-$VERSION_NAME.war
+	wget --no-check-certificate $url
+done
+#copy upgrade.pl file from common folder
+cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl .
+#copy perl files
+cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/RoutingManager/RoutingManager/src/main/resources/configurationProperties/*.pl .
+#copy whtchdog file
+cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/Watchdog/watchdog.p
+#copy conversions folder
+mkdir /home
+mkdir /home/upgrade
+cp -R ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/src/main/resources/upgrade/conversions home/upgrade/
+
+#create tar.gz
+tar czf upgrade_$VERSION_NAME.tar.gz *
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
