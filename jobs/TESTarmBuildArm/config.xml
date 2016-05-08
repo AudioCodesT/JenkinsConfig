@@ -106,7 +106,7 @@
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>cobertura:cobertura -Dcobertura.report.format=xml</goals>
-      <mavenOpts></mavenOpts>
+      <mavenOpts>-XX:MaxPermSize=2048m</mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
   </builders>
   <publishers/>
