@@ -222,10 +222,7 @@
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>DEPLOY/ARM-UI*.war=&gt;com/ac/arm/ARM-UI/${UI_VERSION}/
-latest.txt=&gt;com/ac/arm/ARM-UI
-
-ArmCommon/**/</deployPattern>
+      <deployPattern>**/common-7.0.jar=&gt;com/ac/arm/common/7.0-latest/</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
