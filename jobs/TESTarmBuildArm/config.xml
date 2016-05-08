@@ -108,6 +108,9 @@
       <goals>cobertura:cobertura -Dcobertura.report.format=xml</goals>
       <mavenOpts>-XX:MaxPermSize=2048m</mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
+    <hudson.tasks.Shell>
+      <command>cp ArmCommon/Common/target/*.jar common-7.0.jar</command>
+    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
@@ -193,7 +196,7 @@
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>ext-release-local</keyFromSelect>
+          <keyFromSelect>libs-release-local</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -219,7 +222,10 @@
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern></deployPattern>
+      <deployPattern>DEPLOY/ARM-UI*.war=&gt;com/ac/arm/ARM-UI/${UI_VERSION}/
+latest.txt=&gt;com/ac/arm/ARM-UI
+
+ArmCommon/**/</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
