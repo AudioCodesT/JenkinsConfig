@@ -57,11 +57,11 @@
 #This script purpose is to create an Upgrade tarball from a given version
 
 #verify argument was provided
-if [ $# -eq 0 ]
-  then
-    echo &quot;Please supply Version Name (e.g. 7.0.21.0)&quot;  &gt;&amp;3
-	exit
-fi
+#if [ $# -eq 0 ]
+#  then
+#    echo &quot;Please supply Version Name (e.g. 7.0.21.0)&quot;  &gt;&amp;3
+#	exit
+#fi
 
 # set logger ###############
 exec 3&gt;&amp;1 4&gt;&amp;2
@@ -69,7 +69,7 @@ trap &apos;exec 2&gt;&amp;4 1&gt;&amp;3&apos; 0 1 2 3
 exec 1&gt;aws_createUpgradeTarball_log.out 2&gt;&amp;1
 # Everything below will go to the file &apos;aws_createUpgradeTarball_log.out&apos;:
 
-VERSION_NAME=$1
+#VERSION_NAME=$1
 
 # Artifactory location
 artifactoryServer=https://artifactory
