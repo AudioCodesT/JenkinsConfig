@@ -97,5 +97,22 @@
   <concurrentBuild>true</concurrentBuild>
   <builders/>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@1.92.1">
+      <info>
+        <propertiesContent>artifactory_username=admin</propertiesContent>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@1.92.1">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>Fu716nR7gMphn+wlAcoezYvCPX3Sulw5RrlYNkTjvxA=</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
 </project>
