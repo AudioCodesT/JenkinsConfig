@@ -95,7 +95,14 @@
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
-  <builders/>
+  <builders>
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+      <mavenName>Maven_v325</mavenName>
+      <rootPom>pom.xml</rootPom>
+      <goals>clean releaser:release</goals>
+      <mavenOpts>-XX:MaxPermSize=2048m</mavenOpts>
+    </org.jfrog.hudson.maven3.Maven3Builder>
+  </builders>
   <publishers/>
   <buildWrappers>
     <EnvInjectBuildWrapper plugin="envinject@1.92.1">
