@@ -109,7 +109,7 @@
       <mavenOpts>-XX:MaxPermSize=2048m</mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
-      <command>cp ArmCommon/Common/target/*.jar common-7.0.jar</command>
+      <command>if [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.0.jar; fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
