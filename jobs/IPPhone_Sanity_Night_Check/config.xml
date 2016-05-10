@@ -24,7 +24,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>open(&quot;http://ippauto/index.php/status/show.xml&quot;).read.include?(&apos;&lt;status&gt;free&lt;/status&gt;&apos;)</command>
+      <command>free=`curl -s http://ippauto/index.php/status/show.xml  | grep \&lt;status\&gt;free\&lt;/status\&gt;`</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
