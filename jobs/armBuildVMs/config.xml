@@ -87,5 +87,8 @@ sh -x aws_buildRouterVM.sh $VERSION_NAME</command>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <multiConfProject>false</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+      <template>#${BUILD_NUMBER}___${ENV,var=&quot;VERSION_NAME&quot;}</template>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>
