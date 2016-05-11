@@ -34,7 +34,8 @@ available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note th
       <command>c:&#xd;
 cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
 dir Resources\Firmwares\UC430HD_3.0.0.65.img&#xd;
-pwd&#xd;
+set&#xd;
+echo %USERNAME%&#xd;
 tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img</command>
     </hudson.tasks.BatchFile>
   </builders>
