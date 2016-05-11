@@ -55,6 +55,11 @@ git bundle create Arm.bundle-$NOW --all
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>devops@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <jenkins.plugins.publish__over__cifs.CifsPublisherPlugin plugin="publish-over-cifs@0.3">
       <consolePrefix>CIFS: </consolePrefix>
       <delegate>
