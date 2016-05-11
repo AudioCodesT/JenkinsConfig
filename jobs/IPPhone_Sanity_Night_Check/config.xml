@@ -5,26 +5,36 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
-      <useBuildBlocker>false</useBuildBlocker>
+      <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs>IPPhone_Sanity_Night_Build</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.37">
+      <projectNameList/>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
+  <scmCheckoutRetryCount>2</scmCheckoutRetryCount>
   <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <disabled>true</disabled>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H 22 * * 1-5</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>free=`curl -s http://ippauto/index.php/status/show.xml  | grep \&lt;status\&gt;free\&lt;/status\&gt;`</command>
+      <command>if [ `curl -s http://ippauto/index.php/status/show.xml  | grep \&lt;status\&gt;free\&lt;/status\&gt;` ]; then
+  echo &quot;Copy from artifactory to \\isr0214-34401\firmwares&quot;
+fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
