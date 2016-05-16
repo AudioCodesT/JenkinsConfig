@@ -108,13 +108,8 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cp /home/centos/jenkinsslave/ARM-UI-build.xml .</command>
+      <command>grunt dist</command>
     </hudson.tasks.Shell>
-    <hudson.tasks.Ant plugin="ant@1.2">
-      <targets></targets>
-      <antName>ant1.9.4</antName>
-      <buildFile>ARM-UI-build.xml</buildFile>
-    </hudson.tasks.Ant>
   </builders>
   <publishers/>
   <buildWrappers/>
