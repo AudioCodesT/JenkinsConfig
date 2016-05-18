@@ -99,10 +99,10 @@ cp -R $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/conversions home/up
 
 #create ComponentVersions.txt
 cd $WORKSPACE
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: RoutingManager&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
+V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: RoutingManager&quot; |sed -r &apos;s/^.*RoutingManager-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;RoutingManager=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
 
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: TopologyManagement&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
+V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: TopologyManagement&quot; |sed -r &apos;s/^.*TopologyManagement-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;TopologyManager=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
 
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
@@ -112,10 +112,10 @@ git clone ssh://jenkins@gerrit:29418/ARM/arm-frontend.git
 git clone ssh://jenkins@gerrit:29418/ARM/ARM-UI.git
 
 cd $WORKSPACE/arm-frontend
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
+V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;arm-frontend=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
 cd $WORKSPACE/ARM-UI
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
+V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;ARM-UI=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
 
 
