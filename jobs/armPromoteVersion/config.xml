@@ -99,7 +99,8 @@
   <buildWrappers/>
   <prebuilders>
     <hudson.tasks.Shell>
-      <command>git checkout master
+      <command>if [ ${#VERSION_NAME} != 6  ]; then echo &quot;Version pattern muat be 7.0.XX&quot;; exit 1; fi
+git checkout master
 git pull --rebase</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Maven>
