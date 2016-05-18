@@ -23,7 +23,12 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
+  <rootModule>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>sonar-gerrit</artifactId>
+  </rootModule>
   <rootPOM>sonar-gerrit-plugin-sonar-gerrit-1.0.6/pom.xml</rootPOM>
+  <defaultGoals>install</defaultGoals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <localRepository class="hudson.maven.local_repo.PerJobLocalRepositoryLocator"/>
