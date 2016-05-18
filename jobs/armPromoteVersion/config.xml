@@ -100,7 +100,7 @@
   <prebuilders>
     <hudson.tasks.Shell>
       <command>git checkout master
-git pull</command>
+git pull --rebase</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Maven>
       <targets>versions:set -DnewVersion=$VERSION_NAME versions:commit</targets>
