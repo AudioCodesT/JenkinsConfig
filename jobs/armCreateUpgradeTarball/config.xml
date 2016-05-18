@@ -84,6 +84,11 @@ do
 	wget --no-check-certificate $url
 done
 
+mv TopologyManagement-*.war ARM.war
+mv RoutingManager-*.war RoutingManager.war
+mv ARM-UI-*.war ARM-UI.war
+mv arm-frontend-*.war arm-frontend.war
+
 #copy upgrade.pl file from common folder
 cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl .
 #copy perl files
