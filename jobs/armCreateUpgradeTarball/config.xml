@@ -95,13 +95,14 @@ mkdir /home/upgrade
 cp -R ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/src/main/resources/upgrade/conversions home/upgrade/
 
 #create ComponentVersions.txt
-cd ~/jenkinsslave/workspace/armCreateUpgradeTarball/RoutingManager
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
+cd ~/jenkinsslave/workspace/armCreateUpgradeTarball/
+
+V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: RoutingManager&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;RoutingManager=$V&quot; &gt;&gt; ~/jenkinsslave/workspace/armCreateUpgradeTarball/upgrade/ComponentVersions.txt
-cd ~/jenkinsslave/workspace/armCreateUpgradeTarball/TopologyManager
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
+
+V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: TopologyManagement&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;TopologyManager=$V&quot; &gt;&gt; ~/jenkinsslave/workspace/armCreateUpgradeTarball/upgrade/ComponentVersions.txt
-cd ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon
+
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
 echo &quot;ArmCommon=$V&quot; &gt;&gt; ~/jenkinsslave/workspace/armCreateUpgradeTarball/upgrade/ComponentVersions.txt
 
