@@ -101,7 +101,7 @@
     <artifactId>RouteTestModule</artifactId>
   </rootModule>
   <rootPOM>RouterTestModule/pom.xml</rootPOM>
-  <goals>clean install</goals>
+  <goals>clean install -Dmaven.test.skip=true</goals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <ignoreUpstremChanges>true</ignoreUpstremChanges>
