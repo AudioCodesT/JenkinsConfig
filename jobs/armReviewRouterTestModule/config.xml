@@ -97,12 +97,11 @@
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <rootModule>
-    <groupId>com.ac.arm</groupId>
-    <artifactId>arm-reactor</artifactId>
+    <groupId>com.ac.rtm</groupId>
+    <artifactId>RouteTestModule</artifactId>
   </rootModule>
   <rootPOM>RouterTestModule/pom.xml</rootPOM>
   <goals>clean install</goals>
-  <defaultGoals>package</defaultGoals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <ignoreUpstremChanges>true</ignoreUpstremChanges>
