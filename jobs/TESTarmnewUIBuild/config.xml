@@ -42,7 +42,8 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cp ${WORKSPACE}/TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
+      <command>cp -v ${WORKSPACE}/.bowerrc ${WORKSPACE}/
+cp -v ${WORKSPACE}/TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 grunt dist</command>
     </hudson.tasks.Shell>
   </builders>
