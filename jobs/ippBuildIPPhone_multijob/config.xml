@@ -124,7 +124,7 @@
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>yossim</recipients>
+      <recipients>yossim,$GERRIT_CHANGE_OWNER_EMAIL,$GERRIT_PATCHSET_UPLOADER_EMAIL </recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
