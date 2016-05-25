@@ -96,6 +96,11 @@
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#if commit&apos;s files are only VMFiles then no need to compile or test. just exit job successfully 
+git diff-tree --no-commit-id --name-only -r $GERRIT_PATCHSET_REVISION |grep -v &apos;ArmCommon/Common/VMFiles&apos; || exit 0
+</command>
+    </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
