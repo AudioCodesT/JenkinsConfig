@@ -74,8 +74,18 @@ exec 1&gt;aws_createUpgradeTarball_log.out 2&gt;&amp;1
 artifactoryServer=https://artifactory
 artifactoryRepo=libs-release-local
 
-mkdir upgrade
-cd upgrade
+#create folders: tarFolder/home/upgrade
+if [ ! -d &quot;tarFolder&quot; ]; then
+	mkdir tarFolder
+fi
+if [ ! -d &quot;tarFolder/home&quot; ]; then
+	mkdir tarFolder/home
+fi
+if [ ! -d &quot;tarFolder/home/upgrade&quot; ]; then
+	mkdir tarFolder/home/upgrade
+fi
+cd tarFolder/home/upgrade
+
 #download all 4 war files
 wars=( TopologyManagement RoutingManager arm-frontend ARM-UI )
 for i in &quot;${wars[@]}&quot;
@@ -84,48 +94,42 @@ do
 	wget --no-check-certificate $url
 done
 
+#rename war files to a VM war name (not the same as in artifactory)
 mv TopologyManagement-*.war ARM.war
 mv RoutingManager-*.war RoutingManager.war
 mv ARM-UI-*.war ARM-UI.war
 mv arm-frontend-*.war arm-frontend.war
 
 #copy upgrade.pl file from common folder
-cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl .
+cp $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl .
 #copy perl files
-cp ~/jenkinsslave/workspace/armCreateUpgradeTarball/ArmCommon/Common/VMFiles/Router/usr/local/bin/*.pl .
+cp $WORKSPACE/ArmCommon/Common/VMFiles/Router/usr/local/bin/*.pl .
 #copy conversions folder
-if [ ! -d &quot;home&quot; ]; then
-	mkdir home
-fi
-if [ ! -d &quot;home/upgrade&quot; ]; then
-	mkdir home/upgrade
-fi
-cp -R $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/conversions home/upgrade/
+cp -R $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/conversions .
 
 #create ComponentVersions.txt
 cd $WORKSPACE
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: RoutingManager&quot; |sed -r &apos;s/^.*RoutingManager-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;RoutingManager=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
+echo &quot;RoutingManager=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/home/upgrade/ComponentVersions.txt
 
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: TopologyManagement&quot; |sed -r &apos;s/^.*TopologyManagement-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;TopologyManager=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
+echo &quot;TopologyManager=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/home/upgrade/ComponentVersions.txt
 
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;ArmCommon=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
+echo &quot;ArmCommon=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/home/upgrade/ComponentVersions.txt
 
 git clone ssh://jenkins@gerrit:29418/ARM/arm-frontend.git
 git clone ssh://jenkins@gerrit:29418/ARM/ARM-UI.git
 
 cd $WORKSPACE/arm-frontend
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;arm-frontend=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
+echo &quot;arm-frontend=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/home/upgrade/ComponentVersions.txt
 cd $WORKSPACE/ARM-UI
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;ARM-UI=$V&quot; &gt;&gt; $WORKSPACE/upgrade/ComponentVersions.txt
-
+echo &quot;ARM-UI=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/home/upgrade/ComponentVersions.txt
 
 #create tar.gz
-cd $WORKSPACE/upgrade
+cd $WORKSPACE/tarFolder
 tar czf upgrade_$VERSION_NAME.tar.gz *
 
 rm -rf $WORKSPACE/arm-frontend
