@@ -140,7 +140,8 @@
   </buildWrappers>
   <prebuilders>
     <hudson.tasks.Shell>
-      <command>git diff-tree --no-commit-id --name-only -r $GERRIT_PATCHSET_REVISION |grep -v &apos;ArmCommon/Common/VMFiles&apos; || exit 0
+      <command>#if commit&apos;s files are only VMFiles then no need to compile or test. just exit job successfully 
+git diff-tree --no-commit-id --name-only -r $GERRIT_PATCHSET_REVISION |grep -v &apos;ArmCommon/Common/VMFiles&apos; || exit 0
 </command>
     </hudson.tasks.Shell>
   </prebuilders>
