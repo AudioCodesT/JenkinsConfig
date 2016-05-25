@@ -130,7 +130,7 @@ echo &quot;ARM-UI=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/home/upgrade/ComponentV
 
 #create tar.gz
 cd $WORKSPACE/tarFolder
-tar czf upgrade_$VERSION_NAME_fixed.tar.gz *
+tar czf upgrade_$VERSION_NAME.tar.gz *
 
 rm -rf $WORKSPACE/arm-frontend
 rm -rf $WORKSPACE/ARM-UI</command>
@@ -170,7 +170,7 @@ rm -rf $WORKSPACE/ARM-UI</command>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>tarFolder/upgrade_$VERSION_NAME_fixed.tar.gz=&gt;com/ac/arm/upgrade/$VERSION_NAME/
+      <deployPattern>tarFolder/upgrade_$VERSION_NAME.tar.gz=&gt;com/ac/arm/upgrade/$VERSION_NAME/
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
