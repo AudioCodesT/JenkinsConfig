@@ -74,10 +74,11 @@ exec 1&gt;aws_createUpgradeTarball_log.out 2&gt;&amp;1
 artifactoryServer=https://artifactory
 artifactoryRepo=libs-release-local
 
-#create folders: /home/upgrade
-if [ ! -d &quot;/home/upgrade&quot; ]; then
-	echo -e &quot;\n&quot;|sudo -S mkdir /home/upgrade
+#create folder: tarFolder
+if [ ! -d &quot;tarFolder&quot; ]; then
+	mkdir tarFolder
 fi
+cd tarFolder
 
 #download all 4 war files
 wars=( TopologyManagement RoutingManager arm-frontend ARM-UI )
@@ -93,42 +94,40 @@ mv RoutingManager-*.war RoutingManager.war
 mv ARM-UI-*.war ARM-UI.war
 mv arm-frontend-*.war arm-frontend.war
 
-echo -e &quot;\n&quot;|sudo -S cp *.war /home/upgrade
-
 #copy upgrade.pl file from common folder
-echo -e &quot;\n&quot;|sudo -S cp $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl /home/upgrade
+cp $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl .
 #copy perl files
-echo -e &quot;\n&quot;|sudo -S cp $WORKSPACE/ArmCommon/Common/VMFiles/Router/usr/local/bin/*.pl /home/upgrade
+cp $WORKSPACE/ArmCommon/Common/VMFiles/Router/usr/local/bin/*.pl .
 #copy conversions folder
-echo -e &quot;\n&quot;|sudo -S cp -R $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/conversions /home/upgrade
+cp -R $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/conversions .
 
 #create ComponentVersions.txt
+cd $WORKSPACE
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: RoutingManager&quot; |sed -r &apos;s/^.*RoutingManager-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo -e &quot;\n&quot;|sudo -S echo &quot;RoutingManager=$V&quot; &gt;&gt; /home/upgrade/ComponentVersions.txt
+echo &quot;RoutingManager=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
 
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: TopologyManagement&quot; |sed -r &apos;s/^.*TopologyManagement-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo -e &quot;\n&quot;|sudo -S echo &quot;TopologyManager=$V&quot; &gt;&gt; /home/upgrade/ComponentVersions.txt
+echo &quot;TopologyManager=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
 
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo -e &quot;\n&quot;|sudo -S echo &quot;ArmCommon=$V&quot; &gt;&gt; /home/upgrade/ComponentVersions.txt
+echo &quot;ArmCommon=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
 
 git clone ssh://jenkins@gerrit:29418/ARM/arm-frontend.git
 git clone ssh://jenkins@gerrit:29418/ARM/ARM-UI.git
 
 cd $WORKSPACE/arm-frontend
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo -e &quot;\n&quot;|sudo -S echo &quot;arm-frontend=$V&quot; &gt;&gt; /home/upgrade/ComponentVersions.txt
+echo &quot;arm-frontend=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
 cd $WORKSPACE/ARM-UI
 V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo -e &quot;\n&quot;|sudo -S echo &quot;ARM-UI=$V&quot; &gt;&gt; /home/upgrade/ComponentVersions.txt
+echo &quot;ARM-UI=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
 
 #create tar.gz
-cd $WORKSPACE
-echo -e &quot;\n&quot;|sudo -S tar czfP upgrade_$VERSION_NAME.tar.gz /home/upgrade
+cd $WORKSPACE/tarFolder
+tar czf upgrade_$VERSION_NAME.tar.gz *
 
 rm -rf $WORKSPACE/arm-frontend
-rm -rf $WORKSPACE/ARM-UI
-</command>
+rm -rf $WORKSPACE/ARM-UI</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
