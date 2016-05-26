@@ -26,8 +26,8 @@
     <hudson.tasks.Shell>
       <command>echo &quot;this is build step 1: touch temp&quot;
 touch temp
-echo &quot;now i am going to exit 0&quot;
-exit 0</command>
+echo &quot;now i am going to stop job&quot;
+curl $BUILD_URL</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>echo &quot;this is build step 2 - should not be execute&quot;</command>
@@ -37,13 +37,13 @@ exit 0</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token></token>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.FileExistsCondition" plugin="run-condition@1.0">
+            <file>temp</file>
+            <baseDir class="org.jenkins_ci.plugins.run_condition.common.BaseDirectory$Workspace"/>
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-              <recipientList>shukyr
-</recipientList>
+              <recipientList>shuky.riechard@audiocodes.com</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
                   <email>
