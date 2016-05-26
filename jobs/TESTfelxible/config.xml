@@ -43,7 +43,8 @@ exit 0</command>
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-              <recipientList>$DEFAULT_RECIPIENTS</recipientList>
+              <recipientList>shukyr
+</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
                   <email>
@@ -61,9 +62,11 @@ exit 0</command>
                   </email>
                 </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
               </configuredTriggers>
-              <contentType>default</contentType>
-              <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
-              <defaultContent>$DEFAULT_CONTENT</defaultContent>
+              <contentType>text/html</contentType>
+              <defaultSubject>Notification: changes in VMFiles</defaultSubject>
+              <defaultContent>A new commit was pushed to Arm repository.
+modified files are:
+...</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <attachBuildLog>false</attachBuildLog>
