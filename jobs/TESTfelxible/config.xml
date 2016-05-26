@@ -27,7 +27,7 @@
       <command>echo &quot;this is build step 1: touch temp&quot;
 touch temp
 echo &quot;now i am going to stop job&quot;
-curl $BUILD_URL</command>
+curl $BUILD_URL/stop</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>echo &quot;this is build step 2 - should not be execute&quot;</command>
