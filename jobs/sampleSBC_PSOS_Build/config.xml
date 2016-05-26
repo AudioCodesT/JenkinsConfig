@@ -16,7 +16,7 @@
     </com.sonyericsson.rebuild.RebuildSettings>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>sbc-build-lod</assignedNode>
+  <assignedNode>sbc-psos</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -24,11 +24,9 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command>echo Hello World !
-
-hostname</command>
-    </hudson.tasks.Shell>
+    <hudson.tasks.BatchFile>
+      <command>echo computer slave is: %COMPUTERNAME%</command>
+    </hudson.tasks.BatchFile>
   </builders>
   <publishers/>
   <buildWrappers/>
