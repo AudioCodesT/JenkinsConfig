@@ -108,11 +108,11 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>private-bower &amp;
-sleep 15
-cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
+      <command>cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
+private-bower &amp;
+sleep 15
 bower install
 grunt dist
 </command>
