@@ -44,13 +44,13 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
-#cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
-#npm install
-#bower install
-#grunt dist
-ls -ltr
-ls -ltr node_modules</command>
+      <command>cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
+cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
+npm install
+sudo private-bower &amp;
+bower install
+grunt dist
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
