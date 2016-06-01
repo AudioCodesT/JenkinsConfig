@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <maven2-moduleset plugin="maven-plugin@2.12.1">
   <actions/>
-  <description></description>
+  <description>if the commit files are under:&#xd;
+ArmCommon/Common/VMFiles/**&#xd;
+or&#xd;
+ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&#xd;
+do not build - just return verified+1&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
