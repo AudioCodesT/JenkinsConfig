@@ -68,6 +68,12 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
               <pattern>**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
+          <forbiddenFilePaths>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+              <compareType>ANT</compareType>
+              <pattern>src/app</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+          </forbiddenFilePaths>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
