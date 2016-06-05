@@ -35,11 +35,12 @@ Should work on 10.59.1.46 - ippAuto</description>
     <hudson.tasks.BatchFile>
       <command>curl -s http://ippauto/index.php/status/show.xml  | findstr status.free./status&#xd;
 if %ERRORLEVEL% == 0 (&#xd;
-&#xd;
-c:&#xd;
-cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
-net use z: \\10.59.0.87\Firmwares&#xd;
-tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_2.0.13.205.12.img&#xd;
+  c:&#xd;
+  cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
+  net use z: \\10.59.0.87\Firmwares&#xd;
+  tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_2.0.13.205.12.img&#xd;
+) else (&#xd;
+  sleep 30&#xd;
 )</command>
     </hudson.tasks.BatchFile>
   </builders>
