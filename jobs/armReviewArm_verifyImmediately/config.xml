@@ -157,7 +157,10 @@ do not build - just return verified+1&#xd;
       <contentType>text/html</contentType>
       <defaultSubject>Some changes in VMFiles were submitted</defaultSubject>
       <defaultContent>Please review changes:
-$GERRIT_CHANGE_URL
+
+https://gerrit/plugins/gitblit/commit/?r=ARM/Arm.git&amp;h=$GERRIT_PATCHSET_REVISION
+
+
 </defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
