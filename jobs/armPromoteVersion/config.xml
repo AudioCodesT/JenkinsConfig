@@ -87,7 +87,8 @@
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>GERRIT_BRANCH=master
-BEFORE_VMS_RELEASE=1</properties>
+RELEASE_VMS=1
+VERSION_NAME=$VERSION_NAME</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <projects>armBuildArm</projects>
