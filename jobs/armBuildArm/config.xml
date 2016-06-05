@@ -202,18 +202,23 @@
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>BEFORE_VMS_RELEASE</token>
+            <token>RELEASE_VMS</token>
           </condition>
           <publisherList>
-            <hudson.tasks.BuildTrigger>
-              <childProjects>armBuildVMs, armCreateUpgradeTarball</childProjects>
-              <threshold>
-                <name>SUCCESS</name>
-                <ordinal>0</ordinal>
-                <color>BLUE</color>
-                <completeBuild>true</completeBuild>
-              </threshold>
-            </hudson.tasks.BuildTrigger>
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+              <configs>
+                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>VERSION_NAME=$VERSION_NAME.0</properties>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  </configs>
+                  <projects>armBuildVMs, armCreateUpgradeTarball</projects>
+                  <condition>SUCCESS</condition>
+                  <triggerWithNoParameters>false</triggerWithNoParameters>
+                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+              </configs>
+            </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
