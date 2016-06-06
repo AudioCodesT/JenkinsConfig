@@ -29,7 +29,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>perl /opt/sanity/__sanity.pl -e
+      <command>perl /opt/sanity/__sanity.pl
 #cd /root/jenkinsslave
 #sh -x aws_nightSanity.sh
 #cat /root/jenkinsslave/aws_nightlySanity_log.out |grep &quot;Sanity result is 0&quot;
