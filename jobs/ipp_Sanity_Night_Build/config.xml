@@ -46,7 +46,7 @@ if %ERRORLEVEL% == 0 (&#xd;
   net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versions\Lync\int_delivery\2.0.15&quot;&#xd;
   net use z: \\10.59.0.87\Firmwares&#xd;
   set LASTBL=11&#xd;
-  set SaveLASTBL=11&#xd;
+  set SaveLASTBL=22&#xd;
   dir /o-d /B j: &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
   IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set SaveLASTBL=1 )&#xd;
