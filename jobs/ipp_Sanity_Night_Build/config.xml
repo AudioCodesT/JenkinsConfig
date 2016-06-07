@@ -47,11 +47,12 @@ H/30 0-6 * * *</spec>
 if %ERRORLEVEL% == 0 (&#xd;
   net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versions\Lync\int_delivery\2.0.15&quot;&#xd;
   net use z: \\10.59.0.87\Firmwares&#xd;
-  rem isr0214-34401 = 10.59.0.87&#xd;
-  dir /o-d /B j: | head -1 &gt; LASTBL.txt&#xd;
+  REM isr0214-34401 = 10.59.0.87&#xd;
+  dir /o-d /B j: &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
-  set /P LASTBL1=&lt;LASTBL1.txt&#xd;
+  IF EXIST LASTBL1.txt ( set /P LASTBL1=&lt;LASTBL1.txt ) else ( set LASTBL1=&quot;&quot; )&#xd;
   IF NOT %LASTBL%==%LASTBL1% (&#xd;
+    ren LASTBL.txt LASTBL1.txt&#xd;
     IF NOT EXIST z:\UC440HD_%LASTBL%.img (&#xd;
       copy J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img z:&#xd;
       copy J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:&#xd;
@@ -62,7 +63,6 @@ if %ERRORLEVEL% == 0 (&#xd;
     cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
     tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_%LASTBL%.img&#xd;
   )&#xd;
-  ren LASTBL.txt LASTBL1.txt&#xd;
 )</command>
     </hudson.tasks.BatchFile>
   </builders>
