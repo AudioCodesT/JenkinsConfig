@@ -50,7 +50,7 @@ if %ERRORLEVEL% == 0 (&#xd;
   REM isr0214-34401 = 10.59.0.87&#xd;
   dir /o-d /B j: &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
-  IF EXIST LASTBL1.txt ( set /P LASTBL1=&lt;LASTBL1.txt ) else ( set LASTBL1=&quot;&quot; )&#xd;
+  IF EXIST LASTBL1.txt ( set /P LASTBL1=&lt;LASTBL1.txt ) else ( set LASTBL1=1 )&#xd;
   IF NOT %LASTBL%==%LASTBL1% (&#xd;
     ren LASTBL.txt LASTBL1.txt&#xd;
     IF NOT EXIST z:\UC440HD_%LASTBL%.img (&#xd;
