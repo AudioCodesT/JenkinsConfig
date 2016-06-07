@@ -48,17 +48,15 @@ echo if %ERRORLEVEL% == 0 (&#xd;
   dir /o-d /B j: &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
   IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set SaveLASTBL=1 )&#xd;
-  echo %%LASTBL%%==%%SaveLASTBL%%&#xd;
-  echo %%LASTBL==%%SaveLASTBL&#xd;
-  echo IF NOT %LASTBL%==%SaveLASTBL% (&#xd;
+  IF NOT %%LASTBL%%==%%SaveLASTBL%% (&#xd;
     move /Y LASTBL.txt SaveLASTBL.txt&#xd;
-    IF NOT EXIST z:\UC440HD_%LASTBL%.img copy /Y J:\%%LASTBL%%\440HD\UC440HD_%%LASTBL%%.img z:\&#xd;
+    IF NOT EXIST z:\UC440HD_%LASTBL%.img copy /Y J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img z:\&#xd;
     IF NOT EXIST z:\UC430HD_%LASTBL%.img copy /Y J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:\&#xd;
     IF NOT EXIST z:\UC420HD_%LASTBL%.img copy /Y J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:\&#xd;
     IF NOT EXIST z:\UC405_%LASTBL%.img copy /Y J:\%LASTBL%\405\UC405_%LASTBL%.img z:\&#xd;
     echo cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
     echo tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_%LASTBL%.img&#xd;
-  echo )&#xd;
+  )&#xd;
 echo )</command>
     </hudson.tasks.BatchFile>
   </builders>
