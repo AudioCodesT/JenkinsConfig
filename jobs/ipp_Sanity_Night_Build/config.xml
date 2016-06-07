@@ -40,6 +40,10 @@ H/30 0-6 * * *</spec>
     <hudson.tasks.BatchFile>
       <command>curl -s http://ippauto/index.php/status/show.xml  | findstr status.free./status&#xd;
 if %ERRORLEVEL% == 0 (&#xd;
+  net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versions\Lync\int_delivery\2.0.15&quot;&#xd;
+  dir /o-d /B j: | head -1 &gt; LASTBL.txt&#xd;
+  set /P LASTBL=&lt;LASTBL.txt&#xd;
+&#xd;
   c:&#xd;
   cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
   net use z: \\10.59.0.87\Firmwares&#xd;
