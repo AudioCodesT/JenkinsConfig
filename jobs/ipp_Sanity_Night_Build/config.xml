@@ -5,11 +5,13 @@
 suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#xd;
 configName - name of the predefined session config, e.g. Sanity440LyncConfig&#xd;
 firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#xd;
-1. Before running, put a firmware version to \\isr0214-34401\firmwares , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
+1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
 available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no &apos;HD&apos; in firmware name);&#xd;
 2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
 &#xd;
-Should work on 10.59.1.46 - ippAuto</description>
+Should work on 10.59.1.46 - ippAuto&#xd;
+User:qa-cmbu&#xd;
+Pass:Qacmbu202</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -39,12 +41,10 @@ H/30 0-6 * * *</spec>
   <builders>
     <hudson.tasks.BatchFile>
       <command>curl -s http://ippauto/index.php/status/show.xml  | findstr status.free./status&#xd;
-echo if %ERRORLEVEL% == 0 (&#xd;
+if %ERRORLEVEL% == 0 (&#xd;
   echo net use...&#xd;
   net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versions\Lync\int_delivery\2.0.15&quot;&#xd;
   net use z: \\10.59.0.87\Firmwares&#xd;
-  REM isr0214-34401 = 10.59.0.87&#xd;
-  echo dir j: &#xd;
   dir /o-d /B j: &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
   IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set SaveLASTBL=1 )&#xd;
@@ -54,10 +54,10 @@ echo if %ERRORLEVEL% == 0 (&#xd;
     IF NOT EXIST z:\UC430HD_%LASTBL%.img copy /Y J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:\&#xd;
     IF NOT EXIST z:\UC420HD_%LASTBL%.img copy /Y J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:\&#xd;
     IF NOT EXIST z:\UC405_%LASTBL%.img copy /Y J:\%LASTBL%\405\UC405_%LASTBL%.img z:\&#xd;
-    echo cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
-    echo tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_%LASTBL%.img&#xd;
+    cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
+    tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_%LASTBL%.img&#xd;
   )&#xd;
-echo )</command>
+)</command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers/>
