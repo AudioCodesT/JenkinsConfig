@@ -25,7 +25,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cd /root/jenkinsslave
+      <command>export TERM=xterm
+cd /root/jenkinsslave
 sh -x aws_releaseSanity.sh
 cat /root/jenkinsslave/aws_releaseSanity_log.out |grep &quot;Sanity result is 0&quot;
 </command>
