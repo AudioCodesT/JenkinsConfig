@@ -46,8 +46,6 @@
   <builders>
     <hudson.tasks.Shell>
       <command>export TERM=xterm
-#env
-#perl /opt/sanity/1sanity.pl
 cd /root/jenkinsslave
 sh -x aws_nightSanity.sh
 cat /root/jenkinsslave/aws_nightlySanity_log.out |grep &quot;Sanity result is 0&quot;
