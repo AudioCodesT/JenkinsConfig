@@ -149,7 +149,9 @@
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>CI_WEB-UI_admins</sid>
+        </assignedSIDs>
       </role>
       <role name="CI_WEB-UI_DEVELOPERS" pattern="(web.*)">
         <permissions>
@@ -158,7 +160,9 @@
           <permission>hudson.model.Item.Cancel</permission>
           <permission>hudson.model.Item.Workspace</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>CI_WEB-UI_developers</sid>
+        </assignedSIDs>
       </role>
     </roleMap>
   </authorizationStrategy>
