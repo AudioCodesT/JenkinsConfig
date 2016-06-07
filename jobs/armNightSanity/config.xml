@@ -29,7 +29,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>env
+      <command>export TERM=xterm
+env
 perl /opt/sanity/1sanity.pl
 #cd /root/jenkinsslave
 #sh -x aws_nightSanity.sh
