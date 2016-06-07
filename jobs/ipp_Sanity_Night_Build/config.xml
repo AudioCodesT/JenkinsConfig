@@ -34,6 +34,11 @@ Should work on 10.59.1.46 - ippAuto</description>
       <spec>H/30 22-23 * * *
 H/30 0-6 * * *</spec>
     </hudson.triggers.TimerTrigger>
+    <org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger plugin="startup-trigger-plugin@2.5">
+      <spec></spec>
+      <label>SanityLabel</label>
+      <quietPeriod>0</quietPeriod>
+    </org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
@@ -41,13 +46,23 @@ H/30 0-6 * * *</spec>
       <command>curl -s http://ippauto/index.php/status/show.xml  | findstr status.free./status&#xd;
 if %ERRORLEVEL% == 0 (&#xd;
   net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versions\Lync\int_delivery\2.0.15&quot;&#xd;
+  net use z: \\10.59.0.87\Firmwares&#xd;
+  rem isr0214-34401 = 10.59.0.87&#xd;
   dir /o-d /B j: | head -1 &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
-&#xd;
-  c:&#xd;
-  cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
-  net use z: \\10.59.0.87\Firmwares&#xd;
-  tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_2.0.13.205.12.img&#xd;
+  set /P LASTBL1=&lt;LASTBL1.txt&#xd;
+  IF NOT %LASTBL%==%LASTBL1% (&#xd;
+    IF NOT EXIST z:\UC440HD_%LASTBL%.img (&#xd;
+      copy J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img z:&#xd;
+      copy J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:&#xd;
+      copy J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:&#xd;
+      copy J:\%LASTBL%\405\UC405_%LASTBL%.img z:&#xd;
+    )&#xd;
+    c:&#xd;
+    cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
+    tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_%LASTBL%.img&#xd;
+  )&#xd;
+  ren LASTBL.txt LASTBL1.txt&#xd;
 )</command>
     </hudson.tasks.BatchFile>
   </builders>
