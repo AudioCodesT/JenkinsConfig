@@ -64,13 +64,12 @@
         <assignedSIDs>
           <sid>yossim</sid>
           <sid>amoss</sid>
-          <sid>natanm</sid>
           <sid>haggaip</sid>
+          <sid>natanm</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="(arm.*)">
         <permissions>
@@ -134,16 +133,9 @@
           <sid>CI_IPP_developers</sid>
         </assignedSIDs>
       </role>
-      <role name="CI_WEB-UI_DEVELOPERS" pattern="(web-ui.*)">
-        <permissions>
-          <permission>hudson.model.Item.Read</permission>
-          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
-          <permission>hudson.model.Item.Cancel</permission>
-          <permission>hudson.model.Item.Workspace</permission>
-        </permissions>
-        <assignedSIDs>
-          <sid>CI_WEB-UI_developers</sid>
-        </assignedSIDs>
+      <role name="CI_WEB-UI_ADMINS" pattern="(web.*)">
+        <permissions/>
+        <assignedSIDs/>
       </role>
     </roleMap>
   </authorizationStrategy>
