@@ -24,7 +24,8 @@ Should work on 10.59.1.46 - ippAuto</description>
     </com.sonyericsson.rebuild.RebuildSettings>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>ippSanityTest</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -33,11 +34,6 @@ Should work on 10.59.1.46 - ippAuto</description>
       <spec>H/30 22-23 * * *
 H/30 0-6 * * *</spec>
     </hudson.triggers.TimerTrigger>
-    <org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger plugin="startup-trigger-plugin@2.5">
-      <spec></spec>
-      <label>SanityLabel</label>
-      <quietPeriod>0</quietPeriod>
-    </org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
