@@ -6,7 +6,14 @@
       <apiToken>KT16kDhqIRVQWpOmMwnuKuSPWLSwZAAcov3hgSL145MQV7WSh2DA10Lq4g4XcOmq</apiToken>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@1.26">
-      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
+      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
+        <entry>
+          <com.cloudbees.plugins.credentials.domains.Domain>
+            <specifications/>
+          </com.cloudbees.plugins.credentials.domains.Domain>
+          <java.util.concurrent.CopyOnWriteArrayList/>
+        </entry>
+      </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
     <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
       <triggers/>
@@ -50,16 +57,17 @@
         <string>Offer Remote Assistance Helpers</string>
         <string># IP Phone R&amp;D</string>
         <string>authenticated</string>
+        <string>CI_IPP_developers</string>
         <string>Citrix_Allow_Project</string>
         <string># R&amp;D Israel</string>
         <string>Certificate Service DCOM Access</string>
         <string># All Dinner</string>
         <string>CI_IPP_admins</string>
-        <string>Allowed RODC Password Replication Group</string>
         <string>Agile users</string>
+        <string>Allowed RODC Password Replication Group</string>
         <string># All ISRAEL</string>
       </roles>
-      <timestamp>1461145441023</timestamp>
+      <timestamp>1465798296829</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
       <emailAddress>Oleg.Friedman@audiocodes.com</emailAddress>
