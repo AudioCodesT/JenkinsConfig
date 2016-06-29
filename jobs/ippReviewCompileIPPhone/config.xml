@@ -90,8 +90,9 @@
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD FIRMWARE=ce3 LOG=0
-make SUBVERSION=dummy;
+make
+#make auto AUTOPRD=$AUTOPRD FIRMWARE=ce3 LOG=0
+#make SUBVERSION=dummy;
 </command>
     </hudson.tasks.Shell>
   </builders>
