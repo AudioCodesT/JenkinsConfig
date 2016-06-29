@@ -11,6 +11,9 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -98,11 +101,20 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
-cp -v ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
+      <command>export CHROME_BIN=/usr/lib64/firefox/browser/chrome
+cd ${WORKSPACE}/../TESTarmnewUIBuild_backup/
 npm install
 private-bower &amp;
 sleep 15
+bower install
+
+cd $WORKSPACE
+cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
+cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
+npm install
+cp ../indexjs node_modules/karma-ie-launcher/index.js -f
+#private-bower &amp;
+#sleep 15
 bower install
 grunt dist
 </command>
