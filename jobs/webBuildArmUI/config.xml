@@ -112,7 +112,7 @@ cd $WORKSPACE
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
-cp ../indexjs node_modules/karma-ie-launcher/index.js -f
+cp ../index.js node_modules/karma-ie-launcher/index.js -f
 #private-bower &amp;
 #sleep 15
 bower install
