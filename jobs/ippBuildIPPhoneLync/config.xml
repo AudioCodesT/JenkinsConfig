@@ -10,6 +10,9 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -72,10 +75,7 @@
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
-        <string>405</string>
-        <string>420HD</string>
-        <string>430HD</string>
-        <string>440HD</string>
+        <string>450HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.TextAxis>
@@ -88,7 +88,6 @@
     <hudson.matrix.TextAxis>
       <name>LOG</name>
       <values>
-        <string>0</string>
         <string>1</string>
       </values>
     </hudson.matrix.TextAxis>
@@ -117,7 +116,8 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
+#make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
+make auto AUTOPRD=$AUTOPRD
 if [ $LOG == 0 ]; then
   make binary;
   make SUBVERSION=dummy;
