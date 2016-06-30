@@ -10,6 +10,9 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -52,82 +55,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#run the script that collect all files and creates tarball
-#This script purpose is to create an Upgrade tarball from a given version
-
-#verify argument was provided
-#if [ $# -eq 0 ]
-#  then
-#    echo &quot;Please supply Version Name (e.g. 7.0.21.0)&quot;  &gt;&amp;3
-#	exit
-#fi
-
-# set logger ###############
-exec 3&gt;&amp;1 4&gt;&amp;2
-trap &apos;exec 2&gt;&amp;4 1&gt;&amp;3&apos; 0 1 2 3
-exec 1&gt;aws_createUpgradeTarball_log.out 2&gt;&amp;1
-# Everything below will go to the file &apos;aws_createUpgradeTarball_log.out&apos;:
-
-#VERSION_NAME=$1
-
-# Artifactory location
-artifactoryServer=https://artifactory
-artifactoryRepo=libs-release-local
-
-#create folder: tarFolder
-if [ ! -d &quot;tarFolder&quot; ]; then
-	mkdir tarFolder
-fi
-cd tarFolder
-
-#download all 4 war files
-wars=( TopologyManagement RoutingManager arm-frontend ARM-UI )
-for i in &quot;${wars[@]}&quot;
-do
-	url=$artifactoryServer/$artifactoryRepo/com/ac/arm/$i/$VERSION_NAME/$i-$VERSION_NAME.war
-	wget --no-check-certificate $url
-done
-
-#rename war files to a VM war name (not the same as in artifactory)
-mv TopologyManagement-*.war ARM.war
-mv RoutingManager-*.war RoutingManager.war
-mv ARM-UI-*.war ARM-UI.war
-mv arm-frontend-*.war arm-frontend.war
-
-#copy upgrade.pl file from common folder
-cp $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/upgrade.pl .
-#copy perl files
-cp $WORKSPACE/ArmCommon/Common/VMFiles/Router/usr/local/bin/*.pl .
-#copy conversions folder
-cp -R $WORKSPACE/ArmCommon/Common/src/main/resources/upgrade/conversions .
-
-#create ComponentVersions.txt
-cd $WORKSPACE
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: RoutingManager&quot; |sed -r &apos;s/^.*RoutingManager-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;RoutingManager=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
-
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: TopologyManagement&quot; |sed -r &apos;s/^.*TopologyManagement-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;TopologyManager=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
-
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag: common&quot; |sed -r &apos;s/^.*common-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;ArmCommon=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
-
-git clone ssh://jenkins@gerrit:29418/ARM/arm-frontend.git
-git clone ssh://jenkins@gerrit:29418/ARM/ARM-UI.git
-
-cd $WORKSPACE/arm-frontend
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;arm-frontend=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
-cd $WORKSPACE/ARM-UI
-V=$(git log --pretty=format:&quot;%d&quot; . |grep &quot;tag:&quot; |sed -r &apos;s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/&apos; |while read line ; do  if [[ $line =~ \.0$ ]]; then     lastZero=$line; else     echo $lastZero;                 break; fi; done)
-echo &quot;ARM-UI=$V&quot; &gt;&gt; $WORKSPACE/tarFolder/ComponentVersions.txt
-
-#create tar.gz
-cd $WORKSPACE/tarFolder
-tar czf upgrade_$VERSION_NAME.tar.gz *
-
-rm -rf $WORKSPACE/arm-frontend
-rm -rf $WORKSPACE/ARM-UI</command>
+      <command>sh -x  ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
