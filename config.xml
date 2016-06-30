@@ -72,6 +72,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="(arm.*)">
         <permissions>
@@ -286,7 +287,7 @@
           <connectUsingPublicIp>false</connectUsingPublicIp>
         </hudson.plugins.ec2.SlaveTemplate>
         <hudson.plugins.ec2.SlaveTemplate>
-          <ami>ami-f2aa489d</ami>
+          <ami>ami-d73ed5b8</ami>
           <description>build slave for IPP project</description>
           <zone>eu-central-1a</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
@@ -306,7 +307,7 @@
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
-          <instanceCap>5</instanceCap>
+          <instanceCap>10</instanceCap>
           <stopOnTerminate>true</stopOnTerminate>
           <tags>
             <hudson.plugins.ec2.EC2Tag>
