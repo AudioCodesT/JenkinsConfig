@@ -117,7 +117,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 #make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
-make auto AUTOPRD=$AUTOPRD
+make auto AUTOPRD=$AUTOPRD LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
   make SUBVERSION=dummy;
