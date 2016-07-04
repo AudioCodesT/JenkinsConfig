@@ -10,6 +10,9 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -69,6 +72,10 @@
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
               <compareType>ANT</compareType>
               <pattern>ArmCommon/Common/src/main/resources/upgrade/upgrade.pl</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+              <compareType>PLAIN</compareType>
+              <pattern>ArmCommon/Common/.deploy/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
           </forbiddenFilePaths>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -201,8 +208,10 @@
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>RELEASE_VMS</token>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition" plugin="run-condition@1.0">
+            <lhs>RELEASE_VMS</lhs>
+            <rhs>1</rhs>
+            <comparator class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition$EqualTo"/>
           </condition>
           <publisherList>
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
