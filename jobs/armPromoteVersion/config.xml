@@ -10,6 +10,9 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -115,6 +118,11 @@ git pull --rebase</command>
     </hudson.tasks.Maven>
   </prebuilders>
   <postbuilders>
+    <hudson.tasks.Shell>
+      <command>#promote version number also in the following eclipse files:
+perl -pi -e &quot;s/7.(\d+).(\d+)/$VERSION_NAME/g&quot; TopologyManager/TopologyManagement/.settings/org.eclipse.wst.common.component 
+perl -pi -e &quot;s/7.(\d+).(\d+)/$VERSION_NAME/g&quot; RoutingManager/RoutingManager/.settings/org.eclipse.wst.common.component</command>
+    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
