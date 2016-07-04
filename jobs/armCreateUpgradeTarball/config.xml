@@ -55,7 +55,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
+      <command>sed &apos;s/\r$//&apos; ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh &gt; aws_createUpgradeTarball_unix.sh
+sh -x aws_createUpgradeTarball_unix.sh</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
