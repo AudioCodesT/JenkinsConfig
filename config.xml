@@ -65,12 +65,13 @@
         <assignedSIDs>
           <sid>yossim</sid>
           <sid>amoss</sid>
-          <sid>haggaip</sid>
           <sid>natanm</sid>
+          <sid>haggaip</sid>
           <sid>shukyr</sid>
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="(arm.*)">
         <permissions>
@@ -301,8 +302,8 @@
     <listView>
       <owner class="hudson" reference="../../.."/>
       <name>ARM</name>
-      <filterExecutors>false</filterExecutors>
-      <filterQueue>false</filterQueue>
+      <filterExecutors>true</filterExecutors>
+      <filterQueue>true</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
