@@ -118,7 +118,8 @@ cp ../index.js node_modules/karma-ie-launcher/index.js -f
 #sleep 15
 bower install --force-latest
 grunt dist
-</command>
+#kill the private-bower:
+kill %1</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
