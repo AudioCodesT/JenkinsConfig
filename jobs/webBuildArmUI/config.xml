@@ -41,7 +41,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.18.4">
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -53,7 +53,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.18.4">
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -101,7 +101,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>export CHROME_BIN=$WORKSPACE/node_modules/grunt-protractor-runner/node_modules/protractor/node_modules/selenium-webdriver/chrome.js
+      <command>export CHROME_BIN=/usr/bin/google-chrome
 #cd ${WORKSPACE}/../TESTarmnewUIBuild_backup/
 #npm install
 sudo private-bower &amp;
