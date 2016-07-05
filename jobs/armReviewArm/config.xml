@@ -61,6 +61,16 @@
               <pattern>**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
+          <forbiddenFilePaths>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+              <compareType>ANT</compareType>
+              <pattern>ArmCommon/Common/VMFiles/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+              <compareType>ANT</compareType>
+              <pattern>ArmCommon/Common/.deploy/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+          </forbiddenFilePaths>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
