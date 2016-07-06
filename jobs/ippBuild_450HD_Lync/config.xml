@@ -66,22 +66,20 @@
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
   <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H 11,23 * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
         <string>450HD</string>
-      </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.TextAxis>
-      <name>FIRMWARE</name>
-      <values>
-        <string>ce3</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.TextAxis>
@@ -98,7 +96,6 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(AUTOPRD==&quot;405&quot; &amp;&amp; FIRMWARE==&quot;ce7&quot;) &amp;&amp; !(LOG==&quot;1&quot; &amp;&amp; FIRMWARE==&quot;ce7&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
@@ -116,7 +113,6 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-#make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
 make auto AUTOPRD=$AUTOPRD LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
@@ -159,7 +155,7 @@ fi</command>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz_${FIRMWARE}
+${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
 ${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 </deployPattern>
       <resolvePattern></resolvePattern>
