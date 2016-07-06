@@ -96,6 +96,15 @@ git push origin ${GERRIT_BRANCH}
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>ippBuild_450HD_Lync</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
     <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
       <configVersion>2</configVersion>
       <pushMerge>false</pushMerge>
