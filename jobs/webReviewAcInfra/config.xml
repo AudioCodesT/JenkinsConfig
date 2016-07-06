@@ -112,6 +112,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <builders>
     <hudson.tasks.Shell>
       <command>#3.advance version number by 1 in bower.json &amp; build.config.js
+echo &quot;hello&quot;
 #4.grunt dist
 #5.git add (to dist folder)
 #6.git commit (with a message such as “new version v0.0.x”)
