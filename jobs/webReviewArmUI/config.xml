@@ -111,7 +111,12 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>export CHROME_BIN=/usr/bin/google-chrome
+      <command>#connect repositories using https instead opf git:
+git config url.https://.insteadOf git://
+
+#set chrome bin
+export CHROME_BIN=/usr/bin/google-chrome
+
 #cd ${WORKSPACE}/../TESTarmnewUIBuild_backup/
 #npm install
 sudo private-bower &amp;
