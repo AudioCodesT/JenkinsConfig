@@ -43,7 +43,7 @@
   </scm>
   <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -105,6 +105,8 @@ git push origin 2.0.13_450HD
           <updateTag>true</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
+      <branchesToPush/>
+      <notesToPush/>
     </hudson.plugins.git.GitPublisher>
     <hudson.tasks.BuildTrigger>
       <childProjects>ippBuild_450HD_Lync</childProjects>
