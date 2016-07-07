@@ -102,6 +102,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <builders>
     <hudson.tasks.Shell>
       <command>git checkout master
+git pull --rebase
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
