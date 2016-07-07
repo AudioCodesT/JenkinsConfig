@@ -101,7 +101,10 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#3.advance version number by 1 in bower.json &amp; build.config.js
+      <command>#connect repositories using https instead opf git:
+git config url.https://.insteadOf git://
+
+#3.advance version number by 1 in bower.json &amp; build.config.js
 version=$(cat bower.json |grep version)
 version=${version:14}
 version=${version%\&quot;,}
