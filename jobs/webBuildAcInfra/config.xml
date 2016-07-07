@@ -132,9 +132,9 @@ grunt dist
 #7.git push
 git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
-git add dist
+git add --all
 message=&quot;automatic build a new dist and promote version&quot;
-git commit -am &quot;$message&quot;
+git commit -m &quot;$message&quot;
 
 #8.git tag v0.0.x
 git tag -a v$version -m &quot;automatic version tag&quot;
