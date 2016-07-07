@@ -112,13 +112,37 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <builders>
     <hudson.tasks.Shell>
       <command>#3.advance version number by 1 in bower.json &amp; build.config.js
-echo &quot;hello&quot;
+version=$(cat bower.json |grep version)
+version=${version:14}
+version=${version%\&quot;,}
+current_version=$version
+[[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
+perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
+
 #4.grunt dist
+private-bower &amp;
+sleep 15
+cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
+cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
+npm install
+bower install --force-latest
+grunt dist
+
 #5.git add (to dist folder)
 #6.git commit (with a message such as “new version v0.0.x”)
 #7.git push
+git config --global user.name &quot;Jenkins&quot;
+git config --global user.email devops@audiocodes.com
+git add dist
+message=&quot;automatic build a new dist and promote version&quot;
+git commit -am &quot;$message&quot;
+
 #8.git tag v0.0.x
+git tag -a v$version -m &quot;automatic version tag&quot;
+
 #9.git push origin v0.0.x
+git push origin master
+git push v$version
 </command>
     </hudson.tasks.Shell>
   </builders>
