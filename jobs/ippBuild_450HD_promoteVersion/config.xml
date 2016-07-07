@@ -17,15 +17,6 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
-        </hudson.model.StringParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
     <configVersion>2</configVersion>
@@ -63,7 +54,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git checkout ${GERRIT_BRANCH}
+      <command>git checkout 2.0.13_450HD
 git pull</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -94,7 +85,7 @@ git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
 message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
-git push origin ${GERRIT_BRANCH}
+git push origin 2.0.13_450HD
 #git push origin ${IPP_VER}
 </command>
     </hudson.tasks.Shell>
