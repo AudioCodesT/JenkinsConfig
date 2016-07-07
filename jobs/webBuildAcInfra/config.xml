@@ -123,13 +123,16 @@ grunt dist
 #7.git push
 git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
-message=&quot;auto promote version&quot;
+git add dist
+message=&quot;automatic build a new dist and promote version&quot;
 git commit -am &quot;$message&quot;
-git push origin master
-
 
 #8.git tag v0.0.x
+git tag -a v$version -m &quot;automatic version tag&quot;
+
 #9.git push origin v0.0.x
+git push origin master
+git push v$version
 </command>
     </hudson.tasks.Shell>
   </builders>
