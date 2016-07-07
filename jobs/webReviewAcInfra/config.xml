@@ -114,12 +114,16 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <command>#connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
+#set chrome bin
+export CHROME_BIN=/usr/bin/google-chrome
+
 #build
 private-bower &amp;
 sleep 15
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
+cp ../index.js node_modules/karma-ie-launcher/index.js -f
 bower install --force-latest
 grunt dist
 
