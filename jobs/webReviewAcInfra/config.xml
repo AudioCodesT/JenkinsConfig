@@ -117,9 +117,12 @@ git config url.https://.insteadOf git://
 #set chrome bin
 export CHROME_BIN=/usr/bin/google-chrome
 
-#build
-private-bower &amp;
+#run private-bower
+if ( ! ps -ef | grep private-bower | grep -v grep) &gt; /dev/null
+then sudo private-bower &amp;
 sleep 15
+fi
+
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
