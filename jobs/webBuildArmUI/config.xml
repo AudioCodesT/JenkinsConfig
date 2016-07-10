@@ -107,11 +107,11 @@ git config url.https://.insteadOf git://
 #set chrome bin
 export CHROME_BIN=/usr/bin/google-chrome
 
-#cd ${WORKSPACE}/../TESTarmnewUIBuild_backup/
-#npm install
-sudo private-bower &amp;
+#run private-bower
+if ( ! ps -ef | grep private-bower | grep -v grep) &gt; /dev/null
+then sudo private-bower &amp;
 sleep 15
-#bower install
+fi
 
 #cd $WORKSPACE
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
