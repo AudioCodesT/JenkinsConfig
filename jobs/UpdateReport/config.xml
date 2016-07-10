@@ -73,7 +73,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>/opt/devops/tools/reports.pl &quot;$GERRIT_EVENT_ACCOUNT_NAME&quot; &quot;$GERRIT_CHANGE_COMMIT_MESSAGE&quot; &quot;$GERRIT_CHANGE_SUBJECT&quot; &quot;$GERRIT_CHANGE_URL&quot; &quot;$GERRIT_BRANCH&quot; &quot;$GERRIT_CHANGE_OWNER_NAME&quot; &quot;$GERRIT_PATCHSET_UPLOADER_NAME&quot;</command>
+      <command>/opt/devops/tools/reports.pl &quot;$GERRIT_EVENT_ACCOUNT_NAME&quot; &quot;$GERRIT_TOPIC&quot; &quot;$GERRIT_CHANGE_SUBJECT&quot; &quot;$GERRIT_CHANGE_URL&quot; &quot;$GERRIT_BRANCH&quot; &quot;$GERRIT_CHANGE_OWNER_NAME&quot; &quot;$GERRIT_PATCHSET_UPLOADER_NAME&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
