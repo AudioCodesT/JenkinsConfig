@@ -118,9 +118,13 @@ current_version=$version
 perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
 perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
 
-#4.grunt dist
-private-bower &amp;
+#4. run private-bower
+if ( ! ps -ef | grep private-bower | grep -v grep) &gt; /dev/null
+then sudo private-bower &amp;
 sleep 15
+fi
+
+#4.grunt dist
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
