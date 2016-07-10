@@ -149,6 +149,8 @@ git tag -a v$version -m &quot;automatic version tag&quot;
 #9.git push origin v0.0.x
 git push origin master
 git push origin v$version
+
+echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -188,7 +190,7 @@ git push origin v$version
         </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
-      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
+      <defaultSubject>ac-infra version was promoted to $version</defaultSubject>
       <defaultContent>$DEFAULT_CONTENT</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
