@@ -195,7 +195,7 @@ echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
         </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
-      <defaultSubject>ac-infra version was promoted to $version</defaultSubject>
+      <defaultSubject>ac-infra version was promoted to $ACINFRA_VERSION</defaultSubject>
       <defaultContent>$DEFAULT_CONTENT</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
