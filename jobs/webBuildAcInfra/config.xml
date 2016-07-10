@@ -176,7 +176,7 @@ echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-      <recipientList>Eitan Farbiash &lt;Eitan.Farbiash@audiocodes.com&gt;; Erez Nejat Haim &lt;Erez.NejatHaim@audiocodes.com&gt;; Roman Bar Am &lt;Roman.BarAm@audiocodes.com&gt;; Rivka Ashkenazy &lt;Rivka.Ashkenazy@audiocodes.com&gt;; Rachel Mizrachi &lt;Rachel.Mizrachi@audiocodes.com&gt;</recipientList>
+      <recipientList>Eitan.Farbiash@audiocodes.com, Erez.NejatHaim@audiocodes.com, Roman.BarAm@audiocodes.com, Rivka.Ashkenazy@audiocodes.com, Rachel.Mizrachi@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
@@ -196,12 +196,14 @@ echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
       </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>ac-infra version was promoted to $ACINFRA_VERSION</defaultSubject>
-      <defaultContent>$DEFAULT_CONTENT</defaultContent>
+      <defaultContent>For details:
+https://gerrit/plugins/gitblit/summary/?r=web-ui/ac-infra.git
+</defaultContent>
       <attachmentsPattern></attachmentsPattern>
-      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <presendScript></presendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
-      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <replyTo></replyTo>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
