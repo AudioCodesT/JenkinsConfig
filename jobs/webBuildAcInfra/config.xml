@@ -153,6 +153,11 @@ git push origin v$version
 echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
 </command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>acinfra_version.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
