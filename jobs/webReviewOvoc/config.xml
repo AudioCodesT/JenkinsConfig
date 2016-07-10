@@ -148,7 +148,7 @@ grunt dist
           </logTexts>
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep private-bower| grep -v grep | while read c1 c2 c3; do echo $c2; done); do sudo kill -9 $pid; done</script>
+          <script>for pid in $(ps -ef | grep private-bower | grep -v grep | while read c1 c2 c3; do echo $c2; done); do sudo kill -9 $pid; done</script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
