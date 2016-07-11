@@ -328,7 +328,7 @@
         <hudson.plugins.ec2.SlaveTemplate>
           <ami>ami-5573993a</ami>
           <description>build slave for WEB-UI project</description>
-          <zone>eu-central-1b</zone>
+          <zone>eu-central-1a</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/home/centos/jenkinsslave</remoteFS>
           <type>M4Large</type>
@@ -346,14 +346,8 @@
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
-          <instanceCap>10</instanceCap>
+          <instanceCap>8</instanceCap>
           <stopOnTerminate>true</stopOnTerminate>
-          <tags>
-            <hudson.plugins.ec2.EC2Tag>
-              <name>Name</name>
-              <value>web-ui-build-dynamic-slave</value>
-            </hudson.plugins.ec2.EC2Tag>
-          </tags>
           <usePrivateDnsName>false</usePrivateDnsName>
           <associatePublicIp>false</associatePublicIp>
           <useDedicatedTenancy>false</useDedicatedTenancy>
