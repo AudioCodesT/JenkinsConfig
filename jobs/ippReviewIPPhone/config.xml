@@ -64,6 +64,11 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
         <timeout>20</timeout>
         <depth>0</depth>
       </hudson.plugins.git.extensions.impl.CloneOption>
+      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
+          <separator>#</separator>
+        </buildChooser>
+      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
   <assignedNode>ipp-build</assignedNode>
