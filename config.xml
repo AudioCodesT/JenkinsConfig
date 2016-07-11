@@ -348,6 +348,12 @@
           <customDeviceMapping></customDeviceMapping>
           <instanceCap>20</instanceCap>
           <stopOnTerminate>true</stopOnTerminate>
+          <tags>
+            <hudson.plugins.ec2.EC2Tag>
+              <name>Name</name>
+              <value>web-ui-build-dynamic-slave</value>
+            </hudson.plugins.ec2.EC2Tag>
+          </tags>
           <usePrivateDnsName>false</usePrivateDnsName>
           <associatePublicIp>false</associatePublicIp>
           <useDedicatedTenancy>false</useDedicatedTenancy>
