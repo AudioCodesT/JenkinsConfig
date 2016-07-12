@@ -62,7 +62,7 @@ git pull</command>
       <command># Update file with new version num
 IPP_VER_PREV=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 #fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
-fourth=`echo ${IPP_VER_PREV} | sed -r &apos;s/.*\.([0-9]+)/\1/`
+fourth=`echo ${IPP_VER_PREV} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth++))
 sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
 mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped</command>
