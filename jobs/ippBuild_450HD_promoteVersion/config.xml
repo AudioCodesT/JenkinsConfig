@@ -61,6 +61,7 @@ git pull</command>
     <hudson.tasks.Shell>
       <command># Update file with new version num
 IPP_VER_PREV=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
+IPP_MAJOR_VER=`echo ${IPP_VER_PREV} | cut -d. -f1,2,3`
 #fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
 fourth=`echo ${IPP_VER_PREV} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth++))
@@ -70,7 +71,6 @@ mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped</command>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
-IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 </command>
