@@ -67,13 +67,16 @@ echo Last tag: ${IPP_VER_PREV} &gt; log-info.txt
 fourth=`echo ${IPP_VER_PREV} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth++))
 sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
-mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped</command>
+mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
+
+echo IPP_VER_PREV=${IPP_VER_PREV} &gt; generated_ipp_version.properties
+echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
-echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
+echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
