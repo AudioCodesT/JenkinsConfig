@@ -134,51 +134,5 @@ git push origin 2.0.13_450HD
       </threshold>
     </hudson.tasks.BuildTrigger>
   </publishers>
-  <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText>ipp-release</keyFromText>
-          <keyFromSelect></keyFromSelect>
-          <dynamicMode>true</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/log-info.txt=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
-      <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
-      <deployBuildInfo>false</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <multiConfProject>false</multiConfProject>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-  </buildWrappers>
+  <buildWrappers/>
 </project>
