@@ -62,6 +62,7 @@ git pull</command>
       <command># Update file with new version num
 IPP_VER_PREV=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 IPP_MAJOR_VER=`echo ${IPP_VER_PREV} | cut -d. -f1,2,3`
+echo Last tag: ${IPP_VER_PREV} &gt; log-info.txt
 #fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
 fourth=`echo ${IPP_VER_PREV} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth++))
@@ -113,7 +114,7 @@ git push origin 2.0.13_450HD
     <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
       <buildSteps>
         <hudson.tasks.Shell>
-          <command>git log --decorate ${IPP_VER_PREV}..${IPP_VER} &gt; log-info.txt</command>
+          <command>git log --decorate ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; log-info.txt</command>
         </hudson.tasks.Shell>
       </buildSteps>
       <scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
