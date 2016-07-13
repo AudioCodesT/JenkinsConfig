@@ -145,8 +145,7 @@ fi</command>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>/opt/jenkinsslave/workspace/$IPP_VER/log-info.txt=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}
-${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
 ${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 </deployPattern>
