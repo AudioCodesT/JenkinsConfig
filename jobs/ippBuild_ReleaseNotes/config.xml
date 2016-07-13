@@ -65,28 +65,8 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>true</concurrentBuild>
-  <axes>
-    <hudson.matrix.TextAxis>
-      <name>AUTOPRD</name>
-      <values>
-        <string>450HD</string>
-      </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.TextAxis>
-      <name>LOG</name>
-      <values>
-        <string>1</string>
-        <string>0</string>
-      </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.LabelAxis>
-      <name>label</name>
-      <values>
-        <string>ipp-build</string>
-      </values>
-    </hudson.matrix.LabelAxis>
-  </axes>
+  <concurrentBuild>false</concurrentBuild>
+  <axes/>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
@@ -145,9 +125,7 @@ fi</command>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
-${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+      <deployPattern>/opt/jenkinsslave/workspace/$IPP_VER/log-info.txt=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
