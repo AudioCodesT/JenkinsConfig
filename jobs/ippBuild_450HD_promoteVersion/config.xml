@@ -57,7 +57,8 @@
     <hudson.tasks.Shell>
       <command>git checkout 2.0.13_450HD
 git pull
-[ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` == &quot;Jenkins&quot; ] &amp;&amp; exit 1</command>
+if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` == &quot;Jenkins&quot; ]; then exit 1; fi
+</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
@@ -91,6 +92,8 @@ message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
 git push origin 2.0.13_450HD
 #git push origin ${IPP_VER}
+git pull
+
 </command>
     </hudson.tasks.Shell>
   </builders>
