@@ -49,33 +49,29 @@
   <triggers>
     <hudson.triggers.SCMTrigger>
       <spec>H 9,21 * * *</spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+      <ignorePostCommitHooks>true</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>git checkout 2.0.13_450HD
-git pull</command>
+git pull
+[ `&quot;git log -n1 --pretty=%an&quot;` == &quot;Jenkins&quot; ] &amp;&amp; exit 1</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
-IPP_VER_PREV=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
-IPP_MAJOR_VER=`echo ${IPP_VER_PREV} | cut -d. -f1,2,3`
-#fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
-fourth=`echo ${IPP_VER_PREV} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
+fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
 ((fourth++))
 sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
 mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
-
-echo IPP_VER_PREV=${IPP_VER_PREV} &gt; generated_ipp_version.properties
-echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
+</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
-echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
+echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -85,8 +81,6 @@ echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
       <command>echo ipp version is: ${IPP_VER}
-mkdir ../$IPP_VER
-echo Last tag: ${IPP_VER_PREV} &gt; ../log_${IPP_VER}-info.txt
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -96,6 +90,7 @@ git config --global user.email devops@audiocodes.com
 message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
 git push origin 2.0.13_450HD
+git pull
 #git push origin ${IPP_VER}
 </command>
     </hudson.tasks.Shell>
@@ -116,18 +111,8 @@ git push origin 2.0.13_450HD
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
     </hudson.plugins.git.GitPublisher>
-    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
-      <buildSteps>
-        <hudson.tasks.Shell>
-          <command>git log --decorate ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; ../log_${IPP_VER}-info.txt</command>
-        </hudson.tasks.Shell>
-      </buildSteps>
-      <scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
-      <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
-      <markBuildUnstable>false</markBuildUnstable>
-    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
     <hudson.tasks.BuildTrigger>
-      <childProjects>ippBuild_450HD_Lync</childProjects>
+      <childProjects>ippBuild_ReleaseNotes,ippBuild_450HD_Lync</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>
