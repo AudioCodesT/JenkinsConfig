@@ -57,7 +57,7 @@
     <hudson.tasks.Shell>
       <command>git checkout 2.0.13_450HD
 git pull
-[ `&quot;git log -n1 --pretty=%an&quot;` == &quot;Jenkins&quot; ] &amp;&amp; exit 1</command>
+[ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` == &quot;Jenkins&quot; ] &amp;&amp; exit 1</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
