@@ -147,6 +147,7 @@ git commit -m &quot;$message&quot;
 git tag -a v$version -m &quot;automatic version tag&quot;
 
 #9.git push origin v0.0.x
+git pull --rebase
 git push origin master
 git push origin v$version
 
