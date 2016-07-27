@@ -49,9 +49,10 @@
   <builders>
     <hudson.tasks.Shell>
       <command>export TERM=xterm
-#cd /root/jenkinsslave
+cd /root/jenkinsslave
 #cp -f $WORKSPACE/ArmCommon/Common/.deploy/aws_nightSanity.sh .
-sh -x ArmCommon/Common/.deploy/aws_nightSanity.sh
+#sh -x ArmCommon/Common/.deploy/aws_nightSanity.sh
+sh -x aws_nightSanity.sh
 cat $WORKSPACE/ArmCommon/Common/.deploy/aws_nightlySanity_log.out |grep &quot;Sanity result is 0&quot;
 </command>
     </hudson.tasks.Shell>
