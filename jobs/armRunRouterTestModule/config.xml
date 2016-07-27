@@ -50,17 +50,17 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#sftp put configuratorPredefineData.sql in the remote configurator
-#cd RouterTestModule/src/main/resources/sql
-#/usr/bin/expect&lt;&lt;EOD
-#	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
-#	expect &quot;password:&quot;
-#	send &quot;password\r&quot;
-#	expect &quot;sftp&gt;&quot;
-#	send &quot;put -p configuratorPredefineData.sql\r&quot;
-#	expect &quot;sftp&gt;&quot;
-#	send &quot;bye\r&quot;
-#EOD</command>
+      <command>sftp put configuratorPredefineData.sql in the remote configurator
+cd RouterTestModule/src/main/resources/sql
+/usr/bin/expect&lt;&lt;EOD
+	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
+	expect &quot;password:&quot;
+	send &quot;password\r&quot;
+	expect &quot;sftp&gt;&quot;
+	send &quot;put -p configuratorPredefineData.sql\r&quot;
+	expect &quot;sftp&gt;&quot;
+	send &quot;bye\r&quot;
+EOD</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#run sql init
