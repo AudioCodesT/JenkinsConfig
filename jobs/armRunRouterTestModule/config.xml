@@ -112,6 +112,13 @@ sleep 120</command>
     </hudson.plugins.postbuildtask.PostbuildTask>
   </publishers>
   <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@1.92.1">
+      <info>
+        <propertiesContent>TERM=xterm
+</propertiesContent>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
 </project>
