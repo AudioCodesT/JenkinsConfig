@@ -50,7 +50,7 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>sftp put configuratorPredefineData.sql in the remote configurator
+      <command>#sftp put configuratorPredefineData.sql in the remote configurator
 cd RouterTestModule/src/main/resources/sql
 /usr/bin/expect&lt;&lt;EOD
 	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
@@ -64,23 +64,23 @@ EOD</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#run sql init
-#	/usr/bin/expect&lt;&lt;EOD
-#	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
-#	expect &quot;assword:&quot;
-#	send &quot;password\r&quot;
-#	expect &quot;]#&quot;
-#	send &quot;service tomcat stop\r&quot;
-#	expect &quot;]#&quot;
-#	send &quot;mv -f configuratorPredefineData.sql sql\r&quot;
-#	expect &quot;]#&quot;
-#	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/armDB.sql\r&quot;
-#	expect &quot;]#&quot;
-#	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/configuratorPredefineData.sql\r&quot;
-#	expect &quot;]#&quot;
-#	send &quot;service tomcat start\r&quot;
-#	expect &quot;]#&quot;
-#	send &quot;exit\r&quot;
-#EOD
+	/usr/bin/expect&lt;&lt;EOD
+	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
+	expect &quot;assword:&quot;
+	send &quot;password\r&quot;
+	expect &quot;]#&quot;
+	send &quot;service tomcat stop\r&quot;
+	expect &quot;]#&quot;
+	send &quot;mv -f configuratorPredefineData.sql sql\r&quot;
+	expect &quot;]#&quot;
+	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/armDB.sql\r&quot;
+	expect &quot;]#&quot;
+	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/configuratorPredefineData.sql\r&quot;
+	expect &quot;]#&quot;
+	send &quot;service tomcat start\r&quot;
+	expect &quot;]#&quot;
+	send &quot;exit\r&quot;
+EOD
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
