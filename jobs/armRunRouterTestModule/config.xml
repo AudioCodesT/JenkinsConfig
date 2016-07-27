@@ -64,7 +64,7 @@ EOD</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#run sql init
-	/usr/bin/expect&lt;&lt;EOD
+/usr/bin/expect&lt;&lt;EOD
 	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
 	expect &quot;assword:&quot;
 	send &quot;password\r&quot;
