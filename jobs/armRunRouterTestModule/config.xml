@@ -69,19 +69,23 @@
 #	expect &quot;assword:&quot;
 #	send &quot;password\r&quot;
 #	expect &quot;]#&quot;
+#	send &quot;service tomcat stop\r&quot;
+#	expect &quot;]#&quot;
 #	send &quot;mv -f configuratorPredefineData.sql sql\r&quot;
 #	expect &quot;]#&quot;
-#	send &quot;/usr/bin/mysql -u root -p &lt;/root/sql/armDB.sql\r&quot;
-#	expect &quot;password:&quot;
-#	send &quot;root\r&quot;
+#	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/armDB.sql\r&quot;
 #	expect &quot;]#&quot;
-#	send &quot;/usr/bin/mysql -u root -p &lt;/root/sql/configuratorPredefineData.sql\r&quot;
-#	expect &quot;password:&quot;
-#	send &quot;root\r&quot;
+#	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/configuratorPredefineData.sql\r&quot;
+#	expect &quot;]#&quot;
+#	send &quot;service tomcat start\r&quot;
 #	expect &quot;]#&quot;
 #	send &quot;exit\r&quot;
 #EOD
 </command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#wait for configurator to startup
+#sleep 120</command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
