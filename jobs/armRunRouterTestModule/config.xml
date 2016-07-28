@@ -73,9 +73,9 @@ EOD</command>
 	expect &quot;]#&quot;
 	send &quot;mv -f configuratorPredefineData.sql sql\r&quot;
 	expect &quot;]#&quot;
-	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/armDB.sql\r&quot;
+	send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
 	expect &quot;]#&quot;
-	send &quot;/usr/bin/mysql -u root --password=root &lt;/root/sql/configuratorPredefineData.sql\r&quot;
+	send &quot;mysql -u root --password=root &lt;sql/configuratorPredefineData.sql\r&quot;
 	expect &quot;]#&quot;
 	send &quot;service tomcat start\r&quot;
 	expect &quot;]#&quot;
