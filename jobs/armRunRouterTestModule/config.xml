@@ -51,13 +51,13 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#sftp put configuratorPredefineData.sql in the remote configurator
-cd RouterTestModule/src/main/resources/sql
+cp RouterTestModule/src/main/resources/sql/configuratorPredefineData.sql conf.sql
 /usr/bin/expect&lt;&lt;EOD
 	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
 	expect &quot;password:&quot;
 	send &quot;password\r&quot;
 	expect &quot;sftp&gt;&quot;
-	send &quot;put -p configuratorPredefineData.sql\r&quot;
+	send &quot;put -p conf.sql\r&quot;
 	expect &quot;sftp&gt;&quot;
 	send &quot;bye\r&quot;
 EOD</command>
@@ -75,7 +75,7 @@ EOD</command>
 	expect &quot;]#&quot;
 	send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
 	expect &quot;]#&quot;
-	send &quot;mysql -u root --password=root &lt;sql/configuratorPredefineData.sql\r&quot;
+	send &quot;mysql -u root --password=root &lt;sql/conf.sql\r&quot;
 	expect &quot;]#&quot;
 	send &quot;service tomcat start\r&quot;
 	expect &quot;]#&quot;
