@@ -38,7 +38,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>2.0.13_450HD</name>
+        <name>3.0.0_450HD</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -76,7 +76,6 @@
     <hudson.matrix.TextAxis>
       <name>LOG</name>
       <values>
-        <string>1</string>
         <string>0</string>
       </values>
     </hudson.matrix.TextAxis>
@@ -111,7 +110,13 @@ if [ $LOG == 0 ]; then
 fi</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>yossim@audiocodes.com,oleg.Friedman@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>true</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
       <details>
