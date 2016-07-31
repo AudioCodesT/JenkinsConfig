@@ -57,7 +57,7 @@ fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
 IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
 echo Last tag was: $IPP_VER_PREV &gt; releaseNotes.txt
-git log --oneline --decorate 2.0.13.205.7.146..${IPP_VER} &gt;&gt; releaseNotes.txt
+git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; releaseNotes.txt
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
