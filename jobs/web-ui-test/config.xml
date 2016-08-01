@@ -50,15 +50,13 @@
     <hudson.tasks.Shell>
       <command>echo &apos;
 {
-  &quot;directory&quot;: &quot;app/components/&quot;,
-  &quot;timeout&quot;: 120000,
-  &quot;registry&quot;: {
-    &quot;search&quot;: [
-      &quot;http://172.16.143.124:8081/artifactory/list/bower-release-local/&quot;,
-      &quot;http://172.16.143.124:8081/artifactory/list/bower-remote-cache/&quot;
-    ]
-  }
-}&apos; &gt; ${WORKSPACE}/.bowerrc
+	&quot;registry&quot; : &quot;http://172.16.143.124:8081/artifactory/api/bower/bower-remote&quot;,
+	&quot;resolvers&quot; : [
+		&quot;bower-art-resolver&quot;
+	]
+}
+
+&apos; &gt; ${WORKSPACE}/.bowerrc
 
 
 
