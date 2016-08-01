@@ -48,7 +48,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;
+      <command>echo &apos;
 {
   &quot;directory&quot;: &quot;app/components/&quot;,
   &quot;timeout&quot;: 120000,
@@ -58,7 +58,7 @@
       &quot;http://172.16.143.124:8081/artifactory/list/bower-remote-cache/&quot;
     ]
   }
-}&quot; &gt; ${WORKSPACE}/.bowerrc
+}&apos; &gt; ${WORKSPACE}/.bowerrc
 
 
 
