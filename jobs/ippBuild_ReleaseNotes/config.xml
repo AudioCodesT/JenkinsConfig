@@ -28,7 +28,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>2.0.13_450HD</name>
+        <name>3.0.0_450HD</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -53,9 +53,10 @@
       <command>IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 
-fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
-((fourth--))
-IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
+#fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
+#((fourth--))
+#IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
+IPP_VER_PREV=`git describe --tags`;
 echo Last tag was: $IPP_VER_PREV &gt; releaseNotes.txt
 git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; releaseNotes.txt
 
