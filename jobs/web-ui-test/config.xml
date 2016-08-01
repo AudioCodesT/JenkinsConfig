@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>gerrit trigger when new patchset&#xd;
-Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verified-1 if failed</description>
+  <description>test artifactory pro</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -29,7 +28,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$GERRIT_BRANCH</name>
+        <name>**</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -38,95 +37,33 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <projectName>web-ui/arm</projectName>
     </browser>
     <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
-    </extensions>
+    <extensions/>
   </scm>
   <assignedNode>web-ui-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>web-ui/arm</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#connect repositories using https instead opf git:
-git config url.https://.insteadOf git://
+      <command>echo &quot;
+{
+  &quot;directory&quot;: &quot;app/components/&quot;,
+  &quot;timeout&quot;: 120000,
+  &quot;registry&quot;: {
+    &quot;search&quot;: [
+      &quot;http://172.16.143.124:8081/artifactory/list/bower-release-local/&quot;,
+      &quot;http://172.16.143.124:8081/artifactory/list/bower-remote-cache/&quot;
+    ]
+  }
+}&quot; &gt; ${WORKSPACE}/.bowerrc
 
-#set chrome bin
-export CHROME_BIN=/usr/bin/google-chrome
 
-#run private-bower
-if ( ! ps -ef | grep private-bower | grep -v grep) &gt; /dev/null
-then sudo private-bower &amp;
-sleep 15
-fi
 
-#cd $WORKSPACE
-cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
-cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/build.config.js ${WORKSPACE}/
-cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
-npm install
-cp ../index.js node_modules/karma-ie-launcher/index.js -f
-#private-bower &amp;
-#sleep 15
-bower install --force-latest
-grunt dist
+bower install
 </command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
@@ -143,51 +80,5 @@ grunt dist
       <assignedLabels></assignedLabels>
       <parallelBuild>false</parallelBuild>
     </org.jenkinsci.plugins.xvfb.Xvfb>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </resolverCredentialsConfig>
-      <deployPattern>dist/arm-ui-7.0.zip=&gt;com/ac/arm/arm-ui/7.0/
-dist/arm-web-ui-7.0.zip=&gt;com/ac/arm/arm-web-ui/7.0/</deployPattern>
-      <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
-      <deployBuildInfo>false</deployBuildInfo>
-      <includeEnvVars>true</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <multiConfProject>false</multiConfProject>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
 </project>
