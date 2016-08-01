@@ -49,6 +49,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>npm install bower-art-resolver
+pushd ${WORKSPACE}
 echo &apos;
 {
 	&quot;registry&quot; : &quot;http://172.16.143.124:8081/artifactory/bower-remote-github/&quot;,
@@ -57,7 +58,7 @@ echo &apos;
 	]
 }
 
-&apos; &gt; ${WORKSPACE}/.bowerrc
+&apos; &gt; .bowerrc
 
 
 echo &apos;
@@ -162,9 +163,22 @@ echo &apos;
       ]
     }
   }
-}
-&apos;
+} &apos; &gt; bower.json
 
+
+echo &quot;**&quot;
+echo &quot;**&quot;
+cat .bowerrc
+
+echo &quot;**&quot;
+echo &quot;**&quot;
+echo &quot;**&quot;
+echo &quot;**&quot;
+
+cat bower.json
+
+echo &quot;**&quot;
+echo &quot;**&quot;
 
 bower install
 </command>
