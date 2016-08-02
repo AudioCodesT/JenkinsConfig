@@ -84,14 +84,14 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
       <skipVote>
-        <onSuccessful>false</onSuccessful>
+        <onSuccessful>true</onSuccessful>
         <onFailed>true</onFailed>
         <onUnstable>true</onUnstable>
         <onNotBuilt>true</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
       <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
+      <silentStartMode>true</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
       <dependencyJobsNames></dependencyJobsNames>
