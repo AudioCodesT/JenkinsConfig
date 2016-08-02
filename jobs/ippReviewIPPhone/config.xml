@@ -85,15 +85,10 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
       </gerritProjects>
       <skipVote>
         <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
+        <onFailed>true</onFailed>
+        <onUnstable>true</onUnstable>
+        <onNotBuilt>true</onNotBuilt>
       </skipVote>
-      <gerritBuildStartedVerifiedValue>0</gerritBuildStartedVerifiedValue>
-      <gerritBuildSuccessfulVerifiedValue>1</gerritBuildSuccessfulVerifiedValue>
-      <gerritBuildFailedVerifiedValue>0</gerritBuildFailedVerifiedValue>
-      <gerritBuildUnstableVerifiedValue>0</gerritBuildUnstableVerifiedValue>
-      <gerritBuildNotBuiltVerifiedValue>0</gerritBuildNotBuiltVerifiedValue>
       <silentMode>false</silentMode>
       <notificationLevel></notificationLevel>
       <silentStartMode>false</silentStartMode>
