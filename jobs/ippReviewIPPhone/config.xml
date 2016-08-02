@@ -76,12 +76,61 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/szipp</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>false</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>false</excludeNoCodeChange>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command># Get changed files in this commit
-git diff-tree --no-commit-id --name-only -r ${GERRIT_PATCHSET_REVISION} &gt; changedFiles.txt</command>
+git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Static code analysis - CPP Check
@@ -94,7 +143,7 @@ cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFi
 #cppcheck --enable=all --inconclusive --xml --xml-version=2 src/apps/radvision/radvision_linux/ice/ice/IceStun.c 2&gt; cppcheck.xml</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only -r ${GERRIT_PATCHSET_REVISION} | sed &apos;:a;N;$!ba;s/\n/,/g&apos;` &gt; changedFiles.prop</command>
+      <command>echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; | sed &apos;:a;N;$!ba;s/\n/,/g&apos;` &gt; changedFiles.prop</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
@@ -129,7 +178,7 @@ sonar.report.export.path=sonar-report.json</properties>
     <org.jenkinsci.plugins.cppcheck.CppcheckPublisher plugin="cppcheck@1.21">
       <cppcheckConfig>
         <pattern>cppcheck.xml</pattern>
-        <ignoreBlankFiles>false</ignoreBlankFiles>
+        <ignoreBlankFiles>true</ignoreBlankFiles>
         <allowNoReport>true</allowNoReport>
         <configSeverityEvaluation>
           <threshold></threshold>
