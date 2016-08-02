@@ -57,7 +57,7 @@
     <hudson.tasks.Shell>
       <command>git checkout 3.0.0_450HD
 git pull --rebase
-if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` == &quot;Jenkins&quot; ]; then exit 1; fi
+#if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` == &quot;Jenkins&quot; ]; then exit 1; fi
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
