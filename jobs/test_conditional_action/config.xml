@@ -17,6 +17,15 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>RELEASE_VMS</name>
+          <description></description>
+          <defaultValue>1</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>master</assignedNode>
@@ -28,33 +37,27 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command></command>
+      <command>echo &quot;condition test&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition" plugin="run-condition@1.0">
-            <lhs>RELEASE_VMS</lhs>
-            <rhs>1</rhs>
-            <comparator class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition$EqualTo"/>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
+            <token>RELEASE_VMS</token>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>VERSION_NAME=$VERSION_NAME.0</properties>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>armBuildVMs, armCreateUpgradeTarball</projects>
-                  <condition>SUCCESS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
+              <buildSteps>
+                <hudson.tasks.Shell>
+                  <command>echo &quot;TOKEN is true&gt;&gt; RELEASE_VMS = 1&quot;</command>
+                </hudson.tasks.Shell>
+              </buildSteps>
+              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
+              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
+              <markBuildUnstable>false</markBuildUnstable>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
