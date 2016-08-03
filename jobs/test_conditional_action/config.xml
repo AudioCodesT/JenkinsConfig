@@ -5,7 +5,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
-      <useBuildBlocker>true</useBuildBlocker>
+      <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs</blockingJobs>
@@ -18,197 +18,20 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/ARM/Arm</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>$GERRIT_BRANCH</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>ARM/Arm</projectName>
-    </browser>
-    <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
-    </extensions>
-  </scm>
-  <assignedNode>arm-build</assignedNode>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>master</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>ARM/Arm</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>master</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <forbiddenFilePaths>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
-              <compareType>ANT</compareType>
-              <pattern>ArmCommon/Common/VMFiles/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
-              <compareType>ANT</compareType>
-              <pattern>ArmCommon/Common/src/main/resources/upgrade/upgrade.pl</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
-              <compareType>ANT</compareType>
-              <pattern>ArmCommon/Common/.deploy/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
-          </forbiddenFilePaths>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
-  <concurrentBuild>true</concurrentBuild>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git checkout master
-git pull --rebase</command>
-    </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
-      <mavenName>Maven_v325</mavenName>
-      <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release</goals>
-      <mavenOpts></mavenOpts>
-    </org.jfrog.hudson.maven3.Maven3Builder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
-      <mavenName>Maven_v325</mavenName>
-      <rootPom>pom.xml</rootPom>
-      <goals>cobertura:cobertura -Dcobertura.report.format=xml</goals>
-      <mavenOpts></mavenOpts>
-    </org.jfrog.hudson.maven3.Maven3Builder>
-    <hudson.tasks.Shell>
-      <command>if [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.0.jar; fi</command>
+      <command></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
-      <tasks>
-        <hudson.plugins.postbuildtask.TaskProperties>
-          <logTexts>
-            <hudson.plugins.postbuildtask.LogProperties>
-              <logText>Build was aborted</logText>
-              <operator>AND</operator>
-            </hudson.plugins.postbuildtask.LogProperties>
-          </logTexts>
-          <EscalateStatus>false</EscalateStatus>
-          <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
-        </hudson.plugins.postbuildtask.TaskProperties>
-      </tasks>
-    </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.cobertura.CoberturaPublisher plugin="cobertura@1.9.7">
-      <coberturaReportFile>**/target/site/cobertura/coverage.xml</coberturaReportFile>
-      <onlyStable>false</onlyStable>
-      <failUnhealthy>false</failUnhealthy>
-      <failUnstable>false</failUnstable>
-      <autoUpdateHealth>false</autoUpdateHealth>
-      <autoUpdateStability>false</autoUpdateStability>
-      <zoomCoverageChart>false</zoomCoverageChart>
-      <maxNumberOfBuilds>0</maxNumberOfBuilds>
-      <failNoReports>true</failNoReports>
-      <healthyTarget>
-        <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>METHOD</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>8000000</int>
-          </entry>
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>8000000</int>
-          </entry>
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>CONDITIONAL</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>7000000</int>
-          </entry>
-        </targets>
-      </healthyTarget>
-      <unhealthyTarget>
-        <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>METHOD</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>0</int>
-          </entry>
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>0</int>
-          </entry>
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>CONDITIONAL</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>0</int>
-          </entry>
-        </targets>
-      </unhealthyTarget>
-      <failingTarget>
-        <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>METHOD</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>0</int>
-          </entry>
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>LINE</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>0</int>
-          </entry>
-          <entry>
-            <hudson.plugins.cobertura.targets.CoverageMetric>CONDITIONAL</hudson.plugins.cobertura.targets.CoverageMetric>
-            <int>0</int>
-          </entry>
-        </targets>
-      </failingTarget>
-      <sourceEncoding>ASCII</sourceEncoding>
-    </hudson.plugins.cobertura.CoberturaPublisher>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
@@ -239,68 +62,5 @@ git pull --rebase</command>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
-  <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </resolverCredentialsConfig>
-      <deployPattern>common-7.0.jar=&gt;com/ac/arm/common/7.0/</deployPattern>
-      <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
-      <deployBuildInfo>true</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <multiConfProject>false</multiConfProject>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@1.92.1">
-      <info>
-        <propertiesContent>artifactory_username=admin</propertiesContent>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-    </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@1.92.1">
-      <injectGlobalPasswords>false</injectGlobalPasswords>
-      <maskPasswordParameters>true</maskPasswordParameters>
-      <passwordEntries>
-        <EnvInjectPasswordEntry>
-          <name>artifactory_password</name>
-          <value>Fu716nR7gMphn+wlAcoezYvCPX3Sulw5RrlYNkTjvxA=</value>
-        </EnvInjectPasswordEntry>
-      </passwordEntries>
-    </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
-  </buildWrappers>
+  <buildWrappers/>
 </project>
