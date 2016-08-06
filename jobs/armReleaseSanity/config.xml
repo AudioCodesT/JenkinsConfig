@@ -10,6 +10,9 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -26,6 +29,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>export TERM=xterm
+#sh -x ArmCommon/Common/.deploy/aws_releaseSanity.sh
 cd /root/jenkinsslave
 sh -x aws_releaseSanity.sh
 cat /root/jenkinsslave/aws_releaseSanity_log.out |grep &quot;Sanity result is 0&quot;
@@ -41,6 +45,11 @@ cat /root/jenkinsslave/aws_releaseSanity_log.out |grep &quot;Sanity result is 0&
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients></recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers/>
 </project>
