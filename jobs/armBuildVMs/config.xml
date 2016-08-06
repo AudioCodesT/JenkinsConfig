@@ -10,6 +10,9 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -50,7 +53,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cd /root/jenkinsslave/
+      <command>#sh -x ArmCommon/Common/.deploy/aws_buildTopologyVM.sh $VERSION_NAME
+#sh -x ArmCommon/Common/.deploy/aws_buildRouterVM.sh $VERSION_NAME
+cd /root/jenkinsslave
 sh -x aws_buildTopologyVM.sh $VERSION_NAME
 sh -x aws_buildRouterVM.sh $VERSION_NAME</command>
     </hudson.tasks.Shell>
