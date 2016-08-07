@@ -22,7 +22,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/IPP/szipp.git</url>
+        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -34,7 +34,7 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
       <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>IPP/szipp</projectName>
+      <projectName>IPP/SFB</projectName>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -91,9 +91,7 @@ git config --global user.email devops@audiocodes.com
 message=&quot;promote version to ${IPP_VER}&quot;
 git commit -am &quot;$message&quot;
 git push origin 3.0.0_450HD
-#git push origin ${IPP_VER}
-git pull
-</command>
+#git push origin ${IPP_VER}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
