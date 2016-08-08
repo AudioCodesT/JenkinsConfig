@@ -60,21 +60,24 @@
     <hudson.tasks.Shell>
       <command>git checkout 3.0.0_450HD
 git pull --rebase
-if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` == &quot;Jenkins&quot; ]; then exit 1; fi
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Update file with new version num
-fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
-((fourth++))
-sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
-mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
-</command>
+if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot; ]; then
+	fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
+	((fourth++))
+	sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
+	mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
+else
+	echo &quot;No change was found&quot;
+	exit 1;
+fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
-if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
+#if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
