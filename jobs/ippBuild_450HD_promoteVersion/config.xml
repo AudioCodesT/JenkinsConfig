@@ -70,7 +70,7 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
 	sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
 	mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
 else
-	echo &quot;No change was found&quot;
+	echo &quot;Branch is up to date. Nothing to do&quot;
 	exit 1;
 fi</command>
     </hudson.tasks.Shell>
