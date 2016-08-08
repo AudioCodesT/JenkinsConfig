@@ -1,7 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>Activated at ~11:00AM and at ~23:00PM, this job create a new TAG and execute the 2 following jobs:&#xd;
+1)      ippBuild_450HD_Lync – Compile 450HD&#xd;
+2)      ippBuild_ReleaseNotes&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
