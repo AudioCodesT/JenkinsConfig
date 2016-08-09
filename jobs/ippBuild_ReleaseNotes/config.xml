@@ -32,10 +32,6 @@
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>IPP/SFB</projectName>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
@@ -57,8 +53,9 @@ fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
 IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
 IPP_VER_PREV=&quot;3.0.0.346.7&quot;;
-echo git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt; releaseNotes.txt
-git log --oneline --decorate --no-color ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; releaseNotes.txt
+echo git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
+git log --oneline --decorate --no-color ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
+sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
