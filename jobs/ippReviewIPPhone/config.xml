@@ -121,7 +121,7 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <builders>
     <hudson.tasks.Shell>
       <command># Get changed files in this commit
-git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt</command>
+git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt || exit 0</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Static code analysis - CPP Check
