@@ -146,7 +146,7 @@ make auto AUTOPRD=$AUTOPRD LOG=0
     <hudson.tasks.Mailer plugin="mailer@1.16">
       <recipients>yossim@audiocodes.com,oleg.Friedman@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>true</sendToIndividuals>
+      <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers/>
