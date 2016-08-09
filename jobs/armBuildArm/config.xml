@@ -130,7 +130,7 @@ git pull --rebase</command>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
-      <command>if [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.0.jar; fi</command>
+      <command>if [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -270,7 +270,7 @@ git pull --rebase</command>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>common-7.0.jar=&gt;com/ac/arm/common/7.0/</deployPattern>
+      <deployPattern>common-7.2.jar=&gt;com/ac/arm/common/7.2/</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
