@@ -134,7 +134,7 @@ cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFi
 #cppcheck --enable=all --inconclusive --xml --xml-version=2 src/apps/radvision/radvision_linux/ice/ice/IceStun.c 2&gt; cppcheck.xml</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; | sed &apos;:a;N;$!ba;s/\n/,/g&apos;` &gt; changedFiles.prop</command>
+      <command>echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; | sed &apos;:a;N;$!ba;s/\n/,/g&apos;` &gt; changedFiles.prop || exit 0</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
