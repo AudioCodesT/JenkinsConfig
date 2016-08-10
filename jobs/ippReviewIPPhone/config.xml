@@ -130,7 +130,7 @@ git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSE
 #cppcheck -j 2 --xml --xml-version=2 ${WORKSPACE}/src 2&gt; cppcheck.xml
 
 # Enable all checks only on new files
-cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml
+cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml || exit 0
 #cppcheck --enable=all --inconclusive --xml --xml-version=2 src/apps/radvision/radvision_linux/ice/ice/IceStun.c 2&gt; cppcheck.xml</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
