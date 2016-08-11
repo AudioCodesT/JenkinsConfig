@@ -59,6 +59,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>git checkout 3.0.0_450HD
+git branch --set-upstream 3.0.0_450HD remotes/origin/3.0.0_450HD
 git pull --rebase
 </command>
     </hudson.tasks.Shell>
