@@ -150,5 +150,15 @@ grunt dist
       <assignedLabels></assignedLabels>
       <parallelBuild>false</parallelBuild>
     </org.jenkinsci.plugins.xvfb.Xvfb>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.17.1">
+      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
+        <timeoutSecondsString>180</timeoutSecondsString>
+      </strategy>
+      <operationList>
+        <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
+          <maxRestarts>3</maxRestarts>
+        </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
+      </operationList>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
   </buildWrappers>
 </project>
