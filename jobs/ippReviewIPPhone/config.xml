@@ -121,7 +121,7 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <builders>
     <hudson.tasks.Shell>
       <command>#remove the flag that indicate about the need of cppcheck
-if [ -f &quot;needcppcheck&quot; ]; then rm -rf needcppcheck; fi
+if [ -f &quot;needcppcheck&quot; ]; then rm -f needcppcheck; fi
 # Get changed files in this commit, but only *.c or *.cpp or *.h extentions
 git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt || { echo &quot;*****  no files to check  *****&quot;; exit 0; }
 touch needcppcheck
