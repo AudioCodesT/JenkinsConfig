@@ -120,9 +120,11 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># Get changed files in this commit, but only *.c or *.cpp or *.h extentions
+      <command>#remove the flag that indicate about the need of cppcheck
+if [ -f &quot;needcppcheck&quot; ]; then rm -rf needcppcheck; fi
+# Get changed files in this commit, but only *.c or *.cpp or *.h extentions
 git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt || { echo &quot;*****  no files to check  *****&quot;; exit 0; }
-
+touch needcppcheck
 # Static code analysis - CPP Check
 cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml
 
@@ -131,8 +133,9 @@ echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only --diff-filte
     </hudson.tasks.Shell>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.3">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-      <runCondition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-        <command>! ( git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r 051be60722a24dcbb2297def2353f1375c3ba70d | egrep &apos;\.c$|\.cpp$|\.h$&apos; )</command>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.FileExistsCondition" plugin="run-condition@1.0">
+        <file>needcppcheck</file>
+        <baseDir class="org.jenkins_ci.plugins.run_condition.common.BaseDirectory$Workspace"/>
       </runCondition>
       <conditionalbuilders>
         <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -170,8 +173,9 @@ sonar.report.export.path=sonar-report.json</properties>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>! ( git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r 051be60722a24dcbb2297def2353f1375c3ba70d | egrep &apos;\.c$|\.cpp$|\.h$&apos; )</command>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.FileExistsCondition" plugin="run-condition@1.0">
+            <file>needcppcheck</file>
+            <baseDir class="org.jenkins_ci.plugins.run_condition.common.BaseDirectory$Workspace"/>
           </condition>
           <publisherList>
             <org.jenkinsci.plugins.cppcheck.CppcheckPublisher plugin="cppcheck@1.21">
