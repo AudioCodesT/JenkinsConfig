@@ -1,7 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>run every night after the armNightSanity job @ ~22:15&#xd;
+steps:&#xd;
+1. checkout RouterTestModule repo&#xd;
+2. run maven test ConfigureDevicesSettings - this configures SBC devices to work or not work with Configurator 10.7.20.150&#xd;
+3. run sql init and then qsl configuratorPredefineData&#xd;
+4. run maven test RouterModuleTest&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
