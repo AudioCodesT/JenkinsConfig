@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <maven2-moduleset plugin="maven-plugin@2.12.1">
   <actions/>
-  <description></description>
+  <description>1. checkout Arm repo&#xd;
+2. maven set new version to reactor pom.xml&#xd;
+3. maven set new version -SNAPSHOT to parent pom.xml&#xd;
+4. commit and push to remote master&#xd;
+5. trigger jobs: armBuildARM-UI, armBuildarm-frontend (old GUI)&#xd;
+6. trigger job armBuildArm</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
