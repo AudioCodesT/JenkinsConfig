@@ -5,7 +5,11 @@
       <name>sonar_runner_251</name>
       <properties>
         <hudson.tools.InstallSourceProperty>
-          <installers/>
+          <installers>
+            <hudson.plugins.sonar.SonarRunnerInstaller>
+              <id>2.5.1</id>
+            </hudson.plugins.sonar.SonarRunnerInstaller>
+          </installers>
         </hudson.tools.InstallSourceProperty>
       </properties>
     </hudson.plugins.sonar.SonarRunnerInstallation>
