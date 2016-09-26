@@ -7,9 +7,9 @@ configName - name of the predefined session config, e.g. Sanity440LyncConfig&#xd
 firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#xd;
 1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
 available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no &apos;HD&apos; in firmware name);&#xd;
-2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
+2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName LyncBasic_OverNightPhase2.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
 &#xd;
-Should work on 10.59.1.46 - ippAuto</description>
+Should work on 10.59.1.150 - ippSanityTest02</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -46,7 +46,7 @@ Should work on 10.59.1.46 - ippAuto</description>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ippSanityTest01</assignedNode>
+  <assignedNode>ippSanityTest02</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
