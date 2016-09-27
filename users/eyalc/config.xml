@@ -6,7 +6,14 @@
       <apiToken>wCKD44+L4Nz2zMfKiSDmkvc+nZBAmqqKTHduuQzXYVUQV7WSh2DA10Lq4g4XcOmq</apiToken>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@1.26">
-      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
+      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
+        <entry>
+          <com.cloudbees.plugins.credentials.domains.Domain>
+            <specifications/>
+          </com.cloudbees.plugins.credentials.domains.Domain>
+          <java.util.concurrent.CopyOnWriteArrayList/>
+        </entry>
+      </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
     <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
       <triggers/>
@@ -23,7 +30,9 @@
       </views>
     </hudson.model.MyViewsProperty>
     <hudson.model.PaneStatusProperties>
-      <collapsed/>
+      <collapsed>
+        <string>buildQueue</string>
+      </collapsed>
     </hudson.model.PaneStatusProperties>
     <hudson.search.UserSearchProperty>
       <insensitiveSearch>false</insensitiveSearch>
