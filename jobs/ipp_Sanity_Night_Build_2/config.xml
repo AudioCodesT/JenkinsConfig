@@ -79,12 +79,11 @@ if %model%==405 ( set ImageName=UC%model%_%LASTBL%_ce4 ) else ( set ImageName=UC
 &#xd;
 net use z: \\10.59.0.87\Firmwares&#xd;
 IF EXIST J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img (&#xd;
-	rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
 	IF NOT EXIST z:\UC440HD_%LASTBL%.img copy /Y J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img z:\&#xd;
 	IF NOT EXIST z:\UC430HD_%LASTBL%.img copy /Y J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:\&#xd;
 	IF NOT EXIST z:\UC420HD_%LASTBL%.img copy /Y J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:\&#xd;
 	IF NOT EXIST z:\UC405_%LASTBL%_ce4.img copy /Y J:\%LASTBL%\405\UC405_%LASTBL%_ce4.img z:\&#xd;
-	cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
+	cd C:\IpPhoneAutomation\ATA&#xd;
 	tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.ACDev.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%.img&#xd;
 	if ErrorLevel 1 (&#xd;
 	  set /P LASTBL=&lt;BeLASTBL.txt&#xd;
