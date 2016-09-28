@@ -69,12 +69,12 @@ net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versi
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   dir /o-d /B j: &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
-  Set COUNTER=0&#xd;
+  set COUNTER=0&#xd;
 )&#xd;
 &#xd;
 :RunAgain&#xd;
 set /A COUNTER=%COUNTER%+1&#xd;
-if %model%==405 ( set ImageName=UC%model%_%LASTBL%_ce4 ) else ( set ImageName=UC%model%HD_%LASTBL% )&#xd;
+if %model%==405 ( set ImageName=&quot;UC%model%_%LASTBL%_ce4&quot; ) else ( set ImageName=&quot;UC%model%HD_%LASTBL%&quot; )&#xd;
 set Error=0&#xd;
 net use z: \\10.59.0.87\Firmwares&#xd;
 IF EXIST J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img (&#xd;
