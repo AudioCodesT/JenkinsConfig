@@ -92,7 +92,7 @@ if %Error%==0 tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -s
   if ErrorLevel 1 set Error=1&#xd;
   if %Error%==1 (&#xd;
     echo find Error&#xd;
-    set LASTBL=BeLASTBL&#xd;
+    set LASTBL=%BeLASTBL%&#xd;
     if %COUNTER% EQU 1 goto RunAgain&#xd;
     Exit 1&#xd;
   ) else (&#xd;
