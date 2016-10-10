@@ -60,7 +60,7 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
+      <command>curl -s http://ippauto1/index.php/status/show.xml &gt; show.xml&#xd;
 type show.xml&#xd;
 type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
