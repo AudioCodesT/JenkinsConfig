@@ -82,7 +82,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>/opt/devops/tools/checkvi.pl &quot;$GERRIT_PROJECT&quot; &quot;$GERRIT_CHANGE_COMMIT_MESSAGE&quot; &quot;$GERRIT_CHANGE_ID&quot; &quot;$GERRIT_BRANCH&quot; &quot;$GERRIT_CHANGE_OWNER_NAME&quot;</command>
+      <command>/opt/devops/tools/checkvi_when_push_to_gerrit.pl &quot;$GERRIT_PROJECT&quot; &quot;$GERRIT_CHANGE_COMMIT_MESSAGE&quot; &quot;$GERRIT_CHANGE_ID&quot; &quot;$GERRIT_BRANCH&quot; &quot;$GERRIT_CHANGE_OWNER_NAME&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
