@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.6">
+<matrix-project plugin="matrix-project@1.7.1">
   <actions/>
   <description>Compile 450HD - activated by ippBuild_450HD_promoteVersion </description>
   <keepDependencies>false</keepDependencies>
@@ -109,6 +109,12 @@ if [ $LOG == 0 ]; then
   make SUBVERSION=dummy;
 fi</command>
     </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
+# (artifactory do not allow deploying checksum files)
+mv ${WORKSPACE}/build/image/*$AUTOPRD*.img.md5 ${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt
+mv ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5 ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt</command>
+    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
@@ -151,8 +157,10 @@ fi</command>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
 ${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
