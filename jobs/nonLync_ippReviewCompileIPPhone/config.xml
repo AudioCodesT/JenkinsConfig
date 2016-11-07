@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Compile 450HD after “Push to Gerrit”</description>
+  <description>Compile 440HD after “Push to Gerrit”</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -33,7 +33,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>$GERRIT_REFSPEC</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
+        <url>ssh://jenkins@gerrit:29418/tests/non_lync</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -72,7 +72,7 @@
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>IPP/SFB</pattern>
+          <pattern>tests/non_lync</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -122,7 +122,7 @@
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
-        <string>450HD</string>
+        <string>440HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -157,7 +157,7 @@ make auto AUTOPRD=$AUTOPRD LOG=0
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.WsCleanup>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>yossim@audiocodes.com,oleg.Friedman@audiocodes.com</recipients>
+      <recipients></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
