@@ -2,8 +2,8 @@
 <project>
   <actions/>
   <description>Activated at ~11:00AM and at ~23:00PM, this job create a new TAG and execute the 2 following jobs:&#xd;
-1)      ippBuild_450HD_Lync – Compile 450HD&#xd;
-2)      ippBuild_ReleaseNotes&#xd;
+1)      ippBuild nonLync – Compile 6 boards&#xd;
+2)      ippBuild nonLync ReleaseNotes&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -25,19 +25,19 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
+        <url>ssh://jenkins@gerrit:29418/tests/non_lync</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>3.0.0_450HD</name>
+        <name>non_lync</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
       <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>IPP/SFB</projectName>
+      <projectName>tests/non_lync</projectName>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -51,7 +51,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <hudson.triggers.SCMTrigger>
-      <spec>H 9,21 * * *</spec>
+      <spec>H 10,22 * * *</spec>
       <ignorePostCommitHooks>true</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
@@ -62,7 +62,7 @@
 if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot; ]; then
 	echo NEW_TAG=1 &gt; generated_ipp_version.properties
     #rebase:
-    git checkout 3.0.0_450HD
+    git checkout non_lync
 	git branch --set-upstream 3.0.0_450HD remotes/origin/3.0.0_450HD
 	git pull --rebase
     # Update file with new version num
