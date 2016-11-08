@@ -63,7 +63,7 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
 	echo NEW_TAG=1 &gt; generated_ipp_version.properties
     #rebase:
     git checkout non_lync
-	git branch --set-upstream 3.0.0_450HD remotes/origin/3.0.0_450HD
+	git branch --set-upstream non_lync remotes/origin/non_lync
 	git pull --rebase
     # Update file with new version num
 	fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
@@ -78,7 +78,7 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
     git config --global user.email devops@audiocodes.com
     message=&quot;promote version to ${IPP_VER}&quot;
     git commit -am &quot;$message&quot;
-    git push origin 3.0.0_450HD
+    git push origin non_lync
     #git push origin ${IPP_VER}
 else
 	echo &quot;Branch is up to date. Nothing to do&quot;
