@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Create &quot;ReleaseNote.txt&quot; - activated by ippBuild_450HD_promoteVersion </description>
+  <description>Create &quot;ReleaseNote.txt&quot; - activated by ippBuild non lync_promoteVersion </description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -22,13 +22,13 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
+        <url>ssh://jenkins@gerrit:29418/tests/non_lync</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>3.0.0_450HD</name>
+        <name>non_lync</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -52,7 +52,7 @@ IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
 IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
-IPP_VER_PREV=&quot;3.0.0.346.7&quot;;
+IPP_VER_PREV=&quot;2.2.10.6&quot;;
 echo git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
@@ -100,7 +100,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/lync/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
+      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
