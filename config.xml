@@ -13,16 +13,16 @@
     <roleMap type="projectRoles">
       <role name="ARM_ADMINS" pattern="(arm.*)">
         <permissions>
-          <permission>hudson.model.Item.Release</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
+          <permission>hudson.model.Item.Release</permission>
           <permission>hudson.model.Item.Create</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
           <permission>hudson.model.Item.Configure</permission>
           <permission>hudson.model.Item.Read</permission>
-          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>hudson.model.Item.Build</permission>
           <permission>hudson.scm.SCM.Tag</permission>
           <permission>hudson.model.Item.Discover</permission>
@@ -33,8 +33,8 @@
       </role>
       <role name="ARM_DEVELOPERS" pattern="(arm.*)">
         <permissions>
-          <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
         </permissions>
@@ -44,16 +44,16 @@
       </role>
       <role name="CI_IPP_ADMINS" pattern="(ipp.*)">
         <permissions>
-          <permission>hudson.model.Item.Release</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
+          <permission>hudson.model.Item.Release</permission>
           <permission>hudson.model.Item.Create</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
           <permission>hudson.model.Item.Configure</permission>
           <permission>hudson.model.Item.Read</permission>
-          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>hudson.model.Item.Build</permission>
           <permission>hudson.scm.SCM.Tag</permission>
           <permission>hudson.model.Item.Discover</permission>
@@ -64,8 +64,8 @@
       </role>
       <role name="CI_IPP_DEVELOPERS" pattern="(ipp.*)">
         <permissions>
-          <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>hudson.model.Item.Build</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
@@ -76,18 +76,18 @@
       </role>
       <role name="CI_WEB-UI_ADMINS" pattern="(web.*)">
         <permissions>
-          <permission>hudson.model.Item.Release</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
+          <permission>hudson.model.Item.Release</permission>
           <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Create</permission>
           <permission>hudson.model.Item.Workspace</permission>
-          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
           <permission>hudson.model.Item.Build</permission>
-          <permission>hudson.scm.SCM.Tag</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
-          <permission>hudson.model.Item.Discover</permission>
+          <permission>hudson.scm.SCM.Tag</permission>
           <permission>hudson.model.Item.Configure</permission>
+          <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
           <sid>CI_WEB-UI_admins</sid>
@@ -95,8 +95,8 @@
       </role>
       <role name="CI_WEB-UI_DEVELOPERS" pattern="(web.*)">
         <permissions>
-          <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
         </permissions>
@@ -123,15 +123,15 @@
           <permission>hudson.model.Hudson.UploadPlugins</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains</permission>
           <permission>hudson.model.Computer.Create</permission>
-          <permission>org.jfrog.hudson.ArtifactoryPlugin.PushToBintray</permission>
           <permission>hudson.model.View.Configure</permission>
+          <permission>org.jfrog.hudson.ArtifactoryPlugin.PushToBintray</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
-          <permission>hudson.model.Item.Configure</permission>
           <permission>hudson.model.Hudson.ConfigureUpdateCenter</permission>
           <permission>hudson.model.Computer.Build</permission>
-          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Configure</permission>
           <permission>hudson.model.Hudson.Administer</permission>
           <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
           <permission>hudson.model.Computer.Delete</permission>
           <permission>hudson.model.Item.Build</permission>
@@ -139,20 +139,20 @@
           <permission>hudson.model.Item.Move</permission>
           <permission>hudson.model.Item.Discover</permission>
           <permission>hudson.model.Hudson.Read</permission>
-          <permission>hudson.model.Item.Release</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
-          <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
+          <permission>hudson.model.Item.Release</permission>
           <permission>hudson.model.Item.Create</permission>
+          <permission>org.jfrog.hudson.ArtifactoryPlugin.Release</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Delete</permission>
           <permission>hudson.model.Run.Replay</permission>
           <permission>hudson.model.View.Read</permission>
-          <permission>hudson.model.View.Create</permission>
           <permission>hudson.model.Hudson.RunScripts</permission>
+          <permission>hudson.model.View.Create</permission>
           <permission>hudson.model.Item.Delete</permission>
           <permission>org.jfrog.hudson.ArtifactoryPlugin.Promote</permission>
-          <permission>hudson.model.Computer.Configure</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
+          <permission>hudson.model.Computer.Configure</permission>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Create</permission>
           <permission>hudson.model.Computer.Disconnect</permission>
           <permission>hudson.model.Run.Update</permission>
@@ -165,8 +165,17 @@
           <sid>natanm</sid>
         </assignedSIDs>
       </role>
+      <role name="ipp-sanity" pattern=".*">
+        <permissions>
+          <permission>hudson.model.Hudson.Read</permission>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Item.Configure</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
