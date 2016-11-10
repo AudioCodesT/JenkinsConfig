@@ -104,6 +104,16 @@
           <sid>CI_WEB-UI_developers</sid>
         </assignedSIDs>
       </role>
+      <role name="ipp_sanity" pattern="(ipp_Sanity.*)">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Run.Replay</permission>
+          <permission>hudson.model.Item.Configure</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
     </roleMap>
     <roleMap type="globalRoles">
       <role name="ReadOnly" pattern=".*">
