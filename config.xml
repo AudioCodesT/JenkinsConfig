@@ -112,7 +112,9 @@
           <permission>hudson.model.Run.Replay</permission>
           <permission>hudson.model.Item.Configure</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>tg</sid>
+        </assignedSIDs>
       </role>
     </roleMap>
     <roleMap type="globalRoles">
@@ -176,6 +178,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
