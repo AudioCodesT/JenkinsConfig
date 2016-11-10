@@ -165,20 +165,7 @@
           <sid>natanm</sid>
         </assignedSIDs>
       </role>
-      <role name="ipp-sanity" pattern=".*">
-        <permissions>
-          <permission>hudson.model.Hudson.Read</permission>
-          <permission>hudson.model.Item.Cancel</permission>
-          <permission>hudson.model.Item.Read</permission>
-          <permission>hudson.model.Item.Build</permission>
-          <permission>hudson.model.Item.Configure</permission>
-        </permissions>
-        <assignedSIDs>
-          <sid>tg</sid>
-        </assignedSIDs>
-      </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
