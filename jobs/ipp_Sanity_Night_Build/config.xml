@@ -72,7 +72,7 @@ if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
 )&#xd;
 &#xd;
-if %model%==405 ( set ImageName=UC%model%_%LASTBL%_ce4 ) else ( set ImageName=UC%model%HD_%LASTBL% )&#xd;
+if %model%==405 ( set ImageName=UC%model%_%LASTBL%_ce4.img ) else ( set ImageName=UC%model%HD_%LASTBL%.img )&#xd;
 &#xd;
 rem IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set SaveLASTBL=1 )&#xd;
 net use z: /DELETE&#xd;
@@ -84,7 +84,7 @@ IF EXIST J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img (&#xd;
 	IF NOT EXIST z:\UC420HD_%LASTBL%.img copy /Y J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:\&#xd;
 	IF NOT EXIST z:\UC405_%LASTBL%_ce4.img copy /Y J:\%LASTBL%\405\UC405_%LASTBL%_ce4.img z:\&#xd;
 	cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
-	tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%.img&#xd;
+	tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
 )&#xd;
 </command>
     </hudson.tasks.BatchFile>
