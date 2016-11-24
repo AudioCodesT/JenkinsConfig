@@ -165,7 +165,8 @@
   </buildWrappers>
   <prebuilders>
     <hudson.tasks.Shell>
-      <command>git gc --aggressive --prune=all &amp;</command>
+      <command>#Cleanup unnecessary files and optimize the local repository
+git gc --aggressive --prune=all &amp;</command>
     </hudson.tasks.Shell>
   </prebuilders>
   <postbuilders>
