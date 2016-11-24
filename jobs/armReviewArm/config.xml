@@ -163,7 +163,11 @@
   <buildWrappers>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
-  <prebuilders/>
+  <prebuilders>
+    <hudson.tasks.Shell>
+      <command>git gc --aggressive --prune=all &amp;</command>
+    </hudson.tasks.Shell>
+  </prebuilders>
   <postbuilders>
     <hudson.tasks.Shell>
       <command>/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION
