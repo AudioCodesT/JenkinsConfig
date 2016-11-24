@@ -134,7 +134,10 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+      <command>#Cleanup unnecessary files and optimize the local repository
+git gc --aggressive --prune=all &amp;
+
+export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 #make
 make auto AUTOPRD=$AUTOPRD LOG=0
