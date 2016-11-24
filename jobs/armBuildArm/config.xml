@@ -82,7 +82,10 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git checkout master
+      <command>#Cleanup unnecessary files and optimize the local repository
+git gc --aggressive --prune=all &amp;
+
+git checkout master
 git pull --rebase</command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
