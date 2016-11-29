@@ -82,11 +82,16 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD LOG=$LOG
-if [ $LOG == 0 ]; then
-  make binary;
-  make SUBVERSION=dummy;
-fi</command>
+
+make auto AUTOPRD=405__16M
+make binary
+make auto AUTOPRD=405
+make binary
+make allbuild AUTOPRD=405
+make auto AUTOPRD=405__16M SUBVERSION=dummy
+make auto AUTOPRD=405 SUBVERSION=dummy
+make allbuild AUTOPRD=405
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -103,7 +108,7 @@ fi</command>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect></keyFromSelect>
+          <keyFromSelect>ipp-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
