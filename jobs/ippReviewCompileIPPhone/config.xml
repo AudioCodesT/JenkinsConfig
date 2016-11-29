@@ -135,7 +135,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#Cleanup unnecessary files and optimize the local repository
-git gc --aggressive --prune=all
+#git gc --aggressive --prune=all
 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
