@@ -65,7 +65,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <hudson.matrix.TextAxis>
-      <name>AUTOPRD</name>
+      <name>SUBVERSION</name>
       <values>
         <string> </string>
         <string>SUBVERSION=dummy</string>
@@ -96,9 +96,9 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 make auto AUTOPRD=405 $SUBVERSION
-if  if [ $SUBVERSION == &quot;&quot; ]; then make binary; fi
+if  if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
 make auto AUTOPRD=405__16M  $SUBVERSION
-if  if [ $SUBVERSION == &quot;&quot; ]; then make binary; fi
+if  if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
 
 #create combined image will be located at /buildall/image/405/
 make allbuild AUTOPRD=405
@@ -123,6 +123,21 @@ mv ${file2} ${file2}.txt
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+      <details>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect></keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </details>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
       <deployerCredentialsConfig>
         <credentials>
           <username></username>
@@ -157,4 +172,7 @@ ${WORKSPACE}/buildall/image/405/*405*.img=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VE
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
 </matrix-project>
