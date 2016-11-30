@@ -107,9 +107,9 @@ make allbuild AUTOPRD=405
     <hudson.tasks.Shell>
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
 # (artifactory do not allow deploying checksum files)
-file1=&quot;$(ls ${WORKSPACE}/build/image/*.bin.md5 |grep -v dummy)&quot;
+file1=&quot;$(ls ${WORKSPACE}/build.405/image/*.bin.md5 |grep -v dummy)&quot;
 mv ${file1} ${file1}.txt
-file2=&quot;$(ls ${WORKSPACE}/build/image/*.img.md5 |grep -v dummy)&quot;
+file2=&quot;$(ls ${WORKSPACE}/build.405__16M/image/*.bin.md5 |grep -v dummy)&quot;
 mv ${file2} ${file2}.txt
 </command>
     </hudson.tasks.Shell>
@@ -128,7 +128,7 @@ mv ${file2} ${file2}.txt
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect></keyFromSelect>
+          <keyFromSelect>ext-release-local</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -154,8 +154,8 @@ mv ${file2} ${file2}.txt
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build.405/image/*405*.bin=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/Production
-${WORKSPACE}/build.405__16M/image/*405*.bin=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/Production
+      <deployPattern>${WORKSPACE}/build.405/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/Production
+${WORKSPACE}/build.405__16M/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/Production
 ${WORKSPACE}/buildall/image/405/*405*.img=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405_combined 
 </deployPattern>
       <resolvePattern></resolvePattern>
