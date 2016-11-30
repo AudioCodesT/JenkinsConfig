@@ -43,10 +43,6 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>tests/non_lync</projectName>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
@@ -71,17 +67,8 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
-        <string>440HD</string>
-        <string>430HD</string>
-        <string>420HD</string>
-        <string>SIP100</string>
-        <string>SIP200</string>
-      </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.TextAxis>
-      <name>LOG</name>
-      <values>
-        <string>0</string>
+        <string> </string>
+        <string>SUBVERSION=dummy</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -108,11 +95,14 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD LOG=$LOG
-if [ $LOG == 0 ]; then
-  make binary;
-  make SUBVERSION=dummy;
-fi</command>
+make auto AUTOPRD=405 $SUBVERSION
+if  if [ $SUBVERSION == &quot;&quot; ]; then make binary; fi
+make auto AUTOPRD=405__16M  $SUBVERSION
+if  if [ $SUBVERSION == &quot;&quot; ]; then make binary; fi
+
+#create combined image will be located at /buildall/image/405/
+make allbuild AUTOPRD=405
+</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
@@ -133,21 +123,6 @@ mv ${file2} ${file2}.txt
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>ipp-release</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
       <deployerCredentialsConfig>
         <credentials>
           <username></username>
@@ -164,11 +139,9 @@ mv ${file2} ${file2}.txt
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
-${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+      <deployPattern>${WORKSPACE}/build.405/image/*405*.bin=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/Production
+${WORKSPACE}/build.405__16M/image/*405*.bin=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/Production
+${WORKSPACE}/buildall/image/405/*405*.img=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405_combined 
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
@@ -184,7 +157,4 @@ ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/non_lync/${IPP_MA
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
-  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
-    <runSequentially>false</runSequentially>
-  </executionStrategy>
 </matrix-project>
