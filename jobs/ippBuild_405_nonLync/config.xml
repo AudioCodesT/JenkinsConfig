@@ -115,7 +115,8 @@ if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then
   file2=&quot;$(ls ${WORKSPACE}/build.405__16M/image/*.bin.md5)&quot;
   mv ${file2} ${file2}.txt
 fi
-</command>
+file1=&quot;$(ls ${WORKSPACE}/buildall/image/405/*.img.md5)&quot;
+mv ${file1} ${file1}.txt</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -160,7 +161,7 @@ fi
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build.405/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/Production
 ${WORKSPACE}/build.405__16M/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/Production
-${WORKSPACE}/buildall/image/405/*405*.img=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405_combined 
+${WORKSPACE}/buildall/image/405/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405_combined 
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
