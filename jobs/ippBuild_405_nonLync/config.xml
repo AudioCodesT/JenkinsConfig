@@ -67,8 +67,8 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
     <hudson.matrix.TextAxis>
       <name>SUBVERSION</name>
       <values>
-        <string> </string>
-        <string>SUBVERSION=dummy</string>
+        <string>nodummy</string>
+        <string>dummy</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -95,10 +95,12 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=405 $SUBVERSION
-if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
-make auto AUTOPRD=405__16M  $SUBVERSION
-if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
+param=&quot;&quot;
+if [ &quot;$SUBVERSION&quot; == &quot;dummy&quot; ]; then param=&quot;SUBVERSION=dummy&quot;; fi
+make auto AUTOPRD=405 $param
+if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then make binary; fi
+make auto AUTOPRD=405__16M  $param
+if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then make binary; fi
 
 #create combined image will be located at /buildall/image/405/
 make allbuild AUTOPRD=405
