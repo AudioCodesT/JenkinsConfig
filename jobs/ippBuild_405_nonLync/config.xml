@@ -96,9 +96,9 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 make auto AUTOPRD=405 $SUBVERSION
-if  if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
+if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
 make auto AUTOPRD=405__16M  $SUBVERSION
-if  if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
+if [ &quot;$SUBVERSION&quot; == &quot; &quot; ]; then make binary; fi
 
 #create combined image will be located at /buildall/image/405/
 make allbuild AUTOPRD=405
