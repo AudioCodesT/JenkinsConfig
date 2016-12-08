@@ -114,6 +114,10 @@ if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then
   mv ${file1} ${file1}.txt
   file2=&quot;$(ls ${WORKSPACE}/build.405__16M/image/*.bin.md5)&quot;
   mv ${file2} ${file2}.txt
+  file1=&quot;$(ls ${WORKSPACE}/build.405/image/*.img.md5)&quot;
+  mv ${file1} ${file1}.txt
+  file2=&quot;$(ls ${WORKSPACE}/build.405__16M/image/*.img.md5)&quot;
+  mv ${file2} ${file2}.txt
 fi
 file1=&quot;$(ls ${WORKSPACE}/buildall/image/405/*.img.md5)&quot;
 mv ${file1} ${file1}.txt</command>
@@ -160,7 +164,9 @@ mv ${file1} ${file1}.txt</command>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build.405/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/Production
+${WORKSPACE}/build.405/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405
 ${WORKSPACE}/build.405__16M/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/Production
+${WORKSPACE}/build.405__16M/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M
 ${WORKSPACE}/buildall/image/405/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405_combined 
 </deployPattern>
       <resolvePattern></resolvePattern>
