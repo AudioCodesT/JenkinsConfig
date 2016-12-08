@@ -110,17 +110,11 @@ make allbuild AUTOPRD=405
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
 # (artifactory do not allow deploying checksum files)
 if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then
-  file1=&quot;$(ls ${WORKSPACE}/build.405/image/*.bin.md5)&quot;
-  mv ${file1} ${file1}.txt
-  file2=&quot;$(ls ${WORKSPACE}/build.405__16M/image/*.bin.md5)&quot;
-  mv ${file2} ${file2}.txt
-  file1=&quot;$(ls ${WORKSPACE}/build.405/image/*.img.md5)&quot;
-  mv ${file1} ${file1}.txt
-  file2=&quot;$(ls ${WORKSPACE}/build.405__16M/image/*.img.md5)&quot;
-  mv ${file2} ${file2}.txt
+  rename md5 md5.txt ${WORKSPACE}/build.405/image/*.md5
+  rename md5 md5.txt ${WORKSPACE}/build.405__16M/image/*.md5
 fi
-file1=&quot;$(ls ${WORKSPACE}/buildall/image/405/*.img.md5)&quot;
-mv ${file1} ${file1}.txt</command>
+rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
