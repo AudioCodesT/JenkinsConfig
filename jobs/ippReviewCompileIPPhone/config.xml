@@ -159,11 +159,6 @@ make auto AUTOPRD=$AUTOPRD LOG=0
       <cleanupMatrixParent>false</cleanupMatrixParent>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.WsCleanup>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>yossim@audiocodes.com,oleg.Friedman@audiocodes.com</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers/>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
