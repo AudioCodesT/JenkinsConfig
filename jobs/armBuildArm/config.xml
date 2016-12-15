@@ -83,7 +83,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#Cleanup unnecessary files and optimize the local repository
-git gc --aggressive --prune=all &amp;
+#git gc --aggressive --prune=all &amp;
 
 git checkout master
 git pull --rebase</command>
