@@ -20,6 +20,17 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <EnvInjectJobProperty plugin="envinject@1.92.1">
+      <info>
+        <propertiesContent>BUILD_BRANCH=3.0.0.GA</propertiesContent>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+      <on>true</on>
+      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
+      <keepBuildVariables>true</keepBuildVariables>
+      <overrideBuildParameters>false</overrideBuildParameters>
+      <contributors/>
+    </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
     <configVersion>2</configVersion>
@@ -31,7 +42,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>3.0.0.GA</name>
+        <name>${BUILD_BRANCH}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -62,8 +73,8 @@
 if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot; ]; then
 	echo NEW_TAG=1 &gt; generated_ipp_version.properties
     #rebase:
-    git checkout 3.0.0_450HD
-	git branch --set-upstream 3.0.0_450HD remotes/origin/3.0.0_450HD
+    git checkout ${BUILD_BRANCH}
+	git branch --set-upstream ${BUILD_BRANCH} remotes/origin/${BUILD_BRANCH}
 	git pull --rebase
     # Update file with new version num
 	fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
@@ -78,7 +89,7 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
     git config --global user.email devops@audiocodes.com
     message=&quot;promote version to ${IPP_VER}&quot;
     git commit -am &quot;$message&quot;
-    git push origin 3.0.0_450HD
+    git push origin ${BUILD_BRANCH}
     #git push origin ${IPP_VER}
 else
 	echo &quot;Branch is up to date. Nothing to do&quot;
