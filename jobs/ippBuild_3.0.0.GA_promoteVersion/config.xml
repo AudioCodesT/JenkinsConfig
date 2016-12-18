@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Activated at ~11:00AM and at ~23:00PM, this job create a new TAG and execute the 2 following jobs:&#xd;
-1)      ippBuild_450HD_Lync – Compile 450HD&#xd;
-2)      ippBuild_ReleaseNotes&#xd;
+  <description>Activated at ~11:30AM and at ~23:30PM, this job create a new TAG and execute the 2 following jobs:&#xd;
+1)      ippBuild_3.0.0.GA_Lync – Compile 3.0.0.GA&#xd;
+2)      ippBuild_3.0.0.GA_ReleaseNotes&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -31,7 +31,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>3.0.0_450HD</name>
+        <name>3.0.0.GA</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -51,7 +51,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <hudson.triggers.SCMTrigger>
-      <spec>H 9,21 * * *</spec>
+      <spec>30 9,21 * * *</spec>
       <ignorePostCommitHooks>true</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
