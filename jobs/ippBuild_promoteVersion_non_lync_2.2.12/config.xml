@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>Activated at ~10:00AM and at ~22:00PM&#xd;
-this job create a new TAG and execute the 2 following jobs:&#xd;
+this job create a new TAG and execute the 3 following jobs:&#xd;
 1)      ippBuild nonLync – Compile 6 boards&#xd;
 2)      ippBuild ReleaseNotes  nonLync&#xd;
 3)      405 and 405__16M combined compilation&#xd;
@@ -64,7 +64,7 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
 	git pull --rebase
     # Update file with new version num
 	fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
-	((fourth++))
+	((++fourth))
 	sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
 	mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
     # Get majoe and monir versions
