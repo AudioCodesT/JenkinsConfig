@@ -2,7 +2,8 @@
 <project>
   <actions/>
   <description>Create &quot;ReleaseNote.txt&quot; &#xd;
-activated by ippBuild_promoteVersion_nonLync </description>
+activated by ippBuild_promoteVersion_nonLync_2.2.10  or  2.2.12&#xd;
+and get BUILD_BRANCH param from father job</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -18,6 +19,15 @@ activated by ippBuild_promoteVersion_nonLync </description>
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>BUILD_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
     <configVersion>2</configVersion>
@@ -29,7 +39,7 @@ activated by ippBuild_promoteVersion_nonLync </description>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>non_lync_dev</name>
+        <name>${BUILD_BRANCH}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
