@@ -69,7 +69,7 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
 	git pull --rebase
     # Update file with new version num
 	fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
-	((fourth++))
+	((++fourth))
 	sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
 	mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
     # Get majoe and monir versions
