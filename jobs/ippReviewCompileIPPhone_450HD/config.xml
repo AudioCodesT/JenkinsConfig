@@ -217,7 +217,7 @@ make auto AUTOPRD=$AUTOPRD LOG=0
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
-      <artifactoryCombinationFilter></artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
