@@ -192,6 +192,9 @@ ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/non_lync/${IPP_MA
       <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+      <template>#${BUILD_NUMBER}___${IPP_VER}</template>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
