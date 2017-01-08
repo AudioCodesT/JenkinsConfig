@@ -145,7 +145,7 @@ rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
         </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
       </configuredTriggers>
       <contentType>text/html</contentType>
-      <defaultSubject>TEST - Mail notification regarding new release in Artifactory</defaultSubject>
+      <defaultSubject>TEST - Mail notification regarding new release  :  SFB/${BUILD_BRANCH} new release: ${IPP_VER}</defaultSubject>
       <defaultContent>Hi All,
 
 This is a test email to see if we have here a satisfying content regarding every new release in Artifactory.
