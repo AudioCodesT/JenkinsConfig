@@ -120,6 +120,11 @@ mv ${file2} ${file2}.txt
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>oleg.Friedman@audiocodes.com, Igal.Vainzof@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
       <recipientList>oleg.Friedman@audiocodes.com, Igal.Vainzof@audiocodes.com, shuky.riechard@audiocodes.com, ami.lahav@audiocodes.com, Eli.Carciente@audiocodes.com, Yossi.Merzbach@audiocodes.com</recipientList>
       <configuredTriggers>
@@ -161,7 +166,7 @@ Submitted commits:  ${BUILD_URL}
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
       <saveOutput>false</saveOutput>
-      <disabled>false</disabled>
+      <disabled>true</disabled>
       <matrixTriggerMode>ONLY_PARENT</matrixTriggerMode>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
