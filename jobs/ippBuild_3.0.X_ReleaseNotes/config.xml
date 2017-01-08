@@ -61,7 +61,9 @@ IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
 IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
-IPP_VER_PREV=&quot;3.0.0.346.7&quot;;
+if [ $BUILD_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_VER_PREV=&quot;3.0.0.346.7&quot;; fi;
+if [ $BUILD_BRANCH == &quot;3.0.1&quot; ];    then IPP_VER_PREV=&quot;3.0.1.41&quot;;    fi;
+
 echo git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
