@@ -133,15 +133,6 @@ fi</command>
                 </hudson.plugins.git.GitPublisher_-TagToPush>
               </tagsToPush>
             </hudson.plugins.git.GitPublisher>
-            <hudson.tasks.BuildTrigger>
-              <childProjects>ippBuild_3.0.X_ReleaseNotes, ippBuild_3.0.X_Lync, ippBuild_3.0.X_405_Lync</childProjects>
-              <threshold>
-                <name>SUCCESS</name>
-                <ordinal>0</ordinal>
-                <color>BLUE</color>
-                <completeBuild>true</completeBuild>
-              </threshold>
-            </hudson.tasks.BuildTrigger>
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
