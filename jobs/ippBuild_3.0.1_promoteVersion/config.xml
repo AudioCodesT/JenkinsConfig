@@ -134,7 +134,7 @@ fi</command>
               </tagsToPush>
             </hudson.plugins.git.GitPublisher>
             <hudson.tasks.BuildTrigger>
-              <childProjects>ippBuild_3.0_ReleaseNotes, ippBuild_3.0_Lync, ippBuild_3.0_405_Lync</childProjects>
+              <childProjects>ippBuild_3.0.X_ReleaseNotes, ippBuild_3.0.X_Lync, ippBuild_3.0.X_405_Lync</childProjects>
               <threshold>
                 <name>SUCCESS</name>
                 <ordinal>0</ordinal>
@@ -142,6 +142,20 @@ fi</command>
                 <completeBuild>true</completeBuild>
               </threshold>
             </hudson.tasks.BuildTrigger>
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+              <configs>
+                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>BUILD_BRANCH=${BUILD_BRANCH}</properties>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  </configs>
+                  <projects>ippBuild_3.0.X_ReleaseNotes, ippBuild_3.0.X_Lync, ippBuild_3.0.X_405_Lync</projects>
+                  <condition>SUCCESS</condition>
+                  <triggerWithNoParameters>false</triggerWithNoParameters>
+                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+              </configs>
+            </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailFastExecutionStrategy"/>
