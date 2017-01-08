@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Activated at ~11:30AM and at ~23:30PM, this job create a new TAG and execute the 2 following jobs:&#xd;
+1)      ippBuild_3.0.0.GA_Lync – Compile 3.0.0.GA&#xd;
+2)      ippBuild_3.0.0.GA_ReleaseNotes&#xd;
+</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <EnvInjectJobProperty plugin="envinject@1.92.1">
+      <info>
+        <propertiesContent>BUILD_BRANCH=3.0.0.GA</propertiesContent>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+      <on>true</on>
+      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
+      <keepBuildVariables>true</keepBuildVariables>
+      <overrideBuildParameters>false</overrideBuildParameters>
+      <contributors/>
+    </EnvInjectJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>refs/heads/3.0.0.GA</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
+      <url>https://gerrit/plugins/gitblit/</url>
+      <projectName>IPP/SFB</projectName>
+    </browser>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+    </extensions>
+  </scm>
+  <assignedNode>ipp-build</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>30 9,21 * * *</spec>
+      <ignorePostCommitHooks>true</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#check if last commiter is Jenkins (so there is no new code in repo and no need to promote)
+if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot; ]; then
+	echo NEW_TAG=1 &gt; generated_ipp_version.properties
+    #rebase:
+    git checkout ${BUILD_BRANCH}
+	git branch --set-upstream ${BUILD_BRANCH} remotes/origin/${BUILD_BRANCH}
+	git pull --rebase
+    # Update file with new version num
+	fourth=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*&quot;.*\.([0-9]+)&quot;/\1/&apos;`
+	((++fourth))
+	sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*\.)[0-9]+\&quot;/\1$fourth\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
+	mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
+    # Get majoe and monir versions
+	IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
+	echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
+    #commit and push the new version
+    git config --global user.name &quot;Jenkins&quot;
+    git config --global user.email devops@audiocodes.com
+    message=&quot;promote version to ${IPP_VER}&quot;
+    git commit -am &quot;$message&quot;
+    git push origin ${BUILD_BRANCH}
+    #git push origin ${IPP_VER}
+else
+	echo &quot;Branch is up to date. Nothing to do&quot;
+    echo NEW_TAG=0 &gt; generated_ipp_version.properties
+	exit 0;
+fi</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Get majoe and monir versions
+#IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
+#if [ `git tag -l $IPP_VER` ]; then git tag -d $IPP_VER; fi
+#echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+  </builders>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
+            <token>$NEW_TAG</token>
+          </condition>
+          <publisherList>
+            <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
+              <configVersion>2</configVersion>
+              <pushMerge>false</pushMerge>
+              <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+              <forcePush>false</forcePush>
+              <tagsToPush>
+                <hudson.plugins.git.GitPublisher_-TagToPush>
+                  <targetRepoName>origin</targetRepoName>
+                  <tagName>${IPP_VER}</tagName>
+                  <tagMessage>Jenkins automating tag</tagMessage>
+                  <createTag>true</createTag>
+                  <updateTag>true</updateTag>
+                </hudson.plugins.git.GitPublisher_-TagToPush>
+              </tagsToPush>
+            </hudson.plugins.git.GitPublisher>
+            <hudson.tasks.BuildTrigger>
+              <childProjects>ippBuild_3.0.0.GA_ReleaseNotes, ippBuild_3.0.0.GA_Lync, ippBuild_3.0.0.GA_405_Lync</childProjects>
+              <threshold>
+                <name>SUCCESS</name>
+                <ordinal>0</ordinal>
+                <color>BLUE</color>
+                <completeBuild>true</completeBuild>
+              </threshold>
+            </hudson.tasks.BuildTrigger>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailFastExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+  </publishers>
+  <buildWrappers/>
+</project>
