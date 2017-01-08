@@ -224,6 +224,9 @@ ${WORKSPACE}/buildall/image/405/*405*.img*=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/$
       <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+      <template>#${BUILD_NUMBER}___${IPP_VER}</template>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
