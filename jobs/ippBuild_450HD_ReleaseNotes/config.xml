@@ -113,5 +113,8 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <multiConfProject>false</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+      <template>#${BUILD_NUMBER}___${IPP_VER}</template>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>
