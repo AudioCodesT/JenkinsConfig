@@ -122,6 +122,11 @@ echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
     </EnvInjectBuilder>
   </builders>
   <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>devops@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
       <recipientList>Eitan.Farbiash@audiocodes.com, Erez.NejatHaim@audiocodes.com, Roman.BarAm@audiocodes.com, Rivka.Ashkenazy@audiocodes.com, Rachel.Mizrachi@audiocodes.com</recipientList>
       <configuredTriggers>
