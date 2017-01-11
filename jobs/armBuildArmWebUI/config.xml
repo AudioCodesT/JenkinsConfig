@@ -84,7 +84,13 @@ grunt dist
       <command>cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>devops@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
       <installationName>default</installationName>
