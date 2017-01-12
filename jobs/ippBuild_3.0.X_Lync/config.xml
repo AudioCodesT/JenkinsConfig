@@ -57,6 +57,7 @@
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
@@ -64,7 +65,6 @@
         <timeout>20</timeout>
         <depth>10</depth>
       </hudson.plugins.git.extensions.impl.CloneOption>
-      <hudson.plugins.git.extensions.impl.WipeWorkspace/>
     </extensions>
   </scm>
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
