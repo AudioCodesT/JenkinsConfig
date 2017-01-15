@@ -39,7 +39,7 @@ Should work on 10.59.1.46 - ippAuto</description>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LASTBL</name>
-          <description>Example: 3.0.0.299</description>
+          <description>Example: 3.0.1.53</description>
           <defaultValue>None</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -65,12 +65,8 @@ type show.xml&#xd;
 type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
 &#xd;
-curl -k -s -X GET https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1 | grep &quot;uri&quot; | grep \&quot;/&#xd;
-&#xd;
-net use j: /DELETE&#xd;
-net use j: &quot;\\netapp1\Vopp tech Support\CMBU R&amp;D\IP Phone\4xx IPP Versions\Lync\int_delivery\3.0.1&quot;&#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
-  dir /o-d /B j: &gt; LASTBL.txt&#xd;
+  curl -k -s -X GET https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1 | findstr uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v artifactory | cut -c 2- | sort /R &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
 )&#xd;
 &#xd;
@@ -79,15 +75,16 @@ if %model%==405 ( set ImageName=UC%model%_%LASTBL%_ce4.img ) else ( set ImageNam
 rem IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set SaveLASTBL=1 )&#xd;
 net use z: /DELETE&#xd;
 net use z: \\10.59.0.87\Firmwares&#xd;
-IF EXIST J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img (&#xd;
-	rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
-	IF NOT EXIST z:\UC440HD_%LASTBL%.img copy /Y J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img z:\&#xd;
-	IF NOT EXIST z:\UC430HD_%LASTBL%.img copy /Y J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:\&#xd;
-	IF NOT EXIST z:\UC420HD_%LASTBL%.img copy /Y J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:\&#xd;
-	IF NOT EXIST z:\UC405_%LASTBL%_ce4.img copy /Y J:\%LASTBL%\405\UC405_%LASTBL%_ce4.img z:\&#xd;
-	cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
-	tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
-)&#xd;
+curl -k -s -X GET https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri&#xd;
+&#xd;
+rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
+IF NOT EXIST z:\UC440HD_%LASTBL%.img copy /Y J:\%LASTBL%\440HD\UC440HD_%LASTBL%.img z:\&#xd;
+IF NOT EXIST z:\UC430HD_%LASTBL%.img copy /Y J:\%LASTBL%\430HD\UC430HD_%LASTBL%.img z:\&#xd;
+IF NOT EXIST z:\UC420HD_%LASTBL%.img copy /Y J:\%LASTBL%\420HD\UC420HD_%LASTBL%.img z:\&#xd;
+IF NOT EXIST z:\UC405_%LASTBL%_ce4.img copy /Y J:\%LASTBL%\405\UC405_%LASTBL%_ce4.img z:\&#xd;
+cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
+tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
+&#xd;
 </command>
     </hudson.tasks.BatchFile>
   </builders>
