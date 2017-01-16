@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Compile UC405 UC405_16M UC420HD UC430HD UC440HD after “Push to Gerrit”</description>
+  <description>Compile UC420HD UC430HD UC440HD after “Push to Gerrit”</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -134,8 +134,6 @@
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
-        <string>405</string>
-        <string>405__16M</string>
         <string>420HD</string>
         <string>430HD</string>
         <string>440HD</string>
