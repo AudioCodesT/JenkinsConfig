@@ -130,52 +130,6 @@ rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-      <recipientList>devops@audiocodes.com</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
-          <email>
-            <recipientList></recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-            </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
-      </configuredTriggers>
-      <contentType>text/html</contentType>
-      <defaultSubject>TEST -New Release:  SFB/${BUILD_BRANCH} new release: ${IPP_VER}</defaultSubject>
-      <defaultContent>Hi All,
-
-This is a test email to see if we have here a satisfying content regarding every new release in Artifactory.
-
-email Subject:
-SFB/${BUILD_BRANCH} new release: ${IPP_VER}
-
-email Body:
-Project:   SFB
-Branch:   ${BUILD_BRANCH}
-version:   ${IPP_VER}
-download from:   https://artifactory/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/
-Submitted commits:  ${BUILD_URL}
-
-
-</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
-      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-      <attachBuildLog>false</attachBuildLog>
-      <compressBuildLog>false</compressBuildLog>
-      <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <saveOutput>false</saveOutput>
-      <disabled>false</disabled>
-      <matrixTriggerMode>ONLY_PARENT</matrixTriggerMode>
-    </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
