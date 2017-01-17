@@ -120,68 +120,11 @@ mv ${file2} ${file2}.txt
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
-      <buildSteps>
-        <EnvInjectBuilder plugin="envinject@1.92.1">
-          <info>
-            <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-          </info>
-        </EnvInjectBuilder>
-      </buildSteps>
-      <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
-      <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
-      <markBuildUnstable>false</markBuildUnstable>
-      <executeOn>MATRIX</executeOn>
-    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
     <hudson.tasks.Mailer plugin="mailer@1.16">
       <recipients>oleg.Friedman@audiocodes.com, Igal.Vainzof@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-      <recipientList>devops@audiocodes.com</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
-          <email>
-            <recipientList></recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-            </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
-      </configuredTriggers>
-      <contentType>text/html</contentType>
-      <defaultSubject>TEST - Mail notification regarding new release  :  SFB/${BUILD_BRANCH} new release: ${IPP_VER}</defaultSubject>
-      <defaultContent>Hi All,
-
-This is a test email to see if we have here a satisfying content regarding every new release in Artifactory.
-
-email Subject:
-SFB/${BUILD_BRANCH} new release: ${IPP_VER}
-
-email Body:
-Project:   SFB
-Branch:   ${BUILD_BRANCH}
-version:   ${IPP_VER}
-download from:   https://artifactory/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/
-Submitted commits:  ${BUILD_URL}
-</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
-      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-      <attachBuildLog>false</attachBuildLog>
-      <compressBuildLog>false</compressBuildLog>
-      <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <saveOutput>false</saveOutput>
-      <disabled>false</disabled>
-      <matrixTriggerMode>ONLY_PARENT</matrixTriggerMode>
-    </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
