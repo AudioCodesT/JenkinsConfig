@@ -82,7 +82,7 @@ rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
 IF NOT EXIST z:\UC440HD_%LASTBL%.img curl -k -s -X GET https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1/%LASTBL%/440HD/UC440HD_%LASTBL%.img --output z:\UC440HD_%LASTBL%.img&#xd;
 IF NOT EXIST z:\UC430HD_%LASTBL%.img curl -k -s -X GET https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1/%LASTBL%/430HD/UC430HD_%LASTBL%.img --output z:\UC430HD_%LASTBL%.img&#xd;
 IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
-IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1/%LASTBL%/405_combined/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
+IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
 cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
 tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
 &#xd;
