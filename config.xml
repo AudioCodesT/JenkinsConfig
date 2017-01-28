@@ -37,6 +37,7 @@
           <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
           <sid>CI_ARM_developers</sid>
@@ -69,6 +70,7 @@
           <permission>hudson.model.Item.Workspace</permission>
           <permission>hudson.model.Item.Build</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
           <sid>CI_IPP_developers</sid>
@@ -99,6 +101,7 @@
           <permission>hudson.model.Item.Read</permission>
           <permission>hudson.model.Item.Workspace</permission>
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
           <sid>CI_WEB-UI_developers</sid>
@@ -111,6 +114,7 @@
           <permission>hudson.model.Item.Build</permission>
           <permission>hudson.model.Run.Replay</permission>
           <permission>hudson.model.Item.Configure</permission>
+          <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
           <sid>orena</sid>
@@ -178,7 +182,6 @@
         </assignedSIDs>
       </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
