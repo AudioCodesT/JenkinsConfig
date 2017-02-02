@@ -109,7 +109,7 @@ VERSION_NAME=$VERSION_NAME</properties>
   <buildWrappers/>
   <prebuilders>
     <hudson.tasks.Shell>
-      <command>if [ ${#VERSION_NAME} != 6  ]; then echo &quot;Version pattern muat be 7.2.XX&quot;; exit 1; fi
+      <command>if [ ${#VERSION_NAME} != 5  ]; then echo &quot;Version pattern muat be 7.2.XX&quot;; exit 1; fi
 git checkout master
 git pull --rebase</command>
     </hudson.tasks.Shell>
