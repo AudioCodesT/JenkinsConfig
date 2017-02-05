@@ -106,7 +106,11 @@ VERSION_NAME=$VERSION_NAME</properties>
       </configs>
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+      <template>#${BUILD_NUMBER}__${VERSION_NAME}</template>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
   <prebuilders>
     <hudson.tasks.Shell>
       <command>if [ ${#VERSION_NAME} != 5  ]; then echo &quot;Version pattern muat be 7.2.XX&quot;; exit 1; fi
