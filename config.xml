@@ -182,6 +182,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
@@ -489,6 +490,7 @@
         <string>test_webBuildArmUI_windows</string>
         <string>web-ui-test</string>
         <string>webBuildAcInfra</string>
+        <string>webBuildAcInfra_v0.1.91-fixes</string>
         <string>webReviewAcInfra</string>
         <string>webReviewOvoc</string>
         <string>webTagAc-polyfill</string>
