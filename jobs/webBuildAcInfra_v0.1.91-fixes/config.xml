@@ -35,7 +35,7 @@ send email&#xd;
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$GERRIT_BRANCH</name>
+        <name>refs/heads/0.1.91-fixes</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -45,11 +45,6 @@ send email&#xd;
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
       <hudson.plugins.git.extensions.impl.WipeWorkspace/>
     </extensions>
   </scm>
@@ -58,56 +53,11 @@ send email&#xd;
   <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>web-ui/ac-infra</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>master</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git checkout master
+      <command>git checkout 0.1.91-fixes
 git pull --rebase
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
@@ -116,14 +66,14 @@ git config url.https://.insteadOf git://
 export CHROME_BIN=/usr/bin/google-chrome
 
 #3.advance version number by 1 in bower.json &amp; build.config.js
-version=$(cat bower.json |grep version)
-version=${version:14}
-version=${version%\&quot;,}
-current_version=$version
-[[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
-#perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
-perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
-perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
+#version=$(cat bower.json |grep version)
+#version=${version:14}
+#version=${version%\&quot;,}
+#current_version=$version
+#[[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
+
+#perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
+#perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
 
 #4. run private-bower
 if ( ! ps -ef | grep private-bower | grep -v grep) &gt; /dev/null
@@ -147,59 +97,22 @@ git config --global user.email devops@audiocodes.com
 git add --all dist/
 git add bower.json
 git add build.config.js
-message=&quot;automatic build a new dist and promote version to $version&quot;
+#message=&quot;automatic build a new dist and promote version to $version&quot;
+message=&quot;automatic build a new dist&quot;
 git commit -m &quot;$message&quot;
 
 #8.git tag v0.0.x
-git tag -a v$version -m &quot;automatic version tag&quot;
+#git tag -a v$version -m &quot;automatic version tag&quot;
 
 #9.git push origin v0.0.x
-git push origin master
-git push origin v$version
+git push origin 0.1.91-fixes
+#git push origin v$version
 
 echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
-      <info>
-        <propertiesFilePath>acinfra_version.properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
-  <publishers>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-      <recipientList>Eitan.Farbiash@audiocodes.com, Erez.NejatHaim@audiocodes.com, Roman.BarAm@audiocodes.com, Rivka.Ashkenazy@audiocodes.com, Rachel.Mizrachi@audiocodes.com</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-          <email>
-            <recipientList></recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-            </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-      </configuredTriggers>
-      <contentType>default</contentType>
-      <defaultSubject>ac-infra version was promoted to $ACINFRA_VERSION</defaultSubject>
-      <defaultContent>For details:
-https://gerrit/plugins/gitblit/summary/?r=web-ui/ac-infra.git
-</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
-      <presendScript></presendScript>
-      <attachBuildLog>false</attachBuildLog>
-      <compressBuildLog>false</compressBuildLog>
-      <replyTo></replyTo>
-      <saveOutput>false</saveOutput>
-      <disabled>false</disabled>
-    </hudson.plugins.emailext.ExtendedEmailPublisher>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
       <installationName>default</installationName>
