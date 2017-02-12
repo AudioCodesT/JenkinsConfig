@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>poll SCM every 15 minutes&#xd;
-if new code then build and deploy arm-ui-7.0.zip</description>
+if new code then build and deploy ovoc-7.4.0.zip</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -23,7 +23,7 @@ if new code then build and deploy arm-ui-7.0.zip</description>
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/web-ui/arm</url>
+        <url>ssh://jenkins@gerrit:29418/web-ui/ovoc</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -70,7 +70,7 @@ fi
 
 #cd $WORKSPACE
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
-cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/build.config.js ${WORKSPACE}/
+#cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/build.config.js ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
 cp ../index.js node_modules/karma-ie-launcher/index.js -f
@@ -79,9 +79,6 @@ cp ../index.js node_modules/karma-ie-launcher/index.js -f
 bower install --force-latest
 grunt dist
 </command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -120,7 +117,7 @@ grunt dist
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
+          <keyFromSelect>ems-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -146,8 +143,8 @@ grunt dist
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>dist/arm-ui-7.0.zip=&gt;com/ac/arm/arm-ui/7.0/
-dist/arm-web-ui-7.0.zip=&gt;com/ac/arm/arm-web-ui/7.0/</deployPattern>
+      <deployPattern>dist/ovoc*.zip=&gt;com/ac/ems/ovoc_client/7.4/
+</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>false</deployBuildInfo>
