@@ -278,12 +278,12 @@
           <remoteAdmin>centos</remoteAdmin>
           <jvmopts></jvmopts>
           <subnetId>subnet-05e4727e</subnetId>
-          <idleTerminationMinutes>30</idleTerminationMinutes>
+          <idleTerminationMinutes>-3</idleTerminationMinutes>
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
           <instanceCap>12</instanceCap>
-          <stopOnTerminate>true</stopOnTerminate>
+          <stopOnTerminate>false</stopOnTerminate>
           <tags>
             <hudson.plugins.ec2.EC2Tag>
               <name>Name</name>
