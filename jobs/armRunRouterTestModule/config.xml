@@ -133,11 +133,6 @@ sleep 120</command>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>Gila Berchayev &lt;Gila.Berchayev@audiocodes.com&gt;</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
     <EnvInjectBuildWrapper plugin="envinject@1.92.1">
