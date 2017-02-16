@@ -71,12 +71,7 @@
       <name>AUTOPRD</name>
       <values>
         <string>450HD</string>
-      </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.TextAxis>
-      <name>LOG</name>
-      <values>
-        <string>0</string>
+        <string>440HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -103,11 +98,19 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD LOG=$LOG
-if [ $LOG == 0 ]; then
-  make binary;
-  make SUBVERSION=dummy;
-fi</command>
+
+if [ $AUTOPRD == 450HD ]; then
+	make auto AUTOPRD=450HD LOG=0
+	make binary;
+	make SUBVERSION=dummy;
+fi
+
+if [ $AUTOPRD == 440HD ]; then
+	make auto AUTOPRD=440HD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
+    make binary;
+	make SUBVERSION=dummy;
+fi
+</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
