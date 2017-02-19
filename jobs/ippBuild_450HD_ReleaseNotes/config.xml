@@ -1,7 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Create &quot;ReleaseNote.txt&quot; - activated by ippBuild_450HD_promoteVersion or ippBuild_3.0.2_450HD_promoteVersion </description>
+  <description>Create and deploy &quot;ReleaseNote.txt&quot; &#xd;
+&#xd;
+activated by one of the following:&#xd;
+ippBuild_3.0.0_450HD_promoteVersion&#xd;
+or&#xd;
+ippBuild_3.0.2_450HD_promoteVersion &#xd;
+&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
