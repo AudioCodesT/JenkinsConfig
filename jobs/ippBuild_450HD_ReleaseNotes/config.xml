@@ -51,19 +51,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec></spec>
-    </hudson.triggers.TimerTrigger>
-    <org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger plugin="startup-trigger-plugin@2.5">
-      <spec></spec>
-      <quietPeriod>0</quietPeriod>
-    </org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger>
-    <hudson.triggers.SCMTrigger>
-      <spec></spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
