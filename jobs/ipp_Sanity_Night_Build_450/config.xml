@@ -34,8 +34,8 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>model</name>
-          <description>model :440/430/320/440/405</description>
-          <defaultValue>440</defaultValue>
+          <description>model :450/440/430/320/440/405</description>
+          <defaultValue>450</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LASTBL</name>
@@ -66,47 +66,34 @@ type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
 set PATH=%PATH%;c:\cygwin\bin&#xd;
 &#xd;
-set ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
-set DOWNLOAD=https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
+set ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1_450HD&#xd;
+set DOWNLOAD=https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1_450HD&#xd;
 &#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   curl -k -s -X GET %ARTIFACTORY% | findstr uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v artifactory | cut -c 2- | sort /R &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
-  more +1 LASTBL.txt &gt; BeLASTBL.txt&#xd;
-  set /P BeLASTBL=&lt;BeLASTBL.txt&#xd;
-  set COUNTER=0&#xd;
 )&#xd;
 &#xd;
-:RunAgain&#xd;
-set /A COUNTER=%COUNTER%+1&#xd;
 if %model%==405 ( set ImageName=UC%model%_%LASTBL%_ce4.img ) else ( set ImageName=UC%model%HD_%LASTBL%.img )&#xd;
-set Error=0&#xd;
+&#xd;
+&#xd;
 net use z: /DELETE&#xd;
 net use z: \\10.59.0.87\Firmwares&#xd;
-cd C:\IpPhoneAutomation\ATA&#xd;
-curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri | wc -l &gt; 440HD.txt&#xd;
-set /P IMAGE440HD=&lt;440HD.txt&#xd;
-echo %IMAGE440HD%&#xd;
 &#xd;
-if %IMAGE440HD%==1 (&#xd;
+curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/450HD/UC450HD_%LASTBL%.img | grep uri | wc -l &gt; 450HD.txt&#xd;
+set /P IMAGE450HD=&lt;450HD.txt&#xd;
+&#xd;
+IF %IMAGE450HD%==1 (&#xd;
+  IF NOT EXIST z:\UC450HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/450HD/UC450HD_%LASTBL%.img --output z:\UC450HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC440HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/440HD/UC440HD_%LASTBL%.img --output z:\UC440HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC430HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/430HD/UC430HD_%LASTBL%.img --output z:\UC430HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
+  cd C:\IpPhoneAutomation\ATA&#xd;
+  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
 ) else set Error=1&#xd;
-if %Error%==0 tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
-if ErrorLevel 1 set Error=1&#xd;
-if %Error%==1 (&#xd;
-  echo Find Error&#xd;
-  set LASTBL=%BeLASTBL%&#xd;
-  if %COUNTER% EQU 1 goto RunAgain&#xd;
-  Exit 1&#xd;
-) else (&#xd;
-  echo Execute phase 2&#xd;
-  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%overNight_phase2.suite -firmwareVersionMain %ImageName%&#xd;
-  if ErrorLevel 1 Exit 1&#xd;
-)&#xd;
-</command>
+&#xd;
+h</command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers>
