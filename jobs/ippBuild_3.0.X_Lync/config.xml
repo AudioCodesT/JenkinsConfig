@@ -129,10 +129,10 @@ fi</command>
     <hudson.tasks.Shell>
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
 # (artifactory do not allow deploying checksum files)
-file1=&quot;$(ls ${WORKSPACE}/build/image/*.bin.md5 |grep -v dummy)&quot;
-mv ${file1} ${file1}.txt
-file2=&quot;$(ls ${WORKSPACE}/build/image/*.img.md5 |grep -v dummy)&quot;
-mv ${file2} ${file2}.txt
+#file1=&quot;$(ls ${WORKSPACE}/build/image/*.bin.md5 |grep -v dummy)&quot;
+#mv ${file1} ${file1}.txt
+#file2=&quot;$(ls ${WORKSPACE}/build/image/*.img.md5 |grep -v dummy)&quot;
+#mv ${file2} ${file2}.txt
 </command>
     </hudson.tasks.Shell>
   </builders>
