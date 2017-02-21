@@ -111,6 +111,7 @@
         <permissions>
           <permission>hudson.model.Item.Cancel</permission>
           <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Create</permission>
           <permission>hudson.model.Item.Build</permission>
           <permission>hudson.model.Run.Replay</permission>
           <permission>hudson.model.Item.Configure</permission>
@@ -182,7 +183,6 @@
         </assignedSIDs>
       </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
