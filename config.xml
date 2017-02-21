@@ -184,6 +184,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
@@ -408,6 +409,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
         <string>ipp_Sanity_Night_Build</string>
         <string>ipp_Sanity_Night_Build_2</string>
+        <string>ipp_Sanity_Night_Build_450</string>
         <string>ippBuild_405_nonLync</string>
         <string>ippBuild_nonLync</string>
         <string>ippBuild_promoteVersion_non_lync_2.2.10</string>
