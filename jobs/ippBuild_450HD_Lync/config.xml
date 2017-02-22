@@ -124,7 +124,7 @@ fi
     <hudson.tasks.Shell>
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
 # (artifactory do not allow deploying checksum files)
-#rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
+rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
 </command>
     </hudson.tasks.Shell>
   </builders>
