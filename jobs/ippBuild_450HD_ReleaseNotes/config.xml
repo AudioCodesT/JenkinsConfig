@@ -67,13 +67,17 @@ IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
-IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
-IPP_VER_PREV=&quot;3.0.0.346.7&quot;;
+#IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
+#IPP_VER_PREV=&quot;3.0.0.346.7&quot;;
+if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_VER_PREV=&quot;3.0.0.346.7&quot;; fi;
+if [ $BUILD_BRANCH == &quot;3.0.2&quot; ];    then IPP_VER_PREV=&quot;3.0.2.1&quot;;    fi;
+
 echo git log --oneline --decorate ${IPP_VER_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_VER_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
+if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER}_450HD&quot;; fi;
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -116,7 +120,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}_450HD/${IPP_VER}</deployPattern>
+      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
