@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>activated by ippBuild_3.0.0_450HD_promoteVersion or ippBuild_3.0.2_450HD_promoteVersion&#xd;
-Compile and deploy 450HD from 3.0.X branch</description>
+  <description>activated by ippBuild_3.0.0_450HD_promoteVersion or ippBuild_3.0.2_promoteVersion&#xd;
+Compile and deploy 450HD</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -97,6 +97,7 @@ IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;
 IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
+if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER}_450HD&quot;; fi;
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -168,11 +169,11 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}_450HD/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}_450HD/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}_450HD/${IPP_VER}/$AUTOPRD/build_tgz
-${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}_450HD/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}_450HD/${IPP_VER}/$AUTOPRD/Production
+      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
+${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
