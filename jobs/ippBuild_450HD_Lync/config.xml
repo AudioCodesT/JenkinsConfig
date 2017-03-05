@@ -115,11 +115,12 @@ if [ $AUTOPRD == 450HD ]; then
 	make SUBVERSION=dummy;
 fi
 
-if [ $AUTOPRD == 440HD ]; then
-	make auto AUTOPRD=440HD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
+if [ $AUTOPRD == 440HD ] || [ $AUTOPRD == 430HD ]; then
+	make auto AUTOPRD=$AUTOPRD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
     make binary;
 	make SUBVERSION=dummy;
 fi
+
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
