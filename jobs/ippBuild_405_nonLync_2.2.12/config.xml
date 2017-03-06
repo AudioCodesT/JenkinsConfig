@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Compile 405&#xd;
-activated by job:   ippBuild_promoteVersion_nonLync</description>
+  <description>Compile 405, 405HD, 405 combined&#xd;
+activated by job:   ippBuild_promoteVersion_nonLync_2.2.12</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -106,9 +106,9 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
 yes | make distclean
 param=&quot;&quot;
 if [ &quot;$SUBVERSION&quot; == &quot;dummy&quot; ]; then param=&quot;SUBVERSION=dummy&quot;; fi
-make auto AUTOPRD=405__8M $param
+make auto AUTOPRD=405 $param
 if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then make binary; fi
-make auto AUTOPRD=405__16M  $param
+make auto AUTOPRD=405HD  $param
 if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then make binary; fi
 
 #create combined image will be located at /buildall/image/405/
@@ -118,8 +118,8 @@ make allbuild AUTOPRD=405
     <hudson.tasks.Shell>
       <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
 # (artifactory do not allow deploying checksum files)
-rename md5 md5.txt ${WORKSPACE}/build.405__8M/image/*.md5
-rename md5 md5.txt ${WORKSPACE}/build.405__16M/image/*.md5
+rename md5 md5.txt ${WORKSPACE}/build.405/image/*.md5
+rename md5 md5.txt ${WORKSPACE}/build.405HD/image/*.md5
 rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
 </command>
     </hudson.tasks.Shell>
@@ -164,14 +164,14 @@ rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build.405__8M/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__8M/Production
-${WORKSPACE}/build.405__8M/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__8M
-${WORKSPACE}/build.405__8M/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__8M/build_tgz
-${WORKSPACE}/build.405__16M/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/Production
-${WORKSPACE}/build.405__16M/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M
-${WORKSPACE}/build.405__16M/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405__16M/build_tgz
-${WORKSPACE}/buildall/image/405/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405
-${WORKSPACE}/buildall/image/405/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/build_tgz</deployPattern>
+      <deployPattern>${WORKSPACE}/build.405/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/Production
+${WORKSPACE}/build.405/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405
+${WORKSPACE}/build.405/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405/build_tgz
+${WORKSPACE}/build.405HD/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405HD/Production
+${WORKSPACE}/build.405HD/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405HD
+${WORKSPACE}/build.405HD/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405HD/build_tgz
+${WORKSPACE}/buildall/image/405/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405all
+${WORKSPACE}/buildall/image/405/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405all/build_tgz</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>false</deployBuildInfo>
