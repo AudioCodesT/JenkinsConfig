@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Compile 405, 405HD, 405 combined&#xd;
+  <description>Compile 405, 405HD&#xd;
 activated by job:   ippBuild_promoteVersion_nonLync_2.2.12</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -112,7 +112,7 @@ make auto AUTOPRD=405HD  $param
 if [ &quot;$SUBVERSION&quot; != &quot;dummy&quot; ]; then make binary; fi
 
 #create combined image will be located at /buildall/image/405/
-make allbuild AUTOPRD=405
+#make allbuild AUTOPRD=405
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -120,7 +120,7 @@ make allbuild AUTOPRD=405
 # (artifactory do not allow deploying checksum files)
 rename md5 md5.txt ${WORKSPACE}/build.405/image/*.md5
 rename md5 md5.txt ${WORKSPACE}/build.405HD/image/*.md5
-rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
+#rename md5 md5.txt ${WORKSPACE}/buildall/image/405/*.md5
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -170,8 +170,7 @@ ${WORKSPACE}/build.405/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/
 ${WORKSPACE}/build.405HD/image/*405*.bin*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405HD/Production
 ${WORKSPACE}/build.405HD/image/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405HD
 ${WORKSPACE}/build.405HD/image/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405HD/build_tgz
-${WORKSPACE}/buildall/image/405/*405*.img*=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405all
-${WORKSPACE}/buildall/image/405/build.tgz=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}/405all/build_tgz</deployPattern>
+</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>false</deployBuildInfo>
