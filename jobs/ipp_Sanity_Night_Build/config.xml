@@ -70,7 +70,7 @@ set ARTIFACTORY=https://172.16.133.222/api/storage/ipp-release/com/ac/ipp/SFB/3.
 set DOWNLOAD=https://172.16.133.222/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
 &#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
-  curl -k -s -X GET %ARTIFACTORY% | findstr uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v https | cut -c 2- | sort /R &gt; LASTBL.txt&#xd;
+  curl -k -s -X GET %ARTIFACTORY% | findstr uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v https | cut -c 2- | c:\cygwin\bin\sort -Vr &gt; LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
 )&#xd;
 &#xd;
