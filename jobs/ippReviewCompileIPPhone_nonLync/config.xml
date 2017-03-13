@@ -137,10 +137,17 @@
   <builders>
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+
+#for branch 2.2.10, keep using the old 405 profile name:
+if [ $AUTOPRD == 405 ] &amp;&amp; [ $GERRIT_BRANCH == non_lync_dev ]; then
+	AUTOPRD=405__8M
+fi
+
 yes | make distclean
 #make
 make auto AUTOPRD=$AUTOPRD LOG=0
 #make SUBVERSION=dummy;
+
 </command>
     </hudson.tasks.Shell>
   </builders>
