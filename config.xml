@@ -309,7 +309,7 @@
           <zone>eu-central-1b</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/opt/jenkinsslave</remoteFS>
-          <type>M4Large</type>
+          <type>M42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
           <labels>ipp-build</labels>
           <mode>EXCLUSIVE</mode>
@@ -324,7 +324,7 @@
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
-          <instanceCap>30</instanceCap>
+          <instanceCap>40</instanceCap>
           <stopOnTerminate>false</stopOnTerminate>
           <tags>
             <hudson.plugins.ec2.EC2Tag>
