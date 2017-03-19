@@ -80,15 +80,61 @@ echo VIS=${VIS} &gt;&gt; ../generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; ../generated_ipp_version.properties
 echo PROJECT=${GERRIT_PROJECT} &gt;&gt; ../generated_ipp_version.properties
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-echo DATE=${DATE} &gt;&gt; ../generated_ipp_version.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; ../generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+        <propertiesContent>IPP_VER=${IPP_VER}
+RN=${RN}
+VIS=${VIS}
+EMAIL=${EMAIL}
+PROJECT=${GERRIT_PROJECT}
+DATE=${DATE}
+AuthorCommitter=${AuthorCommitter}
+</propertiesContent>
       </info>
     </EnvInjectBuilder>
+    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
+      <token></token>
+      <remoteJenkinsName>test-jenkins</remoteJenkinsName>
+      <job>UpdateVI</job>
+      <shouldNotFailBuild>true</shouldNotFailBuild>
+      <pollInterval>10</pollInterval>
+      <connectionRetryLimit>5</connectionRetryLimit>
+      <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
+      <blockBuildUntilComplete>false</blockBuildUntilComplete>
+      <enhancedLogging>false</enhancedLogging>
+      <parameters>IPP_VER=${IPP_VER}
+RN=${RN}
+VIS=${VIS}
+EMAIL=${EMAIL}
+PROJECT=${GERRIT_PROJECT}
+DATE=${DATE}
+AuthorCommitter=${AuthorCommitter}
+</parameters>
+      <parameterList>
+        <string>IPP_VER=${IPP_VER}</string>
+        <string>RN=${RN}</string>
+        <string>VIS=${VIS}</string>
+        <string>EMAIL=${EMAIL}</string>
+        <string>PROJECT=${GERRIT_PROJECT}</string>
+        <string>DATE=${DATE}</string>
+        <string>AuthorCommitter=${AuthorCommitter}</string>
+      </parameterList>
+      <overrideAuth>false</overrideAuth>
+      <auth>
+        <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
+          <NONE>none</NONE>
+          <API__TOKEN>apiToken</API__TOKEN>
+          <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
+        </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
+      </auth>
+      <loadParamsFromFile>false</loadParamsFromFile>
+      <parameterFile></parameterFile>
+      <queryString></queryString>
+    </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers/>
   <buildWrappers>
