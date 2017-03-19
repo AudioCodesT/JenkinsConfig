@@ -75,25 +75,19 @@ AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IP
 RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://test-gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | sed s/\&quot;/\&apos;/g`
 VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/\[VI\([0-9]+\)\]*/\1/g&apos; | sort -u`
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | sort -u`
-echo RN=${RN} &gt;&gt; ../generated_ipp_version.properties
-echo VIS=${VIS} &gt;&gt; ../generated_ipp_version.properties
-echo EMAIL=${EMAIL} &gt;&gt; ../generated_ipp_version.properties
-echo PROJECT=${GERRIT_PROJECT} &gt;&gt; ../generated_ipp_version.properties
+echo IPP_VER=${IPP_VER} &gt; updatevi.properties
+echo RN=${RN} &gt;&gt; updatevi.properties
+echo VIS=${VIS} &gt;&gt; updatevi.properties
+echo EMAIL=${EMAIL} &gt;&gt; updatevi.properties
+echo PROJECT=${GERRIT_PROJECT} &gt;&gt; updatevi.properties
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-echo AuthorCommitter=${AuthorCommitter} &gt;&gt; ../generated_ipp_version.properties
+echo DATE=${DATE} &gt;&gt; updatevi.properties
+echo AuthorCommitter=${AuthorCommitter} &gt;&gt; updatevi.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-        <propertiesContent>IPP_VER=${IPP_VER}
-RN=${RN}
-VIS=${VIS}
-EMAIL=${EMAIL}
-PROJECT=${GERRIT_PROJECT}
-DATE=${DATE}
-AuthorCommitter=${AuthorCommitter}
-</propertiesContent>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
@@ -101,27 +95,14 @@ AuthorCommitter=${AuthorCommitter}
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
       <job>UpdateVI</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
-      <pollInterval>10</pollInterval>
+      <pollInterval>5</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>false</enhancedLogging>
-      <parameters>IPP_VER=${IPP_VER}
-RN=${RN}
-VIS=${VIS}
-EMAIL=${EMAIL}
-PROJECT=${GERRIT_PROJECT}
-DATE=${DATE}
-AuthorCommitter=${AuthorCommitter}
-</parameters>
+      <parameters></parameters>
       <parameterList>
-        <string>IPP_VER=${IPP_VER}</string>
-        <string>RN=${RN}</string>
-        <string>VIS=${VIS}</string>
-        <string>EMAIL=${EMAIL}</string>
-        <string>PROJECT=${GERRIT_PROJECT}</string>
-        <string>DATE=${DATE}</string>
-        <string>AuthorCommitter=${AuthorCommitter}</string>
+        <string></string>
       </parameterList>
       <overrideAuth>false</overrideAuth>
       <auth>
@@ -131,8 +112,8 @@ AuthorCommitter=${AuthorCommitter}
           <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
         </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
       </auth>
-      <loadParamsFromFile>false</loadParamsFromFile>
-      <parameterFile></parameterFile>
+      <loadParamsFromFile>true</loadParamsFromFile>
+      <parameterFile>/updatevi.properties</parameterFile>
       <queryString></queryString>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
