@@ -1,33 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <user>
   <fullName>Oleksiy Tsubera</fullName>
+  <description></description>
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>k5cB5swwoS7Yg7hl1WI2+K5HhhxIRoF0Q8lV7VgGW4MQV7WSh2DA10Lq4g4XcOmq</apiToken>
     </jenkins.security.ApiTokenProperty>
+    <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.15">
+      <enabledColorBlindSupport>false</enabledColorBlindSupport>
+    </hudson.plugins.greenballs.ColorBlindProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@1.26">
-      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
+      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
+        <entry>
+          <com.cloudbees.plugins.credentials.domains.Domain>
+            <specifications/>
+          </com.cloudbees.plugins.credentials.domains.Domain>
+          <java.util.concurrent.CopyOnWriteArrayList/>
+        </entry>
+      </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
+      <emailAddress>Oleksiy.Tsubera@audiocodes.com</emailAddress>
+    </hudson.tasks.Mailer_-UserProperty>
     <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
-    <hudson.model.MyViewsProperty>
-      <views>
-        <hudson.model.AllView>
-          <owner class="hudson.model.MyViewsProperty" reference="../../.."/>
-          <name>All</name>
-          <filterExecutors>false</filterExecutors>
-          <filterQueue>false</filterQueue>
-          <properties class="hudson.model.View$PropertyList"/>
-        </hudson.model.AllView>
-      </views>
-    </hudson.model.MyViewsProperty>
-    <hudson.model.PaneStatusProperties>
-      <collapsed/>
-    </hudson.model.PaneStatusProperties>
-    <hudson.search.UserSearchProperty>
-      <insensitiveSearch>false</insensitiveSearch>
-    </hudson.search.UserSearchProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
         <string>SSL_NO_VPN</string>
@@ -44,8 +41,26 @@
       </roles>
       <timestamp>1483549295433</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
-      <emailAddress>Oleksiy.Tsubera@audiocodes.com</emailAddress>
-    </hudson.tasks.Mailer_-UserProperty>
+    <hudson.model.MyViewsProperty>
+      <primaryViewName></primaryViewName>
+      <views>
+        <hudson.model.AllView>
+          <owner class="hudson.model.MyViewsProperty" reference="../../.."/>
+          <name>All</name>
+          <filterExecutors>false</filterExecutors>
+          <filterQueue>false</filterQueue>
+          <properties class="hudson.model.View$PropertyList"/>
+        </hudson.model.AllView>
+      </views>
+    </hudson.model.MyViewsProperty>
+    <hudson.model.PaneStatusProperties>
+      <collapsed/>
+    </hudson.model.PaneStatusProperties>
+    <org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl>
+      <authorizedKeys>ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvH6cen/tvTF7zwLvycwhaiP1c3l90ql54DjIaHwZD2cIALcsrrZLawbeDInTOFr/aI7G5En8N9vK61WkW3YhStbcAr/76daGIR+xKlEoVvg8t0sow0aTKwhW2G+FQjZFtjpgMzeWyTKlL26KvR5vCFdVfQypShVBmite83eH9+RD8c5qDl43g/mZbaJCLtJlhfG3BYWCqUkgIxFbIzZJ/RShXXnV2ZnxC4aPqejwaxsp6mW47YIMSnTyRu6yff/AtIy6bWLY3SsSucEtql9UuIAX2Uxw+CyHepOsKvbQdfCJghBhYxERYq8QDd8YmZzucq//zxDm6HDFGE1egmwzEQ== oleksiy.tsubera@audiocodes.com</authorizedKeys>
+    </org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl>
+    <hudson.search.UserSearchProperty>
+      <insensitiveSearch>false</insensitiveSearch>
+    </hudson.search.UserSearchProperty>
   </properties>
 </user>
