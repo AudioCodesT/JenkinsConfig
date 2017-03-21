@@ -1,9 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Create &quot;ReleaseNote.txt&quot; &#xd;
-activated by ippBuild_promoteVersion_nonLync_2.2.10  or  2.2.12&#xd;
-and get BUILD_BRANCH param from father job</description>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -29,25 +27,7 @@ and get BUILD_BRANCH param from father job</description>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/IPP/non_lync</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>${BUILD_BRANCH}</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-    </extensions>
-  </scm>
+  <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
@@ -57,32 +37,13 @@ and get BUILD_BRANCH param from father job</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
-IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
-
-fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
-((fourth--))
-IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
-IPP_FIRST_PREV=&quot;2.2.10.24&quot;;
-echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
-git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
-sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
-
-echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
-echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
-
-AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
-RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | sed s/\&quot;/\&apos;/g`
-VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/VI\(\d+\)*/\1/g&apos; | cut -d&apos; &apos; -f1 | sort -u`
-EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
-GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
-DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-echo RN=${RN} &gt;&gt; generated_ipp_version.properties
-echo VIS=${VIS} &gt;&gt; generated_ipp_version.properties
-echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
-echo PROJECT=${GERRIT_PROJECT} &gt;&gt; generated_ipp_version.properties
-echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
-echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.properties
+      <command>echo IPP_VER=2.2.12.57 &gt; generated_ipp_version.properties
+echo RN=&quot;&lt;a href=&apos;https://gerrit/r/30990b1&apos;&gt;30990b1&lt;/a&gt; - promote version to 2.2.12.57 &lt;a href=&apos;https://gerrit/r/4b45d8d&apos;&gt;4b45d8d&lt;/a&gt; - [VI103685] Genesys (DWP) - Call forward on Busy does not work whe&quot; &gt;&gt; generated_ipp_version.properties
+echo VIS=&quot;&quot; &gt;&gt; generated_ipp_version.properties
+echo EMAIL=le.deng@audiocodes.com &gt;&gt; generated_ipp_version.properties
+echo PROJECT=&quot;IPP/non_lync&quot; &gt;&gt; generated_ipp_version.properties
+echo DATE=&quot;Tue Mar 21 10:52:18 2017 +0000&quot; &gt;&gt; generated_ipp_version.properties
+echo AuthorCommitter=&quot;Andy Deng; Le Deng;&quot; &gt;&gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -102,21 +63,21 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.propertie
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>true</enhancedLogging>
-      <parameters>NEWTAG
-RN
-VIS
-EMAIL
-PROJECT
-DATE
-AuthorCommitter</parameters>
+      <parameters>$NEWTAG
+$RN
+$VIS
+$EMAIL
+$PROJECT
+$DATE
+$AuthorCommitter</parameters>
       <parameterList>
-        <string>NEWTAG</string>
-        <string>RN</string>
-        <string>VIS</string>
-        <string>EMAIL</string>
-        <string>PROJECT</string>
-        <string>DATE</string>
-        <string>AuthorCommitter</string>
+        <string>$NEWTAG</string>
+        <string>$RN</string>
+        <string>$VIS</string>
+        <string>$EMAIL</string>
+        <string>$PROJECT</string>
+        <string>$DATE</string>
+        <string>$AuthorCommitter</string>
       </parameterList>
       <overrideAuth>false</overrideAuth>
       <auth>
@@ -132,54 +93,5 @@ AuthorCommitter</parameters>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers/>
-  <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText>ipp-release</keyFromText>
-          <keyFromSelect>ext-release-local</keyFromSelect>
-          <dynamicMode>true</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
-      <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
-      <deployBuildInfo>true</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <multiConfProject>false</multiConfProject>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>#${BUILD_NUMBER}___${IPP_VER}</template>
-    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
-  </buildWrappers>
+  <buildWrappers/>
 </project>
