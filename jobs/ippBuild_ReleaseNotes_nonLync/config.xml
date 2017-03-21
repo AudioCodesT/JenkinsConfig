@@ -108,9 +108,8 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; updatevi.properties
       <overrideAuth>true</overrideAuth>
       <auth>
         <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-          <authType>apiToken</authType>
-          <username>yossim</username>
-          <apiToken>VI</apiToken>
+          <authType>credentialsPlugin</authType>
+          <creds>90785dfe-eb4c-4adc-9993-192ac7072146</creds>
           <NONE>none</NONE>
           <API__TOKEN>apiToken</API__TOKEN>
           <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
