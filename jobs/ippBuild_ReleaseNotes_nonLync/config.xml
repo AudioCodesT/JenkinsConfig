@@ -76,19 +76,25 @@ RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit
 VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/VI\(\d+\)*/\1/g&apos; | cut -d&apos; &apos; -f1 | sort -u`
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
-echo NEWTAG=${IPP_VER} &gt; updatevi.properties
-echo RN=${RN} &gt;&gt; updatevi.properties
-echo VIS=${VIS} &gt;&gt; updatevi.properties
-echo EMAIL=${EMAIL} &gt;&gt; updatevi.properties
-echo PROJECT=${GERRIT_PROJECT} &gt;&gt; updatevi.properties
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-echo DATE=${DATE} &gt;&gt; updatevi.properties
-echo AuthorCommitter=${AuthorCommitter} &gt;&gt; updatevi.properties
+echo RN=${RN} &gt;&gt; generated_ipp_version.properties
+echo VIS=${VIS} &gt;&gt; generated_ipp_version.properties
+echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
+echo PROJECT=${GERRIT_PROJECT} &gt;&gt; generated_ipp_version.properties
+echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
+echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+        <propertiesContent>NEWTAG=${IPP_VER}
+RN=${RN}
+VIS=${VIS}
+EMAIL=${EMAIL}
+PROJECT=${GERRIT_PROJECT}
+DATE=${DATE}
+AuthorCommitter=${AuthorCommitter}</propertiesContent>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
@@ -101,22 +107,32 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; updatevi.properties
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>true</enhancedLogging>
-      <parameters></parameters>
+      <parameters>NEWTAG=${IPP_VER}
+RN=${RN}
+VIS=${VIS}
+EMAIL=${EMAIL}
+PROJECT=${GERRIT_PROJECT}
+DATE=${DATE}
+AuthorCommitter=${AuthorCommitter}</parameters>
       <parameterList>
-        <string></string>
+        <string>NEWTAG=${IPP_VER}</string>
+        <string>RN=${RN}</string>
+        <string>VIS=${VIS}</string>
+        <string>EMAIL=${EMAIL}</string>
+        <string>PROJECT=${GERRIT_PROJECT}</string>
+        <string>DATE=${DATE}</string>
+        <string>AuthorCommitter=${AuthorCommitter}</string>
       </parameterList>
-      <overrideAuth>true</overrideAuth>
+      <overrideAuth>false</overrideAuth>
       <auth>
         <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-          <authType>credentialsPlugin</authType>
-          <creds>90785dfe-eb4c-4adc-9993-192ac7072146</creds>
           <NONE>none</NONE>
           <API__TOKEN>apiToken</API__TOKEN>
           <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
         </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
       </auth>
-      <loadParamsFromFile>true</loadParamsFromFile>
-      <parameterFile>/updatevi.properties</parameterFile>
+      <loadParamsFromFile>false</loadParamsFromFile>
+      <parameterFile></parameterFile>
       <queryString></queryString>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
