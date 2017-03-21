@@ -89,12 +89,7 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.propertie
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
         <propertiesContent>NEWTAG=${IPP_VER}
-RN=${RN}
-VIS=${VIS}
-EMAIL=${EMAIL}
-PROJECT=${GERRIT_PROJECT}
-DATE=${DATE}
-AuthorCommitter=${AuthorCommitter}</propertiesContent>
+</propertiesContent>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
@@ -107,21 +102,21 @@ AuthorCommitter=${AuthorCommitter}</propertiesContent>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>true</enhancedLogging>
-      <parameters>NEWTAG=${IPP_VER}
-RN=${RN}
-VIS=${VIS}
-EMAIL=${EMAIL}
-PROJECT=${GERRIT_PROJECT}
-DATE=${DATE}
-AuthorCommitter=${AuthorCommitter}</parameters>
+      <parameters>NEWTAG
+RN
+VIS
+EMAIL
+PROJECT
+DATE
+AuthorCommitter</parameters>
       <parameterList>
-        <string>NEWTAG=${IPP_VER}</string>
-        <string>RN=${RN}</string>
-        <string>VIS=${VIS}</string>
-        <string>EMAIL=${EMAIL}</string>
-        <string>PROJECT=${GERRIT_PROJECT}</string>
-        <string>DATE=${DATE}</string>
-        <string>AuthorCommitter=${AuthorCommitter}</string>
+        <string>NEWTAG</string>
+        <string>RN</string>
+        <string>VIS</string>
+        <string>EMAIL</string>
+        <string>PROJECT</string>
+        <string>DATE</string>
+        <string>AuthorCommitter</string>
       </parameterList>
       <overrideAuth>false</overrideAuth>
       <auth>
