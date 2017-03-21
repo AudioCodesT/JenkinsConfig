@@ -39,8 +39,6 @@ echo AuthorCommitter=&quot;Andy Deng; Le Deng;&quot; &gt;&gt; generated_ipp_vers
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-        <propertiesContent>NEWTAG=${IPP_VER}
-</propertiesContent>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
@@ -53,21 +51,21 @@ echo AuthorCommitter=&quot;Andy Deng; Le Deng;&quot; &gt;&gt; generated_ipp_vers
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>true</enhancedLogging>
-      <parameters>$NEWTAG
-$RN
-$VIS
-$EMAIL
-$PROJECT
-$DATE
-$AuthorCommitter</parameters>
+      <parameters>NEWTAG=$IPP_VER
+RN=$RN
+VIS=$VIS
+EMAIL=$EMAIL
+PROJECT=$PROJECT
+DATE=$DATE
+AuthorCommitter=$AuthorCommitter</parameters>
       <parameterList>
-        <string>$NEWTAG</string>
-        <string>$RN</string>
-        <string>$VIS</string>
-        <string>$EMAIL</string>
-        <string>$PROJECT</string>
-        <string>$DATE</string>
-        <string>$AuthorCommitter</string>
+        <string>NEWTAG=$IPP_VER</string>
+        <string>RN=$RN</string>
+        <string>VIS=$VIS</string>
+        <string>EMAIL=$EMAIL</string>
+        <string>PROJECT=$PROJECT</string>
+        <string>DATE=$DATE</string>
+        <string>AuthorCommitter=$AuthorCommitter</string>
       </parameterList>
       <overrideAuth>false</overrideAuth>
       <auth>
