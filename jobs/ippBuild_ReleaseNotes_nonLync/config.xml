@@ -77,19 +77,19 @@ VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | 
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
+GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
 echo VIS=${VIS} &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
 echo PROJECT=${GERRIT_PROJECT} &gt;&gt; generated_ipp_version.properties
 echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
+echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; generated_ipp_version.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-        <propertiesContent>NEWTAG=${IPP_VER}
-</propertiesContent>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
@@ -102,21 +102,23 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.propertie
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>true</enhancedLogging>
-      <parameters>NEWTAG
-RN
-VIS
-EMAIL
-PROJECT
-DATE
-AuthorCommitter</parameters>
+      <parameters>NEWTAG=$IPP_VER
+RN=$RN
+VIS=$VIS
+EMAIL=$EMAIL
+PROJECT=$PROJECT
+DATE=$DATE
+GERRIT_BRANCH=$GERRIT_BRANCH
+AuthorCommitter=$AuthorCommitter</parameters>
       <parameterList>
-        <string>NEWTAG</string>
-        <string>RN</string>
-        <string>VIS</string>
-        <string>EMAIL</string>
-        <string>PROJECT</string>
-        <string>DATE</string>
-        <string>AuthorCommitter</string>
+        <string>NEWTAG=$IPP_VER</string>
+        <string>RN=$RN</string>
+        <string>VIS=$VIS</string>
+        <string>EMAIL=$EMAIL</string>
+        <string>PROJECT=$PROJECT</string>
+        <string>DATE=$DATE</string>
+        <string>GERRIT_BRANCH=$GERRIT_BRANCH</string>
+        <string>AuthorCommitter=$AuthorCommitter</string>
       </parameterList>
       <overrideAuth>false</overrideAuth>
       <auth>
