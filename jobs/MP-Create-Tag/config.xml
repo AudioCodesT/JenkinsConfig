@@ -66,14 +66,16 @@ git config --global user.email devops@audiocodes.com
 #LastTag=`git describe --abbrev=0 --first-parent --tags origin/$GERRIT_BRANCH`
 LastTag=`git describe --abbrev=0 --tags origin/$GERRIT_BRANCH`
 
+cd rg
+
 function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
     return
   fi
-  FixNum=`echo $LastTag | cut -d. -f4`
+  FixNum=`echo $LastTag | cut -d_ -f3`
   if [ -z $FixNum ]; then FixNum=0; fi
   Fix=`expr 1 + $FixNum`
-  NEWTAG=`echo $LastTag | cut -d. -f1-3`.`printf &quot;%03d&quot; $Fix`
+  NEWTAG=`echo $LastTag | cut -d_ -f1-2`.$Fix
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   #git tag $NEWTAG $LastSha1
   git push origin $NEWTAG
