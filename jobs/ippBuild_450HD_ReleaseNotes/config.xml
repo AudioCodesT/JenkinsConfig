@@ -81,7 +81,7 @@ if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 
 AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
-RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | sed s/\&quot;/\&apos;/g`
+RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
 # Old GIT version doesn&apos;t know %B option
 #VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/\[VI//; s/\].*//&apos; | sort -u`
 VIS=`git log $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
