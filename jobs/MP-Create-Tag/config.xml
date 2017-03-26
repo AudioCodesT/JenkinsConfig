@@ -75,7 +75,7 @@ function createTag {
   FixNum=`echo $LastTag | cut -d_ -f3`
   if [ -z $FixNum ]; then FixNum=0; fi
   Fix=`expr 1 + $FixNum`
-  NEWTAG=`echo $LastTag | cut -d_ -f1-2`.$Fix
+  NEWTAG=`echo $LastTag | cut -d_ -f1-2`_$Fix
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   #git tag $NEWTAG $LastSha1
   git push origin $NEWTAG
