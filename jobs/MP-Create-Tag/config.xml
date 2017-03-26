@@ -64,7 +64,7 @@
 git config --global user.email devops@audiocodes.com
 #GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 #LastTag=`git describe --abbrev=0 --first-parent --tags origin/$GERRIT_BRANCH`
-LastTag=`git describe --abbrev=0 --tags
+LastTag=`git describe --abbrev=0 --tags`
 
 function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
