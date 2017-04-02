@@ -158,11 +158,10 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>#Cleanup unnecessary files and optimize the local repository
-#git gc --aggressive --prune=all
-
+      <command>#modify ipp version just for the review level, in order to make unique &quot;private image&quot;
 branchName=`echo $GERRIT_BRANCH | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${branchName}_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
+sed -r &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${branchName}_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped &gt; new_ipp_version.h_shipped
+mv -f new_ipp_version.h_shipped include/ipp_version.h_shipped
 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
