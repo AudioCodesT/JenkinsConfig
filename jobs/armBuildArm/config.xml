@@ -33,9 +33,9 @@
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>GERRIT_BRANCH</name>
+          <name>BRANCH</name>
           <description></description>
-          <defaultValue></defaultValue>
+          <defaultValue>master</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>RELEASE_VMS</name>
@@ -55,7 +55,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>refs/heads/master</name>
+        <name>refs/heads/$BRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -85,8 +85,8 @@
       <command>#Cleanup unnecessary files and optimize the local repository
 #git gc --aggressive --prune=all &amp;
 
-git checkout master
-git pull --rebase</command>
+#git checkout master
+#git pull --rebase</command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
@@ -95,7 +95,7 @@ git pull --rebase</command>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
-      <command>if [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi</command>
+      <command>if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -162,7 +162,7 @@ git pull --rebase</command>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>Liav.Elias</recipients>
+      <recipients></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
