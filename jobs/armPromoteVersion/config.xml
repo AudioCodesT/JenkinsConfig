@@ -26,8 +26,16 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
-          <description></description>
+          <description>example:
+for master branch: 7.4.8
+for a patch to 7.4 branch: 7.4.8.0.1</description>
           <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BRANCH</name>
+          <description>default is master
+but we can promote a version to a patch in a maintenance branch (e.g.: 7.4)</description>
+          <defaultValue>master</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -42,7 +50,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>*/master</name>
+        <name>refs/heads/$BRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -84,17 +92,7 @@
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>VERSION_NAME=$VERSION_NAME</properties>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-          </configs>
-          <projects>armBuildARM-UI, armBuildarm-frontend</projects>
-          <condition>SUCCESS</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-          <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>GERRIT_BRANCH=master
+              <properties>BRANCH=$BRANCH
 RELEASE_VMS=1
 VERSION_NAME=$VERSION_NAME</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
@@ -113,9 +111,9 @@ VERSION_NAME=$VERSION_NAME</properties>
   </buildWrappers>
   <prebuilders>
     <hudson.tasks.Shell>
-      <command>if [ ${#VERSION_NAME} != 5  ]; then echo &quot;Version pattern muat be 7.2.XX&quot;; exit 1; fi
-git checkout master
-git pull --rebase</command>
+      <command>#if [ ${#VERSION_NAME} != 5  ]; then echo &quot;Version pattern muat be 7.2.XX&quot;; exit 1; fi
+#git checkout master
+#git pull --rebase</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Maven>
       <targets>versions:set -DnewVersion=$VERSION_NAME versions:commit</targets>
@@ -137,7 +135,7 @@ perl -pi -e &quot;s/7.(\d+).(\d+)/$VERSION_NAME/g&quot; RoutingManager/RoutingMa
 git config --global user.email devops@audiocodes.com
 message=&quot;promote version to $VERSION_NAME&quot;
 git commit -am &quot;$message&quot;
-git push origin master
+git push origin $BRANCH
 </command>
     </hudson.tasks.Shell>
   </postbuilders>
