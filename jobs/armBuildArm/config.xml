@@ -146,7 +146,8 @@
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>VERSION_NAME=$VERSION_NAME.0</properties>
+                      <properties>VERSION_NAME=$VERSION_NAME.0
+BRANCH=$BRANCH</properties>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
                   <projects>armBuildVMs, armCreateUpgradeTarball</projects>
