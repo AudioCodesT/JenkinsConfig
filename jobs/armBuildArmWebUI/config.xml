@@ -90,9 +90,10 @@ grunt dist
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f
-if [ $BRANCH != &quot;master&quot; ]; then
-  cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-7.4.8.0.zip -f
+      <command>if [ $BRANCH != &quot;master&quot; ]; then
+  mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-7.4.8.0.zip -f
+else
+	cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f
 fi</command>
     </hudson.tasks.Shell>
   </builders>
