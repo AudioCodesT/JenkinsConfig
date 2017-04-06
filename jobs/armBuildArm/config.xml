@@ -81,13 +81,6 @@
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command>#Cleanup unnecessary files and optimize the local repository
-#git gc --aggressive --prune=all &amp;
-
-#git checkout master
-#git pull --rebase</command>
-    </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
@@ -163,7 +156,7 @@ BRANCH=$BRANCH</properties>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients></recipients>
+      <recipients>liav.elias</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
