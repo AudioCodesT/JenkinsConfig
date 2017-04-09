@@ -207,6 +207,8 @@ make auto AUTOPRD=$AUTOPRD LOG=0
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}
+${WORKSPACE}/build/image/build.tgz=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}
+
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
