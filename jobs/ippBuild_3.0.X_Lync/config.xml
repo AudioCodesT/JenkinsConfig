@@ -123,7 +123,7 @@ yes | make distclean
 make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
-  make SUBVERSION=dummy;
+#  make SUBVERSION=dummy;
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
