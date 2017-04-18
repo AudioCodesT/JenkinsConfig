@@ -211,9 +211,9 @@ ${WORKSPACE}/build/image/build.tgz=&gt;nonLync/$AUTOPRD/build-${BUILD_NUMBER}/ge
         <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
+      <discardOldBuilds>true</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
-      <artifactoryCombinationFilter></artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
