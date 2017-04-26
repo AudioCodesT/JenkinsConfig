@@ -346,7 +346,7 @@
         <hudson.plugins.ec2.SlaveTemplate>
           <ami>ami-38e22a57</ami>
           <description>build slave for SBC Linux</description>
-          <zone>eu-central-1a</zone>
+          <zone>eu-central-1b</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/home/centos/jenkinsslave</remoteFS>
           <type>T2Medium</type>
@@ -356,7 +356,7 @@
           <initScript></initScript>
           <tmpDir></tmpDir>
           <userData></userData>
-          <numExecutors></numExecutors>
+          <numExecutors>1</numExecutors>
           <remoteAdmin>centos</remoteAdmin>
           <jvmopts></jvmopts>
           <subnetId></subnetId>
