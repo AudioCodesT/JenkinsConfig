@@ -22,7 +22,7 @@
     </com.sonyericsson.rebuild.RebuildSettings>
     <EnvInjectJobProperty plugin="envinject@1.92.1">
       <info>
-        <propertiesContent>BUILD_BRANCH=3.0.2</propertiesContent>
+        <propertiesContent>BUILD_BRANCH=3.0.4</propertiesContent>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
       <on>true</on>
@@ -42,7 +42,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>3.0.2</name>
+        <name>3.0.4</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -132,8 +132,6 @@ fi</command>
                   <updateTag>true</updateTag>
                 </hudson.plugins.git.GitPublisher_-TagToPush>
               </tagsToPush>
-              <branchesToPush/>
-              <notesToPush/>
             </hudson.plugins.git.GitPublisher>
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
               <configs>
