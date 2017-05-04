@@ -103,13 +103,13 @@ if [ $RELEASE_VMS ]; then
     mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
 fi
 
-echo majorVersion=${majorVersion} &gt;&gt; armBuild.properties
-echo buildNumber=${mavenBuildNumber} &gt;&gt; armBuild.properties
+echo majorVersion=${majorVersion} &gt;&gt; ../armBuild.properties
+echo buildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
-        <propertiesFilePath>armBuild.properties</propertiesFilePath>
+        <propertiesFilePath>../armBuild.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
