@@ -80,6 +80,9 @@
       <command>#find the last tag in this branch:
 LastTag=`git describe --abbrev=0 --tags origin/$BRANCH`
 
+#if this is a night build, need to run maven with the last version name:
+mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
+
 #if this is a new release, then
 #create new tag in Arm repo:
 if [ $RELEASE_VMS ]; then
@@ -89,16 +92,22 @@ if [ $RELEASE_VMS ]; then
     git push origin $VERSION_NAME
 #create new tag in Arm UI
 	cd ../
-    git clone ssh://jenkins@gerrit:29418/web-ui/arm
+    if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
+    git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
+    cd armUI
     git tag -a -m &quot;automatic tag&quot; $VERSION_NAME
     git push origin $VERSION_NAME
+#need to run maven with the new version name:
+    mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
 fi
+
+echo buildNumber=${mavenBuildNumber} &gt;&gt; armBuild.properties
 </command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release</goals>
+      <goals>clean releaser:release -DforceRelease=parent,arm-reactor -DpushTags=false -DbuildNumber=$buildNumber</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
