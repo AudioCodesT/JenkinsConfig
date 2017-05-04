@@ -123,7 +123,7 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
       <command>if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e TopologyManager/TopologyManagement/target/*.war ]; then cp TopologyManager/TopologyManagement/target/*.war TopologyManagement-$majorVersion.war; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.jar; fi</command>
+if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.war; fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
