@@ -115,11 +115,12 @@ echo buildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release -DforceRelease=parent,arm-reactor -DpushTags=false -DbuildNumber=$buildNumber</goals>
+      <goals>clean releaser:release -DforceRelease=parent,arm-reactor -DpushTags=false -DbuildNumber=$buildNumber -Dmaven.test.skip=true</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
-      <command>if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
+      <command>if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi
+if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e TopologyManager/TopologyManagement/target/*.war ]; then cp TopologyManager/TopologyManagement/target/*.war TopologyManagement-$majorVersion.war; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.jar; fi</command>
     </hudson.tasks.Shell>
@@ -227,10 +228,10 @@ BRANCH=$BRANCH</properties>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>common-*.jar=&gt;com/ac/arm/common/7.2/common-7.2.jar
-common-*.jar=&gt;com/ac/arm/common/$majorVersion/common-$majorVersion.jar
-TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/TopologyManagement-$majorVersion.war
-RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/RoutingManager-$majorVersion.war
+      <deployPattern>common-7.2.jar=&gt;com/ac/arm/common/7.2/
+common-$majorVersion.jar=&gt;com/ac/arm/common/$majorVersion/
+TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/
+RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
