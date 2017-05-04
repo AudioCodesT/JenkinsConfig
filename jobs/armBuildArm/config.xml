@@ -103,6 +103,7 @@ if [ $RELEASE_VMS ]; then
     mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
 fi
 
+rm -rf ../armBuild.properties
 echo majorVersion=${majorVersion} &gt;&gt; ../armBuild.properties
 echo buildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 </command>
