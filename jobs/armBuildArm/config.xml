@@ -89,7 +89,9 @@ mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
 if [ $RELEASE_VMS ]; then
 	git config --global user.name &quot;Jenkins&quot;
 	git config --global user.email devops@audiocodes.com
-    git tag -a -m &quot;automatic tag&quot; $VERSION_NAME $BRANCH
+    git checkout $BRANCH
+    git pull --rebase origin $BRANCH
+    git tag -a -m &quot;automatic tag&quot; $VERSION_NAME
     git push origin $VERSION_NAME
 #create new tag in Arm UI
 	cd ..
