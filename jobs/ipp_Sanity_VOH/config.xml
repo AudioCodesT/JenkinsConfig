@@ -42,6 +42,11 @@ Should work on 10.59.1.46 - ippAuto</description>
           <description>Example: 3.0.1.53</description>
           <defaultValue>None</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SuiteName</name>
+          <description></description>
+          <defaultValue>pre_commit_automation</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -92,7 +97,7 @@ IF %IMAGE440HD%==1 (&#xd;
   IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
   cd C:\IpPhoneAutomation\ModifeidIterations\ATA&#xd;
-  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
+  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_%SuiteName.suite -firmwareVersionMain %ImageName%&#xd;
 ) else set Error=1&#xd;
 &#xd;
 </command>
