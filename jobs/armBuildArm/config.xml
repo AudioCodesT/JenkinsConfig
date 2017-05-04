@@ -76,6 +76,25 @@
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#find the last tag in this branch:
+LastTag=`git describe --abbrev=0 --tags origin/$BRANCH`
+
+#if this is a new release, then
+#create new tag in Arm repo:
+if [ $RELEASE_VMS ]; then
+	git config --global user.name &quot;Jenkins&quot;
+	git config --global user.email devops@audiocodes.com
+    git tag -a -m &quot;automatic tag&quot; $VERSION_NAME $BRANCH
+    git push origin $VERSION_NAME
+#create new tag in Arm UI
+	cd ../
+    git clone ssh://jenkins@gerrit:29418/web-ui/arm
+    git tag -a -m &quot;automatic tag&quot; $VERSION_NAME
+    git push origin $VERSION_NAME
+fi
+</command>
+    </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
