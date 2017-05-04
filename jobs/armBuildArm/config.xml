@@ -116,7 +116,7 @@ echo buildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release -DforceRelease=parent,arm-reactor -Dmaven.test.skip=true -DpushTags=false -DbuildNumber=$buildNumber</goals>
+      <goals>clean releaser:release -DforceRelease=parent,arm-reactor -Dmaven.test.skip=true -DpushTags=false -DbuildNumber=${buildNumber}</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
