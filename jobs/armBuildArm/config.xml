@@ -105,7 +105,7 @@ fi
 
 rm -rf ../armBuild.properties
 echo majorVersion=${majorVersion} &gt;&gt; ../armBuild.properties
-echo buildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
+echo MAVEN_BUILD_NUMBER=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -116,7 +116,7 @@ echo buildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release  -DbuildNumber=001 -DforceRelease=parent,arm-reactor -DskipTests=true -DpushTags=false</goals>
+      <goals>clean releaser:release  -DbuildNumber=${MAVEN_BUILD_NUMBER} -DforceRelease=parent,arm-reactor -DskipTests=true -DpushTags=false</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
