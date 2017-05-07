@@ -39,8 +39,10 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>RELEASE_VMS</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description>if ==1 then it is a new release to QA:
+1. push new tag to Arm and to Arm-UI
+2. at the end will call the following jobs: armBuildVMs, armCreateUpgradeTarball</description>
+          <defaultValue>0</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -91,14 +93,14 @@ if [ $RELEASE_VMS ]; then
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
     git pull --rebase origin $BRANCH
-    git tag -a -m &quot;automatic tag&quot; $VERSION_NAME
+    git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
 #create new tag in Arm UI
 	cd ..
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
     git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
     cd armUI
-    git tag -a -m &quot;automatic tag&quot; $VERSION_NAME
+    git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
     cd ${WORKSPACE}
 #need to run maven with the new version name:
