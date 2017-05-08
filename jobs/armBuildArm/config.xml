@@ -93,7 +93,7 @@ mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
 
 #if this is a new release, then
 #create new tag in Arm repo:
-if [ $RELEASE_VMS ]; then
+if [ $RELEASE_VMS == &quot;1&quot; ]; then
 	git config --global user.name &quot;Jenkins&quot;
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
