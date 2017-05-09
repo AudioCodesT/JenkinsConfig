@@ -71,7 +71,7 @@ set DOWNLOAD=https://172.16.133.222/ipp-release/com/ac/ipp/SFB/3.0.2&#xd;
 &#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   curl -k -s -X GET %ARTIFACTORY% | grep uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v https | cut -c 2- | c:\cygwin\bin\sort -Vr &gt; LASTBL.txt&#xd;
-  c:\cygwin\bin\unix2dos LASTBL.txt&#xd;
+  unix2dos LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
 )&#xd;
 echo Find: %LASTBL%&#xd;
