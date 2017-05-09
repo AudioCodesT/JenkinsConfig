@@ -91,7 +91,7 @@ curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/450HD/UC450HD_%LASTBL%.img | grep uri |
 set /P IMAGE450HD=&lt;450HD.txt&#xd;
 &#xd;
 IF %IMAGE450HD%==1 (&#xd;
-  rem move /Y LASTBL.txt SaveLASTBL.txt&#xd;
+ ## rem move /Y LASTBL.txt SaveLASTBL.txt&#xd;
   IF NOT EXIST z:\UC450HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/450HD/UC450HD_%LASTBL%.img --output z:\UC450HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC440HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/440HD/UC440HD_%LASTBL%.img --output z:\UC440HD_%LASTBL%.img&#xd;
   IF NOT EXIST z:\UC430HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/430HD/UC430HD_%LASTBL%.img --output z:\UC430HD_%LASTBL%.img&#xd;
