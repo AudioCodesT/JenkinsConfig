@@ -321,7 +321,7 @@
           <remoteFS>/opt/jenkinsslave</remoteFS>
           <type>M4Large</type>
           <ebsOptimized>false</ebsOptimized>
-          <labels>ipp-build</labels>
+          <labels></labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -357,14 +357,14 @@
       <region>eu-central-1</region>
     </hudson.plugins.ec2.EC2Cloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
-      <name>sig-4d3953b3</name>
-      <groupId>sig-4d3953b3</groupId>
+      <name>sig-8b654dfd</name>
+      <groupId>sig-8b654dfd</groupId>
       <pendingInstances/>
-      <labelString>testLabel_1</labelString>
+      <labelString>ipp-build</labelString>
       <idleTerminationMinutes>-1</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>testLabel_1</hudson.model.labels.LabelAtom>
+        <hudson.model.labels.LabelAtom>ipp-build</hudson.model.labels.LabelAtom>
       </labelSet>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
