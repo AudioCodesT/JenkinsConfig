@@ -117,9 +117,9 @@ if [ $AUTOPRD == 450HD ]; then
 	make auto AUTOPRD=450HD LOG=0
 	make binary;
 	make SUBVERSION=dummy;
-fi
-
-if [ $AUTOPRD == 440HD ] || [ $AUTOPRD == 430HD ]; then
+#fi
+#if [ $AUTOPRD == 440HD ] || [ $AUTOPRD == 430HD ]; then
+else
 	make auto AUTOPRD=$AUTOPRD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
     make binary;
 	make SUBVERSION=dummy;
