@@ -132,7 +132,6 @@
         </permissions>
         <assignedSIDs>
           <sid>anonymous</sid>
-          <sid>ldap_aws</sid>
         </assignedSIDs>
       </role>
       <role name="admin" pattern=".*">
@@ -190,9 +189,12 @@
           <permission>hudson.model.Hudson.Read</permission>
           <permission>hudson.model.Computer.Connect</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>ldap_aws</sid>
+        </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
