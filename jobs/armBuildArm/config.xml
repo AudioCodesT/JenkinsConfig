@@ -29,7 +29,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
-          <description></description>
+          <description>provide it only when releasing to QA
+otherwise - it is a night build and there is no version name change</description>
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
