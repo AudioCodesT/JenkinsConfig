@@ -101,15 +101,19 @@
     <hudson.tasks.Shell>
       <command>#list of branches from older to newer
 declare -a SFB_branches=(&quot;3.0.1&quot; &quot;3.0.0_450HD&quot; &quot;3.0.2&quot;)
+url=&quot;https://gerrit/a/changes/?q=&quot;
 
-#find branch location in branches list
+#loop the list
 for i in &quot;${!SFB_branches[@]}&quot;; do
+   #find the gerrit branch in list
    if [[ &quot;${SFB_branches[$i]}&quot; = &quot;${GERRIT_BRANCH}&quot; ]]; then
        index=${i};
        continue;
    fi
+   #if gerrit branch was already found, then check if current branch has change-ID
    if [[ $index ]]; then
-   		
+   curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot;;
+   fi [[ $? ]]; then vote=-1; else vote=1; fi
    fi
 done
 </command>
