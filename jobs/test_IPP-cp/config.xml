@@ -46,56 +46,86 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>tests/non_lync</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>false</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>false</excludeNoCodeChange>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command></command>
+      <command>#list of branches from older to newer
+declare -a SFB_branches=(&quot;3.0.1&quot; &quot;3.0.0_450HD&quot; &quot;3.0.2&quot;)
+
+#find branch location in branches list
+for i in &quot;${!SFB_branches[@]}&quot;; do
+   if [[ &quot;${SFB_branches[$i]}&quot; = &quot;${GERRIT_BRANCH}&quot; ]]; then
+       index=${i};
+       continue;
+   fi
+   if [[ $index ]]; then
+   		
+   fi
+done
+</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
-      <info>
-        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
-    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token></token>
-      <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>UpdateVI</job>
-      <shouldNotFailBuild>true</shouldNotFailBuild>
-      <pollInterval>3</pollInterval>
-      <connectionRetryLimit>5</connectionRetryLimit>
-      <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
-      <blockBuildUntilComplete>false</blockBuildUntilComplete>
-      <enhancedLogging>true</enhancedLogging>
-      <parameters>NEWTAG=$IPP_VER
-RN=$RN
-VIS=&quot;103456&quot;
-EMAIL=$EMAIL
-PROJECT=$PROJECT
-DATE=$DATE
-AuthorCommitter=$AuthorCommitter</parameters>
-      <parameterList>
-        <string>NEWTAG=$IPP_VER</string>
-        <string>RN=$RN</string>
-        <string>VIS=&quot;103456&quot;</string>
-        <string>EMAIL=$EMAIL</string>
-        <string>PROJECT=$PROJECT</string>
-        <string>DATE=$DATE</string>
-        <string>AuthorCommitter=$AuthorCommitter</string>
-      </parameterList>
-      <overrideAuth>false</overrideAuth>
-      <auth>
-        <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-          <NONE>none</NONE>
-          <API__TOKEN>apiToken</API__TOKEN>
-          <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
-        </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-      </auth>
-      <loadParamsFromFile>false</loadParamsFromFile>
-      <parameterFile></parameterFile>
-      <queryString></queryString>
-    </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@1.92.1">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>curl_pass</name>
+          <value>xVs3KtGPlAVKOmVtUycepCkn8E5IJqrjTAtdBphlrqM3G2A9GvpCA5XbMoBENOs91XGZP9OrOmj1v39Q1UUHRQ==</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
 </project>
