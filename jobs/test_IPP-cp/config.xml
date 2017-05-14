@@ -115,8 +115,8 @@ for i in &quot;${!SFB_branches[@]}&quot;; do
    fi
    #if gerrit branch was already found, then check if current branch has change-ID
    if [[ $index ]]; then
-      curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot;;
-      if [[ $? ]]; then
+      exist=$(curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot; || true);
+      if [[ &quot;$exist&quot; = &quot;0&quot; ]]; then
       vote=-1;
       missingBranches+=(&quot;${SFB_branches[$i]}&quot;)
       fi
