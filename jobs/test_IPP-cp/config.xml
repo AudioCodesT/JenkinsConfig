@@ -102,6 +102,8 @@
       <command>#list of branches from older to newer
 declare -a SFB_branches=(&quot;3.0.1&quot; &quot;3.0.0_450HD&quot; &quot;3.0.2&quot;)
 url=&quot;https://gerrit/a/changes/?q=&quot;
+vote=1
+declare -a missingBranches
 
 #loop the list
 for i in &quot;${!SFB_branches[@]}&quot;; do
@@ -112,10 +114,16 @@ for i in &quot;${!SFB_branches[@]}&quot;; do
    fi
    #if gerrit branch was already found, then check if current branch has change-ID
    if [[ $index ]]; then
-   curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot;;
-   fi [[ $? ]]; then vote=-1; else vote=1; fi
+      curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot;;
+      if [[ $? ]]; then
+      vote=-1;
+      missingBranches+=(&quot;${SFB_branches[$i]}&quot;)
+      fi
    fi
 done
+
+echo $vote
+echo ${missingBranches[@]}
 </command>
     </hudson.tasks.Shell>
   </builders>
