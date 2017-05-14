@@ -130,6 +130,11 @@ done
 
 echo &quot;**** vote $vote in gerrit&quot;
 echo &quot;**** message: these are the branched without cherry-pick:  ${missingBranches[@]}&quot;
+
+#############################
+#reply vote to gerrit
+if [[ &quot;$vote&quot; = &quot;-1&quot; ]]; then
+	ssh -p 29418 jenkins@gerrit gerrit review  --project tests/non_lync --message &quot;&apos;&apos;&quot;  --Cherry-Pick -1 $GERRIT_CHANGE_NUMBER,$GERRIT_PATCHSET_NUMBER
 </command>
     </hudson.tasks.Shell>
   </builders>
