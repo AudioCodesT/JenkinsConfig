@@ -108,15 +108,19 @@ declare -a missingBranches
 
 #loop the list
 for i in &quot;${!SFB_branches[@]}&quot;; do
+echo &quot;************   i = ${SFB_branches[$i]}  **************&quot;
    #find the gerrit branch in list
    if [[ &quot;${SFB_branches[$i]}&quot; = &quot;${GERRIT_BRANCH}&quot; ]]; then
+echo &quot;************   is THE current branch  **************&quot;
        index=${i};
        continue;
    fi
    #if gerrit branch was already found, then check if current branch has change-ID
    if [[ $index ]]; then
+echo &quot;************   is AFTER current branch  **************&quot;
       exist=$(curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot; || true);
       if [[ &quot;$exist&quot; = &quot;0&quot; ]]; then
+echo &quot;************   no CH-ID found in this branch  **************&quot;
       vote=-1;
       missingBranches+=(&quot;${SFB_branches[$i]}&quot;)
       fi
