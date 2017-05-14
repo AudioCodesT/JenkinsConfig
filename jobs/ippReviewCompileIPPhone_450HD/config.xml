@@ -200,7 +200,7 @@ fi</command>
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
-            <arg1>$GERRIT_TRIGGER</arg1>
+            <arg1>$GERRIT_BRANCH</arg1>
             <arg2>3.0.0_450HD</arg2>
             <ignoreCase>false</ignoreCase>
           </condition>
