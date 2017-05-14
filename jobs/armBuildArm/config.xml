@@ -272,6 +272,9 @@ RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+      <template>#${BUILD_NUMBER}__${VERSION_NAME}</template>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
 </project>
