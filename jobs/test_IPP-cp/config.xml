@@ -117,18 +117,19 @@ echo &quot;************   is THE current branch  **************&quot;
    fi
    #if gerrit branch was already found, then check if current branch has change-ID
    if [[ $index ]]; then
-echo &quot;************   is AFTER current branch  **************&quot;
       exist=$(curl -k -s --digest -u shukyr:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot; || true);
       if [[ &quot;$exist&quot; = &quot;0&quot; ]]; then
-echo &quot;************   no CH-ID found in this branch  **************&quot;
+echo &quot;************ Change-ID was not found in branch ${SFB_branches[$i]} **************&quot;
       vote=-1;
       missingBranches+=(&quot;${SFB_branches[$i]}&quot;)
-      fi
+else
+echo &quot;************ Change-ID does exist in branch ${SFB_branches[$i]} **************&quot;
+fi
    fi
 done
 
-echo $vote
-echo ${missingBranches[@]}
+echo &quot;**** vote $vote in gerrit&quot;
+echo &quot;**** message: these are the branched without cherry-pick:  ${missingBranches[@]}&quot;
 </command>
     </hudson.tasks.Shell>
   </builders>
