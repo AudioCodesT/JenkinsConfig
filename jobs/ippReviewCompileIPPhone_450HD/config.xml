@@ -208,7 +208,9 @@ fi</command>
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs class="empty-list"/>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+                  </configs>
                   <projects>ippVerifyCherryPick</projects>
                   <condition>ALWAYS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
@@ -229,7 +231,9 @@ fi</command>
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs class="empty-list"/>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+                  </configs>
                   <projects>ippVerifyCherryPick</projects>
                   <condition>ALWAYS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
