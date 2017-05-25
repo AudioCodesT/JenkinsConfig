@@ -197,7 +197,7 @@ ${WORKSPACE}/build/obj/apps/voip_task/voip_task=&gt;com/ac/ipp/SFB/${IPP_MAJOR_V
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>#${BUILD_NUMBER}___${IPP_VER}</template>
+      <template>#${BUILD_NUMBER}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
