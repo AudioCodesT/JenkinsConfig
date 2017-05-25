@@ -140,9 +140,13 @@ IF %IMAGE450HD%==1 (&#xd;
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs class="empty-list"/>
-                  <projects>ipp</projects>
-                  <condition>SUCCESS</condition>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>Branch_Release=3.0.4</properties>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  </configs>
+                  <projects>ipp_Sanity_Night_Build_450</projects>
+                  <condition>ALWAYS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                 </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
               </configs>
@@ -156,9 +160,6 @@ IF %IMAGE450HD%==1 (&#xd;
   </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.17.1">
-      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
-        <timeoutSecondsString>3600</timeoutSecondsString>
-      </strategy>
       <operationList/>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
