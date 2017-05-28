@@ -80,26 +80,9 @@ majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$LastTag&quot;).$(cu
 mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
 
 function UpdateVI() {
-  SubModule=$1
-
-AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
-RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
-# Old GIT version doesn&apos;t know %B option
-#VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/\[VI//; s/\].*//&apos; | sort -u`
-VIS=`git log $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
-EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
-GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
-DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-echo RN=${RN} &gt;&gt; armBuild.properties
-echo VIS=${VIS} &gt;&gt; armBuild.properties
-echo EMAIL=${EMAIL} &gt;&gt; armBuild.properties
-echo PROJECT=${GERRIT_PROJECT} &gt;&gt; armBuild.properties
-echo DATE=${DATE} &gt;&gt; armBuild.properties
-echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; armBuild.properties
-echo AuthorCommitter=${AuthorCommitter} &gt;&gt; armBuild.properties
 }
 
+    echo VERSION_NAME=${VERSION_NAME} &gt; armBuild.properties
 #if this is a new release, then
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == &quot;1&quot; ]; then
@@ -109,7 +92,15 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     git pull --rebase origin $BRANCH
     git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
-    
+    GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
+    DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$VERSION_NAME`
+    GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+    AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
+    RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
+    VIS=`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
+    EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | grep -v devops | sort -u`
+
+    UpdateVI
 #create new tag in Arm UI
 	cd ..
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
@@ -117,12 +108,24 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     cd armUI
     git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
+    AuthorCommitter.=&quot; &quot;.`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
+    RN.=&quot; &quot;.`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
+    VIS.=&quot; &quot;.`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
+    EMAIL.=&quot; &quot;.`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | grep -v devops | sort -u`
+
     cd ${WORKSPACE}
 #need to run maven with the new version name:
     mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
+    
+    echo RN=${RN} &gt;&gt; armBuild.properties
+    echo VIS=${VIS} &gt;&gt; armBuild.properties
+    echo EMAIL=${EMAIL} &gt;&gt; armBuild.properties
+    echo PROJECT=${GERRIT_PROJECT} &gt;&gt; armBuild.properties
+    echo DATE=${DATE} &gt;&gt; armBuild.properties
+    echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; armBuild.properties
+    echo AuthorCommitter=${AuthorCommitter} &gt;&gt; armBuild.properties
 fi
 
-rm -rf ../armBuild.properties
 echo majorVersion=${majorVersion} &gt;&gt; ../armBuild.properties
 echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 </command>
@@ -146,7 +149,7 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
         <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
         <blockBuildUntilComplete>false</blockBuildUntilComplete>
         <enhancedLogging>false</enhancedLogging>
-        <parameters>NEWTAG=$IPP_VER
+        <parameters>NEWTAG=$VERSION_NAME
 RN=$RN
 VIS=$VIS
 EMAIL=$EMAIL
@@ -155,7 +158,7 @@ DATE=$DATE
 GERRIT_BRANCH=$GERRIT_BRANCH
 AuthorCommitter=$AuthorCommitter</parameters>
         <parameterList>
-          <string>NEWTAG=$IPP_VER</string>
+          <string>NEWTAG=$VERSION_NAME</string>
           <string>RN=$RN</string>
           <string>VIS=$VIS</string>
           <string>EMAIL=$EMAIL</string>
