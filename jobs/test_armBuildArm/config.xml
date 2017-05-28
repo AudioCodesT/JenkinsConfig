@@ -79,6 +79,27 @@ majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$LastTag&quot;).$(cu
 #if this is a night build, need to run maven with the last version name:
 mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
 
+function UpdateVI() {
+  SubModule=$1
+
+AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
+RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
+# Old GIT version doesn&apos;t know %B option
+#VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/\[VI//; s/\].*//&apos; | sort -u`
+VIS=`git log $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
+EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
+GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
+DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
+GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+echo RN=${RN} &gt;&gt; armBuild.properties
+echo VIS=${VIS} &gt;&gt; armBuild.properties
+echo EMAIL=${EMAIL} &gt;&gt; armBuild.properties
+echo PROJECT=${GERRIT_PROJECT} &gt;&gt; armBuild.properties
+echo DATE=${DATE} &gt;&gt; armBuild.properties
+echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; armBuild.properties
+echo AuthorCommitter=${AuthorCommitter} &gt;&gt; armBuild.properties
+}
+
 #if this is a new release, then
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == &quot;1&quot; ]; then
@@ -88,6 +109,7 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     git pull --rebase origin $BRANCH
     git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
+    
 #create new tag in Arm UI
 	cd ..
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
@@ -110,37 +132,54 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
         <propertiesFilePath>../armBuild.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.3.3">
+      <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
+        <token>$RELEASE_VMS</token>
+      </condition>
+      <buildStep class="org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration" plugin="Parameterized-Remote-Trigger@2.2.2">
+        <token></token>
+        <remoteJenkinsName>test-jenkins</remoteJenkinsName>
+        <job>UpdateVI</job>
+        <shouldNotFailBuild>true</shouldNotFailBuild>
+        <pollInterval>3</pollInterval>
+        <connectionRetryLimit>5</connectionRetryLimit>
+        <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
+        <blockBuildUntilComplete>false</blockBuildUntilComplete>
+        <enhancedLogging>false</enhancedLogging>
+        <parameters>NEWTAG=$IPP_VER
+RN=$RN
+VIS=$VIS
+EMAIL=$EMAIL
+PROJECT=$PROJECT
+DATE=$DATE
+GERRIT_BRANCH=$GERRIT_BRANCH
+AuthorCommitter=$AuthorCommitter</parameters>
+        <parameterList>
+          <string>NEWTAG=$IPP_VER</string>
+          <string>RN=$RN</string>
+          <string>VIS=$VIS</string>
+          <string>EMAIL=$EMAIL</string>
+          <string>PROJECT=$PROJECT</string>
+          <string>DATE=$DATE</string>
+          <string>GERRIT_BRANCH=$GERRIT_BRANCH</string>
+          <string>AuthorCommitter=$AuthorCommitter</string>
+        </parameterList>
+        <overrideAuth>false</overrideAuth>
+        <auth>
+          <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
+            <NONE>none</NONE>
+            <API__TOKEN>apiToken</API__TOKEN>
+            <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
+          </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
+        </auth>
+        <loadParamsFromFile>false</loadParamsFromFile>
+        <parameterFile></parameterFile>
+        <queryString></queryString>
+      </buildStep>
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+    </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
   </builders>
-  <publishers>
-    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
-      <publishers>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>$RELEASE_VMS</token>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>VERSION_NAME=$VERSION_NAME
-BRANCH=$BRANCH</properties>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>armBuildVMs, armCreateUpgradeTarball</projects>
-                  <condition>SUCCESS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <EnvInjectBuildWrapper plugin="envinject@1.92.1">
       <info>
