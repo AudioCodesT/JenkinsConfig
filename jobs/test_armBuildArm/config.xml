@@ -5,19 +5,11 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
-      <useBuildBlocker>true</useBuildBlocker>
+      <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <jenkins.model.BuildDiscarderProperty>
-      <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>30</daysToKeep>
-        <numToKeep>-1</numToKeep>
-        <artifactDaysToKeep>30</artifactDaysToKeep>
-        <artifactNumToKeep>-1</artifactNumToKeep>
-      </strategy>
-    </jenkins.model.BuildDiscarderProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -76,12 +68,7 @@ otherwise - it is a night build and there is no version name change</description
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.SCMTrigger>
-      <spec>H 22 * * *</spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -123,55 +110,8 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
         <propertiesFilePath>../armBuild.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
-      <mavenName>Maven_v325</mavenName>
-      <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release -DforceRelease=parent,arm-reactor</goals>
-      <mavenOpts></mavenOpts>
-    </org.jfrog.hudson.maven3.Maven3Builder>
-    <hudson.tasks.Shell>
-      <command>if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e TopologyManager/TopologyManagement/target/*.war ]; then cp TopologyManager/TopologyManagement/target/*.war TopologyManagement-$majorVersion.war; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.war; fi</command>
-    </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
-      <tasks>
-        <hudson.plugins.postbuildtask.TaskProperties>
-          <logTexts>
-            <hudson.plugins.postbuildtask.LogProperties>
-              <logText>Build was aborted</logText>
-              <operator>AND</operator>
-            </hudson.plugins.postbuildtask.LogProperties>
-          </logTexts>
-          <EscalateStatus>false</EscalateStatus>
-          <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
-        </hudson.plugins.postbuildtask.TaskProperties>
-      </tasks>
-    </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@2.0.1">
-      <execPattern>**/**.exec</execPattern>
-      <classPattern>**/target/**/classes</classPattern>
-      <sourcePattern>**/src/main/java</sourcePattern>
-      <inclusionPattern></inclusionPattern>
-      <exclusionPattern></exclusionPattern>
-      <minimumInstructionCoverage>0</minimumInstructionCoverage>
-      <minimumBranchCoverage>0</minimumBranchCoverage>
-      <minimumComplexityCoverage>0</minimumComplexityCoverage>
-      <minimumLineCoverage>0</minimumLineCoverage>
-      <minimumMethodCoverage>0</minimumMethodCoverage>
-      <minimumClassCoverage>0</minimumClassCoverage>
-      <maximumInstructionCoverage>0</maximumInstructionCoverage>
-      <maximumBranchCoverage>0</maximumBranchCoverage>
-      <maximumComplexityCoverage>0</maximumComplexityCoverage>
-      <maximumLineCoverage>0</maximumLineCoverage>
-      <maximumMethodCoverage>0</maximumMethodCoverage>
-      <maximumClassCoverage>0</maximumClassCoverage>
-      <changeBuildStatus>false</changeBuildStatus>
-    </hudson.plugins.jacoco.JacocoPublisher>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
@@ -200,62 +140,8 @@ BRANCH=$BRANCH</properties>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>liav.elias</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-      </resolverCredentialsConfig>
-      <deployPattern>common-7.2.jar=&gt;com/ac/arm/common/7.2/
-common-$majorVersion.jar=&gt;com/ac/arm/common/$majorVersion/
-TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/
-RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
-</deployPattern>
-      <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
-      <deployBuildInfo>true</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <multiConfProject>false</multiConfProject>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@1.92.1">
       <info>
         <propertiesContent>artifactory_username=armdeploy</propertiesContent>
