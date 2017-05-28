@@ -79,10 +79,7 @@ majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$LastTag&quot;).$(cu
 #if this is a night build, need to run maven with the last version name:
 mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
 
-function UpdateVI() {
-}
-
-    echo VERSION_NAME=${VERSION_NAME} &gt; armBuild.properties
+echo VERSION_NAME=${VERSION_NAME} &gt; armBuild.properties
 #if this is a new release, then
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == &quot;1&quot; ]; then
@@ -94,7 +91,6 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     git push origin $VERSION_NAME
     GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
     DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$VERSION_NAME`
-    GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
     AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
     RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
     VIS=`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
@@ -155,7 +151,7 @@ VIS=$VIS
 EMAIL=$EMAIL
 PROJECT=$PROJECT
 DATE=$DATE
-GERRIT_BRANCH=$GERRIT_BRANCH
+GERRIT_BRANCH=$BRANCH
 AuthorCommitter=$AuthorCommitter</parameters>
         <parameterList>
           <string>NEWTAG=$VERSION_NAME</string>
@@ -164,7 +160,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
           <string>EMAIL=$EMAIL</string>
           <string>PROJECT=$PROJECT</string>
           <string>DATE=$DATE</string>
-          <string>GERRIT_BRANCH=$GERRIT_BRANCH</string>
+          <string>GERRIT_BRANCH=$BRANCH</string>
           <string>AuthorCommitter=$AuthorCommitter</string>
         </parameterList>
         <overrideAuth>false</overrideAuth>
