@@ -48,7 +48,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>FIRMWARE</name>
+        <name>${BUILD_BRANCH}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
