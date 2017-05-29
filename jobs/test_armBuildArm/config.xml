@@ -94,8 +94,8 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$VERSION_NAME`
     AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
     RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
-    VIS=`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
-    EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | grep -v devops | sort -u`
+    VIS=`git log $LastTag..$VERSION_NAME | grep ^Issue | sed &apos;s/^Issue: \(VI\|\)//g; s/ .*//g&apos; | sort -u`
+    EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | sort -u`
 
 #create new tag in Arm UI
 	cd ..
@@ -106,8 +106,8 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
  
     AuthorCommitter+=&quot; &quot;`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
     RN+=&quot; &quot;`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
-    VIS+=&quot; &quot;`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
-    EMAIL+=&quot; &quot;`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | grep -v devops | sort -u`
+    VIS+=&quot; &quot;`git log $LastTag..$VERSION_NAME | grep ^Issue | sed &apos;s/^Issue: \(VI\|\)//g; s/ .*//g&apos; | sort -u`
+    EMAIL+=&quot; &quot;`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | sort -u`
     EMAIL=&quot;&quot;
 
     cd ${WORKSPACE}
