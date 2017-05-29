@@ -115,10 +115,14 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 if [ $FIRMWARE == &quot;ce8&quot; ]; then
-  make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE SUBVERSION=$FIRMWARE
-  make binary;
-  make SUBVERSION=${FIRMWARE}_dummy;
-  mv build/image/build.tgz build/image/build_${FIRMWARE}.tgz
+  if [[ $BUILD_BRANCH =~ 2.2.12 ]]; then 
+    make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE SUBVERSION=$FIRMWARE
+    make binary;
+    make SUBVERSION=${FIRMWARE}_dummy;
+    mv build/image/build.tgz build/image/build_${FIRMWARE}.tgz
+  else
+    exit 0;
+  fi
 else
   make auto AUTOPRD=$AUTOPRD
   make binary;
@@ -145,6 +149,21 @@ mv ${file2} ${file2}.txt
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+      <details>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect></keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </details>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
       <deployerCredentialsConfig>
         <credentials>
           <username></username>
@@ -184,5 +203,8 @@ ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/non_lync/${IPP_MA
       <template>#${BUILD_NUMBER}___${IPP_VER}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
   <childCustomWorkspace>${SHORT_COMBINATION}</childCustomWorkspace>
 </matrix-project>
