@@ -104,10 +104,11 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     cd armUI
     echo git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
  
-    AuthorCommitter=&quot; &quot;.`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
-    RN=&quot; &quot;.`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
-    VIS=&quot; &quot;.`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
-    EMAIL=&quot; &quot;.`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | grep -v devops | sort -u`
+    AuthorCommitter+=&quot; &quot;`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
+    RN+=&quot; &quot;`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
+    VIS+=&quot; &quot;`git log $LastTag..$VERSION_NAME | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
+    EMAIL+=&quot; &quot;`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | grep -v devops | sort -u`
+    EMAIL=&quot;&quot;
 
     cd ${WORKSPACE}
 #need to run maven with the new version name:
