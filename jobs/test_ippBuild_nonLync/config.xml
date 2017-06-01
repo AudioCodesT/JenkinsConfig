@@ -67,7 +67,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.TextAxis>
   </axes>
-  <combinationFilter>!(($AUTOPRD==~ /SIP/) &amp;&amp; $FIRMWARE== &quot;ce8&quot;) </combinationFilter>
+  <combinationFilter>!($AUTOPRD==&quot;SIP100&quot; &amp;&amp; $FIRMWARE== &quot;ce8&quot;) </combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>echo $AUTOPRD
@@ -83,5 +83,8 @@ echo $BUILD_BRANCH
       <template>#${BUILD_NUMBER}___${IPP_VER}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
   <childCustomWorkspace>${SHORT_COMBINATION}</childCustomWorkspace>
 </matrix-project>
