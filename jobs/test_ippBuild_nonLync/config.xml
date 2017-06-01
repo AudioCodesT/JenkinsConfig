@@ -67,7 +67,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.TextAxis>
   </axes>
-  <combinationFilter>!((AUTOPRD==&quot;SIP100&quot; ||  AUTOPRD==&quot;SIP200&quot;) &amp;&amp; FIRMWARE== &quot;ce8&quot; &amp;&amp; BUILD_BRANCH!=&quot;nonLync_2.2.12&quot;)</combinationFilter>
+  <combinationFilter>(FIRMWARE== &quot;ce8&quot; &amp;&amp; BUILD_BRANCH==&quot;nonLync_2.2.12&quot;)</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>echo $AUTOPRD
