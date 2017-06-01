@@ -76,6 +76,8 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
+        <string>405</string>
+        <string>405HD</string>
         <string>440HD</string>
         <string>430HD</string>
         <string>420HD</string>
@@ -97,6 +99,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
+  <combinationFilter>($BUILD_BRANCH==~ /2.2.12/  &amp;&amp; !AUTOPRD==~ /SIP/ &amp;&amp; $FIRMWARE== &quot;ce8&quot;) </combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
