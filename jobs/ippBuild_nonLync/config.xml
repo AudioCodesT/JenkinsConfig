@@ -99,7 +99,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(FIRMWARE== &quot;ce8&quot; &amp;&amp; (BUILD_BRANCH!=&quot;nonLync_2.2.12&quot; || (AUTOPRD==&quot;SIP100&quot; || AUTOPRD==&quot;SIP200&quot;)))</combinationFilter>
+  <combinationFilter>!(FIRMWARE== &quot;ce8&quot; &amp;&amp; (!(BUILD_BRANCH=~/2.2.12/) || AUTOPRD=~/SIP/))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
@@ -118,14 +118,10 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 if [ $FIRMWARE == &quot;ce8&quot; ]; then
-  if [[ $BUILD_BRANCH =~ 2.2.12 ]]; then 
-    make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE SUBVERSION=$FIRMWARE
-    make binary;
-    make SUBVERSION=${FIRMWARE}_dummy;
-    mv build/image/build.tgz build/image/build_${FIRMWARE}.tgz
-  else
-    exit 0;
-  fi
+  make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE SUBVERSION=$FIRMWARE
+  make binary;
+  make SUBVERSION=${FIRMWARE}_dummy;
+  mv build/image/build.tgz build/image/build_${FIRMWARE}.tgz
 else
   make auto AUTOPRD=$AUTOPRD
   make binary;
