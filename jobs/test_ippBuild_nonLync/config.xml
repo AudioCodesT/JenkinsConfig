@@ -39,8 +39,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
     </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
-  <assignedNode>ipp-build</assignedNode>
+  <assignedNode>master</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -78,22 +77,10 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
   <combinationFilter>($BUILD_BRANCH==~ /2.2.12/  &amp;&amp; !AUTOPRD==~ /SIP/ &amp;&amp; $FIRMWARE== &quot;ce8&quot;) </combinationFilter>
   <builders>
     <hudson.tasks.Shell>
-      <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+      <command>echo $AUTOPRD
+echo $FIRMWARE
+echo $BUILD_BRANCH
 
-if [ $FIRMWARE == &quot;ce8&quot; ]; then
-  if [[ $BUILD_BRANCH =~ 2.2.12 ]]; then 
-    make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE SUBVERSION=$FIRMWARE
-    make binary;
-    make SUBVERSION=${FIRMWARE}_dummy;
-    mv build/image/build.tgz build/image/build_${FIRMWARE}.tgz
-  else
-    exit 0;
-  fi
-else
-  make auto AUTOPRD=$AUTOPRD
-  make binary;
-  make SUBVERSION=dummy;
-fi
 </command>
     </hudson.tasks.Shell>
   </builders>
