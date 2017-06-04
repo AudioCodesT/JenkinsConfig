@@ -113,13 +113,15 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
 yes | make distclean
 
 if [ $AUTOPRD == 450HD ]; then
-	make auto AUTOPRD=450HD LOG=0
-	make binary;
-	make SUBVERSION=dummy;
+    echo Done
+	#make auto AUTOPRD=450HD LOG=0
+	#make binary;
+	#make SUBVERSION=dummy;
 elif [ $AUTOPRD == 440HD ] || [ $AUTOPRD == 430HD ]; then
-	make auto AUTOPRD=$AUTOPRD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
-    make binary;
-	make SUBVERSION=dummy;
+    echo Done
+	#make auto AUTOPRD=$AUTOPRD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
+    #make binary;
+	#make SUBVERSION=dummy;
 else
 	make auto AUTOPRD=$AUTOPRD
     make binary;
