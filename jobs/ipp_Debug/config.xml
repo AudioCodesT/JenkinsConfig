@@ -62,6 +62,12 @@ Compile and deploy 450HD</description>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <depth>100</depth>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
