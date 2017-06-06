@@ -84,6 +84,7 @@ set DOWNLOAD=https://172.16.133.222/ipp-release/com/ac/ipp/SFB/%BuildRelease%&#x
 &#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   curl -k -s -X GET %ARTIFACTORY% | grep uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v https | grep -v DEBUG | cut -c 2- | c:\cygwin\bin\sort -Vr &gt; LASTBL.txt&#xd;
+  rem curl -k -s -X GET %ARTIFACTORY% | grep uri | cut -d&quot;&quot;&quot;&quot; -f4 | cut -c 2- | grep &quot;^[1-9]&quot; | c:\cygwin\bin\sort -Vr &gt; LASTBL.txt&#xd;
   unix2dos LASTBL.txt&#xd;
   set /P LASTBL=&lt;LASTBL.txt&#xd;
 )&#xd;
