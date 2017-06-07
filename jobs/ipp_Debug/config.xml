@@ -147,7 +147,7 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>ipp-release</keyFromSelect>
+          <keyFromSelect>ipp-review</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -173,12 +173,12 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/DEBUG/${BUILD_BRANCH}/$AUTOPRD
-${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/DEBUG/${BUILD_BRANCH}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/DEBUG/${BUILD_BRANCH}/$AUTOPRD/build_tgz
-${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/DEBUG/${BUILD_BRANCH}/$AUTOPRD/Production
-${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/DEBUG/${BUILD_BRANCH}/$AUTOPRD/Production
-${WORKSPACE}/build/image/binGroupdefFor450HD.def=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/DEBUG/${BUILD_BRANCH}/$AUTOPRD
+      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/${BUILD_BRANCH}/$AUTOPRD
+${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/${BUILD_BRANCH}/$AUTOPRD
+${WORKSPACE}/build/image/build.tgz=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/${BUILD_BRANCH}/$AUTOPRD/build_tgz
+${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/${BUILD_BRANCH}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/${BUILD_BRANCH}/$AUTOPRD/Production
+${WORKSPACE}/build/image/binGroupdefFor450HD.def=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/${BUILD_BRANCH}/$AUTOPRD
 
 </deployPattern>
       <resolvePattern></resolvePattern>
