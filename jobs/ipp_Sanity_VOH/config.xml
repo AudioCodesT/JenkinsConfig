@@ -58,7 +58,7 @@ Should work on 10.59.1.46 - ippAuto</description>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>true</concurrentBuild>
+  <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
       <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
