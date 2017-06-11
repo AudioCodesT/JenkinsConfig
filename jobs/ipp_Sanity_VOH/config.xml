@@ -51,13 +51,14 @@ Should work on 10.59.1.46 - ippAuto</description>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
+  <quietPeriod>30</quietPeriod>
   <assignedNode>ippSanityTest01</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
+  <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
       <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
