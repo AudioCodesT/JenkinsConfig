@@ -53,12 +53,6 @@ SuiteName=basicPart1</properties>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-      </phaseJobs>
-      <continuationCondition>ALWAYS</continuationCondition>
-    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>suite-2</phaseName>
-      <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_tests_parallel</jobName>
           <currParams>true</currParams>
@@ -77,7 +71,7 @@ model=440
 SuiteName=basicPart2</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
