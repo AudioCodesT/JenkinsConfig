@@ -33,7 +33,7 @@
       <phaseName>suite-1</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_VOH</jobName>
+          <jobName>ipp_Sanity_tests_parallel</jobName>
           <currParams>true</currParams>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
@@ -45,7 +45,7 @@
           <condition></condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
-              <properties>ConfigName=Sanity440LyncConfig_groupA.tcl
+              <properties>ConfigName=groupA
 model=440
 SuiteName=basicPart1</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
@@ -60,7 +60,7 @@ SuiteName=basicPart1</properties>
       <phaseName>suite-2</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_VOH</jobName>
+          <jobName>ipp_Sanity_tests_parallel</jobName>
           <currParams>true</currParams>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
@@ -72,7 +72,7 @@ SuiteName=basicPart1</properties>
           <condition></condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
-              <properties>ConfigName=Sanity440LyncConfig_groupB.tcl
+              <properties>ConfigName=groupB
 model=440
 SuiteName=basicPart2</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
