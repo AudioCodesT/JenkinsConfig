@@ -184,7 +184,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(AUTOPRD==&quot;420HD&quot; &amp;&amp; (!($GERRIT_BRANCH==&quot;3.0.4&quot;)))</combinationFilter>
+  <combinationFilter>!(AUTOPRD==&quot;420HD&quot; &amp;&amp; (!($GERRIT_BRANCH=~/3.0.4/)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>#modify the IPP version in order to have a unique &quot;private image&quot;
