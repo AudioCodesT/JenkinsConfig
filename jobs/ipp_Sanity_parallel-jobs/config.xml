@@ -31,7 +31,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>suite-1</phaseName>
+      <phaseName>first model: $model</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_child</jobName>
