@@ -34,7 +34,7 @@
       <phaseName>suite-1</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_tests_parallel</jobName>
+          <jobName>ipp_Sanity_child</jobName>
           <currParams>true</currParams>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
@@ -55,7 +55,7 @@ SuiteName=basicPart1</properties>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_tests_parallel</jobName>
+          <jobName>ipp_Sanity_child</jobName>
           <currParams>true</currParams>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
