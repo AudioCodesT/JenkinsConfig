@@ -67,7 +67,7 @@ Should work on 10.59.1.46 - ippAuto</description>
     <hudson.tasks.BatchFile>
       <command>if %ConfigName%==&quot;groupB&quot; (&#xd;
    echo This is groupB, waiting 30 seconds before starting&#xd;
-   timeout 30&#xd;
+   sleep 30&#xd;
 )&#xd;
 &#xd;
 curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
