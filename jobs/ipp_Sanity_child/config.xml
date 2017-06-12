@@ -66,7 +66,9 @@ Should work on 10.59.1.46 - ippAuto</description>
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
+      <command>if %ConfigName%==&quot;groupB&quot; (timeout 30)&#xd;
+&#xd;
+curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
 type show.xml&#xd;
 type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
