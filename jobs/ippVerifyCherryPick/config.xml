@@ -59,9 +59,7 @@ declare -a SFB_branches=(&quot;3.0.1&quot; &quot;3.0.2&quot; &quot;3.0.4&quot;)
 if [ &quot;${SFB_branches[${#SFB_branches[@]}-1]}&quot; == &quot;${GERRIT_BRANCH}&quot; ]; then exit 0; fi
 
 #some init params
-#url=&quot;https://gerrit/a/changes/?q=&quot;
-#change &apos;a&apos; to &apos;#&apos;, since gerrit 2.14:
-url=&quot;https://gerrit/#/changes/?q=&quot;
+url=&quot;https://gerrit/a/changes/?q=&quot;
 vote=1
 declare -a missingBranches
 
