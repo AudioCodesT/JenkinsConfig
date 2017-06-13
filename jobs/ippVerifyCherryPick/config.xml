@@ -73,7 +73,7 @@ for i in &quot;${!SFB_branches[@]}&quot;; do
    fi
    #if gerrit branch was already found, then check if current branch has this change-ID
    if [[ $index ]]; then
-      exist=$(curl -k -s --digest -u jenkins:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot; || true);
+      exist=$(curl -k -s --digest --basic -u jenkins:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${SFB_branches[$i]}\&quot;&quot; || true);
       if [[ &quot;$exist&quot; = &quot;0&quot; ]]; then
         echo &quot;*** Change-ID was not found in branch ${SFB_branches[$i]} ***&quot;
         vote=-1;
