@@ -115,15 +115,21 @@ yes | make distclean
 if [ $AUTOPRD == 450HD ]; then
 	make auto AUTOPRD=450HD LOG=0
 	make binary;
+    mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
 	make SUBVERSION=dummy;
+    mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
 elif [ $AUTOPRD == 440HD ] || [ $AUTOPRD == 430HD ]; then
 	make auto AUTOPRD=$AUTOPRD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
     make binary;
+    mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
 	make SUBVERSION=dummy;
+    mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
 else
 	make auto AUTOPRD=$AUTOPRD
     make binary;
+    mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
 	make SUBVERSION=dummy;
+    mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
 fi
 
 </command>
