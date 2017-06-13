@@ -123,7 +123,9 @@ yes | make distclean
 make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
-#  make SUBVERSION=dummy;
+  mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
+  make SUBVERSION=dummy;
+  mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
