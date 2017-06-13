@@ -137,7 +137,7 @@ if [ -f &quot;needcppcheck&quot; ]; then rm -f needcppcheck; fi
 git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt || { echo &quot;*****  no files to check  *****&quot;; exit 0; }
 touch needcppcheck
 # Static code analysis - CPP Check
-cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml
+cppcheck --enable=error,style --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml
 
 #prepare env variable
 echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; | sed &apos;:a;N;$!ba;s/\n/,/g&apos;` &gt; changedFiles.prop</command>
