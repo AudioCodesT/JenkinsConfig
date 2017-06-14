@@ -20,6 +20,15 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>LASTBL</name>
+          <description></description>
+          <defaultValue>NONE</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>master</assignedNode>
@@ -48,7 +57,8 @@
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
               <properties>ConfigName=groupA
 model=440
-SuiteName=basicPart1</properties>
+SuiteName=basicPart1
+LASTBL=$LASTBL</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
