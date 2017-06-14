@@ -58,7 +58,7 @@
               <properties>ConfigName=groupA
 model=440
 SuiteName=basicPart1
-</properties>
+LASTBL=$LASTBL</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
@@ -79,7 +79,8 @@ SuiteName=basicPart1
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
               <properties>ConfigName=groupB
 model=440
-SuiteName=basicPart2</properties>
+SuiteName=basicPart2
+LASTBL=$LASTBL</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
