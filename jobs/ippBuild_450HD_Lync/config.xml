@@ -97,7 +97,8 @@ Compile and deploy 450HD</description>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
-IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
+#IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
+IPP_MAJOR_VER=${BUILD_BRANCH}
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER}_450HD&quot;; fi;
