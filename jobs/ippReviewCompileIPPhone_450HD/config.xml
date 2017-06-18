@@ -196,15 +196,11 @@ sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUM
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-#make auto AUTOPRD=$AUTOPRD LOG=0
+make auto AUTOPRD=$AUTOPRD LOG=0
 
-if [ $AUTOPRD == 450HD ]; then
-	make auto AUTOPRD=450HD LOG=0
-fi
-
-if [ $AUTOPRD == 440HD ]; then
-	make auto AUTOPRD=440HD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
-fi</command>
+#if [ $AUTOPRD == 440HD ]; then
+#	make auto AUTOPRD=440HD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
+#fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
