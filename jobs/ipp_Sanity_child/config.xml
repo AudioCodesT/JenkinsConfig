@@ -52,6 +52,11 @@ Should work on 10.59.1.46 - ippAuto</description>
           <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
           <defaultValue>Sanity</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>%BuildRelease%</name>
+          <description>Build brunch Release</description>
+          <defaultValue>3.0.1</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -76,8 +81,8 @@ type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
 set PATH=%PATH%;c:\cygwin\bin&#xd;
 &#xd;
-set ARTIFACTORY=https://172.16.133.222/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
-set DOWNLOAD=https://172.16.133.222/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
+set ARTIFACTORY=https://172.16.133.222/api/storage/ipp-release/com/ac/ipp/SFB/%BuildRelease%&#xd;
+set DOWNLOAD=https://172.16.133.222/ipp-release/com/ac/ipp/SFB/%BuildRelease%&#xd;
 &#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   curl -k -s -X GET %ARTIFACTORY% | grep uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v https | cut -c 2- | c:\cygwin\bin\sort -Vr &gt; LASTBL.txt&#xd;
