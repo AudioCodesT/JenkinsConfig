@@ -96,6 +96,21 @@
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>web-ui/arm</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>7.4</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
       <skipVote>
         <onSuccessful>true</onSuccessful>
