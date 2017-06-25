@@ -102,8 +102,15 @@ rem IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set 
 net use z: /DELETE&#xd;
 net use z: \\10.59.0.87\Firmwares&#xd;
 &#xd;
+del 440HD.txt&#xd;
 curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri | wc -l &gt; 440HD.txt&#xd;
 set /P IMAGE440HD=&lt;440HD.txt&#xd;
+IF %IMAGE440HD%==0 (&#xd;
+  curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri | wc -l &gt; 440HD.txt&#xd;
+  set /P IMAGE440HD=&lt;440HD.txt&#xd;
+)&#xd;
+&#xd;
+&#xd;
 &#xd;
 IF %IMAGE440HD%==1 (&#xd;
   rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
