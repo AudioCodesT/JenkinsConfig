@@ -53,7 +53,7 @@ Should work on 10.59.1.46 - ippAuto</description>
           <defaultValue>Sanity</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>%BuildRelease%</name>
+          <name>BuildRelease</name>
           <description>Build brunch Release</description>
           <defaultValue>3.0.1</defaultValue>
         </hudson.model.StringParameterDefinition>
@@ -102,15 +102,8 @@ rem IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set 
 net use z: /DELETE&#xd;
 net use z: \\10.59.0.87\Firmwares&#xd;
 &#xd;
-del 440HD.txt&#xd;
 curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri | wc -l &gt; 440HD.txt&#xd;
 set /P IMAGE440HD=&lt;440HD.txt&#xd;
-IF %IMAGE440HD%==0 (&#xd;
-  curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri | wc -l &gt; 440HD.txt&#xd;
-  set /P IMAGE440HD=&lt;440HD.txt&#xd;
-)&#xd;
-&#xd;
-&#xd;
 &#xd;
 IF %IMAGE440HD%==1 (&#xd;
   rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
