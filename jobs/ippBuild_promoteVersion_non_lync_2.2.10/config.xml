@@ -76,8 +76,8 @@ if [ `git log -n1 --pretty=%an | cut -f1 -d&quot; &quot;` != &quot;Jenkins&quot;
 	IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 	echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
     #commit and push the new version
-    git config --global user.name &quot;Jenkins&quot;
-    git config --global user.email devops@audiocodes.com
+    git config user.name &quot;Jenkins&quot;
+    git config user.email devops@audiocodes.com
     message=&quot;promote version to ${IPP_VER}&quot;
     git commit -am &quot;$message&quot;
     git push origin non_lync_dev
