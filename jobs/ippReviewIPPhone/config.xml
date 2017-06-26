@@ -128,7 +128,8 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [ $GERRIT_CHANGE_NUMBER == &quot;6903&quot; ]; then
+      <command>#this is a temp build step because gerrit change 6903 is somehow stucking this job
+if [ $GERRIT_CHANGE_NUMBER == &quot;6903&quot; ]; then
 	exit 0
 fi</command>
     </hudson.tasks.Shell>
