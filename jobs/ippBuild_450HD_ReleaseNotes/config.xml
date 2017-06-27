@@ -63,7 +63,7 @@ ippBuild_3.0.4_promoteVersion&#xd;
   <builders>
     <hudson.tasks.Shell>
       <command>IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
-#IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
+IPP_MAJOR_VER_fromFile=`echo ${IPP_VER} | cut -d. -f1,2,3`
 IPP_MAJOR_VER=${BUILD_BRANCH}
 
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
@@ -79,7 +79,7 @@ git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; U
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
-#if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER}_450HD&quot;; fi;
+if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER_fromFile}_450HD&quot;; fi;
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 
 AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
