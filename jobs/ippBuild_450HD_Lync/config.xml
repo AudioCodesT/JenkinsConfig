@@ -94,6 +94,7 @@ Compile and deploy 450HD</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
+  <combinationFilter>!(AUTOPRD==&quot;405HD&quot; &amp;&amp; (!(BUILD_BRANCH=~/3.0.4/)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
