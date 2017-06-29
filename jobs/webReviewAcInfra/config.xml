@@ -127,8 +127,7 @@ cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
 npm install
 cp ../index.js node_modules/karma-ie-launcher/index.js -f
-#bower install --force-latest
-bower install
+bower install --force-latest
 grunt dist
 
 </command>
