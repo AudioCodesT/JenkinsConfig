@@ -55,11 +55,21 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
           <description></description>
           <defaultValue>3.0.2</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>PC2RUN</name>
+          <description>on which PC should we run this job?</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ippSanity_DL</string>
+              <string>ippSanity_NiL</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ippSanityTest02</assignedNode>
+  <assignedNode>master</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
