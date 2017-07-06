@@ -42,6 +42,20 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>MODEL</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>440</string>
+              <string>450</string>
+              <string>445</string>
+              <string>430</string>
+              <string>420</string>
+              <string>405</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -55,7 +69,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>first model: $model</phaseName>
+      <phaseName>first model: $MODEL</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_child</jobName>
@@ -71,7 +85,7 @@
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
               <properties>ConfigName=basic1
-model=440
+model=$MODEL
 SuiteName=basicPart1
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
@@ -97,7 +111,7 @@ SuiteName=basicPart1
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
               <properties>ConfigName=basic2
-model=440
+model=$MODEL
 SuiteName=basicPart2
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
