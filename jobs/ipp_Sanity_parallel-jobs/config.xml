@@ -32,6 +32,16 @@
           <description>Build brunch Release</description>
           <defaultValue>3.0.1</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>PC2RUN</name>
+          <description>on which PC should we run?</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ippSanityTest01</string>
+              <string>ippSanityTest02</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -65,6 +75,10 @@ model=440
 SuiteName=basicPart1
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
+              <name>PC2RUN</name>
+              <nodeLabel>${PC2RUN}</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
@@ -87,6 +101,10 @@ model=440
 SuiteName=basicPart2
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
+              <name>PC2RUN</name>
+              <nodeLabel>${PC2RUN}</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
