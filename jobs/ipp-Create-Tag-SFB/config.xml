@@ -71,7 +71,7 @@
       <command>git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
 GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-LastTag=`git tag --points-at $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH) --sort=-taggerdate`
+LastTag=`git tag --points-at $(git describe --tags --abbrev=0 origin/$GERRIT_BRANCH) --sort=-taggerdate`
 
 function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
@@ -93,7 +93,7 @@ do
   LastUser=$User
   LastSha1=$Sha1
   LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
+done &lt;&lt;&lt; &quot;$(git log --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
 
 # git show FETCH_HEAD:./${LastSha1:0:2}/${LastSha1:2:-1}
 if [ -z $LastWhen ]; then exit -1; fi
