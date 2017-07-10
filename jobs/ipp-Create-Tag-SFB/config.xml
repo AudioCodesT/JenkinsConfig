@@ -98,7 +98,7 @@ for GERRIT_BRANCH in 3.0.1 3.0.2 3.0.4 3.0.0.GA 3.0.0_450HD;
   done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
 
 # git show FETCH_HEAD:./${LastSha1:0:2}/${LastSha1:2:-1}
-  if [ -z $LastWhen ]; then exit -1; fi
+  if [ -z $LastWhen ]; then continue; fi
 
   CurrentTime=`date +%s`
   if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
