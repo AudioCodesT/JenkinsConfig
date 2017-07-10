@@ -56,6 +56,12 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
         <string>445HD</string>
       </values>
     </hudson.matrix.TextAxis>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>arm-build-esxi</string>
+      </values>
+    </hudson.matrix.LabelAxis>
   </axes>
   <combinationFilter>!((AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;445HD&quot;) &amp;&amp; (!(BUILD_BRANCH=~/3.0.4/)))</combinationFilter>
   <builders>
