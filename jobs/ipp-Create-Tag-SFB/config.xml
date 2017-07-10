@@ -86,25 +86,28 @@ function createTag {
   LastTag=$NEWTAG
 }
 
-LastUser=&quot;&quot;
-while IFS=_ read -r Sha1 User When
-do
-  if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
-  LastUser=$User
-  LastSha1=$Sha1
-  LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
+for GERRIT_BRANCH in 3.0.1 3.0.2 3.0.4 3.0.0.GA 3.0.0_450HD;
+  git checkout $GERRIT_BRANCH
+  LastUser=&quot;&quot;
+  while IFS=_ read -r Sha1 User When
+  do
+    if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
+    LastUser=$User
+    LastSha1=$Sha1
+    LastWhen=`echo $When | cut -d&quot; &quot; -f1`
+  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
 
 # git show FETCH_HEAD:./${LastSha1:0:2}/${LastSha1:2:-1}
-if [ -z $LastWhen ]; then exit -1; fi
+  if [ -z $LastWhen ]; then exit -1; fi
 
-CurrentTime=`date +%s`
-if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
-  createTag
-else
-  echo Try again later after 300 seconds
-  exit -1
-fi
+  CurrentTime=`date +%s`
+  if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
+    createTag
+  else
+    echo Try again later after 300 seconds
+    exit -1
+  fi
+done
 
 </command>
     </hudson.tasks.Shell>
