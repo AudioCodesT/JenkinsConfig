@@ -317,7 +317,7 @@
           <connectUsingPublicIp>false</connectUsingPublicIp>
         </hudson.plugins.ec2.SlaveTemplate>
         <hudson.plugins.ec2.SlaveTemplate>
-          <ami>ami-75f62c1a</ami>
+          <ami>ami-bbdb78d4</ami>
           <description>build slave for IPP project</description>
           <zone>eu-central-1b</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
@@ -362,58 +362,7 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances>
-        <entry>
-          <string>sir-s8v8gdgq</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-s8v8gdgq</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2017-07-06 14:22:10.547 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>sir-mp7ik3zm</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-mp7ik3zm</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2017-07-06 14:23:10.400 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-0795233c729fadfe5</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-0795233c729fadfe5</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2017-07-06 14:22:29.123 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>sir-58qij69q</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-58qij69q</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2017-07-06 14:23:00.929 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>sir-w4arkktp</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-w4arkktp</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2017-07-06 14:22:41.179 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>-1</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
