@@ -193,7 +193,8 @@
 sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
 
 #a temp check: verify mkimage is in path
-type -path mkimage
+#type -path mkimage
+echo $PATH
 
 #compile:
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
