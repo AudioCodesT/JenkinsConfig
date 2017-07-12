@@ -4,9 +4,8 @@
   <description>run every night after the armRunRouterTestModule job @ ~6:15 AM&#xd;
 steps:&#xd;
 1. checkout arm_topology_test repo&#xd;
-2. run maven test ConfigureDevicesSettings - this configures SBC devices to work or not work with Configurator 10.7.20.150&#xd;
-3. run sql init and then qsl configuratorPredefineData&#xd;
-4. run maven test RouterModuleTest&#xd;
+2. run sql init&#xd;
+4. run maven test&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -15,8 +14,17 @@ steps:&#xd;
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs
-armNightSanity</blockingJobs>
+armNightSanity
+armRunRouterTestModule</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>14</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -29,7 +37,7 @@ armNightSanity</blockingJobs>
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/ARM/RouterTestModule</url>
+        <url>ssh://jenkins@gerrit:29418/ARM/arm_topology_test</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -39,10 +47,6 @@ armNightSanity</blockingJobs>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>ARM/RouterTestModule</projectName>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
@@ -56,7 +60,7 @@ armNightSanity</blockingJobs>
   <triggers>
     <jenkins.triggers.ReverseBuildTrigger>
       <spec></spec>
-      <upstreamProjects>armNightSanity</upstreamProjects>
+      <upstreamProjects>armRunRouterTestModule</upstreamProjects>
       <threshold>
         <name>FAILURE</name>
         <ordinal>2</ordinal>
@@ -65,27 +69,8 @@ armNightSanity</blockingJobs>
       </threshold>
     </jenkins.triggers.ReverseBuildTrigger>
   </triggers>
-  <concurrentBuild>true</concurrentBuild>
+  <concurrentBuild>false</concurrentBuild>
   <builders>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
-      <mavenName>Maven_v325</mavenName>
-      <rootPom>RouterTestModule/pom.xml</rootPom>
-      <goals>clean install -U test -Dtest=ConfigureDevicesSettings</goals>
-      <mavenOpts></mavenOpts>
-    </org.jfrog.hudson.maven3.Maven3Builder>
-    <hudson.tasks.Shell>
-      <command>#sftp put configuratorPredefineData.sql in the remote configurator
-cp RouterTestModule/src/main/resources/sql/configuratorPredefineData.sql conf.sql
-/usr/bin/expect&lt;&lt;EOD
-	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
-	expect &quot;password:&quot;
-	send &quot;password\r&quot;
-	expect &quot;sftp&gt;&quot;
-	send &quot;put -p conf.sql\r&quot;
-	expect &quot;sftp&gt;&quot;
-	send &quot;bye\r&quot;
-EOD</command>
-    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#run sql init
 /usr/bin/expect&lt;&lt;EOD
@@ -113,7 +98,7 @@ sleep 120</command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
-      <rootPom>RouterTestModule/pom.xml</rootPom>
+      <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean install -U test -Dtest=RouterModuleTest</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
