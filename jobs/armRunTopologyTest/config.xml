@@ -94,28 +94,13 @@ sleep 120
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
-      <goals>clean install -U test -Dtest=RouterModuleTest</goals>
+      <goals>clean package</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
   </builders>
   <publishers>
-    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
-      <tasks>
-        <hudson.plugins.postbuildtask.TaskProperties>
-          <logTexts>
-            <hudson.plugins.postbuildtask.LogProperties>
-              <logText>Build was aborted</logText>
-              <operator>AND</operator>
-            </hudson.plugins.postbuildtask.LogProperties>
-          </logTexts>
-          <EscalateStatus>false</EscalateStatus>
-          <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
-        </hudson.plugins.postbuildtask.TaskProperties>
-      </tasks>
-    </hudson.plugins.postbuildtask.PostbuildTask>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>Gila.Berchayev@audiocodes.com</recipients>
+      <recipients></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
