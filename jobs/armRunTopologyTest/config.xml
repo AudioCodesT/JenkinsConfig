@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>run every night after the armNightSanity job @ ~4:15 AM&#xd;
+  <description>run every night after the armRunRouterTestModule job @ ~6:15 AM&#xd;
 steps:&#xd;
-1. checkout RouterTestModule repo&#xd;
+1. checkout arm_topology_test repo&#xd;
 2. run maven test ConfigureDevicesSettings - this configures SBC devices to work or not work with Configurator 10.7.20.150&#xd;
 3. run sql init and then qsl configuratorPredefineData&#xd;
 4. run maven test RouterModuleTest&#xd;
@@ -50,7 +50,7 @@ armNightSanity</blockingJobs>
   </scm>
   <assignedNode>arm-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
