@@ -73,28 +73,28 @@ armRunRouterTestModule</blockingJobs>
   <builders>
     <hudson.tasks.Shell>
       <command>#run sql init
-/usr/bin/expect&lt;&lt;EOD
-	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
-	expect &quot;assword:&quot;
-	send &quot;password\r&quot;
-	expect &quot;]#&quot;
-	send &quot;service tomcat stop\r&quot;
-	expect &quot;]#&quot;
-	send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
-	expect &quot;]#&quot;
-	send &quot;service tomcat start\r&quot;
-	expect &quot;]#&quot;
-	send &quot;exit\r&quot;
-EOD
+#/usr/bin/expect&lt;&lt;EOD
+#	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
+#	expect &quot;assword:&quot;
+#	send &quot;password\r&quot;
+#	expect &quot;]#&quot;
+#	send &quot;service tomcat stop\r&quot;
+#	expect &quot;]#&quot;
+#	send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
+#	expect &quot;]#&quot;
+#	send &quot;service tomcat start\r&quot;
+#	expect &quot;]#&quot;
+#	send &quot;exit\r&quot;
+#EOD
 
 #wait for configurator to startup
-sleep 120
+#sleep 120
 </command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
-      <goals>clean package exec:java -Dexec.args= &quot;${config_file_path} ${logs_path} 333&quot;</goals>
+      <goals>clean package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path} 333&quot;</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
   </builders>
