@@ -160,8 +160,6 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#modify the IPP version in order to have a unique &quot;private image&quot;
-#branchName=`echo $GERRIT_BRANCH | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-#sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${branchName}_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
 sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
 
 #compile:
@@ -169,7 +167,6 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 #make
 make auto AUTOPRD=$AUTOPRD LOG=0
-#make SUBVERSION=dummy;
 </command>
     </hudson.tasks.Shell>
   </builders>
