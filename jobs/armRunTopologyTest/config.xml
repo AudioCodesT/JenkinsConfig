@@ -97,6 +97,12 @@ sleep 120
       <goals>clean package</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+      <mavenName>Maven_v325</mavenName>
+      <rootPom>arm_topology_test/pom.xml</rootPom>
+      <goals>exec:java -Dexec.args= &quot;${config_ file_path} ${logs_path} 333&quot;</goals>
+      <mavenOpts></mavenOpts>
+    </org.jfrog.hudson.maven3.Maven3Builder>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
@@ -109,6 +115,8 @@ sleep 120
     <EnvInjectBuildWrapper plugin="envinject@1.92.1">
       <info>
         <propertiesContent>TERM=xterm
+config_ file_path=&quot;${WORKSPACE}/arm_topology_test/conf/arm_topology_test.conf&quot;
+logs_path=&quot;${WORKSPACE}/arm_topology_test/logs&quot;
 </propertiesContent>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
