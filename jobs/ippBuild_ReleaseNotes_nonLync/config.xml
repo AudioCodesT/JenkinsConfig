@@ -53,11 +53,61 @@ and get BUILD_BRANCH param from father job</description>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/non_lync</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>refs/tags/2.2.10.*</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>refs/tags/2.2.12.*</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>false</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginRefUpdatedEvent/>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
+      <command>#IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
+IPP_VER=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
 IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
@@ -68,8 +118,11 @@ echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; Unixrelease
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
 
+GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
+echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; generated_ipp_version.properties
 
 AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
 RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
@@ -140,7 +193,23 @@ AuthorCommitter=$AuthorCommitter</parameters>
       <queryString></queryString>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>NEWTAG=${IPP_VER}
+GERRIT_BRANCH=${GERRIT_BRANCH}</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <projects>ippBuild_nonLync, </projects>
+          <condition>UNSTABLE_OR_BETTER</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
       <details>
