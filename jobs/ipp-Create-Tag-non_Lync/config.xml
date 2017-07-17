@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG by one for the the 2 following branches: non_lync_dev and nonLync_2.2.12</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -70,8 +70,6 @@
     <hudson.tasks.Shell>
       <command>git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-LastTag=`git tag --points-at $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH) --sort=-taggerdate`
 
 function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
