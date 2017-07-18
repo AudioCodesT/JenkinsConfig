@@ -7,6 +7,7 @@ activated by one of the following:&#xd;
 ippBuild_3.0.0_450HD_promoteVersion&#xd;
 ippBuild_3.0.2_promoteVersion &#xd;
 ippBuild_3.0.4_promoteVersion&#xd;
+ippBuild_3.0.6_promoteVersion&#xd;
 &#xd;
 </description>
   <keepDependencies>false</keepDependencies>
@@ -72,7 +73,7 @@ IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
 IPP_FIRST_PREV=$IPP_VER_PREV;
 if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.346.7&quot;; fi;
 if [ $BUILD_BRANCH == &quot;3.0.2&quot; ];    then IPP_FIRST_PREV=&quot;3.0.2.1&quot;;    fi;
-if [ $BUILD_BRANCH == &quot;3.0.4&quot; ];    then IPP_FIRST_PREV=&quot;3.0.4.1&quot;;    fi;
+if [ $BUILD_BRANCH == &quot;3.0.4&quot; || $BUILD_BRANCH == &quot;3.0.6&quot; ];    then IPP_FIRST_PREV=&quot;3.0.4.1&quot;;    fi;
 
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
