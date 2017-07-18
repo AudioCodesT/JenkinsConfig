@@ -262,7 +262,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
       <multiConfProject>false</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>${BUILD_NUMBER} - ${GERRIT_REFNAME} - ${IPP_VER}</template>
+      <template>${BUILD_NUMBER} - ${IPP_VER}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>
