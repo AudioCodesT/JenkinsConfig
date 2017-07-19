@@ -117,7 +117,10 @@
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
-        <assignedSIDs/>
+        <assignedSIDs>
+          <sid>gilab</sid>
+          <sid>natalie</sid>
+        </assignedSIDs>
       </role>
       <role name="ipp_sanity" pattern="(ipp_Sanity.*)">
         <permissions>
@@ -209,6 +212,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
