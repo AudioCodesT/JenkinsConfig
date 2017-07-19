@@ -107,6 +107,18 @@
           <sid>CI_WEB-UI_developers</sid>
         </assignedSIDs>
       </role>
+      <role name="arm_night" pattern="(armRun.*)">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Run.Replay</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
       <role name="ipp_sanity" pattern="(ipp_Sanity.*)">
         <permissions>
           <permission>hudson.model.Item.Cancel</permission>
@@ -197,7 +209,6 @@
         </assignedSIDs>
       </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@1.42">
     <domain>corp.audiocodes.com</domain>
@@ -480,8 +491,6 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
         <string>ipp-Create-Tag-non_Lync</string>
-        <string>ippBuild_405_nonLync</string>
-        <string>ippBuild_405_nonLync_2.2.12</string>
         <string>ippBuild_nonLync</string>
         <string>ippBuild_promoteVersion_non_lync_2.2.10</string>
         <string>ippBuild_promoteVersion_non_lync_2.2.12</string>
