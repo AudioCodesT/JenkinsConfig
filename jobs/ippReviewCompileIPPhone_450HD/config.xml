@@ -193,7 +193,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!((!(GERRIT_BRANCH=~/3.0.4/ || GERRIT_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot;)) || ((!(GERRIT_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
+  <combinationFilter>!((!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(BUILD_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>#modify the IPP version in order to have a unique &quot;private image&quot;
