@@ -63,7 +63,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(AUTOPRD==&quot;420HD&quot; &amp;&amp; (!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/)))</combinationFilter>
+  <combinationFilter>!((!(GERRIT_BRANCH=~/3.0.4/ || GERRIT_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot;)) || ((!(GERRIT_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>echo $AUTOPRD
