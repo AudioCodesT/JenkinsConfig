@@ -178,6 +178,7 @@
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
+        <string>405HD</string>
         <string>420HD</string>
         <string>440HD</string>
         <string>450HD</string>
@@ -238,6 +239,21 @@ make auto AUTOPRD=$AUTOPRD
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+      <details>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect></keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </details>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
       <deployerCredentialsConfig>
         <credentials>
           <username></username>
@@ -270,4 +286,7 @@ make auto AUTOPRD=$AUTOPRD
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
 </matrix-project>
