@@ -66,6 +66,13 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>true</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <timeout>10</timeout>
+        <depth>10</depth>
+      </hudson.plugins.git.extensions.impl.CloneOption>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
         <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
           <separator>#</separator>
@@ -194,8 +201,6 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
   <builders>
     <hudson.tasks.Shell>
       <command>#modify the IPP version in order to have a unique &quot;private image&quot;
-#branchName=`echo $GERRIT_BRANCH | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-#sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${branchName}_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
 sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
 
 #compile:
@@ -204,10 +209,7 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
 make auto AUTOPRD=$AUTOPRD
-
-#if [ $AUTOPRD == 440HD ]; then
-#	make auto AUTOPRD=440HD BUILD_WGET=y BUILD_LLDPD=y BUILD_TFTP=y BUILD_OPENLDAP=y BUILD_OPENSSL=y
-#fi</command>
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
