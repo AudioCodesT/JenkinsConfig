@@ -66,13 +66,6 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.CloneOption>
-        <shallow>true</shallow>
-        <noTags>false</noTags>
-        <reference></reference>
-        <timeout>20</timeout>
-        <depth>100</depth>
-      </hudson.plugins.git.extensions.impl.CloneOption>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
         <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
