@@ -64,7 +64,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!((!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot;)) || ((!(BUILD_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
+  <combinationFilter>!((!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(BUILD_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>echo $AUTOPRD
@@ -79,5 +79,8 @@ echo $BUILD_BRANCH
       <template>#${BUILD_NUMBER}___${IPP_VER}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
   <childCustomWorkspace>${SHORT_COMBINATION}</childCustomWorkspace>
 </matrix-project>
