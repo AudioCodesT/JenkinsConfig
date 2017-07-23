@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>Create &quot;ReleaseNote.txt&quot; &#xd;
-activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
+activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.2”, “3.0.4”, &quot;3.0.6&quot;&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -38,7 +38,7 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/IPP/non_lync</url>
+        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -64,15 +64,11 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>IPP/non_lync</pattern>
+          <pattern>IPP/SFB</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
-              <pattern>refs/tags/2.2.10.*</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>refs/tags/2.2.12.*</pattern>
+              <pattern>refs/tags/3.0.*</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -118,7 +114,14 @@ IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
 IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
-IPP_FIRST_PREV=&quot;2.2.10.24&quot;;
+
+if [ $BUILD_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.575.8&quot;
+else if [ $BUILD_BRANCH == &quot;3.0.1&quot; ];    then IPP_FIRST_PREV=&quot;3.0.1.41&quot;
+else if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.346.7&quot;
+else if [ $BUILD_BRANCH == &quot;3.0.2&quot; ];    then IPP_FIRST_PREV=&quot;3.0.2.1&quot;
+else if [[ $BUILD_BRANCH == &quot;3.0.4&quot; || $BUILD_BRANCH == &quot;3.0.6&quot; ]];    then IPP_FIRST_PREV=&quot;3.0.4.1&quot;
+else echo Abort...; exit 1; fi; fi; fi; fi; fi
+
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
@@ -208,7 +211,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
 BUILD_BRANCH=${GERRIT_BRANCH}</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>ippBuild_nonLync</projects>
+          <projects>ippBuild_3.0.X_Lync, ippBuild_3.0.X_405_Lync, ippBuild_450HD_Lync</projects>
           <condition>UNSTABLE_OR_BETTER</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
@@ -248,7 +251,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
+      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
