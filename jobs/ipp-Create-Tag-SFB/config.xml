@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG by one for the the 2 following branches: non_lync_dev and nonLync_2.2.12</description>
+  <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG in the following  branches: “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.2”, “3.0.4” ,&quot;3.0.6&quot;</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -39,7 +39,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/IPP/non_lync</url>
+        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
