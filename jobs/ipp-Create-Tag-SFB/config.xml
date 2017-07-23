@@ -45,7 +45,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>origin/non*</name>
+        <name>origin/3.0.*</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -81,7 +81,7 @@ function createTag {
   LastTag=$NEWTAG
 }
 
-for GERRIT_BRANCH in non_lync_dev nonLync_2.2.12
+for GERRIT_BRANCH in 3.0.1 3.0.2 3.0.4 3.0.6 3.0.0.GA 3.0.0_450HD
 do
   if [ $(git describe --tags --first-parent origin/$GERRIT_BRANCH | grep - | wc -l) == 0 ]; then continue; fi
   git checkout $GERRIT_BRANCH
