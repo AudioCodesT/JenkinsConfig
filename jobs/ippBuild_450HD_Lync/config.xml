@@ -21,6 +21,11 @@ Compile and deploy 450HD</description>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
+          <name>NEWTAG</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>BUILD_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
@@ -48,7 +53,7 @@ Compile and deploy 450HD</description>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>${BUILD_BRANCH}</name>
+        <name>$NEWTAG</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -98,8 +103,9 @@ Compile and deploy 450HD</description>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
-IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
+IPP_VER=$NEWTAG
 IPP_MAJOR_VER_fromFile=`echo ${IPP_VER} | cut -d. -f1,2,3`
+sed -r -i &apos;s:(IP_Phone_ACL_VERSION\s+)&quot;.*&quot;:\1&quot;&apos;$IPP_VER&apos;&quot;:&apos; include/ipp_version.h_shipped
 IPP_MAJOR_VER=${BUILD_BRANCH}
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
