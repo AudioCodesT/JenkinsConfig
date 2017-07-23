@@ -299,7 +299,7 @@
           <remoteFS>/home/centos/jenkinsslave</remoteFS>
           <type>M4Large</type>
           <ebsOptimized>false</ebsOptimized>
-          <labels>arm-build</labels>
+          <labels></labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -379,7 +379,7 @@
       <groupId>sig-b9119121</groupId>
       <pendingInstances/>
       <labelString>ipp-build</labelString>
-      <idleTerminationMinutes>-5</idleTerminationMinutes>
+      <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
         <hudson.model.labels.LabelAtom>ipp-build</hudson.model.labels.LabelAtom>
@@ -436,10 +436,12 @@
       <name>sig-588d4297</name>
       <groupId>sig-588d4297</groupId>
       <pendingInstances/>
-      <labelString></labelString>
+      <labelString>arm-build</labelString>
       <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set"/>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>arm-build</hudson.model.labels.LabelAtom>
+      </labelSet>
       <usage>NORMAL</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
