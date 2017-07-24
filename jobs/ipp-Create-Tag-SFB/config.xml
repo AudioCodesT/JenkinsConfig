@@ -84,8 +84,9 @@ function createTag {
 
 for GERRIT_BRANCH in 3.0.1 3.0.2 3.0.4 3.0.6 3.0.0.GA 3.0.0_450HD
 do
+    git checkout $GERRIT_BRANCH
   if [ $(git describe --tags --first-parent origin/$GERRIT_BRANCH | grep - | wc -l) == 0 ]; then continue; fi
-  git checkout $GERRIT_BRANCH
+
   git tag -d 3.0.4.1.9.11
   git tag -d 3.0.4.1.9.10
   LastTag=`git tag --points-at $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH) --sort=-taggerdate`
