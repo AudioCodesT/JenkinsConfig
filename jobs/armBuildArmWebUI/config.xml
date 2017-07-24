@@ -93,8 +93,8 @@ grunt dist
       <command>if [ $BRANCH != &quot;master&quot; ]; then
   mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-$BRANCH.zip -f
 else
-	cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f
-    cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-7.6.zip -f
+#	cp dist/arm-web-ui-7.0.zip dist/arm-ui-7.0.zip -f
+    cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-7.8.zip -f
 fi</command>
     </hudson.tasks.Shell>
   </builders>
@@ -161,7 +161,7 @@ fi</command>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>dist/arm-ui-7.0.zip=&gt;com/ac/arm/arm-ui/7.0/
-dist/arm-web-ui-7.6.zip=&gt;com/ac/arm/arm-web-ui/7.6/
+dist/arm-web-ui-7.8.zip=&gt;com/ac/arm/arm-web-ui/7.8/
 dist/arm-web-ui-$BRANCH.zip=&gt;com/ac/arm/arm-web-ui/$BRANCH/</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
