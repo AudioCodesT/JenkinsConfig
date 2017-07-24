@@ -271,7 +271,8 @@ make auto AUTOPRD=$AUTOPRD
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}
-</deployPattern>
+${WORKSPACE}/build/image/phone.bin=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}
+${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
