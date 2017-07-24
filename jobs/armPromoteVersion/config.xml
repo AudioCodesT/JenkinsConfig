@@ -5,8 +5,7 @@
 2. maven set new version to reactor pom.xml&#xd;
 3. maven set new version -SNAPSHOT to parent pom.xml&#xd;
 4. commit and push to remote master&#xd;
-5. trigger jobs: armBuildARM-UI, armBuildarm-frontend (old GUI)&#xd;
-6. trigger job armBuildArm</description>
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -86,24 +85,7 @@ but we can promote a version to a patch in a maintenance branch (e.g.: 7.4)</des
   <settings class="jenkins.mvn.DefaultSettingsProvider"/>
   <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
   <reporters/>
-  <publishers>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
-      <configs>
-        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-          <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>BRANCH=$BRANCH
-RELEASE_VMS=1
-VERSION_NAME=$VERSION_NAME</properties>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-          </configs>
-          <projects>armBuildArm</projects>
-          <condition>UNSTABLE</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-      </configs>
-    </hudson.plugins.parameterizedtrigger.BuildTrigger>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
       <template>#${BUILD_NUMBER}__${VERSION_NAME}</template>
