@@ -75,7 +75,7 @@ function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
     return
   fi
-  NEWTAG=`echo $LastTag | awk -F. &apos;sub(FS $NF,x)&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
+  NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push origin $NEWTAG
   LastTag=$NEWTAG
