@@ -131,7 +131,7 @@ done
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>#${BUILD_NUMBER}, ${BUILD_LOG_REGEX, regex=&quot;^.*NEWTAG=(\S*)&quot;,substText=&quot;$1&quot;,showTruncatedLines=false}</template>
+      <template>#${BUILD_NUMBER}__${BUILD_LOG_REGEX, regex=&quot;^.*NEWTAG=(\S*)&quot;,substText=&quot;$1&quot;,showTruncatedLines=false}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>
