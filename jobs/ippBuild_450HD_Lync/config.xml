@@ -122,11 +122,15 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
 yes | make distclean
 
 make auto AUTOPRD=$AUTOPRD
-make binary;
+
+# temporary dont execute &quot;make binary&quot; (and further)
+# because it failes to build  &quot;build.tgz&quot;  file
+
+#make binary;
 #because we have to deploy the build.tgz that was created from &quot;make binary&quot; we backup build.tgz before running &quot;make SUBVERSION=dummy&quot; that overwrites it
-mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
-make SUBVERSION=dummy;
-mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
+#mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
+#make SUBVERSION=dummy;
+#mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
 
 
 </command>
