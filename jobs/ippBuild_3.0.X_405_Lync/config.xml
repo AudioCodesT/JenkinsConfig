@@ -190,7 +190,7 @@ ${WORKSPACE}/buildall/image/405/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>#${BUILD_NUMBER}</template>
+      <template>#${BUILD_NUMBER}__${NEWTAG}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
