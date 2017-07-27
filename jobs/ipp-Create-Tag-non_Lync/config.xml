@@ -84,7 +84,7 @@ function createTag {
 for GERRIT_BRANCH in non_lync_dev nonLync_2.2.12
 do
   if [ $(git describe --tags --first-parent origin/$GERRIT_BRANCH | grep - | wc -l) == 0 ]; then continue; fi
-  git checkout $GERRIT_BRANCH
+  git checkout origin/$GERRIT_BRANCH
   LastTag=`git tag --points-at $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH) --sort=-taggerdate`
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
