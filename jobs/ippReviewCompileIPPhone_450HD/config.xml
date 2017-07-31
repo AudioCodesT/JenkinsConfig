@@ -200,11 +200,7 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
   <combinationFilter>!((!(GERRIT_BRANCH=~/3.0.4/ || GERRIT_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(GERRIT_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
-      <command>#temp file changhe: according to Sean Xie request
-#&quot;we should remove typedef &apos;error_t&apos; of 68,69 line  in  /opt/dspg/v1.3.5-rc3/sysroots/armv5te-dspg-linux-uclibceabi/usr/include/errno.h.&quot;
-sed -i -e &apos;68,69s/^/\/\//&apos; /opt/dspg/v1.3.5-rc3/sysroots/armv5te-dspg-linux-uclibceabi/usr/include/errno.h
-
-#modify the IPP version in order to have a unique &quot;private image&quot;
+      <command>#modify the IPP version in order to have a unique &quot;private image&quot;
 sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
 
 #compile:
