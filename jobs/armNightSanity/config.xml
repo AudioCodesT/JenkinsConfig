@@ -9,7 +9,10 @@
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildArm
-armRunRouterTestModule</blockingJobs>
+armRunRouterTestModule
+armReleaseSanity
+armRunTopologyTest
+</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
       <optOut>false</optOut>
