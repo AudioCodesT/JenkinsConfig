@@ -15,7 +15,10 @@ steps:&#xd;
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs
-armNightSanity</blockingJobs>
+armNightSanity
+armRunRouterTestModule
+armRunTopologyTest
+</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
