@@ -15,7 +15,10 @@ steps:&#xd;
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs
 armNightSanity
-armRunRouterTestModule</blockingJobs>
+armRunRouterTestModule
+armReleaseSanity
+
+</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
