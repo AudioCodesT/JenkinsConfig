@@ -55,6 +55,31 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
           <description></description>
           <defaultValue>3.0.2</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>AtaGuiOptions </name>
+          <description>
+
+to rerun failed:  -rerunMode failed
+to rerun last session: -rerunMode last
+to rerun with restore default: -restoreDefaults 1
+to retun without restore default: -restoreDefaults 0
+
+###########################################################################
+# New params:
+###########################################################################
+# rerunMode: failed|last
+# forceUpgrade: 0|1
+# restoreDefaults&quot; 0|1
+# signInMethod: 1 - URI, 2 - PIN, 3 - WEB
+# iterationPerScenario: digit
+# iterationPerSuite: digit
+# federationUser: orig|term
+# externalUser: orig|term
+# speedDialMode: 1|0
+# traceError: 1|0
+</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -110,7 +135,7 @@ IF %IMAGE450HD%==1 (&#xd;
   rem IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
   rem IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
   cd C:\IpPhoneAutomation\ATA&#xd;
-  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName%&#xd;
+  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName% -AtaGuiOptions  %AtaGuiOptions%&#xd;
 ) else set Error=1&#xd;
 &#xd;
 </command>
