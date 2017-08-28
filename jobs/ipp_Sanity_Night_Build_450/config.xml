@@ -64,10 +64,16 @@ to rerun last session: -rerunMode last
 to rerun with restore default: -restoreDefaults 1
 to retun without restore default: -restoreDefaults 0
 
-###########################################################################
+
+</description>
+          <defaultValue>failed</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>forceUpgrade</name>
+          <description>###########################################################################
 # New params:
 ###########################################################################
-# rerunMode: failed|last
+
 # forceUpgrade: 0|1
 # restoreDefaults&quot; 0|1
 # signInMethod: 1 - URI, 2 - PIN, 3 - WEB
@@ -76,9 +82,8 @@ to retun without restore default: -restoreDefaults 0
 # federationUser: orig|term
 # externalUser: orig|term
 # speedDialMode: 1|0
-# traceError: 1|0
-</description>
-          <defaultValue>failed</defaultValue>
+# traceError: 1|0</description>
+          <defaultValue>0</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -135,7 +140,7 @@ IF %IMAGE450HD%==1 (&#xd;
   rem IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
   rem IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
   cd C:\IpPhoneAutomation\ATA&#xd;
-  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName% -rerunMode  %rerunMode%&#xd;
+  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName% -rerunMode %rerunMode% -forceUpgrade %forceUpgrade%&#xd;
 ) else set Error=1&#xd;
 &#xd;
 </command>
