@@ -57,10 +57,6 @@
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>IPP/SFB</projectName>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
@@ -91,6 +87,7 @@
         <string>430HD</string>
         <string>440HD</string>
         <string>450HD</string>
+        <string>445HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -100,7 +97,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!((!(GERRIT_BRANCH=~/3.0.4/ || GERRIT_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(GERRIT_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
+  <combinationFilter>!((!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(BUILD_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
@@ -152,21 +149,6 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>ipp-release</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </details>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
       <deployerCredentialsConfig>
         <credentials>
           <username></username>
@@ -208,7 +190,4 @@ ${WORKSPACE}/build/image/binGroupdefFor450HD.def=&gt;com/ac/ipp/SFB/${IPP_MAJOR_
       <template>#${BUILD_NUMBER}___${NEWTAG}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
-  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
-    <runSequentially>false</runSequentially>
-  </executionStrategy>
 </matrix-project>
