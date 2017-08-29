@@ -55,6 +55,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
         <string>430HD</string>
         <string>440HD</string>
         <string>450HD</string>
+        <string>445HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -64,7 +65,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!((AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;) &amp;&amp; (!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/)))</combinationFilter>
+  <combinationFilter>!((!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(BUILD_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>echo $AUTOPRD
