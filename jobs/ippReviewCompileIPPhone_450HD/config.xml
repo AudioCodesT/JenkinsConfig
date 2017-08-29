@@ -15,9 +15,9 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>14</daysToKeep>
+        <daysToKeep>4</daysToKeep>
         <numToKeep>-1</numToKeep>
-        <artifactDaysToKeep>30</artifactDaysToKeep>
+        <artifactDaysToKeep>4</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
