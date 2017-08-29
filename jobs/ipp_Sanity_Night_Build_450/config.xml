@@ -81,6 +81,11 @@ to rerun last session: -rerunMode last
 # traceError: 1|0</description>
           <defaultValue>0</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name> restoreDefaults</name>
+          <description># restoreDefaults&quot; 0|1</description>
+          <defaultValue>0</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -136,7 +141,7 @@ IF %IMAGE450HD%==1 (&#xd;
   rem IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
   rem IF NOT EXIST z:\UC405_%LASTBL%_ce4.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
   cd C:\IpPhoneAutomation\ATA&#xd;
-  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName% -rerunMode %rerunMode% -forceUpgrade %forceUpgrade%&#xd;
+  tclsh AtaExec.tcl -configName %ConfigName%%model%LyncConfig.tcl -suiteName %ConfigName%%model%Lync_basic.suite -firmwareVersionMain %ImageName% -rerunMode %rerunMode% -forceUpgrade %forceUpgrade% - restoreDefaults % restoreDefaults%&#xd;
 ) else set Error=1&#xd;
 &#xd;
 </command>
