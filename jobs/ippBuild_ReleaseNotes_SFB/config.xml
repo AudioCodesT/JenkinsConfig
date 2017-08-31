@@ -145,13 +145,11 @@ VIS=`git log $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/.*\[VI//; s/\].*//&
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
 echo VIS=${VIS} &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
 echo PROJECT=${GERRIT_PROJECT} &gt;&gt; generated_ipp_version.properties
 echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
-echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; generated_ipp_version.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.properties
 
 #replace backslash with space, because it is not a valid properties file if it includes a backslash char
