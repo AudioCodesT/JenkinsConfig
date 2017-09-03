@@ -94,15 +94,11 @@
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=$NEWTAG
-IPP_MAJOR_VER_fromFile=`echo ${IPP_VER} | cut -d. -f1,2,3`
+IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 sed -r -i &apos;s:(IP_Phone_ACL_VERSION\s+)&quot;.*&quot;:\1&quot;&apos;$IPP_VER&apos;&quot;:&apos; include/ipp_version.h_shipped
-IPP_MAJOR_VER=${BUILD_BRANCH}
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
-if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER_fromFile}_450HD&quot;; fi;
-echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
-
-</command>
+echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
