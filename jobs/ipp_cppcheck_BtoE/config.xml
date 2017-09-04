@@ -43,7 +43,7 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>${GERRIT_REFSPEC}</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
+        <url>ssh://jenkins@gerrit:29418/IPP/BtoE_PC</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -81,7 +81,7 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>IPP/SFB</pattern>
+          <pattern>IPP/BtoE_PC</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -127,9 +127,6 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command></command>
-    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#Cleanup unnecessary files and optimize the local repository
 git gc --aggressive --prune=all &amp;
