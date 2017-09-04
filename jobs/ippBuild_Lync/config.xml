@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Compile 3.0.X - activated by ippBuild_ReleaseNotes_SFB for branches 3.0.0.GA and 3.0.1</description>
+  <description>Activated by ippBuild_ReleaseNotes_SFB</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -84,15 +84,7 @@
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
-        <string>420HD</string>
-        <string>430HD</string>
-        <string>440HD</string>
-      </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.TextAxis>
-      <name>FIRMWARE</name>
-      <values>
-        <string>ce7</string>
+        <string>450HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.TextAxis>
@@ -112,10 +104,12 @@
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
 IPP_VER=$NEWTAG
-IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
+IPP_MAJOR_VER_fromFile=`echo ${IPP_VER} | cut -d. -f1,2,3`
 sed -r -i &apos;s:(IP_Phone_ACL_VERSION\s+)&quot;.*&quot;:\1&quot;&apos;$IPP_VER&apos;&quot;:&apos; include/ipp_version.h_shipped
+IPP_MAJOR_VER=${BUILD_BRANCH}
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
+if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER_fromFile}_450HD&quot;; fi;
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
@@ -126,7 +120,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE LOG=$LOG
+make auto AUTOPRD=$AUTOPRD LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
   mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
@@ -135,13 +129,7 @@ if [ $LOG == 0 ]; then
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command># rename md5 files  -  add txt extention in order to be able to deploy it to artifactory
-# (artifactory do not allow deploying checksum files)
-file1=&quot;$(ls ${WORKSPACE}/build/image/*.bin.md5 |grep -v dummy)&quot;
-mv ${file1} ${file1}.txt
-file2=&quot;$(ls ${WORKSPACE}/build/image/*.img.md5 |grep -v dummy)&quot;
-mv ${file2} ${file2}.txt
-</command>
+      <command>rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -189,7 +177,6 @@ ${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_V
 ${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
 ${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/obj/apps/voip_task/voip_task=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/voip_task
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
