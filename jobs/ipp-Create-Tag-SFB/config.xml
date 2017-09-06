@@ -116,7 +116,7 @@ done
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
       <recipients>yossim,Shuky.Riechard</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.1">
