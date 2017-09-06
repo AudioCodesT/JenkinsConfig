@@ -124,11 +124,13 @@ make auto AUTOPRD=$AUTOPRD
 # temporary dont execute &quot;make binary&quot; (and further)
 # because it failes to build  &quot;build.tgz&quot;  file
 
+#Sep 6, 2017  -  i assume that the bug with &quot;build.tgz&quot; was fixed so i estore the &quot;make binary&quot; (and further)
+
 #make binary;
 #because we have to deploy the build.tgz that was created from &quot;make binary&quot; we backup build.tgz before running &quot;make SUBVERSION=dummy&quot; that overwrites it
-#mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
-#make SUBVERSION=dummy;
-#mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
+mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
+make SUBVERSION=dummy;
+mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
 
 
 </command>
