@@ -117,19 +117,12 @@ yes | make distclean
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $AUTOPRD | cut -d&quot;&amp;&quot; -f$i`
+  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
   make $PARAMS
+  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 do
 
-make auto AUTOPRD=$AUTOPRD LOG=$LOG
-if [ $LOG == 0 ]; then
-  make binary;
-  mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
-  make SUBVERSION=dummy;
-  mv ${WORKSPACE}/build/image/_build.tgz ${WORKSPACE}/build/image/build.tgz
-fi</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
+rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
