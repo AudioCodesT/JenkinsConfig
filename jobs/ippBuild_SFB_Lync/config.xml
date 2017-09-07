@@ -81,18 +81,12 @@
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <axes>
-    <hudson.matrix.TextAxis>
+    <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
       <name>AUTOPRD</name>
       <values>
-        <string>450HD</string>
+        <string>boards2compile.yml</string>
       </values>
-    </hudson.matrix.TextAxis>
-    <hudson.matrix.TextAxis>
-      <name>LOG</name>
-      <values>
-        <string>0</string>
-      </values>
-    </hudson.matrix.TextAxis>
+    </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
@@ -120,6 +114,12 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
+
+for ((i=1;i&lt;=$NumExecuting;i++)); do 
+  PARAMS=`echo $AUTOPRD | cut -d&quot;&amp;&quot; -f$i`
+  make $PARAMS
+do
+
 make auto AUTOPRD=$AUTOPRD LOG=$LOG
 if [ $LOG == 0 ]; then
   make binary;
