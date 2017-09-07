@@ -115,12 +115,14 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
+NumExecuting=$(echo &quot;$AUTOPRD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $AUTOPRD | cut -d&quot;&amp;&quot; -f$i`
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
   make $PARAMS
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
-do
+done
 
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
     </hudson.tasks.Shell>
