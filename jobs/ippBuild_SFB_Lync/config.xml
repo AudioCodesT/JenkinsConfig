@@ -119,8 +119,11 @@ NumExecuting=$(echo &quot;$AUTOPRD&quot; |  awk -F &apos;&amp;&apos; &apos;{prin
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $AUTOPRD | cut -d&quot;&amp;&quot; -f$i`
+  pwd
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
   make $PARAMS
+  pwd
+  ls -ltr build/image
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 done
 </command>
