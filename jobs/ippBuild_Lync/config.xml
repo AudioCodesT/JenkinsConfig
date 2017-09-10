@@ -120,8 +120,8 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
-make auto AUTOPRD=$AUTOPRD
-if [ $LOG == 1 ]; then
+make auto AUTOPRD=$AUTOPRD LOG=$LOG
+if [ $LOG == 0 ]; then
   make binary;
   mv ${WORKSPACE}/build/image/build.tgz ${WORKSPACE}/build/image/_build.tgz
   make SUBVERSION=dummy;
@@ -132,7 +132,13 @@ fi</command>
       <command>rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>oleg.Friedman@audiocodes.com, Ami.Lahav@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>true</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
       <details>
