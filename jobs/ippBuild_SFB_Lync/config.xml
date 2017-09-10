@@ -123,8 +123,10 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   make $PARAMS
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 done
-
-rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>rename md5 md5.txt ${WORKSPACE}/build/image/*.md5</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
