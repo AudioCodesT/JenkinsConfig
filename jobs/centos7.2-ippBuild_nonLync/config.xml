@@ -72,7 +72,7 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
     </extensions>
   </scm>
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
-  <assignedNode>ipp-build</assignedNode>
+  <assignedNode>ipp-mc-fathers</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -102,7 +102,7 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp-build</string>
+        <string>ipp-centos7.2</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
@@ -203,7 +203,7 @@ ${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/non_lync/${IPP_MA
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
-      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.2&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
