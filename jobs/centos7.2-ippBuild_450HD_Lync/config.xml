@@ -93,7 +93,7 @@
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp-build</string>
+        <string>ipp-centos7.2</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
@@ -200,7 +200,7 @@ ${WORKSPACE}/build/image/binGroupdefFor450HD.def=&gt;com/ac/ipp/SFB/${IPP_MAJOR_
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
-      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.2&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
