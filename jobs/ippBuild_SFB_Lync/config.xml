@@ -126,7 +126,7 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=//  cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo AUTOPRD=${AUTOPRD} &gt; IPP_properties.txt</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
