@@ -372,6 +372,46 @@
           <connectBySSHProcess>true</connectBySSHProcess>
           <connectUsingPublicIp>false</connectUsingPublicIp>
         </hudson.plugins.ec2.SlaveTemplate>
+        <hudson.plugins.ec2.SlaveTemplate>
+          <ami>ami-8244f3ed</ami>
+          <description>test IPP centos7.2</description>
+          <zone>eu-central-1b</zone>
+          <securityGroups>Apps-Basic-SG</securityGroups>
+          <remoteFS>/home/admin/jenkinsslave</remoteFS>
+          <type>C42xlarge</type>
+          <ebsOptimized>false</ebsOptimized>
+          <labels>ipp-centos7.2</labels>
+          <mode>EXCLUSIVE</mode>
+          <initScript></initScript>
+          <tmpDir></tmpDir>
+          <userData></userData>
+          <numExecutors>1</numExecutors>
+          <remoteAdmin>admin</remoteAdmin>
+          <jvmopts></jvmopts>
+          <subnetId>subnet-8ce472f7</subnetId>
+          <idleTerminationMinutes>-3</idleTerminationMinutes>
+          <iamInstanceProfile></iamInstanceProfile>
+          <useEphemeralDevices>false</useEphemeralDevices>
+          <customDeviceMapping></customDeviceMapping>
+          <instanceCap>40</instanceCap>
+          <stopOnTerminate>false</stopOnTerminate>
+          <tags>
+            <hudson.plugins.ec2.EC2Tag>
+              <name>Name</name>
+              <value>ipp-centos7.2-tests</value>
+            </hudson.plugins.ec2.EC2Tag>
+          </tags>
+          <usePrivateDnsName>false</usePrivateDnsName>
+          <associatePublicIp>false</associatePublicIp>
+          <useDedicatedTenancy>false</useDedicatedTenancy>
+          <amiType class="hudson.plugins.ec2.UnixData">
+            <rootCommandPrefix></rootCommandPrefix>
+            <sshPort>22</sshPort>
+          </amiType>
+          <launchTimeout>180</launchTimeout>
+          <connectBySSHProcess>true</connectBySSHProcess>
+          <connectUsingPublicIp>false</connectUsingPublicIp>
+        </hudson.plugins.ec2.SlaveTemplate>
       </templates>
       <region>eu-central-1</region>
     </hudson.plugins.ec2.EC2Cloud>
@@ -494,64 +534,11 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-061a004fe64b681d6</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-061a004fe64b681d6</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.2</requestedLabel>
-            <createdAt>2017-09-11 14:25:45.359 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-094314d549c287454</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-094314d549c287454</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.2</requestedLabel>
-            <createdAt>2017-09-11 14:26:45.109 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-01a6f662ef9426ae4</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-01a6f662ef9426ae4</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.2</requestedLabel>
-            <createdAt>2017-09-11 14:26:15.367 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>sir-5dvrj3dn</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-5dvrj3dn</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.2</requestedLabel>
-            <createdAt>2017-09-11 14:24:06.678 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-016c6003580e5520b</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-016c6003580e5520b</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.2</requestedLabel>
-            <createdAt>2017-09-11 14:25:15.177 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
-      <labelString>ipp-centos7.2</labelString>
+      <pendingInstances/>
+      <labelString></labelString>
       <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/home/admin/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>ipp-centos7.2</hudson.model.labels.LabelAtom>
-      </labelSet>
+      <labelSet class="sorted-set"/>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
