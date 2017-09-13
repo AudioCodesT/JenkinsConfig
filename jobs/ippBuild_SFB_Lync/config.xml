@@ -115,10 +115,10 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-NumExecuting=$(echo &quot;$AUTOPRD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $AUTOPRD | cut -d&quot;&amp;&quot; -f$i`
+  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
   make $PARAMS
   ls -ltr build/image
@@ -126,8 +126,8 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
-TARGET=`echo $AUTOPRD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1`
-echo TARGET=${TARGET} &gt; IPP_properties.txt</command>
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=//  cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+echo AUTOPRD=${AUTOPRD} &gt; IPP_properties.txt</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
@@ -175,11 +175,11 @@ echo TARGET=${TARGET} &gt; IPP_properties.txt</command>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$TARGET*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$TARGET
-${WORKSPACE}/build/image/*$TARGET*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$TARGET
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$TARGET/build_tgz
-${WORKSPACE}/build/image/*$TARGET*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$TARGET/Production
-${WORKSPACE}/build/image/*$TARGET*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$TARGET/Production
+      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
+${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
