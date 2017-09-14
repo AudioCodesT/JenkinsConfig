@@ -113,6 +113,7 @@ IPP_MAJOR_VER_fromTag=`echo ${IPP_VER} | cut -d. -f1,2,3`
 fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
 ((fourth--))
 IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
+IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
 
 GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 #we deploy to artifactory to a specific folder $IPP_MAJOR_VER
