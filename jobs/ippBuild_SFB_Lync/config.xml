@@ -82,7 +82,7 @@
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
-      <name>AUTOPRD</name>
+      <name>MAKE_CMD</name>
       <values>
         <string>boards2compile.yml</string>
       </values>
@@ -104,7 +104,9 @@ IPP_MAJOR_VER=${BUILD_BRANCH}
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER_fromFile}_450HD&quot;; fi;
-echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
+echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
@@ -126,14 +128,8 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
-echo AUTOPRD=${AUTOPRD} &gt; IPP_properties.txt</command>
+</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
-      <info>
-        <propertiesFilePath>IPP_properties.txt</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
