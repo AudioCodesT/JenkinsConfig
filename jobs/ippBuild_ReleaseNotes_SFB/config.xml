@@ -122,12 +122,13 @@ if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP
 if [ $GERRIT_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_MAJOR_VER=&quot;3.0.0&quot;; fi;
 
 #where to start history from?
+IPP_FIRST_PREV=$IPP_VER_PREV 
 if [ $GERRIT_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.575.8&quot;
 else if [ $GERRIT_BRANCH == &quot;3.0.1&quot; ];    then IPP_FIRST_PREV=&quot;3.0.1.41&quot;
 else if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.346.7&quot;
 else if [ $GERRIT_BRANCH == &quot;3.0.2&quot; ];    then IPP_FIRST_PREV=&quot;3.0.2.1&quot;
 else if [[ $GERRIT_BRANCH == &quot;3.0.4&quot; || $GERRIT_BRANCH == &quot;3.0.6&quot; ]];    then IPP_FIRST_PREV=&quot;3.0.4.1&quot;
-else echo Abort...; exit 1; fi; fi; fi; fi; fi
+fi; fi; fi; fi; fi
 
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
@@ -222,56 +223,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
 BUILD_BRANCH=${GERRIT_BRANCH}</properties>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
-                  <projects>ippBuild_3.0.X_Lync, ippBuild_3.0.X_405_Lync</projects>
-                  <condition>UNSTABLE_OR_BETTER</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.2&quot; ] &amp;&amp; [ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.4&quot; ] &amp;&amp; [ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.6&quot; ]; then exit 1; fi
-</command>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>NEWTAG=${IPP_VER}
-BUILD_BRANCH=${GERRIT_BRANCH}</properties>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>ippBuild_450HD_Lync</projects>
-                  <condition>UNSTABLE_OR_BETTER</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.0_450HD&quot; ]; then exit 1; fi</command>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>NEWTAG=${IPP_VER}
-BUILD_BRANCH=${GERRIT_BRANCH}</properties>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>ippBuild_SFB_Lync</projects>
+                  <projects>ippBuild_3.0.X_405_Lync</projects>
                   <condition>UNSTABLE_OR_BETTER</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                 </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
@@ -283,6 +235,21 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>NEWTAG=${IPP_VER}
+BUILD_BRANCH=${GERRIT_BRANCH}</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <projects>ippBuild_SFB_Lync</projects>
+          <condition>UNSTABLE_OR_BETTER</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
     <hudson.tasks.Mailer plugin="mailer@1.16">
       <recipients>yossim,Shuky.Riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
