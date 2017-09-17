@@ -117,13 +117,16 @@ echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
+#Works with the following yml file: boards2compile.yml
+#Every make command was separated by &apos;&amp;&apos;
+#Example: &apos;auto AUTOPRD=405HD &amp; binary&apos;, The number of the &apos;make&apos; execution will be 2
+#The first in the for loop will be &apos;make auto AUTOPRD=405HD`, the second &apos;make binary&apos;
 NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
   make $PARAMS
-  ls -ltr build/image
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 done
 
