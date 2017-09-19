@@ -137,11 +137,6 @@ git gc --aggressive --prune=all &amp;
 #remove the flag that indicate about the need of cppcheck
 if [ -f &quot;needcppcheck&quot; ]; then rm -f needcppcheck; fi
 
-######################################################################################
-#this is a temp build step because gerrit change 6903 is somehow stucking this job
-if [ $GERRIT_CHANGE_NUMBER == &quot;6903&quot; ]; then exit 0; fi
-#######################################################################################
-
 # Get changed files in this commit, but only *.c or *.cpp or *.h extentions
 git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt || { echo &quot;*****  no files to check  *****&quot;; exit 0; }
 touch needcppcheck
