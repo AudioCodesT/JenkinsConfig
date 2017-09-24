@@ -110,8 +110,8 @@ IPP_MAJOR_VER=${BUILD_BRANCH}
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER_fromFile}_450HD&quot;; fi;
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
-echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
+#AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+#echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
@@ -122,7 +122,7 @@ echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-make auto AUTOPRD=450
+make auto AUTOPRD=$AUTOPRD
 
 #Works with the following yml file: boards2compile.yml
 #Every make command was separated by &apos;&amp;&apos;
