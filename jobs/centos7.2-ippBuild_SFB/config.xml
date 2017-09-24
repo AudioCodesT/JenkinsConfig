@@ -81,12 +81,6 @@
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <axes>
-    <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
-      <name>MAKE_CMD</name>
-      <values>
-        <string>boards2compile.yml</string>
-      </values>
-    </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
@@ -117,18 +111,20 @@ echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
+make auto AUTOPRD=450
+
 #Works with the following yml file: boards2compile.yml
 #Every make command was separated by &apos;&amp;&apos;
 #Example: &apos;auto AUTOPRD=405HD &amp; binary&apos;, The number of the &apos;make&apos; execution will be 2
 #The first in the for loop will be &apos;make auto AUTOPRD=405HD`, the second &apos;make binary&apos;
-NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+#NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
 
-for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
-  make $PARAMS
-  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
-done
+#for ((i=1;i&lt;=$NumExecuting;i++)); do 
+#  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
+#  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
+#  make $PARAMS
+#  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
+#done
 
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
 </command>
@@ -190,7 +186,7 @@ ${WORKSPACE}/build/image/binGroupdefFor450HD.def=&gt;com/ac/ipp/centos7.2/SFB/${
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
-      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-SIM-only&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
