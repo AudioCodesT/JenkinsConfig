@@ -298,7 +298,7 @@
           <zone>eu-central-1b</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/home/centos/jenkinsslave</remoteFS>
-          <type>M4Large</type>
+          <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
           <labels></labels>
           <mode>EXCLUSIVE</mode>
@@ -329,7 +329,7 @@
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>2147483647</launchTimeout>
-          <connectBySSHProcess>false</connectBySSHProcess>
+          <connectBySSHProcess>true</connectBySSHProcess>
           <connectUsingPublicIp>false</connectUsingPublicIp>
         </hudson.plugins.ec2.SlaveTemplate>
         <hudson.plugins.ec2.SlaveTemplate>
@@ -434,10 +434,6 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
@@ -446,15 +442,15 @@
           <int>1</int>
         </entry>
         <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M3Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
       <executorsForTypes>
-        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M32xlarge</awsInstanceType>
-          <executors>1</executors>
-        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
           <awsInstanceType>M42xlarge</awsInstanceType>
           <executors>1</executors>
@@ -469,6 +465,10 @@
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
           <awsInstanceType>R42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M3Xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
@@ -496,7 +496,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -504,19 +504,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M3Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
       <executorsForTypes>
-        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M3Xlarge</awsInstanceType>
-          <executors>1</executors>
-        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M4Xlarge</awsInstanceType>
-          <executors>1</executors>
-        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
           <awsInstanceType>C32xlarge</awsInstanceType>
           <executors>1</executors>
@@ -527,6 +519,14 @@
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
           <awsInstanceType>M4Large</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
@@ -550,15 +550,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -568,11 +560,11 @@
       </executorsForInstanceType>
       <executorsForTypes>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M32xlarge</awsInstanceType>
+          <awsInstanceType>C42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M42xlarge</awsInstanceType>
+          <awsInstanceType>R42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
