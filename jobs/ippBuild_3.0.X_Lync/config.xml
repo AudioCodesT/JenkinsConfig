@@ -89,8 +89,6 @@ Compile 3.0.X - activated by ippBuild_ReleaseNotes_SFB for branches 3.0.0.GA and
       <name>AUTOPRD</name>
       <values>
         <string>420HD</string>
-        <string>430HD</string>
-        <string>440HD</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.TextAxis>
@@ -148,13 +146,7 @@ mv ${file2} ${file2}.txt
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>oleg.Friedman@audiocodes.com, Ami.Lahav@audiocodes.com</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>true</sendToIndividuals>
-    </hudson.tasks.Mailer>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
       <details>
