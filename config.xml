@@ -380,7 +380,7 @@
           <remoteFS>/home/admin/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
-          <labels>ipp-SIM-only</labels>
+          <labels></labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -535,10 +535,12 @@
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
       <pendingInstances/>
-      <labelString></labelString>
+      <labelString>ipp-SIM-only</labelString>
       <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/home/admin/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set"/>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>ipp-SIM-only</hudson.model.labels.LabelAtom>
+      </labelSet>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
