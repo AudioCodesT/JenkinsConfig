@@ -373,14 +373,14 @@
           <connectUsingPublicIp>false</connectUsingPublicIp>
         </hudson.plugins.ec2.SlaveTemplate>
         <hudson.plugins.ec2.SlaveTemplate>
-          <ami>ami-3481375b</ami>
+          <ami>ami-c7dc6ca8</ami>
           <description>IPP centos7.2 for SIM</description>
           <zone>eu-central-1b</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/home/admin/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
-          <labels></labels>
+          <labels>ipp-SIM-only</labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -535,12 +535,10 @@
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
       <pendingInstances/>
-      <labelString>ipp-SIM-only</labelString>
+      <labelString></labelString>
       <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/home/admin/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>ipp-SIM-only</hudson.model.labels.LabelAtom>
-      </labelSet>
+      <labelSet class="sorted-set"/>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
