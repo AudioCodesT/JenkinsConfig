@@ -109,7 +109,7 @@ AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&
 echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties
 
 if curl -ks https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_VER}/${IPP_MAJOR_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_MAJOR_VER}.img | grep -q uri; then
-	echo ${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD exist already!... Abort without error;
+	echo ${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD exist already... Abort without error;
     echo EXITFLAG=1 &gt;&gt; generated_ipp_version.properties
     exit 0
 fi
