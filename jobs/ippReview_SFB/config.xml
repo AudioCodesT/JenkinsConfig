@@ -1,10 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Compile after “Push to Gerrit”:&#xd;
-in branch 3.0.0_450HD, 3.0.2  :  440, 450&#xd;
-in 3.0.4:  405, 402, 440, 450&#xd;
-in 3.0.6:  405, 402, 440, 450, 445 </description>
+  <description>Activated by after “Push to Gerrit”:&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -180,16 +178,12 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <axes>
-    <hudson.matrix.TextAxis>
-      <name>AUTOPRD</name>
+    <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
+      <name>MAKE_CMD</name>
       <values>
-        <string>405HD</string>
-        <string>420HD</string>
-        <string>440HD</string>
-        <string>450HD</string>
-        <string>445HD</string>
+        <string>boards2review.yml</string>
       </values>
-    </hudson.matrix.TextAxis>
+    </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
@@ -197,20 +191,32 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!((!(GERRIT_BRANCH=~/3.0.4/ || GERRIT_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(GERRIT_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>#modify the IPP version in order to have a unique &quot;private image&quot;
 sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}\&quot;/&quot; include/ipp_version.h_shipped
+
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
 
 #compile:
 export PATH=/usr/local/bin:$PATH
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-make auto AUTOPRD=$AUTOPRD
+NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+
+for ((i=1;i&lt;=$NumExecuting;i++)); do 
+  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
+  make $PARAMS
+done
 </command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
