@@ -90,12 +90,12 @@
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
-        <string>405HD__SIM</string>
-        <string>420HD__SIM</string>
-        <string>430HD__SIM</string>
-        <string>440HD__SIM</string>
-        <string>445HD__SIM</string>
-        <string>450HD__SIM</string>
+        <string>405HD</string>
+        <string>420HD</string>
+        <string>430HD</string>
+        <string>440HD</string>
+        <string>445HD</string>
+        <string>450HD</string>
       </values>
     </hudson.matrix.TextAxis>
   </axes>
@@ -122,7 +122,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-make auto AUTOPRD=$AUTOPRD
+make auto AUTOPRD=$AUTOPRD__SIM
 
 #Works with the following yml file: boards2compile.yml
 #Every make command was separated by &apos;&amp;&apos;
