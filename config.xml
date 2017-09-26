@@ -340,7 +340,7 @@
           <remoteFS>/opt/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
-          <labels></labels>
+          <labels>ipp-build</labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -419,12 +419,10 @@
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
       <pendingInstances/>
-      <labelString>ipp-build</labelString>
+      <labelString></labelString>
       <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>ipp-build</hudson.model.labels.LabelAtom>
-      </labelSet>
+      <labelSet class="sorted-set"/>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
