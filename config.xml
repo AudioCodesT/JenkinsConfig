@@ -300,7 +300,7 @@
           <remoteFS>/home/centos/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
-          <labels></labels>
+          <labels>arm-build</labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -477,12 +477,10 @@
       <name>sig-588d4297</name>
       <groupId>sig-588d4297</groupId>
       <pendingInstances/>
-      <labelString>arm-build</labelString>
+      <labelString></labelString>
       <idleTerminationMinutes>-3</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>arm-build</hudson.model.labels.LabelAtom>
-      </labelSet>
+      <labelSet class="sorted-set"/>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
