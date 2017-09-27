@@ -143,9 +143,9 @@ make auto AUTOPRD=${AUTOPRD}__SIM
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients></recipients>
+      <recipients>shuky.riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>true</sendToIndividuals>
+      <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.30">
       <patterns class="empty-list"/>
