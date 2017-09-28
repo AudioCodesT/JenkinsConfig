@@ -143,14 +143,6 @@
       <values>
         <string>boards2review.yml</string>
       </values>
-      <computedValues>
-        <string>auto AUTOPRD=405HD</string>
-        <string>auto AUTOPRD=420HD</string>
-        <string>auto AUTOPRD=430HD</string>
-        <string>auto AUTOPRD=440HD</string>
-        <string>auto AUTOPRD=445HD</string>
-        <string>auto AUTOPRD=450HD</string>
-      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
@@ -166,9 +158,15 @@ sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUM
 
 AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
-
-#compile:
-export PATH=/usr/local/bin:$PATH
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <hudson.tasks.Shell>
+      <command>#compile:
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
@@ -180,11 +178,6 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
-      <info>
-        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
