@@ -159,11 +159,11 @@ sed -ri &quot;s/(IP_Phone_ACL_VERSION\s+\&quot;.*)\&quot;/\1_${GERRIT_CHANGE_NUM
 AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
 
-   message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
+   CURL=&quot;curl -kn -u admin:password --silent&quot;
    base=https://$GERRIT_HOST/a/changes
-   id=$(curl -kn --silent &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
+   id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
    endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-   echo curl -kn --silent -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;</command>
+   echo $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
@@ -216,11 +216,12 @@ fi</command>
   <buildWrappers>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>if [[ $(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION) =~ ipp_version.h_shipped|\.yml  ]] &amp;&amp; [ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; != &quot;Oleg Friedman&quot; ]; then
+   CURL=&quot;curl -kn -u admin:password --silent&quot;
    message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
    base=https://$GERRIT_HOST/a/changes
-   id=$(curl -kn --silent &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
+   id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
    endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-   curl -kn --silent -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+   $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
   exit 1;
 fi</script>
       <scriptType>unixScript</scriptType>
