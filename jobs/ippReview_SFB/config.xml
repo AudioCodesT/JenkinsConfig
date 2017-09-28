@@ -80,7 +80,7 @@
   </scm>
   <quietPeriod>30</quietPeriod>
   <scmCheckoutRetryCount>1</scmCheckoutRetryCount>
-  <assignedNode>ipp-mc-fathers</assignedNode>
+  <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -143,14 +143,6 @@
       <values>
         <string>boards2review.yml</string>
       </values>
-      <computedValues>
-        <string>auto AUTOPRD=405HD</string>
-        <string>auto AUTOPRD=420HD</string>
-        <string>auto AUTOPRD=430HD</string>
-        <string>auto AUTOPRD=440HD</string>
-        <string>auto AUTOPRD=445HD</string>
-        <string>auto AUTOPRD=450HD</string>
-      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
@@ -285,4 +277,5 @@ ${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/ger
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>
+  <childCustomWorkspace>${SHORT_COMBINATION}</childCustomWorkspace>
 </matrix-project>
