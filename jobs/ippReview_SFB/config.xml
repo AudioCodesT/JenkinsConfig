@@ -82,7 +82,7 @@
   <scmCheckoutRetryCount>1</scmCheckoutRetryCount>
   <assignedNode>ipp-mc-fathers</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -143,6 +143,14 @@
       <values>
         <string>boards2review.yml</string>
       </values>
+      <computedValues>
+        <string>auto AUTOPRD=405HD</string>
+        <string>auto AUTOPRD=420HD</string>
+        <string>auto AUTOPRD=430HD</string>
+        <string>auto AUTOPRD=440HD</string>
+        <string>auto AUTOPRD=445HD</string>
+        <string>auto AUTOPRD=450HD</string>
+      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
