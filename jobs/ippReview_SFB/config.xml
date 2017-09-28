@@ -212,7 +212,7 @@ fi</command>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>if [[ $(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION) =~ ipp_version.h_shipped|\.yml  ]] &amp;&amp; [ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; != &quot;Oleg Friedman&quot; ]; then
    message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
-   base=https://gerrit/a/changes
+   base=https://$GERRIT_HOST/a/changes
    id=$(curl -kn --silent &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
    endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
    curl -kn --silent -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
