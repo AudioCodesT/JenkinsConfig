@@ -29,7 +29,7 @@ if new code then build and deploy ovoc-7.4.0.zip</description>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>ui_7.4_bugfix</name>
+        <name>master</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -143,7 +143,7 @@ grunt dist
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>dist/ovoc*.zip=&gt;com/ac/ems/ovoc_client/7.4/
+      <deployPattern>dist/ovoc*.zip=&gt;com/ac/ems/ovoc_client/7.4.1000/
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
