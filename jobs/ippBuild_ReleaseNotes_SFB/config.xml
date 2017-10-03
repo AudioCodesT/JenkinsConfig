@@ -111,12 +111,16 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
 
 IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
 
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1`
+GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+if [[ $FULL_BRANCH_NAME =~ &quot;release&quot; ]]; then
+  GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | sed -r &apos;s|.*(release/.*)|\1|&apos;`
+fi
 #we deploy to artifactory to a specific folder $IPP_MAJOR_VER
 IPP_MAJOR_VER=${GERRIT_BRANCH}
 
-# If $BUILD_BRANCH == &quot;3.0.0_450HD&quot;, replace the 3.0.0 by the 3 first digits in the TAG name (probably: 3.0.1)
-if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;$(echo ${IPP_VER} | cut -d. -f1,2,3)_450HD&quot;; fi
+# If $GERRIT_BRANCH == &quot;3.0.0_450HD&quot;, replace the 3.0.0 by the 3 first digits in the TAG name (probably: 3.0.1)
+if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;$(echo ${IPP_VER} | cut -d. -f1,2,3)_450HD&quot;; fi
 if [ $GERRIT_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_MAJOR_VER=&quot;3.0.0&quot;; fi;
 
 #where to start history from?
