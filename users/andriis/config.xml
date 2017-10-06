@@ -9,7 +9,7 @@
     <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.15">
       <enabledColorBlindSupport>false</enabledColorBlindSupport>
     </hudson.plugins.greenballs.ColorBlindProperty>
-    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@1.26">
+    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
         <entry>
           <com.cloudbees.plugins.credentials.domains.Domain>
@@ -19,9 +19,6 @@
         </entry>
       </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
-      <emailAddress>Andrii.Stas@audiocodes.com</emailAddress>
-    </hudson.tasks.Mailer_-UserProperty>
     <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
@@ -62,5 +59,8 @@
     <hudson.search.UserSearchProperty>
       <insensitiveSearch>false</insensitiveSearch>
     </hudson.search.UserSearchProperty>
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
+      <emailAddress>Andrii.Stas@audiocodes.com</emailAddress>
+    </hudson.tasks.Mailer_-UserProperty>
   </properties>
 </user>
