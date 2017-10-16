@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.7.1">
   <actions/>
-  <description>Activated by ippBuild_ReleaseNotes_SFB</description>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -84,7 +84,7 @@
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp-SIM-only</string>
+        <string>ipp-centos7.4</string>
       </values>
     </hudson.matrix.LabelAxis>
     <hudson.matrix.TextAxis>
@@ -122,7 +122,8 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-make auto AUTOPRD=${AUTOPRD}__SIM
+make auto AUTOPRD=${AUTOPRD}
+#make auto AUTOPRD=${AUTOPRD}__SIM
 
 #Works with the following yml file: boards2compile.yml
 #Every make command was separated by &apos;&amp;&apos;
@@ -194,7 +195,7 @@ make auto AUTOPRD=${AUTOPRD}__SIM
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;com/ac/ipp//SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;com/ac/ipp//SFB/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
@@ -206,7 +207,7 @@ make auto AUTOPRD=${AUTOPRD}__SIM
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
-      <artifactoryCombinationFilter>label==&quot;ipp-SIM-only&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4 &quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
