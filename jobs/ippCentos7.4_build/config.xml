@@ -195,7 +195,8 @@ make auto AUTOPRD=${AUTOPRD}
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;com/ac/ipp//SFB/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;com/ac/ipp/SFB/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
