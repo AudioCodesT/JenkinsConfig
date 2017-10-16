@@ -122,8 +122,8 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-make auto AUTOPRD=${AUTOPRD}
-#make auto AUTOPRD=${AUTOPRD}__SIM
+#make auto AUTOPRD=${AUTOPRD}
+make auto AUTOPRD=${AUTOPRD}__SIM
 
 #Works with the following yml file: boards2compile.yml
 #Every make command was separated by &apos;&amp;&apos;
