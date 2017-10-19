@@ -50,11 +50,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>&quot;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat&quot;&#xd;
-</command>
-    </hudson.tasks.BatchFile>
-    <hudson.tasks.BatchFile>
-      <command>cd NSCmrcpserver&#xd;
+      <command>%comspec% /k &quot;&quot;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat&quot;&quot; x86&#xd;
+cd NSCmrcpserver&#xd;
 msbuild /target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\Workspaces\mediatech\mrcp\NSCmrcpserver C:\Workspaces\mediatech\mrcp\NSCmrcpserver\MRCP.proj</command>
     </hudson.tasks.BatchFile>
   </builders>
