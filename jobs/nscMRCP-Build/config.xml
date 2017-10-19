@@ -50,7 +50,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>NSCmrcpserver&gt;msbuild /target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\Workspaces\mediatech\mrcp\NSCmrcpserver C:\Workspaces\mediatech\mrcp\NSCmrcpserver\MRCP.proj</command>
+      <command>cd NSCmrcpserver&#xd;
+msbuild /target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\Workspaces\mediatech\mrcp\NSCmrcpserver C:\Workspaces\mediatech\mrcp\NSCmrcpserver\MRCP.proj</command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers/>
