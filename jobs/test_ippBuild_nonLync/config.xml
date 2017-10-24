@@ -50,12 +50,20 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
     <hudson.matrix.TextAxis>
       <name>AUTOPRD</name>
       <values>
+        <string>405</string>
         <string>405HD</string>
-        <string>420HD</string>
-        <string>430HD</string>
         <string>440HD</string>
-        <string>450HD</string>
-        <string>445HD</string>
+        <string>430HD</string>
+        <string>420HD</string>
+        <string>SIP100</string>
+        <string>SIP200</string>
+      </values>
+    </hudson.matrix.TextAxis>
+    <hudson.matrix.TextAxis>
+      <name>FIRMWARE</name>
+      <values>
+        <string>ce4</string>
+        <string>ce8</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
@@ -65,7 +73,7 @@ activated by job:   ippBuild_promoteVersion_nonLync</description>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!((!(BUILD_BRANCH=~/3.0.4/ || BUILD_BRANCH=~/3.0.6/) &amp;&amp; (AUTOPRD==&quot;420HD&quot; || AUTOPRD==&quot;405HD&quot;)) || ((!(BUILD_BRANCH=~/3.0.6/) &amp;&amp; AUTOPRD==&quot;445HD&quot;)))</combinationFilter>
+  <combinationFilter>!(FIRMWARE== &quot;ce8&quot; &amp;&amp; (!(BUILD_BRANCH=~/2.2.12/) || AUTOPRD=~/SIP/))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command>echo $AUTOPRD
