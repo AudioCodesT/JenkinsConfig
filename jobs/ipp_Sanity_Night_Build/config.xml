@@ -89,9 +89,11 @@ if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
 fi
 echo Find: $LASTBL
 
-if [ &quot;$model&quot; = 405 ]; then ImageName=UC${model}_${LASTBL}_ce4.img; else ImageName=UC${model}HD_${LASTBL}_ce4.img; fi
+if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD&quot;
+else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
+fi
 
-for BOARD in 440HD 430HD 420HD 405; do
+for BOARD in $BoardsList; do
 if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC$BOARD_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img; fi
 fi
