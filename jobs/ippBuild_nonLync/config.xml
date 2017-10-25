@@ -96,8 +96,6 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
         <string>440HD</string>
         <string>430HD</string>
         <string>420HD</string>
-        <string>SIP100</string>
-        <string>SIP200</string>
       </values>
     </hudson.matrix.TextAxis>
     <hudson.matrix.TextAxis>
@@ -114,7 +112,6 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>!(FIRMWARE== &quot;ce8&quot; &amp;&amp; (!(BUILD_BRANCH=~/2.2.12/) || AUTOPRD=~/SIP/))</combinationFilter>
   <builders>
     <hudson.tasks.Shell>
       <command># Get majoe and monir versions
