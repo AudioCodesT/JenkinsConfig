@@ -95,8 +95,10 @@ else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
 fi
 
 for BOARD in $BoardsList; do
-  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
-    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then 
+  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD/UC$BOARD_$LASTBL.img | grep -q $LASTBL.img\&quot;; then
+    echo -- UC$BOARD_$LASTBL.img exist in Artifactory
+    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
+      echo ----      Download UC$BOARD_$LASTBL.img to z:
       curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC$BOARD_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
   fi fi
 done
