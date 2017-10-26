@@ -49,10 +49,6 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>%comspec% /k &quot;&quot;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat&quot;&quot; x86&#xd;
-cd NSCmrcpserver</command>
-    </hudson.tasks.BatchFile>
     <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
       <msBuildName>(Default)</msBuildName>
       <msBuildFile>MRCP.proj</msBuildFile>
