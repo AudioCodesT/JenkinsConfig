@@ -51,7 +51,7 @@
   <builders>
     <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
       <msBuildName>MSBuild v3.5 VS2008</msBuildName>
-      <msBuildFile>MRCP.proj</msBuildFile>
+      <msBuildFile>C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\MRCP.proj</msBuildFile>
       <cmdLineArgs>/target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\</cmdLineArgs>
       <buildVariablesAsProperties>false</buildVariablesAsProperties>
       <continueOnBuildFailure>false</continueOnBuildFailure>
