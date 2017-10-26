@@ -104,7 +104,7 @@ for BOARD in $BoardsList; do
 done
 
 cd C:/IpPhoneAutomation/ModifeidIterations/ATA
-tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain $ImageName</command>
+cmd /K tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain $ImageName</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
