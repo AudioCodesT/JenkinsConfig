@@ -90,8 +90,6 @@ if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
 fi
 echo Find: $LASTBL
 
-ImageName=UC${model}HD_${LASTBL}_ce4.img;
-
 if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD&quot;
 else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
 fi
@@ -104,7 +102,7 @@ for BOARD in $BoardsList; do
 done
 
 cd C:/IpPhoneAutomation/ModifeidIterations/ATA
-cmd /K tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain $ImageName</command>
+cmd /K tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
