@@ -101,8 +101,9 @@ for BOARD in $BoardsList; do
   fi fi
 done
 
+echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
 cd C:/IpPhoneAutomation/ModifeidIterations/ATA
-cmd /K tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img</command>
+tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
