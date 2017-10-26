@@ -75,7 +75,7 @@ net use z: \\10.59.0.87\Firmwares&#xd;
 </command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
-      <command>c:\cygwin\bin\bash  --login -i
+      <command>#!c:\cygwin\bin\bash  --login -i
 
 if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then 
   exit 1
@@ -94,9 +94,11 @@ else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
 fi
 
 for BOARD in $BoardsList; do
-if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
-   if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC$BOARD_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img; fi
-fi
+  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
+    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then 
+      curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC$BOARD_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
+  fi fi
+done
 
 cd C:\IpPhoneAutomation\ModifeidIterations\ATA
 tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain $ImageName</command>
