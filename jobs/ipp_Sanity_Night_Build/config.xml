@@ -101,7 +101,11 @@ for BOARD in $BoardsList; do
     if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
       echo ----      Download UC$BOARD_$LASTBL.img to z:
       curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
-  fi fi
+    fi
+  else
+    echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD... Failed
+    exit 1;
+  fi
 done
 
 echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
