@@ -103,9 +103,9 @@ for BOARD in $BoardsList; do
       curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
     else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
     fi
-  else
-    echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
-  fi
+ # else
+  #  echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
+  # fi
 done
 
 if [ -f z:/UC${model}_$LASTBL.img ]; then
