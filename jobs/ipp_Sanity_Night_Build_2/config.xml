@@ -42,6 +42,11 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
           <description>Example: 3.0.0.299</description>
           <defaultValue>None</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildRelease</name>
+          <description></description>
+          <defaultValue>3.0.1</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -66,8 +71,8 @@ type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
 set PATH=%PATH%;c:\cygwin\bin&#xd;
 &#xd;
-set ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
-set DOWNLOAD=https://artifactory/ipp-release/com/ac/ipp/SFB/3.0.1&#xd;
+set ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease&#xd;
+set DOWNLOAD=https://artifactory/ipp-release/com/ac/ipp/SFB/$BuildRelease&#xd;
 &#xd;
 if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
   curl -k -s -X GET %ARTIFACTORY% | findstr uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v artifactory | cut -c 2- | sort /R &gt; LASTBL.txt&#xd;
