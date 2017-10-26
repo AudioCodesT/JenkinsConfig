@@ -120,7 +120,7 @@ IF NOT EXIST z: ( &#xd;
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
-if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then 
+if curl -s http://ippauto1/index.php/status/show.xml | grep -q status.busy./status; then 
   exit 1
 fi
 
