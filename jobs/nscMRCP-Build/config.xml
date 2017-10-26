@@ -51,9 +51,17 @@
   <builders>
     <hudson.tasks.BatchFile>
       <command>%comspec% /k &quot;&quot;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat&quot;&quot; x86&#xd;
-cd NSCmrcpserver&#xd;
-msbuild /target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\Workspaces\mediatech\mrcp\NSCmrcpserver C:\Workspaces\mediatech\mrcp\NSCmrcpserver\MRCP.proj</command>
+cd NSCmrcpserver</command>
     </hudson.tasks.BatchFile>
+    <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
+      <msBuildName>(Default)</msBuildName>
+      <msBuildFile>MRCP.proj</msBuildFile>
+      <cmdLineArgs>/target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\Workspaces\mediatech\mrcp\NSCmrcpserver</cmdLineArgs>
+      <buildVariablesAsProperties>false</buildVariablesAsProperties>
+      <continueOnBuildFailure>false</continueOnBuildFailure>
+      <unstableIfWarnings>false</unstableIfWarnings>
+      <doNotUseChcpCommand>false</doNotUseChcpCommand>
+    </hudson.plugins.msbuild.MsBuildBuilder>
   </builders>
   <publishers/>
   <buildWrappers/>
