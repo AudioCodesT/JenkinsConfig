@@ -95,12 +95,13 @@ else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
 fi
 
 for BOARD in $BoardsList; do
-  echo Download $BOARD/UC${BOARD}_$LASTBL.img...
+  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
   if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
-    echo -- UC${BOARD}_$LASTBL.img exist in Artifactory
+    echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
     if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
       echo ----      Download UC$BOARD_$LASTBL.img to z:
       curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
+    else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
     fi
   else
     echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD... Failed
@@ -110,7 +111,7 @@ done
 
 echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
 cd C:/IpPhoneAutomation/ModifeidIterations/ATA
-#tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img</command>
+tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
