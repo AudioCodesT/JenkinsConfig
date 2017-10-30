@@ -131,6 +131,8 @@ fi
 
 net use z: /DELETE
 net use z: &apos;\\10.59.0.87\Firmwares&apos;
+net use y: /DELETE
+net use y: &apos;\\10.59.0.87\Resources&apos;
 
 for BOARD in $BoardsList; do
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
