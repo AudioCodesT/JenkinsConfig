@@ -141,8 +141,8 @@ if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   if [&quot;$PC2RUN&quot; = &quot;ippSanityTest01&quot; ]; then cd C:\IpPhoneAutomation\ModifeidIterations\ATA
   	else  cd C:\IpPhoneAutomation\ATA
   fi
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
-fi</command>
+  tclsh AtaExec.tcl -configName ${RegressionType}${model}$LyncConfig_{ConfigName}.tcl -suiteName ${RegressionType}${model}$Lync_{SuiteName} -firmwareVersionMain UC${model}HD_${LASTBL}.img
+  fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
