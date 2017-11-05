@@ -142,7 +142,7 @@ if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   	else  cd C:\IpPhoneAutomation\ATA
   fi
   tclsh AtaExec.tcl -configName ${RegressionType}${model}$LyncConfig_{ConfigName}.tcl -suiteName ${RegressionType}${model}$Lync_{SuiteName} -firmwareVersionMain UC${model}HD_${LASTBL}.img
-  fi</command>
+ fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
