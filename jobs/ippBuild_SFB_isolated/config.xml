@@ -108,13 +108,7 @@ echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command># Check if the image exist already in the Artifactory - if exist, exit without error
-if curl -ks https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
-	echo ${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img exist already... Abort without error;
-    exit 0
-fi
-
-export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+      <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
 #Works with the following yml file: boards2compile.yml
