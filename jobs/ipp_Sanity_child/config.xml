@@ -90,51 +90,58 @@ Should work on 10.59.1.46 - ippAuto</description>
    timeout 30&#xd;
 )&#xd;
 &#xd;
+&#xd;
 curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
 type show.xml&#xd;
 type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
-set PATH=%PATH%;c:\cygwin\bin&#xd;
 &#xd;
-set ARTIFACTORY=https://172.16.133.222/api/storage/ipp-release/com/ac/ipp/SFB/%BuildRelease%&#xd;
-set DOWNLOAD=https://172.16.133.222/ipp-release/com/ac/ipp/SFB/%BuildRelease%&#xd;
-&#xd;
-if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
-  curl -k -s -X GET %ARTIFACTORY% | grep uri | cut -d&quot;&quot;&quot;&quot; -f4 | grep -v https | cut -c 2- | c:\cygwin\bin\sort -Vr &gt; LASTBL.txt&#xd;
-  unix2dos LASTBL.txt&#xd;
-  set /P LASTBL=&lt;LASTBL.txt&#xd;
+IF NOT EXIST z: ( &#xd;
+  net use z: /DELETE&#xd;
+  net use z: \\10.59.0.87\Firmwares&#xd;
 )&#xd;
-echo Find: %LASTBL%&#xd;
-if &quot;%LASTBL%&quot;==&quot;None&quot; (&#xd;
-  echo TAG not found ... abort&#xd;
-  type LASTBL.txt&#xd;
-  exit 1 &#xd;
-)&#xd;
-&#xd;
-if %model%==405 ( set ImageName=UC%model%_%LASTBL%.img ) else ( set ImageName=UC%model%HD_%LASTBL%.img )&#xd;
-&#xd;
-rem IF EXIST SaveLASTBL.txt ( set /P SaveLASTBL=&lt;SaveLASTBL.txt ) else ( set SaveLASTBL=1 )&#xd;
-net use z: /DELETE&#xd;
-net use z: \\10.59.0.87\Firmwares&#xd;
-&#xd;
-curl -k -s -X GET %ARTIFACTORY%/%LASTBL%/440HD/UC440HD_%LASTBL%.img | grep uri | wc -l &gt; 440HD.txt&#xd;
-set /P IMAGE440HD=&lt;440HD.txt&#xd;
-&#xd;
-IF %IMAGE440HD%==1 (&#xd;
-  rem move /Y LASTBL.txt SaveLASTBL.txt	&#xd;
-  IF NOT EXIST z:\UC440HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/440HD/UC440HD_%LASTBL%.img --output z:\UC440HD_%LASTBL%.img&#xd;
-  IF NOT EXIST z:\UC430HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/430HD/UC430HD_%LASTBL%.img --output z:\UC430HD_%LASTBL%.img&#xd;
-  IF NOT EXIST z:\UC420HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/420HD/UC420HD_%LASTBL%.img --output z:\UC420HD_%LASTBL%.img&#xd;
-  IF NOT EXIST z:\UC405_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405/UC405_%LASTBL%.img --output z:\UC405_%LASTBL%.img&#xd;
-  IF NOT EXIST z:\UC405HD_%LASTBL%.img curl -k -s -X GET %DOWNLOAD%/%LASTBL%/405HD/UC405HD_%LASTBL%.img --output z:\UC405HD_%LASTBL%.img&#xd;
- &#xd;
-if &quot;%PC2RUN%&quot;==&quot;ippSanityTest01&quot; (cd C:\IpPhoneAutomation\ModifeidIterations\ATA) else  (cd C:\IpPhoneAutomation\ATA)&#xd;
-&#xd;
-  tclsh AtaExec.tcl -configName %RegressionType%%model%LyncConfig_%ConfigName%.tcl -suiteName %RegressionType%%model%Lync_%SuiteName%.suite -firmwareVersionMain %ImageName%&#xd;
-) else set Error=1&#xd;
 &#xd;
 </command>
     </hudson.tasks.BatchFile>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash  --login -i
+
+if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then 
+  exit 1
+fi
+
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
+DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+
+if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
+  LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+fi
+echo Find: $LASTBL
+
+if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD&quot;
+else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
+fi
+
+for BOARD in $BoardsList; do
+  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
+  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
+    echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
+    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
+      echo ----      Download UC$BOARD_$LASTBL.img to z:
+      curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
+    else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
+    fi
+  else
+   echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
+  fi
+done
+
+if [ -f z:/UC${model}HD_$LASTBL.img ]; then
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
+  if &quot;%PC2RUN%&quot;==&quot;ippSanityTest01&quot; (cd C:\IpPhoneAutomation\ModifeidIterations\ATA) else  (cd C:\IpPhoneAutomation\ATA) fi
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
+fi</command>
+    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.1">
