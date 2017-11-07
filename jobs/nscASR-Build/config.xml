@@ -34,7 +34,7 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
       <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>mediatech/mrcp</projectName>
+      <projectName>mediatech/dev_sw</projectName>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -50,7 +50,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
-      <msBuildName>MSBuild v3.5 VS2008</msBuildName>
+      <msBuildName>MSBuild v4.7 VS2012</msBuildName>
       <msBuildFile>C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\MRCP.proj</msBuildFile>
       <cmdLineArgs>/target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\</cmdLineArgs>
       <buildVariablesAsProperties>false</buildVariablesAsProperties>
