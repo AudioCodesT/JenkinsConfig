@@ -51,8 +51,8 @@
   <builders>
     <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
       <msBuildName>MSBuild v4.0 VS2010</msBuildName>
-      <msBuildFile>C:\jenkins\workspace\nscASR-Build\dev_sw\src\NSC_2010.proj</msBuildFile>
-      <cmdLineArgs>/target:BuildRelease;BuildInternal /property:BuildFolderName=asr_jobtag;SourceRoot=C:\jenkins\workspace\nscASR-Build\\dev_sw\src\</cmdLineArgs>
+      <msBuildFile>C:\jenkins\workspace\nscASR-Build\src\NSC_2010.proj</msBuildFile>
+      <cmdLineArgs>/target:BuildRelease;BuildInternal /property:BuildFolderName=asr_jobtag;SourceRoot=C:\jenkins\workspace\nscASR-Build\src\</cmdLineArgs>
       <buildVariablesAsProperties>false</buildVariablesAsProperties>
       <continueOnBuildFailure>false</continueOnBuildFailure>
       <unstableIfWarnings>false</unstableIfWarnings>
