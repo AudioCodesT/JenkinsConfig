@@ -121,6 +121,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 # Find the AUTOPRD value from the yml command line
 AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties
+echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_ipp_version.properties
 
 </command>
     </hudson.tasks.Shell>
@@ -196,11 +197,11 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
-${WORKSPACE}/build/image/*$AUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/image/*$AUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 ${WORKSPACE}/build/image/binGroupdefFor$AUTOPRD.def=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 ${WORKSPACE}/build/product/config.csv=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/product/status.csv=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
