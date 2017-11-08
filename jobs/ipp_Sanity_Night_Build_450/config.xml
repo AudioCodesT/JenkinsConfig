@@ -152,10 +152,10 @@ done
 echo Check z:/UC${model}HD_$LASTBL.img if exist...
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   echo cd C:/IpPhoneAutomation/ATA
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
   echo $PATH
   cd C:/IpPhoneAutomation/ATA
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
 fi</command>
     </hudson.tasks.Shell>
   </builders>
