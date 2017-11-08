@@ -78,6 +78,8 @@ for i in &quot;${!SFB_branches[@]}&quot;; do
 	   echo &quot;***  SFB_branches[$i] is THE current branch  ***&quot;
        index=${i};
        continue;
+   else     
+   	   echo &quot;***  SFB_branches[$i] is not the current branch  ***&quot;
    fi
    #if gerrit branch was already found, then check if current branch has this change-ID
    if [[ $index ]]; then
