@@ -85,9 +85,9 @@
           <condition></condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
-              <properties>ConfigName=basic1of2
+              <properties>ConfigName=basic1of4
 model=$MODEL
-SuiteName=basic1of2
+SuiteName=basic1of4
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
@@ -111,9 +111,9 @@ SuiteName=basic1of2
           <condition></condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
-              <properties>ConfigName=basic2of2
+              <properties>ConfigName=basic2of4
 model=$MODEL
-SuiteName=basic2of2
+SuiteName=basic2of4
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
@@ -135,8 +135,14 @@ SuiteName=basic2of2
           <enableCondition>false</enableCondition>
           <abortAllJob>true</abortAllJob>
           <condition></condition>
-          <configs class="empty-list"/>
-          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
+              <properties>ConfigName=basic3of4
+model=$MODEL
+SuiteName=basic3of4</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
@@ -150,8 +156,14 @@ SuiteName=basic2of2
           <enableCondition>false</enableCondition>
           <abortAllJob>true</abortAllJob>
           <condition></condition>
-          <configs class="empty-list"/>
-          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
+              <properties>ConfigName=basic4of4
+model=$MODEL
+SuiteName=basic4of4</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
