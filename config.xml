@@ -214,6 +214,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@2.6">
     <domains>
@@ -830,6 +831,7 @@
         <string>ipp_Sanity_Night_Build_450_2</string>
         <string>ipp_Sanity_Night_Build_450_3</string>
         <string>ipp_Sanity_parallel-jobs</string>
+        <string>ipp_Sanity_Pre_build_parallel-jobs</string>
         <string>ipp_Sanity_VOH</string>
         <string>ipp_Sanity_VOH_init</string>
       </jobNames>
