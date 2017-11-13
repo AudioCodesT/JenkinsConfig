@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#xd;
+suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#xd;
+configName - name of the predefined session config, e.g. Sanity440LyncConfig&#xd;
+firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#xd;
+1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
+available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no &apos;HD&apos; in firmware name);&#xd;
+2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
+&#xd;
+Should work on 10.59.1.46 - ippAuto</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>ConfigName</name>
+          <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
+          <defaultValue>Sanity</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>model</name>
+          <description>model :440/430/320/440/405</description>
+          <defaultValue>440</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>LASTBL</name>
+          <description>Example: 3.0.1.53</description>
+          <defaultValue>None</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildRelease</name>
+          <description></description>
+          <defaultValue>3.0.1</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>ippSanityTest01</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H 22 * * *
+</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
+type show.xml&#xd;
+type show.xml | findstr status.free./status&#xd;
+if ErrorLevel 1 Exit 1&#xd;
+&#xd;
+IF NOT EXIST z: ( &#xd;
+  net use z: /DELETE&#xd;
+  net use z: \\10.59.0.87\Firmwares&#xd;
+)</command>
+    </hudson.tasks.BatchFile>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash  --login -i
+
+if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then 
+  exit 1
+fi
+
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
+DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+
+if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
+  LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+fi
+echo Find: $LASTBL
+
+if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD&quot;
+else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
+fi
+
+for BOARD in $BoardsList; do
+  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
+  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
+    echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
+    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
+      echo ----      Download UC$BOARD_$LASTBL.img to z:
+      curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
+    else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
+    fi
+  else
+   echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
+  fi
+done
+
+if [ -f z:/UC${model}HD_$LASTBL.img ]; then
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
+  cd C:/IpPhoneAutomation/ModifeidIterations/ATA
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
+fi</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.1">
+      <regexpForRerun>&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>1800</delay>
+      </delay>
+      <maxSchedule>12</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.17.1">
+      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
+        <timeoutSecondsString>3600</timeoutSecondsString>
+      </strategy>
+      <operationList/>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
+  </buildWrappers>
+</project>
