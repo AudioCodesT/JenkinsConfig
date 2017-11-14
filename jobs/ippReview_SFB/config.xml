@@ -266,9 +266,9 @@ fi</script>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/$TARGET
-${WORKSPACE}/build/image/phone.bin=&gt;SFB/$TARGET
-${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/$TARGET</deployPattern>
+      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
+${WORKSPACE}/build/image/phone.bin=&gt;SFB/${GERRIT_BRANCH}/$TARGET
+${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
