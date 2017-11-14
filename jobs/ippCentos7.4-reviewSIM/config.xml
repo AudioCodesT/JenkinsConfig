@@ -229,7 +229,7 @@ make auto AUTOPRD=${AUTOPRD}__SIM</command>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;SFB/$TARGET</deployPattern>
+      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>
       <deployBuildInfo>true</deployBuildInfo>
