@@ -175,10 +175,19 @@
   <builders>
     <hudson.tasks.Shell>
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+echo TARGET=${TARGET} &gt; generated_ipp_version.properties
+
 yes | make distclean
 
 make auto AUTOPRD=${AUTOPRD}__SIM</command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.16">
@@ -188,6 +197,52 @@ make auto AUTOPRD=${AUTOPRD}__SIM</command>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+      <details>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect>ipp-review</keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </details>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+      </resolverCredentialsConfig>
+      <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;SFB/$TARGET</deployPattern>
+      <resolvePattern></resolvePattern>
+      <matrixParams></matrixParams>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>true</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
+      <multiConfProject>true</multiConfProject>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
