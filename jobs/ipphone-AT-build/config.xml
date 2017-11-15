@@ -50,7 +50,7 @@
       <command>#!c:\cygwin\bin\bash  --login -i
 
 REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-ARTIFACTORY=https://artifactory/api/storage/ipp-review/ipp/SFB/$GERRIT_BRANCH/$REFTARGET
+ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
