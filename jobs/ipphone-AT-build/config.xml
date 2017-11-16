@@ -155,7 +155,63 @@ SuiteName=basic2of4
       <continuationCondition>SUCCESSFUL</continuationCondition>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+            <worstResult>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </worstResult>
+            <bestResult>
+              <name>UNSTABLE</name>
+              <ordinal>1</ordinal>
+              <color>YELLOW</color>
+              <completeBuild>true</completeBuild>
+            </bestResult>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
+              <buildSteps>
+                <hudson.tasks.Shell>
+                  <command>#!/usr/bin/env ruby
+
+require &apos;json&apos;
+
+if ENV[&apos;REFSPEC&apos;].to_s =~ %r{refs/changes/\d\d/(\d+)/(\d+)$}
+  change=$1
+  ps=$2
+else
+  puts &apos;Invalid refspec&apos;
+  exit 0
+end
+
+data = {
+  labels: { Automation-Test: &apos;-1&apos; },
+  message: &apos;copy to  - \\10.59.0.87\Firmwares was failed&apos; + ENV[&apos;BUILD_URL&apos;],
+  notify: &apos;OWNER&apos;,
+  tag: &apos;Automation-Test&apos;,
+}
+
+system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
+       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+</command>
+                </hudson.tasks.Shell>
+              </buildSteps>
+              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
+              <scriptOnlyIfFailure>true</scriptOnlyIfFailure>
+              <markBuildUnstable>false</markBuildUnstable>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+  </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
       <template>#${BUILD_NUMBER} ${REFSPEC}</template>
