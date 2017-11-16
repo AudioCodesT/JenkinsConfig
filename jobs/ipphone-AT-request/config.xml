@@ -29,6 +29,21 @@
           <description></description>
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ConfigName</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>model</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SuiteName</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -41,17 +56,6 @@
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
-type show.xml&#xd;
-type show.xml | findstr status.free./status&#xd;
-if ErrorLevel 1 Exit 1&#xd;
-&#xd;
-IF NOT EXIST z: ( &#xd;
-  net use z: /DELETE&#xd;
-  net use z: \\10.59.0.87\Firmwares&#xd;
-)</command>
-    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
