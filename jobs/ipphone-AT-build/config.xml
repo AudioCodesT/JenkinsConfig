@@ -53,35 +53,43 @@ REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
+net use z: /DELETE
+net use z: &apos;\\10.59.0.87\firmware&apos;
+
 if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
 else BoardsList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
 fi
 
-COUNTER=${#BoardsList[@]}
-while [  $COUNTER -gt 0 ]; do 
+COUNTER=0
+countBoards=${#BoardsList[@]}
+while [  $countBoards -gt 0 ]; do 
   echo The counter is $COUNTER
   for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep sim.tgz | cut -d&apos;&quot;&apos; -f4); do
-    if [ ! -f z:/$BOARD ]; then
-      curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
+    PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
+    if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
+      COUNTER=0
+      echo -- Check if $BOARD exist in z:
+      if [ ! -f z:$BOARD ]; then
+        echo ----      Download $BOARD to z:
+        curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
+        COUNTER=1
+      else echo ----      z:$BOARD already exist.. skip the download...
+      fi
+      BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
+      ((countBoards--))
     fi
-    let COUNTER=COUNTER-1
   done
+  if [ $COUNTER -eq 0 ]; then sleep 30; fi  
+  ((COUNTER++))
+  if [ $COUNTER -eq 5 ]; then countBoards=0; fi
 done
 
+if [ $COUNTER -eq 5 ]; then
+  echo files were not found ... abort
+  exit 1
+fi
 
-for BOARD in $BoardsList; do
-  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
-  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
-    echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
-    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
-      echo ----      Download UC$BOARD_$LASTBL.img to z:
-      curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
-    else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
-    fi
-  else
-   echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
-  fi
-done
+
 </command>
     </hudson.tasks.Shell>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
