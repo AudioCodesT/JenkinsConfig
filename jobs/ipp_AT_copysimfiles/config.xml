@@ -149,6 +149,24 @@ system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revis
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>REFSPEC=$REFSPEC
+GERRIT_BRANCH=$GERRIT_BRANCH
+MODEL=440
+
+</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <projects>ipp_AT_parent</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers/>
 </project>
