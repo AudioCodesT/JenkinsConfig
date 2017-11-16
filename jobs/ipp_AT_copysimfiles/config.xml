@@ -1,16 +1,141 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
+  <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name></name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>ippTestAuto8</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
-  <publishers/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash  --login -i
+
+REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
+DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+
+net use z: /DELETE
+net use z: &apos;\\10.59.0.87\Firmwares&apos;
+
+if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
+else BoardsList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
+fi
+
+COUNTER=0
+countBoards=${#BoardsList[@]}
+while [  $countBoards -gt 0 ]; do 
+  echo The counter is $COUNTER
+  for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep sim.tgz | cut -d&apos;&quot;&apos; -f4); do
+    PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
+    if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
+      COUNTER=0
+      echo -- Check if $BOARD exist in z:
+      if [ ! -f z:$BOARD ]; then
+        echo ----      Download $BOARD to z:
+        curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
+        COUNTER=1
+      else echo ----      z:$BOARD already exist.. skip the download...
+      fi
+      BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
+      ((countBoards--))
+    fi
+  done
+  if [ $COUNTER -eq 0 ]; then sleep 30; fi  
+  ((COUNTER++))
+  if [ $COUNTER -eq 5 ]; then countBoards=0; fi
+done
+
+if [ $COUNTER -eq 5 ]; then
+  echo files were not found ... abort
+  exit 1
+fi
+
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
+              <buildSteps>
+                <hudson.tasks.Shell>
+                  <command>#!/usr/bin/env ruby
+
+require &apos;json&apos;
+
+if ENV[&apos;REFSPEC&apos;].to_s =~ %r{refs/changes/\d\d/(\d+)/(\d+)$}
+  change=$1
+  ps=$2
+else
+  puts &apos;Invalid refspec&apos;
+  exit 0
+end
+
+data = {
+  labels: { Automation-Test: &apos;-1&apos; },
+  message: &apos;Sim files are not ready: &apos; + ENV[&apos;BUILD_URL&apos;],
+  notify: &apos;OWNER&apos;,
+  tag: &apos;Automation-Test&apos;,
+}
+
+system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
+       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+</command>
+                </hudson.tasks.Shell>
+              </buildSteps>
+              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
+              <scriptOnlyIfFailure>true</scriptOnlyIfFailure>
+              <markBuildUnstable>false</markBuildUnstable>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+  </publishers>
   <buildWrappers/>
 </project>
