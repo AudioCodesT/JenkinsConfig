@@ -92,6 +92,13 @@ fi
 
 </command>
     </hudson.tasks.Shell>
+    <hudson.tasks.BatchFile>
+      <command>curl -s http://10.59.1.121/index.php/status/show.xml &gt; show.xml&#xd;
+type show.xml&#xd;
+type show.xml | findstr status.free./status&#xd;
+if ErrorLevel 1 Exit 1&#xd;
+</command>
+    </hudson.tasks.BatchFile>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>Split session</phaseName>
       <phaseJobs>
@@ -159,19 +166,10 @@ SuiteName=basic2of4
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
-            <worstResult>
-              <name>FAILURE</name>
-              <ordinal>2</ordinal>
-              <color>RED</color>
-              <completeBuild>true</completeBuild>
-            </worstResult>
-            <bestResult>
-              <name>UNSTABLE</name>
-              <ordinal>1</ordinal>
-              <color>YELLOW</color>
-              <completeBuild>true</completeBuild>
-            </bestResult>
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
+            <command>if curl -s http://10.59.1.121/index.php/status/show.xml | grep -q status.busy./status; then 
+  exit 0
+fi</command>
           </condition>
           <publisherList>
             <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
@@ -211,6 +209,17 @@ system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revis
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.1">
+      <regexpForRerun>&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>1800</delay>
+      </delay>
+      <maxSchedule>12</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
