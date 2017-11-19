@@ -47,26 +47,18 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/usr/bin/env ruby
+      <command>#!c:\cygwin\bin\bash  --login -i
 
-require &apos;json&apos;
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
 
-if ENV[&apos;REFSPEC&apos;].to_s =~ %r{refs/changes/\d\d/(\d+)/(\d+)$}
-  change=$1
-  ps=$2
-else
-  puts &apos;Invalid refspec&apos;
-  exit 0
-end
+#data = {
+#  message: &apos;Automation test was started: &apos; + ENV[&apos;BUILD_URL&apos;],
+#  notify: &apos;NONE&apos;,
+#  tag: &apos;Automation-Test&apos;,
+#}
 
-data = {
-  message: &apos;Automation test was started: &apos; + ENV[&apos;BUILD_URL&apos;],
-  notify: &apos;NONE&apos;,
-  tag: &apos;Automation-Test&apos;,
-}
-
-system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
-       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+#curl -kn --anyauth -X POST https://gerrit/a/changes/$change/revisions/$ps/review -d &quot;message: &apos;Automation test was started&apos;&quot; -H &apos;Content-Type: application/json&apos;
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
