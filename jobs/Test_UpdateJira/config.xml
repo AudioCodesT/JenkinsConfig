@@ -82,6 +82,7 @@ otherwise - it is a night build and there is no version name change</description
     <hudson.tasks.Shell>
       <command>#find the last tag in this branch:
 LastTag=`git describe --abbrev=0 --tags origin/$BRANCH`
+LastTag=7.8.10
 majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;).$(cut -d &quot;.&quot; -f 2 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
 
 #if this is a night build, need to run maven with the last version name:
