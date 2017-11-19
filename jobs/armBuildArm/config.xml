@@ -172,7 +172,7 @@ if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/
       </runCondition>
       <conditionalbuilders>
         <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-          <token></token>
+          <token>VI</token>
           <remoteJenkinsName>test-jenkins</remoteJenkinsName>
           <job>UpdateJiraVI</job>
           <shouldNotFailBuild>true</shouldNotFailBuild>
@@ -279,7 +279,7 @@ BRANCH=$BRANCH</properties>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.Mailer plugin="mailer@1.16">
-      <recipients>liav.elias, shuky.riechard</recipients>
+      <recipients>shuky.riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
