@@ -166,41 +166,54 @@ SuiteName=basic4of4</properties>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if curl -s http://10.59.1.121/index.php/status/show.xml | grep -q status.busy./status; then 
-  exit 0
-fi</command>
-          </condition>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
           <publisherList>
             <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
               <buildSteps>
                 <hudson.tasks.Shell>
-                  <command>#!/usr/bin/env ruby
+                  <command>#!c:\cygwin\bin\bash  --login -i
 
-require &apos;json&apos;
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
 
-if ENV[&apos;REFSPEC&apos;].to_s =~ %r{refs/changes/\d\d/(\d+)/(\d+)$}
-  change=$1
-  ps=$2
-else
-  puts &apos;Invalid refspec&apos;
-  exit 0
-end
+#data = {
+#  labels: { Automation-Test: &apos;-1&apos; },
+#  message: &apos;Automation-Test failed: &apos; + ENV[&apos;BUILD_URL&apos;],
+#  notify: &apos;OWNER&apos;,
+#  tag: &apos;Automation-Test&apos;,
+#}
 
-data = {
-  labels: { Automation-Test: &apos;-1&apos; },
-  message: &apos;copy to  - \\10.59.0.87\Firmwares was failed&apos; + ENV[&apos;BUILD_URL&apos;],
-  notify: &apos;OWNER&apos;,
-  tag: &apos;Automation-Test&apos;,
-}
-
-system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
-       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+#system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
+#       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
 </command>
                 </hudson.tasks.Shell>
               </buildSteps>
               <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
               <scriptOnlyIfFailure>true</scriptOnlyIfFailure>
+              <markBuildUnstable>false</markBuildUnstable>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
+              <buildSteps>
+                <hudson.tasks.Shell>
+                  <command>#!c:\cygwin\bin\bash  --login -i
+
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+
+#data = {
+#  labels: { Automation-Test: &apos;+1&apos; },
+#  message: &apos;Automation-Test OK: &apos; + ENV[&apos;BUILD_URL&apos;],
+#  notify: &apos;OWNER&apos;,
+#  tag: &apos;Automation-Test&apos;,
+#}
+
+#system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
+#       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+</command>
+                </hudson.tasks.Shell>
+              </buildSteps>
+              <scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
+              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
               <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
