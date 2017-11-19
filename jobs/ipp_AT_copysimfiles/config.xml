@@ -47,6 +47,29 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>#!/usr/bin/env ruby
+
+require &apos;json&apos;
+
+if ENV[&apos;REFSPEC&apos;].to_s =~ %r{refs/changes/\d\d/(\d+)/(\d+)$}
+  change=$1
+  ps=$2
+else
+  puts &apos;Invalid refspec&apos;
+  exit 0
+end
+
+data = {
+  message: &apos;Automation test was started: &apos; + ENV[&apos;BUILD_URL&apos;],
+  notify: &apos;NONE&apos;,
+  tag: &apos;Automation-Test&apos;,
+}
+
+system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
+       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
 REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
