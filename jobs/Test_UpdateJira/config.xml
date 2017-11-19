@@ -107,8 +107,6 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
     git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
     cd armUI
-    git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
-    git push origin $VERSION_NAME
  
     # Gathering information to UpdateVI from armUI repository too
     AuthorCommitter+=&quot; &quot;`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
