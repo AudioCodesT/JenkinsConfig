@@ -122,7 +122,7 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     # Save all UpdateVI information into the properties file
     echo RN=${RN} &gt;&gt; ../armBuild.properties
     echo VIS=${VIS} &gt;&gt; ../armBuild.properties
-    echo EMAIL=${EMAIL} &gt;&gt; ../armBuild.properties
+    echo EMAIL=yossim &gt;&gt; ../armBuild.properties
     echo PROJECT=${GERRIT_PROJECT} &gt;&gt; ../armBuild.properties
     echo DATE=${DATE} &gt;&gt; ../armBuild.properties
     echo AuthorCommitter=${AuthorCommitter} &gt;&gt; ../armBuild.properties
