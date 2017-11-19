@@ -93,12 +93,6 @@ echo VERSION_NAME=${VERSION_NAME} &gt; ../armBuild.properties
 #if this is a new release, then
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == &quot;1&quot; ]; then
-	git config --global user.name &quot;Jenkins&quot;
-	git config --global user.email devops@audiocodes.com
-    git checkout $BRANCH
-    git pull --rebase origin $BRANCH
-    git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
-    git push origin $VERSION_NAME
     
     # Gathering information to UpdateVI
     GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
