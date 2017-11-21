@@ -64,6 +64,11 @@
           <ignoreOfflineNodes>false</ignoreOfflineNodes>
           <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
         </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ImageNames</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -84,7 +89,7 @@ if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then cd  C:/IpPhoneAu
   else  cd C:/IpPhoneAutomation/ATA
 fi
 
-tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
+tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${ImageNames}.img
 </command>
     </hudson.tasks.Shell>
   </builders>
