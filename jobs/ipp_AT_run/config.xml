@@ -84,7 +84,6 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
-echo tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
 if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
   else  cd C:/IpPhoneAutomation/ATA
 fi
