@@ -75,6 +75,7 @@ while [  $countBoards -gt 0 ]; do
   echo The counter is $COUNTER
   for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep sim.tgz | cut -d&apos;&quot;&apos; -f4); do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
+    ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       COUNTER=0
       echo -- Check if $BOARD exist in z:
@@ -101,6 +102,11 @@ fi
 
 </command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesContent>ImageNames=$ImageNames</propertiesContent>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
@@ -156,6 +162,7 @@ $change,$ps
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=440
+ImageNames=$ImageNames
 
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
