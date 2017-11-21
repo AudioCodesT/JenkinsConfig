@@ -47,7 +47,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!c:\cygwin\bin\bash  --login -i
+      <command>#!c:\cygwin\bin\bash
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
@@ -57,6 +57,7 @@ REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
+echo REFTARGET=$REFTARGET &gt; properties.txt
 #net use z: /DELETE
 #net use z: &apos;\\10.59.0.87\Firmwares&apos;
 
@@ -89,7 +90,8 @@ while [  $countBoards -gt 0 ]; do
   if [ $COUNTER -eq 5 ]; then countBoards=0; fi
 done
 
-echo ImageNames=$ImageNames &gt; properties.txt
+echo ImageNames=$ImageNames &gt;&gt; properties.txt
+
 if [ $COUNTER -eq 5 ]; then
   echo files were not found ... abort
   exit 1
