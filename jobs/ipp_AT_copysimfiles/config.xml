@@ -51,7 +51,7 @@
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+#ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
@@ -72,7 +72,8 @@ while [  $countBoards -gt 0 ]; do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       echo -- Check if $BOARD exist in z:
-      ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);      
+      ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
+      echo ImageNames=$ImageNames
       if [ ! -f z:$BOARD ]; then
         echo ----      Download $BOARD to z:
         curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
