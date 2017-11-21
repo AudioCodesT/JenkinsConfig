@@ -176,15 +176,13 @@ SuiteName=basic4of4</properties>
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
-#data = {
-#  labels: { Automation-Test: &apos;-1&apos; },
-#  message: &apos;Automation-Test failed: &apos; + ENV[&apos;BUILD_URL&apos;],
-#  notify: &apos;OWNER&apos;,
-#  tag: &apos;Automation-Test&apos;,
-#}
 
-#system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
-#       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Automation-Test failed: &apos; $BUILD_URL&quot; \
+--notify OWNER \
+--labels Automation-Test=-1 \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$ps
 </command>
                 </hudson.tasks.Shell>
               </buildSteps>
@@ -200,15 +198,12 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
-#data = {
-#  labels: { Automation-Test: &apos;+1&apos; },
-#  message: &apos;Automation-Test OK: &apos; + ENV[&apos;BUILD_URL&apos;],
-#  notify: &apos;OWNER&apos;,
-#  tag: &apos;Automation-Test&apos;,
-#}
-
-#system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
-#       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Automation-Test OK: &apos; $BUILD_URL&quot; \
+--notify OWNER \
+--labels Automation-Test=1 \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$ps
 </command>
                 </hudson.tasks.Shell>
               </buildSteps>
