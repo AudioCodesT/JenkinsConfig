@@ -541,7 +541,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0cf65a6d25b6f3308</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0cf65a6d25b6f3308</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2017-11-21 16:20:43.604 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>7</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -633,7 +644,6 @@
         <string>armRunRouterTestModule</string>
         <string>armRunTopologyTest</string>
         <string>armVMFilesChange-Email</string>
-        <string>Test_UpdateJira</string>
       </jobNames>
       <jobFilters/>
       <columns>
