@@ -173,6 +173,7 @@ SuiteName=basic4of4</properties>
                 <hudson.tasks.Shell>
                   <command>#!c:\cygwin\bin\bash  --login -i
 
+change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
 ssh -p 29418 jenkins@gerrit gerrit review \
@@ -201,7 +202,7 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 --notify OWNER \
 --labels Automation-Test=1 \
 --tag &quot;&apos;Automation&apos;&quot; \
-$(echo $REFSPEC | cut -d/ -f4),$ps
+$change,$ps
 </command>
                 </hudson.tasks.Shell>
               </buildSteps>
