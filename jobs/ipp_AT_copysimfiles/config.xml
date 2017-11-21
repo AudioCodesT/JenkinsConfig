@@ -67,25 +67,22 @@ fi
 
 COUNTER=0
 countBoards=${#BoardsList[@]}
-while [  $countBoards -gt 0 ]; do 
-  echo The counter is $COUNTER
+while [  $countBoards -gt 0 ]; do
   for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep sim.tgz | cut -d&apos;&quot;&apos; -f4); do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
-    ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
-      COUNTER=0
       echo -- Check if $BOARD exist in z:
+      ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);      
       if [ ! -f z:$BOARD ]; then
         echo ----      Download $BOARD to z:
         curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
-        COUNTER=1
       else echo ----      z:$BOARD already exist.. skip the download...
       fi
       BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
       ((countBoards--))
     fi
   done
-  if [ $COUNTER -eq 0 ]; then sleep 30; fi  
+  if [ $countBoards -ne 0 ]; then sleep 30; fi  
   ((COUNTER++))
   if [ $COUNTER -eq 5 ]; then countBoards=0; fi
 done
