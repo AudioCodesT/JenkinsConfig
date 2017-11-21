@@ -51,15 +51,7 @@
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
-
-#data = {
-#  message: &apos;Automation test was started: &apos; + ENV[&apos;BUILD_URL&apos;],
-#  notify: &apos;NONE&apos;,
-#  tag: &apos;Automation-Test&apos;,
-#}
-
-#curl -kn --anyauth -X POST https://gerrit/a/changes/$change/revisions/$ps/review -d &quot;message: &apos;Automation test was started&apos;&quot; -H &apos;Content-Type: application/json&apos;
-</command>
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
@@ -135,15 +127,12 @@ fi
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
-#data = {
-#  labels: { Automation-Test: &apos;-1&apos; },
-#  message: &apos;Sim files are not ready: &apos; + ENV[&apos;BUILD_URL&apos;],
-#  notify: &apos;OWNER&apos;,
-#  tag: &apos;Automation-Test&apos;,
-#}
-
-#system(&quot;curl -kn --anyauth -X POST https://gerrit/a/changes/#{change}/revisions/#{ps}/review &quot; +
-#       &quot;-d &apos;#{data.to_json}&apos; -H &apos;Content-Type: application/json&apos;&quot;)
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Sim files are not ready: &apos; $BUILD_URL&quot; \
+--notify OWNER \
+--labels Automation-Test=-1 \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$ps
 </command>
                 </hudson.tasks.Shell>
               </buildSteps>
