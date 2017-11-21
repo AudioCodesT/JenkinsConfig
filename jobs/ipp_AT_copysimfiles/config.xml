@@ -141,7 +141,6 @@ $change,$ps
               <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
               <scriptOnlyIfFailure>true</scriptOnlyIfFailure>
               <markBuildUnstable>false</markBuildUnstable>
-              <executeOn>BOTH</executeOn>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
@@ -162,7 +161,7 @@ ImageNames=$ImageNames
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>ipp_AT_parent_test</projects>
+          <projects>ipp_AT_parent</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
