@@ -100,6 +100,7 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 ConfigName=basic1of4
 model=$MODEL
 SuiteName=basic1of4
+ImageNames=$ImageNames
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
@@ -128,7 +129,7 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 ConfigName=basic2of4
 model=$MODEL
 SuiteName=basic2of4
-</properties>
+ImageNames=$ImageNames</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
               <name>PC2RUN</name>
@@ -155,7 +156,8 @@ SuiteName=basic2of4
 GERRIT_BRANCH=$GERRIT_BRANCH
 ConfigName=basic3of4
 model=$MODEL
-SuiteName=basic3of4</properties>
+SuiteName=basic3of4
+ImageNames=$ImageNames</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
@@ -178,7 +180,8 @@ SuiteName=basic3of4</properties>
 GERRIT_BRANCH=$GERRIT_BRANCH
 ConfigName=basic4of4
 model=$MODEL
-SuiteName=basic4of4</properties>
+SuiteName=basic4of4
+ImageNames=$ImageNames</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
