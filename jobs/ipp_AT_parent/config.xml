@@ -179,7 +179,7 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;Automation-Test failed: $BUILD_URL&apos;&quot; \
 --notify OWNER \
---labels Automation-Test=-1 \
+--label Automation-Test=-1 \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$ps
 </command>
@@ -200,7 +200,7 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;Automation-Test OK: &apos; $BUILD_URL&quot; \
 --notify OWNER \
---labels Automation-Test=1 \
+--label Automation-Test=1 \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$ps
 </command>
