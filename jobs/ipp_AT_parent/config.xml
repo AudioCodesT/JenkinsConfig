@@ -65,20 +65,6 @@ type show.xml | findstr status.free./status&#xd;
 if ErrorLevel 1 Exit 1&#xd;
 </command>
     </hudson.tasks.BatchFile>
-    <hudson.tasks.Shell>
-      <command>#!c:\cygwin\bin\bash  --login -i
-
-change=`echo $REFSPEC | cut -d/ -f4`
-ps=`echo $REFSPEC | cut -d/ -f5`
-
-ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;Automation-Test failed: $BUILD_URL&apos;&quot; \
---notify OWNER \
---label Automation-Test=-1 \
---tag &quot;&apos;Automation&apos;&quot; \
-$change,$ps
-</command>
-    </hudson.tasks.Shell>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>Split session</phaseName>
       <phaseJobs>
