@@ -73,7 +73,6 @@ while [  $countBoards -gt 0 ]; do
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       echo -- Check if $BOARD exist in z:
       ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
-      echo ImageNames=$ImageNames
       if [ ! -f z:$BOARD ]; then
         echo ----      Download $BOARD to z:
         curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
