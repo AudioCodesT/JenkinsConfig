@@ -57,10 +57,8 @@ REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
-net use z: /DELETE
-net use z: &apos;\\10.59.0.87\Firmwares&apos;
-net use y: /DELETE
-net use y: &apos;\\10.59.0.87\Resources&apos;
+#net use z: /DELETE
+#net use z: &apos;\\10.59.0.87\Firmwares&apos;
 
 if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
 else BoardsList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
@@ -91,6 +89,7 @@ while [  $countBoards -gt 0 ]; do
   if [ $COUNTER -eq 5 ]; then countBoards=0; fi
 done
 
+echo ImageNames=$ImageNames &gt; properties.txt
 if [ $COUNTER -eq 5 ]; then
   echo files were not found ... abort
   exit 1
@@ -101,7 +100,7 @@ fi
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@1.92.1">
       <info>
-        <propertiesContent>ImageNames=$ImageNames</propertiesContent>
+        <propertiesFilePath>properties.txt</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
   </builders>
