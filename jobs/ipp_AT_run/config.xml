@@ -90,8 +90,6 @@ else
   cd C:/IpPhoneAutomation/ATA
 fi
 
-ls -l
-which tclsh
 pwd
 
 tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${ImageNames}.tgz
