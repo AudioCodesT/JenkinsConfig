@@ -57,7 +57,6 @@ REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
-echo REFTARGET=${REFTARGET} &gt; properties.txt
 #net use z: /DELETE
 #net use z: &apos;\\10.59.0.87\Firmwares&apos;
 
@@ -87,8 +86,7 @@ while [  $countBoards -gt 0 ]; do
 done
 
 ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
-echo ImageNames=${ImageNames} &gt;&gt; properties.txt
-echo ImageNames=${ImageNames}
+echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
 
 if [ $COUNTER -eq 5 ]; then
   echo files were not found ... abort
