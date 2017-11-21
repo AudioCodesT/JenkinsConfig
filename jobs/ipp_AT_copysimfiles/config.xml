@@ -72,7 +72,6 @@ while [  $countBoards -gt 0 ]; do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       echo -- Check if $BOARD exist in z:
-      ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
       if [ ! -f z:$BOARD ]; then
         echo ----      Download $BOARD to z:
         curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
@@ -87,8 +86,9 @@ while [  $countBoards -gt 0 ]; do
   if [ $COUNTER -eq 5 ]; then countBoards=0; fi
 done
 
+ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
 echo ImageNames=${ImageNames} &gt;&gt; properties.txt
-cat properties.txt
+echo ImageNames=${ImageNames}
 
 if [ $COUNTER -eq 5 ]; then
   echo files were not found ... abort
@@ -163,7 +163,7 @@ ImageNames=$ImageNames
 </properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>ipp_AT_parent</projects>
+          <projects>ipp_AT_parent_test</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
