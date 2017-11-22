@@ -85,7 +85,7 @@ while [  $countBoards -gt 0 ]; do
   if [ $COUNTER -eq 5 ]; then countBoards=0; fi
 done
 
-ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.tgz::&apos;);
+ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;);
 echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
 
 if [ $COUNTER -eq 5 ]; then
