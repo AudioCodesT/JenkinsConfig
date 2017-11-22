@@ -51,7 +51,7 @@
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
-#ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
