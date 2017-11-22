@@ -129,8 +129,8 @@ else if [ $GERRIT_BRANCH == &quot;3.0.1&quot; ]; then IPP_FIRST_PREV=&quot;3.0.1
 else if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.346.7&quot;
 else if [ $GERRIT_BRANCH == &quot;3.0.2&quot; ]; then IPP_FIRST_PREV=&quot;3.0.2.1&quot;
 else if [[ $GERRIT_BRANCH == &quot;3.0.4&quot; || $GERRIT_BRANCH == &quot;3.0.6&quot; ]]; then IPP_FIRST_PREV=&quot;3.0.4.1&quot;
-else if [[ $GERRIT_BRANCH == &quot;3.0.4.GA&quot; ]]; then IPP_FIRST_PREV=&quot;3.0.4.1000&quot;
-else if [[ $GERRIT_BRANCH == &quot;3.0.40&quot; ]]; then IPP_FIRST_PREV=&quot;3.0.40.1&quot;
+else if [ $GERRIT_BRANCH == &quot;3.0.4.GA&quot; ]; then IPP_FIRST_PREV=&quot;3.0.4.1000&quot;
+else if [ $GERRIT_BRANCH == &quot;3.0.40&quot; ]; then IPP_FIRST_PREV=&quot;3.0.40.1&quot;
 else if [[ $FULL_BRANCH_NAME =~ &quot;release&quot; ]];  then IPP_FIRST_PREV=$IPP_VER_PREV
 else exit 1;
 fi fi; fi; fi; fi; fi; fi
