@@ -130,11 +130,10 @@ for BOARD in $BoardsList; do
     echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
     if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
       echo ----      Download UC$BOARD_$LASTBL.img to z:
-      echo ----      Download UC$BOARD_$LASTBL.sim.tgz to z:
       curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
       curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.sim.tgz --output z:\UC${BOARD}_$LASTBL.sim.tgz
     else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
-    	 echo ----      z:/UC${BOARD}_$LASTBL.sim.tgz already exist.. skip the download...
+    	 echo ----      z:\UC${BOARD}_$LASTBL.sim.tgz already exist.. skip the download...
     fi
   else
    echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
@@ -142,7 +141,7 @@ for BOARD in $BoardsList; do
 done
 
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
-  echo tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.imgg
+  echo tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
   if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
   	else  cd C:/IpPhoneAutomation/ATA
   fi
