@@ -92,7 +92,9 @@ fi
 
 pwd
 
-#tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite -firmwareVersionMain UC${model}HD_${ImageNames}.tgz
+tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl \
+-suiteName ${RegressionType}${model}Lync_${SuiteName}.suite \
+-firmwareVersionMain UC${model}HD_${ImageNames}.img
 </command>
     </hudson.tasks.Shell>
   </builders>
