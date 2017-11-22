@@ -64,9 +64,11 @@ if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;4
 else BoardsList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
 fi
 
+BoardsList+=(${BoardsList[@]})
 COUNTER=0
-countBoards=`expr ${#BoardsList[@]} \* 2`
+countBoards=${#BoardsList[@]}
 while [  $countBoards -gt 0 ]; do
+  countBoards=${#BoardsList[@]}
   for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep  &apos;sim.tgz\|img&apos; | cut -d&apos;&quot;&apos; -f4); do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
@@ -76,7 +78,7 @@ while [  $countBoards -gt 0 ]; do
         curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
       else echo ----      z:$BOARD already exist.. skip the download...
       fi
-      BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
+      #BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
       ((countBoards--))
     fi
   done
