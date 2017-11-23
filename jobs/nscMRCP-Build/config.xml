@@ -49,10 +49,44 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+
+cd $WORKSPACE
+#
+BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+OLDTAG=`git describe --abbrev=0 --first-parent --tags origin/$BRANCH`
+DATE=`date`
+
+#calculate new tag
+# If vesion number is to be handled by Jenkins,
+# parse it from OLDTAG here.
+#
+# Define new build number
+# Note that suffix &quot;I&quot; is hard coded!!
+MAJOR=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $1}&apos;`
+MINOR=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $2}&apos;`
+POINT=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $3}&apos;`
+OLDBUILD=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $NF}&apos; | sed &apos;{s/[^0-9]//g}&apos;`
+NEWBUILD=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $NF+1}&apos; | sed &apos;{s/[^0-9]//g}&apos;`
+NEWTAG=$MAJOR.$MINOR.$POINT.$NEWBUILD&quot;I&quot;
+VERSION=$MAJOR.$MINOR.$POINT
+
+echo &quot;NEWBUILD=$NEWBUILD&quot; &gt; release.prop
+echo &quot;NEWTAG=$NEWTAG&quot; &gt;&gt; release.prop
+echo &quot;VERSION=$VERSION&quot; &gt;&gt; release.prop
+
+sed -i &quot;s/^SmartTAP=.*/SmartTAP=$NEWBUILD/g&quot; &quot;../Version.ini&quot;</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>release.prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
     <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
       <msBuildName>MSBuild v3.5 VS2008</msBuildName>
       <msBuildFile>C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\MRCP.proj</msBuildFile>
-      <cmdLineArgs>/target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\</cmdLineArgs>
+      <cmdLineArgs>/target:BuildRelease /property:BuildFolderName=mrcp_${NEWTAG};SourceRoot=C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\</cmdLineArgs>
       <buildVariablesAsProperties>false</buildVariablesAsProperties>
       <continueOnBuildFailure>false</continueOnBuildFailure>
       <unstableIfWarnings>false</unstableIfWarnings>
