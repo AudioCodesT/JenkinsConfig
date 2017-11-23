@@ -91,6 +91,22 @@ sed -i &quot;s/^SmartTAP=.*/SmartTAP=$NEWBUILD/g&quot; &quot;../Version.ini&quot
       <doNotUseChcpCommand>false</doNotUseChcpCommand>
     </hudson.plugins.msbuild.MsBuildBuilder>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
+      <configVersion>2</configVersion>
+      <pushMerge>false</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <forcePush>false</forcePush>
+      <tagsToPush>
+        <hudson.plugins.git.GitPublisher_-TagToPush>
+          <targetRepoName>origin</targetRepoName>
+          <tagName>${NEWTAG}</tagName>
+          <tagMessage>Jenkins auto tagging</tagMessage>
+          <createTag>true</createTag>
+          <updateTag>true</updateTag>
+        </hudson.plugins.git.GitPublisher_-TagToPush>
+      </tagsToPush>
+    </hudson.plugins.git.GitPublisher>
+  </publishers>
   <buildWrappers/>
 </project>
