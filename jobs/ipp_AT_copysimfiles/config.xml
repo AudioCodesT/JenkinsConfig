@@ -126,7 +126,7 @@ fi
             <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
               <buildSteps>
                 <hudson.tasks.Shell>
-                  <command>#!c:\cygwin\bin\bash  --login -i
+                  <command>#!c:\cygwin\bin\bash  --login
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
