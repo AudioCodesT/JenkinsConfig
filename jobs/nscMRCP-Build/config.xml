@@ -50,7 +50,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cd $WORKSPACE
+      <command>#!&quot;C:\Program Files\Git\git-bash.exe&quot; --login -i
+
+cd $WORKSPACE
 #
 BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 OLDTAG=`git describe --abbrev=0 --first-parent --tags origin/$BRANCH`
