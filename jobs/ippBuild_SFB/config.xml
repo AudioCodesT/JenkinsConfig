@@ -138,6 +138,7 @@ if curl -ks https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJ
 fi
 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
 #Works with the following yml file: boards2compile.yml
