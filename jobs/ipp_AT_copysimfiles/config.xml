@@ -54,7 +54,7 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH/$REFTARGET
+ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 #net use z: /DELETE
@@ -64,18 +64,20 @@ if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;4
 else BoardsList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
 fi
 
+if ! curl -ks -X GET $ARTIFACTORY | grep -q $REFTARGET; then exit 1; fi
+
 #BoardsList+=(${BoardsList[@]})
 COUNTER=0
 countBoards=`expr ${#BoardsList[@]} \* 2`
 while [  $countBoards -gt 0 ]; do
   countBoards=${#BoardsList[@]}
-  for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep  &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
+  for BOARD in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep  &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       echo -- Check if $BOARD exist in z:
       if [ ! -f z:$BOARD ]; then
         echo ----      Download $BOARD to z:
-        curl -ks -X GET ${DOWNLOAD}$BOARD --output z:$BOARD
+        curl -ks -X GET ${DOWNLOAD}/${REFTARGET}$BOARD --output z:$BOARD
       else echo ----      z:$BOARD already exist.. skip the download...
       fi
       #BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
