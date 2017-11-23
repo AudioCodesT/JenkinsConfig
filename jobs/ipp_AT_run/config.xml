@@ -86,19 +86,63 @@
 
 if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
+  cd /cygdrive/c/IpPhoneAutomation/ModifeidIterations/ATA
 else  
   cd C:/IpPhoneAutomation/ATA
+  cd /cygdrive/c/IpPhoneAutomation/ATA
 fi
 
 pwd
 
 tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl \
 -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite \
--firmwareVersionMain UC${model}HD_${ImageNames}.img
+-firmwareVersionMain UC${model}HD_${ImageNames}.img &gt; ${WORKSPACE}/SaveLog.txt
+
+grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt | cut -d: -f2
+
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+            <worstResult>
+              <name>ABORTED</name>
+              <ordinal>4</ordinal>
+              <color>ABORTED</color>
+              <completeBuild>false</completeBuild>
+            </worstResult>
+            <bestResult>
+              <name>ABORTED</name>
+              <ordinal>4</ordinal>
+              <color>ABORTED</color>
+              <completeBuild>false</completeBuild>
+            </bestResult>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
+              <buildSteps>
+                <hudson.tasks.Shell>
+                  <command>#!c:\cygwin\bin\bash  --login
+
+ID = `grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt  | cut -d: -f2`
+echo $ID
+</command>
+                </hudson.tasks.Shell>
+              </buildSteps>
+              <scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
+              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
+              <markBuildUnstable>false</markBuildUnstable>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+  </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
       <template>#${BUILD_NUMBER} ${REFSPEC}</template>
