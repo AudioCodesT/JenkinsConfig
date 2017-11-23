@@ -69,7 +69,7 @@ COUNTER=0
 countBoards=`expr ${#BoardsList[@]} \* 2`
 while [  $countBoards -gt 0 ]; do
   countBoards=${#BoardsList[@]}
-  for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep  &apos;sim.tgz\|img&apos; | cut -d&apos;&quot;&apos; -f4); do
+  for BOARD in $(curl -ks -X GET $ARTIFACTORY | grep  &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
     PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
     if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       echo -- Check if $BOARD exist in z:
