@@ -132,7 +132,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
 ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;Sim files are not ready: &apos; $BUILD_URL&quot; \
+--message &quot;&apos;Sim files are not ready: $BUILD_URL&apos;&quot; \
 --notify OWNER \
 --labels Automation-Test=-1 \
 --tag &quot;&apos;Automation&apos;&quot; \
