@@ -6,7 +6,14 @@
       <apiToken>Y6ZJRDgye6p5K/JOOIdL9aC1SSdxLcAmCGxbaR34tpEQV7WSh2DA10Lq4g4XcOmq</apiToken>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
-      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
+      <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
+        <entry>
+          <com.cloudbees.plugins.credentials.domains.Domain>
+            <specifications/>
+          </com.cloudbees.plugins.credentials.domains.Domain>
+          <java.util.concurrent.CopyOnWriteArrayList/>
+        </entry>
+      </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
     <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
       <triggers/>
@@ -48,6 +55,7 @@
         <string>CI_IPP_developers</string>
         <string># All ISRAEL</string>
         <string>Offer Remote Assistance Helpers</string>
+        <string>FTP_default</string>
         <string>Mailvision Branch Office Users</string>
         <string>Vopp</string>
         <string>Linuxusers</string>
@@ -64,7 +72,7 @@
         <string># R&amp;D Application Group</string>
         <string># IPP R&amp;D</string>
       </roles>
-      <timestamp>1509450711356</timestamp>
+      <timestamp>1511429102940</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
       <emailAddress>Yaniv.Mazliah@audiocodes.com</emailAddress>
