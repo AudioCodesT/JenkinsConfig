@@ -155,7 +155,7 @@ tclsh AtaExec.tcl -stop $ID</command>
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>#${BUILD_NUMBER} ${REFSPEC}</template>
+      <template>#${BUILD_NUMBER} ${REFSPEC} ${ConfigName}</template>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
