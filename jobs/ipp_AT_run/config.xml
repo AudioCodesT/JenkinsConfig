@@ -86,15 +86,17 @@
 
 if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
-  cd /cygdrive/c/IpPhoneAutomation/ModifeidIterations/ATA
 else
-  pwd
   cd C:/IpPhoneAutomation/ATA
   pwd
-  cd /cygdrive/c/IpPhoneAutomation/ATA
-  pwd
+  echo Cehck dir C:/IpPhoneAutomation/ATA
+  ls -l C:/IpPhoneAutomation
+  echo Try again
+  cd C:/IpPhoneAutomation/ATA
+  pwd  
 fi
 
+echo Start the ATA: ${SuiteName}
 tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl \
 -suiteName ${RegressionType}${model}Lync_${SuiteName}.suite \
 -firmwareVersionMain UC${model}HD_${ImageNames}.img &gt; ${WORKSPACE}/SaveLog.txt
