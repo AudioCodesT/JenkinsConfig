@@ -101,9 +101,15 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>NSCmrcpserver&gt;msbuild /target:BuildRelease /property:BuildFolderName=mrcp_jobtag;SourceRoot=C:\Workspaces\mediatech\mrcp\NSCmrcpserver C:\Workspaces\mediatech\mrcp\NSCmrcpserver\MRCP.proj</command>
-    </hudson.tasks.BatchFile>
+    <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
+      <msBuildName>MSBuild v3.5 VS2008</msBuildName>
+      <msBuildFile>C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\MRCP.proj</msBuildFile>
+      <cmdLineArgs>/target:BuildRelease /property:BuildFolderName=mrcp_codereview;SourceRoot=C:\jenkins\workspace\nscMRCP-Build\NSCmrcpserver\</cmdLineArgs>
+      <buildVariablesAsProperties>false</buildVariablesAsProperties>
+      <continueOnBuildFailure>false</continueOnBuildFailure>
+      <unstableIfWarnings>false</unstableIfWarnings>
+      <doNotUseChcpCommand>false</doNotUseChcpCommand>
+    </hudson.plugins.msbuild.MsBuildBuilder>
   </builders>
   <publishers/>
   <buildWrappers/>
