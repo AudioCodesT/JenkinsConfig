@@ -90,12 +90,6 @@ if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
 else
   cd C:/IpPhoneAutomation/ATA
-  pwd
-  echo Cehck dir C:/IpPhoneAutomation/ATA
-  ls -l C:/IpPhoneAutomation
-  echo Try again
-  cd C:/IpPhoneAutomation/ATA
-  pwd  
 fi
 
 echo Start the ATA: ${SuiteName}
@@ -130,17 +124,15 @@ grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt
             <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
               <buildSteps>
                 <hudson.tasks.Shell>
-                  <command>#!c:\cygwin\bin\bash  --login
+                  <command>#!c:\cygwin\bin\bash --login
 
 ID = `grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt  | cut -d: -f2`
 echo $ID
 
 if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
-  cd /cygdrive/c/IpPhoneAutomation/ModifeidIterations/ATA
 else  
   cd C:/IpPhoneAutomation/ATA
-  cd /cygdrive/c/IpPhoneAutomation/ATA
 fi
 
 tclsh AtaExec.tcl -stop $ID</command>
