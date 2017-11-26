@@ -145,6 +145,10 @@ model=$MODEL
 SuiteName=basic3of4
 ImageNames=$ImageNames</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
+              <name>PC2RUN</name>
+              <nodeLabel>ippTestAuto8</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
@@ -169,6 +173,10 @@ model=$MODEL
 SuiteName=basic4of4
 ImageNames=$ImageNames</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
+              <name>PC2RUN</name>
+              <nodeLabel>ippTestAuto8</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
