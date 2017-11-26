@@ -55,39 +55,38 @@ DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 #net use z: /DELETE
 #net use z: &apos;\\10.59.0.87\Firmwares&apos;
 
-if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then BoardsList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
-else BoardsList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
+if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then ImagesList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
+else ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
 fi
 
 echo Check $REFTARGET
 if ! curl -ks -X GET $ARTIFACTORY | grep -q $REFTARGET; then exit 1; fi
 
 echo Start copying files
-#BoardsList+=(${BoardsList[@]})
 COUNTER=0
-countBoards=${#BoardsList[@]}
-while [  $countBoards -gt 0 ]; do
-  countBoards=${#BoardsList[@]}
-  for BOARD in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep  &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
-    PRD=$(echo $BOARD | sed &apos;s:.UC::; s:_.*::&apos;);
-    if [[ &quot;${BoardsList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
-      echo -- Check if $BOARD exist in z:
-      if [ ! -f z:$BOARD ]; then
-        echo ----      Download $BOARD to z:
-        curl -ks -X GET ${DOWNLOAD}/${REFTARGET}$BOARD --output z:$BOARD
-      else echo ----      z:$BOARD already exist.. skip the download...
+countImages=${#ImagesList[@]}
+while [  $countImages -gt 0 ]; do
+  countImages=${#ImagesList[@]}
+  for Image in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep  &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
+    PRD=$(echo $Image | sed &apos;s:.UC::; s:_.*::&apos;);
+    if [[ &quot;${ImagesList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
+      TargetImage=$(echo $Image | sed &quot;s:\.\(img\|sim.tgz\)$:_${REFTARGET}.\1:&quot;)
+      echo -- Check if $TargetImage exist in z:
+      if [ ! -f z:$TargetImage ]; then
+        echo ----      Download $TargetImage to z:
+        curl -ks -X GET ${DOWNLOAD}/${REFTARGET}$Image --output z:$TargetImage
+      else echo ----      z:$TargetImage already exist.. skip the download...
       fi
-      #BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
-      if echo $BOARD | grep -q img; then ((countBoards--)); fi
+      if echo $TargetImage | grep -q img; then ((countImages--)); fi
     fi
   done
-  if [ $countBoards -ne 0 ]; then sleep 30; fi  
+  if [ $countImages -ne 0 ]; then sleep 30; fi  
   ((COUNTER++))
   echo Count $COUNTER
-  if [ $COUNTER -eq 5 ]; then countBoards=0; fi
+  if [ $COUNTER -eq 5 ]; then countImages=0; fi
 done
 
-ImageNames=$(echo $BOARD | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;);
+ImageNames=$(echo $Image | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;)_${REFTARGET};
 echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
 
 if [ $COUNTER -eq 5 ]; then
