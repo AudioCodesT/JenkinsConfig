@@ -49,16 +49,289 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#!&quot;C:\Program Files\Git\git-bash.exe&quot; -xe
+
+cd $WORKSPACE
+#
+BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+OLDTAG=`git describe --abbrev=0 --first-parent --tags origin/$BRANCH`
+DATE=`date`
+
+#calculate new tag
+# If vesion number is to be handled by Jenkins,
+# parse it from OLDTAG here.
+#
+# Define new build number
+# Note that suffix &quot;I&quot; is hard coded!!
+MAJOR=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $1}&apos;`
+MINOR=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $2}&apos;`
+POINT=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $3}&apos;`
+OLDBUILD=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $NF}&apos; | sed &apos;{s/[^0-9]//g}&apos;`
+NEWBUILD=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $NF+1}&apos; | sed &apos;{s/[^0-9]//g}&apos;`
+NEWTAG=$MAJOR.$MINOR.$POINT.$NEWBUILD
+VERSION=$MAJOR.$MINOR.$POINT
+
+echo &quot;NEWBUILD=$NEWBUILD&quot; &gt; release.prop
+echo &quot;NEWTAG=$NEWTAG&quot; &gt;&gt; release.prop
+echo &quot;VERSION=$VERSION&quot; &gt;&gt; release.prop</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.92.1">
+      <info>
+        <propertiesFilePath>release.prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>&lt;#
+    .SYNOPSIS
+    Runs the specified command in an elevated context.
+
+    .DESCRIPTION
+    Runs the specified command in an elevated context. This is useful on Windows
+    systems where the user account control is enabled. Input object and result
+    objects are serialized using XML.
+    It&apos;s important, the command does use the current user context. This means,
+    the current user needs administrative permissions on the local system.
+    If no file path or script block is specified, the current running process
+    will be run as administrator.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    Output of the invoked script block or command.
+
+    .EXAMPLE
+    PS C:\&gt; Invoke-Elevated
+    Will start the current process, e.g. PowerShell Console or ISE, in an
+    elevated session as Administrator.
+
+    .EXAMPLE
+    PS C:\&gt; Invoke-Elevated -FilePath &apos;C:\Temp\script.ps1&apos;
+    Start the script in an elevated session and return the result.
+
+    .EXAMPLE
+    PS C:\&gt; Invoke-Elevated -ScriptBlock { Get-DscLocalConfigurationManager }
+    Start the script in an elevated session and return the result.
+
+    .EXAMPLE
+    PS C:\&gt; Invoke-Elevated -ScriptBlock { param ($Path) Remove-Item -Path $Path } -ArgumentList &apos;C:\Windows\test.txt&apos;
+    Delete a file from the program files folder with elevated permission,
+    beacuse a normal user account has no permissions.
+
+    .NOTES
+    Author : Claudio Spizzi
+    License : MIT License
+
+    .LINK
+    https://github.com/claudiospizzi/SecurityFever
+#&gt;
+
+function Invoke-Elevated
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(&apos;PSShouldProcess&apos;, &apos;&apos;, Scope=&apos;Function&apos;, Target=&apos;Invoke-Elevated&apos;)]
+    [CmdletBinding(DefaultParameterSetName = &apos;None&apos;)]
+    [Alias(&apos;sudo&apos;)]
+    param
+    (
+        # The path to an executable program.
+        [Parameter(Mandatory = $true, Position = 0, ParameterSetName = &apos;FilePath&apos;)]
+        [ValidateScript({Test-Path -Path $_})]
+        [System.String]
+        $FilePath,
+
+        # The script block to execute in an elevated context.
+        [Parameter(Mandatory = $true, Position = 0, ParameterSetName = &apos;ScriptBlock&apos;)]
+        [System.Management.Automation.ScriptBlock]
+        $ScriptBlock,
+
+        # Optional argument list for the program or the script block.
+        [Parameter(Mandatory = $false, Position = 1)]
+        [System.Object[]]
+        $ArgumentList
+    )
+
+    if ($PSCmdlet.ParameterSetName -eq &apos;None&apos;)
+    {
+        # If no file path and script block was specified, just elevate the
+        # current session for interactive use. For this, use the start info
+        # object of the current process and start an elevated new one.
+        $currentProcess = Get-Process -Id $PID
+
+        $processStart = $currentProcess.StartInfo
+        $processStart.FileName         = $currentProcess.Path
+        $processStart.Verb             = &apos;RunAs&apos;
+
+        $process = New-Object -TypeName System.Diagnostics.Process
+        $process.StartInfo = $processStart
+        $process.Start() | Out-Null
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq &apos;FilePath&apos;)
+    {
+        # If a file path instead of a script block was specified, just load the
+        # file content and parse it as script block.
+        $ScriptBlock = [System.Management.Automation.ScriptBlock]::Create((Get-Content -Path $FilePath -ErrorAction Stop -Raw))
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq &apos;FilePath&apos; -or $PSCmdlet.ParameterSetName -eq &apos;ScriptBlock&apos;)
+    {
+        try
+        {
+            # To transport the parameters, script outputs and the errors, we use
+            # the CliXml object serialization and temporary files. This is
+            # necessary because the elevated process runs in an elevated context
+            $scriptBlockFile   = [System.IO.Path]::GetTempFileName() + &apos;.xml&apos;
+            $argumentListFile  = [System.IO.Path]::GetTempFileName() + &apos;.xml&apos;
+            $commandOutputFile = [System.IO.Path]::GetTempFileName() + &apos;.xml&apos;
+            $commandErrorFile  = [System.IO.Path]::GetTempFileName() + &apos;.xml&apos;
+
+            $ScriptBlock  | Export-Clixml -Path $scriptBlockFile
+            $ArgumentList | Export-Clixml -Path $argumentListFile
+
+            # Create a command string which contains all command executed in the
+            # elevated session. The wrapper of the script block is needed to
+            # pass the parameters and return all outputs objects and errors.
+            $commandString = &apos;&apos;
+            $commandString += &apos;Set-Location -Path &quot;{0}&quot;;&apos; -f $pwd.Path
+            $commandString += &apos;$scriptBlock = [System.Management.Automation.ScriptBlock]::Create((Import-Clixml -Path &quot;{0}&quot;));&apos; -f $scriptBlockFile
+            $commandString += &apos;$argumentList = [System.Object[]] (Import-Clixml -Path &quot;{0}&quot;);&apos; -f $argumentListFile
+            $commandString += &apos;$output = Invoke-Command -ScriptBlock $scriptBlock -ArgumentList $argumentList;&apos;
+            $commandString += &apos;$error | Export-Clixml -Path &quot;{0}&quot;;&apos; -f $commandErrorFile
+            $commandString += &apos;$output | Export-Clixml -Path &quot;{0}&quot;;&apos; -f $commandOutputFile
+
+            $commandEncoded = [System.Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($commandString))
+
+            $processStart = New-Object -TypeName System.Diagnostics.ProcessStartInfo -ArgumentList &apos;C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe&apos;
+            $processStart.Arguments   = &apos;-NoProfile -NonInteractive -EncodedCommand {0}&apos; -f $commandEncoded
+            $processStart.Verb        = &apos;RunAs&apos;
+            $processStart.WindowStyle = &apos;Hidden&apos;
+
+            $process = New-Object -TypeName System.Diagnostics.Process
+            $process.StartInfo = $processStart
+            $process.Start() | Out-Null
+
+            Write-Verbose &quot;Elevated powershell.exe process started with id $($process.Id).&quot;
+
+            $process.WaitForExit()
+
+            Write-Verbose &quot;Elevated powershell.exe process stopped with exit code $($process.ExitCode).&quot;
+
+            if ((Test-Path -Path $commandErrorFile))
+            {
+                Import-Clixml -Path $commandErrorFile | ForEach-Object { Write-Error $_ }
+            }
+
+            if ((Test-Path -Path $commandOutputFile))
+            {
+                Import-Clixml -Path $commandOutputFile | Write-Output
+            }
+        }
+        catch
+        {
+            throw $_
+        }
+        finally
+        {
+            if ($null -ne $process)
+            {
+                $process.Dispose()
+            }
+
+            Remove-Item -Path $scriptBlockFile   -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path $argumentListFile  -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path $commandOutputFile -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path $commandErrorFile  -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Invoke-Elevated -ScriptBlock {
+	foreach($line in Get-Content .\release.prop) {
+		if(-Not $line.startswith(&quot;#&quot;)){
+			$data = $line.split(&apos;=&apos;)
+			$var = $data[0]
+			$val = $data[1].replace(&apos;&quot;&apos;,&apos;&apos;)
+			[Environment]::SetEnvironmentVariable($var, $val, &quot;Machine&quot;)
+		}
+	}
+}</command>
+    </hudson.plugins.powershell.PowerShell>
     <hudson.plugins.msbuild.MsBuildBuilder plugin="msbuild@1.28">
       <msBuildName>MSBuild v4.0 VS2010</msBuildName>
       <msBuildFile>C:\jenkins\workspace\nscASR-Build\src\NSC_2010.proj</msBuildFile>
-      <cmdLineArgs>/target:BuildRelease;BuildInternal /property:BuildFolderName=asr_jobtag;SourceRoot=C:\jenkins\workspace\nscASR-Build\src\</cmdLineArgs>
+      <cmdLineArgs>/target:BuildRelease;BuildInternal /property:BuildFolderName=asr_${NEWTAG};SourceRoot=C:\jenkins\workspace\nscASR-Build\src\</cmdLineArgs>
       <buildVariablesAsProperties>false</buildVariablesAsProperties>
       <continueOnBuildFailure>false</continueOnBuildFailure>
       <unstableIfWarnings>false</unstableIfWarnings>
       <doNotUseChcpCommand>false</doNotUseChcpCommand>
     </hudson.plugins.msbuild.MsBuildBuilder>
+    <hudson.tasks.BatchFile>
+      <command>&quot;C:\Program Files\7-Zip\7z.exe&quot; a C:\BuildOutput\asr_%NEWTAG%.7z C:\BuildOutput\asr_%NEWTAG%</command>
+    </hudson.tasks.BatchFile>
   </builders>
-  <publishers/>
-  <buildWrappers/>
+  <publishers>
+    <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
+      <configVersion>2</configVersion>
+      <pushMerge>false</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <forcePush>false</forcePush>
+      <tagsToPush>
+        <hudson.plugins.git.GitPublisher_-TagToPush>
+          <targetRepoName>origin</targetRepoName>
+          <tagName>${NEWTAG}</tagName>
+          <tagMessage>Jenkins auto tagging</tagMessage>
+          <createTag>false</createTag>
+          <updateTag>false</updateTag>
+        </hudson.plugins.git.GitPublisher_-TagToPush>
+      </tagsToPush>
+    </hudson.plugins.git.GitPublisher>
+  </publishers>
+  <buildWrappers>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+      <details>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect>nsc-Mediatech-asr</keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </details>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+      </resolverCredentialsConfig>
+      <deployPattern>C:\BuildOutput\asr_${NEWTAG}.7z=&gt;${VERSION}/</deployPattern>
+      <resolvePattern></resolvePattern>
+      <matrixParams></matrixParams>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <multiConfProject>false</multiConfProject>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+  </buildWrappers>
 </project>
