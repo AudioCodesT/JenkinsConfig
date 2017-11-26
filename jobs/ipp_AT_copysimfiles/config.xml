@@ -65,7 +65,7 @@ if ! curl -ks -X GET $ARTIFACTORY | grep -q $REFTARGET; then exit 1; fi
 echo Start copying files
 #BoardsList+=(${BoardsList[@]})
 COUNTER=0
-countBoards=`expr ${#BoardsList[@]} \* 2`
+countBoards=${#BoardsList[@]}
 while [  $countBoards -gt 0 ]; do
   countBoards=${#BoardsList[@]}
   for BOARD in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep  &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
@@ -78,7 +78,7 @@ while [  $countBoards -gt 0 ]; do
       else echo ----      z:$BOARD already exist.. skip the download...
       fi
       #BoardsList=( &quot;${BoardsList[@]/$PRD}&quot; )
-      ((countBoards--))
+      if echo $BOARD | grep -q img; then ((countBoards--)); fi
     fi
   done
   if [ $countBoards -ne 0 ]; then sleep 30; fi  
