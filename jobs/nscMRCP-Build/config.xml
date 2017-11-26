@@ -90,6 +90,9 @@ echo &quot;NEWVERSION=$NEWVERSION&quot; &gt;&gt; release.prop</command>
       <unstableIfWarnings>false</unstableIfWarnings>
       <doNotUseChcpCommand>false</doNotUseChcpCommand>
     </hudson.plugins.msbuild.MsBuildBuilder>
+    <hudson.tasks.BatchFile>
+      <command>&quot;C:\Program Files\7-Zip\7z.exe&quot; a C:\BuildOutput\mrcp_%NEWTAG%.7z C:\BuildOutput\mrcp_%NEWTAG%</command>
+    </hudson.tasks.BatchFile>
   </builders>
   <publishers>
     <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
