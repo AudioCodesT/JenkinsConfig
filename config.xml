@@ -78,7 +78,7 @@
           <sid>CI_IPP_developers</sid>
         </assignedSIDs>
       </role>
-      <role name="CI_WEB-UI_ADMINS" pattern="(web.*)">
+      <role name="CI_NSC_ADMINS" pattern="(nsc.*)">
         <permissions>
           <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
           <permission>hudson.model.Item.Release</permission>
@@ -91,6 +91,37 @@
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
           <permission>hudson.scm.SCM.Tag</permission>
           <permission>hudson.model.Item.Configure</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs>
+          <sid>CI_NSC_admins</sid>
+        </assignedSIDs>
+      </role>
+      <role name="CI_NSC_DEVELOPERS" pattern="(nsc.*)">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs>
+          <sid>CI_NSC_developers</sid>
+        </assignedSIDs>
+      </role>
+      <role name="CI_WEB-UI_ADMINS" pattern="(web.*)">
+        <permissions>
+          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update</permission>
+          <permission>hudson.model.Item.Release</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Create</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.scm.SCM.Tag</permission>
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
@@ -107,6 +138,7 @@
         </permissions>
         <assignedSIDs>
           <sid>CI_WEB-UI_developers</sid>
+          <sid># OVOC_UI</sid>
         </assignedSIDs>
       </role>
       <role name="arm_night" pattern="(armRun.*)">
@@ -121,7 +153,24 @@
         </permissions>
         <assignedSIDs>
           <sid>gilab</sid>
+          <sid>einavl</sid>
           <sid>natalie</sid>
+        </assignedSIDs>
+      </role>
+      <role name="ipp_AT" pattern="(ipp_AT.*)">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Create</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Run.Replay</permission>
+          <permission>hudson.model.Item.Configure</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs>
+          <sid>orena</sid>
+          <sid>izikh</sid>
         </assignedSIDs>
       </role>
       <role name="ipp_sanity" pattern="(ipp_Sanity.*)">
@@ -201,6 +250,7 @@
           <sid>yuvaly</sid>
           <sid>amoss</sid>
           <sid>shukyr</sid>
+          <sid>benm</sid>
           <sid>natanm</sid>
         </assignedSIDs>
       </role>
@@ -214,13 +264,12 @@
         </assignedSIDs>
       </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@2.6">
     <domains>
       <hudson.plugins.active__directory.ActiveDirectoryDomain>
         <name>corp.audiocodes.com</name>
-        <servers>APCADSSrvs:3269</servers>
+        <servers>aclads06:3269</servers>
         <bindName>aws</bindName>
         <bindPassword>LtIaoEeo43Scvla9clarOi/9mJwKcO3oJXlEpqc71P4=</bindPassword>
       </hudson.plugins.active__directory.ActiveDirectoryDomain>
@@ -300,7 +349,7 @@
       <instanceCap>250</instanceCap>
       <templates>
         <hudson.plugins.ec2.SlaveTemplate>
-          <ami>ami-c7e929a8</ami>
+          <ami>ami-940d96fb</ami>
           <description>build slave for ARM project</description>
           <zone>eu-central-1b</zone>
           <securityGroups>Apps-Basic-SG</securityGroups>
@@ -316,7 +365,7 @@
           <remoteAdmin>centos</remoteAdmin>
           <jvmopts></jvmopts>
           <subnetId>subnet-05e4727e</subnetId>
-          <idleTerminationMinutes>-3</idleTerminationMinutes>
+          <idleTerminationMinutes>5</idleTerminationMinutes>
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
@@ -356,7 +405,7 @@
           <remoteAdmin>centos</remoteAdmin>
           <jvmopts></jvmopts>
           <subnetId>subnet-8ce472f7</subnetId>
-          <idleTerminationMinutes>-3</idleTerminationMinutes>
+          <idleTerminationMinutes>5</idleTerminationMinutes>
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
@@ -396,7 +445,7 @@
           <remoteAdmin>admin</remoteAdmin>
           <jvmopts></jvmopts>
           <subnetId>subnet-8ce472f7</subnetId>
-          <idleTerminationMinutes>-3</idleTerminationMinutes>
+          <idleTerminationMinutes>5</idleTerminationMinutes>
           <iamInstanceProfile></iamInstanceProfile>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
@@ -422,7 +471,7 @@
       </templates>
       <region>eu-central-1</region>
     </hudson.plugins.ec2.EC2Cloud>
-    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
       <pendingInstances/>
@@ -437,11 +486,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -449,11 +498,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -480,7 +529,7 @@
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
-    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-588d4297</name>
       <groupId>sig-588d4297</groupId>
       <pendingInstances/>
@@ -495,10 +544,6 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
@@ -508,6 +553,10 @@
         </entry>
         <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -538,7 +587,7 @@
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
-    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.0">
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
       <pendingInstances/>
@@ -553,9 +602,63 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+      </executorsForInstanceType>
+      <executorsForTypes>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>R42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+      </executorsForTypes>
+    </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
+      <name>sig-f061906e</name>
+      <groupId>sig-f061906e</groupId>
+      <pendingInstances/>
+      <labelString>NSC-mediatech-SpotInst</labelString>
+      <idleTerminationMinutes>10</idleTerminationMinutes>
+      <workspaceDir>c:\jenkins</workspaceDir>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>NSC-mediatech-SpotInst</hudson.model.labels.LabelAtom>
+      </labelSet>
+      <usage>EXCLUSIVE</usage>
+      <tunnel></tunnel>
+      <vmargs></vmargs>
+      <executorsForInstanceType>
         <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
@@ -565,7 +668,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -590,8 +693,54 @@
           <awsInstanceType>C42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+      </executorsForTypes>
+    </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
+      <name>sig-756f72a5</name>
+      <groupId>sig-756f72a5</groupId>
+      <pendingInstances/>
+      <labelString>Web-UI-Win-Dynamic</labelString>
+      <idleTerminationMinutes>10</idleTerminationMinutes>
+      <workspaceDir>c:\jenkins</workspaceDir>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>Web-UI-Win-Dynamic</hudson.model.labels.LabelAtom>
+      </labelSet>
+      <usage>EXCLUSIVE</usage>
+      <tunnel></tunnel>
+      <vmargs></vmargs>
+      <executorsForInstanceType>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+      </executorsForInstanceType>
+      <executorsForTypes>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>R42xlarge</awsInstanceType>
+          <awsInstanceType>M32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
@@ -658,8 +807,10 @@
         <string>ippBuild_nonLync</string>
         <string>ippBuild_nonLync_Centos7.4</string>
         <string>ippBuild_ReleaseNotes_nonLync</string>
+        <string>ipphone_NON_Lync_CppCheck</string>
         <string>ippReviewCompileIPPhone_nonLync</string>
         <string>ippReviewIPPhone_nonLync</string>
+        <string>ippVerifyCherryPick_nonLync</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -684,10 +835,12 @@
         <string>aa_ipp_build_test</string>
         <string>buildCalculator</string>
         <string>echo123</string>
+        <string>test-web-ui-on-win-slave</string>
         <string>test_armBuildArm</string>
+        <string>test_clean_artifactory</string>
         <string>test_conditional_action</string>
         <string>test_ippBuild_nonLync</string>
-        <string>test_webBuildArmUI_windows</string>
+        <string>test_matrix_clean_artifactory</string>
         <string>testCppUnitTest</string>
         <string>testDockerBuildStepPlugin</string>
         <string>testLinuxSlave</string>
@@ -714,13 +867,12 @@
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
-        <string>test_webBuildArmUI_windows</string>
-        <string>web-ui-test</string>
         <string>webBuildAcInfra</string>
-        <string>webBuildAcInfra_v0.1.91-fixes</string>
+        <string>webBuildOvoc_</string>
         <string>webBuildOvoc_7.4</string>
         <string>webBuildOvoc_7.4.1000</string>
         <string>webBuildOvoc_7.4.2000</string>
+        <string>webBuildOvoc_7.4.3000</string>
         <string>webReviewAcInfra</string>
         <string>webReviewOvoc</string>
         <string>webTagAc-polyfill</string>
@@ -777,6 +929,8 @@
         <string>ippCentos7.4-buildSIM</string>
         <string>ippCentos7.4-reviewSIM</string>
         <string>ippCentos7.4_build</string>
+        <string>ipphone_SFB_CppCheck</string>
+        <string>ippReview_CppCheck</string>
         <string>ippReview_SFB</string>
         <string>ippReviewIPPhone</string>
         <string>ippVerifyCherryPick</string>
@@ -801,9 +955,14 @@
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>Automation-Test_stop</string>
+        <string>CheckJira</string>
         <string>CheckVI</string>
+        <string>Delete-Old-Artifactory-Versions</string>
         <string>UpdateJira</string>
         <string>UpdateVI</string>
+        <string>UpdateVI-MRCP</string>
+        <string>UpdateVI_armBuildArm</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -820,15 +979,15 @@
     <listView>
       <owner class="hudson" reference="../../.."/>
       <name>IPP_Sanity</name>
-      <filterExecutors>false</filterExecutors>
-      <filterQueue>false</filterQueue>
+      <filterExecutors>true</filterExecutors>
+      <filterQueue>true</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
-        <string>ipp_AT_copysimfiles</string>
+        <string>ipp_AT_copyfiles</string>
         <string>ipp_AT_parent</string>
         <string>ipp_AT_run</string>
-        <string>ipp_AT_stop</string>
+        <string>ipp_MT_copyfiles</string>
         <string>ipp_Sanity_1</string>
         <string>ipp_Sanity_2</string>
         <string>ipp_Sanity_child</string>
@@ -837,10 +996,10 @@
         <string>ipp_Sanity_Night_Build_450</string>
         <string>ipp_Sanity_Night_Build_450_2</string>
         <string>ipp_Sanity_Night_Build_450_3</string>
+        <string>ipp_Sanity_Night_Build_Models</string>
+        <string>ipp_Sanity_Night_Non_lync_Build_Models</string>
         <string>ipp_Sanity_parallel-jobs</string>
         <string>ipp_Sanity_Pre_build_parallel-jobs</string>
-        <string>ipp_Sanity_VOH</string>
-        <string>ipp_Sanity_VOH_init</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -857,14 +1016,44 @@
     <listView>
       <owner class="hudson" reference="../../.."/>
       <name>NSC</name>
-      <filterExecutors>false</filterExecutors>
-      <filterQueue>false</filterQueue>
+      <filterExecutors>true</filterExecutors>
+      <filterQueue>true</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>nscASR-Build</string>
+        <string>nscASR-Review</string>
         <string>nscMRCP-Build</string>
         <string>nscMRCP-Review</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+    </listView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>web-ui-windows</name>
+      <filterExecutors>true</filterExecutors>
+      <filterQueue>true</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>_webBuildAcInfra-windows</string>
+        <string>_webBuildOvoc_7.4-windows</string>
+        <string>_webBuildOvoc_7.4.1000-windows</string>
+        <string>_webBuildOvoc_7.4.2000-windows</string>
+        <string>_webBuildOvoc_7.4.3000-windows</string>
+        <string>_webReviewOvoc-windows</string>
+        <string>_webTagAc-polyfill-windows</string>
+        <string>webReviewAcInfra-windows</string>
       </jobNames>
       <jobFilters/>
       <columns>
