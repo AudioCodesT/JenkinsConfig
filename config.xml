@@ -264,6 +264,7 @@
         </assignedSIDs>
       </role>
     </roleMap>
+    <roleMap type="slaveRoles"/>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@2.6">
     <domains>
@@ -271,7 +272,7 @@
         <name>corp.audiocodes.com</name>
         <servers>aclads06:3269</servers>
         <bindName>aws</bindName>
-        <bindPassword>LtIaoEeo43Scvla9clarOi/9mJwKcO3oJXlEpqc71P4=</bindPassword>
+        <bindPassword>{AQAAABAAAAAQBowxprhBrbhFHmuKWWyke7qg2IQUnzwxxViQf89m42Q=}</bindPassword>
       </hudson.plugins.active__directory.ActiveDirectoryDomain>
     </domains>
     <startTls>true</startTls>
@@ -342,9 +343,9 @@
       <name>ec2-AC_Cloud</name>
       <useInstanceProfileForCredentials>false</useInstanceProfileForCredentials>
       <accessId>AKIAIAM5BZYETBTET2CA</accessId>
-      <secretKey>mxDJ7jmlBTNDcknPB+clH88ZvFqFP6b0CRx2ef/DvcobjwbZrF32TV2JkuVOuA+ni8I9fdK6XDlGuVg2ROO/EA==</secretKey>
+      <secretKey>{AQAAABAAAAAw4fpZRcD5h4KJP2+gYXw+EuytSju5ndcwWrqXt2yVU1upVsHD/XjBK+2OCXDB/0q9onr6GQi6LinWm/Z11JuX+A==}</secretKey>
       <privateKey>
-        <privateKey>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</privateKey>
+        <privateKey>{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}</privateKey>
       </privateKey>
       <instanceCap>250</instanceCap>
       <templates>
@@ -486,15 +487,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -502,7 +499,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -544,10 +545,6 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
@@ -556,11 +553,15 @@
           <int>1</int>
         </entry>
         <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -602,15 +603,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -618,7 +615,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -660,11 +661,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -672,7 +673,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -710,11 +711,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -722,7 +723,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -751,7 +752,7 @@
   <views>
     <hudson.model.AllView>
       <owner class="hudson" reference="../../.."/>
-      <name>All</name>
+      <name>all</name>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
@@ -764,6 +765,8 @@
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>_armBuildArmWebUI-Windows</string>
+        <string>_armReviewArmWebUI-Windows</string>
         <string>armBackup</string>
         <string>armBuildArm</string>
         <string>armBuildArmWebUI</string>
@@ -922,6 +925,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>ipp-Create-Tag-SFB</string>
         <string>ipp_cppcheck_BtoE</string>
+        <string>ipp_SFB_CppCheck_fullRepo</string>
         <string>ippBuild_3.0.X_405_Lync</string>
         <string>ippBuild_ReleaseNotes_SFB</string>
         <string>ippBuild_SFB</string>
@@ -929,7 +933,6 @@
         <string>ippCentos7.4-buildSIM</string>
         <string>ippCentos7.4-reviewSIM</string>
         <string>ippCentos7.4_build</string>
-        <string>ipphone_SFB_CppCheck</string>
         <string>ippReview_CppCheck</string>
         <string>ippReview_SFB</string>
         <string>ippReviewIPPhone</string>
@@ -956,9 +959,11 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>Automation-Test_stop</string>
+        <string>Check_for_old_Spotinsts</string>
         <string>CheckJira</string>
         <string>CheckVI</string>
         <string>Delete-Old-Artifactory-Versions</string>
+        <string>ScmSyncConfiguration test job</string>
         <string>UpdateJira</string>
         <string>UpdateVI</string>
         <string>UpdateVI-MRCP</string>
@@ -985,9 +990,9 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>ipp_AT_copyfiles</string>
+        <string>ipp_AT_copyfiles_From_TAG</string>
         <string>ipp_AT_parent</string>
         <string>ipp_AT_run</string>
-        <string>ipp_MT_copyfiles</string>
         <string>ipp_Sanity_1</string>
         <string>ipp_Sanity_2</string>
         <string>ipp_Sanity_child</string>
@@ -1047,6 +1052,7 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>_webBuildAcInfra-windows</string>
+        <string>_webBuildOvoc-windows</string>
         <string>_webBuildOvoc_7.4-windows</string>
         <string>_webBuildOvoc_7.4.1000-windows</string>
         <string>_webBuildOvoc_7.4.2000-windows</string>
@@ -1068,7 +1074,7 @@
       <recurse>false</recurse>
     </listView>
   </views>
-  <primaryView>All</primaryView>
+  <primaryView>all</primaryView>
   <slaveAgentPort>45374</slaveAgentPort>
   <label></label>
   <nodeProperties/>
