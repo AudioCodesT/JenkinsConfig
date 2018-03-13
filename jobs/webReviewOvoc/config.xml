@@ -156,7 +156,6 @@ fi
 bower install --force-latest
 
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
-#if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4.3000_webpack&quot; ]]
 then grunt dist
 else npm run dist
 fi
