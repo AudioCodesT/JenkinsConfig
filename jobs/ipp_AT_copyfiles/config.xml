@@ -64,12 +64,11 @@ do
   if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
   else
     echo  Patch set: $checkPS,  change kind: $value
-    if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; (&quot;$value&quot; == &quot;REWORK&quot; || &quot;$value&quot; == &quot;TRIVIAL_REBASE&quot;) ]]; then
+    if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
       echo It is a newest patch-set... abort action
       echo -----------------------------------------
-      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation test for PS $ps, the last PS is $checkPS&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-      echo RunPhases=0 &gt;&gt; ${WORKSPACE}/properties.txt
-      exit 0;
+      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Copying files for Automation test - PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+      exit 1;
     fi
   fi
 done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)

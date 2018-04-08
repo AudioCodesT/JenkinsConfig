@@ -27,26 +27,45 @@
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BRANCH</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>master</string>
+              <string>7.8</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
           <description>provide it only when releasing to QA
 otherwise - it is a night build and there is no version name change</description>
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>BRANCH</name>
-          <description></description>
-          <defaultValue>master</defaultValue>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
           <name>RELEASE_VMS</name>
-          <description>if ==1 then it is a new release to QA:
+          <description>if ==YES then it is a new release to QA:
 1. push new tag to Arm and to Arm-UI
 2. at the end will call the following jobs: armBuildVMs, armCreateUpgradeTarball</description>
-          <defaultValue>0</defaultValue>
-        </hudson.model.StringParameterDefinition>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>NO</string>
+              <string>YES</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
     <configVersion>2</configVersion>
@@ -85,7 +104,31 @@ otherwise - it is a night build and there is no version name change</description
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#find the last tag in this branch:
+      <command># Setting jdk version for branches
+# Default version is 1.8.0_162
+jdkver=&quot;1.8.0_162&quot;
+
+# Branch 7.8 needs version 1.8.0_92
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
+	jdkver=&quot;1.8.0_92&quot;
+fi
+
+# Set Java
+sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
+jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
+echo &quot;Java version set to: $jver&quot;
+
+# Set JavaC
+sudo alternatives --set javac /usr/java/jdk&quot;$jdkver&quot;/bin/javac
+jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
+echo &quot;javac version set to: $jcver&quot;
+
+# Set JAVA_HOME
+sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
+. /etc/environment
+
+
+#find the last tag in this branch:
 LastTag=`git describe --abbrev=0 --tags origin/$BRANCH`
 if [ -z &quot;$VERSION_NAME&quot; ]; then
 majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$LastTag&quot;).$(cut -d &quot;.&quot; -f 2 &lt;&lt;&lt; &quot;$LastTag&quot;)
@@ -102,7 +145,7 @@ echo VERSION_NAME=${VERSION_NAME} &gt; ../armBuild.properties
 
 #if this is a new release, then
 #create new tag in Arm repo:
-if [ $RELEASE_VMS == &quot;1&quot; ]; then
+if [ $RELEASE_VMS == &quot;YES&quot; ]; then
 	git config --global user.name &quot;Jenkins&quot;
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
@@ -114,8 +157,15 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
     DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$VERSION_NAME`
     AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
-    RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
-    VIS=`git log $LastTag..$VERSION_NAME | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;`
+    #RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
+    #VIS=`git log $LastTag..$VERSION_NAME | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;`
+    RN=&quot;&quot;
+    while read -r hash; do 
+      subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g; s/\$//g&apos;)
+      VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;)
+      RN+=---$subject::$hash::$VI
+    done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $LastTag..$VERSION_NAME)&quot;
+
     #EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | sort -u`
     
 #create new tag in Arm UI
@@ -123,14 +173,22 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
     git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
     cd armUI
+    git checkout $BRANCH
     git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
  
     # Gathering information to UpdateVI from armUI repository too
     AuthorCommitter+=&quot; &quot;`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
-    RN+=&quot; &quot;`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
-    VIS+=&quot; &quot;`git log $LastTag..$VERSION_NAME | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;`
-    VIS=`echo $VIS |tr &quot; &quot; &quot;\n&quot; | sort -u`
+    #RN+=&quot; &quot;`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
+    #VIS+=&quot; &quot;`git log $LastTag..$VERSION_NAME | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;`
+    #VIS=`echo $VIS |tr &quot; &quot; &quot;\n&quot; | sort -u`
+    while read -r hash; do
+      if [ &quot;$hash&quot; != &quot;&quot; ]; then
+        subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g; s/\$//g&apos;)
+        VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;)
+        RN+=---$subject::$hash::$VI
+      fi
+    done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $LastTag..$VERSION_NAME)&quot;
 
     cd ${WORKSPACE}
 #need to run maven with the new version name:
@@ -138,7 +196,7 @@ if [ $RELEASE_VMS == &quot;1&quot; ]; then
     
     # Save all UpdateVI information into the properties file
     echo RN=${RN} &gt;&gt; ../armBuild.properties
-    echo VIS=${VIS} &gt;&gt; ../armBuild.properties
+    echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; ../armBuild.properties
     echo EMAIL=${EMAIL} &gt;&gt; ../armBuild.properties
     echo PROJECT=${GERRIT_PROJECT} &gt;&gt; ../armBuild.properties
     echo DATE=${DATE} &gt;&gt; ../armBuild.properties
@@ -165,7 +223,7 @@ sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
-      <command>if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-7.2.jar; fi
+      <command>if [ &quot;$BRANCH&quot; != &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$BRANCH.jar; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e TopologyManager/TopologyManagement/target/*.war ]; then cp TopologyManager/TopologyManagement/target/*.war TopologyManagement-$majorVersion.war; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.war; fi</command>
@@ -177,9 +235,9 @@ if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/
       </runCondition>
       <conditionalbuilders>
         <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-          <token>VI</token>
+          <token>VI-Jira</token>
           <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-          <job>UpdateVI</job>
+          <job>UpdateVI-Jira</job>
           <shouldNotFailBuild>true</shouldNotFailBuild>
           <pollInterval>3</pollInterval>
           <connectionRetryLimit>5</connectionRetryLimit>
@@ -188,7 +246,7 @@ if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/
           <enhancedLogging>false</enhancedLogging>
           <parameters>NEWTAG=$VERSION_NAME
 RN=$RN
-VIS=$VIS
+GERRIT_HOST=$GERRIT_HOST
 EMAIL=$EMAIL
 PROJECT=$PROJECT
 DATE=$DATE
@@ -197,7 +255,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
           <parameterList>
             <string>NEWTAG=$VERSION_NAME</string>
             <string>RN=$RN</string>
-            <string>VIS=$VIS</string>
+            <string>GERRIT_HOST=$GERRIT_HOST</string>
             <string>EMAIL=$EMAIL</string>
             <string>PROJECT=$PROJECT</string>
             <string>DATE=$DATE</string>
@@ -283,7 +341,7 @@ BRANCH=$BRANCH</properties>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
+    <hudson.tasks.Mailer plugin="mailer@1.20">
       <recipients>shuky.riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
@@ -322,7 +380,7 @@ BRANCH=$BRANCH</properties>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
       </resolverCredentialsConfig>
-      <deployPattern>common-7.2.jar=&gt;com/ac/arm/common/7.2/
+      <deployPattern>common-$BRANCH.jar=&gt;com/ac/arm/common/$BRANCH/
 common-$majorVersion.jar=&gt;com/ac/arm/common/$majorVersion/
 TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/
 RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
@@ -351,7 +409,7 @@ RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>0+bORynG3wIw/H2Vygb4uU34f5ZL7oqyWl45CHuvDOI=</value>
+          <value>{AQAAABAAAAAQuILbcU20hkNtNL+9MHHV5hHOYS84g2q/+h/hAHMg7So=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>

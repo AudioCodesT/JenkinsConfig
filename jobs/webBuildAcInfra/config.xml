@@ -17,6 +17,14 @@ send email&#xd;
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>14</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -24,6 +32,24 @@ send email&#xd;
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
     <configVersion>2</configVersion>
@@ -68,7 +94,7 @@ send email&#xd;
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
-              <pattern>master</pattern>
+              <pattern>7.4.*</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -107,7 +133,7 @@ send email&#xd;
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git checkout master
+      <command>git checkout $GERRIT_BRANCH
 git pull --rebase
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
@@ -124,6 +150,8 @@ current_version=$version
 #perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
 perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
 perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
+#per Roman request promote also the verion in package.json
+perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
 
 #4. run private-bower
 if ( ! ps -ef | grep private-bower | grep -v grep) &gt; /dev/null
@@ -134,10 +162,19 @@ fi
 #4.grunt dist
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/.bowerrc ${WORKSPACE}/
 cp ${WORKSPACE}/../TESTarmnewUIBuild_backup/node_modules ${WORKSPACE}/ -Rf
-npm install
+
+   if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
+	  then npm install
+	  else yarn install
+	  fi
+      
 cp ../index.js node_modules/karma-ie-launcher/index.js -f
 bower install --force-latest
-grunt dist
+
+ if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
+      then grunt dist --force
+      else npm run dist
+      fi
 
 #5.git add (to dist folder)
 #6.git commit (with a message such as “new version v0.0.x”)
@@ -147,6 +184,7 @@ git config --global user.email devops@audiocodes.com
 git add --all dist/
 git add bower.json
 git add build.config.js
+git add package.json
 message=&quot;automatic build a new dist and promote version to $version&quot;
 git commit -m &quot;$message&quot;
 
@@ -154,7 +192,7 @@ git commit -m &quot;$message&quot;
 git tag -a v$version -m &quot;automatic version tag&quot;
 
 #9.git push origin v0.0.x
-git push origin master
+git push origin $GERRIT_BRANCH
 git push origin v$version
 
 echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
@@ -168,7 +206,8 @@ echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
   </builders>
   <publishers>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.41.3">
-      <recipientList>Eitan.Farbiash@audiocodes.com, Erez.NejatHaim@audiocodes.com, Roman.BarAm@audiocodes.com, Rivka.Ashkenazy@audiocodes.com, Rachel.Mizrachi@audiocodes.com</recipientList>
+      <recipientList>Erez.NejatHaim@audiocodes.com, Rivka.Ashkenazy@audiocodes.com, Kfir.Gershon@audiocodes.com, Michael.Lallouz@audiocodes.com, Sara.Steinberg@audiocodes.com
+</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
@@ -213,16 +252,6 @@ https://gerrit/plugins/gitblit/summary/?r=web-ui/ac-infra.git
       <assignedLabels></assignedLabels>
       <parallelBuild>false</parallelBuild>
     </org.jenkinsci.plugins.xvfb.Xvfb>
-    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.17.1">
-      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
-        <timeoutSecondsString>180</timeoutSecondsString>
-      </strategy>
-      <operationList>
-        <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
-          <maxRestarts>3</maxRestarts>
-        </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
-      </operationList>
-    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
       <details>
         <artifactoryName>797876730@1453721585664</artifactoryName>
