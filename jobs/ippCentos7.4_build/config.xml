@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.7.1">
+<?xml version='1.1' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.12">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -10,10 +10,10 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -23,26 +23,42 @@
           <name>NEWTAG</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BUILD_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
-    <EnvInjectJobProperty plugin="envinject@1.92.1">
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <matrixOptions>
+        <throttleMatrixBuilds>true</throttleMatrixBuilds>
+        <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
+      </matrixOptions>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
       <on>true</on>
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
-      <contributors/>
     </EnvInjectJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -69,6 +85,7 @@
         <reference></reference>
         <timeout>20</timeout>
         <depth>10</depth>
+        <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
@@ -113,7 +130,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 #AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 #echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
+    <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
@@ -143,15 +160,15 @@ make auto AUTOPRD=${AUTOPRD}
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
+    <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>shuky.riechard@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+      <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
@@ -160,7 +177,7 @@ make auto AUTOPRD=${AUTOPRD}
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
-      </details>
+      </deployerDetails>
       <resolverDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -173,6 +190,7 @@ make auto AUTOPRD=${AUTOPRD}
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
         <credentials>
@@ -181,12 +199,20 @@ make auto AUTOPRD=${AUTOPRD}
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
+      <useSpecs>false</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec></spec>
+      </downloadSpec>
       <deployPattern>${WORKSPACE}/build/image/*.sim.tgz=&gt;com/ac/ipp/SFB/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 </deployPattern>
       <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>false</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
@@ -195,11 +221,16 @@ ${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/SFB/centos7.4/${IPP_MAJOR
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
       <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}  Branch:${BUILD_BRANCH} -- ${NEWTAG}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
