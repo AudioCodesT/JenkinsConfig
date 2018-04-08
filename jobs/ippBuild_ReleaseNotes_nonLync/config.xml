@@ -1,8 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>Create &quot;ReleaseNote.txt&quot; &#xd;
-activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
+activated by new TAG on nonLync_2.2.10  or  2.2.12 or 2.2.14 or 2.2.16&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -12,10 +12,18 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>10</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -25,16 +33,25 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
           <name>GERRIT_REFNAME</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_PROJECT</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -59,7 +76,7 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -74,10 +91,19 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
               <compareType>ANT</compareType>
               <pattern>refs/tags/2.2.12.*</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>refs/tags/2.2.14.*</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>refs/tags/2.2.16.*</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
+      <dynamicGerritProjects class="empty-list"/>
       <skipVote>
         <onSuccessful>false</onSuccessful>
         <onFailed>false</onFailed>
@@ -92,6 +118,7 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
       <dependencyJobsNames></dependencyJobsNames>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
       <buildStartMessage></buildStartMessage>
       <buildFailureMessage></buildFailureMessage>
       <buildSuccessfulMessage></buildSuccessfulMessage>
@@ -113,37 +140,42 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12&#xd;
     <hudson.tasks.Shell>
       <command>#IPP_VER=`grep IP_Phone_ACL_VERSION include/ipp_version.h_shipped | sed -r &apos;s/.*\s+&quot;([0-9.]+)&quot;/\1/&apos;`
 IPP_VER=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
-IPP_MAJOR_VER=`echo ${IPP_VER} | cut -d. -f1,2,3`
 
-fourth=`echo ${IPP_VER} | sed -r &apos;s/.*\.([0-9]+)/\1/&apos;`
-((fourth--))
-IPP_VER_PREV=`echo ${IPP_VER} | sed -r &quot;s/[0-9]+$/$fourth/&quot;`
+FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
+GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+if [[ $FULL_BRANCH_NAME =~ (release|feature) ]]; then
+  GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | sed -r &apos;s|.*(release\|feature/.*)|\1|&apos;`
+fi
+#we deploy to artifactory to a specific folder $IPP_MAJOR_VER
+IPP_MAJOR_VER=${GERRIT_BRANCH}
+
+IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
 IPP_FIRST_PREV=&quot;2.2.10.24&quot;;
+if [[ $FULL_BRANCH_NAME =~ (release|feature) ]];  then IPP_FIRST_PREV=$IPP_VER_PREV; fi
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
-
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; generated_ipp_version.properties
 
 AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
-RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $IPP_VER_PREV..$IPP_VER | grep -v &quot;promote version&quot; | sed s/\&quot;/\&apos;/g`
-# Old GIT version doesn&apos;t know %B option
-#VIS=`git log --pretty=format:&quot;%B&quot; $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/\[VI//; s/\].*//&apos; | sort -u`
-VIS=`git log $IPP_VER_PREV..$IPP_VER | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
+RN=&quot;&quot;
+while read -r hash; do 
+  subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
+  Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[IGS&quot; | sed &apos;s/.*\[IGS/IGS/; s/\].*//&apos;)
+  RN+=---$subject::$hash::$Jira
+done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $IPP_VER_PREV..$IPP_VER)&quot;
+
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
-echo VIS=${VIS} &gt;&gt; generated_ipp_version.properties
+echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
 echo PROJECT=${GERRIT_PROJECT} &gt;&gt; generated_ipp_version.properties
 echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
-echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; generated_ipp_version.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.properties
 
 #replace backslash with space, because it is not a valid properties file if it includes a backslash char
@@ -152,15 +184,15 @@ sed -i.bak &apos;s/\\/ /g&apos; generated_ipp_version.properties
 
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
+    <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token></token>
+      <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>UpdateVI</job>
+      <job>UpdateVI-Jira</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
       <pollInterval>3</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
@@ -169,7 +201,7 @@ sed -i.bak &apos;s/\\/ /g&apos; generated_ipp_version.properties
       <enhancedLogging>false</enhancedLogging>
       <parameters>NEWTAG=$IPP_VER
 RN=$RN
-VIS=$VIS
+GERRIT_HOST=$GERRIT_HOST
 EMAIL=$EMAIL
 PROJECT=$PROJECT
 DATE=$DATE
@@ -178,7 +210,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
       <parameterList>
         <string>NEWTAG=$IPP_VER</string>
         <string>RN=$RN</string>
-        <string>VIS=$VIS</string>
+        <string>GERRIT_HOST=$GERRIT_HOST</string>
         <string>EMAIL=$EMAIL</string>
         <string>PROJECT=$PROJECT</string>
         <string>DATE=$DATE</string>
@@ -199,25 +231,27 @@ AuthorCommitter=$AuthorCommitter</parameters>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>NEWTAG=${IPP_VER}
 BUILD_BRANCH=${GERRIT_BRANCH}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <projects>ippBuild_nonLync</projects>
           <condition>UNSTABLE_OR_BETTER</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
       </configs>
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+      <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
@@ -226,7 +260,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
           <dynamicMode>true</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
-      </details>
+      </deployerDetails>
       <resolverDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -239,6 +273,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
         <credentials>
@@ -247,10 +282,18 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
+      <useSpecs>false</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec></spec>
+      </downloadSpec>
       <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/non_lync/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
       <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
@@ -259,10 +302,15 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>${BUILD_NUMBER} - ${IPP_VER}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>
