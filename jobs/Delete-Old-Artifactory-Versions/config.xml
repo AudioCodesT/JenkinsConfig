@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>This job go over all the folders in the Artifactory and discard the old version instead of the &quot;Discard old builds&quot; plugin that deosn&apos;t work well in Matrix jobs.&#xd;
@@ -12,10 +12,10 @@ Executed periodically every night.&#xd;
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -25,6 +25,7 @@ Executed periodically every night.&#xd;
           <name>OLD</name>
           <description>Delete all Artifacts OLD of this number of days </description>
           <defaultValue>10</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -58,7 +59,7 @@ oldThan=$(date +&quot;%Y%m%d&quot; -d &quot;-$OLD days&quot;)
 User=admin:$Artifact_pass
 
 # this is a recursive function - check the last modified date, if old or equel to $oldThan than remove this folder from the Artifactory
-function EachFolder() {
+function RemoveFolder() {
   
   local Folder=$1
   # The date format is: YYYYMMDD (Y=the year, M=Month, D=Day  - Example: 8 Jan 2018 should be 20180108
@@ -73,32 +74,36 @@ function EachFolder() {
     curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*true&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
     do
       echo Execute this function again to check the following directory: ${Folder}$uri
-      EachFolder ${Folder}$uri;
+      RemoveFolder ${Folder}$uri;
     done
   fi
 }
 
 # Ececute for folders in Artifactory
 ARTIFACTORY=artifactory
-EachFolder ipp-review/nonLync
-EachFolder ipp-review/SFB
+RemoveFolder ipp-review/nonLync
+RemoveFolder ipp-review/SFB
 
 # Ececute for folders in test-Artifactory
 ARTIFACTORY=test-artifactory
-EachFolder sbc-review/com/ac/sbc/Firmware
-EachFolder sbc-review/com/ac/sbc/DRT
-EachFolder sbc-review/com/ac/sbc/user</command>
+RemoveFolder sbc-review/com/ac/sbc/Firmware
+RemoveFolder sbc-review/com/ac/sbc/DRT
+RemoveFolder sbc-review/com/ac/sbc/user
+RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.1000/latest_iso
+RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.2000/latest_iso
+RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.3000/latest_iso
+RemoveFolder ems-release/com/ac/ems/ovoc_server/7.6/latest_iso</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.20">
+    <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>shukyr,yossim</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <EnvInjectPasswordWrapper plugin="envinject@1.92.1">
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
