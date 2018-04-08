@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>This job go over all the folders in the Artifactory and discard the old version instead of the &quot;Discard old builds&quot; plugin that deosn&apos;t work well in Matrix jobs.&#xd;
+  <description>This job go over all the folders in the Artifactory and move the old version releases version to aclnas03.&#xd;
 Executed periodically every night.&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
@@ -24,7 +24,7 @@ Executed periodically every night.&#xd;
         <hudson.model.StringParameterDefinition>
           <name>OLD</name>
           <description>Delete all Artifacts OLD of this number of days </description>
-          <defaultValue>10</defaultValue>
+          <defaultValue>60</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -37,7 +37,6 @@ Executed periodically every night.&#xd;
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -48,7 +47,7 @@ Executed periodically every night.&#xd;
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <hudson.triggers.TimerTrigger>
-      <spec>H 21 * * *</spec>
+      <spec>H 22 * * *</spec>
     </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
@@ -60,7 +59,7 @@ oldThan=$(date +&quot;%Y%m%d&quot; -d &quot;-$OLD days&quot;)
 User=admin:$Artifact_pass
 
 # this is a recursive function - check the last modified date, if old or equel to $oldThan than remove this folder from the Artifactory
-function RemoveFolder() {
+function MoveFolder() {
   
   local Folder=$1
   # The date format is: YYYYMMDD (Y=the year, M=Month, D=Day  - Example: 8 Jan 2018 should be 20180108
@@ -69,31 +68,27 @@ function RemoveFolder() {
   if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
     echo Delete $Folder
     echo ---------------------
+    
+    
     curl -ks -u $User -X DELETE https://$ARTIFACTORY/$Folder
   else
     echo $Folder is not old - check its sub folders
     curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*true&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
     do
       echo Execute this function again to check the following directory: ${Folder}$uri
-      RemoveFolder ${Folder}$uri;
+      MoveFolder ${Folder}$uri;
     done
   fi
 }
 
 # Ececute for folders in Artifactory
 ARTIFACTORY=artifactory
-RemoveFolder ipp-review/nonLync
-RemoveFolder ipp-review/SFB
+MoveFolder ipp-review/nonLync
 
 # Ececute for folders in test-Artifactory
 ARTIFACTORY=test-artifactory
-RemoveFolder sbc-review/com/ac/sbc/Firmware
-RemoveFolder sbc-review/com/ac/sbc/DRT
-RemoveFolder sbc-review/com/ac/sbc/user
-RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.1000/latest_iso
-RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.2000/latest_iso
-RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.3000/latest_iso
-RemoveFolder ems-release/com/ac/ems/ovoc_server/7.6/latest_iso</command>
+MoveFolder sbc-review/com/ac/sbc/Firmware
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
