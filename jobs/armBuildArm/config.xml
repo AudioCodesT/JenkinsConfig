@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -18,10 +18,10 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -42,6 +42,7 @@
           <description>provide it only when releasing to QA
 otherwise - it is a night build and there is no version name change</description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>RELEASE_VMS</name>
@@ -67,7 +68,7 @@ otherwise - it is a night build and there is no version name change</description
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -211,12 +212,12 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
+    <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
         <propertiesFilePath>../armBuild.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>clean releaser:release -DforceRelease=parent,arm-reactor</goals>
@@ -228,7 +229,7 @@ if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Commo
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e TopologyManager/TopologyManagement/target/*.war ]; then cp TopologyManager/TopologyManagement/target/*.war TopologyManagement-$majorVersion.war; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.war; fi</command>
     </hudson.tasks.Shell>
-    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.3">
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
       <runCondition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
         <token>$RELEASE_VMS</token>
@@ -293,12 +294,13 @@ AuthorCommitter=$AuthorCommitter</parameters>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@2.0.1">
+    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.1">
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/main/java</sourcePattern>
       <inclusionPattern></inclusionPattern>
       <exclusionPattern></exclusionPattern>
+      <skipCopyOfSrcFiles>false</skipCopyOfSrcFiles>
       <minimumInstructionCoverage>0</minimumInstructionCoverage>
       <minimumBranchCoverage>0</minimumBranchCoverage>
       <minimumComplexityCoverage>0</minimumComplexityCoverage>
@@ -312,6 +314,13 @@ AuthorCommitter=$AuthorCommitter</parameters>
       <maximumMethodCoverage>0</maximumMethodCoverage>
       <maximumClassCoverage>0</maximumClassCoverage>
       <changeBuildStatus>false</changeBuildStatus>
+      <deltaInstructionCoverage>0</deltaInstructionCoverage>
+      <deltaBranchCoverage>0</deltaBranchCoverage>
+      <deltaComplexityCoverage>0</deltaComplexityCoverage>
+      <deltaLineCoverage>0</deltaLineCoverage>
+      <deltaMethodCoverage>0</deltaMethodCoverage>
+      <deltaClassCoverage>0</deltaClassCoverage>
+      <buildOverBuild>false</buildOverBuild>
     </hudson.plugins.jacoco.JacocoPublisher>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
@@ -320,18 +329,20 @@ AuthorCommitter=$AuthorCommitter</parameters>
             <token>$RELEASE_VMS</token>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                       <properties>VERSION_NAME=$VERSION_NAME
 BRANCH=$BRANCH</properties>
+                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
                   <projects>armBuildVMs, armCreateUpgradeTarball</projects>
                   <condition>SUCCESS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
+                  <triggerFromChildProjects>false</triggerFromChildProjects>
                 </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
@@ -341,15 +352,15 @@ BRANCH=$BRANCH</properties>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.20">
+    <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>shuky.riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
-      <details>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+      <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
@@ -358,7 +369,7 @@ BRANCH=$BRANCH</properties>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
-      </details>
+      </deployerDetails>
       <resolverDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -371,6 +382,7 @@ BRANCH=$BRANCH</properties>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
         <credentials>
@@ -379,14 +391,22 @@ BRANCH=$BRANCH</properties>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
+      <useSpecs>false</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec></spec>
+      </downloadSpec>
       <deployPattern>common-$BRANCH.jar=&gt;com/ac/arm/common/$BRANCH/
 common-$majorVersion.jar=&gt;com/ac/arm/common/$majorVersion/
 TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/
 RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
 </deployPattern>
       <resolvePattern></resolvePattern>
-      <matrixParams></matrixParams>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
@@ -395,15 +415,22 @@ RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@1.92.1">
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_username=armdeploy</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@1.92.1">
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -413,8 +440,10 @@ RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__${VERSION_NAME}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
