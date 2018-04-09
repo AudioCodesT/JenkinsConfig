@@ -101,6 +101,10 @@ otherwise - it is a night build and there is no version name change</description
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
+  <rootModule>
+    <groupId>com.ac.arm</groupId>
+    <artifactId>arm-reactor</artifactId>
+  </rootModule>
   <goals>clean releaser:release -DforceRelease=parent,arm-reactor</goals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
