@@ -1,5 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <maven2-moduleset plugin="maven-plugin@3.1.2">
+  <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -126,6 +127,78 @@ otherwise - it is a night build and there is no version name change</description
     </hudson.maven.reporters.MavenMailer>
   </reporters>
   <publishers>
+    <org.jfrog.hudson.ArtifactoryRedeployPublisher plugin="artifactory@2.15.1">
+      <evenIfUnstable>false</evenIfUnstable>
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect>libs-release-local</keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <deploySnapshotRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect>libs-snapshot-local</keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deploySnapshotRepository>
+        <stagingPlugin>
+          <pluginName>None</pluginName>
+          <paramMap/>
+        </stagingPlugin>
+        <userPluginKey>None</userPluginKey>
+        <userPluginParams></userPluginParams>
+      </deployerDetails>
+      <deployArtifacts>true</deployArtifacts>
+      <artifactDeploymentPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns></excludePatterns>
+      </artifactDeploymentPatterns>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <runChecks>false</runChecks>
+      <violationRecipients></violationRecipients>
+      <includePublishArtifacts>false</includePublishArtifacts>
+      <passIdentifiedDownstream>false</passIdentifiedDownstream>
+      <scopes></scopes>
+      <licenseAutoDiscovery>true</licenseAutoDiscovery>
+      <disableLicenseAutoDiscovery>false</disableLicenseAutoDiscovery>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <deploymentProperties></deploymentProperties>
+      <enableIssueTrackerIntegration>false</enableIssueTrackerIntegration>
+      <allowPromotionOfNonStagedBuilds>false</allowPromotionOfNonStagedBuilds>
+      <allowBintrayPushOfNonStageBuilds>false</allowBintrayPushOfNonStageBuilds>
+      <filterExcludedArtifactsFromBuild>true</filterExcludedArtifactsFromBuild>
+      <recordAllDependencies>false</recordAllDependencies>
+      <defaultPromotionTargetRepository></defaultPromotionTargetRepository>
+      <deployBuildInfo>true</deployBuildInfo>
+      <aggregationBuildStatus>Released</aggregationBuildStatus>
+      <aggregateBuildIssues>false</aggregateBuildIssues>
+      <blackDuckRunChecks>false</blackDuckRunChecks>
+      <blackDuckAppName></blackDuckAppName>
+      <blackDuckAppVersion></blackDuckAppVersion>
+      <blackDuckReportRecipients></blackDuckReportRecipients>
+      <blackDuckScopes></blackDuckScopes>
+      <blackDuckIncludePublishedArtifacts>false</blackDuckIncludePublishedArtifacts>
+      <autoCreateMissingComponentRequests>true</autoCreateMissingComponentRequests>
+      <autoDiscardStaleComponentRequests>true</autoDiscardStaleComponentRequests>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.ArtifactoryRedeployPublisher>
     <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
       <tasks>
         <hudson.plugins.postbuildtask.TaskProperties>
