@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -10,10 +10,18 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>20</daysToKeep>
+        <numToKeep>480</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -23,42 +31,47 @@
           <name>REFSPEC</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>ConfigName</name>
+          <name>CONFIGNAME</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>model</name>
+          <name>MODEL</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>SuiteName</name>
+          <name>SUITENAME</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>RegressionType</name>
+          <name>REGRESSIONTYPE</name>
           <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
           <defaultValue>Sanity</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.1">
+        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name>PC2RUN</name>
           <description></description>
           <allowedSlaves>
-            <string>ippSanityTest01</string>
-            <string>ippSanityTest02</string>
+            <string>ippTestAuto7</string>
             <string>ippTestAuto8</string>
           </allowedSlaves>
           <defaultSlaves>
-            <string>ippTestAuto8</string>
+            <string>ippTestAuto7</string>
           </defaultSlaves>
           <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
           <allowMultiNodeSelection>false</allowMultiNodeSelection>
@@ -67,17 +80,39 @@
           <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
         </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>ImageNames</name>
+          <name>IMAGENAMES</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>PHASE</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>1</string>
+              <string>2</string>
+              <string>3</string>
+              <string>4</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ippTestAuto8</assignedNode>
-  <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <canRoam>true</canRoam>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -85,21 +120,67 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login
-
+date
 if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
 else
   cd C:/IpPhoneAutomation/ATA
 fi
 
-echo Start the ATA: ${SuiteName}
-tclsh AtaExec.tcl -configName ${RegressionType}${model}LyncConfig_${ConfigName}.tcl \
--suiteName ${RegressionType}${model}Lync_${SuiteName}.suite \
--firmwareVersionMain UC${model}HD_${ImageNames}.img &gt; ${WORKSPACE}/SaveLog.txt
+ActiveFolder=`pwd`
+echo active folder is: $ActiveFolder
 
-grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt | cut -d: -f2
+BUILDNAME=$(echo $REFSPEC | sed &apos;s:refs/changes/../::&apos;)
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then BUILDNAME=$IMAGENAMES; fi
+echo REFSPEC=$BUILDNAME &gt; $WORKSPACE/properties.txt
 
+seconds=$(expr $(expr $PHASE - 1) \* 60)
+echo Wait before starting according the the phase number: $PHASE -- $seconds seconds
+sleep $seconds
+
+date
+
+echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
+
+set -o pipefail
+tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
+-suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
+-firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
+
+ExitCode=$?
+
+if [ &quot;$ExitCode&quot; == &quot;&quot; ]; then  ExitCode=1; fi
+
+echo http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml
+ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+echo Find $ID with the new command
+
+echo ATA was finished
+echo Exit code $ExitCode
+MESSAGE=&quot;Succeed&quot;
+if [ &quot;$ExitCode&quot; -eq 2 ]; then  MESSAGE=&quot;failed - Fatal&quot;; 
+else if [ &quot;$ExitCode&quot; -gt 0 ]; then MESSAGE=&quot;failed - Functhonality&quot;; fi; fi
+
+echo MESSAGE=${MESSAGE} &gt;&gt; $WORKSPACE/properties.txt
+echo ExitCode=$ExitCode &gt;&gt; $WORKSPACE/properties.txt
+date
+
+#ID=`grep &quot;session id:&quot; ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2 | sed -e &apos;s/ //g&apos;`
+echo Find $ID
+echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
+echo CONFIGNAME=${CONFIGNAME} ATA-${ID} &gt;&gt; $WORKSPACE/properties.txt
+cat $WORKSPACE/properties.txt
 </command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>$WORKSPACE/properties.txt</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash --login
+
+exit $ExitCode</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -121,13 +202,31 @@ grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt
             </bestResult>
           </condition>
           <publisherList>
-            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@0.17">
-              <buildSteps>
-                <hudson.tasks.Shell>
-                  <command>#!c:\cygwin\bin\bash --login
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash --login
 
-ID = `grep &quot;starting script with given session id:&quot; ${WORKSPACE}/SaveLog.txt  | cut -d: -f2`
-echo $ID
+date
+#ID=`grep &quot;session id:&quot; ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2`
+ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+
+echo Find $ID
+
+if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
 
 if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
@@ -135,10 +234,98 @@ else
   cd C:/IpPhoneAutomation/ATA
 fi
 
-tclsh AtaExec.tcl -stop $ID</command>
-                </hudson.tasks.Shell>
+echo MESSAGE=Aborted &gt;&gt; $WORKSPACE/properties.txt
+echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
+echo CONFIGNAME=${CONFIGNAME} ATA-${ID} &gt;&gt; $WORKSPACE/properties.txt
+
+echo Stop Ata $ID
+tclsh AtaExec.tcl -stop $ID
+date
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+              <buildSteps>
+                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/hudson.tasks.Shell"/>
               </buildSteps>
-              <scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
+              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
+              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
+              <markBuildUnstable>false</markBuildUnstable>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <EnvInjectBuilder plugin="envinject@2.1.5">
+                        <info>
+                          <propertiesFilePath>$WORKSPACE/properties.txt</propertiesFilePath>
+                        </info>
+                      </EnvInjectBuilder>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash --login
+
+date
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+# URL=http://10.59.1.121/index.php/providerSessionReport/generate/$ID
+if [ &quot;$PC2RUN&quot; == &quot;ippTestAuto8&quot; ]; then 
+  URL=http://10.59.1.121/index.php/providerSessionReport/generate/$ID
+else
+  URL=http://10.59.0.81/index.php/providerSessionReport/generate/$ID
+fi
+
+labelName=&quot;Automation-Test&quot;;
+if [[ &quot;$CONFIGNAME&quot; =~ &quot;sim&quot; ]]; then labelName=&quot;Automation-Test-Sim&quot;; fi
+
+echo $labelName for $SUITENAME $MESSAGE
+echo &quot;--- $labelName for $SUITENAME $MESSAGE: $URL - $BUILD_URL&quot; &gt;&gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+
+date
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+              <buildSteps>
+                <EnvInjectBuilder reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/EnvInjectBuilder"/>
+                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep[2]/buildSteps/hudson.tasks.Shell"/>
+              </buildSteps>
+              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
               <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
               <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
@@ -148,10 +335,33 @@ tclsh AtaExec.tcl -stop $ID</command>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
+      <patterns class="empty-list"/>
+      <deleteDirs>false</deleteDirs>
+      <skipWhenFailed>false</skipWhenFailed>
+      <cleanWhenSuccess>true</cleanWhenSuccess>
+      <cleanWhenUnstable>true</cleanWhenUnstable>
+      <cleanWhenFailure>true</cleanWhenFailure>
+      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+      <cleanWhenAborted>true</cleanWhenAborted>
+      <notFailBuild>false</notFailBuild>
+      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <externalDelete></externalDelete>
+    </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
-      <template>#${BUILD_NUMBER} ${REFSPEC} ${ConfigName}</template>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
+        <timeoutSecondsString>900</timeoutSecondsString>
+      </strategy>
+      <operationList>
+        <hudson.plugins.build__timeout.operations.AbortOperation/>
+      </operationList>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${REFSPEC} ${CONFIGNAME}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
     <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
