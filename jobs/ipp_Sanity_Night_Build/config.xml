@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#xd;
@@ -18,10 +18,10 @@ Should work on 10.59.1.46 - ippAuto</description>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -31,45 +31,56 @@ Should work on 10.59.1.46 - ippAuto</description>
           <name>ConfigName</name>
           <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
           <defaultValue>Sanity</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>model</name>
           <description>model :440/430/320/440/405</description>
           <defaultValue>440</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LASTBL</name>
           <description>Example: 3.0.1.53</description>
           <defaultValue>None</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
           <description></description>
-          <defaultValue>3.0.1</defaultValue>
+          <defaultValue>3.0.4.GA</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DelayTime</name>
+          <description></description>
+          <defaultValue>0</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippSanityTest01</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H 22 * * *
-</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>curl -s http://ippauto/index.php/status/show.xml &gt; show.xml&#xd;
-type show.xml&#xd;
-type show.xml | findstr status.free./status&#xd;
-if ErrorLevel 1 Exit 1&#xd;
-&#xd;
+      <command>&#xd;
 IF NOT EXIST z: ( &#xd;
   net use z: /DELETE&#xd;
   net use z: \\10.59.0.87\Firmwares&#xd;
@@ -78,21 +89,44 @@ IF NOT EXIST z: ( &#xd;
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
-if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then 
-  exit 1
+echo sleep $DelayTime
+sleep $DelayTime
+
+line=$(curl -s http://${COMPUTERNAME}/index.php/status/show.xml | tail -1)
+echo $line
+if echo $line | grep -q status.busy./status; then
+  echo &quot;&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;&quot;
+  #exit 1
+  echo Kill last build
+  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
+  for session in `echo $line | sed &apos;s:&lt;/session&gt;:\n:g&apos;`; do 
+    number=$(echo $session | sed &apos;s:.*&lt;session&gt;::&apos;)
+    if [[ &quot;$number&quot; =~ ^[0-9]+$ ]]; then
+      echo tclsh AtaExec.tcl -stop $number
+      tclsh AtaExec.tcl -stop $number
+    fi
+  done 
 fi
 
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
+echo LASTBL: $LASTBL
 if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
   LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+  echo Find: $LASTBL
 fi
-echo Find: $LASTBL
 
 if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD&quot;
-else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
+else BoardsList=&quot;450HD 445HD 440HD 430HD 405HD&quot;
 fi
+
+if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
+  echo Not find LASTBL - Exit with error
+  exit 1
+fi
+
+date
 
 for BOARD in $BoardsList; do
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
@@ -108,30 +142,22 @@ for BOARD in $BoardsList; do
   fi
 done
 
+date
+
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
   cd C:/IpPhoneAutomation/ModifeidIterations/ATA
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img
-fi</command>
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
+fi
+
+exit $?</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.1">
-      <regexpForRerun>&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;</regexpForRerun>
-      <rerunIfUnstable>false</rerunIfUnstable>
-      <rerunMatrixPart>false</rerunMatrixPart>
-      <checkRegexp>true</checkRegexp>
-      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
-      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>1800</delay>
-      </delay>
-      <maxSchedule>12</maxSchedule>
-    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-  </publishers>
+  <publishers/>
   <buildWrappers>
-    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.17.1">
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
-        <timeoutSecondsString>3600</timeoutSecondsString>
+        <timeoutSecondsString>900</timeoutSecondsString>
       </strategy>
       <operationList/>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
