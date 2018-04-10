@@ -93,7 +93,7 @@ then
     jsonFile=$(ssh -i cerdentials -p $PORT $SERVER gerrit query --format=JSON project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE --patch-sets)
     patchSetArray=( $(echo &quot;$jsonFile&quot; | jq &apos;.patchSets | length&apos;) )
     
-    jsonFileMerged=$(ssh -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE)
+    jsonFileMerged=$(ssh -i cerdentials -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE)
     MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
     
     echo &quot;the amount of PatchSets to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
