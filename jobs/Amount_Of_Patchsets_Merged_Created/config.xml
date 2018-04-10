@@ -22,13 +22,13 @@
         <hudson.model.StringParameterDefinition>
           <name>FROM_DATE</name>
           <description></description>
-          <defaultValue>2018-04-01</defaultValue>
+          <defaultValue>2018-03-01</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>TO_DATE</name>
           <description></description>
-          <defaultValue>2018-03-01</defaultValue>
+          <defaultValue>2018-04-01</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
@@ -80,17 +80,39 @@ SERVER=gerrit
 fi
 PORT=29418
 
-jsonFile=$(ssh -p $PORT $SERVER gerrit query --format=JSON project:$PROJECT_NAME before:$FROM_DATE after:$TO_DATE --patch-sets)
-patchSetArray=( $(echo &quot;$jsonFile&quot; | jq &apos;.patchSets | length&apos;) )
+TodayDate=$(date +&quot;%Y%m%d&quot;)
+fromDate=$(date -d $FROM_DATE +&quot;%Y%m%d&quot;)
+toDate=$(date -d $TO_DATE +&quot;%Y%m%d&quot;)
 
-jsonFileMerged=$(ssh -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$FROM_DATE after:$TO_DATE)
-MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
+if [ fromDate -le toDate ]
+then
 
-echo &quot;the amount of PatchSets to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
-printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot; | awk &apos;{sum+=$1};END{print sum}&apos;
+	if [ toDate -le TodayDate ]
+	then
 
-echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
-printf &apos;%s\n&apos; &quot;${MergedArray[@]}&quot; | awk &apos;{sum1+=$1};END{print sum1}&apos;
+    jsonFile=$(ssh -p $PORT $SERVER gerrit query --format=JSON project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE --patch-sets)
+    patchSetArray=( $(echo &quot;$jsonFile&quot; | jq &apos;.patchSets | length&apos;) )
+    
+    jsonFileMerged=$(ssh -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE)
+    MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
+    
+    echo &quot;the amount of PatchSets to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
+    printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot; | awk &apos;{sum+=$1};END{print sum}&apos;
+
+	echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
+	printf &apos;%s\n&apos; &quot;${MergedArray[@]}&quot; | awk &apos;{sum1+=$1};END{print sum1}&apos;
+
+	else
+	echo &quot;*************************************************&quot;
+	echo &quot;WRONG DATE  need to be smaller then Today&apos;s Date&quot;
+	echo &quot;*************************************************&quot;
+	fi
+
+else
+echo &quot;******************************************&quot;
+echo &quot;FROM_DATE need to be smaller then TO_DATE&quot;
+echo &quot;******************************************&quot;
+fi
 </command>
     </hudson.tasks.Shell>
   </builders>
