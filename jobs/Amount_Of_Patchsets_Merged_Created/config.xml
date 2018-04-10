@@ -105,7 +105,7 @@ fi
     MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
 
     #echo &quot;the amount of PatchSets to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE is &quot;
-    printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot;  |awk &apos;{sum+=$1};END{print \n&quot;\nthe amount of PatchSets to the project is &quot; sum}&apos;
+    printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot;  |awk &apos;{sum+=$1};END{print &quot;\nthe amount of PatchSets to the project is &quot; sum}&apos;
 	echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE is ${MergedArray[-1]}&quot;
 
 
