@@ -84,10 +84,10 @@ TodayDate=$(date +&quot;%Y%m%d&quot;)
 fromDate=$(date -d $FROM_DATE +&quot;%Y%m%d&quot;)
 toDate=$(date -d $TO_DATE +&quot;%Y%m%d&quot;)
 
-if [ fromDate -le toDate ]
+if [ $fromDate -le $toDate ]
 then
 
-	if [ toDate -le TodayDate ]
+	if [ $toDate -le $TodayDate ]
 	then
 
     jsonFile=$(ssh -i cerdentials -p $PORT $SERVER gerrit query --format=JSON project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE --patch-sets)
