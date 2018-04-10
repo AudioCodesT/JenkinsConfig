@@ -90,10 +90,10 @@ then
 	if [ $toDate -le $TodayDate ]
 	then
 
-    jsonFile=$(ssh  -J jenkins@gerrit:29418 -p $PORT $SERVER gerrit query  project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE --patch-sets)
+    jsonFile=$(ssh -p $PORT $SERVER gerrit query --format=JSON project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE --patch-sets)
     patchSetArray=( $(echo &quot;$jsonFile&quot; | jq &apos;.patchSets | length&apos;) )
     
-    jsonFileMerged=$(ssh -i credentials -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE)
+    jsonFileMerged=$(ssh -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$TO_DATE after:$FROM_DATE)
     MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
     
     echo &quot;the amount of PatchSets to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
