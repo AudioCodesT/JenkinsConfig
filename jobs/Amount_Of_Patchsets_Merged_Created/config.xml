@@ -93,7 +93,7 @@ then
     printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot; | awk &apos;{sum+=$1};END{print sum}&apos;
 
 	echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE are &quot;
-	printf &apos;%s\n&apos; &quot;${MergedArray[@]}&quot; | awk &apos;{sum1+=$1};END{print sum1}&apos;
+	echo ${MergedArray[-1]}
 
 	else
 	echo &quot;*************************************************&quot;
