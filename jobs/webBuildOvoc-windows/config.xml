@@ -196,7 +196,11 @@ then
       fi
       
       #rename zip file to ovoc-7.4.0.zip in order to deploy in one name to artifactory
-      mv dist/ovoc*.zip dist/ovoc-7.4.0.zip
+      if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.3000&quot; ]]
+      then mv dist/ovoc*.zip dist/ovoc-7.4.0.zip
+      # from 7.6 we use a new name:
+      else mv dist/ovoc*.zip dist/ovoc-ui.zip
+      fi
 else
 	echo &quot;******   This is not the last commit. Exit without building  ******&quot;
 fi
