@@ -90,8 +90,6 @@ then
     MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
     echo &quot;&quot;
     echo &quot;&quot;
-    echo &quot;&quot;
-    echo &quot;&quot;
     echo &quot;the amount of PatchSets to the project $PROJECT_NAME between $TO_DATE  to $FROM_DATE is &quot;
     printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot; | awk &apos;{sum+=$1};END{print sum}&apos;
 
