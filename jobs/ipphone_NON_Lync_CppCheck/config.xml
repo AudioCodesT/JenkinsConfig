@@ -153,8 +153,12 @@
         </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
-      <defaultSubject>IPPhone NON Lync full repo CPPCheck</defaultSubject>
-      <defaultContent>The Build url is $BUILD_URL</defaultContent>
+      <defaultSubject>Weekly CppCheck for IPPhone non_lync project</defaultSubject>
+      <defaultContent>Please review CppCheck reports from the last weekly run:
+$JOB_URL
+
+Regards,
+DevOps Team</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript></postsendScript>
