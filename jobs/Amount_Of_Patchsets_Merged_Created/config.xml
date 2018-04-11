@@ -40,6 +40,7 @@
               <string>IPP/non_lync</string>
               <string>TP/GWApp</string>
               <string>web-ui/ovoc</string>
+              <string>EMS/ovoc_server</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
@@ -66,7 +67,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-if [ &quot;$PROJECT_NAME&quot; == &quot;TP/GWApp&quot; ]
+if [[ &quot;$PROJECT_NAME&quot; == &quot;TP/GWApp&quot; ] | [ &quot;$PROJECT_NAME&quot; == &quot;EMS/ovoc_server&quot; ]]
 then
 SERVER=benm@test-gerrit
 else
