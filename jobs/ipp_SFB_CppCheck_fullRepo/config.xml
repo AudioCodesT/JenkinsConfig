@@ -126,7 +126,7 @@
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>Ben.Magriso@audiocodes.com , Shuky.Riechard@audiocodes.com , Natan.Merfish@audiocodes.com</recipientList>
+      <recipientList>cc:Ben.Magriso@audiocodes.com , cc:Shuky.Riechard@audiocodes.com , Natan.Merfish@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
           <email>
@@ -144,8 +144,12 @@
         </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
-      <defaultSubject>IPPhone SFB full repo CPPCheck</defaultSubject>
-      <defaultContent>The Build url is $BUILD_URL</defaultContent>
+      <defaultSubject>Weekly CppCheck for IPPhone SFB project</defaultSubject>
+      <defaultContent>Please review CppCheck reports from the last weekly run:
+$JOB_URL
+
+Regards,
+DevOps Team</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript></postsendScript>
