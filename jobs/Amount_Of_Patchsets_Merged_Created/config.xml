@@ -67,7 +67,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-if [[ &quot;$PROJECT_NAME&quot; == &quot;TP/GWApp&quot; ] | [ &quot;$PROJECT_NAME&quot; == &quot;EMS/ovoc_server&quot; ]]
+if [[ &quot;$PROJECT_NAME&quot; == &quot;TP/GWApp&quot;  || &quot;$PROJECT_NAME&quot; == &quot;EMS/ovoc_server&quot; ]]
 then
 SERVER=benm@test-gerrit
 else
