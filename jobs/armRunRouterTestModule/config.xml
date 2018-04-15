@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>run every night after the armNightSanity job @ ~4:15 AM&#xd;
@@ -29,15 +29,22 @@ armRunTopologyTest
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -62,20 +69,13 @@ armRunTopologyTest
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <jenkins.triggers.ReverseBuildTrigger>
-      <spec></spec>
-      <upstreamProjects>armNightSanity</upstreamProjects>
-      <threshold>
-        <name>FAILURE</name>
-        <ordinal>2</ordinal>
-        <color>RED</color>
-        <completeBuild>true</completeBuild>
-      </threshold>
-    </jenkins.triggers.ReverseBuildTrigger>
+    <hudson.triggers.TimerTrigger>
+      <spec>H 0 * * 1-5</spec>
+    </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>RouterTestModule/pom.xml</rootPom>
       <goals>clean install -U test -Dtest=ConfigureDevicesSettings</goals>
@@ -105,9 +105,10 @@ EOD</command>
 	expect &quot;]#&quot;
 	send &quot;mv -f conf.sql sql\r&quot;
 	expect &quot;]#&quot;
-	send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
-	expect &quot;]#&quot;
-	send &quot;mysql -u root --password=root &lt;sql/conf.sql\r&quot;
+	#send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
+	send &quot;mysql &lt;sql/armDB.sql\r&quot;
+    expect &quot;]#&quot;
+	send &quot;mysql &lt;sql/conf.sql\r&quot;
 	expect &quot;]#&quot;
 	send &quot;service tomcat start\r&quot;
 	expect &quot;]#&quot;
@@ -119,7 +120,7 @@ EOD
       <command>#wait for configurator to startup
 sleep 120</command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>RouterTestModule/pom.xml</rootPom>
       <goals>clean install -U test -Dtest=RouterModuleTest</goals>
@@ -142,17 +143,21 @@ sleep 120</command>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
+    <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>Gila.Berchayev@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <EnvInjectBuildWrapper plugin="envinject@1.92.1">
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>TERM=xterm
 </propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
