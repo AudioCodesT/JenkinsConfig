@@ -86,7 +86,7 @@ MAKE_CMD_auto_AUTOPRD_C450HD=0
 SUCCESS=SUCCESS
 FAILURE=FAILURE
 ABORTED=ABORTED
-User=benm
+
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$Password &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
