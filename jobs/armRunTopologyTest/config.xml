@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>run every night after the armRunRouterTestModule job @ ~6:15 AM&#xd;
@@ -28,15 +28,22 @@ armReleaseSanity
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -98,9 +105,10 @@ EOD</command>
 	expect &quot;]#&quot;
 	send &quot;mv -f conf.sql sql\r&quot;
 	expect &quot;]#&quot;
-	send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
+	#send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
+    send &quot;mysql &lt;sql/armDB.sql\r&quot;
 	expect &quot;]#&quot;
-	send &quot;mysql -u root --password=root &lt;sql/conf.sql\r&quot;
+	send &quot;mysql &lt;sql/conf.sql\r&quot;
 	expect &quot;]#&quot;
 	send &quot;service tomcat start\r&quot;
 	expect &quot;]#&quot;
@@ -108,13 +116,13 @@ EOD</command>
 EOD
 </command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean -U package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path} 333&quot;</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path}&quot;</goals>
@@ -130,19 +138,23 @@ EOD
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
+    <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>Natali.Elashvili Einav.Levy</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <EnvInjectBuildWrapper plugin="envinject@1.92.1">
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>TERM=xterm
 config_file_path=${WORKSPACE}/arm_topology_test/conf/arm_topology_test.conf
 logs_path=${WORKSPACE}/arm_topology_test/logs
 </propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
