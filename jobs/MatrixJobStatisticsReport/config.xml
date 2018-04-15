@@ -1,15 +1,210 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ProjectName</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>IPPhone SFB</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>JobName</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ippReview_SFB</string>
+              <string>ippBuild_SFB</string>
+              <string>ippCentos7.4-reviewSIM</string>
+              <string>ippCentos7.4-buildSIM</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>User</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.PasswordParameterDefinition>
+          <name>Password</name>
+          <description></description>
+          <defaultValue>{AQAAABAAAAAQzT0LKUtZ4rNdBQ7m6zzGh8zFgNxHiBGMCsSCtJdkvjk=}</defaultValue>
+        </hudson.model.PasswordParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>AllSuccess=0
+AllFailed=0
+apiAdress=api/json?pretty=true
+MAKE_CMD_auto_AUTOPRD_405HD=0
+MAKE_CMD_auto_AUTOPRD_430HD=0
+MAKE_CMD_auto_AUTOPRD_440HD=0
+MAKE_CMD_auto_AUTOPRD_445HD=0
+MAKE_CMD_auto_AUTOPRD_450HD=0
+MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=0
+MAKE_CMD_auto_AUTOPRD_C450HD=0
+SUCCESS=SUCCESS
+FAILURE=FAILURE
+ABORTED=ABORTED
+#The Main Job Json File (to take all the builds in the jobs)
+JobJsonFile=$(curl -s --insecure -u $User:$Password &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
+AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
+for i in `seq 0 $(($AllBuildsLength-1))`
+do
+    #The Main Job Url and the number of the build
+    FatherBuildUrl=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].url&apos;)
+    FatherBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].number&apos;)
+
+    #All The Builds of the job
+    FatherBuildUrl=${FatherBuildUrl:1}
+    FatherBuildUrl=${FatherBuildUrl%&apos;&quot;&apos;}$apiAdress
+    AllSonsBuildJsonFile=$(curl -s --insecure -u $User:$Password $FatherBuildUrl)
+    AllSonBuildsLength=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs | length&apos;)
+    #check if the Father build Failed or succuess
+    FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
+    FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess:1}
+    FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess%&apos;&quot;&apos;}
+    if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$SUCCESS&quot; ]
+    then
+        AllSuccess=$((AllSuccess+1))
+    fi
+    if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
+    then
+        AllFailedCheck=true
+        checkIfEnteredTheIf=false
+        for i in `seq 0 $(($AllSonBuildsLength-1))`
+        do
+          #The Son Build Url and the number of the build
+        SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
+        SonBuildsUrl=${SonBuildsUrl:1}
+        SonBuildsUrl=${SonBuildsUrl%&apos;&quot;&apos;}$apiAdress
+        SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
+        if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
+          then
+            SonBuildJsonFile=$(curl -s --insecure -u $User:$Password $SonBuildsUrl)
+            #check if the Son build Failed or succuess
+            SonBuildFaledOrSuccess=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.result&apos;)
+            SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess:1}
+            SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess%&apos;&quot;&apos;}
+            if [ &quot;$SonBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
+              then
+                    checkIfEnteredTheIf=true
+                    #Check Which Build Failed and count how many times failed
+                    SonBuildFullName=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.fullDisplayName&apos;)
+                    if [ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; ]
+                    then
+                      SonBuildName=${SonBuildFullName##*=}
+                      SonBuildName=${SonBuildName%,*}
+                    fi
+                    if [[ &quot;$JobName&quot; == &quot;ippCentos7.4-buildSIM&quot; || &quot;$JobName&quot; == &quot;ippCentos7.4-reviewSIM&quot; ]]
+                    then
+                      SonBuildName=$(echo $SonBuildFullName | cut -f1-1 -d&quot;,&quot;)
+                      SonBuildName=$(echo $SonBuildName | cut -f3 -d&quot; &quot;)
+                    fi
+                    if [ &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]
+                    then
+                      SonBuildName=${SonBuildFullName##*=}
+                      SonBuildName=${SonBuildName%,*}
+                      SonBuildName=$(echo $SonBuildName | cut -f1 -d&quot; &quot;)
+                    fi
+                    echo $SonBuildName
+                    if [ $SonBuildName == &quot;405HD&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_405HD=$((MAKE_CMD_auto_AUTOPRD_405HD+1))
+                    fi
+                    if [ $SonBuildName == &quot;430HD&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_430HD=$((MAKE_CMD_auto_AUTOPRD_430HD+1))
+                    fi
+                    if [ $SonBuildName == &quot;440HD&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_440HD=$((MAKE_CMD_auto_AUTOPRD_440HD+1))
+                    fi
+                    if [ $SonBuildName == &quot;445HD&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_445HD=$((MAKE_CMD_auto_AUTOPRD_445HD+1))
+                    fi
+                    if [ $SonBuildName == &quot;450HD&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_450HD=$((MAKE_CMD_auto_AUTOPRD_450HD+1))
+                    fi
+                    if [ $SonBuildName == &quot;C450HD&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD+1))
+                    fi
+                    if [ $SonBuildName == &quot;1&quot; ]
+                    then
+                      MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1+1))
+                    fi
+                else
+                   AllFailedCheck=false
+                   checkIfEnteredTheIf=true
+                fi
+          fi
+        done
+        if [[ $AllFailedCheck == &quot;true&quot; &amp;&amp; &quot;$checkIfEnteredTheIf&quot; == &quot;true&quot; ]]
+        then
+          AllFailed=$((AllFailed+1))
+        fi
+    fi
+done
+MAKE_CMD_auto_AUTOPRD_405HD=$((MAKE_CMD_auto_AUTOPRD_405HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_430HD=$((MAKE_CMD_auto_AUTOPRD_430HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_440HD=$((MAKE_CMD_auto_AUTOPRD_440HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_445HD=$((MAKE_CMD_auto_AUTOPRD_445HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_450HD=$((MAKE_CMD_auto_AUTOPRD_450HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1-$AllFailed))
+echo &quot;All builds Both Failed and Success are $AllBuildsLength&quot;
+echo &quot;All Success Builds Are $AllSuccess&quot;
+echo &quot;All Failed Builds Are $AllFailed&quot;
+echo &quot;405HD Failed $MAKE_CMD_auto_AUTOPRD_405HD&quot;
+echo &quot;430HD Failed $MAKE_CMD_auto_AUTOPRD_430HD&quot;
+echo &quot;440HD Failed $MAKE_CMD_auto_AUTOPRD_440HD&quot;
+echo &quot;445HD Failed $MAKE_CMD_auto_AUTOPRD_445HD&quot;
+echo &quot;450HD Failed $MAKE_CMD_auto_AUTOPRD_450HD&quot;
+echo &quot;C450HD Failed $MAKE_CMD_auto_AUTOPRD_C450HD&quot;
+echo &quot;450HD Log 1 Failed $MAKE_CMD_auto_AUTOPRD_450HD_LOG_1&quot;
+</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
   <buildWrappers/>
 </project>
