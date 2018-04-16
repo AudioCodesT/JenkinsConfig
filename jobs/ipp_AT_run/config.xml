@@ -107,7 +107,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -248,12 +247,6 @@ date
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-              <buildSteps>
-                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/hudson.tasks.Shell"/>
-              </buildSteps>
-              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
-              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
-              <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
@@ -321,13 +314,6 @@ date
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-              <buildSteps>
-                <EnvInjectBuilder reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/EnvInjectBuilder"/>
-                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep[2]/buildSteps/hudson.tasks.Shell"/>
-              </buildSteps>
-              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
-              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
-              <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
@@ -363,6 +349,5 @@ date
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
-    <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
   </buildWrappers>
 </project>
