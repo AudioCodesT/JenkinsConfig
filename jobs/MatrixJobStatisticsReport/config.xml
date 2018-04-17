@@ -40,24 +40,6 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>USER</name>
-          <description></description>
-          <defaultValue></defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.PasswordParameterDefinition>
-          <name>Password</name>
-          <description></description>
-          <defaultValue>{AQAAABAAAAAQtvYV08XKLADXQNULPzW1xTatW1yfrwvuqAfwSwrBvfQ=}</defaultValue>
-        </hudson.model.PasswordParameterDefinition>
-        <com.cloudbees.plugins.credentials.CredentialsParameterDefinition plugin="credentials@2.1.16">
-          <name>Cerd</name>
-          <description></description>
-          <defaultValue>8b967245-6534-4e0b-a0f2-4b8b9206f88d</defaultValue>
-          <credentialType>com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl</credentialType>
-          <required>false</required>
-        </com.cloudbees.plugins.credentials.CredentialsParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -93,12 +75,10 @@ MAKE_CMD_auto_AUTOPRD_C450HD=0
 SUCCESS=SUCCESS
 FAILURE=FAILURE
 ABORTED=ABORTED
-echo $USER
-echo &quot;$USER&quot;
-echo $Cerd
-echo &quot;$Cerd&quot;
+User=benm
+ApiToken=0820c5cd2ddda470d58baa1c2847eb37
 #The Main Job Json File (to take all the builds in the jobs)
-JobJsonFile=$(curl -s --insecure -u $USER:$Password &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
+JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
@@ -109,7 +89,7 @@ do
     #All The Builds of the job
     FatherBuildUrl=${FatherBuildUrl:1}
     FatherBuildUrl=${FatherBuildUrl%&apos;&quot;&apos;}$apiAdress
-    AllSonsBuildJsonFile=$(curl -s --insecure -u $USER:$Password $FatherBuildUrl)
+    AllSonsBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $FatherBuildUrl)
     AllSonBuildsLength=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs | length&apos;)
     #check if the Father build Failed or succuess
     FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
@@ -132,7 +112,7 @@ do
         SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
-            SonBuildJsonFile=$(curl -s --insecure -u $USER:$Password $SonBuildsUrl)
+            SonBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $SonBuildsUrl)
             #check if the Son build Failed or succuess
             SonBuildFaledOrSuccess=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.result&apos;)
             SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess:1}
@@ -204,26 +184,21 @@ MAKE_CMD_auto_AUTOPRD_430HD=$((MAKE_CMD_auto_AUTOPRD_430HD-$AllFailed))
 MAKE_CMD_auto_AUTOPRD_440HD=$((MAKE_CMD_auto_AUTOPRD_440HD-$AllFailed))
 MAKE_CMD_auto_AUTOPRD_445HD=$((MAKE_CMD_auto_AUTOPRD_445HD-$AllFailed))
 MAKE_CMD_auto_AUTOPRD_450HD=$((MAKE_CMD_auto_AUTOPRD_450HD-$AllFailed))
-
- if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
- then
-	MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD-$AllFailed))
-	MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1-$AllFailed))
- fi
+MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD-$AllFailed))
+MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1-$AllFailed))
 echo &quot;All builds Both Failed and Success are $AllBuildsLength&quot;
 echo &quot;All Success Builds Are $AllSuccess&quot;
 echo &quot;All Failed Builds Are $AllFailed&quot;
-
+ if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
+ then
+       echo &quot;C450HD Failed $MAKE_CMD_auto_AUTOPRD_C450HD&quot;
+	   echo &quot;450HD Log 1 Failed $MAKE_CMD_auto_AUTOPRD_450HD_LOG_1&quot;
+ fi
 echo &quot;405HD Failed $MAKE_CMD_auto_AUTOPRD_405HD&quot;
 echo &quot;430HD Failed $MAKE_CMD_auto_AUTOPRD_430HD&quot;
 echo &quot;440HD Failed $MAKE_CMD_auto_AUTOPRD_440HD&quot;
 echo &quot;445HD Failed $MAKE_CMD_auto_AUTOPRD_445HD&quot;
 echo &quot;450HD Failed $MAKE_CMD_auto_AUTOPRD_450HD&quot;
- if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
- then
-	echo &quot;C450HD Failed $MAKE_CMD_auto_AUTOPRD_C450HD&quot;
-	echo &quot;450HD Log 1 Failed $MAKE_CMD_auto_AUTOPRD_450HD_LOG_1&quot;
- fi
 
 </command>
     </hudson.tasks.Shell>
