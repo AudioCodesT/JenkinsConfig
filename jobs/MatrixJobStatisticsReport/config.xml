@@ -184,22 +184,26 @@ MAKE_CMD_auto_AUTOPRD_430HD=$((MAKE_CMD_auto_AUTOPRD_430HD-$AllFailed))
 MAKE_CMD_auto_AUTOPRD_440HD=$((MAKE_CMD_auto_AUTOPRD_440HD-$AllFailed))
 MAKE_CMD_auto_AUTOPRD_445HD=$((MAKE_CMD_auto_AUTOPRD_445HD-$AllFailed))
 MAKE_CMD_auto_AUTOPRD_450HD=$((MAKE_CMD_auto_AUTOPRD_450HD-$AllFailed))
-MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD-$AllFailed))
-MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1-$AllFailed))
+ if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
+ then
+	MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD-$AllFailed))
+	MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1-$AllFailed))
+ fi
+
 echo &quot;All builds Both Failed and Success are $AllBuildsLength&quot;
 echo &quot;All Success Builds Are $AllSuccess&quot;
 echo &quot;All Failed Builds Are $AllFailed&quot;
- if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
- then
-       echo &quot;C450HD Failed $MAKE_CMD_auto_AUTOPRD_C450HD&quot;
-	   echo &quot;450HD Log 1 Failed $MAKE_CMD_auto_AUTOPRD_450HD_LOG_1&quot;
- fi
+
 echo &quot;405HD Failed $MAKE_CMD_auto_AUTOPRD_405HD&quot;
 echo &quot;430HD Failed $MAKE_CMD_auto_AUTOPRD_430HD&quot;
 echo &quot;440HD Failed $MAKE_CMD_auto_AUTOPRD_440HD&quot;
 echo &quot;445HD Failed $MAKE_CMD_auto_AUTOPRD_445HD&quot;
 echo &quot;450HD Failed $MAKE_CMD_auto_AUTOPRD_450HD&quot;
-
+ if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
+ then
+       echo &quot;C450HD Failed $MAKE_CMD_auto_AUTOPRD_C450HD&quot;
+	   echo &quot;450HD Log 1 Failed $MAKE_CMD_auto_AUTOPRD_450HD_LOG_1&quot;
+ fi
 </command>
     </hudson.tasks.Shell>
   </builders>
