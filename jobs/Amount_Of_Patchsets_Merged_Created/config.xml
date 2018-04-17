@@ -107,7 +107,7 @@ fi
 	
     #print how many times patchset and merges happend
     printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot;  |awk &apos;{sum+=$1};END{print &quot;the amount of PatchSets to the project is &quot; sum}&apos;
-	echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $beforeDate  to $afterDate is ${MergedArray[-1]}&quot;
+	echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $BEFORE_DATE  to $AFTER_DATE is ${MergedArray[-1]}&quot;
 
 
 
