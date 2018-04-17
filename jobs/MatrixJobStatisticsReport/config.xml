@@ -95,8 +95,10 @@ FAILURE=FAILURE
 ABORTED=ABORTED
 echo $USER
 echo &quot;$USER&quot;
+echo $Cerd
+echo &quot;$Cerd&quot;
 #The Main Job Json File (to take all the builds in the jobs)
-JobJsonFile=$(curl -s --insecure -u $USER:$Password &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
+JobJsonFile=$(curl -s --insecure -u $Cerd &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
