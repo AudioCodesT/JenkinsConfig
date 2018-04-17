@@ -77,9 +77,14 @@ FAILURE=FAILURE
 ABORTED=ABORTED
 User=benm
 ApiToken=0820c5cd2ddda470d58baa1c2847eb37
+
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
+#check first and last builds number its will check
+LastBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[0].number&apos;)
+FirstBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$(($AllBuildsLength-1))&apos;].number&apos;)
+
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
     #The Main Job Url and the number of the build
