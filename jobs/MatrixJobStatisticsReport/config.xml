@@ -109,7 +109,7 @@ do
     #All The Builds of the job
     FatherBuildUrl=${FatherBuildUrl:1}
     FatherBuildUrl=${FatherBuildUrl%&apos;&quot;&apos;}$apiAdress
-    AllSonsBuildJsonFile=$(curl -s --insecure -u $User:$Password $FatherBuildUrl)
+    AllSonsBuildJsonFile=$(curl -s --insecure -u $USER:$Password $FatherBuildUrl)
     AllSonBuildsLength=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs | length&apos;)
     #check if the Father build Failed or succuess
     FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
@@ -132,7 +132,7 @@ do
         SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
-            SonBuildJsonFile=$(curl -s --insecure -u $User:$Password $SonBuildsUrl)
+            SonBuildJsonFile=$(curl -s --insecure -u $USER:$Password $SonBuildsUrl)
             #check if the Son build Failed or succuess
             SonBuildFaledOrSuccess=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.result&apos;)
             SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess:1}
