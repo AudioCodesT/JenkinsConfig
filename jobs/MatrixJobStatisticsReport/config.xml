@@ -215,7 +215,7 @@ echo &quot;450HD Failed $MAKE_CMD_auto_AUTOPRD_450HD times&quot;
   <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${JobName}</template>
+      <template>#${BUILD_NUMBER}${JobName}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
