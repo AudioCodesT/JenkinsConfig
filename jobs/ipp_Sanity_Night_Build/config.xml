@@ -67,7 +67,6 @@ Should work on 10.59.1.46 - ippAuto</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -153,7 +152,55 @@ fi
 exit $?</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+      <config>
+        <scriptFiles/>
+        <groovyScripts/>
+        <buildSteps>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>SUCCESS</string>
+              <string>NOT_BUILT</string>
+              <string>ABORTED</string>
+              <string>FAILURE</string>
+              <string>UNSTABLE</string>
+            </results>
+            <role>BOTH</role>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>#!c:\cygwin\bin\bash --login
+
+date
+#ID=`grep &quot;session id:&quot; ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2`
+ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+
+echo Find $ID
+
+if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
+
+if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
+  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
+else  
+  cd C:/IpPhoneAutomation/ATA
+fi
+
+echo MESSAGE=Aborted &gt;&gt; $WORKSPACE/properties.txt
+echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
+echo CONFIGNAME=${CONFIGNAME} ATA-${ID} &gt;&gt; $WORKSPACE/properties.txt
+
+echo Stop Ata $ID
+tclsh AtaExec.tcl -stop $ID
+date
+</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+        </buildSteps>
+        <markBuildUnstable>false</markBuildUnstable>
+      </config>
+    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
