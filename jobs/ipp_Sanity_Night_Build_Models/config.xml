@@ -40,12 +40,13 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -190,6 +191,9 @@ DelayTime=180</properties>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+    <hudson.tasks.BatchFile>
+      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all</command>
+    </hudson.tasks.BatchFile>
   </builders>
   <publishers>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
