@@ -47,7 +47,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -100,7 +99,7 @@ echo LASTBL=${LASTBL} &gt; ${WORKSPACE}/Sanity.prop
       <phaseName>440</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_Night_Build_OLD</jobName>
+          <jobName>ipp_Sanity_Night_Build</jobName>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -133,7 +132,7 @@ DelayTime=0</properties>
       <phaseName>450</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_Night_Build_OLD</jobName>
+          <jobName>ipp_Sanity_Night_Build</jobName>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -166,7 +165,7 @@ DelayTime=180</properties>
       <phaseName>405</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_Night_Build_OLD</jobName>
+          <jobName>ipp_Sanity_Night_Build</jobName>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
