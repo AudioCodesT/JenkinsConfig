@@ -37,6 +37,8 @@ armRunTopologyTest
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -68,11 +70,7 @@ armRunTopologyTest
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H 0 * * 1-5</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
