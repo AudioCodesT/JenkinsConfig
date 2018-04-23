@@ -62,6 +62,9 @@
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.BatchFile>
+      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all</command>
+    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
@@ -191,9 +194,6 @@ DelayTime=180</properties>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-    <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all</command>
-    </hudson.tasks.BatchFile>
   </builders>
   <publishers>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
