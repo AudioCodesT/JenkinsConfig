@@ -226,9 +226,14 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
 
 
 # Run Sputnik pmd
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
+
 cd ${WORKSPACE}/..
 rm -rf tools
-git clone -n ssh://gerrit/devops/tools
+git clone -n https://gerrit/devops/tools
 
 git checkout -f origin/master -- sputnik/gerrit/arm-pdm.properties
 
