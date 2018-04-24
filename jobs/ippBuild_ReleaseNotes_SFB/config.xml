@@ -137,6 +137,12 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
 IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
 
 FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
+
+if [[ $FULL_BRANCH_NAME == &quot;&quot; ]]; then 
+  echo Branch name not found...   exit with error; 
+  exit 1  
+fi
+
 GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 if [[ $FULL_BRANCH_NAME =~ (release|feature) ]]; then
   GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | sed -r &apos;s|.*(release\|feature/.*)|\1|&apos;`
