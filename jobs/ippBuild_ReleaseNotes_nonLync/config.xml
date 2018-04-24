@@ -44,6 +44,8 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12 or 2.2.14 or 2.2.16&#xd;
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -142,6 +144,11 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12 or 2.2.14 or 2.2.16&#xd;
 IPP_VER=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
 
 FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
+if [[ $FULL_BRANCH_NAME == &quot;&quot; ]]; then 
+  echo Branch name not found...   exit with error; 
+  exit 1  
+fi
+
 GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 if [[ $FULL_BRANCH_NAME =~ (release|feature) ]]; then
   GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | sed -r &apos;s|.*(release\|feature/.*)|\1|&apos;`
@@ -231,6 +238,11 @@ AuthorCommitter=$AuthorCommitter</parameters>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>shukyr yossim</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
