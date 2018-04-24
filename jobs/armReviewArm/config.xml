@@ -220,8 +220,28 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
   </prebuilders>
   <postbuilders>
     <hudson.tasks.Shell>
-      <command>/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*** sputnik failed but exit 0 ***&quot; &amp;&amp; exit 0; }
-echo &quot;exit 0 workaround&quot;</command>
+      <command>######### OLD Sputnik #############
+#/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*** sputnik failed but exit 0 ***&quot; &amp;&amp; exit 0; }
+#echo &quot;exit 0 workaround&quot;
+
+
+# Run Sputnik pmd
+cd ${WORKSPACE}/..
+rm -rf tools
+git clone -n ssh://gerrit/devops/tools
+
+git checkout -f origin/master -- sputnik/gerrit/arm-pdm.properties
+
+cp sputnik/gerrit/arm-pdm.properties ${WORKSPACE}/
+
+cd ${WORKSPACE}
+
+## Run Sputnik
+cat arm-pdm.properties
+/opt/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pdm.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }
+
+
+</command>
     </hudson.tasks.Shell>
   </postbuilders>
   <runPostStepsIfResult>
