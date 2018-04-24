@@ -77,7 +77,10 @@ FAILURE=FAILURE
 ABORTED=ABORTED
 User=benm
 ApiToken=0820c5cd2ddda470d58baa1c2847eb37
-
+lengthOfChilds=0
+CountEnteredTheIf=0
+arrBranchesIndex=0
+countHowManyBuilds=0
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
@@ -85,8 +88,10 @@ AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos
 LastBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[0].number&apos;)
 FirstBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$(($AllBuildsLength-1))&apos;].number&apos;)
 
+
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
+    echo $i
     #The Main Job Url and the number of the build
     FatherBuildUrl=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].url&apos;)
     FatherBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].number&apos;)
@@ -100,16 +105,55 @@ do
     FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
     FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess:1}
     FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess%&apos;&quot;&apos;}
+
+    #Get Gerrit Branch
+    GerritBranch=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.actions[5].parameters[2].value&apos;)
+    GerritBranch=${GerritBranch:1}
+    GerritBranch=${GerritBranch%&apos;&quot;&apos;}
+    #Replace &apos;.&apos; and &apos;/&apos; with &apos;_&apos;
+    GerritBranchNoPoints=$(echo $GerritBranch | tr &apos;.&apos; &apos;_&apos; | tr &apos;/&apos; &apos;_&apos;)
+
+    #check if the length of spesific branch is empty, get the length of this branch sons
+    tempLength=&quot;lengthOfChilds_${GerritBranchNoPoints}&quot;
+    if [ -z ${!tempLength} ]
+    then
+
+
+        declare lengthOfChilds_$GerritBranchNoPoints=0
+        for i in `seq 0 $(($AllSonBuildsLength-1))`
+        do
+            SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
+          if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
+            then
+                declare lengthOfChilds_$GerritBranchNoPoints=$((lengthOfChilds_$GerritBranchNoPoints+1))
+            fi
+        done
+        branchesArr[$arrBranchesIndex]=$GerritBranchNoPoints
+        lengthBranchesArr[$arrBranchesIndex]=${!tempLength}
+        declare AllFailed_$GerritBranchNoPoints=0
+        declare AllSuccess_$GerritBranchNoPoints=0
+        arrBranchesIndex=$(($arrBranchesIndex+1))
+        #declare all the Childs The Father Have
+        for i in `seq 0 $((${!tempLength}-1))`
+        do
+          declare child_${i}_$GerritBranchNoPoints=&quot;&quot;
+          declare CountSonFailed_${i}_$GerritBranchNoPoints=0
+        done
+    fi
+
+      #index for the dynamic childs name
+      indexOfDynamicChilds=0
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$SUCCESS&quot; ]
     then
-        AllSuccess=$((AllSuccess+1))
+        declare AllSuccess_$GerritBranchNoPoints=$((AllSuccess_$GerritBranchNoPoints+1))
     fi
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
     then
-        AllFailedCheck=true
-        checkIfEnteredTheIf=false
+        CountEnteredTheIf=0
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
+          echo $i
+
           #The Son Build Url and the number of the build
         SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
         SonBuildsUrl=${SonBuildsUrl:1}
@@ -118,97 +162,82 @@ do
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
             SonBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $SonBuildsUrl)
+
+            #check Childs Names
+            SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
+            SonBuildUrlName=${SonBuildUrlName%,*}
+
+
+
+            echo $SonBuildUrlName
+            tempChild=&quot;child_${indexOfDynamicChilds}_$GerritBranchNoPoints&quot;
+            if [ -z &quot;${!tempChild}&quot; ]
+            then
+                declare child_${indexOfDynamicChilds}_$GerritBranchNoPoints=$SonBuildUrlName
+            fi
+            indexOfDynamicChilds=$((indexOfDynamicChilds+1))
+
             #check if the Son build Failed or succuess
             SonBuildFaledOrSuccess=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.result&apos;)
             SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess:1}
             SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess%&apos;&quot;&apos;}
             if [ &quot;$SonBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
               then
-                    checkIfEnteredTheIf=true
+                    CountEnteredTheIf=$((CountEnteredTheIf+1))
                     #Check Which Build Failed and count how many times failed
-                    SonBuildFullName=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.fullDisplayName&apos;)
-                    if [ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; ]
-                    then
-                      SonBuildName=${SonBuildFullName##*=}
-                      SonBuildName=${SonBuildName%,*}
-                    fi
-                    if [[ &quot;$JobName&quot; == &quot;ippCentos7.4-buildSIM&quot; || &quot;$JobName&quot; == &quot;ippCentos7.4-reviewSIM&quot; ]]
-                    then
-                      SonBuildName=$(echo $SonBuildFullName | cut -f1-1 -d&quot;,&quot;)
-                      SonBuildName=$(echo $SonBuildName | cut -f3 -d&quot; &quot;)
-                    fi
-                    if [ &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]
-                    then
-                      SonBuildName=${SonBuildFullName##*=}
-                      SonBuildName=${SonBuildName%,*}
-                      SonBuildName=$(echo $SonBuildName | cut -f1 -d&quot; &quot;)
-                    fi
-                    echo $SonBuildName
-                    if [ $SonBuildName == &quot;405HD&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_405HD=$((MAKE_CMD_auto_AUTOPRD_405HD+1))
-                    fi
-                    if [ $SonBuildName == &quot;430HD&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_430HD=$((MAKE_CMD_auto_AUTOPRD_430HD+1))
-                    fi
-                    if [ $SonBuildName == &quot;440HD&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_440HD=$((MAKE_CMD_auto_AUTOPRD_440HD+1))
-                    fi
-                    if [ $SonBuildName == &quot;445HD&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_445HD=$((MAKE_CMD_auto_AUTOPRD_445HD+1))
-                    fi
-                    if [ $SonBuildName == &quot;450HD&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_450HD=$((MAKE_CMD_auto_AUTOPRD_450HD+1))
-                    fi
-                    if [ $SonBuildName == &quot;C450HD&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD+1))
-                    fi
-                    if [ $SonBuildName == &quot;1&quot; ]
-                    then
-                      MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1+1))
-                    fi
-                else
-                   AllFailedCheck=false
-                   checkIfEnteredTheIf=true
+                    for i in `seq 0 $((${!tempLength}-1))`
+                    do
+                      tempChild=&quot;child_${i}_$GerritBranchNoPoints&quot;
+                      if [ &quot;${!tempChild}&quot; == &quot;$SonBuildUrlName&quot; ]
+                      then
+                          declare CountSonFailed_${i}_$GerritBranchNoPoints=$((CountSonFailed_${i}_$GerritBranchNoPoints+1))
+                      fi
+                    done
                 fi
           fi
         done
-        if [[ $AllFailedCheck == &quot;true&quot; &amp;&amp; &quot;$checkIfEnteredTheIf&quot; == &quot;true&quot; ]]
+        if [[ &quot;$CountEnteredTheIf&quot; == &quot;${!tempLength}&quot; ]]
         then
-          AllFailed=$((AllFailed+1))
+          declare AllFailed_$GerritBranchNoPoints=$((AllFailed_$GerritBranchNoPoints+1))
+          echo $FatherBuildNumber
         fi
     fi
 done
-MAKE_CMD_auto_AUTOPRD_405HD=$((MAKE_CMD_auto_AUTOPRD_405HD-$AllFailed))
-MAKE_CMD_auto_AUTOPRD_430HD=$((MAKE_CMD_auto_AUTOPRD_430HD-$AllFailed))
-MAKE_CMD_auto_AUTOPRD_440HD=$((MAKE_CMD_auto_AUTOPRD_440HD-$AllFailed))
-MAKE_CMD_auto_AUTOPRD_445HD=$((MAKE_CMD_auto_AUTOPRD_445HD-$AllFailed))
-MAKE_CMD_auto_AUTOPRD_450HD=$((MAKE_CMD_auto_AUTOPRD_450HD-$AllFailed))
- if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
- then
-	MAKE_CMD_auto_AUTOPRD_C450HD=$((MAKE_CMD_auto_AUTOPRD_C450HD-$AllFailed))
-	MAKE_CMD_auto_AUTOPRD_450HD_LOG_1=$((MAKE_CMD_auto_AUTOPRD_450HD_LOG_1-$AllFailed))
- fi
 
-echo &quot;All builds are $AllBuildsLength&quot;
-echo &quot;All Success Builds Are $AllSuccess&quot;
-echo &quot;All Failed Builds Are $AllFailed&quot;
 
-echo &quot;405HD Failed $MAKE_CMD_auto_AUTOPRD_405HD times&quot;
-echo &quot;430HD Failed $MAKE_CMD_auto_AUTOPRD_430HD times&quot;
-echo &quot;440HD Failed $MAKE_CMD_auto_AUTOPRD_440HD times&quot;
-echo &quot;445HD Failed $MAKE_CMD_auto_AUTOPRD_445HD times&quot;
-echo &quot;450HD Failed $MAKE_CMD_auto_AUTOPRD_450HD times&quot;
- if [[ &quot;$JobName&quot; == &quot;ippReview_SFB&quot; || &quot;$JobName&quot; == &quot;ippBuild_SFB&quot; ]]
- then
-       echo &quot;C450HD Failed $MAKE_CMD_auto_AUTOPRD_C450HD times&quot;
-	   echo &quot;450HD Log 1 Failed $MAKE_CMD_auto_AUTOPRD_450HD_LOG_1 times&quot;
- fi
+#     if empty not print that failed
+echo &quot;Date: `date`&quot; &gt;&gt; $JobName.txt
+echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+echo &quot;FirstBuild: $FirstBuildNumber&quot; &gt;&gt; $JobName.txt
+echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+echo &quot;LastBuild: $LastBuildNumber&quot; &gt;&gt; $JobName.txt
+echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+for i in `seq 0 $(($arrBranchesIndex-1))`
+do
+  tempChild=&quot;child_0_${branchesArr[$i]}&quot;
+  tempCount=&quot;CountSonFailed_0_${branchesArr[$i]}&quot;
+  tempAllFailed=&quot;AllFailed_${branchesArr[$i]}&quot;
+  tempAllSuccess=&quot;AllSuccess_${branchesArr[$i]}&quot;
+  echo &quot;Branch: ${branchesArr[$i]}&quot; &gt;&gt; $JobName.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  echo &quot;allSucceeded: ${!tempAllSuccess}&quot; &gt;&gt; $JobName.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  if [ -z ${!tempChild} ]
+  then
+      echo &quot;notFailed&quot; &gt;&gt; $JobName.txt
+      echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  else
+    echo &quot;allFailed: ${!tempAllFailed}&quot; &gt;&gt; $JobName.txt
+    echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+    for j in `seq 0 $((${lengthBranchesArr[$i]}-1))`
+    do
+      tempChild=&quot;child_${j}_${branchesArr[$i]}&quot;
+      tempCount=&quot;CountSonFailed_${j}_${branchesArr[$i]}&quot;
+      echo &quot;${!tempChild} Failed: ${!tempCount} Times&quot; &gt;&gt; $JobName.txt
+      echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+    done
+  fi
+done
 </command>
     </hudson.tasks.Shell>
   </builders>
