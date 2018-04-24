@@ -231,9 +231,14 @@ machine test-gerrit login jenkins password $jpass
 machine gerrit login jenkins password $jpass
 EOF
 
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
+
 cd ${WORKSPACE}/..
 rm -rf tools
-git clone -n https://gerrit/devops/tools
+git -c http.sslverify=false clone -n https://gerrit/devops/tools
 
 git checkout -f origin/master -- sputnik/gerrit/arm-pdm.properties
 
