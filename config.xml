@@ -498,7 +498,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>sir-k8krj5am</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-k8krj5am</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-build</requestedLabel>
+            <createdAt>2018-04-25 14:52:40.503 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -990,6 +1001,7 @@
         <string>CheckJira</string>
         <string>CheckVI</string>
         <string>Delete-Old-Artifactory-Versions</string>
+        <string>MatrixJobsReport</string>
         <string>MatrixJobStatisticsReport</string>
         <string>ScmSyncConfiguration test job</string>
         <string>UpdateJira</string>
