@@ -47,7 +47,7 @@
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippTestAuto7</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -168,6 +168,7 @@ date
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
