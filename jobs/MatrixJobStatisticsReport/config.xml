@@ -81,8 +81,8 @@ if [ -z &quot;$LastJobBuildNumber&quot; ]
 then
   LastJobBuildNumber=0
 fi
-
-for i in `seq 0 $(($AllBuildsLength-1))`
+#$(($AllBuildsLength-1))
+for i in `seq 0 15`
 do
     echo $i
     #The Main Job Url and the number of the build
@@ -137,6 +137,7 @@ do
         do
           declare child_${i}_$GerritBranchNoPoints=&quot;&quot;
           declare CountSonFailed_${i}_$GerritBranchNoPoints=0
+          declare CountChildSuccess_${i}_$GerritBranchNoPoints=0
         done
     fi
         declare AllBuilds_$GerritBranchNoPoints=$((AllBuilds_$GerritBranchNoPoints+1))
@@ -146,6 +147,35 @@ do
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$SUCCESS&quot; ]
     then
         declare AllSuccess_$GerritBranchNoPoints=$((AllSuccess_$GerritBranchNoPoints+1))
+
+
+        for i in `seq 0 $(($AllSonBuildsLength-1))`
+        do
+
+          #The Son Build Url and the number of the build
+        SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
+        SonBuildsUrl=${SonBuildsUrl:1}
+        SonBuildsUrl=${SonBuildsUrl%&apos;&quot;&apos;}$apiAdress
+        SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
+        if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
+          then
+            SonBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $SonBuildsUrl)
+
+            #check Childs Names
+            SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
+            SonBuildUrlName=${SonBuildUrlName%,*}
+
+            tempChild=&quot;child_${indexOfDynamicChilds}_$GerritBranchNoPoints&quot;
+            if [ -z &quot;${!tempChild}&quot; ]
+            then
+                declare child_${indexOfDynamicChilds}_$GerritBranchNoPoints=$SonBuildUrlName
+            fi
+            #count How mouch the child was Successful
+            declare CountChildSuccess_${indexOfDynamicChilds}_$GerritBranchNoPoints=$((CountChildSuccess_${indexOfDynamicChilds}_$GerritBranchNoPoints+1))
+
+            indexOfDynamicChilds=$((indexOfDynamicChilds+1))
+          fi
+      done
 
     fi
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
@@ -191,13 +221,21 @@ do
                           declare CountSonFailed_${i}_$GerritBranchNoPoints=$((CountSonFailed_${i}_$GerritBranchNoPoints+1))
                       fi
                     done
-                fi
+              else
+                    for i in `seq 0 $((${!tempLength}-1))`
+                    do
+                      tempChild=&quot;child_${i}_$GerritBranchNoPoints&quot;
+                      if [ &quot;${!tempChild}&quot; == &quot;$SonBuildUrlName&quot; ]
+                      then
+                          declare CountChildSuccess_${i}_$GerritBranchNoPoints=$((CountChildSuccess_${i}_$GerritBranchNoPoints+1))
+                      fi
+                    done
+              fi
           fi
         done
         if [[ &quot;$CountEnteredTheIf&quot; == &quot;${!tempLength}&quot; ]]
         then
           declare AllFailed_$GerritBranchNoPoints=$((AllFailed_$GerritBranchNoPoints+1))
-          echo $FatherBuildNumber
         fi
     fi
   fi
@@ -239,7 +277,11 @@ do
     do
       tempChild=&quot;child_${j}_${branchesArr[$i]}&quot;
       tempCount=&quot;CountSonFailed_${j}_${branchesArr[$i]}&quot;
+      tempChildSuccessfulCount=&quot;CountChildSuccess_${j}_${branchesArr[$i]}&quot;
+      declare CountChildSuccess_${j}_${branchesArr[$i]}=$((CountChildSuccess_${j}_${branchesArr[$i]}+CountSonFailed_${j}_${branchesArr[$i]}))
       echo &quot;${!tempChild}_${branchesArr[$i]} Failed: ${!tempCount} Times&quot; &gt;&gt; $JobName.txt
+      echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+      echo &quot;${!tempChild}_${branchesArr[$i]} Total: ${!tempChildSuccessfulCount} Times&quot; &gt;&gt; $JobName.txt
       echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
     done
   fi
