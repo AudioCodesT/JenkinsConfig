@@ -17,31 +17,6 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>ProjectName</name>
-          <description></description>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>IPPhone SFB</string>
-            </a>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>JobName</name>
-          <description></description>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>ippReview_SFB</string>
-              <string>ippBuild_SFB</string>
-              <string>ippCentos7.4-reviewSIM</string>
-              <string>ippCentos7.4-buildSIM</string>
-            </a>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <maxConcurrentPerNode>0</maxConcurrentPerNode>
       <maxConcurrentTotal>0</maxConcurrentTotal>
@@ -58,29 +33,55 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>00 05 * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>AllSuccess=0
-AllFailed=0
+      <command>#!/bin/bash
 apiAdress=api/json?pretty
+ProjectName=&quot;IPPhone SFB&quot;
+JobName=ippReview_SFB
 SUCCESS=SUCCESS
 FAILURE=FAILURE
 ABORTED=ABORTED
 User=benm
 ApiToken=0820c5cd2ddda470d58baa1c2847eb37
-lengthOfChilds=0
 CountEnteredTheIf=0
 arrBranchesIndex=0
 countHowManyBuilds=0
+length_JobName=ipp_Review_SFB
+echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+
+for j in `seq 0 1`
+do
+  if [ &quot;$j&quot; == &quot;1&quot; ]
+  then
+    JobName=ippCentos7.4-reviewSIM
+    arrBranchesIndex=0
+    countHowManyBuilds=0
+    length_JobName=reviewSIM
+    echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  fi
+
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
 #check first and last builds number its will check
 LastBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[0].number&apos;)
 FirstBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$(($AllBuildsLength-1))&apos;].number&apos;)
-
+FirstBuildNumber=$LastBuildNumber
+#get the last job build number that happend last build
+LastJobBuildNumber=$(cat $JobName.txt | grep LastBuild: | cut -f2 -d&apos;:&apos; |  tail -n1)
+#if its the first time running the job
+if [ -z &quot;$LastJobBuildNumber&quot; ]
+then
+  LastJobBuildNumber=0
+fi
 
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
@@ -88,7 +89,9 @@ do
     #The Main Job Url and the number of the build
     FatherBuildUrl=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].url&apos;)
     FatherBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].number&apos;)
-
+    if [ &quot;$LastJobBuildNumber&quot; -lt &quot;$FatherBuildNumber&quot; ]
+    then
+      FirstBuildNumber=$FatherBuildNumber
     #All The Builds of the job
     FatherBuildUrl=${FatherBuildUrl:1}
     FatherBuildUrl=${FatherBuildUrl%&apos;&quot;&apos;}$apiAdress
@@ -98,33 +101,37 @@ do
     FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
     FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess:1}
     FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess%&apos;&quot;&apos;}
-
     #Get Gerrit Branch
     GerritBranch=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.actions[5].parameters[2].value&apos;)
+    if [ &quot;$GerritBranch&quot; == &quot;null&quot; ]
+    then
+           GerritBranch=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.actions[1].parameters[2].value&apos;)
+    fi
     GerritBranch=${GerritBranch:1}
     GerritBranch=${GerritBranch%&apos;&quot;&apos;}
     #Replace &apos;.&apos; and &apos;/&apos; with &apos;_&apos;
     GerritBranchNoPoints=$(echo $GerritBranch | tr &apos;.&apos; &apos;_&apos; | tr &apos;/&apos; &apos;_&apos;)
-
-    #check if the length of spesific branch is empty, get the length of this branch sons
-    tempLength=&quot;lengthOfChilds_${GerritBranchNoPoints}&quot;
+     #check if the length of spesific branch is empty, get the length of this branch sons
+    tempLength=&quot;lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}&quot;
     if [ -z ${!tempLength} ]
     then
 
 
-        declare lengthOfChilds_$GerritBranchNoPoints=0
+        declare lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}=0
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
             SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
           if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
             then
-                declare lengthOfChilds_$GerritBranchNoPoints=$((lengthOfChilds_$GerritBranchNoPoints+1))
+                declare lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}=$((lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}+1))
             fi
         done
         branchesArr[$arrBranchesIndex]=$GerritBranchNoPoints
         lengthBranchesArr[$arrBranchesIndex]=${!tempLength}
         declare AllFailed_$GerritBranchNoPoints=0
         declare AllSuccess_$GerritBranchNoPoints=0
+        declare AllBuilds_$GerritBranchNoPoints=0
+        declare AllFatherBuildsFaled_$GerritBranchNoPoints=0
         arrBranchesIndex=$(($arrBranchesIndex+1))
         #declare all the Childs The Father Have
         for i in `seq 0 $((${!tempLength}-1))`
@@ -133,19 +140,21 @@ do
           declare CountSonFailed_${i}_$GerritBranchNoPoints=0
         done
     fi
+        declare AllBuilds_$GerritBranchNoPoints=$((AllBuilds_$GerritBranchNoPoints+1))
 
       #index for the dynamic childs name
       indexOfDynamicChilds=0
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$SUCCESS&quot; ]
     then
         declare AllSuccess_$GerritBranchNoPoints=$((AllSuccess_$GerritBranchNoPoints+1))
+
     fi
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
     then
         CountEnteredTheIf=0
+        declare AllFatherBuildsFaled_$GerritBranchNoPoints=$((AllFatherBuildsFaled_$GerritBranchNoPoints+1))
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
-          echo $i
 
           #The Son Build Url and the number of the build
         SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
@@ -160,9 +169,6 @@ do
             SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
             SonBuildUrlName=${SonBuildUrlName%,*}
 
-
-
-            echo $SonBuildUrlName
             tempChild=&quot;child_${indexOfDynamicChilds}_$GerritBranchNoPoints&quot;
             if [ -z &quot;${!tempChild}&quot; ]
             then
@@ -195,11 +201,13 @@ do
           echo $FatherBuildNumber
         fi
     fi
+  fi
 done
 
+TodayDate=$(date +&quot;%Y%m%d&quot;)
 
 #     if empty not print that failed
-echo &quot;Date: `date`&quot; &gt;&gt; $JobName.txt
+echo &quot;Date: $TodayDate&quot; &gt;&gt; $JobName.txt
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
 echo &quot;FirstBuild: $FirstBuildNumber&quot; &gt;&gt; $JobName.txt
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
@@ -207,29 +215,36 @@ echo &quot;LastBuild: $LastBuildNumber&quot; &gt;&gt; $JobName.txt
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
 for i in `seq 0 $(($arrBranchesIndex-1))`
 do
+  AllBuildsHappend=&quot;AllBuilds_${branchesArr[$i]}&quot;
+  FatherBuildsFailed=&quot;AllFatherBuildsFaled_${branchesArr[$i]}&quot;
   tempChild=&quot;child_0_${branchesArr[$i]}&quot;
   tempCount=&quot;CountSonFailed_0_${branchesArr[$i]}&quot;
   tempAllFailed=&quot;AllFailed_${branchesArr[$i]}&quot;
   tempAllSuccess=&quot;AllSuccess_${branchesArr[$i]}&quot;
   echo &quot;Branch: ${branchesArr[$i]}&quot; &gt;&gt; $JobName.txt
   echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
-  echo &quot;allSucceeded: ${!tempAllSuccess}&quot; &gt;&gt; $JobName.txt
+  echo &quot;allBuilds_${branchesArr[$i]}: ${!AllBuildsHappend}&quot; &gt;&gt; $JobName.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  echo &quot;allSucceeded_${branchesArr[$i]}: ${!tempAllSuccess}&quot; &gt;&gt; $JobName.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  echo &quot;allFatherBuildsFailed_${branchesArr[$i]}: ${!FatherBuildsFailed}&quot; &gt;&gt; $JobName.txt
   echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
   if [ -z ${!tempChild} ]
   then
       echo &quot;notFailed&quot; &gt;&gt; $JobName.txt
       echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
   else
-    echo &quot;allFailed: ${!tempAllFailed}&quot; &gt;&gt; $JobName.txt
+    echo &quot;allSonsFailed_${branchesArr[$i]}: ${!tempAllFailed}&quot; &gt;&gt; $JobName.txt
     echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
     for j in `seq 0 $((${lengthBranchesArr[$i]}-1))`
     do
       tempChild=&quot;child_${j}_${branchesArr[$i]}&quot;
       tempCount=&quot;CountSonFailed_${j}_${branchesArr[$i]}&quot;
-      echo &quot;${!tempChild} Failed: ${!tempCount} Times&quot; &gt;&gt; $JobName.txt
+      echo &quot;${!tempChild}_${branchesArr[$i]} Failed: ${!tempCount} Times&quot; &gt;&gt; $JobName.txt
       echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
     done
   fi
+ done
 done
 </command>
     </hudson.tasks.Shell>
