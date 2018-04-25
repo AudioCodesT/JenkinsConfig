@@ -42,8 +42,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash
-apiAdress=api/json?pretty
+      <command>apiAdress=api/json?pretty
 ProjectName=&quot;IPPhone SFB&quot;
 JobName=ippReview_SFB
 SUCCESS=SUCCESS
@@ -252,7 +251,7 @@ done
   <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}_${JobName}</template>
+      <template>#${BUILD_NUMBER}_`date`</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
