@@ -81,8 +81,8 @@ if [ -z &quot;$LastJobBuildNumber&quot; ]
 then
   LastJobBuildNumber=0
 fi
-#$(($AllBuildsLength-1))
-for i in `seq 0 15`
+
+for i in `seq 0 #$(($AllBuildsLength-1))`
 do
     echo $i
     #The Main Job Url and the number of the build
