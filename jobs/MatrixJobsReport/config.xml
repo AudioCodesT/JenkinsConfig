@@ -1,7 +1,55 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <description>get report between two dates</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>JobName</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ippCentos7.4-reviewSIM</string>
+              <string>ippReview_SFB</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BEFORE_DATE</name>
+          <description>yyyy-mm-dd </description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>AFTER_DATE</name>
+          <description></description>
+          <defaultValue>yyyy-mm-dd </defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
@@ -9,7 +57,94 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
+
+beforeDate=$(date -d $BEFORE_DATE +&quot;%Y%m%d&quot;)
+afterDate=$(date -d $AFTER_DATE +&quot;%Y%m%d&quot;)
+#get all the information between two Dates
+sed -n &apos;/&apos;$beforeDate&apos;/,/&apos;$afterDate&apos;/{//!p}&apos; $JobName.txt &gt; $JobName&apos;1&apos;.txt
+JobName=$JobName&apos;1&apos;
+
+FirstBuildNumber=$(cat $JobName.txt | grep FirstBuild: | cut -f2 -d&apos;:&apos; |  head -n1)
+LastBuildNumber=$(cat $JobName.txt | grep LastBuild: | cut -f2 -d&apos;:&apos; |  tail -n1)
+
+#All the Branches - remove all duplicates
+cat $JobName.txt | grep Branch: | cut -f2 -d&apos;:&apos; &gt; file.txt
+RestOfTheBranches=`perl -ne &apos;print unless $seen{$_}++&apos; file.txt`
+CountHowManyBranchesLeft=$(echo $RestOfTheBranches | wc -w)
+while [[ &quot;$CountHowManyBranchesLeft&quot; != &quot;0&quot; ]]
+do
+  FirstBranch=$(echo $RestOfTheBranches | cut -f1 -d&apos; &apos;)
+  GerritBranchEscaped=$(echo $FirstBranch | tr &apos;=&apos; &apos;_&apos;)
+  echo -e &quot;\r\n&quot;
+  echo &quot;About The Branch  $FirstBranch&quot;
+  cat $JobName.txt | grep &quot;_$FirstBranch Failed:&quot; | cut -f1 -d&apos; &apos; &gt; file.txt
+  #Remove Duplicates
+  allTheJobsNames=`perl -ne &apos;print unless $seen{$_}++&apos; file.txt`
+  CountHowManyJobsLeft=$(echo $allTheJobsNames | wc -w)
+  FirstSonJobName=$(echo $allTheJobsNames | cut -f1 -d&apos; &apos;)
+
+  #All builds of the branch
+  SUM=0; for line in `cat $JobName.txt | grep allBuilds_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
+  declare &quot;allBuilds$FirstBranch&quot;=$SUM
+  tempAllBuilds=&quot;allBuilds$FirstBranch&quot;
+  echo &quot;All The Builds in the branch ${!tempAllBuilds}&quot;
+  #All Success
+  SUM=0; for line in `cat $JobName.txt | grep allSucceeded_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
+  declare &quot;AllSuccess$FirstBranch&quot;=$SUM
+  tempAllSuccess=&quot;AllSuccess$FirstBranch&quot;
+  echo &quot;All The Builds that was Successful ${!tempAllSuccess}&quot;
+  #All Father  Failed
+  SUM=0; for line in `cat $JobName.txt | grep allFatherBuildsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
+  declare &quot;allFatherBuildsFailed$FirstBranch&quot;=$SUM
+  tempAllFatherBuildsFailed=&quot;allFatherBuildsFailed$FirstBranch&quot;
+  echo &quot;all The Parent Builds That Was Failed ${!tempAllFatherBuildsFailed}&quot;
+  #All Sons Failed
+  SUM=0; for line in `cat $JobName.txt | grep allSonsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
+  declare &quot;AllFailed$FirstBranch&quot;=$SUM
+  tempAllFailed=&quot;AllFailed$FirstBranch&quot;
+  echo &quot;all The Childs Builds That Was Failed ${!tempAllFailed}&quot;
+
+  while [[ &quot;$CountHowManyJobsLeft&quot; != &quot;0&quot; ]]
+  do
+
+    FirstSonJobName=$(echo $allTheJobsNames | cut -f1 -d&apos; &apos;)
+    EscapedSonJobName=$(echo $FirstSonJobName | tr &apos;.&apos; &apos;_&apos; | tr &apos;/&apos; &apos;_&apos; | tr &apos;%&apos; &apos;_&apos; | tr &apos;=&apos; &apos;_&apos;)
+    #sum how many times the child failed
+    SUM=0; for line in `cat $JobName.txt | grep -w &quot;$FirstSonJobName Failed&quot; | cut -f2 -d &apos;:&apos; | cut -f2 -d&apos; &apos;`; do SUM=$((SUM + line)); done
+    declare &quot;Failed${EscapedSonJobName}${FirstBranch}&quot;=$SUM
+    tempAllFailed=&quot;Failed${EscapedSonJobName}${FirstBranch}&quot;
+    echo &quot;The Child $FirstSonJobName is failed ${!tempAllFailed}&quot;
+    #Child How Many  Total Build the Child had
+    SUM=0; for line in `cat $JobName.txt | grep -w &quot;$FirstSonJobName Total&quot; | cut -f2 -d &apos;:&apos; | cut -f2 -d&apos; &apos;`; do SUM=$((SUM + line)); done
+    declare &quot;Total${EscapedSonJobName}${FirstBranch}&quot;=$SUM
+    tempTotalBuilds=&quot;Total${EscapedSonJobName}${FirstBranch}&quot;
+    echo &quot;The Child $FirstSonJobName Has total builds of ${!tempTotalBuilds}&quot;
+    #check if only one child and he already did the child (Get out of the While loop)
+    if [[ &quot;$CountHowManyJobsLeft&quot; == &quot;1&quot; ]]
+    then
+      allTheJobsNames=$(echo $allTheJobsNames | cut -f50 -d&apos;_&apos;)
+    else
+      allTheJobsNames=$(echo $allTheJobsNames | cut -f2- -d&apos; &apos;)
+    fi
+    CountHowManyJobsLeft=$(echo $allTheJobsNames | wc -w)
+  done
+
+
+  if [[ &quot;$CountHowManyBranchesLeft&quot; == &quot;1&quot; ]]
+  then
+    RestOfTheBranches=$(echo $RestOfTheBranches | cut -f50 -d&apos;_&apos;)
+  else
+    RestOfTheBranches=$(echo $RestOfTheBranches | cut -f2- -d&apos; &apos;)
+  fi
+CountHowManyBranchesLeft=$(echo $RestOfTheBranches | wc -w)
+
+done
+</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
   <buildWrappers/>
 </project>
