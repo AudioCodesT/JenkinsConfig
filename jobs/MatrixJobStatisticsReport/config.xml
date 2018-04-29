@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>collect daily data about ippReview_SFB and ippCentos7.4-reviewSIM jobs</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -55,9 +55,10 @@ arrBranchesIndex=0
 countHowManyBuilds=0
 length_JobName=ipp_Review_SFB
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
-
+#run twice (first time on IPPhone SFB and second time on ippCentos7.4-reviewSIM)
 for j in `seq 0 1`
 do
+#initialize parameters for the second time the job running for ippCentos7.4-reviewSIM
   if [ &quot;$j&quot; == &quot;1&quot; ]
   then
     JobName=ippCentos7.4-reviewSIM
@@ -84,16 +85,17 @@ fi
 
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
-    echo $i
     #The Main Job Url and the number of the build
     FatherBuildUrl=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].url&apos;)
     FatherBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].number&apos;)
+    #checking if the current build is already in the database 
     if [ &quot;$LastJobBuildNumber&quot; -lt &quot;$FatherBuildNumber&quot; ]
     then
       FirstBuildNumber=$FatherBuildNumber
-    #All The Builds of the job
+   
     FatherBuildUrl=${FatherBuildUrl:1}
     FatherBuildUrl=${FatherBuildUrl%&apos;&quot;&apos;}$apiAdress
+     #Get All The Builds of the job
     AllSonsBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $FatherBuildUrl)
     AllSonBuildsLength=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs | length&apos;)
     #check if the Father build Failed or succuess
@@ -108,15 +110,14 @@ do
     fi
     GerritBranch=${GerritBranch:1}
     GerritBranch=${GerritBranch%&apos;&quot;&apos;}
-    #Replace &apos;.&apos; and &apos;/&apos; with &apos;_&apos;
+    #Replace &apos;.&apos; and &apos;/&apos; with &apos;_&apos; to save it as a variable
     GerritBranchNoPoints=$(echo $GerritBranch | tr &apos;.&apos; &apos;_&apos; | tr &apos;/&apos; &apos;_&apos;)
-     #check if the length of spesific branch is empty, get the length of this branch sons
+     #check if the length of spesific branch is empty, get the length of this branch childs
     tempLength=&quot;lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}&quot;
     if [ -z ${!tempLength} ]
     then
-
-
         declare lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}=0
+        #check how many Childs this branch have
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
             SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
@@ -125,6 +126,7 @@ do
                 declare lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}=$((lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}+1))
             fi
         done
+        #initialize dynamic variables
         branchesArr[$arrBranchesIndex]=$GerritBranchNoPoints
         lengthBranchesArr[$arrBranchesIndex]=${!tempLength}
         declare AllFailed_$GerritBranchNoPoints=0
@@ -132,7 +134,7 @@ do
         declare AllBuilds_$GerritBranchNoPoints=0
         declare AllFatherBuildsFaled_$GerritBranchNoPoints=0
         arrBranchesIndex=$(($arrBranchesIndex+1))
-        #declare all the Childs The Father Have
+        #declare all the Childs The Parent Have
         for i in `seq 0 $((${!tempLength}-1))`
         do
           declare child_${i}_$GerritBranchNoPoints=&quot;&quot;
@@ -140,18 +142,18 @@ do
           declare CountChildSuccess_${i}_$GerritBranchNoPoints=0
         done
     fi
+    	#count How Many builds spesific Branch have
         declare AllBuilds_$GerritBranchNoPoints=$((AllBuilds_$GerritBranchNoPoints+1))
 
       #index for the dynamic childs name
       indexOfDynamicChilds=0
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$SUCCESS&quot; ]
     then
+    	#count how many times the father Successeded
         declare AllSuccess_$GerritBranchNoPoints=$((AllSuccess_$GerritBranchNoPoints+1))
-
-
+        
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
-
           #The Son Build Url and the number of the build
         SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
         SonBuildsUrl=${SonBuildsUrl:1}
@@ -164,15 +166,14 @@ do
             #check Childs Names
             SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
             SonBuildUrlName=${SonBuildUrlName%,*}
-
+			#get this branch childs name (happen for each branch once)
             tempChild=&quot;child_${indexOfDynamicChilds}_$GerritBranchNoPoints&quot;
             if [ -z &quot;${!tempChild}&quot; ]
             then
                 declare child_${indexOfDynamicChilds}_$GerritBranchNoPoints=$SonBuildUrlName
             fi
-            #count How mouch the child was Successful
+            #count how many times each child was running in total
             declare CountChildSuccess_${indexOfDynamicChilds}_$GerritBranchNoPoints=$((CountChildSuccess_${indexOfDynamicChilds}_$GerritBranchNoPoints+1))
-
             indexOfDynamicChilds=$((indexOfDynamicChilds+1))
           fi
       done
@@ -181,11 +182,12 @@ do
     if [ &quot;$FatherBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
     then
         CountEnteredTheIf=0
+        #count how many times the parent failed
         declare AllFatherBuildsFaled_$GerritBranchNoPoints=$((AllFatherBuildsFaled_$GerritBranchNoPoints+1))
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
 
-          #The Son Build Url and the number of the build
+          #The child Build Url and the number of the build
         SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
         SonBuildsUrl=${SonBuildsUrl:1}
         SonBuildsUrl=${SonBuildsUrl%&apos;&quot;&apos;}$apiAdress
@@ -194,10 +196,10 @@ do
           then
             SonBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $SonBuildsUrl)
 
-            #check Childs Names
+     	  	#get The child Build name
             SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
             SonBuildUrlName=${SonBuildUrlName%,*}
-
+			#get this branch childs name (happen for each branch once)
             tempChild=&quot;child_${indexOfDynamicChilds}_$GerritBranchNoPoints&quot;
             if [ -z &quot;${!tempChild}&quot; ]
             then
@@ -215,6 +217,7 @@ do
                     #Check Which Build Failed and count how many times failed
                     for i in `seq 0 $((${!tempLength}-1))`
                     do
+                    #count how many times each child failed
                       tempChild=&quot;child_${i}_$GerritBranchNoPoints&quot;
                       if [ &quot;${!tempChild}&quot; == &quot;$SonBuildUrlName&quot; ]
                       then
@@ -224,6 +227,7 @@ do
               else
                     for i in `seq 0 $((${!tempLength}-1))`
                     do
+                      #count how many times each child was running in total
                       tempChild=&quot;child_${i}_$GerritBranchNoPoints&quot;
                       if [ &quot;${!tempChild}&quot; == &quot;$SonBuildUrlName&quot; ]
                       then
@@ -235,15 +239,15 @@ do
         done
         if [[ &quot;$CountEnteredTheIf&quot; == &quot;${!tempLength}&quot; ]]
         then
+           #count how many times all the childs was Failed 
           declare AllFailed_$GerritBranchNoPoints=$((AllFailed_$GerritBranchNoPoints+1))
         fi
     fi
   fi
 done
 
+#print to text file all the data about each branch about his parents and childs 
 TodayDate=$(date +&quot;%Y%m%d&quot;)
-
-#     if empty not print that failed
 echo &quot;Date: $TodayDate&quot; &gt;&gt; $JobName.txt
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
 echo &quot;FirstBuild: $FirstBuildNumber&quot; &gt;&gt; $JobName.txt
