@@ -62,7 +62,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cp -R /home/centos/MatrixJob .
+      <command>cp -R /home/centos/MatrixJob/. .
 
 BEFORE_DATE_YEAR=$(echo $BEFORE_DATE | cut -f1 -d&apos;-&apos;)
 BEFORE_DATE_Month=$(echo $BEFORE_DATE | cut -f2 -d&apos;-&apos;)
