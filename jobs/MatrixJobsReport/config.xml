@@ -71,7 +71,7 @@
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
       <command>
-OldbeforeDate=$(date -d $NewBeforeDate +&quot;%Y%m%d&quot;)
+OldbeforeDate=$(date -d $BEFORE_DATE +&quot;%Y%m%d&quot;)
 BEFORE_DATE_YEAR=$(echo $BEFORE_DATE | cut -f1 -d&apos;-&apos;)
 BEFORE_DATE_Month=$(echo $BEFORE_DATE | cut -f2 -d&apos;-&apos;)
 BEFORE_DATE_Day=$(echo $BEFORE_DATE | cut -f3 -d&apos;-&apos;)
