@@ -61,8 +61,16 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.39.1">
+      <project>MatrixJobStatisticsReport</project>
+      <filter></filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>cp -a /home/centos/MatrixJob/$JobName.txt .
+      <command>
 
 BEFORE_DATE_YEAR=$(echo $BEFORE_DATE | cut -f1 -d&apos;-&apos;)
 BEFORE_DATE_Month=$(echo $BEFORE_DATE | cut -f2 -d&apos;-&apos;)
