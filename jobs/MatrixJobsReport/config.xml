@@ -62,7 +62,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>xcopy /home/centos/MatrixJob/$JobName.txt .
+      <command>cp /home/centos/MatrixJob/$JobName.txt .
 
 BEFORE_DATE_YEAR=$(echo $BEFORE_DATE | cut -f1 -d&apos;-&apos;)
 BEFORE_DATE_Month=$(echo $BEFORE_DATE | cut -f2 -d&apos;-&apos;)
