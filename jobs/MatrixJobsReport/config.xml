@@ -84,9 +84,7 @@ TodayDate=$(date +&quot;%Y%m%d&quot;)
 
 
 
-
-
-
+#check if wrong date entered
 if [ $afterDate  -ge $OldbeforeDate ]
 then
 echo &quot;******************************************************************&quot;
@@ -103,82 +101,85 @@ then
     exit 1
 fi
 
-#get all the information between two Dates
+
 echo -e &quot;\r\n&quot; &gt; output.txt
 echo &quot;Information about $JobName&quot; &gt;&gt; output.txt
 echo -e &quot;\r\n&quot; &gt;&gt; output.txt
 echo &quot;Between the Dates $afterDate to $OldbeforeDate&quot; &gt;&gt; output.txt
-#get all the information between two Dates
+#get all the information between two Dates 
 sed -n &apos;/&apos;$afterDate&apos;/,/&apos;$beforeDate&apos;/{//!p}&apos; $JobName.txt &gt; $JobName&apos;1&apos;.txt
 JobName=$JobName&apos;1&apos;
-
+#get the first and last build number that happend between this dates
 FirstBuildNumber=$(cat $JobName.txt | grep FirstBuild: | cut -f2 -d&apos;:&apos; |  head -n1)
 LastBuildNumber=$(cat $JobName.txt | grep LastBuild: | cut -f2 -d&apos;:&apos; |  tail -n1)
 
-#All the Branches - remove all duplicates
+#get all the Branches and remove all duplicates
 cat $JobName.txt | grep Branch: | cut -f2 -d&apos;:&apos; &gt; file.txt
 RestOfTheBranches=`perl -ne &apos;print unless $seen{$_}++&apos; file.txt`
 CountHowManyBranchesLeft=$(echo $RestOfTheBranches | wc -w)
+#iterate all the branches
 while [[ &quot;$CountHowManyBranchesLeft&quot; != &quot;0&quot; ]]
 do
+#get the first branch
   FirstBranch=$(echo $RestOfTheBranches | cut -f1 -d&apos; &apos;)
   GerritBranchEscaped=$(echo $FirstBranch | tr &apos;=&apos; &apos;_&apos;)
   echo -e &quot;\r\n&quot; &gt;&gt; output.txt
   echo &quot;About The Branch  $FirstBranch&quot; &gt;&gt; output.txt
+  #get all childs names
   cat $JobName.txt | grep &quot;_$FirstBranch Failed:&quot; | cut -f1 -d&apos; &apos; &gt; file.txt
   #Remove Duplicates
   allTheJobsNames=`perl -ne &apos;print unless $seen{$_}++&apos; file.txt`
   CountHowManyJobsLeft=$(echo $allTheJobsNames | wc -w)
   FirstSonJobName=$(echo $allTheJobsNames | cut -f1 -d&apos; &apos;)
 
-  #All builds of the branch
+  #Sum of all the builds of the branch
   SUM=0; for line in `cat $JobName.txt | grep allBuilds_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;allBuilds$FirstBranch&quot;=$SUM
   tempAllBuilds=&quot;allBuilds$FirstBranch&quot;
   echo -e &quot;\r\n&quot; &gt;&gt; output.txt
   echo &quot;All The Builds in the branch ${!tempAllBuilds}&quot; &gt;&gt; output.txt
-  #All Success
+  #Sum  all the Parent builds of the branch that Successeded 
   SUM=0; for line in `cat $JobName.txt | grep allSucceeded_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;AllSuccess$FirstBranch&quot;=$SUM
   tempAllSuccess=&quot;AllSuccess$FirstBranch&quot;
   echo -e &quot;\r\n&quot; &gt;&gt; output.txt
   echo &quot;All The Builds that was Successful ${!tempAllSuccess}&quot; &gt;&gt; output.txt
-  #All Father  Failed
+   #Sum  all the Parent builds of the branch that Failed 
   SUM=0; for line in `cat $JobName.txt | grep allFatherBuildsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;allFatherBuildsFailed$FirstBranch&quot;=$SUM
   tempAllFatherBuildsFailed=&quot;allFatherBuildsFailed$FirstBranch&quot;
   echo -e &quot;\r\n&quot; &gt;&gt; output.txt
   echo &quot;all The Parent Builds That Was Failed ${!tempAllFatherBuildsFailed}&quot; &gt;&gt; output.txt
-  #All Sons Failed
+   #Sum  all the  builds that all the childs Failed
   SUM=0; for line in `cat $JobName.txt | grep allSonsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;AllFailed$FirstBranch&quot;=$SUM
   tempAllFailed=&quot;AllFailed$FirstBranch&quot;
   echo &quot;all The Childs Builds That Was Failed ${!tempAllFailed}&quot; &gt;&gt; output.txt
-
+	#iterate all the childs
   while [[ &quot;$CountHowManyJobsLeft&quot; != &quot;0&quot; ]]
   do
-
+	#get the Child Name
     FirstSonJobName=$(echo $allTheJobsNames | cut -f1 -d&apos; &apos;)
     EscapedSonJobName=$(echo $FirstSonJobName | tr &apos;.&apos; &apos;_&apos; | tr &apos;/&apos; &apos;_&apos; | tr &apos;%&apos; &apos;_&apos; | tr &apos;=&apos; &apos;_&apos;)
-    #sum how many times the child failed
+    #sum how many times spesific child failed
     SUM=0; for line in `cat $JobName.txt | grep -w &quot;$FirstSonJobName Failed&quot; | cut -f2 -d &apos;:&apos; | cut -f2 -d&apos; &apos;`; do SUM=$((SUM + line)); done
     declare &quot;Failed${EscapedSonJobName}${FirstBranch}&quot;=$SUM
     tempSonFailed=&quot;Failed${EscapedSonJobName}${FirstBranch}&quot;
     echo -e &quot;\r\n&quot; &gt;&gt; output.txt
     echo &quot;The Child $FirstSonJobName is failed ${!tempSonFailed}&quot; &gt;&gt; output.txt
-    #Child How Many  Total Build the Child had
+    #Sum How Many  Total Builds the Child had
     SUM=0; for line in `cat $JobName.txt | grep -w &quot;$FirstSonJobName Total&quot; | cut -f2 -d &apos;:&apos; | cut -f2 -d&apos; &apos;`; do SUM=$((SUM + line)); done
     declare &quot;Total${EscapedSonJobName}${FirstBranch}&quot;=$SUM
     tempTotalBuilds=&quot;Total${EscapedSonJobName}${FirstBranch}&quot;
-    #Child How Many  Total that was Success or failed alone
+    #About each child How Many in Total that was Success or failed alone
     declare  tempTotalBuildThatSuccessAndFailedAlone=$((Total${EscapedSonJobName}${FirstBranch}-AllFailed$FirstBranch))
+    #about each child how many times failed alone 
     declare tempSonAloneFailed=$((Failed${EscapedSonJobName}${FirstBranch}-AllFailed$FirstBranch))
-
     #
     echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonAloneFailed from total of $tempTotalBuildThatSuccessAndFailedAlone&quot; &gt;&gt; output.txt
     echo -e &quot;\r\n&quot; &gt;&gt; output.txt
     echo &quot;The Child $FirstSonJobName Has total builds of ${!tempTotalBuilds}&quot; &gt;&gt; output.txt
-    #check if only one child and he already did the child (Get out of the While loop)
+    #check if only one child remaining to iterate and he already did the iteration (Get out of the While loop)
     if [[ &quot;$CountHowManyJobsLeft&quot; == &quot;1&quot; ]]
     then
       allTheJobsNames=$(echo $allTheJobsNames | cut -f50 -d&apos;_&apos;)
@@ -188,7 +189,7 @@ do
     CountHowManyJobsLeft=$(echo $allTheJobsNames | wc -w)
   done
 
-
+#get out of the While Loop (of the branches) if finish
   if [[ &quot;$CountHowManyBranchesLeft&quot; == &quot;1&quot; ]]
   then
     RestOfTheBranches=$(echo $RestOfTheBranches | cut -f50 -d&apos;_&apos;)
