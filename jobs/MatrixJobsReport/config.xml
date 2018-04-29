@@ -82,7 +82,7 @@ afterDate=$(date -d $AFTER_DATE +&quot;%Y%m%d&quot;)
 beforeDate=$(date -d $NewBeforeDate +&quot;%Y%m%d&quot;)
 TodayDate=$(date +&quot;%Y%m%d&quot;)
 
-
+output=output$JobName
 
 #check if wrong date entered
 if [ $afterDate  -ge $OldbeforeDate ]
@@ -102,10 +102,10 @@ then
 fi
 
 
-echo -e &quot;\r\n&quot; &gt; output.txt
-echo &quot;Information about $JobName&quot; &gt;&gt; output.txt
-echo -e &quot;\r\n&quot; &gt;&gt; output.txt
-echo &quot;Between the Dates $afterDate to $OldbeforeDate&quot; &gt;&gt; output.txt
+echo -e &quot;\r\n&quot; &gt; $output.txt
+echo &quot;Information about $JobName&quot; &gt;&gt; $output.txt
+echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
+echo &quot;Between the Dates $afterDate to $OldbeforeDate&quot; &gt;&gt; $output.txt
 #get all the information between two Dates 
 sed -n &apos;/&apos;$afterDate&apos;/,/&apos;$beforeDate&apos;/{//!p}&apos; $JobName.txt &gt; $JobName&apos;1&apos;.txt
 JobName=$JobName&apos;1&apos;
@@ -123,8 +123,8 @@ do
 #get the first branch
   FirstBranch=$(echo $RestOfTheBranches | cut -f1 -d&apos; &apos;)
   GerritBranchEscaped=$(echo $FirstBranch | tr &apos;=&apos; &apos;_&apos;)
-  echo -e &quot;\r\n&quot; &gt;&gt; output.txt
-  echo &quot;About The Branch  $FirstBranch&quot; &gt;&gt; output.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
+  echo &quot;About The Branch  $FirstBranch&quot; &gt;&gt; $output.txt
   #get all childs names
   cat $JobName.txt | grep &quot;_$FirstBranch Failed:&quot; | cut -f1 -d&apos; &apos; &gt; file.txt
   #Remove Duplicates
@@ -136,25 +136,25 @@ do
   SUM=0; for line in `cat $JobName.txt | grep allBuilds_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;allBuilds$FirstBranch&quot;=$SUM
   tempAllBuilds=&quot;allBuilds$FirstBranch&quot;
-  echo -e &quot;\r\n&quot; &gt;&gt; output.txt
-  echo &quot;All The Builds in the branch ${!tempAllBuilds}&quot; &gt;&gt; output.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
+  echo &quot;All The Builds in the branch ${!tempAllBuilds}&quot; &gt;&gt; $output.txt
   #Sum  all the Parent builds of the branch that Successeded 
   SUM=0; for line in `cat $JobName.txt | grep allSucceeded_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;AllSuccess$FirstBranch&quot;=$SUM
   tempAllSuccess=&quot;AllSuccess$FirstBranch&quot;
-  echo -e &quot;\r\n&quot; &gt;&gt; output.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
   echo &quot;All The Builds that was Successful ${!tempAllSuccess}&quot; &gt;&gt; output.txt
    #Sum  all the Parent builds of the branch that Failed 
   SUM=0; for line in `cat $JobName.txt | grep allFatherBuildsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;allFatherBuildsFailed$FirstBranch&quot;=$SUM
   tempAllFatherBuildsFailed=&quot;allFatherBuildsFailed$FirstBranch&quot;
-  echo -e &quot;\r\n&quot; &gt;&gt; output.txt
-  echo &quot;all The Parent Builds That Was Failed ${!tempAllFatherBuildsFailed}&quot; &gt;&gt; output.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
+  echo &quot;all The Parent Builds That Was Failed ${!tempAllFatherBuildsFailed}&quot; &gt;&gt; $output.txt
    #Sum  all the  builds that all the childs Failed
   SUM=0; for line in `cat $JobName.txt | grep allSonsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;AllFailed$FirstBranch&quot;=$SUM
   tempAllFailed=&quot;AllFailed$FirstBranch&quot;
-  echo &quot;all The Childs Builds That Was Failed ${!tempAllFailed}&quot; &gt;&gt; output.txt
+  echo &quot;all The Childs Builds That Was Failed ${!tempAllFailed}&quot; &gt;&gt; $output.txt
 	#iterate all the childs
   while [[ &quot;$CountHowManyJobsLeft&quot; != &quot;0&quot; ]]
   do
@@ -165,8 +165,8 @@ do
     SUM=0; for line in `cat $JobName.txt | grep -w &quot;$FirstSonJobName Failed&quot; | cut -f2 -d &apos;:&apos; | cut -f2 -d&apos; &apos;`; do SUM=$((SUM + line)); done
     declare &quot;Failed${EscapedSonJobName}${FirstBranch}&quot;=$SUM
     tempSonFailed=&quot;Failed${EscapedSonJobName}${FirstBranch}&quot;
-    echo -e &quot;\r\n&quot; &gt;&gt; output.txt
-    echo &quot;The Child $FirstSonJobName is failed ${!tempSonFailed}&quot; &gt;&gt; output.txt
+    echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
+    echo &quot;The Child $FirstSonJobName is failed ${!tempSonFailed}&quot; &gt;&gt; $output.txt
     #Sum How Many  Total Builds the Child had
     SUM=0; for line in `cat $JobName.txt | grep -w &quot;$FirstSonJobName Total&quot; | cut -f2 -d &apos;:&apos; | cut -f2 -d&apos; &apos;`; do SUM=$((SUM + line)); done
     declare &quot;Total${EscapedSonJobName}${FirstBranch}&quot;=$SUM
@@ -176,9 +176,9 @@ do
     #about each child how many times failed alone 
     declare tempSonAloneFailed=$((Failed${EscapedSonJobName}${FirstBranch}-AllFailed$FirstBranch))
     #
-    echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonAloneFailed from total of $tempTotalBuildThatSuccessAndFailedAlone&quot; &gt;&gt; output.txt
-    echo -e &quot;\r\n&quot; &gt;&gt; output.txt
-    echo &quot;The Child $FirstSonJobName Has total builds of ${!tempTotalBuilds}&quot; &gt;&gt; output.txt
+    echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonAloneFailed from total of $tempTotalBuildThatSuccessAndFailedAlone&quot; &gt;&gt; $output.txt
+    echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
+    echo &quot;The Child $FirstSonJobName Has total builds of ${!tempTotalBuilds}&quot; &gt;&gt; $output.txt
     #check if only one child remaining to iterate and he already did the iteration (Get out of the While loop)
     if [[ &quot;$CountHowManyJobsLeft&quot; == &quot;1&quot; ]]
     then
@@ -200,19 +200,10 @@ CountHowManyBranchesLeft=$(echo $RestOfTheBranches | wc -w)
 
 done
 
-cat output.txt
+cat $output.txt
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>output.txt</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
 </project>
