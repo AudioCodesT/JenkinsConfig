@@ -62,7 +62,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>pwd
+      <command>cp -R /home/centos/jenkinsslave/workspace/MatrixJobStatisticsReport .
 
 BEFORE_DATE_YEAR=$(echo $BEFORE_DATE | cut -f1 -d&apos;-&apos;)
 BEFORE_DATE_Month=$(echo $BEFORE_DATE | cut -f2 -d&apos;-&apos;)
