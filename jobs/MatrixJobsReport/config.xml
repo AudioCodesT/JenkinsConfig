@@ -85,7 +85,7 @@ then
 fi
 
 #get all the information between two Dates
-sed -n &apos;/&apos;$beforeDate&apos;/,/&apos;$afterDate&apos;/{//!p}&apos; $JobName.txt &gt; $JobName&apos;1&apos;.txt
+sed -n &apos;/&apos;$beforeDate&apos;/,/&apos;$NewBeforeDate&apos;/{//!p}&apos; $JobName &gt; $JobName&apos;1&apos;.txt
 JobName=$JobName&apos;1&apos;
 
 FirstBuildNumber=$(cat $JobName.txt | grep FirstBuild: | cut -f2 -d&apos;:&apos; |  head -n1)
