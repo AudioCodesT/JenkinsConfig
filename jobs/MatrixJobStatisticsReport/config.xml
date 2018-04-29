@@ -292,16 +292,7 @@ done
 cp -R . /home/centos/MatrixJob</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts></artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
