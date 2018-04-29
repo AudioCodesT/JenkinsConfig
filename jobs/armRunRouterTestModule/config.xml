@@ -1,15 +1,165 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <description>run every night after the armNightSanity job @ ~4:15 AM&#xd;
+steps:&#xd;
+1. checkout RouterTestModule repo&#xd;
+2. run maven test ConfigureDevicesSettings - this configures SBC devices to work or not work with Configurator 10.7.20.150&#xd;
+3. run sql init and then qsl configuratorPredefineData&#xd;
+4. run maven test RouterModuleTest</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>true</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs>armBuildVMs
+armReleaseSanity
+armNightSanity
+armRunRouterTestModule
+armRunTopologyTest
+</blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>20</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://jenkins@gerrit:29418/ARM/RouterTestModule</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+    </extensions>
+  </scm>
+  <assignedNode>arm-build</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec></spec>
+      <upstreamProjects>armNightSanity, </upstreamProjects>
+      <threshold>
+        <name>FAILURE</name>
+        <ordinal>2</ordinal>
+        <color>RED</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
-  <publishers/>
-  <buildWrappers/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#sftp put configuratorPredefineData.sql in the remote configurator
+cp RouterTestModule/src/main/resources/sql/configuratorPredefineData.sql conf.sql
+/usr/bin/expect&lt;&lt;EOD
+	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
+	expect &quot;password:&quot;
+	send &quot;password\r&quot;
+	expect &quot;sftp&gt;&quot;
+	send &quot;put -p conf.sql\r&quot;
+	expect &quot;sftp&gt;&quot;
+	send &quot;bye\r&quot;
+EOD</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#run sql init
+/usr/bin/expect&lt;&lt;EOD
+	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
+	expect &quot;assword:&quot;
+	send &quot;password\r&quot;
+	expect &quot;]#&quot;
+	send &quot;service tomcat stop\r&quot;
+	expect &quot;]#&quot;
+	send &quot;mv -f conf.sql sql\r&quot;
+	expect &quot;]#&quot;
+	#send &quot;mysql -u root --password=root &lt;sql/armDB.sql\r&quot;
+	send &quot;mysql &lt;sql/armDB.sql\r&quot;
+    expect &quot;]#&quot;
+	send &quot;mysql &lt;sql/conf.sql\r&quot;
+	expect &quot;]#&quot;
+	send &quot;service tomcat start\r&quot;
+	expect &quot;]#&quot;
+	send &quot;exit\r&quot;
+EOD
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#wait for configurator to startup
+sleep 120</command>
+    </hudson.tasks.Shell>
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
+      <mavenName>Maven_v325</mavenName>
+      <rootPom>RouterTestModule/pom.xml</rootPom>
+      <goals>clean install -U test -Dtest=ConfigureDevicesSettings</goals>
+      <mavenOpts></mavenOpts>
+    </org.jfrog.hudson.maven3.Maven3Builder>
+  </builders>
+  <publishers>
+    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
+      <tasks>
+        <hudson.plugins.postbuildtask.TaskProperties>
+          <logTexts>
+            <hudson.plugins.postbuildtask.LogProperties>
+              <logText>Build was aborted</logText>
+              <operator>AND</operator>
+            </hudson.plugins.postbuildtask.LogProperties>
+          </logTexts>
+          <EscalateStatus>false</EscalateStatus>
+          <RunIfJobSuccessful>false</RunIfJobSuccessful>
+          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
+        </hudson.plugins.postbuildtask.TaskProperties>
+      </tasks>
+    </hudson.plugins.postbuildtask.PostbuildTask>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>Gila.Berchayev@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>TERM=xterm
+</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <org.jenkinsci.plugins.testinprogress.TestInProgressBuildWrapper plugin="testInProgress@1.4"/>
+  </buildWrappers>
 </project>
