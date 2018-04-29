@@ -42,7 +42,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>apiAdress=api/json?pretty
+      <command>pwd
+apiAdress=api/json?pretty
 ProjectName=&quot;IPPhone SFB&quot;
 JobName=ippReview_SFB
 SUCCESS=SUCCESS
@@ -291,7 +292,16 @@ done
 cp -R . /var/lib/jenkins/jobs/MatrixJobsReport/workspace</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts></artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
