@@ -105,6 +105,8 @@ fi
 
 #get all the information between two Dates
 echo -e &quot;\r\n&quot; &gt; output.txt
+echo &quot;Information about $JobName&quot; &gt;&gt; output.txt
+echo -e &quot;\r\n&quot; &gt;&gt; output.txt
 echo &quot;Between the Dates $afterDate to $OldbeforeDate&quot; &gt;&gt; output.txt
 #get all the information between two Dates
 sed -n &apos;/&apos;$afterDate&apos;/,/&apos;$beforeDate&apos;/{//!p}&apos; $JobName.txt &gt; $JobName&apos;1&apos;.txt
