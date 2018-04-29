@@ -41,10 +41,6 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.FileParameterDefinition>
-          <name></name>
-          <description></description>
-        </hudson.model.FileParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -67,12 +63,11 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-fileLocation=/home/centos/jenkinsslave/workspace/MatrixJobStatisticsReport
 afterDate=$(date -d $AFTER_DATE +&quot;%Y%m%d&quot;)
 beforeDate=$(date -d $BEFORE_DATE +&quot;%Y%m%d&quot;)
 NewBeforeDate=$(date -d &quot;$beforeDate+1 days&quot;)
 TodayDate=$(date +&quot;%Y%m%d&quot;)
-JobName=$fileLocation$JobName
+
 if [ $afterDate  -ge $beforeDate ]
 then
 echo &quot;******************************************************************&quot;
