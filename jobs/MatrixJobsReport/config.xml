@@ -64,8 +64,27 @@
     <hudson.tasks.Shell>
       <command>
 
-beforeDate=$(date -d $BEFORE_DATE +&quot;%Y%m%d&quot;)
 afterDate=$(date -d $AFTER_DATE +&quot;%Y%m%d&quot;)
+beforeDate=$(date -d $BEFORE_DATE +&quot;%Y%m%d&quot;)
+NewBeforeDate=$(date -d &quot;$beforeDate+1 days&quot;)
+TodayDate=$(date +&quot;%Y%m%d&quot;)
+
+if [ $afterDate  -ge $beforeDate ]
+then
+echo &quot;******************************************************************&quot;
+echo &quot;WRONG DATE ENTERED AFTER_DATE need to be smaller then BEFORE_DATE&quot;
+echo &quot;******************************************************************&quot;
+exit 1
+fi
+
+if [ $NewBeforeDate -ge $TodayDate ]
+then
+	echo &quot;*************************************************&quot;
+	echo &quot;WRONG DATE! BEFORE_DATE need to be smaller then Today&apos;s Date&quot;
+	echo &quot;*************************************************&quot;
+    exit 1
+fi
+
 #get all the information between two Dates
 sed -n &apos;/&apos;$beforeDate&apos;/,/&apos;$afterDate&apos;/{//!p}&apos; $JobName.txt &gt; $JobName&apos;1&apos;.txt
 JobName=$JobName&apos;1&apos;
