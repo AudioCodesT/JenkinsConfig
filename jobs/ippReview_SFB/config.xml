@@ -231,7 +231,8 @@ fi</command>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; || &quot;$tags&quot; -lt &quot;450&quot; ]]
+            <command>tags=$(git describe --tags --first-parent --abbrev=0  | cut -d. -f4)
+if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; || &quot;$tags&quot; -lt &quot;450&quot; ]]
 then exit 1
 fi</command>
           </condition>
@@ -275,7 +276,7 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
       exit 1;
   fi
 fi
-tags=$(git describe --tags --first-parent --abbrev=0  | cut -d. -f4)</script>
+</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
