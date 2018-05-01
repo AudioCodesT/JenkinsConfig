@@ -231,7 +231,7 @@ fi</command>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; ]]
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; || &quot;$tags&quot; -lt &quot;450&quot; ]]
 then exit 1
 fi</command>
           </condition>
@@ -274,7 +274,8 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
       $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
       exit 1;
   fi
-fi</script>
+fi
+tags=$(git describe --tags --first-parent --abbrev=0  | cut -d. -f4)</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
