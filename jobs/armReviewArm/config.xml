@@ -237,15 +237,15 @@ git -c http.sslverify=false clone -n https://gerrit/devops/tools
 
 cd tools
 
-git checkout -f origin/master -- sputnik/gerrit/arm-pdm.properties
+git checkout -f origin/master -- sputnik/gerrit/arm-pmd.properties
 
-cp sputnik/gerrit/arm-pdm.properties ${WORKSPACE}/
+cp sputnik/gerrit/arm-pmd.properties ${WORKSPACE}/
 
 cd ${WORKSPACE}
 
 ## Run Sputnik
-cat arm-pdm.properties
-/home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pdm.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }
+cat arm-pmd.properties
+/home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pmd.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }
 
 
 </command>
