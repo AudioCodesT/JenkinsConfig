@@ -72,11 +72,6 @@
     <hudson.tasks.Shell>
       <command>
 OldbeforeDate=$(date -d $BEFORE_DATE +&quot;%Y%m%d&quot;)
-BEFORE_DATE_YEAR=$(echo $BEFORE_DATE | cut -f1 -d&apos;-&apos;)
-BEFORE_DATE_Month=$(echo $BEFORE_DATE | cut -f2 -d&apos;-&apos;)
-BEFORE_DATE_Day=$(echo $BEFORE_DATE | cut -f3 -d&apos;-&apos;)
-BEFORE_DATE_Day=$((BEFORE_DATE_Day+1))
-NewBeforeDate=$BEFORE_DATE_YEAR-$BEFORE_DATE_Month-$BEFORE_DATE_Day
 
 afterDate=$(date -d $AFTER_DATE +&quot;%Y%m%d&quot;)
 beforeDate=&quot;$(date -d &quot;$BEFORE_DATE +1 days&quot; +&quot;%Y%m%d&quot;)&quot;
