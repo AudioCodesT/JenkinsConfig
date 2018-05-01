@@ -138,8 +138,8 @@ do
   declare &quot;AllSuccess$FirstBranch&quot;=$SUM
   tempAllSuccess=&quot;AllSuccess$FirstBranch&quot;
   echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
-  echo &quot;All The Builds that was Successful ${!tempAllSuccess}&quot; 
   echo &quot;All The Builds that was Successful ${!tempAllSuccess}&quot; &gt;&gt; output.txt
+  echo &quot;All The builds that was Successful  ${!tempAllSuccess}&quot; &gt;&gt; $output.txt
    #Sum  all the Parent builds of the branch that Failed 
   SUM=0; for line in `cat $JobName.txt | grep allFatherBuildsFailed_$FirstBranch: | cut -f2 -d &apos;:&apos;`; do SUM=$((SUM + line)); done
   declare &quot;allFatherBuildsFailed$FirstBranch&quot;=$SUM
