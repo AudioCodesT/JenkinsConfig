@@ -79,7 +79,7 @@ BEFORE_DATE_Day=$((BEFORE_DATE_Day+1))
 NewBeforeDate=$BEFORE_DATE_YEAR-$BEFORE_DATE_Month-$BEFORE_DATE_Day
 
 afterDate=$(date -d $AFTER_DATE +&quot;%Y%m%d&quot;)
-beforeDate=$(date -d $NewBeforeDate +&quot;%Y%m%d&quot;)
+beforeDate=&quot;$(date -d &quot;$BEFORE_DATE +1 days&quot; +&quot;%Y%m%d&quot;)&quot;
 TodayDate=$(date +&quot;%Y%m%d&quot;)
 
 output=output$JobName
