@@ -72,8 +72,27 @@ java --&gt; pmd, findbugs&#xd;
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
-  <builders/>
-  <publishers/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>## Run pmd on entire repository java files
+#/opt/pmd/bin/run.sh pmd -d . -f xml -language java -R category/java/bestpractices.xml,category/java/errorprone.xml -encoding UTF-8 -failOnViolation false &gt; pmd.xml
+/opt/pmd/bin/run.sh pmd -d . -f xml -language java -R category/java/errorprone.xml -encoding UTF-8 -failOnViolation false &gt; pmd.xml
+
+/usr/bin/sed -i -n &apos;/xml/,$p&apos; pmd.xml
+
+
+## Run FindBugs on entire repository java files
+/opt/findbugs/bin/findbugs -medium -xml -output findbugs.xml -textui .
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>shukyr@audiocodes.com,yuvaly@audiocodes.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
@@ -87,7 +106,7 @@ java --&gt; pmd, findbugs&#xd;
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
-          <value>{AQAAABAAAAAQo2VfJ1FZey5G2D0yzPBPi1er6zvkVVa67oouiikPH8Y=}</value>
+          <value>{AQAAABAAAAAQeIlgO9No0fvMfnheHExUWRhpU9jRh5Mr05H/Z6gSUVM=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
