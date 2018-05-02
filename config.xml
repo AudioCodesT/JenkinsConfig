@@ -614,7 +614,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-03b78fbcea75c353a</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-03b78fbcea75c353a</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2018-05-02 08:31:46.684 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -838,7 +849,7 @@
         <string>ippBuild_nonLync</string>
         <string>ippBuild_nonLync_Centos7.4</string>
         <string>ippBuild_ReleaseNotes_nonLync</string>
-        <string>ipphone_NON_Lync_CppCheck</string>
+        <string>ipphone_NON_Lync_CppCheck_fullRepo</string>
         <string>ippReviewCompileIPPhone_nonLync</string>
         <string>ippReviewIPPhone_nonLync</string>
         <string>ippVerifyCherryPick_nonLync</string>
