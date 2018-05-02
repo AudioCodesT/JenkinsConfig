@@ -161,7 +161,7 @@ fi
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__change#$GERRIT_CHANGE_NUMBER_$GERRIT_PATCHSET_NUMBER</template>
+      <template>#${BUILD_NUMBER}_branch:${GERRIT_BRANCH}_change#${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
