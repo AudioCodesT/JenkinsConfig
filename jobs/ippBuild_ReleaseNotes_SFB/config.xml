@@ -163,9 +163,10 @@ else if [[ $GERRIT_BRANCH == &quot;3.0.4&quot; || $GERRIT_BRANCH == &quot;3.0.6&
 else if [ $GERRIT_BRANCH == &quot;3.0.4.GA&quot; ]; then IPP_FIRST_PREV=&quot;3.0.4.1000&quot;
 else if [ $GERRIT_BRANCH == &quot;3.0.40&quot; ]; then IPP_FIRST_PREV=&quot;3.0.40.1&quot;
 else if [ $GERRIT_BRANCH == &quot;3.1.0&quot; ]; then IPP_FIRST_PREV=&quot;3.1.0.1&quot;
+else if [ $GERRIT_BRANCH == &quot;3.1.1&quot; ]; then IPP_FIRST_PREV=&quot;3.1.0.1&quot;
 else if [[ $FULL_BRANCH_NAME =~ (release|feature) ]];  then IPP_FIRST_PREV=$IPP_VER_PREV
 else exit 1;
-fi fi; fi; fi; fi; fi; fi; fi; fi;
+fi fi; fi; fi; fi; fi; fi; fi; fi; fi;
 
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
@@ -277,7 +278,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0.4.GA&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0.40&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1.0&quot;* ]]; then exit 1; fi
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0.4.GA&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0.40&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1.&quot;* ]]; then exit 1; fi
 </command>
           </condition>
           <publisherList>
