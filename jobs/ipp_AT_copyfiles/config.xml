@@ -157,9 +157,9 @@ date
               <completeBuild>true</completeBuild>
             </worstResult>
             <bestResult>
-              <name>FAILURE</name>
-              <ordinal>2</ordinal>
-              <color>RED</color>
+              <name>UNSTABLE</name>
+              <ordinal>1</ordinal>
+              <color>YELLOW</color>
               <completeBuild>true</completeBuild>
             </bestResult>
           </condition>
@@ -181,8 +181,13 @@ date
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
+message=&quot;images/files does not exist: $BUILD_URL&quot;
+if [ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; ]; then
+  message=&quot;Automation Test for branch 3.1.0 only, aborted&quot;
+fi
+
 ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;images/files does not exist: $BUILD_URL&apos;&quot; \
+--message &quot;&apos;$message&apos;&quot; \
 --notify OWNER \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$ps
