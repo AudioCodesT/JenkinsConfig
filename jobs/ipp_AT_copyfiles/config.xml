@@ -56,6 +56,7 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
+echo message=&quot;Automation Test for branch 3.1.0 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
 if [ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; ]; then
   echo Automation Test for branch 3.1.0 only... exit 2
   exit 2
@@ -128,7 +129,7 @@ done
 
 #ImageNames=$(echo $Image | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;)_${REFTARGET};
 ImageNames=$(echo $Image | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
-echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
+echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 date
 if [ $COUNTER -eq 5 ]; then
   echo files were not found ... abort
@@ -174,7 +175,7 @@ date
                       <string>FAILURE</string>
                       <string>UNSTABLE</string>
                     </results>
-                    <role>BOTH</role>
+                    <role>MASTER</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
@@ -197,7 +198,7 @@ $change,$ps
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                 </buildSteps>
-                <markBuildUnstable>false</markBuildUnstable>
+                <markBuildUnstable>true</markBuildUnstable>
               </config>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
