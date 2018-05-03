@@ -97,8 +97,8 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
 
 echo $NODE_NAME
-echo check if equel to IppTestAuto8
-if [ &quot;$NODE_NAME&quot; == &quot;IppTestAuto8&quot; ]; then
+echo check if equel to ippTestAuto8
+if [ &quot;$NODE_NAME&quot; == &quot;ippTestAuto8&quot; ]; then
   echo PHISICALPHONE=sim &gt;&gt; ${WORKSPACE}/properties.txt
   PHISICALPHONE=sim
 fi
