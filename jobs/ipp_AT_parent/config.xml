@@ -51,23 +51,6 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
-          <name>PC2RUN</name>
-          <description></description>
-          <allowedSlaves>
-            <string>ippTestAuto7</string>
-            <string>ippTestAuto8</string>
-          </allowedSlaves>
-          <defaultSlaves>
-            <string>ippTestAuto7</string>
-            <string>ippTestAuto8</string>
-          </defaultSlaves>
-          <triggerIfResult>allowMultiSelectionForConcurrentBuilds</triggerIfResult>
-          <allowMultiNodeSelection>true</allowMultiNodeSelection>
-          <triggerConcurrentBuilds>true</triggerConcurrentBuilds>
-          <ignoreOfflineNodes>false</ignoreOfflineNodes>
-          <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
-        </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>PHISICALPHONE</name>
           <description>sim - for running simulator phones 
