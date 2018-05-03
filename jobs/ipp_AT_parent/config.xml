@@ -84,7 +84,6 @@ empty - for physical phones</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -172,7 +171,7 @@ PHASE=1</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>$PC2RUN</nodeLabel>
+              <nodeLabel>$NODE_NAME</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
@@ -204,7 +203,7 @@ PHASE=2</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>$PC2RUN</nodeLabel>
+              <nodeLabel>$NODE_NAME</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
@@ -236,7 +235,7 @@ PHASE=3</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>$PC2RUN</nodeLabel>
+              <nodeLabel>$NODE_NAME</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
@@ -268,7 +267,7 @@ PHASE=4</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>$PC2RUN</nodeLabel>
+              <nodeLabel>$NODE_NAME</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
@@ -340,12 +339,6 @@ echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-              <buildSteps>
-                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/hudson.tasks.Shell"/>
-              </buildSteps>
-              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
-              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
-              <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
             <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
               <config>
@@ -399,13 +392,6 @@ $change,$newPS
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-              <buildSteps>
-                <EnvInjectBuilder reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/EnvInjectBuilder"/>
-                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep[2]/buildSteps/hudson.tasks.Shell"/>
-              </buildSteps>
-              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
-              <scriptOnlyIfFailure>true</scriptOnlyIfFailure>
-              <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
             <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
               <config>
@@ -460,13 +446,6 @@ $change,$newPS
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-              <buildSteps>
-                <EnvInjectBuilder reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/EnvInjectBuilder"/>
-                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep[2]/buildSteps/hudson.tasks.Shell"/>
-              </buildSteps>
-              <scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
-              <scriptOnlyIfFailure>false</scriptOnlyIfFailure>
-              <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
             <hudson.tasks.Mailer plugin="mailer@1.21">
               <recipients>Oren.Assoulin</recipients>
