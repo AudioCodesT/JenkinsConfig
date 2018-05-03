@@ -184,7 +184,7 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 
 message=&quot;images/files does not exist: $BUILD_URL&quot;
 if [ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; ]; then
-  message=&quot;Automation Test for branch 3.1.0 only, aborted&quot;
+  message=&quot;Automation Test for branch 3.1.0 only, aborted Automation Test&quot;
 fi
 
 ssh -p 29418 jenkins@gerrit gerrit review \
