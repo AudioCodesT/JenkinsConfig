@@ -106,6 +106,10 @@ if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then
   exit 0;
 fi
 
+if [ &quot;$NODE_NAME&quot; == &quot;IppTestAuto8&quot; ]; then
+  echo PHISICALPHONE=sim &gt;&gt; ${WORKSPACE}/properties.txt
+fi
+
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
