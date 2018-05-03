@@ -57,12 +57,6 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>REGRESSIONTYPE</name>
-          <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
-          <defaultValue>Sanity</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name>PC2RUN</name>
           <description></description>
@@ -97,6 +91,12 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>REGRESSIONTYPE</name>
+          <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
+          <defaultValue>Sanity</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
