@@ -41,7 +41,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -56,6 +55,12 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash --login
 date
+
+if [ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; ]; then
+  echo Automation Test for branch 3.1.0 only... exit 2
+  exit 2
+fi
+
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
@@ -132,6 +137,7 @@ fi
 date
 
 </command>
+      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -168,7 +174,6 @@ date
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
-                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
@@ -188,12 +193,6 @@ $change,$ps
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-              <buildSteps>
-                <hudson.tasks.Shell reference="../../config/buildSteps/org.jenkinsci.plugins.postbuildscript.model.PostBuildStep/buildSteps/hudson.tasks.Shell"/>
-              </buildSteps>
-              <scriptOnlyIfSuccess>false</scriptOnlyIfSuccess>
-              <scriptOnlyIfFailure>true</scriptOnlyIfFailure>
-              <markBuildUnstable>false</markBuildUnstable>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
