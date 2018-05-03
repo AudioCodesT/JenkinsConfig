@@ -98,7 +98,10 @@ echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
 
 if [ &quot;$NODE_NAME&quot; == &quot;IppTestAuto8&quot; ]; then
   echo PHISICALPHONE=sim &gt;&gt; ${WORKSPACE}/properties.txt
+  PHISICALPHONE=sim
 fi
+
+
 
 echo Results: &gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
 
