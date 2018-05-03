@@ -86,8 +86,16 @@ empty - for physical phones</description>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login
 
+echo $NODE_NAME
+PHISICALPHONE=&quot;&quot;
+echo check if equel to ippTestAuto8
+if [ &quot;$NODE_NAME&quot; == &quot;ippTestAuto8&quot; ]; then
+  PHISICALPHONE=sim
+fi
+
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then
   echo RunPhases=1 &gt; ${WORKSPACE}/properties.txt
+  echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
   exit 0;
 fi
 
@@ -95,15 +103,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
 echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
-
-echo $NODE_NAME
-echo check if equel to ippTestAuto8
-if [ &quot;$NODE_NAME&quot; == &quot;ippTestAuto8&quot; ]; then
-  echo PHISICALPHONE=sim &gt;&gt; ${WORKSPACE}/properties.txt
-  PHISICALPHONE=sim
-fi
-
-
+echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
 
 echo Results: &gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
 
