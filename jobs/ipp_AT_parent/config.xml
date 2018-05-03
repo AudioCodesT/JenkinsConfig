@@ -106,14 +106,14 @@ if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then
   exit 0;
 fi
 
-if [ &quot;$NODE_NAME&quot; == &quot;IppTestAuto8&quot; ]; then
-  echo PHISICALPHONE=sim &gt;&gt; ${WORKSPACE}/properties.txt
-fi
-
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
 echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
+
+if [ &quot;$NODE_NAME&quot; == &quot;IppTestAuto8&quot; ]; then
+  echo PHISICALPHONE=sim &gt;&gt; ${WORKSPACE}/properties.txt
+fi
 
 echo Results: &gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
 
