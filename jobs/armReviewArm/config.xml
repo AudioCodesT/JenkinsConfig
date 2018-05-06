@@ -238,6 +238,7 @@ git -c http.sslverify=false clone -n https://gerrit/devops/tools
 cd tools
 
 git checkout -f origin/master -- sputnik/gerrit/arm-pmd.properties
+git checkout -f origin/master -- pmd/audc-ruleset.xml
 
 cp sputnik/gerrit/arm-pmd.properties ${WORKSPACE}/
 cp pmd/audc-ruleset.xml ${WORKSPACE}/
@@ -247,8 +248,6 @@ cd ${WORKSPACE}
 ## Run Sputnik
 cat arm-pmd.properties
 /home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pmd.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }
-
-
 </command>
     </hudson.tasks.Shell>
   </postbuilders>
