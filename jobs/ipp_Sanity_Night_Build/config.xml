@@ -179,11 +179,7 @@ echo Find $ID
 
 if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
 
-if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
-  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
-else  
-  cd C:/IpPhoneAutomation/ATA
-fi
+cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
 
 echo MESSAGE=Aborted &gt;&gt; $WORKSPACE/properties.txt
 echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
