@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.jira.JiraProjectProperty_-DescriptorImpl plugin="jira@2.2.1">
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.plugins.jira.JiraProjectProperty_-DescriptorImpl plugin="jira@2.5">
   <sites>
     <hudson.plugins.jira.JiraSite>
       <url>http://acjira:8080/</url>
@@ -9,6 +9,7 @@
       <password>{AQAAABAAAAAQvN98Gam/rcS5TPaDkl0ShdAZlV16ArdJEIR5Bp7SCUQ=}</password>
       <supportsWikiStyleComment>false</supportsWikiStyleComment>
       <recordScmChanges>false</recordScmChanges>
+      <disableChangelogAnnotations>false</disableChangelogAnnotations>
       <userPattern>([a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*)([^.]|\.[^0-9]|\.$|$)</userPattern>
       <updateJiraIssueForAllStatus>true</updateJiraIssueForAllStatus>
       <timeout>10</timeout>

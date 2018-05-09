@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<jenkins.plugins.publish__over__cifs.CifsPublisherPlugin_-Descriptor plugin="publish-over-cifs@0.3">
+<?xml version='1.1' encoding='UTF-8'?>
+<jenkins.plugins.publish__over__cifs.CifsPublisherPlugin_-Descriptor plugin="publish-over-cifs@0.9">
   <hostConfigurations>
     <jenkins.plugins.publish__over__cifs.CifsHostConfiguration>
       <name>netapp1</name>
@@ -9,6 +9,7 @@
       <remoteRootDir>ARM</remoteRootDir>
       <port>445</port>
       <timeout>30000</timeout>
+      <bufferSize>4096</bufferSize>
     </jenkins.plugins.publish__over__cifs.CifsHostConfiguration>
   </hostConfigurations>
   <defaults class="jenkins.plugins.publish_over_cifs.options.CifsPluginDefaults"/>

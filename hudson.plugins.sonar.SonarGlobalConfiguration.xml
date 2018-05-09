@@ -1,10 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <hudson.plugins.sonar.SonarGlobalConfiguration plugin="sonar@2.6.1">
   <installations>
     <hudson.plugins.sonar.SonarInstallation>
       <name>AC_Sonar</name>
       <serverUrl>http://sanjer:9000</serverUrl>
       <serverVersion>5.1</serverVersion>
+      <serverAuthenticationToken></serverAuthenticationToken>
       <mojoVersion></mojoVersion>
       <databaseUrl>jdbc:mysql://rdci.c1tyrsglic7l.eu-central-1.rds.amazonaws.com:3306/sonar?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8</databaseUrl>
       <databaseLogin>sonar</databaseLogin>
@@ -16,8 +17,8 @@
         <envVar></envVar>
       </triggers>
       <sonarLogin></sonarLogin>
-      <databaseSecret>{AQAAABAAAAAQEm7WFElYP0/PgNWxpWRByhPbyEFSuFuWRZB0I8VRSyQ=}</databaseSecret>
-      <sonarSecret>{AQAAABAAAAAQvqhyAjIN5fQ1oIumaUXe9klj+X3Y3waKjxFO4kKjAbI=}</sonarSecret>
+      <databaseSecret>{AQAAABAAAAAQziQtnPbUFYNJlctcW9zD4fPtC7a5uIzDUwbgxzTxDqo=}</databaseSecret>
+      <sonarSecret>{AQAAABAAAAAQ3bcXN+qRdlOw88YLsX1IJnnmx3VeXQjX+ciRKyDMvUs=}</sonarSecret>
     </hudson.plugins.sonar.SonarInstallation>
   </installations>
   <buildWrapperEnabled>true</buildWrapperEnabled>

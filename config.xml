@@ -319,20 +319,27 @@
           <connector class="io.jenkins.docker.connector.DockerComputerSSHConnector">
             <sshKeyStrategy class="io.jenkins.docker.connector.DockerComputerSSHConnector$ManuallyConfiguredSSHKey">
               <credentialsId>c1afc0c0-8ae7-4cfd-ac86-5f295ed013df</credentialsId>
+              <sshHostKeyVerificationStrategy class="hudson.plugins.sshslaves.verifiers.KnownHostsFileKeyVerificationStrategy" plugin="ssh-slaves@1.26"/>
             </sshKeyStrategy>
             <port>22</port>
             <jvmOptions></jvmOptions>
             <javaPath></javaPath>
+            <prefixStartSlaveCmd></prefixStartSlaveCmd>
+            <suffixStartSlaveCmd></suffixStartSlaveCmd>
           </connector>
           <remoteFs>/home/jenkins</remoteFs>
           <instanceCap>1</instanceCap>
           <mode>NORMAL</mode>
-          <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
+          <retentionStrategy class="com.nirima.jenkins.plugins.docker.strategy.DockerOnceRetentionStrategy">
+            <timeout>10</timeout>
+          </retentionStrategy>
           <dockerTemplateBase>
             <image>arm-centos67-mariadb-activemq:1.1</image>
+            <pullCredentialsId></pullCredentialsId>
             <dockerCommand>/root/start.sh</dockerCommand>
             <hostname></hostname>
             <dnsHosts/>
+            <network></network>
             <volumes/>
             <volumesFrom2/>
             <environment/>
@@ -340,14 +347,11 @@
             <bindAllPorts>false</bindAllPorts>
             <privileged>false</privileged>
             <tty>true</tty>
-            <extraHosts class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
-              <c class="list"/>
-              <list reference="../c"/>
-            </extraHosts>
+            <extraHosts class="empty-list"/>
           </dockerTemplateBase>
           <removeVolumes>true</removeVolumes>
           <pullStrategy>PULL_LATEST</pullStrategy>
-          <nodeProperties class="hudson.util.DescribableList"/>
+          <nodeProperties class="empty-list"/>
         </com.nirima.jenkins.plugins.docker.DockerTemplate>
       </templates>
       <dockerApi>
@@ -365,7 +369,7 @@
       <useInstanceProfileForCredentials>false</useInstanceProfileForCredentials>
       <credentialsId>99f592ed-d031-48b3-9a29-82e43e05e202</credentialsId>
       <privateKey>
-        <privateKey>{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}</privateKey>
+        <privateKey>{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}</privateKey>
       </privateKey>
       <instanceCap>250</instanceCap>
       <templates>
@@ -404,6 +408,7 @@
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
             <rootCommandPrefix></rootCommandPrefix>
+            <slaveCommandPrefix></slaveCommandPrefix>
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>2147483647</launchTimeout>
@@ -445,6 +450,7 @@
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
             <rootCommandPrefix></rootCommandPrefix>
+            <slaveCommandPrefix></slaveCommandPrefix>
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>180</launchTimeout>
@@ -486,6 +492,7 @@
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
             <rootCommandPrefix></rootCommandPrefix>
+            <slaveCommandPrefix></slaveCommandPrefix>
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>180</launchTimeout>
@@ -614,18 +621,7 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-03b78fbcea75c353a</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-03b78fbcea75c353a</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2018-05-02 08:31:46.684 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>

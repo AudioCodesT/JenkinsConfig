@@ -1,6 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.emailext.ExtendedEmailPublisherDescriptor plugin="email-ext@2.41.3">
-  <useSsl>false</useSsl>
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.plugins.emailext.ExtendedEmailPublisherDescriptor plugin="email-ext@2.62">
+  <mailAccount>
+    <useSsl>false</useSsl>
+  </mailAccount>
+  <addAccounts/>
   <charset>UTF-8</charset>
   <defaultContentType>text/plain</defaultContentType>
   <defaultSubject>$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!</defaultSubject>
@@ -20,7 +23,7 @@ Check console output at $BUILD_URL to view the results.</defaultBody>
   <overrideGlobalSettings>true</overrideGlobalSettings>
   <precedenceBulk>false</precedenceBulk>
   <debugMode>false</debugMode>
-  <enableSecurity>false</enableSecurity>
   <requireAdminForTemplateTesting>false</requireAdminForTemplateTesting>
   <enableWatching>false</enableWatching>
+  <enableAllowUnregistered>false</enableAllowUnregistered>
 </hudson.plugins.emailext.ExtendedEmailPublisherDescriptor>
