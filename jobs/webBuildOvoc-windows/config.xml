@@ -164,19 +164,14 @@ then
       
       if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
       then 
-      echo &quot;RUN:npm install&quot;
-      npm install
+      	echo &quot;RUN:npm install&quot;
+      	npm install
+      	echo &quot;RUN: bower install --force-latest&quot;
+	  	bower install --force-latest
       else
-      echo &quot;RUN: yarn install&quot;
-      yarn install
+      	echo &quot;RUN: yarn install&quot;
+      	yarn install
       fi
-      
-      
-      echo &quot;RUN: bower install --force-latest&quot;
-	  bower install --force-latest
-
-
-
       
       #update version number before grunt dist
       #change the hard-coded &quot;7.4.0&quot; to branch name + jenkins build number
