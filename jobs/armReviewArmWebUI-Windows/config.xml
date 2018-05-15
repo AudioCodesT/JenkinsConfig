@@ -146,7 +146,7 @@ fi
 #bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
 #echo &quot;RUN: bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git&quot;
 #bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
-rm -rf node_modules
+rm -rf node_modules/
 echo &quot;RUN: npm install&quot;
 npm install
 echo &quot;RUN: bower install --force-latest&quot;
