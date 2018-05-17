@@ -231,7 +231,7 @@ ${WORKSPACE}/build/image/build*.tgz=&gt;com/ac/ipp/non_lync/centos7.4-TEST/${IPP
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}___${IPP_VER}</template>
+      <template>#${BUILD_NUMBER}__branch:${BUILD_BRANCH}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
