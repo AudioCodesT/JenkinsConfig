@@ -37,6 +37,8 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -117,7 +119,7 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp-centos7.4</string>
+        <string>ipp-centos7.4-fix</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
@@ -210,7 +212,7 @@ ${WORKSPACE}/build/image/build*.tgz=&gt;com/ac/ipp/non_lync/centos7.4/${IPP_MAJO
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4-fix&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
