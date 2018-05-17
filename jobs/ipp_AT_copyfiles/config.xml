@@ -56,9 +56,9 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
-echo message=&quot;Automation Test for branch 3.1.0 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
-if [ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; ]; then
-  echo Automation Test for branch 3.1.0 only... exit 2
+echo message=&quot;Automation Test for branch 3.1.0 or 3.2.0 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
+if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2.0&quot; ]]; then
+  echo Automation Test for branch 3.1.0 or 3.2.0 only... exit 2
   exit 2
 fi
 
@@ -184,8 +184,8 @@ change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
 message=&quot;images/files does not exist: $BUILD_URL&quot;
-if [ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; ]; then
-  message=&quot;Automation Test for branch 3.1.0 only, aborted Automation Test&quot;
+if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2.0&quot; ]]; then
+  message=&quot;Automation Test for branch 3.1.0 or 3.2.0 only, aborted Automation Test&quot;
 fi
 
 ssh -p 29418 jenkins@gerrit gerrit review \
