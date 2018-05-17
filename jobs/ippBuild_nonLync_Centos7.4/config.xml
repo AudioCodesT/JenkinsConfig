@@ -13,6 +13,14 @@ activated by job:   ippBuild_ReleaseNotes_nonLync&#xd;
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -143,8 +151,13 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</c
 yes | make distclean
 if [ $FIRMWARE == &quot;ce8&quot; ]; then
   make auto AUTOPRD=$AUTOPRD FIRMWARE=$FIRMWARE SUBVERSION=$FIRMWARE
+  make binary;
+  make SUBVERSION=${FIRMWARE}_dummy;
+  mv build/image/build.tgz build/image/build_${FIRMWARE}.tgz
 else
   make auto AUTOPRD=$AUTOPRD
+  make binary;
+  make SUBVERSION=dummy;
 fi
 </command>
     </hudson.tasks.Shell>
@@ -198,8 +211,8 @@ fi
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/non_lync/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build*.tgz=&gt;com/ac/ipp/non_lync/centos7.4/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
+      <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;com/ac/ipp/non_lync/centos7.4-TEST/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/build*.tgz=&gt;com/ac/ipp/non_lync/centos7.4-TEST/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
 </deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
