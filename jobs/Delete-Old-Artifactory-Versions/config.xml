@@ -92,6 +92,7 @@ function RemoveFolder() {
         echo Delete ${Folder}$uri
         echo ---------------------
         curl -ks -u $User -X DELETE https://$ARTIFACTORY/${Folder}$uri
+      fi
     done    
   fi
 }
