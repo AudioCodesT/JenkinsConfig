@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <user>
   <fullName>Izik Hakshur</fullName>
   <properties>
     <jenkins.security.ApiTokenProperty>
-      <apiToken>SGrdGwwLDTjhR30Zks5/l+yqvhXtnIbximTg+OwvY2UQV7WSh2DA10Lq4g4XcOmq</apiToken>
+      <apiToken>{AQAAABAAAAAw7C9SCxPSiMXbcWzqkKsAE/GE9kXNON3CPTMYBXwyjvG+vuF8caxn2/zyRRkTF9vjZpwDXaWsxOKuTJTYAliMXg==}</apiToken>
     </jenkins.security.ApiTokenProperty>
-    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@1.26">
+    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
         <entry>
           <com.cloudbees.plugins.credentials.domains.Domain>
@@ -15,7 +15,7 @@
         </entry>
       </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
-    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
+    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.62">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
     <hudson.model.MyViewsProperty>
@@ -39,13 +39,12 @@
       <roles>
         <string># All Dinner</string>
         <string>authenticated</string>
-        <string># IP Phone R&amp;D</string>
+        <string>AWS_Jira_Users</string>
         <string>Allowed RODC Password Replication Group</string>
+        <string># IPP QA</string>
         <string>Users</string>
         <string>ActionBase Users</string>
-        <string># CMBU-QA</string>
         <string>#All Breakfast</string>
-        <string># CMBU-R&amp;D</string>
         <string># All Lunch</string>
         <string>CatalogApps_Everyone</string>
         <string>Logistics_maintenance</string>
@@ -53,9 +52,11 @@
         <string>#IP Phone Automation</string>
         <string># All ISRAEL</string>
         <string>Offer Remote Assistance Helpers</string>
+        <string># IPP QA - Israel</string>
+        <string>FTP_default</string>
         <string>Mailvision Branch Office Users</string>
+        <string># IPP</string>
         <string>Vopp</string>
-        <string># IPP New Version Notification</string>
         <string>AudioCodes_VPN</string>
         <string># All AudioCodes</string>
         <string>Certificate Service DCOM Access</string>
@@ -64,10 +65,13 @@
         <string>IppSwReleases</string>
         <string># All_Lync_Pilot</string>
       </roles>
-      <timestamp>1500456060608</timestamp>
+      <timestamp>1526894742700</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Izik.Hakshur@audiocodes.com</emailAddress>
     </hudson.tasks.Mailer_-UserProperty>
+    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.2.0">
+      <providerId>default</providerId>
+    </org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty>
   </properties>
 </user>
