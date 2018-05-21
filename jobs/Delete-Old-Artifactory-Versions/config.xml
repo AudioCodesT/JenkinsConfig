@@ -85,7 +85,7 @@ function RemoveFolder() {
       echo Execute this function again to check the following directory: ${Folder}$uri
       RemoveFolder ${Folder}$uri;
     done
-    if [ $deep -eq 1 ]; then 
+    if [ $deep -eq 2 ]; then 
       echo Check its files
       curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*false&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
       do
@@ -100,11 +100,9 @@ function RemoveFolder() {
   fi
   
   ((deep-=1))
-  echo $?
-  return 0
 }
 
-deep=0
+deep=1
 # Ececute for folders in Artifactory
 ARTIFACTORY=artifactory
 RemoveFolder ipp-review/nonLync
