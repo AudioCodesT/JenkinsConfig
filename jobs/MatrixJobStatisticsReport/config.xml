@@ -65,6 +65,7 @@ echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
 #run twice (first time on IPPhone SFB and second time on ippCentos7.4-reviewSIM)
 for j in `seq 0 1`
 do
+set +x
 #initialize parameters for the second time the job running for ippCentos7.4-reviewSIM
   if [ &quot;$j&quot; == &quot;1&quot; ]
   then
@@ -252,7 +253,7 @@ do
     fi
   fi
 done
-
+set -x
 #print to text file all the data about each branch about his parents and childs 
 TodayDate=$(date +&quot;%Y%m%d&quot;)
 echo &quot;Date: $TodayDate&quot; &gt;&gt; $JobName.txt
