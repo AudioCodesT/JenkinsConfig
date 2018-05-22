@@ -73,7 +73,8 @@ function RemoveFolder() {
   local Folder=$1
   # The date format is: YYYYMMDD (Y=the year, M=Month, D=Day  - Example: 8 Jan 2018 should be 20180108
   lastModified=$(curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
-  
+  if [ &quot;$lastModified&quot; == &quot;&quot; ]; then return 0; fi
+
   if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
     echo Delete $Folder
     echo ---------------------
