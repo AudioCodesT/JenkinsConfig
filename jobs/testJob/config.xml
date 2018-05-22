@@ -1,5 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -17,6 +18,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -34,7 +37,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash +x
+      <command>set +x
 apiAdress=api/json?pretty
 ProjectName=&quot;IPPhone SFB&quot;
 JobName=ippReview_SFB
@@ -48,6 +51,7 @@ arrBranchesIndex=0
 countHowManyBuilds=0
 length_JobName=ipp_Review_SFB
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+echo &quot;dalala&quot;
 #run twice (first time on IPPhone SFB and second time on ippCentos7.4-reviewSIM)
 for j in `seq 0 1`
 do
@@ -60,7 +64,7 @@ do
     length_JobName=reviewSIM
     echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
   fi
-
+set -x
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
@@ -71,6 +75,7 @@ FirstBuildNumber=$LastBuildNumber
 #get the last job build number that happend last build
 LastJobBuildNumber=$(cat $JobName.txt | grep LastBuild: | cut -f2 -d&apos;:&apos; |  tail -n1)
 #if its the first time running the job
+set +x
 if [ -z &quot;$LastJobBuildNumber&quot; ]
 then
   LastJobBuildNumber=0
