@@ -65,6 +65,7 @@ do
     echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
   fi
 set -x
+echo &quot;dalala1&quot;
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
@@ -76,6 +77,7 @@ FirstBuildNumber=$LastBuildNumber
 LastJobBuildNumber=$(cat $JobName.txt | grep LastBuild: | cut -f2 -d&apos;:&apos; |  tail -n1)
 #if its the first time running the job
 set +x
+echo &quot;dalala2&quot;
 if [ -z &quot;$LastJobBuildNumber&quot; ]
 then
   LastJobBuildNumber=0
