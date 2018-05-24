@@ -260,7 +260,9 @@ GERRIT_BRANCH=${GERRIT_BRANCH}</properties>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>.git/index.lock</pattern>
@@ -268,18 +270,9 @@ GERRIT_BRANCH=${GERRIT_BRANCH}</properties>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>false</deleteDirs>
-      <skipWhenFailed>false</skipWhenFailed>
-      <cleanWhenSuccess>false</cleanWhenSuccess>
-      <cleanWhenUnstable>false</cleanWhenUnstable>
-      <cleanWhenFailure>true</cleanWhenFailure>
-      <cleanWhenNotBuilt>false</cleanWhenNotBuilt>
-      <cleanWhenAborted>true</cleanWhenAborted>
-      <notFailBuild>true</notFailBuild>
-      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <cleanupParameter></cleanupParameter>
       <externalDelete></externalDelete>
-    </hudson.plugins.ws__cleanup.WsCleanup>
-  </publishers>
-  <buildWrappers>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
 Owner=$GERRIT_PATCHSET_UPLOADER_NAME
