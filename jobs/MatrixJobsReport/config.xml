@@ -174,7 +174,7 @@ do
     #
     if [ ${!tempSonFailed} -lt ${!tempAllFailed} ]
     then
-    	echo &quot;Meaningful Failure of $FirstSonJobName has  ${!tempSonFailed} from total of {!tempTotalBuilds}&quot; &gt;&gt; $output.txt
+    	echo &quot;Meaningful Failure of $FirstSonJobName has  ${!tempSonFailed} from total of ${!tempTotalBuilds}&quot; &gt;&gt; $output.txt
     else
     	echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonAloneFailed from total of $tempTotalBuildThatSuccessAndFailedAlone&quot; &gt;&gt; $output.txt
     fi
