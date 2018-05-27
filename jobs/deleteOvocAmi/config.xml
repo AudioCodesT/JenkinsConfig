@@ -60,9 +60,9 @@ count=0
 sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 
 for image in sortedAmis7_6:
-     print &quot;image 1 %s&quot; % image.id
-     if count &gt;= 2:
-     	print &quot;image to delete %s&quot; % image.id
+     print &quot;image %d %s&quot; %count % image.id
+     if count &gt;= 0:
+     	print &quot;Delete AmI %s&quot; % image.id
         image.deregister()
  	    # Search for additional snapshots for the current image and delete them
         for snapshot in snapshots:
