@@ -59,7 +59,7 @@ for image in images:
 count=0
 sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 for image in sortedAmis7_6:
-	print &quot;image %s&quot; % image.id
+	print &quot;image $s&quot; $ image.id
 #   count=count+1
 #	if count &gt;= 5:
 #	    print &quot;deregistering image %s&quot; % image.id
