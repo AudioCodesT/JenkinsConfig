@@ -135,6 +135,9 @@ if [ $COUNTER -eq 5 ]; then
   echo files were not found ... abort
   exit 1
 fi
+
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
 date
 
 </command>
