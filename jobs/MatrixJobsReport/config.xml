@@ -172,7 +172,12 @@ do
     #about each child how many times failed alone 
     declare tempSonAloneFailed=$((Failed${EscapedSonJobName}${FirstBranch}-AllFailed$FirstBranch))
     #
-    echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonAloneFailed from total of $tempTotalBuildThatSuccessAndFailedAlone&quot; &gt;&gt; $output.txt
+    if [ ${!tempSonFailed} &lt; ${!tempAllFailed} ]
+    then
+    	echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonFailed from total of $tempTotalBuilds&quot; &gt;&gt; $output.txt
+    else
+    	echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonAloneFailed from total of $tempTotalBuildThatSuccessAndFailedAlone&quot; &gt;&gt; $output.txt
+    fi
     echo -e &quot;\r\n&quot; &gt;&gt; $output.txt
     echo &quot;The Child $FirstSonJobName Has total builds of ${!tempTotalBuilds}&quot; &gt;&gt; $output.txt
     #check if only one child remaining to iterate and he already did the iteration (Get out of the While loop)
