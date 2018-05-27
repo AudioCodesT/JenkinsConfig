@@ -60,7 +60,7 @@ count=0
 sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 
 for image in sortedAmis7_6:
-     print &quot;image %s %s&quot; % count image.id
+     print(&quot;image %s is %s&quot; % (count, image.name))
      if count &gt;= 0:
      	print &quot;Delete AmI %s&quot; % image.id
         image.deregister()
