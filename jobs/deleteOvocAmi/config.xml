@@ -63,7 +63,7 @@ for image in sortedAmis7_6:
      print &quot;image 1 %s&quot; % image.id
      if count &gt;= 2:
      	print &quot;image to delete %s&quot; % image.id
- 	    image.deregister()
+        image.deregister()
  	    # Search for additional snapshots for the current image and delete them
         for snapshot in snapshots:
              if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
