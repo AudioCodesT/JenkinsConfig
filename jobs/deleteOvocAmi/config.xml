@@ -59,17 +59,15 @@ count=0
 sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 for image in sortedAmis7_6:
     count=count+1
-    print &quot;image number %d&quot; % count
 	if count &gt;= 5:
 	    print &quot;deregistering image %s&quot; % image.id
  	    #image.deregister()
  	    # Search for additional snapshots for the current image and delete them
 	    for snapshot in snapshots:
-		    if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
-	    	    #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+		    if snapshot[&apos;Description&apos;].find(image.id) &gt; 0 :
  	            print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
 	            print &quot;----------------------------------------------------------&quot;
-            
+            	#snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
 </command>
     </hudson.tasks.Shell>
   </builders>
