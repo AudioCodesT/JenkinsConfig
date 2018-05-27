@@ -69,6 +69,7 @@ for image in sortedAmis7_6:
              if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
                 print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
                 #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+     count=count+1
 EOS</command>
     </hudson.tasks.Shell>
   </builders>
