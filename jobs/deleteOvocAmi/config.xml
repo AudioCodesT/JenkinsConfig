@@ -58,6 +58,7 @@ for image in images:
      	imagesListOf7_6.append(image)
 count=0
 sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
+print sortedAmis7_6
 for image in sortedAmis7_6:
 	print &quot;image %s&quot; % image.id
 #   count=count+1
