@@ -97,6 +97,7 @@ then
 	echo &quot;*************************************************&quot;
     exit 1
 fi
+set +x
  	#get all the details about all the patchsets that created
    	jsonFile=$(ssh -p $PORT $SERVER gerrit query --format=JSON project:$PROJECT_NAME before:$BEFORE_DATE after:$AFTER_DATE --patch-sets)
     patchSetArray=( $(echo &quot;$jsonFile&quot; | jq &apos;.patchSets | length&apos;) )
@@ -104,7 +105,7 @@ fi
     #get all the details about all the merges 
     jsonFileMerged=$(ssh -p $PORT $SERVER gerrit query --format=JSON status:Merged project:$PROJECT_NAME before:$BEFORE_DATE after:$AFTER_DATE)
     MergedArray=( $(echo &quot;$jsonFileMerged&quot; | jq &apos;.rowCount  | length&apos;) )
-	
+	set -x
     #print how many times patchset and merges happend
     printf &apos;%s\n&apos; &quot;${patchSetArray[@]}&quot;  |awk &apos;{sum+=$1};END{print &quot;the amount of PatchSets to the project is &quot; sum}&apos;
 	echo &quot;The amount of Issues that merged to the project $PROJECT_NAME between $BEFORE_DATE  to $AFTER_DATE is ${MergedArray[-1]}&quot;
