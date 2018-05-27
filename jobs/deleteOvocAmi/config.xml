@@ -66,9 +66,9 @@ for image in sortedAmis7_6:
  	    # Search for additional snapshots for the current image and delete them
 	     for snapshot in snapshots:
 		      if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
- 	            print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
-	            print &quot;----------------------------------------------------------&quot;
-            	#snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+ 	             print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
+	             print &quot;----------------------------------------------------------&quot;
+            	 #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
 EOS</command>
     </hudson.tasks.Shell>
   </builders>
