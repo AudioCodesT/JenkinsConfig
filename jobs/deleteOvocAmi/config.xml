@@ -1,15 +1,73 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>python &lt;&lt;-EOS
+
+import boto3
+import collections
+import datetime
+import time
+import sys
+ec = boto3.client(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
+ec2 = boto3.resource(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
+images = ec2.images.filter(Name=[&quot;858367874798&quot;])
+# Select all snapshots owned by me
+snapshots = ec.describe_snapshots(MaxResults=1000, OwnerIds=[&apos;858367874798&apos;])[&apos;Snapshots&apos;]
+imagesListOf7_6 = []
+# Loop through each image of our current instance
+for image in images:
+	if image.name.startswith(&apos;OvocAMI_7.6&apos;):
+    	imagesListOf7_6.append(image)
+count=0
+sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
+for image in sortedAmis7_6:
+	count += 1
+	if count &gt;= 5:
+		print &quot;deregistering image %s&quot; % image.id
+ 	    #image.deregister()
+ 	    # Search for additional snapshots for the current image and delete them
+	    for snapshot in snapshots:
+		    if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
+	    #	    snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+ 	            print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
+	            print &quot;----------------------------------------------------------&quot;
+            
+</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
   <buildWrappers/>
 </project>
