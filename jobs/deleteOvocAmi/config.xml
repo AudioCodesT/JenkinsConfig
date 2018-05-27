@@ -58,7 +58,6 @@ for image in images:
     	print &quot;image %s&quot; % image.id
     	#imagesListOf7_6.append(image)
 count=0
-EOS
 #sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 #for image in sortedAmis7_6:
 #    count=count+1
@@ -70,7 +69,8 @@ EOS
 #		    if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
 # 	            print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
 #	            print &quot;----------------------------------------------------------&quot;
-            	#snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])</command>
+            	#snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+EOS</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
