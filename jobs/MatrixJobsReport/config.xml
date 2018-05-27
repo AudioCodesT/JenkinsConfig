@@ -172,7 +172,7 @@ do
     #about each child how many times failed alone 
     declare tempSonAloneFailed=$((Failed${EscapedSonJobName}${FirstBranch}-AllFailed$FirstBranch))
     #
-    if [ ${!tempSonFailed} &lt; ${!tempAllFailed} ]
+    if [ ${!tempSonFailed} -lt ${!tempAllFailed} ]
     then
     	echo &quot;Meaningful Failure of $FirstSonJobName has  $tempSonFailed from total of $tempTotalBuilds&quot; &gt;&gt; $output.txt
     else
