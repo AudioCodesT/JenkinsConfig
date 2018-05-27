@@ -55,9 +55,10 @@ imagesListOf7_6 = []
 # Loop through each image of our current instance
 for image in images:
 	if image.name.startswith(&apos;OvocAMI_7.6&apos;):
-    	imagesListOf7_6.append(image)
-count=0
-sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
+    	print &quot;deregistering image %s&quot; % image.id
+    	#imagesListOf7_6.append(image)
+#count=0
+#sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 #for image in sortedAmis7_6:
 #    count=count+1
 #	if count &gt;= 5:
