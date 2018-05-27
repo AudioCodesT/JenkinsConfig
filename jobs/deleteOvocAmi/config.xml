@@ -41,6 +41,7 @@ import collections
 import datetime
 import time
 import sys
+
 ec = boto3.client(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
 ec2 = boto3.resource(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
 images = ec2.images.filter(Name=[&quot;858367874798&quot;])
