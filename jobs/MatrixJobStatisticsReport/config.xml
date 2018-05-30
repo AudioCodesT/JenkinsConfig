@@ -56,7 +56,7 @@ SUCCESS=SUCCESS
 FAILURE=FAILURE
 ABORTED=ABORTED
 User=benm
-ApiToken=0820c5cd2ddda470d58baa1c2847eb37
+#ApiToken=0820c5cd2ddda470d58baa1c2847eb37
 CountEnteredTheIf=0
 arrBranchesIndex=0
 countHowManyBuilds=0
@@ -313,6 +313,16 @@ done
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>ApiToken</name>
+          <value>{AQAAABAAAAAwrYT9B9LcTWXj8UQg44Hec5Dj8UPBaufJnUgTVOwph4S7+mbyP9hDA154g3Sz8m1R8Y8LQoFgZthBzti1Pw6uow==}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
       <runAtStart>true</runAtStart>
