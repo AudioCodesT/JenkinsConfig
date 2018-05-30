@@ -168,7 +168,7 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
 FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
 if [[ ! $FilesList =~ cppcheck.sh ]]
 then
-	git fetch
+	git fetch origin ${GERRIT_BRANCH}
     git checkout FETCH_HEAD -- scripts/cppcheck.sh scripts/
 fi
 #some init params
