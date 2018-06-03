@@ -279,6 +279,7 @@ if [[ -e ExecuteScript ]];then
     if [[ $GERRIT_BRANCH == feature/3.1.0.199/HTTP_based_Services_Communication ]] ; then
       sh ${WORKSPACE}/GTest.sh
       RetunedValue=$?
+      echo &quot;$RetunedValue&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
             message=&quot;The Unit Tests from the Script GTest.sh Failed&quot;
