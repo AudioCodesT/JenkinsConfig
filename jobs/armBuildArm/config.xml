@@ -128,6 +128,10 @@ echo &quot;javac version set to: $jcver&quot;
 sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
 . /etc/environment
 
+#new scrip to prepare database env
+#this is per Igor request for his new trick to reduce unit-tests time
+#It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
+bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 
 #find the last tag in this branch:
 LastTag=`git describe --abbrev=0 --tags origin/$BRANCH`
