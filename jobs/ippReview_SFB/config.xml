@@ -289,12 +289,11 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
   fi
 fi
 if [[ -e GTest.sh ]]; then
-    if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
-      chmod +x ./GTest.sh
+    if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then 
       set +e
      set -x
     echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
-     ./GTest.sh &gt; GTestLogFile.txt 2&gt;error.txt
+      sh GTest.sh &gt; GTestLogFile.txt
       if [[ -e error.txt ]]; then
       cat error.txt
        fi
@@ -302,7 +301,7 @@ if [[ -e GTest.sh ]]; then
      echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
      echo &quot;************************GTest Log File Output************************&quot;
-     cat &quot;GTestLogFile.txt&quot;
+     cat GTestLogFile.txt
      echo &quot;************************end of the GTest Output************************&quot;
       set +x
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
