@@ -293,7 +293,7 @@ if [[ -e GTest.sh ]]; then
       set +e
      set -x
     echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
-     ./GTest.sh &gt; GTestLogFile.txt 
+     sh GTest.sh &gt; GTestLogFile.txt 
       RetunedValue=$?
      echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
