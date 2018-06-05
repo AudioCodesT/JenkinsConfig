@@ -289,8 +289,6 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
       exit 1;
   fi
 fi
-
-
 if [[ -e GTest.sh ]]; then
     if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
       set +e
