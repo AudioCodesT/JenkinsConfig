@@ -294,10 +294,10 @@ fi
 if [[ -e GTest.sh ]]; then
     if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
       set +e
-    echo &quot;****************************************************RUN GTest.sh SCRIPT****************************************************&quot;
+    echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt
       RetunedValue=$?
-     echo &quot;****************************************************FINISH RUNNING THE SCRIPT****************************************************&quot;
+     echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
      echo &quot;************************GTest Log File Output************************&quot;
      cat GTestLogFile.txt | Tail -n30
