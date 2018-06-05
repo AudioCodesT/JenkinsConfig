@@ -275,6 +275,7 @@ GERRIT_BRANCH=${GERRIT_BRANCH}</properties>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>if [[ -e /GTest.sh ]]; then
+    echo &quot;Found The File&quot; &gt; test.txt
     if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
       sh /GTest.sh &gt; GTestLogFile.txt
       RetunedValue=$?
