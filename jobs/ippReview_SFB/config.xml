@@ -294,8 +294,10 @@ fi
 if [[ -e GTest.sh ]]; then
     if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
      echo &quot;****************************************************RUN GTest.sh SCRIPT****************************************************&quot;
+      set -e
       sh GTest.sh &gt; GTestLogFile.txt
       RetunedValue=$?
+      set +e
     echo &quot;****************************************************FINISH RUNNING THE SCRIPT****************************************************&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
