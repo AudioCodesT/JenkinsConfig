@@ -301,7 +301,7 @@ if [[ -e GTest.sh ]]; then
      echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
      echo &quot;************************GTest Log File Output************************&quot;
-     lpr GTestLogFile.txt
+    cat GTestLogFile.txt
      echo &quot;************************end of the GTest Output************************&quot;
       set +x
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
