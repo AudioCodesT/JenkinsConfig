@@ -294,8 +294,8 @@ if [[ -e GTest.sh ]]; then
       set +e
     echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt
-     echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       RetunedValue=$?
+     echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
      echo &quot;************************GTest Log File Output************************&quot;
      cat GTestLogFile.txt
