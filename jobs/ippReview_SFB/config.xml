@@ -291,7 +291,7 @@ fi
 if [[ -e GTest.sh ]]; then
     if [[ $GERRIT_BRANCH == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
       chmod +x ./GTest.sh
-     chmod ./src/apps/http_services/gtest/
+     chmod +x ./src/apps/http_services/gtest/
       set +e
      set -x
     echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
