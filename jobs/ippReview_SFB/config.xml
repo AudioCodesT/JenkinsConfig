@@ -293,12 +293,13 @@ if [[ -e GTest.sh ]]; then
       set +e
      set -x
     echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
-      sh GTest.sh &gt; GTestLogFile.txt
+      sh GTest.sh &gt; GTestLogFile.txt 2&gt; errors.txt
       RetunedValue=$?
      echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
      echo &quot;************************GTest Log File Output************************&quot;
      cat GTestLogFile.txt
+     errors.txt
      echo &quot;************************end of the GTest Output************************&quot;
       set +x
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
