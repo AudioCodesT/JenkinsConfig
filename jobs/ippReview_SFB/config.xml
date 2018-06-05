@@ -298,7 +298,7 @@ if [[ -e GTest.sh ]]; then
      echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
      echo &quot;************************GTest Log File Output************************&quot;
-     cat GTestLogFile.txt | Tail -n30
+     cat GTestLogFile.txt
      echo &quot;************************end of the GTest Output************************&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
