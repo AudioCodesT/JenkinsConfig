@@ -293,10 +293,10 @@ if [[ -e GTest.sh ]]; then
       set +e
      set -x
     echo &quot;****************************************************RUN GTest.sh SCRIPT***********************************************&quot;
-      sh GTest.sh &gt; GTestLogFile.txt 2&gt;error.txt
+      sh GTest.sh &gt; GTestLogFile.txt
       if [[ -e error.txt ]]; then
      echo $(&lt;error.txt)
-       fi
+      fi
       RetunedValue=$?
      echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
       set -e
