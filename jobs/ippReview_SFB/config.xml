@@ -276,10 +276,11 @@ GERRIT_BRANCH=${GERRIT_BRANCH}</properties>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>ExecuteScript=${WORKSPACE}/GTest.sh
 if [[ -e ExecuteScript ]];then
+    echo &quot;The File Exists&quot; &gt; test.txt
     if [[ $GERRIT_BRANCH == feature/3.1.0.199/HTTP_based_Services_Communication ]] ; then
       sh ${WORKSPACE}/GTest.sh
       RetunedValue=$?
-       echo &quot;Entered the script returned value $RetunedValue&quot; &gt; test.txt
+       echo &quot;Entered the script returned value $RetunedValue&quot; &gt;&gt; test.txt
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
             message=&quot;The Unit Tests from the Script GTest.sh Failed&quot;
