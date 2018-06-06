@@ -294,7 +294,7 @@ if [[ -e GTest.sh ]]; then
      set -x
     printf &quot;****************************************************RUN GTest.sh SCRIPT**********************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt
-   echo &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
+   printf &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
      set +x
       if [[ -e error.txt ]]; then
      echo $(&lt;error.txt)
