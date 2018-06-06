@@ -292,9 +292,9 @@ if [[ -e GTest.sh ]]; then
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then 
       set +e
      set -x
-    printf &quot;****************************************************RUN**********************************************&quot;
+    printf &quot;****************************************************RUN_SCRIPT**********************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt
-   printf &quot;****************************************************FINISH RUNNING THE SCRIPT************************************&quot;
+   printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;
      set +x
       if [[ -e error.txt ]]; then
      echo $(&lt;error.txt)
