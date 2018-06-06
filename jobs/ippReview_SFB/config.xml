@@ -302,10 +302,10 @@ if [[ -e GTest.sh ]]; then
       RetunedValue=$?
   
       set -e
-     #echo &quot;************************GTest Log File Output************************&quot;
+     #printf &quot;************************GTest_Log_File_Output************************&quot;
      #echo $(&lt;GTestLogFile.txt)
     # sed 1,1d GTestLogFile.txt
-     #echo &quot;************************end of the GTest Output************************&quot;
+     #printf &quot;************************end_of_the_GTest_Output************************&quot;
      
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
