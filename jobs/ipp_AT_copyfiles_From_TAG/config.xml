@@ -107,14 +107,14 @@ while [  $countImages -gt 0 ]; do
   if [ $countImages -ne 0 ]; then sleep 30; fi  
   ((COUNTER++))
   echo Count $COUNTER
-  if [ $COUNTER -eq 5 ]; then countImages=0; fi
+  if [ $COUNTER -eq 10 ]; then countImages=0; fi
 done
 
 #ImageNames=$(echo $Image | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;)_${REFTARGET};
 ImageNames=$(echo $Image | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
 echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
 date
-if [ $COUNTER -eq 5 ]; then
+if [ $COUNTER -eq 10 ]; then
   echo files were not found ... abort
   exit 1
 fi
