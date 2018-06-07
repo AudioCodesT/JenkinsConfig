@@ -38,7 +38,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>aws ec2 start-instances --instance-ids i-0c5a2c68f5aeeb806</command>
+      <command>#aws ec2 start-instances --instance-ids i-0c5a2c68f5aeeb806
+
+aws ec2 start-instances --instance-ids i-0ce77b7639075ea09</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
