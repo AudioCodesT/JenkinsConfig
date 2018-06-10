@@ -84,7 +84,8 @@ armReleaseSanity
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#sftp put armDBsetup.sql in the remote configurator
+      <command>echo &quot;build step no. 1&quot;
+#sftp put armDBsetup.sql in the remote configurator
 cp arm_topology_test/src/main/resources/armDBsetup.sql conf.sql
 /usr/bin/expect&lt;&lt;EOD
 	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
@@ -97,7 +98,8 @@ cp arm_topology_test/src/main/resources/armDBsetup.sql conf.sql
 EOD</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>#run sql init + run new configuration
+      <command>echo &quot;build step no. 2&quot;
+#run sql init + run new configuration
 /usr/bin/expect&lt;&lt;EOD
 	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
 	expect &quot;assword:&quot;
