@@ -185,7 +185,18 @@
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQQTxtEpGyaIx2WIBjBPhQnA4NimDhm7Dkla/Bp22Qs6Q=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
   <prebuilders>
     <hudson.tasks.Shell>
       <command># Setting jdk version for branches
