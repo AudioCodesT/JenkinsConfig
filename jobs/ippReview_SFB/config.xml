@@ -303,13 +303,17 @@ if [[ -e GTest.sh ]]; then
     message=$(sed -e :a -e &apos;$q;N;10,$D;ba&apos; GTestLogFile.txt)
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
 
-      if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
-            #message=&quot;The Unit Tests from the Script GTest.sh Failed&quot;
+           
             base=https://$GERRIT_HOST/a/changes
             id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
             endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+      if [[ ! $RetunedValue == &quot;0&quot; ]]; then
+            #message=&quot;The Unit Tests from the Script GTest.sh Failed&quot;
+            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
+      else
+        message=&quot;GTest run successfully&quot;
+            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;+1\&quot;}}&quot;
       fi
   fi
 fi
