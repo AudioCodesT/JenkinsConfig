@@ -305,6 +305,7 @@ if [[ -e GTest.sh ]]; then
      #printf &quot;************************GTest_Log_File_Output************************&quot;
      #echo $(&lt;GTestLogFile.txt)
     # sed 1,1d GTestLogFile.txt
+    tail -n 10 GTestLogFile.txt
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
      
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
