@@ -296,13 +296,13 @@ if [[ -e GTest.sh ]]; then
       sh GTest.sh &gt; GTestLogFile.txt
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;
       RetunedValue=$?
- 
+      set -e
+     set +x
      #printf &quot;************************GTest_Log_File_Output************************&quot;
      #echo $(&lt;GTestLogFile.txt)
     message=$(sed -e :a -e &apos;$q;N;10,$D;ba&apos; GTestLogFile.txt)
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
-     set -e
-     set +x
+
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
             #message=&quot;The Unit Tests from the Script GTest.sh Failed&quot;
