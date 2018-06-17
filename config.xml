@@ -285,7 +285,19 @@
         </assignedSIDs>
       </role>
     </roleMap>
-    <roleMap type="slaveRoles"/>
+    <roleMap type="slaveRoles">
+      <role name="ipp_sanity-and-AT" pattern="(ipp.*)">
+        <permissions>
+          <permission>hudson.model.Computer.Connect</permission>
+          <permission>org.jfrog.hudson.ArtifactoryPlugin.Promote</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
+          <permission>hudson.model.Computer.Disconnect</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Computer.Build</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
+    </roleMap>
   </authorizationStrategy>
   <securityRealm class="hudson.plugins.active_directory.ActiveDirectorySecurityRealm" plugin="active-directory@2.6">
     <domains>
