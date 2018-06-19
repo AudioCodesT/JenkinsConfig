@@ -294,8 +294,12 @@ if [[ -e GTest.sh ]]; then
      set -x
     printf &quot;****************************************************RUN_SCRIPT**********************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt 2&gt;&amp;1
-
       RetunedValue=$?
+      #cat GTestLogFile
+      while read line
+    do echo $line
+      echo -e &quot;\r\n&quot;
+     done &lt; GTestLogFile.txt
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;    
       set -e
      set +x
