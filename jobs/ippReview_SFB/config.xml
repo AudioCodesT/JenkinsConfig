@@ -293,7 +293,9 @@ if [[ -e GTest.sh ]]; then
       set +e
      set -x
     printf &quot;****************************************************RUN_SCRIPT**********************************************&quot;
-      sh GTest.sh &gt; GTestLogFile.txt
+      
+       #sh GTest.sh &gt; GTestLogFile.txt
+        sh GTest.sh 2&gt;&amp;1 GTestLogFile.txt
       RetunedValue=$?
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;    
       set -e
