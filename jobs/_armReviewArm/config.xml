@@ -156,10 +156,13 @@ then
     echo &quot;&quot;
     echo &quot;So its unnecessary to run build&quot;
     onlyForbidenPathModified=&quot;True&quot;
+    echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
 fi</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info/>
+      <info>
+        <propertiesFilePath>properties</propertiesFilePath>
+      </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
@@ -243,7 +246,7 @@ cat arm-pmd.properties
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
-          <value>{AQAAABAAAAAQkxEn4DsNCKwHSH3fSM78qNCte/cD9EouWGrVFrZUdB0=}</value>
+          <value>{AQAAABAAAAAQ/3GsJiUUm/saEhK5+lCNsJjbNDfmdAPIem5zGGgPbgw=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
