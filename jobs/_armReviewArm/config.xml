@@ -157,7 +157,8 @@ then
     echo &quot;So its unnecessary to run build&quot;
     onlyForbidenPathModified=&quot;True&quot;
     echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
-fi</command>
+fi
+cat outfile</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -246,7 +247,7 @@ cat arm-pmd.properties
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
-          <value>{AQAAABAAAAAQWMt0P1w+uSOsPoOdFb7iqH/k0E84TtFxlenRMD+OgYc=}</value>
+          <value>{AQAAABAAAAAQ46awQEY8ph+EpBD0aQEKwhvOLO4+ee3GwCAKj13caVU=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
