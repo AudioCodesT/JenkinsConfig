@@ -55,14 +55,9 @@
           <name>PC2RUN</name>
           <description></description>
           <allowedSlaves>
-            <string>ippTestAuto7</string>
-            <string>ippTestAuto8</string>
             <string>ippTestAuto9</string>
           </allowedSlaves>
-          <defaultSlaves>
-            <string>ippTestAuto7</string>
-            <string>ippTestAuto8</string>
-          </defaultSlaves>
+          <defaultSlaves/>
           <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
           <allowMultiNodeSelection>false</allowMultiNodeSelection>
           <triggerConcurrentBuilds>false</triggerConcurrentBuilds>
@@ -465,7 +460,7 @@ $change,$newPS
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>no workspace from node</regexpForRerun>
+      <regexpForRerun>.*(ClosedChannelno workspace from node|Workspace is not accessible).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
