@@ -116,11 +116,12 @@ echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
 date
 if [ $COUNTER -eq 10 ]; then
   echo files were not found ... abort
-  exit 1
+  exit 2
 fi
 date
 
 </command>
+      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
