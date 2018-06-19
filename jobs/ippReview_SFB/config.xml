@@ -302,7 +302,8 @@ if [[ -e GTest.sh ]]; then
      set +x
      #printf &quot;************************GTest_Log_File_Output************************&quot;
      #echo $(&lt;GTestLogFile.txt)
-    message=$(sed -e :a -e &apos;$q;N;10,$D;ba&apos; GTestLogFile.txt)
+    messageTestsPassed=$(sed -e :a -e &apos;$q;N;5,$D;ba&apos; GTestLogFile.txt)
+    meesageErrors=$(sed -e :a -e &apos;$q;N;20,$D;ba&apos; Errors.txt)
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
 
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
@@ -312,10 +313,10 @@ if [[ -e GTest.sh ]]; then
             endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             #message=&quot;The Unit Tests from the Script GTest.sh Failed&quot;
-            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
+            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$meesageErrors\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
       else
-        message=&quot;GTest run successfully&quot;
-            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;+1\&quot;}}&quot;
+        #message=&quot;GTest run successfully&quot;
+            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$messageTestsPassed\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;+1\&quot;}}&quot;
       fi
   fi
 fi
