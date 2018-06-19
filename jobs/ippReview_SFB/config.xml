@@ -295,7 +295,7 @@ if [[ -e GTest.sh ]]; then
     printf &quot;****************************************************RUN_SCRIPT**********************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt 2&gt;&amp;1
       RetunedValue=$?
-      cat GTestLogFile
+      cat GTestLogFile.txt
       #while read line
     #do echo $line
      #done &lt; GTestLogFile.txt
