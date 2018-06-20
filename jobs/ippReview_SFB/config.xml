@@ -188,7 +188,12 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>#compile:
+      <command>#if branch is 3.2, download C450HD_kernel submodule
+if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.2&quot; ]]
+	then git submodule update
+fi
+
+#compile:
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
