@@ -121,7 +121,41 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># Setting jdk version for branches
+      <command>needToCompile=&quot;True&quot;
+
+#git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
+git diff --name-only HEAD~1 HEAD &gt; infile
+cat infile
+set +e
+egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
+set -e
+cat outfile
+if [[ ! -s outfile ]]
+then
+	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
+    echo &quot;&quot;
+    echo &quot;So its unnecessary to run build&quot;
+    needToCompile=&quot;False&quot;
+fi
+echo &quot;needToCompile=$needToCompile&quot; &gt; properties
+echo &quot;needToCompile=$needToCompile&quot;
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+        <arg1>$needToCompile</arg1>
+        <arg2>True</arg2>
+        <ignoreCase>false</ignoreCase>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.tasks.Shell>
+          <command># Setting jdk version for branches
 # Default version is 1.8.0_162
 jdkver=&quot;1.8.0_162&quot;
 
@@ -148,48 +182,15 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 #this is per Igor request for his new trick to reduce unit-tests time
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>onlyForbidenPathModified=&quot;True&quot;
-echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
-set +e
-#git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
-git diff --name-only HEAD~1 HEAD &gt; infile
-cat infile
-egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
-cat outfile
-if [[ ! -s outfile ]]
-then
-	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
-    echo &quot;&quot;
-    echo &quot;So its unnecessary to run build&quot;
-    onlyForbidenPathModified=&quot;False&quot;
-    echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
-fi
-echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot;
-set -e</command>
-    </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
-    <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.3.6">
-      <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
-        <arg1>$onlyForbidenPathModified</arg1>
-        <arg2>True</arg2>
-        <ignoreCase>false</ignoreCase>
-      </condition>
-      <buildStep class="org.jfrog.hudson.maven3.Maven3Builder" plugin="artifactory@2.15.1">
-        <mavenName>Maven_v325</mavenName>
-        <rootPom>pom.xml</rootPom>
-        <goals>clean install</goals>
-        <mavenOpts></mavenOpts>
-      </buildStep>
-      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-    </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
-    <hudson.tasks.Shell>
-      <command>######### OLD Sputnik #############
+        </hudson.tasks.Shell>
+        <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
+          <mavenName>Maven_v325</mavenName>
+          <rootPom>pom.xml</rootPom>
+          <goals>clean install</goals>
+          <mavenOpts></mavenOpts>
+        </org.jfrog.hudson.maven3.Maven3Builder>
+        <hudson.tasks.Shell>
+          <command>######### OLD Sputnik #############
 #/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*** sputnik failed but exit 0 ***&quot; &amp;&amp; exit 0; }
 #echo &quot;exit 0 workaround&quot;
 
@@ -218,7 +219,9 @@ cd ${WORKSPACE}
 cat arm-pmd.properties
 /home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pmd.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }
 </command>
-    </hudson.tasks.Shell>
+        </hudson.tasks.Shell>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
     <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
@@ -238,10 +241,10 @@ cat arm-pmd.properties
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun></regexpForRerun>
+      <regexpForRerun>no workspace from node</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
-      <checkRegexp>false</checkRegexp>
+      <checkRegexp>true</checkRegexp>
       <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
       <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
         <delay>10</delay>
