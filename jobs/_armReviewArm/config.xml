@@ -156,6 +156,8 @@ git log --name-only --pretty=&quot;&quot; HEAD~1..HEAD &gt; infile
 cat infile
 git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
 cat infile
+git diff --name-only HEAD~1 HEAD &gt; infile1
+cat infile1
 egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
 cat outfile
 if [[ ! -s outfile ]]
