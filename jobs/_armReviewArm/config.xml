@@ -150,7 +150,7 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>onlyForbidenPathModified=&quot;False&quot;
+      <command>onlyForbidenPathModified=&quot;True&quot;
 echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
 #git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
 git diff --name-only HEAD~1 HEAD &gt; infile
@@ -162,7 +162,7 @@ then
 	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
     echo &quot;&quot;
     echo &quot;So its unnecessary to run build&quot;
-    onlyForbidenPathModified=&quot;True&quot;
+    onlyForbidenPathModified=&quot;False&quot;
     echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
 fi
 echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot;</command>
