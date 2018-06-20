@@ -150,7 +150,7 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>git log --name-only --pretty=&quot;&quot; $GERRIT_PATCHSET_REVISION..HEAD &gt; infile
+      <command>git log --name-only --pretty=&quot;&quot; HEAD~1..HEAD &gt; infile
 cat infile
 egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
 cat outfile
