@@ -121,15 +121,17 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>needToCompile=&quot;True&quot;
-
-#git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
+      <command>#check if need to Compile The project
+needToCompile=&quot;True&quot;
+#show all files that modified in the current change
 git diff --name-only HEAD~1 HEAD &gt; infile
 cat infile
 set +e
+#Remove all files That changed that they are in these paths from the list of all the changed files
 egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
 set -e
 cat outfile
+#check if the list of all the change files empty (if it does, there is no need to compile the project)
 if [[ ! -s outfile ]]
 then
 	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
