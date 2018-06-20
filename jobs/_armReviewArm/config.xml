@@ -26,6 +26,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -149,7 +151,9 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>git log --name-only --pretty=&quot;&quot; $GERRIT_PATCHSET_REVISION..HEAD &gt; infile
+cat infile
 egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
+cat outfile
 if [[ ! -s outfile ]]
 then
 	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
