@@ -121,32 +121,6 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>onlyForbidenPathModified=&quot;False&quot;
-echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
-git log --name-only --pretty=&quot;&quot; HEAD~1..HEAD &gt; infile
-cat infile
-git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
-cat infile
-git diff --name-only HEAD~1 HEAD &gt; infile1
-cat infile1
-egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
-cat outfile
-if [[ ! -s outfile ]]
-then
-	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
-    echo &quot;&quot;
-    echo &quot;So its unnecessary to run build&quot;
-    onlyForbidenPathModified=&quot;True&quot;
-    echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
-fi
-cat outfile</command>
-    </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
-    <hudson.tasks.Shell>
       <command># Setting jdk version for branches
 # Default version is 1.8.0_162
 jdkver=&quot;1.8.0_162&quot;
@@ -175,6 +149,29 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>onlyForbidenPathModified=&quot;False&quot;
+echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
+#git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
+git diff --name-only HEAD~1 HEAD &gt; infile
+cat infile
+egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
+cat outfile
+if [[ ! -s outfile ]]
+then
+	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
+    echo &quot;&quot;
+    echo &quot;So its unnecessary to run build&quot;
+    onlyForbidenPathModified=&quot;True&quot;
+    echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
+fi
+echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot;</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
         <arg1>$onlyForbidenPathModified</arg1>
