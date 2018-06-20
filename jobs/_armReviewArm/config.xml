@@ -152,6 +152,7 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     <hudson.tasks.Shell>
       <command>onlyForbidenPathModified=&quot;True&quot;
 echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
+set +e
 #git show --pretty=&quot;format:&quot; --name-only HEAD &gt; infile
 git diff --name-only HEAD~1 HEAD &gt; infile
 cat infile
@@ -165,7 +166,8 @@ then
     onlyForbidenPathModified=&quot;False&quot;
     echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
 fi
-echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot;</command>
+echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot;
+set -e</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
