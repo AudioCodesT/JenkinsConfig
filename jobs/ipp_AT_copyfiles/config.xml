@@ -64,7 +64,7 @@ fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
-echo change $checkPS, PS: $ps
+echo change $change, PS: $ps
 
 while IFS= read -r line
 do
