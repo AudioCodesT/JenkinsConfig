@@ -189,7 +189,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
       <command>#if branch is 3.2, download C450HD_kernel submodule
-if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.2&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.2&quot; ]]
 	then git submodule update
 fi
 
