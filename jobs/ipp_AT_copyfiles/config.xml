@@ -65,6 +65,8 @@ fi
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 echo change $change, PS: $ps
+pwd
+id
 
 while IFS= read -r line
 do
@@ -83,6 +85,7 @@ do
 done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
 
 echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
+echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files for Automation test was started: $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 net use z: /delete
