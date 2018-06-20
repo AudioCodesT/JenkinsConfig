@@ -150,7 +150,7 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>onlyForbidenPathModified=&quot;False
+      <command>onlyForbidenPathModified=&quot;False&quot;
 echo &quot;onlyForbidenPathModified=$onlyForbidenPathModified&quot; &gt; properties
 git log --name-only --pretty=&quot;&quot; HEAD~1..HEAD &gt; infile
 cat infile
