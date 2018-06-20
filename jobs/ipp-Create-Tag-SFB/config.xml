@@ -112,13 +112,15 @@ function createTag {
 for GERRIT_BRANCH in 3.0.1 3.0.4.GA 3.0.40 3.0.0_450HD 3.1.0 3.2 $(git branch --list -a */feature/3.* | sed &apos;s:.*/origin/::&apos;)
 do
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
-  firstParent=&quot;--first-parent&quot;
-  if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then firstParent=&quot;&quot;; fi
-  if ! git describe --tags $firstParent origin/$GERRIT_BRANCH | grep -q -; then continue; fi
+  if ! git describe --tags--first-parent origin/$GERRIT_BRANCH | grep -q -; then continue; fi
   git checkout origin/$GERRIT_BRANCH
   echo Find the last TAG name...
-  #LastTag=`git tag --points-at $(git describe --tags --abbrev=0 $firstParent origin/$GERRIT_BRANCH) --sort=-taggerdate`
-  LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 $firstParent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+
+  LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+  RealLastTag=$LastTag
+  if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then
+    LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+  fi
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
@@ -126,7 +128,7 @@ do
     LastUser=$User
     LastSha1=$Sha1
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-  done &lt;&lt;&lt; &quot;$(git log $firstParent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
+  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $RealLastTag..origin/$GERRIT_BRANCH)&quot;
 
   if [ -z $LastWhen ]; then continue; fi
 
