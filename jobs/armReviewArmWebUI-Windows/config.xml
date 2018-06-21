@@ -151,9 +151,10 @@ echo &quot;RUN: npm install&quot;
 npm install
 
 #new package in private bower
-#ls -la c:/Users
-#cat c:/Users/Administrator/.ssh/id_rsa.pub
-#bower register visjs ssh://tg@gerrit:29418/web-ui/visjs.git
+ls -la c:/Users
+ls -ltr c:/Users/Administrator/.ssh/
+cat c:/Users/Administrator/.ssh/id_rsa.pub
+bower register visjs ssh://tg@gerrit:29418/web-ui/visjs.git
 
 echo &quot;RUN: bower install --force-latest&quot;
 bower install --force-latest
