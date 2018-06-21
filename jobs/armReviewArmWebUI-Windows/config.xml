@@ -135,11 +135,6 @@ if [ -z &quot;$output&quot; ]
 then private-bower &amp; sleep 15
 fi
 
-ls -la c:/Users
- cat c:/Users/Administrator/.ssh/id_rsa.pub
-#new package in private bower
-bower register visjs ssh://tg@gerrit:29418/web-ui/visjs.git
-
 # register the packages.
 #echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
 #bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git
@@ -154,6 +149,12 @@ bower register visjs ssh://tg@gerrit:29418/web-ui/visjs.git
 
 echo &quot;RUN: npm install&quot;
 npm install
+
+#new package in private bower
+ls -la c:/Users
+cat c:/Users/Administrator/.ssh/id_rsa.pub
+bower register visjs ssh://tg@gerrit:29418/web-ui/visjs.git
+
 echo &quot;RUN: bower install --force-latest&quot;
 bower install --force-latest
 echo &quot;RUN: grunt dist&quot;
