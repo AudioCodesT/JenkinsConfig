@@ -42,6 +42,7 @@ if new code then build and deploy arm-ui-7.0.zip</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -135,9 +136,6 @@ cd $WORKSPACE
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
-#new package in private bower
-bower register visjs ssh://tg@gerrit:29418/web-ui/visjs.git
-
 # this jon is gerrit triggered upon any Submit
 # if few changes are Submitted together then we need to build only the latest commit
 # so we compare the SHA1 of last commit in remote repo to the SHA1 in this specofic build
@@ -179,8 +177,7 @@ fi
 #bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git
 #bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git
 #bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
-#bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git
-
+#bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
 </command>
     </hudson.tasks.Shell>
   </builders>
