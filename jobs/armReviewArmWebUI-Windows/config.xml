@@ -150,12 +150,6 @@ fi
 echo &quot;RUN: npm install&quot;
 npm install
 
-#new package in private bower
-ls -la c:/Users
-ls -ltr c:/Users/Administrator/.ssh/
-cat c:/Users/Administrator/.ssh/id_rsa.pub
-bower register visjs https://tg:Audc4801@gerrit/web-ui/visjs
-
 echo &quot;RUN: bower install --force-latest&quot;
 bower install --force-latest
 echo &quot;RUN: grunt dist&quot;
