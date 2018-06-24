@@ -129,6 +129,8 @@ cd $WORKSPACE
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
+git pull --tags
+
 # checking if the private-bower is running
 output=$( netstat -ano | grep 5678 )
 if [ -z &quot;$output&quot; ]
