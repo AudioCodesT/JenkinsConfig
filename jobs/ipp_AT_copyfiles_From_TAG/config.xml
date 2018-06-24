@@ -82,7 +82,6 @@ ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_B
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo Looking after https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-curl -ks -X GET $ARTIFACTORY
 ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
 echo Check $TAG
