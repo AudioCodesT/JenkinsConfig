@@ -131,7 +131,7 @@ done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-set
 
 echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
 
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label &quot;Automation-Test&quot;=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
 
