@@ -128,7 +128,7 @@ git diff --name-only HEAD~1 HEAD &gt; infile
 cat infile
 set +e
 #Remove all files That changed that they are in these paths from the list of all the changed files
-egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot; infile &gt; outfile
+egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/&quot; infile &gt; outfile
 set -e
 cat outfile
 #check if the list of all the change files empty (if it does, there is no need to compile the project)
