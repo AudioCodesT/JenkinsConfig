@@ -519,28 +519,7 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances>
-        <entry>
-          <string>sir-ebsgjqwq</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-ebsgjqwq</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2018-06-19 12:09:09.348 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>sir-d4b8jten</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-d4b8jten</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-build</requestedLabel>
-            <createdAt>2018-06-19 12:08:49.59 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -656,18 +635,7 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances>
-        <entry>
-          <string>sir-4fhig66m</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>sir-4fhig66m</id>
-            <status>SPOT_PENDING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2018-06-19 12:08:59.378 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -899,7 +867,6 @@
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
-        <string>_armReviewArm</string>
         <string>armBackup</string>
         <string>armBuildArm</string>
         <string>armBuildArmWebUI</string>
@@ -909,6 +876,7 @@
         <string>armNightSanity</string>
         <string>armPromoteVersion</string>
         <string>armReleaseSanity</string>
+        <string>armReview</string>
         <string>armReviewArm</string>
         <string>armReviewArm-fullRepo</string>
         <string>armReviewArm_fastVerify</string>
