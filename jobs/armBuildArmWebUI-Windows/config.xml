@@ -42,7 +42,6 @@ if new code then build and deploy arm-ui-7.0.zip</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -185,7 +184,7 @@ fi
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>benm@audiocodes.com,devops@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
+      <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
       <patterns>
