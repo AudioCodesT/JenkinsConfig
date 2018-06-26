@@ -244,6 +244,45 @@ cat arm-pmd.properties
           <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done&#xd;
 </script>
         </hudson.plugins.postbuildtask.TaskProperties>
+        <hudson.plugins.postbuildtask.TaskProperties>
+          <logTexts>
+            <hudson.plugins.postbuildtask.LogProperties>
+              <logText>Build was aborted</logText>
+              <operator>AND</operator>
+            </hudson.plugins.postbuildtask.LogProperties>
+          </logTexts>
+          <EscalateStatus>false</EscalateStatus>
+          <RunIfJobSuccessful>false</RunIfJobSuccessful>
+          <script>######### OLD Sputnik #############&#xd;
+#/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*** sputnik failed but exit 0 ***&quot; &amp;&amp; exit 0; }&#xd;
+#echo &quot;exit 0 workaround&quot;&#xd;
+&#xd;
+&#xd;
+# Run Sputnik pmd&#xd;
+cat &lt;&lt;-EOF &gt; ~/.netrc&#xd;
+machine test-gerrit login jenkins password $jpass&#xd;
+machine gerrit login jenkins password $jpass&#xd;
+EOF&#xd;
+&#xd;
+cd ${WORKSPACE}/..&#xd;
+rm -rf tools&#xd;
+git -c http.sslverify=false clone -n https://gerrit/devops/tools&#xd;
+&#xd;
+cd tools&#xd;
+&#xd;
+git checkout -f origin/master -- sputnik/gerrit/arm-pmd.properties&#xd;
+git checkout -f origin/master -- pmd/audc-ruleset.xml&#xd;
+&#xd;
+cp sputnik/gerrit/arm-pmd.properties ${WORKSPACE}/&#xd;
+cp pmd/audc-ruleset.xml ${WORKSPACE}/&#xd;
+&#xd;
+cd ${WORKSPACE}&#xd;
+&#xd;
+## Run Sputnik&#xd;
+cat arm-pmd.properties&#xd;
+/home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pmd.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }&#xd;
+</script>
+        </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
