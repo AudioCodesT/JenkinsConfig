@@ -307,8 +307,6 @@ if [[ -e GTest.sh ]]; then
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;    
       set -e
      set +x
-     printf &quot;************************GTest_Log_File_Output************************&quot;
-    echo &quot;*********************=================================&quot;
      #echo $(&lt;GTestLogFile.txt)
     message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
