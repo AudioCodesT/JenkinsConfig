@@ -175,6 +175,10 @@ grunt dist
           <pattern>node_modules/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>.git/**</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>true</deleteDirs>
       <skipWhenFailed>false</skipWhenFailed>
