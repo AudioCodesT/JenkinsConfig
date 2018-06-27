@@ -306,7 +306,7 @@ if [[ -e GTest.sh ]]; then
      #done &lt; GTestLogFile.txt
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;    
       set -e
-    
+     set +x
      #printf &quot;************************GTest_Log_File_Output************************&quot;
      #echo $(&lt;GTestLogFile.txt)
     message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
@@ -326,7 +326,7 @@ if [[ -e GTest.sh ]]; then
       fi
   fi
 fi
- set +x</script>
+</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
