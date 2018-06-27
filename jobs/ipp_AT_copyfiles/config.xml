@@ -67,6 +67,13 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 echo change $change, PS: $ps
 pwd
 
+#ssh -p 29418 yossim@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
+#if [ $(tail -2 $change.txt | head -1) == $ps ]; then 
+#  checkImages; 
+#else
+#  
+#fi
+
 while IFS= read -r line
 do
   field=`echo $line | cut -d: -f1` # Could be: number or kind
