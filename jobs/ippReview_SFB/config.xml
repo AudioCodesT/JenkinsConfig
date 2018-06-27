@@ -308,7 +308,8 @@ if [[ -e GTest.sh ]]; then
       set -e
      set +x
      #echo $(&lt;GTestLogFile.txt)
-    message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
+     tr -cd &apos;[:print:]\n\r&apos; &lt; GTestLogFile.txt &gt; Log.txt
+    message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; Log.txt)
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
