@@ -92,7 +92,7 @@ while [ $lastps -gt 0 ]; do
     if [[ &quot;$kind&quot; =~ NO_.*CHANGE ]]; then 
       ((lastps--))
     else
-      echo Images was not found, We will search it again in 20 Min
+      echo Images was not found, we will search again in 20 Min
       ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation Test was started but images were not found, we will search again in 20 minutes&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
       exit 2
     fi
