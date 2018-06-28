@@ -71,6 +71,7 @@ echo change $change, PS: $ps
 pwd
 
 verified=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &quot;type: Verified&quot; | grep value | sed &apos;s/.*: //&apos;)
+echo Find verified score: $verified
 
 if [ $verified == -1 ]; then
   echo Build failed, can not execute Atomation-Test
@@ -85,8 +86,6 @@ if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo n
 
 while [ $lastps -gt 0 ]; do
   if ! curl -ks -X GET $ARTIFACTORY | grep -q ${change}-$lastps; then
-  #curl -ks -X GET $ARTIFACTORY/${change}-$lastps &gt; changeContain.txt
-  #if grep -q &quot;Unable to find item&quot; changeContain.txt; then
     kind=$(grep -A1 $lastps $change.txt | tail -1) # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
     if [[ &quot;$kind&quot; =~ NO_.*CHANGE || &quot;$kind&quot; == &quot;TRIVIAL_REBASE&quot; ]]; then 
       ((lastps--))
