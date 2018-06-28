@@ -93,7 +93,7 @@ while [ $lastps -gt 0 ]; do
       ((lastps--))
     else
       echo Images was not found, We will search it again in 20 Min
-      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Images was not found, We will search it again in 20 Min&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
+      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation Test was started but images were not found, we will search again in 20 minutes&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
       exit 2
     fi
   else
@@ -220,7 +220,7 @@ $change,$ps
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>We will search it again</regexpForRerun>
+      <regexpForRerun>we will search again</regexpForRerun>
       <rerunIfUnstable>true</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
