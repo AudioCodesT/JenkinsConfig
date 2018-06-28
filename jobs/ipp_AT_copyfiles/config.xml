@@ -58,58 +58,57 @@ date
 
 echo message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
 if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
-  echo Automation Test for branch 3.1.0 or 3.2 only... exit 2
-  exit 2
+  echo Automation Test for branch 3.1.0 or 3.2 only... exit 1
+  exit 1
 fi
+
+ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
+DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 echo change $change, PS: $ps
 pwd
 
-#ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
-#if [ $(tail -2 $change.txt | head -1) == $ps ]; then 
-#  checkImages; 
-#else
-#  
-#fi
+verified=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &quot;type: Verified&quot; | grep value | sed &apos;s/.*: //&apos;)
 
-while IFS= read -r line
-do
-  field=`echo $line | cut -d: -f1` # Could be: number or kind
-  value=`echo $line | sed &apos;s/.*: //&apos;` # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
-  if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
-  else
-    echo  Patch set: $checkPS,  change kind: $value
-    if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
-      echo It is a newest patch-set... abort action
-      echo -----------------------------------------
-      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Copying files for Automation test - PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-      exit 1;
+if [ $verified == -1 ]; then
+  echo Build failed, can not execute Atomation-Test
+  ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation-test can not run if Vrified is -1&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
+  exit 1
+fi
+
+ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
+lastps=$(tail -2 $change.txt | head -1)
+echo current patchSet is $lastps - executed with PatchSet $ps
+if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
+
+while [ $lastps -gt 0 ]; do
+  if ! curl -ks -X GET $ARTIFACTORY | grep -q ${change}-$lastps; then
+  #curl -ks -X GET $ARTIFACTORY/${change}-$lastps &gt; changeContain.txt
+  #if grep -q &quot;Unable to find item&quot; changeContain.txt; then
+    kind=$(grep -A1 $lastps $change.txt | tail -1) # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
+    if [[ &quot;$kind&quot; =~ NO_.*CHANGE || &quot;$kind&quot; == &quot;TRIVIAL_REBASE&quot; ]]; then 
+      ((lastps--))
+    else
+      echo Images was not found, We will search it again in 20 Min
+      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Images was not found, We will search it again in 20 Min&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
+      exit 2
     fi
+  else
+    ps=$lastps
+    lastps=0
   fi
-done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
+done
 
-echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
-echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps
+echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps: Copying files
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files for Automation test was started: $BUILD_URL, on pc2run: $NODE_NAME&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 net use z: /delete
 net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
-REFTARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
-DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
-
-#net use z: /DELETE
-#net use z: &apos;\\10.59.0.87\Firmwares&apos;
-
-if [ &quot;$GERRIT_BRANCH&quot; =  &quot;3.0.1&quot; ]; then ImagesList=(&quot;440HD&quot; &quot;430HD&quot; &quot;420HD&quot; &quot;405HD&quot;)
-else ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
-fi
-
-echo Check $REFTARGET
-if ! curl -ks -X GET $ARTIFACTORY | grep -q $REFTARGET; then echo $REFTARGET does not exist, exit with error; exit 1; fi
+REFTARGET=${change}-$ps
+ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
 echo Start copying files
 COUNTER=0
@@ -171,9 +170,9 @@ date
               <completeBuild>true</completeBuild>
             </worstResult>
             <bestResult>
-              <name>UNSTABLE</name>
-              <ordinal>1</ordinal>
-              <color>YELLOW</color>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
               <completeBuild>true</completeBuild>
             </bestResult>
           </condition>
@@ -186,7 +185,6 @@ date
                   <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                     <results>
                       <string>FAILURE</string>
-                      <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
                     <buildSteps>
