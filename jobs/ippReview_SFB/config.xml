@@ -188,8 +188,8 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>#if branch is 3.2, download C450HD_kernel submodule
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.2&quot; &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+      <command>#if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
+if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
 	then git submodule init
     	git submodule update    	
 fi
@@ -307,7 +307,7 @@ if [[ -e GTest.sh ]]; then
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;    
      #echo $(&lt;GTestLogFile.txt)
    message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
-    escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; |  sed &apos;s/[^a-zA-Z0-9 \r\n]*//g&apos;)
+    escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9 ]*//g&apos;)
       set -e
      set +x
      #printf &quot;************************end_of_the_GTest_Output************************&quot;
