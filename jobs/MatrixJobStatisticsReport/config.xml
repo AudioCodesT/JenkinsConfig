@@ -65,7 +65,7 @@ echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
 #run twice (first time on IPPhone SFB and second time on ippCentos7.4-reviewSIM)
 for j in `seq 0 1`
 do
-set +x
+
 #initialize parameters for the second time the job running for ippCentos7.4-reviewSIM
   if [ &quot;$j&quot; == &quot;1&quot; ]
   then
@@ -75,9 +75,10 @@ set +x
     length_JobName=reviewSIM
     echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
   fi
-
+set +x
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
+set -x
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
 #check first and last builds number its will check
 LastBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[0].number&apos;)
@@ -104,7 +105,9 @@ do
     FatherBuildUrl=${FatherBuildUrl:1}
     FatherBuildUrl=${FatherBuildUrl%&apos;&quot;&apos;}$apiAdress
      #Get All The Builds of the job
+     set +x
     AllSonsBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $FatherBuildUrl)
+    set -x
     AllSonBuildsLength=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs | length&apos;)
     #check if the Father build Failed or succuess
     FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
@@ -169,8 +172,9 @@ do
         SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
+          	set +x
             SonBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $SonBuildsUrl)
-
+			set -x
             #check Childs Names
             SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
             SonBuildUrlName=${SonBuildUrlName%,*}
@@ -202,8 +206,9 @@ do
         SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
+       	   	set +x
             SonBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $SonBuildsUrl)
-
+			set -x
      	  	#get The child Build name
             SonBuildUrlName=${SonBuildsUrl##*AUTOPRD=}
             SonBuildUrlName=${SonBuildUrlName%,*}
