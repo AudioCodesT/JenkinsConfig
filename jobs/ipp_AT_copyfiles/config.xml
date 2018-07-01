@@ -82,7 +82,7 @@ fi
 
 grep  &apos;kind:\|number:&apos; current$change.txt | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
 lastps=$(tail -2 $change.txt | head -1)
-echo current patchSet is $lastps - executed with PatchSet $ps
+echo Executed with last PatchSet $ps
 if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
 
 while [ $lastps -gt 0 ]; do
