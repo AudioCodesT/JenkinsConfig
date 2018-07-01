@@ -80,7 +80,7 @@ if [ &quot;$verified&quot; == -1 ]; then
   exit 1
 fi
 
-ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
+ssh -p 29418 jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
 lastps=$(tail -2 $change.txt | head -1)
 echo current patchSet is $lastps - executed with PatchSet $ps
 if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
