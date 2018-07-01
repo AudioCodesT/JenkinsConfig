@@ -70,17 +70,17 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 echo change $change, PS: $ps
 pwd
 
-ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change &gt; current$change.txt
-verified=$(grep -A3 &quot;type: Verified&quot; current$change.txt | grep value | sed &apos;s/.*: //&apos;)
-echo Find verified score: $verified
+ssh -p 29418 jenkins@gerrit gerrit query --patch-sets --submit-records $change &gt; current$change.txt
+verified=$(grep -A1 &quot;label: Verified&quot; current$change.txt | grep status | sed &apos;s/.*: //&apos;)
+echo Find verified score: $verified # Can be: OK, REJECT or NEED
 
-if [ &quot;$verified&quot; == -1 ]; then
+if [ &quot;$verified&quot; == &quot;REJECT&quot; ]; then
   echo Build failed, can not execute Atomation-Test
   ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation-test can not run if Vrified is -1&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
   exit 1
 fi
 
-ssh -p 29418 jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
+grep  &apos;kind:\|number:&apos; current$change.txt | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
 lastps=$(tail -2 $change.txt | head -1)
 echo current patchSet is $lastps - executed with PatchSet $ps
 if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
@@ -92,10 +92,8 @@ while [ $lastps -gt 0 ]; do
     if [[ &quot;$kind&quot; =~ NO_.*CHANGE ]]; then 
       ((lastps--))
     else
-      #since=$(date -d&quot;$(grep -A3 &quot;type: Verified&quot; current$change.txt | grep grantedOn | sed &apos;s/.*: //&apos;)&quot; +%s)
-      #if [ $(( $(date +%s)-$since )) -gt 864000 ]; then
-      if [ &quot;$verified&quot; == 1 ]; then
-        echo Automation Test was started but Patch-set too old, rebase your change to recreate the images
+      if [ &quot;$verified&quot; == &quot;OK&quot; ]; then
+        echo Automation Test was started but images do not exist, rebase your change to recreate the images
         ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;Automation Test was started but Patch-set too old, rebase your change to recreate the images&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
         exit 2
       else
@@ -109,6 +107,8 @@ while [ $lastps -gt 0 ]; do
     lastps=0
   fi
 done
+
+rm -f current$change.txt $change.txt
 
 echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps: Copying files
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files for Automation test was started: $BUILD_URL, on pc2run: $NODE_NAME&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
