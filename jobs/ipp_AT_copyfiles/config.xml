@@ -141,7 +141,7 @@ while [  $countImages -gt 0 ]; do
       if echo $TargetImage | grep -q img; then ((countImages--)); fi
     fi
   done
-  if [ $countImages -ne 0 ]; then sleep 30; fi  
+  if [ $countImages -ne 0 ]; then sleep 300; fi  
   ((COUNTER++))
   echo Count $COUNTER
   if [ $COUNTER -eq 5 ]; then countImages=0; fi
