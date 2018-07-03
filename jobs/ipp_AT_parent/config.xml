@@ -346,7 +346,11 @@ echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
                 <buildSteps>
                   <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                     <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
                       <string>FAILURE</string>
+                      <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
                     <buildSteps>
@@ -373,6 +377,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
 labelGrade=&quot;--label $labelName=-1&quot;
+# No grade if this patch-set was merged already
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt`
@@ -386,28 +391,6 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 $change,$newPS
 </command>
                       </hudson.tasks.Shell>
-                    </buildSteps>
-                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                </buildSteps>
-                <markBuildUnstable>false</markBuildUnstable>
-              </config>
-            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
-            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
-              <config>
-                <scriptFiles/>
-                <groovyScripts/>
-                <buildSteps>
-                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                    <results>
-                      <string>SUCCESS</string>
-                    </results>
-                    <role>BOTH</role>
-                    <buildSteps>
-                      <EnvInjectBuilder plugin="envinject@2.1.5">
-                        <info>
-                          <propertiesFilePath>${WORKSPACE}/properties.txt</propertiesFilePath>
-                        </info>
-                      </EnvInjectBuilder>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                   <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
@@ -436,6 +419,30 @@ echo Send OK message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;$labelName OK: $BUILD_URL ------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>ABORTED</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash --login
+
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
+if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
+
+change=`echo $REFSPEC | cut -d/ -f4`
+
+echo Send abort message to Gerrit - $change,$newPS
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Automation-Test was aborted: $BUILD_URL&apos;&quot; \
+--notify OWNER \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
 </command>
