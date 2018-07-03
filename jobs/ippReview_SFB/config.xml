@@ -304,6 +304,20 @@ if [[ -e GTest.sh ]]; then
     #  while read line
    # do echo $line
    #  done &lt; GTestLogFile.txt
+echo &quot;CAT&quot;
+cat GTestLogFile.txt
+echo &quot;printf &quot;
+ printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
+echo &quot;more&quot;
+more GTestLogFile.txt
+echo &quot;less&quot;
+less GTestLogFile.txt
+echo &quot;tail&quot;
+tail GTestLogFile.txt
+echo &quot;head&quot;
+headGTestLogFile.txt
+
+
 
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT************************************&quot;
       set -e
