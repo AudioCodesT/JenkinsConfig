@@ -158,11 +158,12 @@ if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; 
      grunt dist
 
      #if branch is not master then copy the zip to a new zip with the branch name
-     if [ $GERRIT_BRANCH != &quot;master&quot; ]; then
-          mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
-     else
-          cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.2.zip -f
-     fi
+     #if [ $GERRIT_BRANCH != &quot;master&quot; ]; then
+     #     mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
+     #else
+     #     cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.2.zip -f
+     #fi
+cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.0.zip -f
 
 else
 	echo &quot;************************************************************&quot;
@@ -251,8 +252,8 @@ fi
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>dist/arm-web-ui-8.2.zip=&gt;com/ac/arm/arm-web-ui/8.2/
-dist/arm-web-ui-$GERRIT_BRANCH.zip=&gt;com/ac/arm/arm-web-ui/$GERRIT_BRANCH/</deployPattern>
+      <deployPattern>dist/arm-web-ui-8.0.zip=&gt;com/ac/arm/arm-web-ui/8.0/
+</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>false</deployBuildInfo>
