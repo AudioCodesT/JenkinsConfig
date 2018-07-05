@@ -188,7 +188,13 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>#if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
+      <command># Check if the image exist already in the Artifactory - if exist, exit without error
+if curl -ks https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep -q $SHORTAUTOPRD; then
+	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
+    exit 0
+fi
+
+#if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
 if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
 	then git submodule init
     	git submodule update    	
