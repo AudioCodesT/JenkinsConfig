@@ -189,7 +189,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
       <command># Check if the image exist already in the Artifactory - if exist, exit without error
-if curl -ks https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep -q $SHORTAUTOPRD; then
+if curl -ks https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep -q UC${SHORTAUTOPRD}_; then
 	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
     exit 0
 fi
