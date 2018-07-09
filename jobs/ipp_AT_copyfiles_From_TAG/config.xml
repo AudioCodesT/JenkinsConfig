@@ -98,13 +98,15 @@ for PRD in ${ImagesList[@]}; do
     for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
       echo check and transfer $Image
       if [ ! -f z:/$Image ]; then
-        ArtSize=`curl -ks -X GET $ARTIFACTORY/$PRD/$Image | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+        ArtSize=`curl -ks -X GET $ARTIFACTORY/${PRD}/$Image | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+        echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image
+        echo Artifactory size: $ArtSize
         if [ &quot;$ArtSize&quot; != &quot;&quot; ]; then 
           echo ----      Download $Image to z:
           curl -ks -X GET ${DOWNLOAD}/${PRD}/$Image --output z:/$Image
           ((countImages--))
         else 
-          echo $Image is missing
+          echo ----      $Image is missing
         fi
       else 
         echo ----      z:/$Image already exist.. skip the download...
