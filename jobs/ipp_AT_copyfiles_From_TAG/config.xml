@@ -87,43 +87,39 @@ curl -ks -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
 if grep -q &quot;Unable to find item&quot; $TAG.txt; then
   echo $TAG does not exist, exit with error; 
-  exit 1; 
+  exit 2; 
 fi
 
 echo Start copying files
-COUNTER=0
-countImages=${#ImagesList[@]}
-while [  $countImages -gt 0 ]; do
-  countImages=${#ImagesList[@]}
-  for PRD in ${ImagesList[@]}; do 
-    for Image in $(curl -ks -X GET $ARTIFACTORY/$PRD | grep -v _logs_ | grep &apos;.sim.tgz&quot;\|.img&quot;&apos; | cut -d&apos;&quot;&apos; -f4); do
-      TargetImage=$Image
-      #echo -- Check if $TargetImage exist in z:
-      if [ ! -f z:$TargetImage ]; then
-        echo ----      Download $TargetImage to z:
-        curl -ks -X GET ${DOWNLOAD}/${PRD}$Image --output z:$TargetImage
-        COUNTER=0
+countImages=$(( ${#ImagesList[@]} * 2 ))
+
+for PRD in ${ImagesList[@]}; do
+    echo for each image ir tgz files $PRD
+    for Image in UC$PRD_$TAG.img UC$PRD_$TAG.sim.tgz; do
+      echo check and transfer $Image
+      if [ ! -f z:/$Image ]; then
+        ArtSize=`curl -ks -X GET $ARTIFACTORY/$PRD/$Image | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+        if [ &quot;$ArtSize&quot; != &quot;&quot; ]; then 
+          echo ----      Download $Image to z:
+          curl -ks -X GET ${DOWNLOAD}/${PRD}/$Image --output z:/$Image
+          ((countImages--))
+        else 
+          echo $Image is missing
+        fi
       else 
-        echo ----      z:$TargetImage already exist.. skip the download...
+        echo ----      z:/$Image already exist.. skip the download...
+        ((countImages--))
       fi
-      if echo $TargetImage | grep -q img; then ((countImages--)); fi
     done
-  done
-  if [ $countImages -ne 0 ]; then sleep 30; fi  
-  ((COUNTER++))
-  echo Count $COUNTER
-  if [ $COUNTER -eq 10 ]; then countImages=0; fi
 done
 
-#ImageNames=$(echo $Image | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;)_${REFTARGET};
-ImageNames=$(echo $Image | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
-echo ImageNames=${ImageNames} &gt; ${WORKSPACE}/properties.txt
+echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
 date
-if [ $COUNTER -eq 10 ]; then
+if [ $countImages -ne 0 ]; then
   echo files were not found ... abort
   exit 2
 fi
-date
+
 
 </command>
       <unstableReturn>2</unstableReturn>
@@ -135,6 +131,17 @@ date
     </EnvInjectBuilder>
   </builders>
   <publishers>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun></regexpForRerun>
+      <rerunIfUnstable>true</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>false</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>1200</delay>
+      </delay>
+      <maxSchedule>1</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
     <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
