@@ -106,6 +106,8 @@ for PRD in ${ImagesList[@]}; do
           ((countImages--))
         else 
           echo ----      $Image is missing
+          echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image:
+          echo $(curl -ks -X GET $ARTIFACTORY/${PRD}/$Image)
         fi
       else 
         echo ----      z:/$Image already exist.. skip the download...
@@ -141,7 +143,7 @@ fi
       <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
         <delay>1200</delay>
       </delay>
-      <maxSchedule>1</maxSchedule>
+      <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
     <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
       <configs>
