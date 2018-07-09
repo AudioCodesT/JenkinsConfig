@@ -118,7 +118,7 @@ echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
 date
 echo  $(expr 10 - $countImages ) files exists
 if [ $countImages -ne 0 ]; then
-  echo files were not found ... abort
+  echo $countImages files were not found ... abort
   exit 2
 fi
 
