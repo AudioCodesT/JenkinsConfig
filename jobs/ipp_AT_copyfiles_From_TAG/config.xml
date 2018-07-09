@@ -77,7 +77,7 @@ date
 net use z: /delete
 net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
-ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
+ARTIFACTORY=https://172.16.133.170/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo Looking after https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
@@ -100,15 +100,12 @@ for PRD in ${ImagesList[@]}; do
       if [ ! -f z:/$Image ]; then
         downloadUri=$(curl -ks -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
         echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image
-        sleep 10
         if [ &quot;$downloadUri&quot; != &quot;&quot; ]; then 
           echo ----      Download $Image to z:
           curl -ks -X GET $downloadUri --output z:/$Image
           ((countImages--))
         else 
           echo ----      $Image is missing
-          echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image:
-          echo $(curl -ks -X GET $ARTIFACTORY/${PRD}/$Image)
         fi
       else 
         echo ----      z:/$Image already exist.. skip the download...
