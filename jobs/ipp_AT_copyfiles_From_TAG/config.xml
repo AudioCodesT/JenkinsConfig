@@ -100,11 +100,11 @@ for PRD in ${ImagesList[@]}; do
       if [ ! -f z:/$Image ]; then
         downloadUri=$(curl -ks -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
         echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image
+        sleep 10
         if [ &quot;$downloadUri&quot; != &quot;&quot; ]; then 
           echo ----      Download $Image to z:
           curl -ks -X GET $downloadUri --output z:/$Image
           ((countImages--))
-          sleep 10
         else 
           echo ----      $Image is missing
           echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image:
@@ -119,7 +119,7 @@ done
 
 echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
 date
-echo $countImages files exists
+echo  $(expr 10 - $countImages ) files exists
 if [ $countImages -ne 0 ]; then
   echo files were not found ... abort
   exit 2
