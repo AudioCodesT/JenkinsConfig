@@ -94,7 +94,7 @@ echo Start copying files
 countImages=$(( ${#ImagesList[@]} * 2 ))
 
 for PRD in ${ImagesList[@]}; do
-    echo for each image ir tgz files $PRD
+    echo Check $PRD
     for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
       echo check and transfer $Image
       if [ ! -f z:/$Image ]; then
