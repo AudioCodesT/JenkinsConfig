@@ -81,7 +81,7 @@ artifactory_ip=$(ping artifactory -n 1 | grep Reply | sed &apos;s/Reply from //;
 # The &apos;artifactory&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
 artifactory_ip=artifactory.corp.audiocodes.com
 
-ping $artifactory
+ping $artifactory_ip
 ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
