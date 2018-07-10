@@ -83,7 +83,7 @@ artifactory_ip=$(ping jenkins -n 1 | grep Reply | sed &apos;s/Reply from //; s/:
 ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
-echo Looking after https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
+echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
 curl -ks -X GET $ARTIFACTORY &gt; $TAG.txt
@@ -170,7 +170,7 @@ IMAGENAMES=$ImageNames
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <projects>ipp_AT_parent</projects>
-          <condition>SUCCESS</condition>
+          <condition>UNSTABLE</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
           <triggerFromChildProjects>false</triggerFromChildProjects>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
