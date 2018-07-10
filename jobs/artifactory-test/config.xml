@@ -81,13 +81,13 @@ artifactory_ip=$(ping artifactory -n 1 | grep Reply | sed &apos;s/Reply from //;
 # The &apos;artifactory&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
 artifactory_ip=artifactory.corp.audiocodes.com
 
+ping $artifactory
 ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
-curl -ks -X GET $ARTIFACTORY &gt; $TAG.txt
+curl -k -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
 if grep -q &quot;Unable to find item&quot; $TAG.txt; then
   echo $TAG does not exist, exit with error; 
