@@ -85,7 +85,7 @@ ping artifactory
 ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-ImagesList=(&quot;450HD&quot;)
+ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
 curl -k -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
