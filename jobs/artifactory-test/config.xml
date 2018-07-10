@@ -74,11 +74,10 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
-net use z: /delete
-net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
-
 artifactory_ip=$(ping artifactory -n 1 | grep Reply | sed &apos;s/Reply from //; s/:.*//&apos;)
 # The &apos;artifactory&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
+echo $artifactory_ip
+
 artifactory_ip=artifactory.corp.audiocodes.com
 
 echo ping artifactory
@@ -86,7 +85,7 @@ ping artifactory
 ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-ImagesList=(&quot;450HD&quot; &quot;445HD&quot;)
+ImagesList=(&quot;450HD&quot;)
 
 curl -k -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
