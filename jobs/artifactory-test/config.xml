@@ -102,9 +102,7 @@ countImages=$(( ${#ImagesList[@]} * 2 ))
 for PRD in ${ImagesList[@]}; do
     echo Check $PRD
     for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
-      # Check if this image was copied already, if not, transfer $Image
-      if [ ! -f z:/$Image ]; then
-        # The exact download name
+
         downloadUri=$(curl -k -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
         echo curl -k -X GET $ARTIFACTORY/${PRD}/$Image
         if [ &quot;$downloadUri&quot; != &quot;&quot; ]; then 
@@ -114,10 +112,6 @@ for PRD in ${ImagesList[@]}; do
         else 
           echo ----      $Image is missing  ----
         fi
-      else 
-        echo ----      z:/$Image already exist.. skip the download...
-        ((countImages--))
-      fi
     done
 done
 
