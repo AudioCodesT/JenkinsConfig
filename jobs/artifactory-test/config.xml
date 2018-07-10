@@ -79,7 +79,7 @@ net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
 artifactory_ip=$(ping artifactory -n 1 | grep Reply | sed &apos;s/Reply from //; s/:.*//&apos;)
 # The &apos;artifactory&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
-artifactory_ip=172.16.133.170
+artifactory_ip=artifactory.corp.audiocodes.com
 
 ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
