@@ -77,7 +77,10 @@ date
 net use z: /delete
 net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
-ARTIFACTORY=https://172.16.133.170/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
+artifactory_ip=$(ping jenkins -n 1 | grep Reply | sed &apos;s/Reply from //; s/:.*//&apos;)
+# The &apos;jenkins&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
+
+ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo Looking after https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
