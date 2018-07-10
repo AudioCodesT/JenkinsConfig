@@ -91,13 +91,16 @@ if grep -q &quot;Unable to find item&quot; $TAG.txt; then
 fi
 
 echo Start copying files
+# should be 10, the 5 types for .img and .sim.tgz
 countImages=$(( ${#ImagesList[@]} * 2 ))
 
+#for each type
 for PRD in ${ImagesList[@]}; do
     echo Check $PRD
     for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
-      echo check and transfer $Image
+      # Check if this image was copied already, if not, transfer $Image
       if [ ! -f z:/$Image ]; then
+        # The exact download name
         downloadUri=$(curl -ks -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
         echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image
         if [ &quot;$downloadUri&quot; != &quot;&quot; ]; then 
@@ -105,7 +108,7 @@ for PRD in ${ImagesList[@]}; do
           curl -ks -X GET $downloadUri --output z:/$Image
           ((countImages--))
         else 
-          echo ----      $Image is missing
+          echo ----      $Image is missing  ----
         fi
       else 
         echo ----      z:/$Image already exist.. skip the download...
@@ -116,6 +119,8 @@ done
 
 echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
 date
+# Check if the 10 images were copied or were already there
+# In case of fail, the job will restart after 20 minutes
 echo  $(expr 10 - $countImages ) files exists
 if [ $countImages -ne 0 ]; then
   echo $countImages files were not found ... abort
