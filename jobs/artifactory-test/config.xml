@@ -78,7 +78,7 @@ artifactory_ip=$(ping artifactory -n 1 | grep Reply | sed &apos;s/Reply from //;
 # The &apos;artifactory&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
 echo $artifactory_ip
 
-artifactory_ip=artifactory.corp.audiocodes.com
+artifactory_ip=artifactory
 
 echo ping artifactory
 ping artifactory
