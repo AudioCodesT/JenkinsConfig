@@ -78,11 +78,12 @@ do
 set +x
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
-set -x
+
 AllBuildsLength=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds | length&apos;)
 #check first and last builds number its will check
 LastBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[0].number&apos;)
 FirstBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$(($AllBuildsLength-1))&apos;].number&apos;)
+set -x
 FirstBuildNumber=$LastBuildNumber
 #get the last job build number that happend last build
 LastJobBuildNumber=$(cat $JobName.txt | grep LastBuild: | cut -f2 -d&apos;:&apos; |  tail -n1)
@@ -94,9 +95,11 @@ fi
 
 for i in `seq 0 $(($AllBuildsLength-1))`
 do
+	set +x
     #The Main Job Url and the number of the build
     FatherBuildUrl=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].url&apos;)
     FatherBuildNumber=$(echo &quot;$JobJsonFile&quot; | jq &apos;.builds[&apos;$i&apos;].number&apos;)
+    set -x
     #checking if the current build is already in the database 
     if [ &quot;$LastJobBuildNumber&quot; -lt &quot;$FatherBuildNumber&quot; ]
     then
@@ -107,18 +110,21 @@ do
      #Get All The Builds of the job
      set +x
     AllSonsBuildJsonFile=$(curl -s --insecure -u $User:$ApiToken $FatherBuildUrl)
-    set -x
+    
     AllSonBuildsLength=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs | length&apos;)
     #check if the Father build Failed or succuess
     FatherBuildFaledOrSuccess=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.result&apos;)
+    
     FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess:1}
     FatherBuildFaledOrSuccess=${FatherBuildFaledOrSuccess%&apos;&quot;&apos;}
     #Get Gerrit Branch
     GerritBranch=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.actions[5].parameters[2].value&apos;)
+   
     if [ &quot;$GerritBranch&quot; == &quot;null&quot; ]
     then
            GerritBranch=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.actions[1].parameters[2].value&apos;)
     fi
+     set -x
     GerritBranch=${GerritBranch:1}
     GerritBranch=${GerritBranch%&apos;&quot;&apos;}
     #Replace &apos;.&apos; and &apos;/&apos; with &apos;_&apos; to save it as a variable
@@ -198,12 +204,13 @@ do
         declare AllFatherBuildsFaled_$GerritBranchNoPoints=$((AllFatherBuildsFaled_$GerritBranchNoPoints+1))
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
-
+		set +x
           #The child Build Url and the number of the build
         SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
         SonBuildsUrl=${SonBuildsUrl:1}
         SonBuildsUrl=${SonBuildsUrl%&apos;&quot;&apos;}$apiAdress
         SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
+        set -x
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
        	   	set +x
@@ -221,7 +228,9 @@ do
             indexOfDynamicChilds=$((indexOfDynamicChilds+1))
 
             #check if the Son build Failed or succuess
+            set +x
             SonBuildFaledOrSuccess=$(echo &quot;$SonBuildJsonFile&quot; | jq &apos;.result&apos;)
+            set -x
             SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess:1}
             SonBuildFaledOrSuccess=${SonBuildFaledOrSuccess%&apos;&quot;&apos;}
             if [ &quot;$SonBuildFaledOrSuccess&quot; == &quot;$FAILURE&quot; ]
