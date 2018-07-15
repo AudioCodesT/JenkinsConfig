@@ -130,6 +130,7 @@ git config url.https://.insteadOf git://
 
 # checking if the private-bower is running
 output=$( netstat -ano | grep 5678 )
+echo &quot;private-bower check =&quot; $output
 if [ -z &quot;$output&quot; ]
 then private-bower &amp; sleep 15
 fi
