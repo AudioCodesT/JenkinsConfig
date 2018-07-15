@@ -42,7 +42,6 @@ if new code then build and deploy arm-ui-7.0.zip</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -129,7 +128,10 @@ if new code then build and deploy arm-ui-7.0.zip</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!c:\cygwin64\bin\bash --login -i
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+##!c:\cygwin64\bin\bash --login -i
+set -e
+set -x
 
 cd $WORKSPACE
 
@@ -149,22 +151,44 @@ if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; 
      then private-bower &amp; sleep 15
      fi
 
-     echo &quot;**** RUN: npm install   ****&quot;
-     npm install
+  if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
+then 
 
-     echo &quot;**** RUN: bower install --force-latest ****&quot;
-     bower install --force-latest
+	echo &quot;RUN: npm install&quot;
+	npm install
 
-     echo &quot;**** RUN: grunt dist ****&quot;
-     grunt dist
+	echo &quot;RUN: bower install --force-latest&quot;
+	bower install --force-latest
+else
+	git config http.sslVerify &quot;false&quot;
+    git config --global http.sslVerify false
+	git config --global user.email &quot;Devops@audiocodes.com&quot;
+    git config --global user.name &quot;Devops&quot;
+ 	
+	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
+	machine test-gerrit login jenkins password $jpass
+	machine gerrit login jenkins password $jpass
+	EOF
+	
+    echo &quot;RUN: yarn install&quot;
+    yarn install
+fi
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
+then 
+	echo &quot;RUN: grunt dist&quot;
+	grunt dist
+else
+	echo &quot;RUN: yarn dist&quot;
+	yarn dist
+fi
 
      #if branch is not master then copy the zip to a new zip with the branch name
-     if [ $GERRIT_BRANCH != &quot;master&quot; ]; then
+     if [ $GERRIT_BRANCH != &quot;master&quot; ]; then 
           mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
      else
           cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.2.zip -f
      fi
-
+# ******************************NEED TO CHANGE ZIP FILE!!!!!!!!!!******************************
 else
 	echo &quot;************************************************************&quot;
 	echo &quot;This is not the Last commit  -  exiting now without building&quot;
