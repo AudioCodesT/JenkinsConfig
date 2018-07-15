@@ -122,8 +122,10 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!c:\cygwin64\bin\bash --login -i
-
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+##!c:\cygwin64\bin\bash --login -i
+set -x
+set -e
 cd $WORKSPACE
 
 #connect repositories using https instead opf git:
