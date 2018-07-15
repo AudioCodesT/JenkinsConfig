@@ -129,7 +129,7 @@ cd $WORKSPACE
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
-cat &lt;&lt;-EOF &gt; ~/.netrc
+cat &lt;&lt;-EOF &gt; $HOME/.netrc
 machine test-gerrit login jenkins password $jpass
 machine gerrit login jenkins password $jpass
 EOF
@@ -214,7 +214,7 @@ fi
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
-          <value>{AQAAABAAAAAQtduqkn5lZlJSgPeC7xArgnyk2UDFRotW1gz4qvaZGOw=}</value>
+          <value>{AQAAABAAAAAQViePHIs4D+vVYf5sJg2kyueSCvyPTWUKsjbJU3436eQ=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
