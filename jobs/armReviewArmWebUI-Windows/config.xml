@@ -129,11 +129,6 @@ cd $WORKSPACE
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
-cat &lt;&lt;-EOF &gt; $HOME/.netrc
-machine test-gerrit login jenkins password $jpass
-machine gerrit login jenkins password $jpass
-EOF
-
 # checking if the private-bower is running
 output=$( netstat -ano | grep 5678 )
 if [ -z &quot;$output&quot; ]
@@ -163,6 +158,12 @@ then
 	echo &quot;RUN: bower install --force-latest&quot;
 	bower install --force-latest
 else
+ 	git config --global http.sslVerify false
+	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
+	machine test-gerrit login jenkins password $jpass
+	machine gerrit login jenkins password $jpass
+	EOF
+
   echo &quot;RUN: yarn install&quot;
   yarn install
 fi
@@ -214,7 +215,7 @@ fi
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
-          <value>{AQAAABAAAAAQViePHIs4D+vVYf5sJg2kyueSCvyPTWUKsjbJU3436eQ=}</value>
+          <value>{AQAAABAAAAAQ57cIFh6Cy/qncVmzJLWWXBAGPeh8m4JkDwCvW25zqXU=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
