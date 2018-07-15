@@ -159,15 +159,15 @@ then
 	bower install --force-latest
 else
 	git config http.sslVerify &quot;false&quot;
+    git config --global http.sslVerify false
 	git config --global user.email &quot;Devops@audiocodes.com&quot;
     git config --global user.name &quot;Devops&quot;
  	
-    
 	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
 	machine test-gerrit login jenkins password $jpass
 	machine gerrit login jenkins password $jpass
 	EOF
-	git config --global http.sslVerify false
+	
     echo &quot;RUN: yarn install&quot;
     yarn install
 fi
