@@ -158,14 +158,18 @@ then
 	echo &quot;RUN: bower install --force-latest&quot;
 	bower install --force-latest
 else
- 	git config --global http.sslVerify false
+	git config http.sslVerify &quot;false&quot;
+	git config --global user.email &quot;Devops@audiocodes.com&quot;
+    git config --global user.name &quot;Devops&quot;
+ 	
+    
 	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
 	machine test-gerrit login jenkins password $jpass
 	machine gerrit login jenkins password $jpass
 	EOF
-
-  echo &quot;RUN: yarn install&quot;
-  yarn install
+	git config --global http.sslVerify false
+    echo &quot;RUN: yarn install&quot;
+    yarn install
 fi
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
 then 
