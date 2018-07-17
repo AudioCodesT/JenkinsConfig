@@ -295,6 +295,16 @@ dist/arm-web-ui-$GERRIT_BRANCH.zip=&gt;com/ac/arm/arm-web-ui/$GERRIT_BRANCH/</de
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQR3KnrSKJN9BOTXqgd8LpjkDcMzLoZ0VuKBBzZULoc5U=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__branch-${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
