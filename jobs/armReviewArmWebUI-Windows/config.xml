@@ -136,7 +136,7 @@ if [[ &quot;$GERRIT_CHANGE_ID&quot; == &quot;I1935b36f3f1be4806d8fcbd26e72512d0b
 then
 npm config set registry https://artifactory/api/npm/npm/
 npm install
-grunt dist
+yarn dist
 npm config set registry https://registry.npmjs.org/
 else
 
