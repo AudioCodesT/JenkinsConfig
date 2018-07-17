@@ -131,6 +131,14 @@ cd $WORKSPACE
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
+
+if [[ &quot;$GERRIT_CHANGE_ID&quot; == &quot;I1935b36f3f1be4806d8fcbd26e72512d0bb30694&quot; ]]
+then
+
+npm install
+grunt dist
+else
+
 # checking if the private-bower is running
 output=$( netstat -ano | grep 5678 )
 if [ -z &quot;$output&quot; ]
@@ -182,6 +190,7 @@ else
 	yarn dist
 fi
 
+fi
 </command>
     </hudson.tasks.Shell>
   </builders>
