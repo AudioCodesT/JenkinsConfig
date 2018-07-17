@@ -183,14 +183,15 @@ else
 	yarn dist
 fi
 
-# ******************************NEED TO CHANGE ZIP FILE!!!!!!!!!!******************************
+
      #if branch is not master then copy the zip to a new zip with the branch name
+     mkdir dist
      if [ $GERRIT_BRANCH != &quot;master&quot; ]; then 
           mv build/dist.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
      else
           cp build/dist.zip dist/arm-web-ui-8.4.zip -f
      fi
-# ******************************NEED TO CHANGE ZIP FILE!!!!!!!!!!******************************
+
 else
 	echo &quot;************************************************************&quot;
 	echo &quot;This is not the Last commit  -  exiting now without building&quot;
