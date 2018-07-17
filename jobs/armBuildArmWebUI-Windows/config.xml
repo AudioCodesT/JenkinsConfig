@@ -186,9 +186,9 @@ fi
 # ******************************NEED TO CHANGE ZIP FILE!!!!!!!!!!******************************
      #if branch is not master then copy the zip to a new zip with the branch name
      if [ $GERRIT_BRANCH != &quot;master&quot; ]; then 
-          mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
+          mv build/arm-web-ui-7.0.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
      else
-          cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.4.zip -f
+          cp build/arm-web-ui-7.0.zip dist/arm-web-ui-8.4.zip -f
      fi
 # ******************************NEED TO CHANGE ZIP FILE!!!!!!!!!!******************************
 else
