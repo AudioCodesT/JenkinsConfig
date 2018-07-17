@@ -188,7 +188,7 @@ fi
      if [ $GERRIT_BRANCH != &quot;master&quot; ]; then 
           mv dist/arm-web-ui-7.0.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
      else
-          cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.2.zip -f
+          cp dist/arm-web-ui-7.0.zip dist/arm-web-ui-8.4.zip -f
      fi
 # ******************************NEED TO CHANGE ZIP FILE!!!!!!!!!!******************************
 else
@@ -278,7 +278,7 @@ fi
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>dist/arm-web-ui-8.2.zip=&gt;com/ac/arm/arm-web-ui/8.2/
+      <deployPattern>dist/arm-web-ui-8.4.zip=&gt;com/ac/arm/arm-web-ui/8.4/
 dist/arm-web-ui-$GERRIT_BRANCH.zip=&gt;com/ac/arm/arm-web-ui/$GERRIT_BRANCH/</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
