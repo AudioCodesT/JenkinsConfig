@@ -135,9 +135,11 @@ git config url.https://.insteadOf git://
 if [[ &quot;$GERRIT_CHANGE_ID&quot; == &quot;I1935b36f3f1be4806d8fcbd26e72512d0bb30694&quot; ]]
 then
 yarn config set registry https://artifactory/api/npm/npm/
+yarn config set strict-ssl false 
 yarn install
 yarn dist
 yarn config set registry https://registry.yarnpkg.com
+yarn config set strict-ssl true 
 else
 
 # checking if the private-bower is running
