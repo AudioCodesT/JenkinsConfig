@@ -146,11 +146,12 @@ LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -
 if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
    then
    # checking if the private-bower is running
+     set +e
      output=$( netstat -ano | grep 5678 )
-     if [ -z &quot;$output&quot; ]
+     if [[ -z $output ]]
      then private-bower &amp; sleep 15
      fi
-
+	 set -e
   if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
 then 
 
