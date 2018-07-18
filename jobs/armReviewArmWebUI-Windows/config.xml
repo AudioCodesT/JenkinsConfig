@@ -173,16 +173,17 @@ then
 	echo &quot;RUN: bower install --force-latest&quot;
 	bower install --force-latest
 else
-	git config http.sslVerify &quot;false&quot;
-    git config --global http.sslVerify false
-	git config --global user.email &quot;Devops@audiocodes.com&quot;
-    git config --global user.name &quot;Devops&quot;
- 	
-	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
-	machine test-gerrit login jenkins password $jpass
-	machine gerrit login jenkins password $jpass
-	EOF
-	
+#	git config http.sslVerify &quot;false&quot;
+#    git config --global http.sslVerify false
+#	git config --global user.email &quot;Devops@audiocodes.com&quot;
+#    git config --global user.name &quot;Devops&quot;
+#	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
+#	machine test-gerrit login jenkins password $jpass
+#	machine gerrit login jenkins password $jpass
+#	EOF
+	yarn config set registry https://artifactory/api/npm/npm/
+	yarn config set strict-ssl false
+
     echo &quot;RUN: yarn install&quot;
     yarn install
 fi
@@ -193,6 +194,10 @@ then
 else
 	echo &quot;RUN: yarn dist&quot;
 	yarn dist
+    
+    yarn config set registry https://registry.yarnpkg.com
+	yarn config set strict-ssl true
+    
 fi
 
 fi
