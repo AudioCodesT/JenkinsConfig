@@ -142,11 +142,13 @@ yarn config set registry https://registry.yarnpkg.com
 yarn config set strict-ssl true 
 else
 
+set +e
 # checking if the private-bower is running
 output=$( netstat -ano | grep 5678 )
-if [ -z &quot;$output&quot; ]
+if [[ -z $output ]]
 then private-bower &amp; sleep 15
 fi
+set -e
 
 # register the packages.
 #echo &quot;RUN: bower register visjs ssh://benm@gerrit:29418/web-ui/visjs.git&quot;
