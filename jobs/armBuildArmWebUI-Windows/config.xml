@@ -186,11 +186,10 @@ fi
 
 
      #if branch is not master then copy the zip to a new zip with the branch name
-     mkdir dist
      if [ $GERRIT_BRANCH != &quot;master&quot; ]; then 
-          mv build/dist.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
+          mv dist/arm.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
      else
-          cp build/dist.zip dist/arm-web-ui-8.4.zip -f
+          cp dist/arm.zip dist/arm-web-ui-8.4.zip -f
      fi
 
 else
