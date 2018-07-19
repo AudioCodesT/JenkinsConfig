@@ -155,6 +155,7 @@ if [ $RELEASE_VMS == &quot;YES&quot; ]; then
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
     git pull --rebase origin $BRANCH
+    git tag -d $VERSION_NAME || true
     git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
     
@@ -179,6 +180,7 @@ if [ $RELEASE_VMS == &quot;YES&quot; ]; then
     git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
     cd armUI
     git checkout $BRANCH
+    git tag -d $VERSION_NAME || true
     git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
     git push origin $VERSION_NAME
  
