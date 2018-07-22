@@ -132,23 +132,11 @@ cd $WORKSPACE
 git config url.https://.insteadOf git://
 
 
-if [[ &quot;$GERRIT_CHANGE_ID&quot; == &quot;I1935b36f3f1be4806d8fcbd26e72512d0bb30694&quot; ]]
-then
-yarn config set registry https://artifactory/api/npm/npm/
-yarn config set strict-ssl false 
-yarn install
-yarn dist
-yarn config set registry https://registry.yarnpkg.com
-yarn config set strict-ssl true 
-else
-
-set +e
 # checking if the private-bower is running
 output=$( netstat -ano | grep 5678 )
 if [[ -z $output ]]
 then private-bower &amp; sleep 15
 fi
-set -e
 
 # register the packages.
 #echo &quot;RUN: bower register visjs ssh://benm@gerrit:29418/web-ui/visjs.git&quot;
@@ -173,14 +161,7 @@ then
 	echo &quot;RUN: bower install --force-latest&quot;
 	bower install --force-latest
 else
-#	git config http.sslVerify &quot;false&quot;
-#    git config --global http.sslVerify false
-#	git config --global user.email &quot;Devops@audiocodes.com&quot;
-#    git config --global user.name &quot;Devops&quot;
-#	cat &lt;&lt;-EOF &gt; $USERPROFILE/_netrc
-#	machine test-gerrit login jenkins password $jpass
-#	machine gerrit login jenkins password $jpass
-#	EOF
+
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
 
