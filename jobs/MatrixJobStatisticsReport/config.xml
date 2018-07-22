@@ -137,7 +137,9 @@ do
         #check how many Childs this branch have
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
+        	set +x
             SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
+            set -x
           if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
             then
                 declare lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}=$((lengthOfChilds_${length_JobName}_${GerritBranchNoPoints}+1))
@@ -171,11 +173,13 @@ do
         
         for i in `seq 0 $(($AllSonBuildsLength-1))`
         do
+        set +x
           #The Son Build Url and the number of the build
         SonBuildsUrl=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].url&apos;)
         SonBuildsUrl=${SonBuildsUrl:1}
         SonBuildsUrl=${SonBuildsUrl%&apos;&quot;&apos;}$apiAdress
         SonBuildsNumber=$(echo &quot;$AllSonsBuildJsonFile&quot; | jq &apos;.runs[&apos;$i&apos;].number&apos;)
+        set -x
         if [ &quot;$SonBuildsNumber&quot; == &quot;$FatherBuildNumber&quot; ]
           then
           	set +x
