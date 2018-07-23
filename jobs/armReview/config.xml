@@ -232,7 +232,7 @@ git checkout -f origin/master -- sputnik/gerrit/arm-pmd.properties
 git checkout -f origin/master -- pmd/audc-ruleset.xml
 
 cp sputnik/gerrit/arm-pmd.properties ${WORKSPACE}/
-cp pmd/audc-ruleset.xml ${WORKSPACE}/
+cp pmd/*.xml ${WORKSPACE}/
 
 cd ${WORKSPACE}
 
