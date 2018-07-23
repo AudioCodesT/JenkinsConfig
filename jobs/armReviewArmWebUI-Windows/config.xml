@@ -131,58 +131,38 @@ cd $WORKSPACE
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
-
-# checking if the private-bower is running
-output=$( netstat -ano | grep 5678 )
-if [[ -z $output ]]
-then private-bower &amp; sleep 15
-fi
-
-# register the packages.
-#echo &quot;RUN: bower register visjs ssh://benm@gerrit:29418/web-ui/visjs.git&quot;
-#bower register visjs ssh://benm@gerrit:29418/web-ui/visjs.git
-#echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
-#bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git
-#echo &quot;RUN: bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git&quot;
-#bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git
-#echo &quot;RUN: bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git&quot;
-#bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git
-#echo &quot;RUN: bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git&quot;
-#bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
-#echo &quot;RUN: bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git&quot;
-#bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
-
+# if version is 8.2 or lower - use: npm / bower / privte bower / grunt
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
 then 
-
+	# checking if the private-bower is running
+	output=$( netstat -ano | grep 5678 )
+	if [[ -z $output ]]
+	then private-bower &amp; sleep 15
+	fi
+    
 	echo &quot;RUN: npm install&quot;
 	npm install
 
 	echo &quot;RUN: bower install --force-latest&quot;
 	bower install --force-latest
-else
 
+	echo &quot;RUN: grunt dist&quot;
+	grunt dist
+
+	#	if version is 8.4 or higher - use: yarn with npm on artifactory
+else
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
 
     echo &quot;RUN: yarn install&quot;
     yarn install
-fi
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
-then 
-	echo &quot;RUN: grunt dist&quot;
-	grunt dist
-else
+
 	echo &quot;RUN: yarn dist&quot;
 	yarn dist
     
-    yarn config set registry https://registry.yarnpkg.com
-	yarn config set strict-ssl true
-    
-fi
-
-
-</command>
+    #yarn config set registry https://registry.yarnpkg.com
+	#yarn config set strict-ssl true
+fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
