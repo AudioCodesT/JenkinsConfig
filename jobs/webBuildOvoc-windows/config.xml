@@ -169,6 +169,8 @@ then
       	echo &quot;RUN: bower install --force-latest&quot;
 	  	bower install --force-latest
       else
+      	yarn config set registry https://artifactory/api/npm/npm/
+		yarn config set strict-ssl false
       	echo &quot;RUN: yarn install&quot;
       	yarn install
       fi
