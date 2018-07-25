@@ -264,7 +264,7 @@ cat arm-pmd.properties
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>no workspace from node</regexpForRerun>
+      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
