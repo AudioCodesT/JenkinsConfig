@@ -170,26 +170,21 @@ fi
 
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
 then 
-echo &quot;RUN:npm install&quot;
-npm install
+  echo &quot;RUN:npm install&quot;
+  npm install
+  echo &quot;RUN: bower install --force-latest&quot;
+  bower install --force-latest
+   echo &quot;RUN: grunt dist&quot;
+  grunt dist
 else
-echo &quot;RUN: yarn install&quot;
-yarn install
+	yarn config set registry https://artifactory/api/npm/npm/
+	yarn config set strict-ssl false
+ 	echo &quot;RUN: yarn install&quot;
+    yarn install
+    echo &quot;RUN: yarn run dist&quot;
+  	yarn run dist
 fi
 
-
-echo &quot;RUN: bower install --force-latest&quot;
-bower install --force-latest
-
-
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
-then
-echo &quot;RUN: grunt dist&quot;
-grunt dist
-else 
-echo &quot;RUN: npm dist&quot;
-npm run dist
-fi
 
 
 #5.git add (to dist folder)
