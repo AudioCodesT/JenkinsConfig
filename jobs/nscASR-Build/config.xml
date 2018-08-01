@@ -18,6 +18,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -89,8 +91,12 @@ VERSION=$MAJOR.$MINOR
 
 # Need these details for the UpdateVI job
 AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $OLDTAG..$fullBranch | grep -v Jenkins | sort -u | sed s/$/\;/g`
-RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $OLDTAG..$fullBranch | sed s/\&quot;/\&apos;/g`
-VIS=`git log --pretty=format:&quot;%B&quot; $OLDTAG..$fullBranch | grep ^Issue | sed &apos;s/^Issue: \(VI\|\)//g; s/ .*//g&apos; | sort -u`
+RN=&quot;&quot;
+while read -r hash; do 
+  subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
+  Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
+  RN+=---$subject::$hash::$Jira
+done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $OLDTAG..$fullBranch)&quot;
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $OLDTAG..$fullBranch | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5 | sed &apos;s:\.git::&apos;`
 
@@ -107,7 +113,7 @@ echo NEWTAG=${NEWTAG} &gt;&gt; release.prop
 echo BRANCH=${BRANCH} &gt;&gt; release.prop
 echo VERSION=${VERSION} &gt;&gt; release.prop
 echo RN=${RN} &gt;&gt; release.prop
-echo VIS=${VIS} &gt;&gt; release.prop
+echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; release.prop
 echo EMAIL=${EMAIL} &gt;&gt; release.prop
 echo PROJECT=${GERRIT_PROJECT} &gt;&gt; release.prop
 echo DATE=${DATE} &gt;&gt; release.prop
@@ -268,9 +274,9 @@ Invoke-Elevated -ScriptBlock {
       <command>&quot;C:\Program Files\7-Zip\7z.exe&quot; a C:\BuildOutput\asr_%NEWTAG%.7z C:\BuildOutput\asr_%NEWTAG%</command>
     </hudson.tasks.BatchFile>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token></token>
+      <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>UpdateVI</job>
+      <job>UpdateVI-Jira</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
       <pollInterval>3</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
@@ -279,7 +285,7 @@ Invoke-Elevated -ScriptBlock {
       <enhancedLogging>false</enhancedLogging>
       <parameters>NEWTAG=$NEWTAG
 RN=$RN
-VIS=$VIS
+GERRIT_HOST=$GERRIT_HOST
 EMAIL=$EMAIL
 PROJECT=$PROJECT
 DATE=$DATE
@@ -288,7 +294,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
       <parameterList>
         <string>NEWTAG=$NEWTAG</string>
         <string>RN=$RN</string>
-        <string>VIS=$VIS</string>
+        <string>GERRIT_HOST=$GERRIT_HOST</string>
         <string>EMAIL=$EMAIL</string>
         <string>PROJECT=$PROJECT</string>
         <string>DATE=$DATE</string>
