@@ -272,18 +272,18 @@ Invoke-Elevated -ScriptBlock {
       <command>&quot;C:\Program Files\7-Zip\7z.exe&quot; a C:\BuildOutput\mrcp_%NEWTAG%.7z C:\BuildOutput\mrcp_%NEWTAG%</command>
     </hudson.tasks.BatchFile>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token></token>
+      <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>UpdateVI</job>
+      <job>UpdateVI-Jira</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
-      <pollInterval>10</pollInterval>
+      <pollInterval>3</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>false</enhancedLogging>
       <parameters>NEWTAG=$NEWTAG
 RN=$RN
-VIS=$VIS
+GERRIT_HOST=$GERRIT_HOST
 EMAIL=$EMAIL
 PROJECT=$PROJECT
 DATE=$DATE
@@ -292,7 +292,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
       <parameterList>
         <string>NEWTAG=$NEWTAG</string>
         <string>RN=$RN</string>
-        <string>VIS=$VIS</string>
+        <string>GERRIT_HOST=$GERRIT_HOST</string>
         <string>EMAIL=$EMAIL</string>
         <string>PROJECT=$PROJECT</string>
         <string>DATE=$DATE</string>
