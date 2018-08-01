@@ -190,6 +190,8 @@ then
       else 
  	 echo &quot;RUN: yarn run dist&quot;
       yarn run dist
+      yarn run replaceStrings 
+      yarn run zip 
       fi
       
       #rename zip file to ovoc-7.4.0.zip in order to deploy in one name to artifactory
