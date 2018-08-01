@@ -190,7 +190,9 @@ then
       else 
  	 echo &quot;RUN: yarn run dist&quot;
       yarn run dist
+      echo &quot;RUN: yarn run replaceStrings&quot;
       yarn run replaceStrings 
+      echo &quot;RUN:yarn run zip&quot;
       yarn run zip 
       fi
       
