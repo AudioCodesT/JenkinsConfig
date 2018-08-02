@@ -519,7 +519,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0514653b3aee5429d</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0514653b3aee5429d</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-build</requestedLabel>
+            <createdAt>2018-08-02 06:05:20.301 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -877,9 +888,8 @@
         <string>armPromoteVersion</string>
         <string>armReleaseSanity</string>
         <string>armReview</string>
-        <string>armReviewArm</string>
         <string>armReviewArm-fullRepo</string>
-        <string>armReviewArm_fastVerify</string>
+        <string>armReviewArm_OLD</string>
         <string>armReviewARMLicense</string>
         <string>armReviewArmOracleLicense</string>
         <string>armReviewArmWebUI</string>
@@ -887,12 +897,7 @@
         <string>armReviewNodeSimulator</string>
         <string>armReviewRouterTestModule</string>
         <string>armRunRouterTestModule</string>
-        <string>armRunRouterTestModule_OLD</string>
-        <string>armRunRouterTestModule_OLD2</string>
         <string>armRunTopologyTest</string>
-        <string>armRunTopologyTest_old</string>
-        <string>armRunTopologyTest_OLD2</string>
-        <string>armVMFilesChange-Email</string>
       </jobNames>
       <jobFilters/>
       <columns>
