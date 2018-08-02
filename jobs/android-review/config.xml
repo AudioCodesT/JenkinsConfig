@@ -39,6 +39,9 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 
+OTA_FILE_NAME=OTA_FILE_NAME.zip
+echo OTA_FILE_NAME=${IPP_VER} &gt; generated_ipp_version.properties
+
 cd ~/C450HD-Android-2
 
 # first we need to clean previous build:
@@ -70,9 +73,16 @@ echo ----- make  dist
 make  dist DIST_DIR=./dist_folder1
 # generate the actual image (OTA_FILE_NAME.zip)
 echo ----- generate the actual image
-./build/tools/releasetools/ota_from_target_files  dist_folder1/aosp_dvf101-target_files-eng.ubuntu.zip OTA_FILE_NAME.zip
+./build/tools/releasetools/ota_from_target_files  dist_folder1/aosp_dvf101-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
+
+mv ${OTA_FILE_NAME} ${WORKSPACE}/${OTA_FILE_NAME}
 </command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers/>
   <buildWrappers>
@@ -117,10 +127,10 @@ echo ----- generate the actual image
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
+      <deployPattern>${WORKSPACE}/${OTA_FILE_NAME}=&gt;com/ac/android</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
-      <deployBuildInfo>true</deployBuildInfo>
+      <deployBuildInfo>false</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
         <includePatterns></includePatterns>
