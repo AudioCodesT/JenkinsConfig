@@ -44,7 +44,7 @@ cd ~/C450HD-Android-2
 make clean
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync
-repo sync -c --no-tags --no-clone-bundle -j16
+repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 # at this point you need to chery-pick the relevant change you wish to verify
 # cd to releant path
 # git cherrypick
