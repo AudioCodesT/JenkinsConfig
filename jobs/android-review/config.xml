@@ -37,7 +37,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
+      <command>#!/bin/bash
+
 cd ~/C450HD-Android-2
 
 # first we need to clean previous build:
