@@ -69,7 +69,7 @@ mkdir dist_folder1
 echo ----- make  dist
 make  dist DIST_DIR=./dist_folder1
 # generate the actual image (OTA_FILE_NAME.zip)
-echo ----- generate the actual image (OTA_FILE_NAME.zip)
+echo ----- generate the actual image
 ./build/tools/releasetools/ota_from_target_files  dist_folder1/aosp_dvf101-target_files-eng.ubuntu.zip OTA_FILE_NAME.zip
 </command>
     </hudson.tasks.Shell>
