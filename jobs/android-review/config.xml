@@ -1,5 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -17,6 +18,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -40,25 +43,31 @@ cd ~/C450HD-Android-2
 # first we need to clean previous build:
 make clean
 # second need to sync on latest changes off all other repositories
+echo ----- repo sync
 repo sync -c --no-tags --no-clone-bundle -j16
 # at this point you need to chery-pick the relevant change you wish to verify
-cd to releant path
-git cherrypick
-cd back to C450HD-Android
+# cd to releant path
+# git cherrypick
+# cd back to C450HD-Android
 # setting build variables
+echo ----- source build/envsetup.sh
 source build/envsetup.sh
 # selecting configuration
+echo ----- lunch aosp_dvf101-userdebug
 lunch aosp_dvf101-userdebug
 # building - this step will take ~40 min
+echo ----- make -j16
 make -j16
 # at this point you should have relevant images under ./out/target/product/dvf101/
 
 # now we wish to build the actual image file
 # we create a folder t where our output should go
-mkdir dist_folder
+mkdir dist_folder1
 # run make dist
-make  dist DIST_DIR=./dist_folder
+echo ----- make  dist
+make  dist DIST_DIR=./dist_folder1
 # generate the actual image (OTA_FILE_NAME.zip)
+echo ----- generate the actual image (OTA_FILE_NAME.zip)
 ./build/tools/releasetools/ota_from_target_files  dist_folder/aosp_dvf101-target_files-eng.ubuntu.zip OTA_FILE_NAME.zip
 </command>
     </hudson.tasks.Shell>
