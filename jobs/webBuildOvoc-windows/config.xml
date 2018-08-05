@@ -191,9 +191,9 @@ then
  	  echo &quot;RUN: yarn run dist&quot;
       yarn run dist
       echo &quot;RUN: yarn run protractorProxyServer&quot;
-     yarn run protractorProxyServer &amp; sleep 10
+     yarn run protractorProxyServer &amp; sleep 15
      echo &quot;RUN: yarn run protractorServer&quot;
-     yarn run protractorServer &amp; sleep 10
+     yarn run protractorServer &amp; sleep 15
      sleep 20
       echo &quot;RUN: yarn run protractor&quot;
       yarn run protractor
