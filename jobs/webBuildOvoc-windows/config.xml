@@ -169,6 +169,10 @@ then
       	echo &quot;RUN: bower install --force-latest&quot;
 	  	bower install --force-latest
       else
+        echo &quot;RUN: yarn run protractorProxyServer&quot;
+      	yarn run protractorProxyServer &amp; sleep 10
+      	echo &quot;RUN: yarn run protractorServer&quot;
+      	yarn run protractorServer &amp; sleep 10
       	yarn config set registry https://artifactory/api/npm/npm/
 		yarn config set strict-ssl false
       	echo &quot;RUN: yarn install&quot;
@@ -190,10 +194,10 @@ then
       else 
  	  echo &quot;RUN: yarn run dist&quot;
       yarn run dist
-      echo &quot;RUN: yarn run protractorProxyServer&quot;
-      yarn run protractorProxyServer &amp; sleep 10
-      echo &quot;RUN: yarn run protractorServer&quot;
-      yarn run protractorServer &amp; sleep 10
+ #     echo &quot;RUN: yarn run protractorProxyServer&quot;
+ #     yarn run protractorProxyServer &amp; sleep 10
+ #     echo &quot;RUN: yarn run protractorServer&quot;
+ #     yarn run protractorServer &amp; sleep 10
       echo &quot;RUN: yarn run protractor&quot;
       yarn run protractor
       echo &quot;RUN: yarn run replaceStrings&quot;
