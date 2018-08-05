@@ -129,6 +129,12 @@ if new code then build and deploy ovoc-7.6.zip</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>echo &quot;RUN: yarn run protractorProxyServer&quot;
+yarn run protractorProxyServer &amp; sleep 10
+echo &quot;RUN: yarn run protractorServer&quot;
+yarn run protractorServer &amp; sleep 10</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
 set -e
 cd $WORKSPACE
@@ -169,10 +175,6 @@ then
       	echo &quot;RUN: bower install --force-latest&quot;
 	  	bower install --force-latest
       else
-        echo &quot;RUN: yarn run protractorProxyServer&quot;
-      	yarn run protractorProxyServer &amp; sleep 10
-      	echo &quot;RUN: yarn run protractorServer&quot;
-      	yarn run protractorServer &amp; sleep 10
       	yarn config set registry https://artifactory/api/npm/npm/
 		yarn config set strict-ssl false
       	echo &quot;RUN: yarn install&quot;
