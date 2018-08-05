@@ -130,6 +130,9 @@ if new code then build and deploy ovoc-7.6.zip</description>
   <builders>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
+
+cd $WORKSPACE
+git config url.https://.insteadOf git://
 set -e
 echo &quot;RUN: yarn run protractorProxyServer&quot;
 yarn run protractorProxyServer &amp; sleep 10
