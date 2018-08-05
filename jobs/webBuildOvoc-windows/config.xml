@@ -130,7 +130,7 @@ if new code then build and deploy ovoc-7.6.zip</description>
   <builders>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
-
+set -e
 cd $WORKSPACE
 
 
