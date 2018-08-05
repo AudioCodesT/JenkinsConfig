@@ -129,7 +129,9 @@ if new code then build and deploy ovoc-7.6.zip</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;RUN: yarn run protractorProxyServer&quot;
+      <command>#!c:\cygwin64\bin\bash --login -i
+set -e
+echo &quot;RUN: yarn run protractorProxyServer&quot;
 yarn run protractorProxyServer &amp; sleep 10
 echo &quot;RUN: yarn run protractorServer&quot;
 yarn run protractorServer &amp; sleep 10</command>
