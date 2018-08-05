@@ -173,6 +173,11 @@ then
 		yarn config set strict-ssl false
       	echo &quot;RUN: yarn install&quot;
       	yarn install
+        
+
+
+         
+        
       fi
       
       #update version number before grunt dist
@@ -188,8 +193,14 @@ then
       echo &quot;RUN: grunt dist&quot;
       grunt dist
       else 
- 	 echo &quot;RUN: yarn run dist&quot;
+ 	  echo &quot;RUN: yarn run dist&quot;
       yarn run dist
+      echo &quot;RUN: yarn run protractorProxyServer&quot;
+      yarn run protractorProxyServer &amp; sleep 10
+      echo &quot;RUN: yarn run protractorServer&quot;
+      yarn run protractorServer &amp; sleep 10
+      echo &quot;RUN: yarn run protractor&quot;
+      yarn run protractor
       echo &quot;RUN: yarn run replaceStrings&quot;
       yarn run replaceStrings 
       echo &quot;RUN:yarn run zip&quot;
