@@ -190,13 +190,13 @@ then
       else 
  	  echo &quot;RUN: yarn run dist&quot;
       yarn run dist
-     # echo &quot;RUN: yarn run protractorProxyServer&quot;
-     #yarn run protractorProxyServer &amp; sleep 15
-     #echo &quot;RUN: yarn run protractorServer&quot;
-     #yarn run protractorServer &amp; sleep 15
-     #sleep 20
-     # echo &quot;RUN: yarn run protractor&quot;
-     # yarn run protractor
+      echo &quot;RUN: yarn run protractorProxyServer&quot;
+     yarn run protractorProxyServer &amp; sleep 15
+     echo &quot;RUN: yarn run protractorServer&quot;
+     yarn run protractorServer &amp; sleep 15
+     sleep 20
+      echo &quot;RUN: yarn run protractor&quot;
+      yarn run protractor
       echo &quot;RUN: yarn run replaceStrings&quot;
       yarn run replaceStrings 
       echo &quot;RUN:yarn run zip&quot;
