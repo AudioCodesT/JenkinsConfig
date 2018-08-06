@@ -161,7 +161,13 @@ else
  	echo &quot;RUN: yarn install&quot;
     yarn install
     echo &quot;RUN: yarn run dist&quot;
-  	yarn run dist
+    yarn run dist
+    echo &quot;RUN: yarn run protractorProxyServer&quot;
+    yarn run protractorProxyServer &amp; sleep 15
+    echo &quot;RUN: yarn run protractorServer&quot;
+    yarn run protractorServer &amp; sleep 15
+    echo &quot;RUN: yarn run protractor&quot;
+    yarn run protractor
 fi
 
 
