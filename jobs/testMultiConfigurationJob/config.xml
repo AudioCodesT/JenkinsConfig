@@ -80,20 +80,20 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <axes>
-    <hudson.matrix.LabelExpAxis>
-      <name>test1</name>
-      <values>
-        <string>ipp-build</string>
-      </values>
-    </hudson.matrix.LabelExpAxis>
-    <hudson.matrix.LabelExpAxis>
-      <name>test2</name>
-      <values>
-        <string>ipp-build</string>
-      </values>
-    </hudson.matrix.LabelExpAxis>
     <hudson.matrix.LabelAxis>
-      <name>label</name>
+      <name>test00</name>
+      <values>
+        <string>ipp-build</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+    <hudson.matrix.LabelAxis>
+      <name>test11</name>
+      <values>
+        <string>ipp-build</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+    <hudson.matrix.LabelAxis>
+      <name>test22</name>
       <values>
         <string>ipp-build</string>
       </values>
@@ -114,13 +114,13 @@
           <projects>TestJobQuietPreid</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
-          <triggerFromChildProjects>true</triggerFromChildProjects>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
       </configs>
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers/>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
-    <runSequentially>false</runSequentially>
+    <runSequentially>true</runSequentially>
   </executionStrategy>
 </matrix-project>
