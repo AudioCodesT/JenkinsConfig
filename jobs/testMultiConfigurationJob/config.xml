@@ -101,7 +101,8 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;TEST CHILD JOB&quot;</command>
+      <command>echo &quot;TEST CHILD JOB&quot;
+sleep 10</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
