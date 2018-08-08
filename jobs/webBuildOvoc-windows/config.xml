@@ -199,8 +199,7 @@ then
       echo &quot;RUN: yarn run replaceStrings&quot;
       yarn run replaceStrings 
       echo &quot;RUN:yarn run zip&quot;
-      yarn run zip 
-      
+      yarn run zip  
       #kill the Proxy Server process
    	  pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1)
       taskkill //PID $pidNumber //F &gt;/dev/null 2&gt;&amp;1
