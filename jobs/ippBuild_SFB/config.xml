@@ -210,13 +210,6 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
             <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
-            <hudson.plugins.parameterizedtrigger.FileBuildParameters>
-              <propertiesFile>generated_ipp_version.properties</propertiesFile>
-              <failTriggerOnMissing>false</failTriggerOnMissing>
-              <textParamValueOnNewLine>false</textParamValueOnNewLine>
-              <useMatrixChild>false</useMatrixChild>
-              <onlyExactRuns>false</onlyExactRuns>
-            </hudson.plugins.parameterizedtrigger.FileBuildParameters>
           </configs>
           <projects>ippSizeChecker</projects>
           <condition>SUCCESS</condition>
