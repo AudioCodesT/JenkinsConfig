@@ -635,7 +635,48 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>sir-xbc8hzvm</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-xbc8hzvm</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2018-08-09 09:29:26.185 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>sir-2j4gjdzn</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-2j4gjdzn</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2018-08-09 09:29:49.454 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>sir-i4wih4cq</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-i4wih4cq</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2018-08-09 09:29:35.182 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>sir-6p68je3n</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-6p68je3n</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2018-08-09 09:29:58.777 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -743,7 +784,28 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-756f72a5</name>
       <groupId>sig-756f72a5</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0b06537d0314a846f</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0b06537d0314a846f</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>Web-UI-Win-Dynamic</requestedLabel>
+            <createdAt>2018-08-09 09:21:50.420 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-02b0cbcda81553e03</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-02b0cbcda81553e03</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>Web-UI-Win-Dynamic</requestedLabel>
+            <createdAt>2018-08-09 09:24:26.135 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>Web-UI-Win-Dynamic</labelString>
       <idleTerminationMinutes>60</idleTerminationMinutes>
       <workspaceDir>c:\jenkins</workspaceDir>
@@ -793,7 +855,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-489fa0a5</name>
       <groupId>sig-489fa0a5</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0567e7337934b233b</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0567e7337934b233b</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4-fix</requestedLabel>
+            <createdAt>2018-08-09 09:28:43.790 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4-fix</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1025,6 +1098,7 @@
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>_ippSizeChecker</string>
         <string>ipp-Create-Tag-SFB</string>
         <string>ipp_cppcheck_BtoE</string>
         <string>ipp_SFB_CppCheck_fullRepo</string>
@@ -1039,7 +1113,6 @@
         <string>ippReview_CppCheck</string>
         <string>ippReview_SFB</string>
         <string>ippReviewIPPhone</string>
-        <string>ippSizeChecker</string>
         <string>ippVerifyCherryPick</string>
       </jobNames>
       <jobFilters/>
@@ -1072,6 +1145,7 @@
         <string>Delete-Old-Artifactory-Versions</string>
         <string>ipp_Android_ReST_Start</string>
         <string>IPP_Android_Sched_Off</string>
+        <string>ippSizeChecker</string>
         <string>MatrixJobsReport</string>
         <string>MatrixJobStatisticsReport</string>
         <string>UpdateJira</string>
