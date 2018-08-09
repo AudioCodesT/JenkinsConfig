@@ -68,7 +68,22 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;Job Triggred&quot;</command>
+      <command>artifactory_host=artifactory
+
+#get the Current build NEW CSV REPORT
+curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${childName}/${NEWTAG}_size_report.csv&quot;
+#get the OLDER CSV REPORT (NEWTAG -1)
+curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${childName}/${OLDTAG}_size_report.csv&quot;
+
+sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
+RetunedValue=$?
+
+if [[ $ReturnedValue == &quot;0&quot; ]]
+then
+exit 0
+else
+exit 1
+fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -179,6 +194,20 @@ com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG_SECOND}/${childName}/${NEWTAG_SECOND}_si
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>ArtifactoryApiKey</name>
+          <value>{AQAAABAAAABQxpJMpXlsQymvfBMXNsI9vfdzQCzzqj1oi2q47mThLNpKeD532Xe5MaMBPmqzt2PJcfdUXJ41+WsNPT3jQnalNV0jzoYyGnUaYjXY6430xN9NNMIESzysXSNGTJD6CaoA}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>ArtifactoryUser</name>
+          <value>{AQAAABAAAAAQc0wOYnhbsVUpk5NUdbsorGVYvEESdc2cQQZ5rIbQVwA=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
       <runAtStart>true</runAtStart>
