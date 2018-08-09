@@ -1,5 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -17,6 +18,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -97,22 +100,6 @@
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
               <recipientList>Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger</recipientList>
-              <configuredTriggers>
-                <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-                  <email>
-                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-                    <body>$PROJECT_DEFAULT_CONTENT</body>
-                    <recipientProviders>
-                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
-                    </recipientProviders>
-                    <attachmentsPattern></attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
-                    <compressBuildLog>false</compressBuildLog>
-                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
-                  </email>
-                </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-              </configuredTriggers>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
               <defaultContent></defaultContent>
