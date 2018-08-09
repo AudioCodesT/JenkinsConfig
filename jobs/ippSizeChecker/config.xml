@@ -96,6 +96,7 @@ allChilds=($childs)
 allChildsLength=${#allChilds[@]}
 for i in `seq 2 $(($allChildsLength-1))`
 do
+ echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
 	#get the Current build NEW CSV REPORT
 	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
 	#get the OLDER CSV REPORT (NEWTAG -1)
@@ -103,7 +104,6 @@ do
 	# run comparison between the old csv to the new csv
 	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
 	RetunedValue=$?
-    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
 	#return 0 if the script succeseded else if failed
 	if [[ $RetunedValue == &quot;0&quot; ]]
 	then
