@@ -134,7 +134,8 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
               <recipientList>benm</recipientList>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
-              <defaultContent>In the branch ${BUILD_BRANCH} between the tags ${</defaultContent>
+              <defaultContent>In the branch ${BUILD_BRANCH} between the tags ${OLDTAG} to ${NEWTAG} the img size is diffrent.
+You can see Details here $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
