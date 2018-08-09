@@ -112,7 +112,8 @@ do
 	else
 		needToSendEmail=&quot;True&quot;
         echo &quot;The Child ${allChilds[i]}  img size test failed&quot;
-        echo &quot;The Child ${allChilds[i]}  img size test failed, You can see Extra Details here https://jenkins/view/admin/job/ippSizeChecker/${BUILD_NUMBER}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+        echo &quot;For The Child ${allChilds[i]} The img size test failed, You can see Extra Details here https://jenkins/view/admin/job/ippSizeChecker/${BUILD_NUMBER}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+        echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 	fi
     cat ${allChilds[i]}.txt
 done    
