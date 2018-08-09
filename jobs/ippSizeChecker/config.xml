@@ -89,7 +89,8 @@ needToSendEmail=&quot;False&quot;
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
-
+echo &quot;In the branch ${BUILD_BRANCH} between the tags ${OLDTAG} to ${NEWTAG} the img size is different in the following childs:&quot; &gt; emailContent.txt
+echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 #get all childs names from the spesific TAG
 childs=$(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
 allChilds=($childs)
@@ -111,6 +112,7 @@ do
 	else
 		needToSendEmail=&quot;True&quot;
         echo &quot;The Child ${allChilds[i]}  img size test failed&quot;
+        echo &quot;The Child ${allChilds[i]}  img size test failed, You can see Extra Details here https://jenkins/view/admin/job/ippSizeChecker/${BUILD_NUMBER}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
 	fi
     cat ${allChilds[i]}.txt
 done    
@@ -153,7 +155,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
               <recipientList>Ben.Magriso@audiocodes.com</recipientList>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
-              <defaultContent>In the branch ${BUILD_BRANCH} between the tags ${OLDTAG} to ${NEWTAG} the img size is different.
+              <defaultContent>$emailContent
 You can see Details here $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
