@@ -103,12 +103,14 @@ do
 	# run comparison between the old csv to the new csv
 	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
 	RetunedValue=$?
+    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
 	#return 0 if the script succeseded else if failed
 	if [[ $ReturnedValue == &quot;0&quot; ]]
 	then
-		echo &quot;for ${allChilds[i]} img size test passed&quot;
+		echo &quot;The Child ${allChilds[i]} img size test passed&quot;
 	else
 		needToSendEmail=&quot;True&quot;
+        echo &quot;The Child ${allChilds[i]}  &quot;
 	fi
     
 done    
@@ -140,10 +142,10 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>benm</recipientList>
+              <recipientList>benm@audiocodes.com</recipientList>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
-              <defaultContent>In the branch ${BUILD_BRANCH} between the tags ${OLDTAG} to ${NEWTAG} the img size is diffrent.
+              <defaultContent>In the branch ${BUILD_BRANCH} between the tags ${OLDTAG} to ${NEWTAG} the img size is different.
 You can see Details here $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
