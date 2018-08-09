@@ -102,7 +102,7 @@ do
 	#get the OLDER CSV REPORT (NEWTAG -1)
 	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
 	# run comparison between the old csv to the new csv
-	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
+	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv &gt; ${allChilds[i]}.txt 2&gt;&amp;1
 	RetunedValue=$?
 	#return 0 if the script succeseded else if failed
 	if [[ $RetunedValue == &quot;0&quot; ]]
@@ -112,7 +112,7 @@ do
 		needToSendEmail=&quot;True&quot;
         echo &quot;The Child ${allChilds[i]}  img size test failed&quot;
 	fi
-    
+    cat ${allChilds[i]}.txt
 done    
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
@@ -127,6 +127,14 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
     </EnvInjectBuilder>
   </builders>
   <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>*.txt</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>benm@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
