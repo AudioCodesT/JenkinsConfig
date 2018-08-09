@@ -118,6 +118,7 @@ do
     cat ${allChilds[i]}.txt
 done    
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
+echo &quot;releaseNotes=$(cat emailContent.txt)&quot; &gt;&gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 
 
@@ -156,7 +157,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
               <recipientList>Ben.Magriso@audiocodes.com</recipientList>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
-              <defaultContent>${emailContent.txt}
+              <defaultContent>$releaseNotes
 You can see Details here $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
