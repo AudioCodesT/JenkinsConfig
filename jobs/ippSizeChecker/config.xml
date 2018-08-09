@@ -69,7 +69,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>artifactory_host=artifactory
-
+needToSendEmail=&quot;False&quot;
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
 OLDTAG=NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; NEW_TAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
@@ -86,11 +86,19 @@ if [[ $ReturnedValue == &quot;0&quot; ]]
 then
 exit 0
 else
-exit 1
-fi</command>
+needToSendEmail=&quot;True&quot;
+fi
+
+
+#Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>benm</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <hudson.tasks.ArtifactArchiver>
       <artifacts></artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
@@ -102,23 +110,14 @@ fi</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
-            <worstResult>
-              <name>ABORTED</name>
-              <ordinal>4</ordinal>
-              <color>ABORTED</color>
-              <completeBuild>false</completeBuild>
-            </worstResult>
-            <bestResult>
-              <name>UNSTABLE</name>
-              <ordinal>1</ordinal>
-              <color>YELLOW</color>
-              <completeBuild>true</completeBuild>
-            </bestResult>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+            <arg1>$needToSendEmail</arg1>
+            <arg2>True</arg2>
+            <ignoreCase>false</ignoreCase>
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger</recipientList>
+              <recipientList>benm</recipientList>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
               <defaultContent></defaultContent>
@@ -204,11 +203,11 @@ com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG_SECOND}/${childName}/${NEWTAG_SECOND}_si
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryApiKey</name>
-          <value>{AQAAABAAAABQl8VZt9vNAsQoqK47ka3indL5aeV07eaFUrmjBmQJmYh2p97Y/LkNjAASk2Uvf1qFOKZ5+Xv7+HRbWefGsjkaAWbklC64rl1gcjSmKzQs0Vv5l+0u33mv39UecL1zwCmE}</value>
+          <value>{AQAAABAAAABQXrDK/7JuREGj7F+P0Do8AIj3g+Y7/cHjIEkFk0YRHuOmd1IKaX1MQw+mqBhcOumvimWmpoJB/uRQ6n3hXBrKsYLLJcF8PKJOmIevqzuMyMsWWKPMSe18RTZRBul0o2zT}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryUser</name>
-          <value>{AQAAABAAAAAQIxAAP6eUNMLPGx8pDVY3JhkWQGESskjwa0WfqykDSN0=}</value>
+          <value>{AQAAABAAAAAQjyuxMCeczIXPEjOSii3W28/aEeeKGB4Yuo5zFLPDPoc=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
