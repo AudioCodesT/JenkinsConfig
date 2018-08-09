@@ -50,6 +50,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
+        <refspec>+refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +refs/notes/review:refs/notes/review</refspec>
         <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
@@ -65,7 +66,16 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
+        <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>true</noTags>
+        <reference></reference>
+        <depth>0</depth>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <assignedNode>ipp-matrix-parents-centos7.4</assignedNode>
