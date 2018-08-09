@@ -73,6 +73,7 @@ needToSendEmail=&quot;False&quot;
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
+
 #get all childs names from the spesific TAG
 allChilds=($(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1))
 allChildsLength=${#a[@]}
@@ -94,10 +95,17 @@ do
 	fi
     
 done    
+echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
+echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 
 
 #Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger</command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
@@ -126,7 +134,7 @@ done
               <recipientList>benm</recipientList>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
-              <defaultContent></defaultContent>
+              <defaultContent>In the branch ${BUILD_BRANCH} between the tags ${</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
