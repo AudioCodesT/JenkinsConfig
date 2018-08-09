@@ -71,16 +71,16 @@
       <command>artifactory_host=artifactory
 needToSendEmail=&quot;False&quot;
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
-OLDTAG=NEWTAG
-[[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; NEW_TAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
+OLDTAG=$NEWTAG
+[[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
 allChilds=($(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1))
 allChildsLength=${#a[@]}
 for i in `seq 2 $(($allChildsLength-1))`
 do
 	#get the Current build NEW CSV REPORT
-	curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
+	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryPassword -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
 	#get the OLDER CSV REPORT (NEWTAG -1)
-	curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
+	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryPassword -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
 	# run comparison between the old csv to the new csv
 	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
 	RetunedValue=$?
@@ -208,11 +208,11 @@ com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG_SECOND}/${childName}/${NEWTAG_SECOND}_si
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryApiKey</name>
-          <value>{AQAAABAAAABQOx6kQHlWUzNsZIT2kC8nsWOtrTUzUzYZZu+zbGKTqB5HBsU8zlPVpheFjdDUWpXZ81Eg8UvkVLPDkEY71j1W77L1mwRq1+54KWBhyYc59bzUUNYuCcikIyKokdonO0qs}</value>
+          <value>{AQAAABAAAABQxpAkt847BEHfleQmm3whbw4D3eS/iT0sYscETZCGB8CzKaoywiDzSBlbH0jcrDJRKkagEv+xbYKRtb0bLJek0+RiMjGu/FeZ9m8QJEmnxQC/84R1kdvev6crfqsXy0OK}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryUser</name>
-          <value>{AQAAABAAAAAQjGY5TBBmYpr8Dtdy6G9/cqcRK9hflo73VtSVT4eNntM=}</value>
+          <value>{AQAAABAAAAAQ1I07SLE7nTU5/nFqoF8BB/RXmT/eO3XG+i+szOYuquk=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
