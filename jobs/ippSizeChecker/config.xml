@@ -91,7 +91,8 @@ OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
 
 #get all childs names from the spesific TAG
-allChilds=($(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1))
+allChilds=$(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
+allChilds=($(allChilds))
 allChildsLength=${#a[@]}
 for i in `seq 2 $(($allChildsLength-1))`
 do
