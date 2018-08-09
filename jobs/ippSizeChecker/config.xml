@@ -74,10 +74,10 @@
 curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${childName}/${NEWTAG}_size_report.csv&quot;
 #get the OLDER CSV REPORT (NEWTAG -1)
 curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${childName}/${OLDTAG}_size_report.csv&quot;
-
+# run comparison between the old csv to the new csv
 sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
 RetunedValue=$?
-
+#return 0 if the script succeseded else if failed
 if [[ $ReturnedValue == &quot;0&quot; ]]
 then
 exit 0
@@ -200,11 +200,11 @@ com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG_SECOND}/${childName}/${NEWTAG_SECOND}_si
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryApiKey</name>
-          <value>{AQAAABAAAABQxpJMpXlsQymvfBMXNsI9vfdzQCzzqj1oi2q47mThLNpKeD532Xe5MaMBPmqzt2PJcfdUXJ41+WsNPT3jQnalNV0jzoYyGnUaYjXY6430xN9NNMIESzysXSNGTJD6CaoA}</value>
+          <value>{AQAAABAAAABQRJN6CdEmRfn/hlk1i88SRbQq3COAmE8RniFvA1RduN+laQ5XwlXoOfdDe30aNHRJGfdTFXoIRsVgD1LysgA+u9mV1fg0OqAPz/EurTnu55GhiXLh59CV58HLg5d3Lacn}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryUser</name>
-          <value>{AQAAABAAAAAQc0wOYnhbsVUpk5NUdbsorGVYvEESdc2cQQZ5rIbQVwA=}</value>
+          <value>{AQAAABAAAAAQheKvhVMFjWWnEakK5bTeIb1Kj1lL+kBgUW3L/mJA0PI=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
