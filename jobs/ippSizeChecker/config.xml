@@ -84,7 +84,7 @@ RetunedValue=$?
 #return 0 if the script succeseded else if failed
 if [[ $ReturnedValue == &quot;0&quot; ]]
 then
-exit 0
+echo &quot;for ${childName} img size test passed&quot;
 else
 needToSendEmail=&quot;True&quot;
 fi
@@ -203,11 +203,11 @@ com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG_SECOND}/${childName}/${NEWTAG_SECOND}_si
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryApiKey</name>
-          <value>{AQAAABAAAABQXrDK/7JuREGj7F+P0Do8AIj3g+Y7/cHjIEkFk0YRHuOmd1IKaX1MQw+mqBhcOumvimWmpoJB/uRQ6n3hXBrKsYLLJcF8PKJOmIevqzuMyMsWWKPMSe18RTZRBul0o2zT}</value>
+          <value>{AQAAABAAAABQN2H7f8T5MQsJzi8rePYoMRsUyP4qSchXJI/gToq2+bJNKpfnF7E1s9/cdrSNzMO5FShoYTBU2oaG1Bd4ljv3YpUH7CMvcpFbaF8+MMLovg3dO8MJVqkeLYWvkyM0Q/Qp}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryUser</name>
-          <value>{AQAAABAAAAAQjyuxMCeczIXPEjOSii3W28/aEeeKGB4Yuo5zFLPDPoc=}</value>
+          <value>{AQAAABAAAAAQNyRIAZ53H76uNLqXCQNeSuqR0xXVI7W5INqFkmma3Qs=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
