@@ -70,6 +70,10 @@
     <hudson.tasks.Shell>
       <command>artifactory_host=artifactory
 
+# Downgrade NEWTAG by 1 to compare two newest size_report csv
+OLDTAG=NEWTAG
+[[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; NEW_TAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
+
 #get the Current build NEW CSV REPORT
 curl -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$ArtifactoryApiKey/ipp-release/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${childName}/${NEWTAG}_size_report.csv&quot;
 #get the OLDER CSV REPORT (NEWTAG -1)
@@ -200,11 +204,11 @@ com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG_SECOND}/${childName}/${NEWTAG_SECOND}_si
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryApiKey</name>
-          <value>{AQAAABAAAABQRJN6CdEmRfn/hlk1i88SRbQq3COAmE8RniFvA1RduN+laQ5XwlXoOfdDe30aNHRJGfdTFXoIRsVgD1LysgA+u9mV1fg0OqAPz/EurTnu55GhiXLh59CV58HLg5d3Lacn}</value>
+          <value>{AQAAABAAAABQl8VZt9vNAsQoqK47ka3indL5aeV07eaFUrmjBmQJmYh2p97Y/LkNjAASk2Uvf1qFOKZ5+Xv7+HRbWefGsjkaAWbklC64rl1gcjSmKzQs0Vv5l+0u33mv39UecL1zwCmE}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>ArtifactoryUser</name>
-          <value>{AQAAABAAAAAQheKvhVMFjWWnEakK5bTeIb1Kj1lL+kBgUW3L/mJA0PI=}</value>
+          <value>{AQAAABAAAAAQIxAAP6eUNMLPGx8pDVY3JhkWQGESskjwa0WfqykDSN0=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
