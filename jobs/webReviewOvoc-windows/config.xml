@@ -168,7 +168,7 @@ else
     yarn run protractorServer &amp; sleep 15
     echo &quot;RUN: yarn run protractor&quot;
     yarn run protractor
-    kill the Proxy Server process
+    #kill the Proxy Server process
     pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1)
     taskkill //PID $pidNumber //F &gt;/dev/null 2&gt;&amp;1
 
