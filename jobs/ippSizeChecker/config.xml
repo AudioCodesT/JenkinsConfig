@@ -125,7 +125,8 @@ do
 	fi
     cat ${allChilds[i]}.txt
     cat size_report.txt &gt; size_report_${allChilds[i]}.txt
-done    
+done
+rm -rf size_report.txt
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;releaseNotes=$(cat emailContent.txt)&quot; &gt;&gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
