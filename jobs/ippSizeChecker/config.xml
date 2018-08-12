@@ -124,6 +124,7 @@ do
         echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 	fi
     cat ${allChilds[i]}.txt
+    cat size_report.txt &gt; size_report_${allChilds[i]}.txt
 done    
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;releaseNotes=$(cat emailContent.txt)&quot; &gt;&gt; properties
