@@ -163,6 +163,22 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
               <recipientList>Ben.Magriso@audiocodes.com</recipientList>
+              <configuredTriggers>
+                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+                  <email>
+                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+                    <body>$PROJECT_DEFAULT_CONTENT</body>
+                    <recipientProviders>
+                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+                    </recipientProviders>
+                    <attachmentsPattern></attachmentsPattern>
+                    <attachBuildLog>false</attachBuildLog>
+                    <compressBuildLog>false</compressBuildLog>
+                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+                    <contentType>project</contentType>
+                  </email>
+                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+              </configuredTriggers>
               <contentType>default</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
               <defaultContent>$releaseNotes
