@@ -92,8 +92,8 @@
 needToSendEmail=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
-#LastTag=`git tag --points-at $(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$GERRIT_BRANCH) --sort=-taggerdate`
-#echo &quot;old tag == $LastTag&quot;
+LastTag=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$GERRIT_BRANCH)`
+echo &quot;old tag == $LastTag&quot;
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
 echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
@@ -123,7 +123,7 @@ do
 	else
 		needToSendEmail=&quot;True&quot;
         echo &quot;${allChilds[i]}  img size test failed&quot;
-        echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+        echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
         echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 	fi
     mv size_report.txt size_report_${allChilds[i]}.txt
@@ -184,7 +184,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
               <defaultContent>&lt;pre&gt;
 ${FILE,path=&quot;emailContent.txt&quot;}
 &lt;/pre&gt;
-You can see Details here $BUILD_URL</defaultContent>
+Build Url: $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
