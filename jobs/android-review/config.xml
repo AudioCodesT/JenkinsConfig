@@ -73,7 +73,7 @@
       <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
       <customUrl></customUrl>
       <serverName>gerritHost</serverName>
-      <triggerOnEvents class="linked-list">
+      <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
@@ -94,6 +94,7 @@
 OTA_FILE_NAME=OTA_FILE_NAME.zip
 echo OTA_FILE_NAME=${IPP_VER} &gt; generated_ipp_version.properties
 
+rm -f ${OTA_FILE_NAME}
 #cd ~/C450HD-Android-2
 
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
