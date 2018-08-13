@@ -91,45 +91,52 @@
       <command>artifactory_host=artifactory
 needToSendEmail=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
+
+
 # get one tag before ${NEWTAG} to compare two newest size_report csv
 OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
 echo &quot;OLD TAG == $OLDTAG&quot;
 
-echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
-echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
-#get all childs names from the spesific TAG
-childs=$(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
-allChilds=($childs)
-allChildsLength=${#allChilds[@]}
-for i in `seq 2 $(($allChildsLength-1))`
-do
- echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
-	#get the Current build NEW CSV REPORT
-	curl -k --insecure -O &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
-	#get the OLDER CSV REPORT (NEWTAG -1)
-	curl -k --insecure -O &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
-	# run comparison between the old csv to the new csv
-    
-    set +e
-	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
-	RetunedValue=$?
-    set -e
-    
-	#return 0 if the script succeseded else if failed
-	if [[ $RetunedValue == &quot;0&quot; ]]
-	then
-		echo &quot;${allChilds[i]} img size test passed&quot;
-	else
-		needToSendEmail=&quot;True&quot;
-        echo &quot;${allChilds[i]}  img size test failed&quot;
-        echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
-        echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
-	fi
-    if [[ -e size_report.txt ]]
-    then
-    	mv size_report.txt size_report_${allChilds[i]}.txt
-    fi    
-done
+if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; ]]
+then
+
+  echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
+  echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
+  #get all childs names from the spesific TAG
+  childs=$(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
+  allChilds=($childs)
+  allChildsLength=${#allChilds[@]}
+  for i in `seq 2 $(($allChildsLength-1))`
+  do
+   echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
+      #get the Current build NEW CSV REPORT
+      curl -k --insecure -O &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
+      #get the OLDER CSV REPORT (NEWTAG -1)
+      curl -k --insecure -O &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
+      # run comparison between the old csv to the new csv
+      
+      set +e
+      sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
+      RetunedValue=$?
+      set -e
+      
+      #return 0 if the script succeseded else if failed
+      if [[ $RetunedValue == &quot;0&quot; ]]
+      then
+          echo &quot;${allChilds[i]} img size test passed&quot;
+      else
+          needToSendEmail=&quot;True&quot;
+          echo &quot;${allChilds[i]}  img size test failed&quot;
+          echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+          echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
+      fi
+      if [[ -e size_report.txt ]]
+      then
+          mv size_report.txt size_report_${allChilds[i]}.txt
+      fi    
+  done
+  
+  fi
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 
