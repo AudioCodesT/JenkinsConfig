@@ -183,9 +183,9 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
                   </email>
                 </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
               </configuredTriggers>
-              <contentType>default</contentType>
+              <contentType>text/html</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
-              <defaultContent>$releaseNotes
+              <defaultContent>${emailContent,path=&quot;emailContent.txt&quot;}
 You can see Details here $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
