@@ -111,7 +111,7 @@ do
 	#get the OLDER CSV REPORT (NEWTAG -1)
 	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
 	# run comparison between the old csv to the new csv
-	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv &gt; ${allChilds[i]}.txt 2&gt;&amp;1
+	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv &gt; ${allChilds[i]}.txt 2&gt;&amp;1 | true
 	RetunedValue=$?
 	#return 0 if the script succeseded else if failed
 	if [[ $RetunedValue == &quot;0&quot; ]]
