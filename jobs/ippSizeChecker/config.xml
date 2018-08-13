@@ -65,10 +65,6 @@
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>IPP/SFB</projectName>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
@@ -83,7 +79,7 @@
     </extensions>
   </scm>
   <quietPeriod>600</quietPeriod>
-  <assignedNode>ipp-build</assignedNode>
+  <assignedNode>ipp-centos7.4</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
