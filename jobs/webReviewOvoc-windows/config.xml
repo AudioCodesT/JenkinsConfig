@@ -164,7 +164,7 @@ else
     yarn run dist
    #kill the Proxy Server process
    pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1)
-   echo $pidNumber
+   echo &quot;pidNumber = $pidNumber&quot;
    if [[ ! -z &quot;$pidNumber&quot; ]]
    then
 	  taskkill //PID $pidNumber //F &gt;/dev/null 2&gt;&amp;1
