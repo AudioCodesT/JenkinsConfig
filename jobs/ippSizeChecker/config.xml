@@ -92,10 +92,15 @@
 needToSendEmail=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
-LastTag=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
+OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
 echo &quot;old tag == $LastTag&quot;
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
+
+# Downgrade NEWTAG by 1 to compare two newest size_report csv
+OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
+echo &quot;old tag == $LastTag&quot;
+
 echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
 echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 #get all childs names from the spesific TAG
