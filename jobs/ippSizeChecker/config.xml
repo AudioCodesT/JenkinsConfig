@@ -106,9 +106,9 @@ for i in `seq 2 $(($allChildsLength-1))`
 do
  echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
 	#get the Current build NEW CSV REPORT
-	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
+	curl -k --insecure -O &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
 	#get the OLDER CSV REPORT (NEWTAG -1)
-	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
+	curl -k --insecure -O &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
 	# run comparison between the old csv to the new csv
     
     set +e
@@ -203,20 +203,6 @@ Build Url: $BUILD_URL</defaultContent>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
-      <injectGlobalPasswords>false</injectGlobalPasswords>
-      <maskPasswordParameters>true</maskPasswordParameters>
-      <passwordEntries>
-        <EnvInjectPasswordEntry>
-          <name>ArtifactoryApiKey</name>
-          <value>{AQAAABAAAABQo5sJSv2Gz2C1ULf9sjnJT9CCkLpFYP3Mb5YhXgY720skwvXLP//f7QXmM2z+pR87cJ5QECWJ+tKsCp6oeKvuugpF5Lh7quGIVzhVh4AZuRTadUsWPfSprBRi389/WZdz}</value>
-        </EnvInjectPasswordEntry>
-        <EnvInjectPasswordEntry>
-          <name>ArtifactoryUser</name>
-          <value>{AQAAABAAAAAQI8mbSAmSyk0d3iOjCLRKIWoy0tVZRBizL4Qw5VWcYrQ=}</value>
-        </EnvInjectPasswordEntry>
-      </passwordEntries>
-    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
       <runAtStart>true</runAtStart>
