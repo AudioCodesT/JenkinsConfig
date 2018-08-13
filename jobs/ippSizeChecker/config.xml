@@ -111,10 +111,10 @@ do
 	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
 	# run comparison between the old csv to the new csv
     
-    #set +e
-	RetunedValue=$(sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv)
-	#RetunedValue=$?
-    #set -e
+    set +e
+	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
+	RetunedValue=$?
+    set -e
     
 	#return 0 if the script succeseded else if failed
 	if [[ $RetunedValue == &quot;0&quot; ]]
