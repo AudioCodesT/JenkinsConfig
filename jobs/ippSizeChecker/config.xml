@@ -90,6 +90,7 @@
     <hudson.tasks.Shell>
       <command>artifactory_host=artifactory
 needToSendEmail=&quot;False&quot;
+artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
@@ -103,12 +104,12 @@ for i in `seq 2 $(($allChildsLength-1))`
 do
  echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
 	#get the Current build NEW CSV REPORT
-	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
+	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot;
 	#get the OLDER CSV REPORT (NEWTAG -1)
-	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;https://$artifactory_host/ipp-release/com/ac/ipp/SFB/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
+	curl -k --insecure -u $ArtifactoryUser:$ArtifactoryApiKey -O &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot;
 	# run comparison between the old csv to the new csv
     set +e
-	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv &gt; ${allChilds[i]}.txt 2&gt;&amp;1
+	sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
 	RetunedValue=$?
     set -e
 	#return 0 if the script succeseded else if failed
@@ -118,15 +119,13 @@ do
 	else
 		needToSendEmail=&quot;True&quot;
         echo &quot;The Child ${allChilds[i]}  img size test failed&quot;
-        echo &quot;For The Child ${allChilds[i]} The img size test failed, You can see Extra Details here https://jenkins/view/admin/job/ippSizeChecker/${BUILD_NUMBER}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+        echo &quot;${allChilds[i]} img size test failed, You can see full report here https://jenkins/view/admin/job/ippSizeChecker/${BUILD_NUMBER}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
         echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 	fi
     cat ${allChilds[i]}.txt
     cat size_report.txt &gt; size_report_${allChilds[i]}.txt
 done
-rm -rf size_report.txt
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
-echo &quot;releaseNotes=$(cat emailContent.txt)&quot; &gt;&gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 
 
@@ -155,10 +154,8 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
-            <arg1>$needToSendEmail</arg1>
-            <arg2>True</arg2>
-            <ignoreCase>false</ignoreCase>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
+            <token>$needToSendEmail</token>
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
@@ -180,7 +177,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
                 </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
               </configuredTriggers>
               <contentType>text/html</contentType>
-              <defaultSubject>IPP Size Checker Failed</defaultSubject>
+              <defaultSubject>IPP Size Checker ${NEWTAG} Failed</defaultSubject>
               <defaultContent>&lt;pre&gt;
 ${FILE,path=&quot;emailContent.txt&quot;}
 &lt;/pre&gt;
