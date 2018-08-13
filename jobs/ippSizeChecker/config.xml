@@ -123,7 +123,7 @@ do
 	else
 		needToSendEmail=&quot;True&quot;
         echo &quot;${allChilds[i]}  img size test failed&quot;
-        echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+        echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
         echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 	fi
     mv size_report.txt size_report_${allChilds[i]}.txt
