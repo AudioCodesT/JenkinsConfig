@@ -93,7 +93,7 @@ needToSendEmail=&quot;False&quot;
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
-echo &quot;In the branch ${BUILD_BRANCH} between the tags ${OLDTAG} to ${NEWTAG} the img size is different in the following childs:&quot; &gt; emailContent.txt
+echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
 echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 #get all childs names from the spesific TAG
 childs=$(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
