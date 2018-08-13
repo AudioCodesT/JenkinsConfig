@@ -74,7 +74,8 @@ echo ----- source build/envsetup.sh
 source build/envsetup.sh
 # selecting configuration
 echo ----- lunch aosp_dvf101-userdebug
-lunch aosp_dvf101-userdebug
+# lunch aosp_dvf101-userdebug
+lunch aosp_c450hd-userdebug
 # building - this step will take ~40 min
 echo ----- make -j16
 make -j16
@@ -88,7 +89,8 @@ echo ----- make  dist
 make  dist DIST_DIR=./dist_folder1
 # generate the actual image (OTA_FILE_NAME.zip)
 echo ----- generate the actual image
-./build/tools/releasetools/ota_from_target_files  dist_folder1/aosp_dvf101-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
+#./build/tools/releasetools/ota_from_target_files dist_folder1/aosp_dvf101-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
+./build/tools/releasetools/ota_from_target_files dist_folder1/aosp_c450hd-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
 
 mv ${OTA_FILE_NAME} ${WORKSPACE}/${OTA_FILE_NAME}
 </command>
