@@ -92,7 +92,7 @@
 needToSendEmail=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 # Downgrade NEWTAG by 1 to compare two newest size_report csv
-LastTag=$(git describe --tags --abbrev=0 ${NEWTAG}^^ --first-parent origin/$GERRIT_BRANCH)
+LastTag=$(git describe --tags --abbrev=0 ${NEWTAG}^^ --first-parent origin/$BUILD_BRANCH)
 echo &quot;old tag == $LastTag&quot;
 OLDTAG=$NEWTAG
 [[ &quot;$OLDTAG&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; OLDTAG=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} - 1))&quot;;
