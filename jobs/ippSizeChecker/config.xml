@@ -186,7 +186,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
               <contentType>text/html</contentType>
               <defaultSubject>IPP Size Checker Failed</defaultSubject>
               <defaultContent>&lt;pre&gt;
-${emailContent,path=&quot;emailContent.txt&quot;}
+${FILE,path=&quot;emailContent.txt&quot;}
 &lt;/pre&gt;
 You can see Details here $BUILD_URL</defaultContent>
               <attachmentsPattern></attachmentsPattern>
