@@ -168,7 +168,7 @@ else
    if [[ ! -z &quot;$pidNumber&quot; ]]
    then
       echo &quot;killing the proccess of the protractor proxy server&quot;
-	  taskkill /PID $pidNumber /F
+	  #taskkill /PID $pidNumber /F
    fi
    echo &quot;RUN: yarn run protractorProxyServer&quot;
     yarn run protractorProxyServer &amp; sleep 15
