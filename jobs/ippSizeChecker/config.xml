@@ -117,10 +117,10 @@ do
 	#return 0 if the script succeseded else if failed
 	if [[ $RetunedValue == &quot;0&quot; ]]
 	then
-		echo &quot;The Child ${allChilds[i]} img size test passed&quot;
+		echo &quot;${allChilds[i]} img size test passed&quot;
 	else
 		needToSendEmail=&quot;True&quot;
-        echo &quot;The Child ${allChilds[i]}  img size test failed&quot;
+        echo &quot;${allChilds[i]}  img size test failed&quot;
         echo &quot;${allChilds[i]} img size test failed, You can see full report here https://jenkins/view/admin/job/ippSizeChecker/${BUILD_NUMBER}/artifact/${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
         echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
 	fi
