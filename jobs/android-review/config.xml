@@ -108,16 +108,16 @@ cd $(echo $(repo list | grep $(echo $GERRIT_PROJECT | awk -F/ &apos;{print $NF}&
 pwd
 echo ----- Fetch $GERRIT_PATCHSET_REVISION in branch $GERRIT_BRANCH
 echo ----- Change $GERRIT_REFSPEC
-git log -2
-echo git fetch $(git remote) $GERRIT_PATCHSET_REVISION
+git log -2 --oneline
+echo git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC
 git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 echo ----- git log after fetch
-git log -2
+git log -2 --oneline
 
 cd $WORKSPACE
 # cd back to C450HD-Android
 # setting build variables
-echo $PATH
+pwd
 echo ----- source build/envsetup.sh
 source build/envsetup.sh
 # selecting configuration
