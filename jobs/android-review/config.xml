@@ -107,9 +107,12 @@ repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 # at this point you need to chery-pick the relevant change you wish to verify
 # cd to releant path
 cd $(echo $(repo list | grep $(echo $GERRIT_PROJECT | awk -F/ &apos;{print $NF}&apos;)$) | cut -d: -f1)
+pwd
+echo ----- Fetch $GERRIT_PATCHSET_REVISION in branch $GERRIT_BRANCH
+echo ----- Change $GERRIT_REFSPEC
+git fetch $(git remote) $GERRIT_PATCHSET_REVISION
 
-
-# git cherrypick
+cd $WORKSPACE
 # cd back to C450HD-Android
 # setting build variables
 echo $PATH
