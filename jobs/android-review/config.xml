@@ -106,6 +106,9 @@ echo ----- repo sync
 repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 # at this point you need to chery-pick the relevant change you wish to verify
 # cd to releant path
+cd $(echo $(repo list | grep $(echo $GERRIT_PROJECT | awk -F/ &apos;{print $NF}&apos;)$) | cut -d: -f1)
+
+
 # git cherrypick
 # cd back to C450HD-Android
 # setting build variables
