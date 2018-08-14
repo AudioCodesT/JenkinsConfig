@@ -210,10 +210,8 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
             <command>if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; ]]
-then
-exit 0 
-else 
-exit 1 
+then exit 0 
+else exit 1 
 fi</command>
           </condition>
           <publisherList>
