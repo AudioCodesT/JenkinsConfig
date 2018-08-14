@@ -92,8 +92,9 @@
       <command>#!/bin/bash
 
 OTA_FILE_NAME=OTA_FILE_NAME.zip
-echo OTA_FILE_NAME=${IPP_VER} &gt; generated_ipp_version.properties
+echo OTA_FILE_NAME=${OTA_FILE_NAME} &gt; generated_ipp_version.properties
 
+echo Remove previous $OTA_FILE_NAME
 rm -f ${OTA_FILE_NAME}
 #cd ~/C450HD-Android-2
 
