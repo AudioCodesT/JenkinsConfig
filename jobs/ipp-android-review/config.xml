@@ -89,7 +89,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash -ex
+      <command>#!/bin/bash -e
 #the above line is needed because we are going to use &quot;source&quot; command
 
 OTA_FILE_NAME=OTA_FILE_NAME.zip
