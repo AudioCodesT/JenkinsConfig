@@ -116,7 +116,8 @@ then
       # run comparison between the old csv to the new csv
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
       then
-      	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt; size_report_${allChilds[i]}.txt
+      	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
+        curlHasFailed=&quot;False&quot;
       else
         set +e
         sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
