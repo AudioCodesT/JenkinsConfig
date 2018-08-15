@@ -89,7 +89,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash
+      <command>#!/bin/bash -ex
+#the above line is needed because we are going to use &quot;source&quot; command
 
 OTA_FILE_NAME=OTA_FILE_NAME.zip
 echo OTA_FILE_NAME=${OTA_FILE_NAME} &gt; generated_ipp_version.properties
@@ -98,7 +99,6 @@ echo Remove previous $OTA_FILE_NAME
 rm -f ${OTA_FILE_NAME}
 #cd ~/C450HD-Android-2
 
-echo repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $GERRIT_BRANCH
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $GERRIT_BRANCH
 # first we need to clean previous build:
 echo make clean
@@ -106,10 +106,10 @@ make clean
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-# at this point you need to chery-pick the relevant change you wish to verify
+
 # cd to releant path
 echo Fetch this change $GERRIT_REFSPEC
-cd $(echo $(repo list | grep $(echo $GERRIT_PROJECT | awk -F/ &apos;{print $NF}&apos;)$) | cut -d: -f1)
+cd $(repo list | grep $GERRIT_PROJECT$ | cut -d: -f1)
 pwd
 echo ----- Fetch $GERRIT_PATCHSET_REVISION in branch $GERRIT_BRANCH
 echo ----- Change $GERRIT_REFSPEC
@@ -139,7 +139,7 @@ make -j16
 mkdir dist_$GERRIT_CHANGE_NUMBER
 # run make dist
 echo ----- make  dist
-make  dist DIST_DIR=./dist_$GERRIT_CHANGE_NUMBER
+make dist DIST_DIR=./dist_$GERRIT_CHANGE_NUMBER
 # generate the actual image (OTA_FILE_NAME.zip)
 echo ----- generate the actual image
 #./build/tools/releasetools/ota_from_target_files dist_$GERRIT_CHANGE_NUMBER/aosp_dvf101-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
