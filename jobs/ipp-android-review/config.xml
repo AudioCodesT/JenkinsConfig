@@ -203,7 +203,7 @@ echo ----- generate the actual image
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/${OTA_FILE_NAME}=&gt;com/ac/android</deployPattern>
+      <deployPattern>${WORKSPACE}/${OTA_FILE_NAME}=&gt;com/ac/android/$BUILD_NUMBER</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>false</deployBuildInfo>
