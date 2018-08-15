@@ -147,7 +147,7 @@ echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 
 
-#Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger</command>
+#Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger #,Jonatan.Reberger@audiocodes.com</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -177,7 +177,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com</recipientList>
+              <recipientList>Ben.Magriso@audiocodes.com</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
                   <email>
