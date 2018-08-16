@@ -113,12 +113,13 @@ then
       curl -k --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
       curl -k --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
-      # run comparison between the old csv to the new csv
+      # if curl failed to download the report (not running the comparison)
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
       then
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
         curlHasFailed=&quot;False&quot;
       else
+      # run comparison between the old csv to the new csv
         set +e
         sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
         RetunedValue=$?
@@ -148,7 +149,7 @@ echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 
 
-#Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan,Jonatan.Reberger #,Jonatan.Reberger@audiocodes.com ,Shuky.Riechard</command>
+#Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -166,7 +167,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>ben.magriso</recipients>
+      <recipients>ben.magriso,Shuky.Riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
@@ -178,7 +179,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>Ben.Magriso@audiocodes.com</recipientList>
+              <recipientList>Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com </recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
                   <email>
