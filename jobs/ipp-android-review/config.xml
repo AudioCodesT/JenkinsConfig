@@ -151,9 +151,9 @@ make dist DIST_DIR=./dist_$GERRIT_CHANGE_NUMBER
 # generate the actual image (OTA_FILE_NAME.zip)
 echo ----- generate the actual image
 #./build/tools/releasetools/ota_from_target_files dist_$GERRIT_CHANGE_NUMBER/aosp_dvf101-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
-./build/tools/releasetools/ota_from_target_files dist_$GERRIT_CHANGE_NUMBER/aosp_c450hd-target_files-eng.ubuntu.zip ${OTA_FILE_NAME}
+./build/tools/releasetools/ota_from_target_files $(ls dist_$GERRIT_CHANGE_NUMBER/*target*.zip) ${OTA_FILE_NAME}
 
-#mv ${OTA_FILE_NAME} ${WORKSPACE}/${OTA_FILE_NAME}
+
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
