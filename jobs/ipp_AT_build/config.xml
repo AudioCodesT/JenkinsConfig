@@ -220,10 +220,10 @@ done
                       <hudson.tasks.Shell>
                         <command>change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
-chmod 600 id_rsa_gerrit
+#chmod 600 id_rsa_gerrit
 
 echo Send failed message to Gerrit - $change,$newPS
-ssh -p 29418 -i id_rsa_gerrit jenkins@gerrit gerrit review \
+ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;Compilation Failed - $BUILD_URL&apos;&quot; \
 --notify OWNER --label Automation-Test=-1 \
 --tag &quot;&apos;Automation&apos;&quot; \
