@@ -48,7 +48,6 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -296,7 +295,7 @@ if [[ -e GTest.sh ]]; then
     #  while read line
    # do echo $line
    #  done &lt; GTestLogFile.txt
- printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
+# printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
    printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT***************************************************************************&quot;
       set -e
      set +x    
