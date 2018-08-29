@@ -205,8 +205,8 @@ fi
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso,devops@audiocodes.com,Shuky.Riechard</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>true</sendToIndividuals>
+      <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
       <patterns>
