@@ -133,11 +133,10 @@ if new code then build and deploy ovoc-7.6.zip</description>
 set -e
 cd $WORKSPACE
 
-
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
-
+# we build only if jenkins checked out on the last commit in branch, else exit 0
 LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -f 1 | head -n 1 )
 echo $LastGerritCommitHash
 echo $GERRIT_PATCHSET_REVISION
@@ -149,25 +148,14 @@ then
 	  then private-bower &amp; sleep 15
  	  fi
       
-              # register the packages.
-      #echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
-      #bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git
-      #echo &quot;RUN: bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git&quot;
-      #bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git
-      #echo &quot;RUN: bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git&quot;
-      #bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git
-      #echo &quot;RUN: bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git&quot;
-      #bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
-      #echo &quot;RUN: bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git&quot;
-      #bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
-      
-      
+      # for version 7.4.2000 and down, use nmp/bower
       if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
       then 
       	echo &quot;RUN:npm install&quot;
       	npm install
       	echo &quot;RUN: bower install --force-latest&quot;
 	  	bower install --force-latest
+      # for version 7.4.3000 and up, use yarn
       else
       	yarn config set registry https://artifactory/api/npm/npm/
 		yarn config set strict-ssl false
@@ -181,14 +169,17 @@ then
       current_branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
       perl -pi -e &quot;s/7.4.0/${current_branch}.${BUILD_NUMBER}/g&quot; build.config.js
       
-
-
       if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
       then
       echo &quot;RUN: grunt dist&quot;
       grunt dist
-      else 
- 	  echo &quot;RUN: yarn run dist&quot;
+      else
+      	# set the build number as a version, and run dist
+      	if [ -f webpack.config.js ]; then
+        	echo &quot;*** adding Jenkins BUILD_NUMBER as a version in file webpack.config.js ***&quot;
+			perl -pi -e &quot;s/\&quot;%version%\&quot;/\&quot;${BUILD_NUMBER}\&quot;/g&quot; webpack.config.js
+		fi
+   	  echo &quot;RUN: yarn run dist&quot;
       yarn run dist
       
        #kill the Proxy Server process
@@ -223,7 +214,19 @@ then
 else
 	echo &quot;******   This is not the last commit. Exit without building  ******&quot;
 fi
-</command>
+
+              # register the packages.
+      #echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
+      #bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git
+      #echo &quot;RUN: bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git&quot;
+      #bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git
+      #echo &quot;RUN: bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git&quot;
+      #bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git
+      #echo &quot;RUN: bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git&quot;
+      #bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
+      #echo &quot;RUN: bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git&quot;
+      #bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
+      </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
