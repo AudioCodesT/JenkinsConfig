@@ -197,9 +197,10 @@ if curl -ks https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TAR
 fi
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
-if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-	then git submodule init
-    	git submodule update    	
+#if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+if [[ &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+	then git submodule init || true
+    	git submodule update || true 	
 fi
 
 #compile:
