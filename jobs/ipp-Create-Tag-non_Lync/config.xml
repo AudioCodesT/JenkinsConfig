@@ -94,7 +94,7 @@ function createTag {
   LastTag=$NEWTAG
 }
 
-for GERRIT_BRANCH in non_lync_dev nonLync_2.2.12 2.2.14 2.2.16
+for GERRIT_BRANCH in non_lync_dev nonLync_2.2.12 2.2.14 2.2.16 $(git branch --list -a */feature/* | sed &apos;s:.*/origin/::&apos;)
 do
   if [ $(git describe --tags --first-parent origin/$GERRIT_BRANCH | grep - | wc -l) == 0 ]; then continue; fi
   git checkout origin/$GERRIT_BRANCH
