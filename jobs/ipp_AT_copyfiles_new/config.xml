@@ -1,0 +1,278 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>ippTestAuto</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash --login
+date
+
+echo message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
+if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
+  echo Automation Test for branch 3.1.0 or 3.2 only... exit 1
+  exit 1
+fi
+
+ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
+DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+echo change $change, PS: $ps
+pwd
+
+ssh -p 29418 jenkins@gerrit gerrit query --patch-sets --submit-records --all-approvals $change &gt; current$change.txt
+verified=$(grep -A1 &quot;label: Verified&quot; current$change.txt | grep status | sed &apos;s/.*: //&apos;)
+echo Find verified score: $verified # Can be: OK, REJECT or NEED
+
+if [ &quot;$verified&quot; == &quot;REJECT&quot; ]; then
+  echo Build failed, can not execute Atomation-Test
+  ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation-test can not run if Vrified is -1&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
+  exit 1
+fi
+
+grep  &apos;kind:\|number:&apos; current$change.txt | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
+lastps=$(tail -2 $change.txt | head -1)
+echo Executed with last PatchSet $ps
+if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
+
+while [ $lastps -gt 0 ]; do
+  if ! curl -ks -X GET $ARTIFACTORY | grep -q ${change}-$lastps; then
+    kind=$(grep -A1 $lastps $change.txt | tail -1) # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
+    echo find kind of patch-set $lastps is $kind
+    if [[ &quot;$kind&quot; =~ NO_.*CHANGE ]]; then 
+      ((lastps--))
+    else
+      since=$(date -d&quot;$(grep -A3 &quot;type: Verified&quot; current$change.txt | grep grantedOn | tail -1 | sed &apos;s/.*: //&apos;)&quot; +%s)
+      if [ $(( $(date +%s)-$since )) -gt 864000 ]; then
+        message=&quot;Automation Test was started but Patch-set too old, rebase your change to recreate the images&quot;
+      elif [ &quot;$verified&quot; == &quot;OK&quot; ]; then
+        message=&quot;Automation Test was started but images do not exist, retry the review compilation to create the images&quot;
+      else
+        message=&quot;Images was not found, we will search again in 20 Min&quot;
+      fi
+      echo $message
+      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;$message&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
+      exit 2
+    fi
+  else
+    ps=$lastps
+    lastps=0
+  fi
+done
+
+rm -f current$change.txt $change.txt
+
+echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps: Copying files
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files for Automation test was started: $BUILD_URL, on pc2run: $NODE_NAME&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+net use z: /delete
+net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+
+REFTARGET=${change}-$ps
+ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
+
+echo Start copying files
+COUNTER=0
+countImages=${#ImagesList[@]}
+while [  $countImages -gt 0 ]; do
+  countImages=${#ImagesList[@]}
+  for Image in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep -v _logs_ | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
+    PRD=$(echo $Image | sed &apos;s:.UC::; s:_.*::&apos;);
+    if [[ &quot;${ImagesList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
+      #TargetImage=$(echo $Image | sed &quot;s:\.\(img\|sim.tgz\)$:_${REFTARGET}.\1:&quot;)
+      TargetImage=$Image
+      #echo -- Check if $TargetImage exist in z:
+      if [ ! -f z:$TargetImage ]; then
+        echo ----      Download $TargetImage to z:
+        curl -ks -X GET ${DOWNLOAD}/${REFTARGET}$Image --output z:$TargetImage
+      else 
+        echo ----      z:$TargetImage already exist.. skip the download...
+      fi
+      if echo $TargetImage | grep -q img; then ((countImages--)); fi
+    fi
+  done
+  if [ $countImages -ne 0 ]; then sleep 300; fi  
+  ((COUNTER++))
+  echo Count $COUNTER
+  if [ $COUNTER -eq 5 ]; then countImages=0; fi
+done
+
+#ImageNames=$(echo $Image | sed &apos;s:.*_::; s:.sim.tgz::; s:.img::&apos;)_${REFTARGET};
+ImageNames=$(echo $Image | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
+echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
+date
+if [ $COUNTER -eq 5 ]; then
+  echo files were not found ... abort
+  exit 1
+fi
+
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+date
+
+</command>
+      <unstableReturn>2</unstableReturn>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>properties.txt</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+  </builders>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+            <worstResult>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </worstResult>
+            <bestResult>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </bestResult>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>FAILURE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash  --login
+
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+
+message=&quot;images/files does not exist: $BUILD_URL&quot;
+if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
+  message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot;
+fi
+
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;$message&apos;&quot; \
+--notify OWNER \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$ps
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>true</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>we will search again</regexpForRerun>
+      <rerunIfUnstable>true</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>1200</delay>
+      </delay>
+      <maxSchedule>3</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>REFSPEC=$REFSPEC
+GERRIT_BRANCH=$GERRIT_BRANCH
+MODEL=450
+IMAGENAMES=$ImageNames
+
+</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>ippTestAuto</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <projects>ipp_AT_parent</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${REFSPEC} $GERRIT_BRANCH</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+</project>
