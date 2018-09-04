@@ -288,8 +288,8 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
 fi
 if [[ -e GTest.sh ]]; then
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then
-      echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
       set +e -x
+      echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
       sh GTest.sh &gt; GTestLogFile.txt 2&gt;&amp;1
       RetunedValue=$?
       #printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
