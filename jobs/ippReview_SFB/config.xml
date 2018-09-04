@@ -290,20 +290,20 @@ if [[ -e GTest.sh ]]; then
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then 
       set +e
      set -x
-    printf &quot;****************************************************RUN_SCRIPT**************************************************************************************************&quot;
+    echo &quot;****************************************************RUN_SCRIPT**************************************************************************************************&quot;
       sh GTest.sh &gt; GTestLogFile.txt 2&gt;&amp;1
       RetunedValue=$?
     #  while read line
    # do echo $line
    #  done &lt; GTestLogFile.txt
-   printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
-   printf &quot;****************************************************FINISH_RUNNING_THE_SCRIPT***************************************************************************&quot;
+   #printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
+   echo &quot;****************************************************FINISH_RUNNING_THE_SCRIPT***************************************************************************&quot;
       set -e
      set +x    
      #echo $(&lt;GTestLogFile.txt)
    message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
     escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
-     #printf &quot;************************end_of_the_GTest_Output************************&quot;
+     #echo &quot;************************end_of_the_GTest_Output************************&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
             CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
             base=https://$GERRIT_HOST/a/changes
