@@ -289,28 +289,25 @@ fi
 if [[ -e GTest.sh ]]; then
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then 
       set +e
-     set -x
-    echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
+      set -x
+      echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
       sh GTest.sh &gt; GTestLogFile.txt 2&gt;&amp;1
       RetunedValue=$?
       #printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
       TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-  curl -ks -u ipp-push-gtest:ipp-push-gtest -X PUT &quot;https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogFile.txt&quot; -T GTestLogFile.txt &gt; /dev/null
+      curl -ks -u ipp-push-gtest:ipp-push-gtest -X PUT &quot;https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogFile.txt&quot; -T GTestLogFile.txt &gt; /dev/null
      echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
      set -e
      set +x    
      #echo $(&lt;GTestLogFile.txt)
-   message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
-    escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
+     message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
+     escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
      CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
      base=https://$GERRIT_HOST/a/changes
      id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
      endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-      if [[ ! $RetunedValue == &quot;0&quot; ]]; then
-            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
-      else
-            $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;+1\&quot;}}&quot;
-      fi
+      if [[ ! $RetunedValue == &quot;0&quot; ]]; then gtestSign = -1; else gtestSign = -1; fi
+      $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
   fi
 fi
 </script>
