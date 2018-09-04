@@ -298,7 +298,7 @@ if [[ -e GTest.sh ]]; then
    #  done &lt; GTestLogFile.txt
    #printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
   TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-  curl -ks -u admin:password -X PUT &quot;https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogFile.txt&quot; -T GTestLogFile.txt
+  curl -ks -u ipp-push-gtest:ipp-push-gtest -X PUT &quot;https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogFile.txt&quot; -T GTestLogFile.txt &gt; /dev/null
    echo &quot;****************************************************FINISH_RUNNING_THE_SCRIPT***************************************************************************&quot;
       set -e
      set +x    
