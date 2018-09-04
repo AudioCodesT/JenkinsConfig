@@ -305,18 +305,13 @@ if [[ -e GTest.sh ]]; then
      #echo $(&lt;GTestLogFile.txt)
    message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
     escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
-     #echo &quot;************************end_of_the_GTest_Output************************&quot;
+     CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+     base=https://$GERRIT_HOST/a/changes
+     id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
+     endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then
-            CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
-            base=https://$GERRIT_HOST/a/changes
-            id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
-            endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
             $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
       else
-            CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
-            base=https://$GERRIT_HOST/a/changes
-            id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
-            endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
             $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;+1\&quot;}}&quot;
       fi
   fi
