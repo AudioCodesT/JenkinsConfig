@@ -290,17 +290,14 @@ if [[ -e GTest.sh ]]; then
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; ]]; then 
       set +e
      set -x
-    echo &quot;****************************************************RUN_SCRIPT**************************************************************************************************&quot;
+    echo **************************************************** RUN_SCRIPT ************************************************
       sh GTest.sh &gt; GTestLogFile.txt 2&gt;&amp;1
       RetunedValue=$?
-    #  while read line
-   # do echo $line
-   #  done &lt; GTestLogFile.txt
-   #printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
-  TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+      #printf &quot;%s&quot; &quot;$(&lt;GTestLogFile.txt)&quot;
+      TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
   curl -ks -u ipp-push-gtest:ipp-push-gtest -X PUT &quot;https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogFile.txt&quot; -T GTestLogFile.txt &gt; /dev/null
-   echo &quot;****************************************************FINISH_RUNNING_THE_SCRIPT***************************************************************************&quot;
-      set -e
+     echo ************************************************ FINISH_RUNNING_THE_SCRIPT ********************************************
+     set -e
      set +x    
      #echo $(&lt;GTestLogFile.txt)
    message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
