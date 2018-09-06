@@ -39,6 +39,12 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>IMAGE</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -78,16 +84,34 @@ echo change $change, PS: $ps
 REFTARGET=${change}-$ps
 
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
-if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $BOARD; then
+if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
   sleep 30
-  echo Wait 30 seconds to $BOARD deploy is complete 
-  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $BOARD; then
+  echo Wait 30 seconds to $IMAGE deploy is complete 
+  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
     echo $BOARD is differ, copy again...
     exit 1
   fi
 fi
 
-pwd
+
+# Go over all cmp files in the Artifactory and copy them to netapp1 ($Target)
+curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep cmp | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
+if [ -s &quot;$REFTARGET.list&quot; ]; then
+   while read -r FileName
+   do
+     if [ -e &quot;$Target/$FileName&quot; ]; then continue; fi
+     echo Download $FileName to netapp1
+     curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
+     ArtSize=`curl -ks -X GET $Artifactory/$REFTARGET/$FileName | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+     DestSize=`wc -c &lt;$Target/$FileName`
+     if [ $ArtSize != $DestSize ]; then 
+       echo $ArtSize--$DestSize: $file is differ, copy again...
+       rm -f $Target/$FileName
+       exit 1
+     fi
+   done &lt; &quot;$REFTARGET.list&quot;
+fi
+
 
 ssh -p 29418 jenkins@gerrit gerrit query --patch-sets --submit-records --all-approvals $change &gt; current$change.txt
 verified=$(grep -A1 &quot;label: Verified&quot; current$change.txt | grep status | sed &apos;s/.*: //&apos;)
