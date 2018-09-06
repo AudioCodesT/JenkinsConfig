@@ -70,12 +70,23 @@ if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_
   exit 1
 fi
 
-ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
-DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
-
+Artifactory=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
+DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 echo change $change, PS: $ps
+REFTARGET=${change}-$ps
+
+# if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
+if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $BOARD; then
+  sleep 30
+  echo Wait 30 seconds to $BOARD deploy is complete 
+  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $BOARD; then
+    echo $BOARD is differ, copy again...
+    exit 1
+  fi
+fi
+
 pwd
 
 ssh -p 29418 jenkins@gerrit gerrit query --patch-sets --submit-records --all-approvals $change &gt; current$change.txt
@@ -126,7 +137,7 @@ ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files f
 net use z: /delete
 net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
-REFTARGET=${change}-$ps
+
 ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
 echo Start copying files
