@@ -191,65 +191,6 @@ date
     </EnvInjectBuilder>
   </builders>
   <publishers>
-    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
-      <publishers>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
-            <worstResult>
-              <name>FAILURE</name>
-              <ordinal>2</ordinal>
-              <color>RED</color>
-              <completeBuild>true</completeBuild>
-            </worstResult>
-            <bestResult>
-              <name>FAILURE</name>
-              <ordinal>2</ordinal>
-              <color>RED</color>
-              <completeBuild>true</completeBuild>
-            </bestResult>
-          </condition>
-          <publisherList>
-            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
-              <config>
-                <scriptFiles/>
-                <groovyScripts/>
-                <buildSteps>
-                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                    <results>
-                      <string>FAILURE</string>
-                    </results>
-                    <role>BOTH</role>
-                    <buildSteps>
-                      <hudson.tasks.Shell>
-                        <command>#!c:\cygwin\bin\bash  --login
-
-change=`echo $REFSPEC | cut -d/ -f4`
-ps=`echo $REFSPEC | cut -d/ -f5`
-
-message=&quot;images/files does not exist: $BUILD_URL&quot;
-if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
-  message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot;
-fi
-
-ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;$message&apos;&quot; \
---notify OWNER \
---tag &quot;&apos;Automation&apos;&quot; \
-$change,$ps
-</command>
-                      </hudson.tasks.Shell>
-                    </buildSteps>
-                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                </buildSteps>
-                <markBuildUnstable>true</markBuildUnstable>
-              </config>
-            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>is differ, copy again</regexpForRerun>
       <rerunIfUnstable>true</rerunIfUnstable>
