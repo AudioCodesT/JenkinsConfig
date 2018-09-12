@@ -84,6 +84,7 @@ if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_
    --notify OWNER \
    --tag &quot;&apos;Automation&apos;&quot; \
    $change,$ps
+   exit 1
 fi
 
 Artifactory=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
