@@ -265,7 +265,14 @@ $change,$ps
     <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-          <configs class="empty-list"/>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>REFSPEC=${REFSPEC}
+GERRIT_BRANCH=${GERRIT_BRANCH}
+IMAGE=$SHORTAUTOPRD</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
           <projects>ipp_AT_copyfiles_new</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
