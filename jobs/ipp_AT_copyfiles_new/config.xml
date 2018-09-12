@@ -99,7 +99,7 @@ if ! [ -d &quot;$Target&quot; ]; then
   net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
 fi
 
-# Go over all cmp files in the Artifactory and copy them to netapp1 ($Target)
+# Go over all cmp files in the Artifactory and copy them to z: ($Target)
 curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
 if [ -s &quot;$REFTARGET.list&quot; ]; then
    while read -r FileName
@@ -117,54 +117,8 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
    done &lt; &quot;$REFTARGET.list&quot;
 fi
 
-
-ssh -p 29418 jenkins@gerrit gerrit query --patch-sets --submit-records --all-approvals $change &gt; current$change.txt
-verified=$(grep -A1 &quot;label: Verified&quot; current$change.txt | grep status | sed &apos;s/.*: //&apos;)
-echo Find verified score: $verified # Can be: OK, REJECT or NEED
-
-if [ &quot;$verified&quot; == &quot;REJECT&quot; ]; then
-  echo Build failed, can not execute Atomation-Test
-  ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation-test can not run if Vrified is -1&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
-  exit 1
-fi
-
-grep  &apos;kind:\|number:&apos; current$change.txt | tail -n +2 | sed &apos;s/.*: //&apos; &gt; $change.txt
-lastps=$(tail -2 $change.txt | head -1)
-echo Executed with last PatchSet $ps
-if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
-
-while [ $lastps -gt 0 ]; do
-  if ! curl -ks -X GET $ARTIFACTORY | grep -q ${change}-$lastps; then
-    kind=$(grep -A1 $lastps $change.txt | tail -1) # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
-    echo find kind of patch-set $lastps is $kind
-    if [[ &quot;$kind&quot; =~ NO_.*CHANGE ]]; then 
-      ((lastps--))
-    else
-      since=$(date -d&quot;$(grep -A3 &quot;type: Verified&quot; current$change.txt | grep grantedOn | tail -1 | sed &apos;s/.*: //&apos;)&quot; +%s)
-      if [ $(( $(date +%s)-$since )) -gt 864000 ]; then
-        message=&quot;Automation Test was started but Patch-set too old, rebase your change to recreate the images&quot;
-      elif [ &quot;$verified&quot; == &quot;OK&quot; ]; then
-        message=&quot;Automation Test was started but images do not exist, retry the review compilation to create the images&quot;
-      else
-        message=&quot;Images was not found, we will search again in 20 Min&quot;
-      fi
-      echo $message
-      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;$message&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$lastps
-      exit 2
-    fi
-  else
-    ps=$lastps
-    lastps=0
-  fi
-done
-
-rm -f current$change.txt $change.txt
-
 echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps: Copying files
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files for Automation test was started: $BUILD_URL, on pc2run: $NODE_NAME&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-
-net use z: /delete
-net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
 
 ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
