@@ -100,10 +100,12 @@ if ! [ -d &quot;$Target&quot; ]; then
 fi
 
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
+ImagesList=&quot;450HD 445HD 440HD 430HD 405HD&quot;
 curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
 if [ -s &quot;$REFTARGET.list&quot; ]; then
    while read -r FileName
    do
+     if [[ ! $ImagesList =~ &quot;$(echo $FileName | sed &apos;s:.*UC::; s:_.*::&apos;)&quot; ]]; then continue; fi
      if [ -e &quot;$Target/$FileName&quot; ]; then continue; fi
      echo Download $FileName to netapp1
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
@@ -155,9 +157,9 @@ for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
   checkSum2=$(md5sum $f | cut -d&quot; &quot; -f1)
   if [ $checkSum1 != $checkSum2 ]; then
     # sbc-drt-build is running now?
-    for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep sbc-drt-build); do
+    for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_build); do
       if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
-        echo &quot;sbc-drt-build is running now, job $job, the files are not ready yet&quot;; 
+        echo &quot;ipp_AT_build is running now, job $job, the files are not ready yet&quot;; 
         exit 2
       fi
     done
@@ -167,51 +169,6 @@ for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
     exit 1
   fi
 done
-
-
-
-
-
-
-echo ssh -p 29418 jenkins@gerrit gerrit review $change,$ps: Copying files
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Copying files for Automation test was started: $BUILD_URL, on pc2run: $NODE_NAME&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-
-
-ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
-
-echo Start copying files
-COUNTER=0
-countImages=${#ImagesList[@]}
-while [  $countImages -gt 0 ]; do
-  countImages=${#ImagesList[@]}
-  for Image in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep -v _logs_ | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
-    PRD=$(echo $Image | sed &apos;s:.UC::; s:_.*::&apos;);
-    if [[ &quot;${ImagesList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
-      #TargetImage=$(echo $Image | sed &quot;s:\.\(img\|sim.tgz\)$:_${REFTARGET}.\1:&quot;)
-      TargetImage=$Image
-      #echo -- Check if $TargetImage exist in z:
-      if [ ! -f z:$TargetImage ]; then
-        echo ----      Download $TargetImage to z:
-        curl -ks -X GET ${DOWNLOAD}/${REFTARGET}$Image --output z:$TargetImage
-      else 
-        echo ----      z:$TargetImage already exist.. skip the download...
-      fi
-      if echo $TargetImage | grep -q img; then ((countImages--)); fi
-    fi
-  done
-  if [ $countImages -ne 0 ]; then sleep 300; fi  
-  ((COUNTER++))
-  echo Count $COUNTER
-  if [ $COUNTER -eq 5 ]; then countImages=0; fi
-done
-
-ImageNames=$(echo $Image | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
-echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
-date
-if [ $COUNTER -eq 5 ]; then
-  echo files were not found ... abort
-  exit 1
-fi
 
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
