@@ -262,6 +262,17 @@ $change,$ps
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs class="empty-list"/>
+          <projects>ipp_AT_copyfiles_new</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
     <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
