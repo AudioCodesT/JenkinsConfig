@@ -93,6 +93,11 @@ if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
   fi
 fi
 
+Target=z:
+if ! [ -d &quot;$Target&quot; ]; then
+  net use $Target /delete
+  net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
+fi
 
 # Go over all cmp files in the Artifactory and copy them to netapp1 ($Target)
 curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
