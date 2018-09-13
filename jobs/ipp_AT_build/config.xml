@@ -202,6 +202,7 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
 done
 </command>
+      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -283,7 +284,7 @@ $change,$ps
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>REFSPEC=${REFSPEC}
 GERRIT_BRANCH=${GERRIT_BRANCH}
-IMAGE=$SHORTAUTOPRD</properties>
+IMAGE=${SHORTAUTOPRD}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
