@@ -129,6 +129,7 @@ fi
 
 
 ImageNames=$(echo $FileName | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
+echo Searce all $ImageNames
 echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 
 # Don&apos;t execute the next job in case you don&apos;t found 5 files
