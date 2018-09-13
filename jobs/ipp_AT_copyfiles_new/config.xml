@@ -115,7 +115,7 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
    do
      if [[ ! $ImagesList =~ &quot;$(echo $FileName | sed &apos;s:.*UC::; s:_.*::&apos;)&quot; ]]; then continue; fi
      if [ -e &quot;$Target/$FileName&quot; ]; then continue; fi
-     echo Download $FileName to netapp1
+     echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
      ArtSize=`curl -ks -X GET $Artifactory/$REFTARGET/$FileName | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
      DestSize=`wc -c &lt;$Target/$FileName`
