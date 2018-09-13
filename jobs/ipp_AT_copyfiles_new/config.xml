@@ -109,7 +109,7 @@ fi
 
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
 ImagesList=&quot;450HD 445HD 440HD 430HD 405HD&quot;
-curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.sim.tgz\|.img\|UC&apos; | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
+curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.sim.tgz\|.img\|UC&apos; | grep -v logs | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
 if [ -s &quot;$REFTARGET.list&quot; ]; then
    while read -r FileName
    do
