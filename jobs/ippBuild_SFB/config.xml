@@ -162,8 +162,8 @@ if curl -ks https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJ
 fi
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
-if [[ &quot;$BUILD_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
-	then git submodule update --init
+if [[ &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
+	then git submodule update --init || true
 fi
 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
