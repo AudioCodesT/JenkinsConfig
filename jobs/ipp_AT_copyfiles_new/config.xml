@@ -102,7 +102,7 @@ DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 #fi
 
 Target=z:
-if ! [ -d &quot;$Target&quot; ]; then
+if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
   net use $Target /delete
   net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
 fi
