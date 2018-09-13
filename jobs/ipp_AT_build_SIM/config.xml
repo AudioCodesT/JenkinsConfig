@@ -91,8 +91,8 @@
         <shallow>true</shallow>
         <noTags>false</noTags>
         <reference></reference>
-        <timeout>20</timeout>
-        <depth>10</depth>
+        <timeout>10</timeout>
+        <depth>100</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -135,6 +135,24 @@
 
 TARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; generated_ipp_version.properties
+
+# Check if the image exist already in the Artifactory - if exist, exit without error
+if curl -ks https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep sim.tgz | grep -q ${AUTOPRD}_; then
+	echo ${GERRIT_BRANCH}/$TARGET/$AUTOPRD exist already... Abort without error;
+    exit 0
+fi
+
+# ipp_AT_build is running now?
+allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
+oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
+sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_build_SIM)
+
+for job in $(echo $allRunning | sed &apos;s: :\n:g&apos;); do
+   if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $AUTOPRD; then
+      echo &quot;ipp_AT_build_SIM is running now, job $job, the files are not ready yet&quot;; 
+      exit 0
+    fi
+done
 
 yes | make distclean
 
