@@ -92,14 +92,14 @@ Artifactory=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
-if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
-  sleep 30
-  echo Wait 30 seconds to $IMAGE deploy is complete 
-  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
-    echo $BOARD is differ, copy again...
-    exit 1
-  fi
-fi
+#if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
+#  sleep 30
+#  echo Wait 30 seconds to $IMAGE deploy is complete 
+#  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
+#    echo $BOARD is differ, copy again...
+#    exit 1
+#  fi
+#fi
 
 Target=z:
 if ! [ -d &quot;$Target&quot; ]; then
