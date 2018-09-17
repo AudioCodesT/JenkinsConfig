@@ -107,7 +107,7 @@ DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 #  net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
 #fi
 Target=d:/Firmwares
-
+ImageNames=&quot;&quot;
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
 ImagesList=&quot;450HD 445HD 440HD 430HD 405HD&quot;
 curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.sim.tgz\|.img\|UC&apos; | grep -v logs | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
@@ -115,7 +115,9 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
    while read -r FileName
    do
      if [[ ! $ImagesList =~ &quot;$(echo $FileName | sed &apos;s:.*UC::; s:_.*::&apos;)&quot; ]]; then continue; fi
-     ImageNames=$(echo $FileName | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
+     if [ -f $ImageNames ]; then
+       ImageNames=$(echo $FileName | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
+     fi
      if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName allready exist; continue; fi
      echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
@@ -129,6 +131,10 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
    done &lt; &quot;$REFTARGET.list&quot;
 fi
 
+if [ -f $ImageNames ]; then
+  echo Not Image file was found, exit with error
+  exit 1
+fi
 echo Searce all $ImageNames
 echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 
