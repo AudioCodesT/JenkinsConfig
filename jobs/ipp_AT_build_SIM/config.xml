@@ -145,7 +145,7 @@ fi
 # ipp_AT_build is running now?
 allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
 oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
-sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_build_SIM)
+sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_build_SIM || echo Job ipp_AT_build_SIM not found)
 
 for job in $(echo $allRunning | sed &apos;s: :\n:g&apos;); do
    if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $AUTOPRD; then
