@@ -160,7 +160,7 @@
 Owner=$GERRIT_PATCHSET_UPLOADER_NAME
 if [[ ! $GERRIT_BRANCH =~ private ]]; then
   if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] ; then
-      CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+      CURL=&quot;curl -kn -u jenkins:$jenkinsPassword --silent&quot;
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
       base=https://$GERRIT_HOST/a/changes
       id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
@@ -182,7 +182,7 @@ if [[ -e GTest.sh ]]; then
      set -e +x
      message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
      escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
-     CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+     CURL=&quot;curl -kn -u jenkins:$jenkinsPassword --silent&quot;
      base=https://$GERRIT_HOST/a/changes
      id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
      endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
@@ -281,5 +281,16 @@ fi</command>
       <maxSchedule>0</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jenkinsPassword</name>
+          <value>{AQAAABAAAAAQshqa760XZrx7XFg7oOr0Q7KnaSaKYP8IzLDN6poQiTU=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
 </project>
