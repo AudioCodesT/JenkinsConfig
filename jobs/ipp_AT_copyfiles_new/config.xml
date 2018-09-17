@@ -115,7 +115,8 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
    while read -r FileName
    do
      if [[ ! $ImagesList =~ &quot;$(echo $FileName | sed &apos;s:.*UC::; s:_.*::&apos;)&quot; ]]; then continue; fi
-     if [ -e &quot;$Target/$FileName&quot; ]; then continue; fi
+     ImageNames=$(echo $FileName | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
+     if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName allready exist; continue; fi
      echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
      ArtSize=`curl -ks -X GET $Artifactory/$REFTARGET/$FileName | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
@@ -128,8 +129,6 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
    done &lt; &quot;$REFTARGET.list&quot;
 fi
 
-
-ImageNames=$(echo $FileName | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
 echo Searce all $ImageNames
 echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 
