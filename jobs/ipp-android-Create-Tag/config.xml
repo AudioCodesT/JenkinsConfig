@@ -1,8 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG in the following  branches: “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.2”, “3.0.4” &#xd;
- and &quot;3.0.6&quot;</description>
+  <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG in IPP/Android/repo_manifests</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -44,7 +43,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -52,7 +50,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +refs/notes/review:refs/notes/review</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
+        <url>IPP/Android/repo_manifests</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -79,7 +77,7 @@
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
-  <assignedNode>ipp-matrix-parents-centos7.4</assignedNode>
+  <assignedNode>ipp-android</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
