@@ -61,6 +61,7 @@
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
+      <contributors/>
     </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -100,7 +101,7 @@
   <scmCheckoutRetryCount>1</scmCheckoutRetryCount>
   <assignedNode>ipp-mc-fathers-centos7.4</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -163,6 +164,9 @@
       <values>
         <string>boards2review.yml</string>
       </values>
+      <computedValues>
+        <string>auto AUTOPRD=450HD</string>
+      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
