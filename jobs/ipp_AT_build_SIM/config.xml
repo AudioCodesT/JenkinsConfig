@@ -231,6 +231,7 @@ $change,$ps
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>REFSPEC=${REFSPEC}
 GERRIT_BRANCH=${GERRIT_BRANCH}
+IMAGE=${AUTOPRD}
 </properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
@@ -321,7 +322,7 @@ GERRIT_BRANCH=${GERRIT_BRANCH}
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH} ${REFSPEC}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
