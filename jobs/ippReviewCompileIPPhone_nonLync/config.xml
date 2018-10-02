@@ -175,7 +175,8 @@ fi
 
 yes | make distclean
 #make
-make auto AUTOPRD=$AUTOPRD LOG=0
+make auto AUTOPRD=$AUTOPRD LOG=0 
+#make auto AUTOPRD=$AUTOPRD LOG=0 SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
 #make SUBVERSION=dummy;
 
 </command>
