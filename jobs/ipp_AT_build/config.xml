@@ -174,10 +174,11 @@ export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
 NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+IMGNAME=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:.:g&apos;`
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
+  make $PARAMS SUBVERSION=${IMGNAME}
 done
 </command>
       <unstableReturn>2</unstableReturn>
