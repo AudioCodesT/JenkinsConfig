@@ -155,8 +155,8 @@ for job in $(echo $allRunning | sed &apos;s: :\n:g&apos;); do
 done
 
 yes | make distclean
-
-make auto AUTOPRD=${AUTOPRD}__SIM SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}</command>
+IMGNAME=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:.:g&apos;`
+make auto AUTOPRD=${AUTOPRD}__SIM SUBVERSION=${IMGNAME}</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
