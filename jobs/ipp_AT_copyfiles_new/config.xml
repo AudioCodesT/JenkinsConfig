@@ -147,7 +147,8 @@ if [ `ls $Target/*$ImageNames.sim.tgz | wc -l` != 5 ]; then echo &quot;Missing .
 # to avoid more than one sbc-drt-request execution 
 for job in \
   $(curl -ks https://jenkins/queue/api/json | \
-  sed -e &apos;s/GERRIT_REFSPEC/\n/g&apos; | grep ipp_AT_parent); do
+  sed -e &apos;s/REFSPEC/\n/g&apos; | grep ipp_AT_parent); do
+  echo Check $job.......
   if echo $job | grep ipp_AT_parent | grep -q $REFSPEC; then
     echo &quot;Automation-Test was executed and waiting in the queue&quot;; 
     exit 2
