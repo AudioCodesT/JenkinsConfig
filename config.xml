@@ -221,6 +221,8 @@
       <role name="ReadOnly" pattern=".*">
         <permissions>
           <permission>hudson.model.Hudson.Read</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Discover</permission>
           <permission>hudson.model.View.Read</permission>
         </permissions>
         <assignedSIDs>
