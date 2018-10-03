@@ -103,7 +103,7 @@ echo ============== Image: $IMAGE
 #fi
 
 Target=d:/Firmwares
-# In case it is not the Ftp server 10.59.0.87 
+# In case it is not the Ftp server 10.59.0.87 &quot;ATAFtp&quot;
 if [ ! -d $Target ]; then
   Target=z:
   if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
