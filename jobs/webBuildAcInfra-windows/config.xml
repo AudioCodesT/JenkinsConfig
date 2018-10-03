@@ -152,8 +152,8 @@ perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
 perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
 
 # checking if the private-bower is running
-output=$( netstat -ano | grep 5678 )
-if [ -z &quot;$output&quot; ]
+output=$(netstat -ano | grep 5678) || true
+if [[ -z &quot;$output&quot; ]]
 then private-bower &amp; sleep 15
 fi
 
