@@ -93,14 +93,14 @@ DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 
 echo ============== Image: $IMAGE
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
-#if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
-#  sleep 30
-#  echo Wait 30 seconds to $IMAGE deploy is complete 
-#  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
-#    echo $BOARD is differ, copy again...
-#    exit 1
-#  fi
-#fi
+if ! curl -ks -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
+  sleep 30
+  echo Wait 30 seconds to $IMAGE deploy is complete 
+  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
+    echo $BOARD is differ, copy again...
+    exit 1
+  fi
+fi
 
 Target=d:/Firmwares
 # In case it is not the Ftp server 10.59.0.87 &quot;ATAFtp&quot;
