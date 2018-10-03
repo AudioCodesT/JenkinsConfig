@@ -156,14 +156,14 @@ oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
 sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_build | grep -v SIM || echo Job ipp_AT_build not found)
 
 for job in $(echo $allRunning | sed &apos;s: :\n:g&apos;); do
-   if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q &quot;$MAKE_CMD&quot;; then
+   if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q &quot;$AUTOPRD&quot;; then
       echo &quot;ipp_AT_build is running now, job $job, the files are not ready yet&quot;; 
       exit 0
     fi
 done
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
-if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$AUTOPRD&quot; == &quot;C450HD&quot; ]]
 	then git submodule init
     	git submodule update    	
 fi
