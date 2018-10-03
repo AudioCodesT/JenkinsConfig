@@ -102,12 +102,16 @@ echo ============== Image: $IMAGE
 #  fi
 #fi
 
-#Target=z:
-#if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
-#  net use $Target /delete
-#  net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
-#fi
 Target=d:/Firmwares
+# In case it is not the Ftp server 10.59.0.87 
+if [ ! -d $Target ]; then
+  Target=z:
+  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
+    net use $Target /delete
+    net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
+  fi
+fi
+
 ImageNames=&quot;&quot;
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
 ImagesList=&quot;450HD 445HD 440HD 430HD 405HD&quot;
