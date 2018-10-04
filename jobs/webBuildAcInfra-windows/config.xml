@@ -169,7 +169,9 @@ then
     perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
     #per Roman request promote also the verion in package.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
+    
     echo &quot;next  version is ${version}&quot;
+    
     # checking if the private-bower is running
     output=$(netstat -ano | grep 5678) || true
     if [[ -z &quot;$output&quot; ]]
