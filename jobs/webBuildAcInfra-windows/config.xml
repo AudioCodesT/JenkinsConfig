@@ -76,7 +76,9 @@ send email&#xd;
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.LocalBranch/>
+      <hudson.plugins.git.extensions.impl.LocalBranch>
+        <localBranch>$GERRIT_BRANCH</localBranch>
+      </hudson.plugins.git.extensions.impl.LocalBranch>
     </extensions>
   </scm>
   <assignedNode>Web-UI-Win-Dynamic</assignedNode>
