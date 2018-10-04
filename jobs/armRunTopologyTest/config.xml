@@ -84,7 +84,7 @@ armReleaseSanity
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;build step no. 1&quot;
+      <command>echo &quot;build step no. 1 - sftp put conf.sql&quot;
 #sftp put armDBsetup.sql in the remote configurator
 cp arm_topology_test/src/main/resources/armDBsetup.sql conf.sql
 /usr/bin/expect&lt;&lt;EOD
