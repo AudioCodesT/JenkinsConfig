@@ -162,7 +162,7 @@ then
 	version=$(echo $version | cut -f1 -d &apos;&quot;&apos;)
     #version=${version%\&quot;}
     current_version=$version
-    echo &quot;current version is ${current_version}&quot;
+    
     [[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
     #perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
@@ -170,7 +170,6 @@ then
     #per Roman request promote also the verion in package.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
     
-    echo &quot;next  version is ${version}&quot;
     
     # checking if the private-bower is running
     output=$(netstat -ano | grep 5678) || true
