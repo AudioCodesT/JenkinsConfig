@@ -139,67 +139,76 @@ git pull --rebase
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
-#advance version number by 1 in bower.json &amp; build.config.js
-version=$(cat bower.json | grep version)
-version=${version:14}
-version=${version%\&quot;,}
-current_version=$version
-[[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
-#perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
-perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
-perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
-#per Roman request promote also the verion in package.json
-perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
 
-# checking if the private-bower is running
-output=$(netstat -ano | grep 5678) || true
-if [[ -z &quot;$output&quot; ]]
-then private-bower &amp; sleep 15
+# we build only if jenkins checked out on the last commit in branch, else exit 0
+LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -f 1 | head -n 1 )
+echo $LastGerritCommitHash
+echo $GERRIT_PATCHSET_REVISION
+if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
+then
+
+
+    #advance version number by 1 in bower.json &amp; build.config.js
+    version=$(cat bower.json | grep version)
+    version=${version:14}
+    version=${version%\&quot;,}
+    current_version=$version
+    [[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
+    #perl -pi -e &quot;s/$current_version/$version/g&quot; bower.json
+    perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
+    perl -pi -e &quot;s/$current_version/$version/g&quot; build.config.js
+    #per Roman request promote also the verion in package.json
+    perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
+    
+    # checking if the private-bower is running
+    output=$(netstat -ano | grep 5678) || true
+    if [[ -z &quot;$output&quot; ]]
+    then private-bower &amp; sleep 15
+    fi
+    
+    
+    
+    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
+    then 
+      echo &quot;RUN:npm install&quot;
+      npm install
+      echo &quot;RUN: bower install --force-latest&quot;
+      bower install --force-latest
+       echo &quot;RUN: grunt dist&quot;
+      grunt dist
+    else
+        yarn config set registry https://artifactory/api/npm/npm/
+        yarn config set strict-ssl false
+        echo &quot;RUN: yarn install&quot;
+        yarn install
+        echo &quot;RUN: yarn run dist&quot;
+        yarn run dist
+    fi
+    
+    
+    
+    #5.git add (to dist folder)
+    #6.git commit (with a message such as “new version v0.0.x”)
+    #7.git push
+    git config --global user.name &quot;Jenkins&quot;
+    git config --global user.email devops@audiocodes.com
+    git add --all dist/
+    git add bower.json
+    git add build.config.js
+    git add package.json
+    message=&quot;automatic build a new dist and promote version to $version&quot;
+    git commit -m &quot;$message&quot;
+    
+    #8.git tag v0.0.x
+    git tag -a v$version -m &quot;automatic version tag&quot;
+    
+    #9.git push origin v0.0.x
+    git push origin $GERRIT_BRANCH
+    git push origin v$version
+    
+    echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
+
 fi
-
-
-
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
-then 
-  echo &quot;RUN:npm install&quot;
-  npm install
-  echo &quot;RUN: bower install --force-latest&quot;
-  bower install --force-latest
-   echo &quot;RUN: grunt dist&quot;
-  grunt dist
-else
-	yarn config set registry https://artifactory/api/npm/npm/
-	yarn config set strict-ssl false
- 	echo &quot;RUN: yarn install&quot;
-    yarn install
-    echo &quot;RUN: yarn run dist&quot;
-  	yarn run dist
-fi
-
-
-
-#5.git add (to dist folder)
-#6.git commit (with a message such as “new version v0.0.x”)
-#7.git push
-git config --global user.name &quot;Jenkins&quot;
-git config --global user.email devops@audiocodes.com
-git add --all dist/
-git add bower.json
-git add build.config.js
-git add package.json
-message=&quot;automatic build a new dist and promote version to $version&quot;
-git commit -m &quot;$message&quot;
-
-#8.git tag v0.0.x
-git tag -a v$version -m &quot;automatic version tag&quot;
-
-#9.git push origin v0.0.x
-git push origin $GERRIT_BRANCH
-git push origin v$version
-
-echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
-
-
 
 # register the packages.
 #echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
