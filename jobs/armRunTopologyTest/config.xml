@@ -98,7 +98,7 @@ cp arm_topology_test/src/main/resources/armDBsetup.sql conf.sql
 EOD</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>echo &quot;build step no. 2&quot;
+      <command>echo &quot;build step no. 2 - ssh and configure database&quot;
 #run sql init + run new configuration
 /usr/bin/expect&lt;&lt;EOD
 	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
