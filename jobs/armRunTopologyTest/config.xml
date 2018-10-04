@@ -110,6 +110,8 @@ EOD</command>
 	#send &quot;service tomcat stop\r&quot;
     send &quot;pkill -f tomcat\r&quot;
     expect &quot;]#&quot;
+    send &quot;service tomcat stop\r&quot;
+	expect &quot;]#&quot;
     send &quot;service tomcat status\r&quot;
 	expect &quot;]#&quot;
 	send &quot;mv -f conf.sql sql\r&quot;
