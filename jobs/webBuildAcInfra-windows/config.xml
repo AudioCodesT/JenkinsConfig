@@ -167,7 +167,7 @@ then
     echo $version
     version=${version%\&quot;}
     echo $version
-    ver=${version%\&quot;}
+    ver=${version%&apos;&quot;&apos;}
     echo $ver
     current_version=$version
     echo &quot;current version is ${current_version}&quot;
