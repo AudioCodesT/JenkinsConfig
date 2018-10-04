@@ -216,11 +216,11 @@ then
     git commit -m &quot;$message&quot;
     
     #8.git tag v0.0.x
-    #git tag -a v$version -m &quot;automatic version tag&quot;
+    git tag -a v$version -m &quot;automatic version tag&quot;
     
     #9.git push origin v0.0.x
     git push origin $GERRIT_BRANCH
-    #git push origin v$version
+    git push origin v$version
     
     echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
 
