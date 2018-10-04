@@ -166,6 +166,7 @@ then
     version=${version%\&quot;}
     echo $version
     ver=${version%\&quot;}
+    echo $ver
     current_version=$version
     echo &quot;current version is ${current_version}&quot;
     [[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
