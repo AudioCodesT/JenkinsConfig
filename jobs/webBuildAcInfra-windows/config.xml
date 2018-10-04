@@ -247,29 +247,13 @@ fi
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>Ben.Magriso@audiocodes.com,Shuky.Riechard@audiocodes.com</recipients>
+      <recipients>Ben.Magriso@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
       <recipientList>Erez.NejatHaim@audiocodes.com, Rivka.Ashkenazy@audiocodes.com, Kfir.Gershon@audiocodes.com, Michael.Lallouz@audiocodes.com, Sara.Steinberg@audiocodes.com
 </recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-          <email>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
-            </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-      </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>ac-infra version was promoted to $ACINFRA_VERSION</defaultSubject>
       <defaultContent>For details:
