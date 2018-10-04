@@ -108,7 +108,7 @@ EOD</command>
     send &quot;service tomcat status\r&quot;
 	expect &quot;]#&quot;
 	#send &quot;service tomcat stop\r&quot;
-    send &quot;for pid in $(ps -ef | grep catalina | grep -v grep | grep -v /bin/sh | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done\r&quot;
+    send &quot;pkill -f tomcat\r&quot;
     expect &quot;]#&quot;
     send &quot;service tomcat status\r&quot;
 	expect &quot;]#&quot;
