@@ -121,7 +121,7 @@ git pull --rebase
 #advance version number by 1 in bower.json &amp; build.config.js
 version=$(cat bower.json |grep version)
 version=${version:14}
-version=${version%\&quot;}
+version=$(echo $version | cut -f1 -d &apos;&quot;&apos;)
 current_version=$version
 [[ &quot;$version&quot; =~ (.*[^0-9])([0-9]+)$ ]] &amp;&amp; version=&quot;${BASH_REMATCH[1]}$((${BASH_REMATCH[2]} + 1))&quot;;
 perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
