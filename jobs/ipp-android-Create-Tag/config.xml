@@ -127,13 +127,22 @@ do
   git checkout origin/$GERRIT_BRANCH
   echo Find the last TAG name...
 
-  
+  CurrentPath=`pwd`
+  echo &quot;machine gerrit login jenkins password $jpass&quot; &gt;~/.netrc
+  cd ../..
+  if [ ! -d .git ]; then
+    git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
+    mv repo_manifests/.git .
+    rm -rf repo_manifests
+  fi
+  git fetch
+  git checkout -f origin/$GERRIT_BRANCH -- default.xml
+  LastManifestTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+  pwd
+  ls -l
+  cd $CurrentPath
 
   LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
-  RealLastTag=$LastTag
-  if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then
-    LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
-  fi
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
@@ -141,7 +150,7 @@ do
     LastUser=$User
     LastSha1=$Sha1
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $RealLastTag..origin/$GERRIT_BRANCH)&quot;
+  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..origin/$GERRIT_BRANCH)&quot;
 
   if [ -z $LastWhen ]; then continue; fi
 
@@ -213,6 +222,16 @@ done
       <cleanupParameter></cleanupParameter>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQbuZopR3auh/pP3FcLnU3IdsJVVj0dJDplBpexPKRoUs=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} - ${BUILD_LOG_REGEX, regex=&quot;^.*NEWTAG=(\S*)&quot;,substText=&quot;$1&quot;,showTruncatedLines=false}</template>
       <runAtStart>true</runAtStart>
