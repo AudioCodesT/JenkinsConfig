@@ -142,8 +142,7 @@ date
 id
 pwd
 hostname
-echo ls Resources/Firmwares/UC*HD_${IMAGENAMES}.*
-ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+echo ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
 
 echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
