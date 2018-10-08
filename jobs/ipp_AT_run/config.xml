@@ -132,20 +132,22 @@ seconds=$(expr $(expr $PHASE - 1) \* 30)
 echo Wait before starting according the the phase number: $PHASE -- $seconds seconds
 sleep $seconds
 
+Target=z:
+if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
+  net use $Target /delete
+  net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
+fi
+  
 date
 id
 pwd
 hostname
-echo ls Resources
-ls -l Resources
-echo ls Resources/Firmwares:
-ls -l Resources/Firmwares
+echo ls Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
 
 echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
-
-ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
 
 set -o pipefail
 tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
