@@ -135,6 +135,11 @@ sleep $seconds
 date
 id
 pwd
+hostname
+echo ls Resources
+ls -l Resources
+echo ls Resources/Firmwares:
+ls -l Resources/Firmwares
 
 echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
