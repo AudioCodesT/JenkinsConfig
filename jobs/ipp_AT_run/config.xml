@@ -115,11 +115,11 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login
 date
-if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
-  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
-else
+#if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
+#  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
+#else
   cd C:/IpPhoneAutomation/ATA
-fi
+#fi
 
 ActiveFolder=`pwd`
 echo active folder is: $ActiveFolder
