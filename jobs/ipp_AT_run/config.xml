@@ -134,8 +134,13 @@ sleep $seconds
 
 date
 id
+pwd
 
-echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
+echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
+-suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
+-firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
+
+ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
 
 set -o pipefail
 tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
