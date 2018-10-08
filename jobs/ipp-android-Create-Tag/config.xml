@@ -99,25 +99,28 @@ function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
     return
   fi
-  if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then
-    # Check feature branch if it is the first TAG for this feature branch
-    extName=$(echo $GERRIT_BRANCH | awk -F/ &apos;{print $NF}&apos; | cut -c1-3)
-    extNameLong=$(echo $GERRIT_BRANCH | awk -F/ &apos;{print $NF}&apos; | cut -c1-6)
-    if [[ ! $(echo $LastTag | cut -d. -f5-) =~ &quot;$extName&quot; ]]; then
-      # It is the first TAG so add 3 characters from the branch name and add it to the last current TAG
-      # Start with number 1 (0 will chnage to 1), in case it is exist add 6 characters
-      if git rev-parse $LastTag.$extName.1 &gt;/dev/null 2&gt;&amp;1; then extName=$extNameLong; fi
-      LastTag=$LastTag.$extName.0
-    fi
-  fi
-  NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
-  if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then
-    if git rev-parse $NEWTAG &gt;/dev/null 2&gt;&amp;1; then NEWTAG=$(echo $NEWTAG | sed s:$extName:$extNameLong:); fi
-  fi
+
+  NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
+
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push origin $NEWTAG
-  LastTag=$NEWTAG
+  
+  
+  
+  LastManifestTag=$NEWTAG
 }
+
+CurrentPath=`pwd`
+echo &quot;machine gerrit login jenkins password $jpass&quot; &gt;~/.netrc
+cd ..
+if [ ! -d repo_manifests ]; then
+  git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
+fi
+cd repo_manifests
+git fetch
+git checkout origin/$GERRIT_BRANCH -- default.xml
+LastManifestTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+cd $CurrentPath
 
 for GERRIT_BRANCH in feature/android_repo_manifests/TR_1
 do
@@ -127,20 +130,6 @@ do
   git checkout origin/$GERRIT_BRANCH
   echo Find the last TAG name...
 
-  CurrentPath=`pwd`
-  echo &quot;machine gerrit login jenkins password $jpass&quot; &gt;~/.netrc
-  cd ../..
-  if [ ! -d .git ]; then
-    git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
-    mv repo_manifests/.git .
-    rm -rf repo_manifests
-  fi
-  git fetch
-  git checkout -f origin/$GERRIT_BRANCH -- default.xml
-  LastManifestTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
-  pwd
-  ls -l
-  cd $CurrentPath
 
   LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
   LastUser=&quot;&quot;
