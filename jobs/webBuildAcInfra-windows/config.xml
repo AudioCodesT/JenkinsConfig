@@ -156,8 +156,8 @@ git config url.https://.insteadOf git://
 LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -f 1 | head -n 1 )
 echo $LastGerritCommitHash
 echo $GERRIT_PATCHSET_REVISION
-#if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
-#then
+if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
+then
 
 
     #advance version number by 1 in bower.json &amp; build.config.js
@@ -226,7 +226,7 @@ echo $GERRIT_PATCHSET_REVISION
     
     echo ACINFRA_VERSION=$version &gt; acinfra_version.properties
 
-#fi
+fi
 
 # register the packages.
 #echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
