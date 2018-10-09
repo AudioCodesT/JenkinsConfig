@@ -91,6 +91,10 @@
 git config --global user.email devops@audiocodes.com
 echo Starting...
 
+echo &quot;machine gerrit login jenkins password $jpass&quot; &gt;~/.netrc
+CurrentPath=`pwd`
+pwd
+
 function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
     return
@@ -113,9 +117,6 @@ function createTag {
   )
   LastManifestTag=$NEWTAG
 }
-
-echo &quot;machine gerrit login jenkins password $jpass&quot; &gt;~/.netrc
-CurrentPath=`pwd`
 
 for GERRIT_BRANCH in feature/android_repo_manifests/TR_1
 do
