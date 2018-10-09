@@ -92,11 +92,11 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#git config --global user.name &quot;Jenkins&quot;
-#git config --global user.email devops@audiocodes.com
+      <command>git config --global user.name &quot;Jenkins&quot;
+git config --global user.email devops@audiocodes.com
   
 function createTag {
-  if git log --pretty=format:%B -n1 $LastSha1 | grep &quot;DevOps admin change&quot;; then
+  if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
     return
   fi
 
@@ -105,22 +105,21 @@ function createTag {
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push origin $NEWTAG
   
-  
-  
+  (
+  cd ../repo_manifests
+  git history | grep grep
+  sed -i.bak -e &quot;s:\(.*/$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$NEWTAG\&quot;\2:&quot; default.xml
+  git add default.xml
+  git commit -m &quot;Tag $NEWTAG for repository: $repoName&quot;
+  git tag -a -m &quot;Jenkins auto tag for $repoName&quot; $NEWTAG
+  git push origin HEAD:$GERRIT_BRANCH
+  git push origin $NEWTAG
+  )
   LastManifestTag=$NEWTAG
 }
 
-CurrentPath=`pwd`
 echo &quot;machine gerrit login jenkins password $jpass&quot; &gt;~/.netrc
-cd ..
-if [ ! -d repo_manifests ]; then
-  git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
-fi
-cd repo_manifests
-git fetch
-git checkout origin/$GERRIT_BRANCH -- default.xml
-LastManifestTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
-cd $CurrentPath
+CurrentPath=`pwd`
 
 for GERRIT_BRANCH in feature/android_repo_manifests/TR_1
 do
@@ -129,9 +128,19 @@ do
   if ! git describe --tags --first-parent origin/$GERRIT_BRANCH | grep -q -; then continue; fi
   git checkout origin/$GERRIT_BRANCH
   echo Find the last TAG name...
-
-
   LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+  
+  cd ..
+  if [ ! -d repo_manifests ]; then
+    git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
+  fi
+  cd repo_manifests
+  git fetch
+  git checkout -f origin/$GERRIT_BRANCH 
+  git checkout -- default.xml
+  LastManifestTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+  cd $CurrentPath
+
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
