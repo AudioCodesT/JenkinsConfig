@@ -85,7 +85,7 @@ CurrentPath=`pwd`
 git status
 git remote -v
 
-function createTag {
+createTag() {
   if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
     return
   fi
