@@ -85,7 +85,7 @@ CurrentPath=`pwd`
 git status
 git remote -v
 
-function createTag() {
+function createTag {
   if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
     return
   fi
@@ -95,7 +95,6 @@ function createTag() {
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push origin $NEWTAG
   
-  (
   cd ../repo_manifests
   git history | grep grep
   sed -i.bak -e &quot;s:\(.*/$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$NEWTAG\&quot;\2:&quot; default.xml
@@ -104,7 +103,7 @@ function createTag() {
   git tag -a -m &quot;Jenkins auto tag for $repoName&quot; $NEWTAG
   git push origin HEAD:$GERRIT_BRANCH
   git push origin $NEWTAG
-  )
+
   LastManifestTag=$NEWTAG
 }
 
