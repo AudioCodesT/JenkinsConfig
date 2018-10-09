@@ -175,14 +175,10 @@ echo $GERRIT_PATCHSET_REVISION
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
     #promote version in src/infra/bower.json
     echo &quot;cd src/infra&quot;
-    pwd
-    cd src
-    pwd
-    cd infra
-    pwd
+    cd src/infra 
+    perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
     cd $WORKSPACE
-    pwd
     # checking if the private-bower is running
 #    output=$(netstat -ano | grep 5678) || true
 #    if [[ -z &quot;$output&quot; ]]
