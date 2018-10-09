@@ -176,11 +176,7 @@ echo $GERRIT_PATCHSET_REVISION
     #promote version in src/infra/bower.json
     echo &quot;cd src/infra&quot;
     cd src/infra 
-    cat bower.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
-    cat bower.json
-    perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
-    cat bower.json
     cd $WORKSPACE
     # checking if the private-bower is running
 #    output=$(netstat -ano | grep 5678) || true
@@ -218,6 +214,7 @@ echo $GERRIT_PATCHSET_REVISION
     git add bower.json
     git add build.config.js
     git add package.json
+    git add src/infra/bower.json
     message=&quot;Automatic promote version to $version&quot;
     git commit -m &quot;$message&quot;
     
