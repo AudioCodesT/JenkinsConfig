@@ -174,7 +174,9 @@ then
     #per Roman request promote also the verion in package.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
     #promote version in src/infra/bower.json
-    cd src/infra
+    echo &quot;cd src/infra&quot;
+    cd src
+    cd infra
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
     cd $WORKSPACE
     
