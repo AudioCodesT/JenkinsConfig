@@ -174,8 +174,9 @@ then
     #per Roman request promote also the verion in package.json
     perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; package.json
     #promote version in src/infra/bower.json
-    perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; src/infra/bower.json
-    
+    cd src/infra
+    perl -pi -e &quot;s/version\&quot;: \&quot;$current_version/version\&quot;: \&quot;$version/g&quot; bower.json
+    cd $WORKSPACE
     
     # checking if the private-bower is running
 #    output=$(netstat -ano | grep 5678) || true
