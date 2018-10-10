@@ -126,7 +126,7 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
      if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName allready exist; continue; fi
      echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
-     ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep size | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+     ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
      DestSize=`wc -c &lt;$Target/$FileName`
      echo Check the size: $ArtSize and $DestSize shoulde be the same
      #if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
