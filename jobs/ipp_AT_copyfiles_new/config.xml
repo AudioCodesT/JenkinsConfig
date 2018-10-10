@@ -129,11 +129,11 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
      ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
      DestSize=`wc -c &lt;$Target/$FileName`
      echo Check the size: $ArtSize and $DestSize shoulde be the same
-     #if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
-     #  echo $ArtSize--$DestSize: $file is differ, copy again...
-     #  rm -f $Target/$FileName
-     #  exit 1
-     #fi
+     if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
+       echo $ArtSize--$DestSize: $file is differ, copy again...
+       rm -f $Target/$FileName
+       exit 1
+     fi
    done &lt; &quot;$REFTARGET.list&quot;
 fi
 
