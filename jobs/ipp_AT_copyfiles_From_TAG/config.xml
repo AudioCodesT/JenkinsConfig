@@ -88,7 +88,7 @@ DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
 ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
 
-curl -ks -X GET $ARTIFACTORY &gt; $TAG.txt
+curl -ks -u $User -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
 if grep -q &quot;Unable to find item&quot; $TAG.txt; then
   echo $TAG does not exist, exit with error; 
@@ -106,11 +106,11 @@ for PRD in ${ImagesList[@]}; do
       # Check if this image was copied already, if not, transfer $Image
       if [ ! -f z:/$Image ]; then
         # The exact download name
-        downloadUri=$(curl -ks -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
+        downloadUri=$(curl -ks -u $User -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
         echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image
         if [ &quot;$downloadUri&quot; != &quot;&quot; ]; then 
           echo ----      Download $Image to z:
-          curl -ks -X GET $downloadUri --output z:/$Image
+          curl -ks -u $User -X GET $downloadUri --output z:/$Image
           ((countImages--))
         else 
           echo ----      $Image is missing  ----
@@ -196,7 +196,7 @@ IMAGENAMES=$ImageNames
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQ0y+8PB4rLa+DLsgU4t17VCxPPNpjstVsF8Z8Nf7w6Uo=}</value>
+          <value>{AQAAABAAAAAQr8gqwIQUzKtJXLCSueP3uG9nqtGNlRCRS/f1kOQzSzM=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
