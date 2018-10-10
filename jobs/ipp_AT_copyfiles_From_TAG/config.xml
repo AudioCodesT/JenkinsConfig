@@ -74,6 +74,7 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
+User=&quot;$artifactory_user:$artifactory_password&quot;
 net use z: /delete
 net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 
@@ -179,6 +180,26 @@ IMAGENAMES=$ImageNames
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQ0y+8PB4rLa+DLsgU4t17VCxPPNpjstVsF8Z8Nf7w6Uo=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} ${TAG} $GERRIT_BRANCH</template>
       <runAtStart>true</runAtStart>
