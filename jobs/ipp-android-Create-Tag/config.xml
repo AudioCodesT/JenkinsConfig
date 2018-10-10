@@ -40,11 +40,13 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <name>dvf101-kernel</name>
+        <refspec>+refs/heads/*:refs/remotes/dvf101-kernel/* +refs/tags/*:refs/tags/dvf101-kernel/*</refspec>
         <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
       <hudson.plugins.git.UserRemoteConfig>
         <name>dvf101</name>
+        <refspec>+refs/heads/*:refs/remotes/dvf101/* +refs/tags/*:refs/tags/dvf101/*</refspec>
         <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
