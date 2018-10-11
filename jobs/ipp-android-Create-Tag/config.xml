@@ -111,7 +111,7 @@ createTag() {
 
 for GERRIT_BRANCH in feature/android_repo_manifests/TR_1
 do
-  repoName=$(git branch -a --contains HEAD | sed -n &apos;s:^  remotes/\([^/]*\)/.*$:\1:p&apos;)
+  repoName=$(git branch -a --contains HEAD | grep remotes | cut -d/ -f2)
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
   if ! git describe --tags --first-parent origin/$GERRIT_BRANCH | grep -q -; then continue; fi
   git checkout origin/$GERRIT_BRANCH
