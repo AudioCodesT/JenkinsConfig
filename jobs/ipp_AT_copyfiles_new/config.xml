@@ -183,7 +183,8 @@ for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
     # ipp_AT_build is running now?
     for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_build); do
       if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
-        echo &quot;ipp_AT_build is running now, job $job, the files are not ready yet&quot;; 
+        echo &quot;ipp_AT_build is running now, job $job, the files are not ready yet&quot;;
+        rm -f $f
         exit 2
       fi
     done
