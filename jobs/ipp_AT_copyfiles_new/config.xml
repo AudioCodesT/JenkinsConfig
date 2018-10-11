@@ -178,6 +178,7 @@ for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
             $Artifactory/$REFTARGET/$(basename $f) | \
             grep md5 | head -1 | cut -d\&quot; -f4)
   checkSum2=$(md5sum $f | cut -d&quot; &quot; -f1)
+  echo checksum: $checkSum1 and $checkSum2
   if [ $checkSum1 != $checkSum2 ]; then
     # ipp_AT_build is running now?
     for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_build); do
