@@ -135,7 +135,7 @@
 
 TARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; generated_ipp_version.properties
-User=artifactory_user:artifactory_pass
+User=$artifactory_user:$artifactory_pass
 
 # Check if the image exist already in the Artifactory - if exist, exit without error
 if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep sim.tgz | grep -q ${AUTOPRD}_; then
