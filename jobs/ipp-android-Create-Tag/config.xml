@@ -95,7 +95,7 @@ createTag() {
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
-  git push origin $NEWTAG
+  git push $localRepoName $NEWTAG
   
   cd ../repo_manifests
   git history | grep grep
@@ -111,10 +111,13 @@ createTag() {
 
 for GERRIT_BRANCH in feature/android_repo_manifests/TR_1
 do
-  repoName=$(git branch -a --contains HEAD | grep remotes | cut -d/ -f2)
+
+  localRepoName=$(git branch -a --contains HEAD | grep remotes | cut -d/ -f2)
+  repoName=$(git remote -v | grep push | grep $localRepoName | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+  GERRIT_BRANCH=$(git branch -a | grep TR_1 | grep $localRepoName | sed &quot;s:.*$localRepoName/\(.*\):\1:&quot;)
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
-  if ! git describe --tags --first-parent origin/$GERRIT_BRANCH | grep -q -; then continue; fi
-  git checkout origin/$GERRIT_BRANCH
+  if ! git describe --tags --first-parent $localRepoName/$GERRIT_BRANCH | grep -q -; then continue; fi
+  git checkout $localRepoName/$GERRIT_BRANCH
   echo Find the last TAG name...
   LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
   
