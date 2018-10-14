@@ -74,7 +74,7 @@ if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./statu
   exit 1
 fi
 
-User-$artifactory_user:$artifactory_pass
+User=$artifactory_user:$artifactory_pass
 echo Find the Last TAG if None - $LASTBL
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 
