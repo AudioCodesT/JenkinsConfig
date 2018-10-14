@@ -155,8 +155,10 @@ echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command># Check if the image exist already in the Artifactory - if exist, exit without error
-if curl -ks https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
+      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+
+# Check if the image exist already in the Artifactory - if exist, exit without error
+if curl -ks -u $User https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
 	echo ${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img exist already... Abort without error;
     exit 0
 fi
@@ -305,6 +307,26 @@ ${WORKSPACE}/build/*_size_report.csv=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQck6IKuyw7MRHoC+xi7F4z3t9Q50xeXU6sBFVhBpB9MY=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}  Branch:${BUILD_BRANCH} -- ${NEWTAG}</template>
       <runAtStart>true</runAtStart>
