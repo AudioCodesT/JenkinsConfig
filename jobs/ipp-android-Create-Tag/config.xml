@@ -50,6 +50,12 @@
         <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>tinyalsa</name>
+        <refspec>+refs/heads/*:refs/remotes/tinyalsa/* +refs/tags/*:refs/tags/tinyalsa/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/external_tinyalsa</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
@@ -109,17 +115,18 @@ createTag() {
   LastManifestTag=$NEWTAG
 }
 
-for GERRIT_BRANCH in feature/android_repo_manifests/TR_1
-do
+#for BRANCH in TR_1
+#do
 
-  localRepoName=$(git branch -a --contains HEAD | grep remotes | cut -d/ -f2)
+  remote=$(git branch -a --contains HEAD | grep remotes | head -1)
+  localRepoName=$(echo $remote | cut -d/ -f2)
   repoName=$(git remote -v | grep push | grep $localRepoName | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
-  GERRIT_BRANCH=$(git branch -a | grep TR_1 | grep $localRepoName | sed &quot;s:.*$localRepoName/\(.*\):\1:&quot;)
+  GERRIT_BRANCH=$(echo $remote | cut -d/ -f3-)
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
-  if ! git describe --tags --first-parent $localRepoName/$GERRIT_BRANCH | grep -q -; then continue; fi
+  if ! git describe --tags --first-parent $localRepoName/$GERRIT_BRANCH | grep -q -; then exit 0; fi
   git checkout $localRepoName/$GERRIT_BRANCH
   echo Find the last TAG name...
-  LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+  LastTag=$(git describe --tags --abbrev=0 --first-parent $localRepoName/$GERRIT_BRANCH)
   
   cd ..
   if [ ! -d repo_manifests ]; then
@@ -151,7 +158,7 @@ do
     echo Try again later after 300 seconds
     exit 1
   fi
-done
+#done
 
 </command>
     </hudson.tasks.Shell>
