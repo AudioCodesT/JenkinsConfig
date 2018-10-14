@@ -74,12 +74,13 @@ if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./statu
   exit 1
 fi
 
+User-$artifactory_user:$artifactory_pass
 echo Find the Last TAG if None - $LASTBL
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 
 if [ &quot;$LASTBL&quot; == &quot;None&quot; ]; then
   echo curl -ks -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
-  LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
 fi
 echo Find: $LASTBL
 
@@ -241,6 +242,27 @@ DelayTime=180</properties>
       <maxSchedule>1</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_pass</name>
+          <value>{AQAAABAAAAAQ1lsGozNTbbhVwL3l+tz05dQysZP9pa2d8CcFQA2UB4E=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
   <pollSubjobs>false</pollSubjobs>
 </com.tikal.jenkins.plugins.multijob.MultiJobProject>
