@@ -211,10 +211,12 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command># Check if the image exist already in the Artifactory - if exist, exit without error
+      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+
+# Check if the image exist already in the Artifactory - if exist, exit without error
 # The grep -v flag exclude the pattern, needed when the img name contains _logs_ in case of LOG=1
 if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
-if curl -ks https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep -q UC${SHORTAUTOPRD}_; then
+if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep -q UC${SHORTAUTOPRD}_; then
 	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
     exit 0
 fi
@@ -339,6 +341,16 @@ fi</command>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
@@ -346,6 +358,10 @@ fi</command>
         <EnvInjectPasswordEntry>
           <name>jenkinsPassword</name>
           <value>{AQAAABAAAAAQQu9d0BhwpMF/2A7uAeqGZWR85mSj1p+2dWlQ1qYn8kM=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQR+NAbL2MkfHXfPXaFYaP8r/B7eMSpxp7aGOJW0rNsdA=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
