@@ -157,8 +157,9 @@ echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command># Check if the image exist already in the Artifactory - if exist, exit without error
-#if curl -ks https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
+      <command>#User=&quot;$artifactory_user:$artifactory_password&quot;
+# Check if the image exist already in the Artifactory - if exist, exit without error
+#if curl -ks -u $User https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
 #	echo ${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img exist already... Abort without error;
 #    exit 0
 #fi
