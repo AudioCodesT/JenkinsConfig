@@ -1,7 +1,11 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>for each children &#xd;
+1. it&apos;s downloading the size report of the latest tag and the size report of one tag before the latest one.&#xd;
+2. compare the two reports and check the size differences between them.&#xd;
+3. push the output of the comparison to artifactory &#xd;
+4. send an email with the result of the comparison of each children that the size differences are not well. </description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
