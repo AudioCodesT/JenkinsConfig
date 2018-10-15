@@ -72,7 +72,7 @@ function RemoveFolder() {
   ((deep+=1))
   local Folder=$1
   # The date format is: YYYYMMDD (Y=the year, M=Month, D=Day  - Example: 8 Jan 2018 should be 20180108
-  lastModified=$(curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
+  lastModified=$(curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
   if [ &quot;$lastModified&quot; == &quot;&quot; ]; then return 0; fi
 
   if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
@@ -81,16 +81,16 @@ function RemoveFolder() {
     curl -ks -u $User -X DELETE https://$ARTIFACTORY/$Folder
   else
     echo $Folder is not old - check its sub folders
-    curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*true&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
+    curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*true&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
     do
       echo Execute this function again to check the following directory: ${Folder}$uri
       RemoveFolder ${Folder}$uri;
     done
     if [ $deep -eq 2 ]; then 
       echo Check its files
-      curl -ks -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*false&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
+      curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*false&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
       do
-        lastModified=$(curl -ks -X GET https://$ARTIFACTORY/api/storage/${Folder}$uri?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
+        lastModified=$(curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/${Folder}$uri?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
         if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
           echo Delete ${Folder}$uri
           echo ---------------------
