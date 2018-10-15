@@ -138,7 +138,7 @@ then
         if [[ -e size_report.txt ]]
         then
             mv size_report.txt size_report_${allChilds[i]}.txt
-            #curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/size_report_result.txt -T size_report_${allChilds[i]}.txt
+            #curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt -T size_report_${allChilds[i]}.txt
         fi 
       fi  
   done
