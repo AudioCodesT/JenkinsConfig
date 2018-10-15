@@ -62,6 +62,7 @@ if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_
   exit 1
 fi
 
+User=admin:$artifactory_pass
 ARTIFACTORY=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
@@ -86,7 +87,7 @@ echo Executed with last PatchSet $ps
 if ! [ &quot;$lastps&quot; -eq &quot;$lastps&quot; ] 2&gt;/dev/null; then echo not number; lastps=$ps; fi
 
 while [ $lastps -gt 0 ]; do
-  if ! curl -ks -X GET $ARTIFACTORY | grep -q ${change}-$lastps; then
+  if ! curl -ks -u $User -X GET $ARTIFACTORY | grep -q ${change}-$lastps; then
     kind=$(grep -A1 $lastps $change.txt | tail -1) # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
     echo find kind of patch-set $lastps is $kind
     if [[ &quot;$kind&quot; =~ NO_.*CHANGE ]]; then 
@@ -126,7 +127,7 @@ COUNTER=0
 countImages=${#ImagesList[@]}
 while [  $countImages -gt 0 ]; do
   countImages=${#ImagesList[@]}
-  for Image in $(curl -ks -X GET $ARTIFACTORY/$REFTARGET | grep -v _logs_ | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
+  for Image in $(curl -ks -u $User -X GET $ARTIFACTORY/$REFTARGET | grep -v _logs_ | grep &apos;.sim.tgz\|.img&apos; | cut -d&apos;&quot;&apos; -f4); do
     PRD=$(echo $Image | sed &apos;s:.UC::; s:_.*::&apos;);
     if [[ &quot;${ImagesList[@]}&quot; =~ &quot;$PRD&quot; ]]; then
       #TargetImage=$(echo $Image | sed &quot;s:\.\(img\|sim.tgz\)$:_${REFTARGET}.\1:&quot;)
@@ -134,7 +135,7 @@ while [  $countImages -gt 0 ]; do
       #echo -- Check if $TargetImage exist in z:
       if [ ! -f z:$TargetImage ]; then
         echo ----      Download $TargetImage to z:
-        curl -ks -X GET ${DOWNLOAD}/${REFTARGET}$Image --output z:$TargetImage
+        curl -ks -u $User -X GET ${DOWNLOAD}/${REFTARGET}$Image --output z:$TargetImage
       else 
         echo ----      z:$TargetImage already exist.. skip the download...
       fi
@@ -267,6 +268,16 @@ IMAGENAMES=$ImageNames
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_pass</name>
+          <value>{AQAAABAAAAAQSUxwa13amYiM7hPeujKhybUm32ImLIGcVt64834P1f0=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} ${REFSPEC} $GERRIT_BRANCH</template>
       <runAtStart>true</runAtStart>
