@@ -97,9 +97,11 @@ createTag() {
 
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
 
+  echo Create new TAG $NEWTAG 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push $localRepoName $NEWTAG
-  
+  (
+  echo Create it in repo_manifests too
   cd ../repo_manifests
   sed -i.bak -e &quot;s:\(.*/$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$NEWTAG\&quot;\2:&quot; default.xml
   git add default.xml
@@ -107,12 +109,12 @@ createTag() {
   git tag -a -m &quot;Jenkins auto tag for $repoName&quot; $NEWTAG
   git push origin HEAD:$GERRIT_BRANCH
   git push origin $NEWTAG
-
+  )
   LastManifestTag=$NEWTAG
 }
 
-#for BRANCH in TR_1
-#do
+for BRANCH in TR_1
+do
 
   remote=$(git branch -a --contains HEAD | grep remotes | head -1)
   localRepoName=$(echo $remote | cut -d/ -f2)
@@ -129,7 +131,7 @@ createTag() {
     git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
   fi
   cd repo_manifests
-  if ! git branch | grep -q TR_1; then git checkout -f -b TR_1 `git branch -a | grep TR_1`; fi
+  if ! git branch | grep -q $BRANCH; then git checkout -f -b $BRANCH `git branch -a | grep TR_1`; fi
   git pull --rebase
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
   cd $WORKSPACE
@@ -153,7 +155,7 @@ createTag() {
     echo Try again later after 300 seconds
     exit 1
   fi
-#done
+done
 
 </command>
     </hudson.tasks.Shell>
