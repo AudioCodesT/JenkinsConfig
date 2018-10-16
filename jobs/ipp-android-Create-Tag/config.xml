@@ -117,12 +117,12 @@ createTag() {
   remote=$(git branch -a --contains HEAD | grep remotes | head -1)
   localRepoName=$(echo $remote | cut -d/ -f2)
   repoName=$(git remote -v | grep push | grep $localRepoName | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
-  GERRIT_BRANCH=$(echo $remote | cut -d/ -f3-)
+  GERRIT_BRANCH=$localRepoName/$(echo $remote | cut -d/ -f3-)
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
-  if ! git describe --tags --first-parent $localRepoName/$GERRIT_BRANCH | grep -q -; then exit 0; fi
-  git checkout $localRepoName/$GERRIT_BRANCH
+  if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
+  git checkout $GERRIT_BRANCH
   echo Find the last TAG name...
-  LastTag=$(git describe --tags --abbrev=0 --first-parent $localRepoName/$GERRIT_BRANCH)
+  LastTag=$localRepoName/$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH)
   
   cd ..
   if [ ! -d repo_manifests ]; then
@@ -141,7 +141,7 @@ createTag() {
     LastUser=$User
     LastSha1=$Sha1
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$localRepoName/$GERRIT_BRANCH)&quot;
+  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH)&quot;
 
   if [ -z $LastWhen ]; then continue; fi
 
