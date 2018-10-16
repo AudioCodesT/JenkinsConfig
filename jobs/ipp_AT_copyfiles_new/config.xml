@@ -173,6 +173,9 @@ for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_parent); 
   fi
 done
 
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+exit 0
+
 echo Check the checksum...
 # Check the checksum of the 5 img files before executing the AT itself
 for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
