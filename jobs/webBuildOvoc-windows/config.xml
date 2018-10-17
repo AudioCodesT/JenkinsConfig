@@ -143,7 +143,7 @@ echo $GERRIT_PATCHSET_REVISION
 if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
 then
       #run private-bower
-	  output=$(netstat -ano | grep 5678) || true
+	  output=$(netstat -ano | grep -wF 5678) || true
 	  if [[ -z &quot;$output&quot; ]]
 	  then private-bower &amp; sleep 15
  	  fi
