@@ -183,11 +183,6 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   make $PARAMS SUBVERSION=${IMGNAME}
 done
 
-if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
-  echo Automation Test for branch 3.1.0 or 3.2 only... exit unstable and don&apos;t execute the copy.
-  exit 2
-fi
-
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
