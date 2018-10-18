@@ -137,7 +137,7 @@ do
   cd $WORKSPACE
 
   echo Check $LastTag..$GERRIT_BRANCH
-  git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; $LastTag
+  git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; CommitChangesList
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
@@ -145,7 +145,7 @@ do
     LastUser=$User
     LastSha1=$Sha1
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-  done &lt; $LastTag
+  done &lt; CommitChangesList
 
   if [ -z $LastWhen ]; then continue; fi
 
