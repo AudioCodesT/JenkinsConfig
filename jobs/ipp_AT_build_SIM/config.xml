@@ -159,10 +159,6 @@ yes | make distclean
 IMGNAME=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:.:g&apos;`
 make auto AUTOPRD=${AUTOPRD}__SIM SUBVERSION=${IMGNAME}
 
-if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
-  echo Automation Test for branch 3.1.0 or 3.2 only... exit unstable and don&apos;t execute the copy.
-  exit 2
-fi
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
