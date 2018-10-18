@@ -136,6 +136,7 @@ do
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
   cd $WORKSPACE
 
+  git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; $LastTag
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
@@ -143,7 +144,7 @@ do
     LastUser=$User
     LastSha1=$Sha1
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH)&quot;
+  done &lt; $LastTag
 
   if [ -z $LastWhen ]; then continue; fi
 
