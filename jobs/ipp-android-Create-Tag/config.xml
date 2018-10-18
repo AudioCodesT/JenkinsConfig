@@ -136,6 +136,7 @@ do
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
   cd $WORKSPACE
 
+  echo Check $LastTag..$GERRIT_BRANCH
   git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; $LastTag
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
