@@ -171,7 +171,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 else
  ID=0
  ExitCode=2
- MESSAGE=&quot;Can&apos;t connect to 10.59.0.87\Firmwares&quot;; 
+ MESSAGE=&quot;Can&apos;t connect to Resources/Firmwares/&quot;; 
 fi
 
 echo MESSAGE=${MESSAGE} &gt;&gt; $WORKSPACE/properties.txt
