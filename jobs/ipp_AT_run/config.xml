@@ -168,6 +168,7 @@ if ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* | wc -l | grep -q 10; then
  if [ &quot;$ExitCode&quot; -eq 2 ]; then  MESSAGE=&quot;failed - Fatal&quot;; 
  else if [ &quot;$ExitCode&quot; -gt 0 ]; then MESSAGE=&quot;failed - Functhonality&quot;; fi; fi
 else
+ ID=0
  ExitCode=2
  MESSAGE=&quot;Can&apos;t connect to 10.59.0.87\Firmwares&quot;; 
 fi
