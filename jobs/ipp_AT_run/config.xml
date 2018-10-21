@@ -143,29 +143,34 @@ id
 pwd
 hostname
 echo ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+if ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* | wc -l | grep -q 10; then
 
-echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
+ echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
 
-set -o pipefail
-tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
+ set -o pipefail
+ tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img -ci 1 -rerunFailedAuto 1
 
-ExitCode=$?
+ ExitCode=$?
 
-if [ &quot;$ExitCode&quot; == &quot;&quot; ]; then  ExitCode=1; fi
+ if [ &quot;$ExitCode&quot; == &quot;&quot; ]; then  ExitCode=1; fi
 
-echo http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml
-ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
-echo Find $ID with the new command
+ echo http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml
+ ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+ echo Find $ID with the new command
 
-echo ATA was finished
-echo Exit code $ExitCode
-MESSAGE=&quot;Succeed&quot;
-if [ &quot;$ExitCode&quot; -eq 2 ]; then  MESSAGE=&quot;failed - Fatal&quot;; 
-else if [ &quot;$ExitCode&quot; -gt 0 ]; then MESSAGE=&quot;failed - Functhonality&quot;; fi; fi
+ echo ATA was finished
+ echo Exit code $ExitCode
+ MESSAGE=&quot;Succeed&quot;
+ if [ &quot;$ExitCode&quot; -eq 2 ]; then  MESSAGE=&quot;failed - Fatal&quot;; 
+ else if [ &quot;$ExitCode&quot; -gt 0 ]; then MESSAGE=&quot;failed - Functhonality&quot;; fi; fi
+else
+ ExitCode=2
+ MESSAGE=&quot;Can&apos;t connect to 10.59.0.87\Firmwares&quot;; 
+fi
 
 echo MESSAGE=${MESSAGE} &gt;&gt; $WORKSPACE/properties.txt
 echo ExitCode=$ExitCode &gt;&gt; $WORKSPACE/properties.txt
