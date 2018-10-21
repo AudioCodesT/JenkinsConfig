@@ -106,7 +106,8 @@ Target=d:/Firmwares
 # In case it is not the Ftp server 10.59.0.87 &quot;ATAFtp&quot;
 if [ ! -d $Target ]; then
   Target=z:
-  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
+  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then
+    echo Define again the mapping to Z:
     net use $Target /delete
     net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
   fi
