@@ -133,13 +133,13 @@ echo Wait before starting according the the phase number: $PHASE -- $seconds sec
 sleep $seconds
 
 Target=z:
-if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
+if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then
+  echo confige again Z: ----------------------
   net use $Target /delete
   net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
 fi
   
 date
-id
 pwd
 hostname
 echo ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
