@@ -142,7 +142,7 @@ then
     
 	echo &quot;RUN: npm install&quot;
 	npm install
-
+    
 	echo &quot;RUN: bower install --force-latest&quot;
 	bower install --force-latest
 
@@ -160,8 +160,21 @@ else
 	echo &quot;RUN: yarn dist&quot;
 	yarn dist
     
-    #yarn config set registry https://registry.yarnpkg.com
-	#yarn config set strict-ssl true
+    #kill the Proxy Server process
+#   pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
+#   echo &quot;pidNumber = $pidNumber&quot;
+#   if [[ ! -z &quot;$pidNumber&quot; ]]
+#   then
+#      echo &quot;killing the proccess of the protractor proxy server&quot;
+#	  taskkill /F /PID &quot;$pidNumber&quot;
+#   fi
+#   echo &quot;RUN: yarn run protractorProxyServer&quot;
+#    yarn run protractorProxyServer &amp; sleep 15
+#    echo &quot;RUN: yarn run protractorServer&quot;
+#    yarn run protractorServer &amp; sleep 15
+#    echo &quot;RUN: yarn run protractor&quot;
+#    yarn run protractor
+
 fi</command>
     </hudson.tasks.Shell>
   </builders>
