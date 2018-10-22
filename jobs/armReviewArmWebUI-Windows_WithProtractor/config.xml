@@ -99,17 +99,16 @@ else
 	yarn config set strict-ssl false
 
     echo &quot;RUN: yarn install&quot;
-#    yarn install
+    yarn install
 
 	echo &quot;RUN: yarn dist&quot;
-#	yarn dist
+	yarn dist
     
-
-
-#    echo &quot;RUN: yarn run protractorServer&quot;
-#    yarn run protractorServer &amp; sleep 15
-#    echo &quot;RUN: yarn run protractor&quot;
-#    yarn run protractor
+    echo &quot;RUN: yarn run protractorServer&quot;
+    yarn run protractorServer &amp; sleep 15
+    
+    echo &quot;RUN: yarn run protractor&quot;
+    yarn run protractor
 
 fi</command>
     </hudson.tasks.Shell>
