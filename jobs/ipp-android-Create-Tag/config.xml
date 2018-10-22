@@ -108,7 +108,8 @@ createTag() {
   git add default.xml
   git commit -m &quot;Tag $NEWTAG for repository: $repoName&quot;
   git tag -a -m &quot;Jenkins auto tag for $repoName&quot; $NEWTAG
-  git push origin HEAD:$GERRIT_BRANCH
+  manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | sed &apos;s:.*origin/::&apos;)
+  git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
   )
   LastManifestTag=$NEWTAG
