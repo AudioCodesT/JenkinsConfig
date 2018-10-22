@@ -132,15 +132,6 @@ seconds=$(expr $(expr $PHASE - 1) \* 30)
 echo Wait before starting according the the phase number: $PHASE -- $seconds seconds
 sleep $seconds
 
-Target=z:
-if [ $PHASE -eq 1 ]; then
-  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then
-    echo confige again Z: ----------------------
-    net use $Target /delete
-    net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
-  fi
-fi
-
 date
 pwd
 hostname
