@@ -133,6 +133,7 @@ do
   fi
   cd repo_manifests
   if ! git branch | grep -q $BRANCH; then git checkout -f -b $BRANCH `git branch -a | grep TR_1`; fi
+  git reset --hard
   git pull --rebase
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
   cd $WORKSPACE
