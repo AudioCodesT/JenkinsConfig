@@ -88,7 +88,7 @@
 </command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
-      <command>#!c:\cygwin\bin\bash  --login
+      <command>#!c:\cygwin\bin\bash --login
 
 echo $NODE_NAME
 PHISICALPHONE=&quot;&quot;
@@ -131,10 +131,6 @@ done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-set
 
 echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
 
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-
-echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
-
 net use
 echo ls1
 ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.*
@@ -149,6 +145,10 @@ if [ `ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt
   echo &quot;the images files were not found (ClosedChannel)... try again&quot;
   exit 1;
 fi
+
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
 
 
 </command>
