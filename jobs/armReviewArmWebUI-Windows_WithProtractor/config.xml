@@ -1,8 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>gerrit trigger when new patchset&#xd;
-Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verified-1 if failed</description>
+  <description>test job to check protractor</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -21,7 +20,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>GERRIT_REFSPEC</name>
+          <name>GERRIT_COMMIT_ID</name>
           <description></description>
           <defaultValue></defaultValue>
           <trim>false</trim>
@@ -36,90 +35,31 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <refspec>$GERRIT_REFSPEC</refspec>
         <url>ssh://jenkins@gerrit:29418/web-ui/arm</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$GERRIT_BRANCH</name>
+        <name>master</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
-    </extensions>
+    <extensions/>
   </scm>
   <assignedNode>Web-UI-Win-Dynamic</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>web-ui/arm</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <dynamicGerritProjects class="empty-list"/>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>false</excludeNoCodeChange>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -131,6 +71,9 @@ cd $WORKSPACE
 
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
+
+git pull ssh://jenkins@gerrit:29418/web-ui/arm ${GERRIT_COMMIT_ID}
+git checkout ${GERRIT_COMMIT_ID}
 
 # if version is 8.2 or lower - use: npm / bower / privte bower / grunt
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
@@ -156,12 +99,12 @@ else
 	yarn config set strict-ssl false
 
     echo &quot;RUN: yarn install&quot;
-    yarn install
+#    yarn install
 
 	echo &quot;RUN: yarn dist&quot;
-	yarn dist
+#	yarn dist
     
-    #kill the Proxy Server process
+
 
 #    echo &quot;RUN: yarn run protractorServer&quot;
 #    yarn run protractorServer &amp; sleep 15
