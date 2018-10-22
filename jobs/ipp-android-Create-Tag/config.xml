@@ -103,7 +103,8 @@ createTag() {
   (
   echo Create it in repo_manifests too
   cd ../repo_manifests
-  sed -i.bak -e &quot;s:\(.*/$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$NEWTAG\&quot;\2:&quot; default.xml
+  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$NEWTAG\&quot;\2:&quot; default.xml
+  rm -f default.xml.bak
   git add default.xml
   git commit -m &quot;Tag $NEWTAG for repository: $repoName&quot;
   git tag -a -m &quot;Jenkins auto tag for $repoName&quot; $NEWTAG
