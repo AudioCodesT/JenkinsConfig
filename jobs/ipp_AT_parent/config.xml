@@ -142,7 +142,7 @@ if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
 fi
 
 if [ `ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
-  echo the images files were not found (ClosedChannel)... try again
+  echo &quot;the images files were not found (ClosedChannel)... try again&quot;
   exit 1;
 fi
 
