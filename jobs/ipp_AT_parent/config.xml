@@ -134,6 +134,18 @@ echo current patchSet is $checkPS - no new code changes, this execution is for P
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
+  
+if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
+    echo confige again Z: ----------------------
+    net use z: /delete
+    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+fi
+
+if [ `ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
+  echo the images files weren&apos;t found (ClosedChannel)... try again
+  exit 1
+fi
+
 
 </command>
     </hudson.tasks.Shell>
@@ -471,7 +483,7 @@ $change,$newPS
       <checkRegexp>true</checkRegexp>
       <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
       <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>60</delay>
+        <delay>120</delay>
       </delay>
       <maxSchedule>3</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
