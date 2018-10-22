@@ -138,8 +138,6 @@ echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
 net use
 echo ls1
 ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.*
-echo ls2
-ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/
 
 if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     echo confige again Z: ----------------------
