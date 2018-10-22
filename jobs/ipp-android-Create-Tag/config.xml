@@ -118,8 +118,8 @@ do
 
   remote=$(git branch -a --contains HEAD | grep remotes | head -1)
   localRepoName=$(echo $remote | cut -d/ -f2)
-  repoName=$(git remote -v | grep push | grep $localRepoName | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
-  GERRIT_BRANCH=$localRepoName/$(echo $remote | cut -d/ -f3-)
+  repoName=$(git remote -v | grep push | grep &quot;^$localRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+  GERRIT_BRANCH=$(echo $remote | cut -d/ -f2-)
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
   if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
   git checkout $GERRIT_BRANCH
