@@ -76,25 +76,6 @@ git pull ssh://jenkins@gerrit:29418/web-ui/arm ${GERRIT_COMMIT_ID}
 git checkout ${GERRIT_COMMIT_ID}
 
 # if version is 8.2 or lower - use: npm / bower / privte bower / grunt
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
-then 
-	# checking if the private-bower is running
-	output=$(netstat -ano | grep 5678)
-	if [[ -z $output ]]
-	then private-bower &amp; sleep 15
-	fi
-    
-	echo &quot;RUN: npm install&quot;
-	npm install
-    
-	echo &quot;RUN: bower install --force-latest&quot;
-	bower install --force-latest
-
-	echo &quot;RUN: grunt dist&quot;
-	grunt dist
-
-	#	if version is 8.4 or higher - use: yarn with npm on artifactory
-else
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
 
@@ -110,7 +91,7 @@ else
     echo &quot;RUN: yarn run protractor&quot;
     yarn run protractor
 
-fi</command>
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
