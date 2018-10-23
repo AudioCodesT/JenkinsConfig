@@ -118,7 +118,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
+      <command>#!/bin/bash +e
+
+NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
 echo NEWTAG=${NEWTAG} &gt; generated_ipp_version.properties
 
 PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
