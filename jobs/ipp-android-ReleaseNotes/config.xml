@@ -130,13 +130,11 @@ PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
     VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue: | sed &apos;s/Issue: \(VI\|\)//g; s/ .*//g&apos;)
     RN+=---$subject::$hash::$VI
   done &lt;&lt;&lt; &quot;$(git log --reverse --pretty=format:&quot;%h&quot; $PreviousTAG..$NEWTAG)&quot;
-VIS=`git log $PreviousTAG..$NEWTAG | grep VI | sed &apos;s/.*\[VI//; s/\].*//&apos; | sort -u`
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $PreviousTAG..$NEWTAG | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$NEWTAG`
 GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
-echo VIS=${VIS} &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
 echo PROJECT=${GERRIT_PROJECT} &gt;&gt; generated_ipp_version.properties
 echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
@@ -151,27 +149,27 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.propertie
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token></token>
+      <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>UpdateVI</job>
+      <job>UpdateVI-Jira</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
       <pollInterval>3</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <enhancedLogging>false</enhancedLogging>
-      <parameters>NEWTAG=$IPP_VER
+      <parameters>NEWTAG=$NEWTAG
 RN=$RN
-VIS=$VIS
+GERRIT_HOST=$GERRIT_HOST
 EMAIL=$EMAIL
 PROJECT=$PROJECT
 DATE=$DATE
 GERRIT_BRANCH=$GERRIT_BRANCH
 AuthorCommitter=$AuthorCommitter</parameters>
       <parameterList>
-        <string>NEWTAG=$IPP_VER</string>
+        <string>NEWTAG=$NEWTAG</string>
         <string>RN=$RN</string>
-        <string>VIS=$VIS</string>
+        <string>GERRIT_HOST=$GERRIT_HOST</string>
         <string>EMAIL=$EMAIL</string>
         <string>PROJECT=$PROJECT</string>
         <string>DATE=$DATE</string>
