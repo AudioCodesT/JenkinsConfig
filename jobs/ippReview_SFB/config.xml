@@ -321,8 +321,7 @@ if [[ -e GTest.sh ]]; then
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then gtestSign=-1; else gtestSign=1; fi
       $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
 
-$CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; &gt; output
-id=$(awk -F, &apos;{$3 ==  &quot;\&quot;branch\&quot;: \&quot;feature/3.1.0.199/HTTP_based_Services_Communication\&quot;&quot;} {print $1}&apos; output | cut -d&apos;:&apos; -f2 | cut -d&apos;&quot;&apos; -f2)
+
   fi
 fi
 </script>
