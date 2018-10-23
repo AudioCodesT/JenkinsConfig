@@ -316,6 +316,11 @@ if [[ -e GTest.sh ]]; then
      escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
      CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
      base=https://$GERRIT_HOST/a/changes
+# TEST TEST ***************
+     $CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; &gt; output
+     id=$(awk -F, &apos;{$3 ==  &quot;\&quot;branch\&quot;: \&quot;feature/3.1.0.199/HTTP_based_Services_Communication\&quot;&quot;} {print $1}&apos; output | cut -d&apos;:&apos; -f2 | cut -d&apos;&quot;&apos; -f2)
+# TEST TEST ***************
+
      id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
      endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
       if [[ ! $RetunedValue == &quot;0&quot; ]]; then gtestSign=-1; else gtestSign=1; fi
