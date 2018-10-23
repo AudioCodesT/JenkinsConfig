@@ -130,8 +130,7 @@ echo &gt;&gt; allSha1
 while read -r hash; do
     subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
     VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue: | sed &apos;s/Issue: \(VI\|\)//g; s/ .*//g&apos;)
-    RN+=&quot;---$subject::$hash::$VI&quot;
-    echo RN == $RN
+    RN+=&apos;---$subject::$hash::$VI&apos;
 done &lt; allSha1
 echo finish loop
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $PreviousTAG..$NEWTAG | grep -v devops | sort -u`
