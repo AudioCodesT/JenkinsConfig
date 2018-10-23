@@ -101,6 +101,7 @@ createTag() {
   echo Create new TAG $NEWTAG 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push $localRepoName $NEWTAG
+  subject=$(git log --pretty=format:&quot;%s&quot; $Sha1 -n1)
   (
   echo Create it in repo_manifests too
   cd ../repo_manifests
@@ -108,7 +109,7 @@ createTag() {
   rm -f default.xml.bak
   git add default.xml
   git commit -m &quot;Tag $NEWTAG for repository: $repoName&quot;
-  git tag -a -m &quot;Jenkins auto tag for $repoName&quot; $NEWTAG
+  git tag -a -m &quot;Jenkins auto tag for $repoName by $LastUser&quot; -m &quot;$subject&quot; $NEWTAG
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
