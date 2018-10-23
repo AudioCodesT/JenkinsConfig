@@ -118,7 +118,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash +e
+      <command>#!/bin/bash +e +x
 
 NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
 echo NEWTAG=${NEWTAG} &gt; generated_ipp_version.properties
@@ -257,7 +257,7 @@ HASH=${HASH}</properties>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;Android/build/${NEWTAG}</deployPattern>
+      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;Android/build/$(GERRIT_BRANCH}/${NEWTAG}</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
