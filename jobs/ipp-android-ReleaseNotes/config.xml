@@ -139,7 +139,7 @@ EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $PreviousTAG..$NEWTAG | grep
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$NEWTAG`
 GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-echo HASH=${saveHASH} &gt;&gt; generated_ipp_version.properties
+echo HASH=$(git rev-parse $saveHASH) &gt;&gt; generated_ipp_version.properties
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
 echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
