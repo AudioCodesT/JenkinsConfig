@@ -123,13 +123,15 @@ echo NEWTAG=${NEWTAG} &gt; generated_ipp_version.properties
 
 PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
 
-  AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $PreviousTAG..$NEWTAG | sort -u | sed s/$/\;/g`
-  RN=&quot;&quot;
-  while read -r hash; do 
+AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $PreviousTAG..$NEWTAG | sort -u | sed s/$/\;/g`
+RN=&quot;&quot;
+git log --reverse --pretty=format:&quot;%h&quot; $PreviousTAG..$NEWTAG &gt; allSha1
+echo &gt;&gt; allSha1
+while read -r hash; do 
     subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
     VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue: | sed &apos;s/Issue: \(VI\|\)//g; s/ .*//g&apos;)
     RN+=---$subject::$hash::$VI
-  done &lt;&lt;&lt; &quot;$(git log --reverse --pretty=format:&quot;%h&quot; $PreviousTAG..$NEWTAG)&quot;
+done &lt; allSha1
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $PreviousTAG..$NEWTAG | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$NEWTAG`
