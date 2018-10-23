@@ -143,6 +143,7 @@ do
 
   echo Check $LastTag..$GERRIT_BRANCH
   git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; CommitChangesList
+  echo &gt;&gt; CommitChangesList
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
