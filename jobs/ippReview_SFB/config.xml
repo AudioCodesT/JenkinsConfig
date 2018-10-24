@@ -295,8 +295,12 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
       CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
       base=https://$GERRIT_HOST/a/changes
-      id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
-      endpoint=&quot;/$id/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+
+     #id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
+      id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
+      idEscaped=${id////%2F}
+
+      endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
       $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
       exit 1;
   fi
