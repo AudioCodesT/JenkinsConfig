@@ -165,7 +165,8 @@ fi
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
 if [[ &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
-	then git submodule update --init || true
+	then git submodule init || true
+    	git submodule update || true 
 fi
 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
