@@ -101,11 +101,13 @@ createTag() {
   echo Create new TAG $NEWTAG 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push $localRepoName $NEWTAG
-  subject=$(git log --pretty=format:&quot;%s&quot; $Sha1 -n1)
+  subject=$(git log --pretty=format:&quot;%s&quot; $LastSha1 -n1)
+  fullSha1=$(git rev-parse $LastSha1)
+  
   (
   echo Create it in repo_manifests too
   cd ../repo_manifests
-  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$NEWTAG\&quot;\2:&quot; default.xml
+  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$fullSha1\&quot;\2:&quot; default.xml
   rm -f default.xml.bak
   git add default.xml
   git commit -m &quot;Tag $NEWTAG for repository: $repoName by $LastUser&quot; -m &quot;$subject&quot;
