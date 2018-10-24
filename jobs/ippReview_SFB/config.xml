@@ -315,7 +315,7 @@ if [[ -e GTest.sh ]]; then
       TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
       curl -ks -u ipp-push-gtest:ipp-push-gtest -X PUT &quot;https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogFile.txt&quot; -T GTestLogFile.txt &gt; /dev/null
      echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
-     set -e
+     set -e 
      message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
      escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
      CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
