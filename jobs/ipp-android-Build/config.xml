@@ -75,8 +75,8 @@ echo make clean
 make clean
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-#repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-repo sync -c --no-clone-bundle -j16 --force-sync
+repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
+#repo sync -c --no-clone-bundle -j16 --force-sync
 
 # cd to releant path
 echo Fetch this change $GERRIT_REFSPEC
