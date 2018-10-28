@@ -55,6 +55,7 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>true</limitOneJobWithMatchingParams>
       <paramsToUseForLimit>REFSPEC</paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -106,8 +107,7 @@ Target=d:/Firmwares
 # In case it is not the Ftp server 10.59.0.87 &quot;ATAFtp&quot;
 if [ ! -d $Target ]; then
   Target=z:
-  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then
-    echo Define again the mapping to Z:
+  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
     net use $Target /delete
     net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
   fi
@@ -127,17 +127,11 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
      if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName allready exist; continue; fi
      echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
-     #ArtCheck=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
-     #DestCheck=`wc -c &lt;$Target/$FileName`
-     # CheckSum compare after the download
-     ArtCheck=$(curl -ks -u $User -X GET \
-            $Artifactory/$REFTARGET/$FileName | \
-            grep \&quot;md5\&quot; | head -1 | cut -d\&quot; -f4)
-     DestCheck=$(md5sum $Target/$FileName | cut -d&quot; &quot; -f1)
-
-     echo Check the size: $ArtCheck and $DestCheck shoulde be the same
-     if [ &quot;$ArtCheck&quot; != &quot;$DestCheck&quot; ]; then 
-       echo $ArtCheck--$DestCheck: $file is differ, copy again...
+     ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+     DestSize=`wc -c &lt;$Target/$FileName`
+     echo Check the size: $ArtSize and $DestSize shoulde be the same
+     if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
+       echo $ArtSize--$DestSize: $file is differ, copy again...
        rm -f $Target/$FileName
        exit 1
      fi
@@ -181,11 +175,35 @@ for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_parent); 
 done
 
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-
-date
-
 exit 0
 
+echo Check the checksum...
+# Check the checksum of the 5 img files before executing the AT itself
+for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
+  checkSum1=$(curl -ks -u $User -X GET \
+            $Artifactory/$REFTARGET/$(basename $f) | \
+            grep md5 | head -1 | cut -d\&quot; -f4)
+  checkSum2=$(md5sum $f | cut -d&quot; &quot; -f1)
+  echo checksum: $checkSum1 and $checkSum2
+  if [ $checkSum1 != $checkSum2 ]; then
+    # ipp_AT_build is running now?
+    for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_build); do
+      if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
+        echo &quot;ipp_AT_build is running now, job $job, the files are not ready yet&quot;;
+        rm -f $f
+        exit 2
+      fi
+    done
+
+    echo Abort - the CheckSum of $(basename $f) is differ, copy again
+    rm -f $f
+    exit 1
+  fi
+done
+
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+date
 
 </command>
       <unstableReturn>2</unstableReturn>
