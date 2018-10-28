@@ -96,6 +96,8 @@ createTag() {
     return
   fi
 
+  git config --global user.name &quot;$LastUser&quot;
+
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
 
   echo Create new TAG $NEWTAG 
@@ -107,7 +109,7 @@ createTag() {
   (
   echo Create it in repo_manifests too
   cd ../repo_manifests
-  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;$fullSha1\&quot;\2:&quot; default.xml
+  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;refs/tags/$NEWTAG\&quot;\2:&quot; default.xml
   rm -f default.xml.bak
   git add default.xml
   git commit -m &quot;Tag $NEWTAG for repository: $repoName by $LastUser&quot; -m &quot;$subject&quot;
