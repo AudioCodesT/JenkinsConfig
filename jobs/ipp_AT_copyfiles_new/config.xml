@@ -55,7 +55,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>true</limitOneJobWithMatchingParams>
       <paramsToUseForLimit>REFSPEC</paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -107,7 +106,8 @@ Target=d:/Firmwares
 # In case it is not the Ftp server 10.59.0.87 &quot;ATAFtp&quot;
 if [ ! -d $Target ]; then
   Target=z:
-  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then 
+  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then
+    echo Define again the mapping to Z:
     net use $Target /delete
     net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
   fi
@@ -127,14 +127,14 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
      if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName allready exist; continue; fi
      echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
-     ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
-     DestSize=`wc -c &lt;$Target/$FileName`
-     echo Check the size: $ArtSize and $DestSize shoulde be the same
-     if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
-       echo $ArtSize--$DestSize: $file is differ, copy again...
-       rm -f $Target/$FileName
-       exit 1
-     fi
+     #ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
+     #DestSize=`wc -c &lt;$Target/$FileName`
+     #echo Check the size: $ArtSize and $DestSize shoulde be the same
+     #if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
+     #  echo $ArtSize--$DestSize: $file is differ, copy again...
+     #  rm -f $Target/$FileName
+     #  exit 1
+     #fi
    done &lt; &quot;$REFTARGET.list&quot;
 fi
 
@@ -173,9 +173,6 @@ for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_parent); 
     exit 2
   fi
 done
-
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-exit 0
 
 echo Check the checksum...
 # Check the checksum of the 5 img files before executing the AT itself
