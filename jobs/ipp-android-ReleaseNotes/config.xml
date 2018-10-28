@@ -131,7 +131,7 @@ while read -r hash; do
     subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
     echo $subject &gt;&gt; releaseNotes.txt
     saveHASH=$hash
-    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[IPPAN&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
+    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[IPP&quot; | sed &apos;s/.*\[/; s/\].*//&apos;)
     RN+=---$subject::$hash::$Jira
 done &lt;&lt;&lt; &quot;$(git log --reverse --pretty=format:&quot;%h&quot; $PreviousTAG..$NEWTAG)&quot;
 
