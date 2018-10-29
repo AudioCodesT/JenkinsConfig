@@ -118,6 +118,7 @@ then
       #get the OLDER CSV REPORT (NEWTAG -1)
       curl -k -u ipp-size-check:ipp-size-check --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
+    
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
       then
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
@@ -142,6 +143,9 @@ then
         if [[ -e size_report.txt ]]
         then
             mv size_report.txt size_report_${allChilds[i]}.txt
+            
+            # mv build/size_diff_report_${allChilds[i]}.txt size_report_${allChilds[i]}.txt
+            
             #push the report to artifactory to each children
             curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
         fi 
@@ -185,7 +189,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Eli.Carciente@audiocodes.com</recipientList>
+              <recipientList>Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Eli.Carciente@audiocodes.com,Oriel.Krispin@audiocodes.com,Nirit.Beglaubter@audiocodes.com,Oleg.Friedman@audiocodes.com,Arik.Kabessa@audiocodes.com</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
                   <email>
@@ -193,6 +197,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
                     <body>$PROJECT_DEFAULT_CONTENT</body>
                     <recipientProviders>
                       <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
                     </recipientProviders>
                     <attachmentsPattern></attachmentsPattern>
                     <attachBuildLog>false</attachBuildLog>
