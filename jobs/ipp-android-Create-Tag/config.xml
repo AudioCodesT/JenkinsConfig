@@ -160,7 +160,7 @@ do
   if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
   git checkout $GERRIT_BRANCH
   echo Find the last TAG name...
-  LastTag=$localRepoName/$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH)
+  LastTag=$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH)
   
   echo Create &apos;repo_manifests&apos; and find the last TAG 
   cd ..
