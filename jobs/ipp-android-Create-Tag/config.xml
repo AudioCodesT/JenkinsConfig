@@ -145,7 +145,7 @@ createTag() {
   LastManifestTag=$NEWTAG
 }
 
-for BRANCH in TR_1
+for BRANCH in master
 do
 
   remote=$(git branch -a --contains HEAD | grep remotes | head -1)
