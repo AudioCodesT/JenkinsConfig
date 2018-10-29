@@ -164,7 +164,7 @@ do
   fi
   cd repo_manifests
   # Create a local branch and checkout to 
-  if ! git branch | grep -q $BRANCH; then git checkout -f -b $BRANCH `git branch -a | grep $BRANCH | grep origin`; fi
+  if ! git branch | grep -q $BRANCH; then git checkout -f -b $BRANCH `git branch -a | grep remotes/origin/$BRANCH`; fi
   git reset --hard
   git pull --rebase
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
