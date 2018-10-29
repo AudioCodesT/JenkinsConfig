@@ -122,6 +122,7 @@ createTag() {
 
   git config --global user.name &quot;$LastUser&quot;
 
+  echo Add one to the last TAG
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
 
   echo Create new TAG $NEWTAG 
@@ -131,8 +132,9 @@ createTag() {
   fullSha1=$(git rev-parse $LastSha1)
   
   (
-  echo Create it in repo_manifests too
+  echo Update default.xml file, create a new Commit and create this TAG in repo_manifests too
   cd ../repo_manifests
+  echo Find $repoName in default.xml and replace the revision to be the new TAG
   sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;refs/tags/$NEWTAG\&quot;\2:&quot; default.xml
   rm -f default.xml.bak
   git add default.xml
@@ -147,17 +149,20 @@ createTag() {
 
 for BRANCH in master
 do
-
+  # Find remote repository name
   remote=$(git branch -a --contains HEAD | grep remotes | head -1)
   localRepoName=$(echo $remote | cut -d/ -f2)
-  repoName=$(git remote -v | grep push | grep &quot;^$localRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
   GERRIT_BRANCH=$(echo $remote | cut -d/ -f2-)
+  # Find real repository name - to find the line in default.xml 
+  repoName=$(git remote -v | grep push | grep &quot;^$localRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
   if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
   git checkout $GERRIT_BRANCH
   echo Find the last TAG name...
   LastTag=$localRepoName/$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH)
   
+  echo Create &apos;repo_manifests&apos; and find the last TAG 
   cd ..
   if [ ! -d repo_manifests ]; then
     git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
