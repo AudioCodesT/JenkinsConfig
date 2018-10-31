@@ -138,7 +138,7 @@ createTag() {
   sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;refs/tags/$NEWTAG\&quot;\2:&quot; default.xml
   rm -f default.xml.bak
   git add default.xml
-  git commit -m &quot;Tag $NEWTAG&quot; -m &quot;Repository: $repoName&quot; -m &quot;User: $LastUser&quot; -m &quot;$subject&quot;
+  git commit -m &quot;Change in: $repoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
   git tag -a -m &quot;Jenkins auto tag for $repoName by $LastUser&quot; $NEWTAG
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
