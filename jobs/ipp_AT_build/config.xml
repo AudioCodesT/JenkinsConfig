@@ -190,7 +190,6 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 
 </command>
-      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -217,9 +216,9 @@ done
               <completeBuild>true</completeBuild>
             </worstResult>
             <bestResult>
-              <name>FAILURE</name>
-              <ordinal>2</ordinal>
-              <color>RED</color>
+              <name>UNSTABLE</name>
+              <ordinal>1</ordinal>
+              <color>YELLOW</color>
               <completeBuild>true</completeBuild>
             </bestResult>
           </condition>
