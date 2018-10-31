@@ -195,11 +195,12 @@ do
     createTag
   else
     echo Try again later after 300 seconds
-    exit 1
+    exit 2
   fi
 done
 
 </command>
+      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
