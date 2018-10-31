@@ -100,10 +100,10 @@ artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 # get one tag before ${NEWTAG} to compare two newest size_report csv
 OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
 echo &quot;OLD TAG == $OLDTAG&quot;
-
+#mkdir build
 if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; ]]
 then
-
+	
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
   #get all childs names from the spesific TAG
