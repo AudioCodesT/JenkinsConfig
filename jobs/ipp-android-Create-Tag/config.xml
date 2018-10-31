@@ -113,6 +113,7 @@ git config --global user.email devops@audiocodes.com
 echo Starting...
 git status
 git remote -v
+subject=&quot;&quot;
 
 createTag() {
   if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
@@ -125,7 +126,6 @@ createTag() {
   echo Create new TAG $NEWTAG 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push $localRepoName $NEWTAG
-  subject=$(git log --pretty=format:&quot;%s&quot; $LastSha1 -n1)
   fullSha1=$(git rev-parse $LastSha1)
   
   (
@@ -141,6 +141,7 @@ createTag() {
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
+  subject=&quot;&quot;
   )
   LastManifestTag=$NEWTAG
 }
@@ -182,6 +183,7 @@ do
     if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
     LastUser=$User
     LastSha1=$Sha1
+    subject+=$(git log --pretty=format:&quot;%s%n%b&quot; $LastSha1 -n1)$&apos;\n&apos;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
   done &lt; CommitChangesList
 
