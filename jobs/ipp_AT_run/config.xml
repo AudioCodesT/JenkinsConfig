@@ -153,7 +153,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
  tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img \
--jenkinsChildId 15309 -jenkinsParentId 4178 \
+-jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId 4178 \
 -jenkinsUserGerrit $EMAIL \
 -ci 1 -rerunFailedAuto 1
 
