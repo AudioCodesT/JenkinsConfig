@@ -188,7 +188,8 @@ MODEL=$MODEL
 SUITENAME=basic1of4
 IMAGENAMES=$IMAGENAMES
 PHASE=1
-EMAIL=${EMAIL}</properties>
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -221,7 +222,8 @@ MODEL=$MODEL
 SUITENAME=basic2of4
 IMAGENAMES=$IMAGENAMES
 PHASE=2
-EMAIL=${EMAIL}</properties>
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -254,7 +256,8 @@ MODEL=$MODEL
 SUITENAME=basic3of4
 IMAGENAMES=$IMAGENAMES
 PHASE=3
-EMAIL=${EMAIL}</properties>
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -287,7 +290,8 @@ MODEL=$MODEL
 SUITENAME=basic4of4
 IMAGENAMES=$IMAGENAMES
 PHASE=4
-EMAIL=${EMAIL}</properties>
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
