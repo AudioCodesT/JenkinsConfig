@@ -176,59 +176,6 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>ben.magriso,Shuky.Riechard</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
-    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
-      <publishers>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>$needToSendEmail</token>
-          </condition>
-          <publisherList>
-            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Eli.Carciente@audiocodes.com,Oriel.Krispin@audiocodes.com,Nirit.Beglaubter@audiocodes.com,Oleg.Friedman@audiocodes.com,Arik.Kabessa@audiocodes.com</recipientList>
-              <configuredTriggers>
-                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-                  <email>
-                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-                    <body>$PROJECT_DEFAULT_CONTENT</body>
-                    <recipientProviders>
-                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
-                    </recipientProviders>
-                    <attachmentsPattern></attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
-                    <compressBuildLog>false</compressBuildLog>
-                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
-                  </email>
-                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-              </configuredTriggers>
-              <contentType>text/html</contentType>
-              <defaultSubject>IPP Size Checker ${NEWTAG} Failed</defaultSubject>
-              <defaultContent>&lt;pre&gt;
-${FILE,path=&quot;emailContent.txt&quot;}
-&lt;/pre&gt;
-Build Url: $BUILD_URL</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
-              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-              <attachBuildLog>false</attachBuildLog>
-              <compressBuildLog>false</compressBuildLog>
-              <replyTo></replyTo>
-              <from></from>
-              <saveOutput>false</saveOutput>
-              <disabled>false</disabled>
-            </hudson.plugins.emailext.ExtendedEmailPublisher>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Run" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
