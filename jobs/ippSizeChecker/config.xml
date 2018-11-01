@@ -119,7 +119,7 @@ then
       #get the Current build NEW CSV REPORT
       curl -k -u ipp-size-check:ipp-size-check --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
-      curl -k -u ipp-size-check:ipp-size-check --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+      curl -k -u ipp-size-check:ipp-size-check --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report1.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
     
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
