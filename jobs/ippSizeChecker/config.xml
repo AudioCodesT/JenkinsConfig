@@ -154,7 +154,7 @@ then
             # mv build/size_diff_report_${allChilds[i]}.txt size_report_${allChilds[i]}.txt
             
             #push the report to artifactory to each children
-            curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
+#            curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
         fi 
       fi  
   done
