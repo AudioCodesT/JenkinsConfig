@@ -179,7 +179,6 @@ createTag() {
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
-  subject=&quot;&quot;
   )
   LastManifestTag=$NEWTAG
 }
@@ -218,10 +217,10 @@ do
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
   do
-    if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
+    if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; subject=&quot;&quot;; fi
     LastUser=$User
     LastSha1=$Sha1
-    subject=&quot;$subject$(git log --pretty=format:&quot;%s%n%b %n--Hash: %h%n&quot; $LastSha1 -n1)&quot;
+    subject=&quot;$subject$(git log --pretty=format:&quot;%s%n%b %n--Hash: %h %n&quot; $LastSha1 -n1)&quot;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
   done &lt; CommitChangesList
 
