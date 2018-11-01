@@ -173,7 +173,7 @@ echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
   </builders>
   <publishers>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>.*java.nio.channels.ClosedChannelException*.,.*exit 3*.</regexpForRerun>
+      <regexpForRerun>.*java.nio.channels.ClosedChannelException*.</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
