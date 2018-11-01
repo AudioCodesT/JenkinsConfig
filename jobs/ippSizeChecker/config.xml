@@ -126,7 +126,7 @@ then
       then
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
         curlHasFailed=&quot;False&quot;
-        exit 1
+        exit 3
       else
       # run comparison between the old csv to the new csv
         set +e
