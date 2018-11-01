@@ -157,7 +157,7 @@ then
   done
   
 else
-	echo &quot;ipp Size Checker running only for branches 3.2 and 3.1.0 not for ${BUILD_BRANCH}&quot;
+	echo &quot;ipp Size Checker not running for ${BUILD_BRANCH}&quot;
 fi
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
