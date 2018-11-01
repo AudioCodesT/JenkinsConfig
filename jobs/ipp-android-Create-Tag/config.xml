@@ -160,7 +160,7 @@ do
     LastUser=$User
     LastSha1=$Sha1
     echo &quot;subject: $subject&quot;
-    subject+=&quot;$(git log --pretty=format:&quot;%B --Hash: %h &quot; $LastSha1 -n1)&quot;
+    subject+=&quot;$(git log --pretty=format:&quot;%s %b --Hash: %h &quot; $LastSha1 -n1)&quot;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
   done &lt; CommitChangesList
 
