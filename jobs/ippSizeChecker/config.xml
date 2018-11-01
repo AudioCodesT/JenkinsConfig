@@ -125,6 +125,7 @@ then
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
       then
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
+        needToSendEmail=&quot;True&quot;
         curlHasFailed=&quot;False&quot;
       else
       # run comparison between the old csv to the new csv
