@@ -124,7 +124,7 @@ then
     
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
       then
-      failedToCurlOnceAtLeast=&quot;True&quot;
+      	failedToCurlOnceAtLeast=&quot;True&quot;
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
         curlHasFailed=&quot;False&quot;
       else
