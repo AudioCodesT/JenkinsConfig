@@ -33,7 +33,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -220,7 +219,7 @@ do
     if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
     LastUser=$User
     LastSha1=$Sha1
-    subject+=$(git log --pretty=format:&quot;%s%n%b%nHash: %h&quot; $LastSha1 -n1)$&apos;\n&apos;
+    subject=&quot;$subject$(git log --pretty=format:&quot;%s%n%b %n--Hash: %h%n&quot; $LastSha1 -n1)&quot;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
   done &lt; CommitChangesList
 
