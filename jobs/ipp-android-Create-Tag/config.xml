@@ -98,6 +98,12 @@
         <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_opt_net_ethernet</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>packagesMSPartner</name>
+        <refspec>+refs/heads/*:refs/remotes/packagesMSPartner/* +refs/tags/*:refs/tags/packagesMSPartner/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_services_MSPartner</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
