@@ -522,7 +522,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>sir-z9sgky5m</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-z9sgky5m</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-build</requestedLabel>
+            <createdAt>2018-11-01 16:50:43.608 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -638,7 +649,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.4">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>sir-1j3ikm7p</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>sir-1j3ikm7p</id>
+            <status>SPOT_PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2018-11-01 16:50:50.303 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1198,8 +1220,8 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>ipp-android-Build</string>
+        <string>ipp-android-Create-Tag</string>
         <string>ipp-android-Create-Tag-onerepo</string>
-        <string>ipp-android-Create-Tag-save</string>
         <string>ipp-android-ReleaseNotes</string>
         <string>ipp-android-review</string>
       </jobNames>
