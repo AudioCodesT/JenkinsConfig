@@ -163,19 +163,19 @@ else
     echo &quot;RUN: yarn run dist&quot;
     yarn run dist
    #kill the Proxy Server process
-   pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
-   echo &quot;pidNumber = $pidNumber&quot;
-   if [[ ! -z &quot;$pidNumber&quot; ]]
-   then
-      echo &quot;killing the proccess of the protractor proxy server&quot;
-	  taskkill /F /PID &quot;$pidNumber&quot;
-   fi
-   echo &quot;RUN: yarn run protractorProxyServer&quot;
-    yarn run protractorProxyServer &amp; sleep 15
-    echo &quot;RUN: yarn run protractorServer&quot;
-    yarn run protractorServer &amp; sleep 15
-    echo &quot;RUN: yarn run protractor&quot;
-    yarn run protractor
+#   pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
+#  echo &quot;pidNumber = $pidNumber&quot;
+#   if [[ ! -z &quot;$pidNumber&quot; ]]
+#   then
+#      echo &quot;killing the proccess of the protractor proxy server&quot;
+#	  taskkill /F /PID &quot;$pidNumber&quot;
+#   fi
+#   echo &quot;RUN: yarn run protractorProxyServer&quot;
+#    yarn run protractorProxyServer &amp; sleep 15
+#    echo &quot;RUN: yarn run protractorServer&quot;
+#    yarn run protractorServer &amp; sleep 15
+#    echo &quot;RUN: yarn run protractor&quot;
+#    yarn run protractor
 
 fi
 
