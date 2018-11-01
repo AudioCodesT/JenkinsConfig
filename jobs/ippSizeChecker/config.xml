@@ -161,7 +161,7 @@ else
 fi
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
-# If both conditions are true so i am failing the build because no comparasion as been made
+# If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
 if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$needToSendEmail&quot; == &quot;False&quot; ]]
 then
 exit 3
