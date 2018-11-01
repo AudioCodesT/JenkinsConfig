@@ -72,14 +72,6 @@
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.CloneOption>
-        <shallow>true</shallow>
-        <noTags>false</noTags>
-        <reference></reference>
-        <timeout>20</timeout>
-        <depth>5</depth>
-        <honorRefspec>false</honorRefspec>
-      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <quietPeriod>600</quietPeriod>
