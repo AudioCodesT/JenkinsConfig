@@ -151,6 +151,8 @@ git status
 git remote -v
 subject=&quot;&quot;
 
+git checkout dvf101/master
+
 createTag() {
   if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
     echo Do not create a TAG for DevOps commits
