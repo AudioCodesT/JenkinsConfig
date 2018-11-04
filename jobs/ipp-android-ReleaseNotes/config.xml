@@ -41,7 +41,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -65,7 +64,7 @@
   </scm>
   <assignedNode>ipp-android</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -126,14 +125,28 @@ echo NEWTAG=${NEWTAG} &gt; generated_ipp_version.properties
 
 PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
 
-AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $PreviousTAG..$NEWTAG | sort -u | sed s/$/\;/g`
+git log --first-parent --pretty=format:&quot;%B&quot; $PreviousTAG..$NEWTAG &gt; $NEWTAG.txt
+cp -f $NEWTAG.txt releaseNotes.txt
+AuthorCommitter=$(grep User: $NEWTAG.txt | sed &apos;s/.*User: //&apos; | sort -u )
 RN=&quot;&quot;
-while read -r hash; do
-    subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
-    echo $subject &gt;&gt; releaseNotes.txt
-    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
-    RN+=---$subject::$hash::$Jira
-done &lt;&lt;&lt; &quot;$(git log --reverse --pretty=format:&quot;%h&quot; $PreviousTAG..$NEWTAG)&quot;
+orgHash=&quot;&quot;
+IFS=&apos;&apos;
+while read -r line; do
+    if [ ! -z &quot;$orgHash&quot; ]; then
+      if echo $line | grep -q Change-Id:; then 
+        RN+=---$subject::$orgHash::$Jira
+        echo $RN
+        orgHash=&quot;&quot;
+      else
+        Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
+        subject=&quot;${subject}$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)&quot;
+      fi
+    fi
+    if echo $line | grep -q &quot;\-\-Hash:&quot;; then 
+      orgHash=$(echo $line | cut -d: -f2);
+      subject=&quot;&quot;
+    fi
+done &lt; $NEWTAG.txt
 
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $PreviousTAG..$NEWTAG | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
