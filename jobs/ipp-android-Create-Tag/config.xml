@@ -220,7 +220,7 @@ do
     if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; subject=&quot;&quot;; fi
     LastUser=$User
     LastSha1=$Sha1
-    subject=&quot;$subject$(git log --pretty=format:&quot;%s%n%b %n--Hash: %h %n&quot; $LastSha1 -n1)&quot;
+    subject=&quot;$subject$(git log --pretty=format:&quot;--Hash: %h %n%s%n%b %n&quot; $LastSha1 -n1)&quot;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
   done &lt; CommitChangesList
 
