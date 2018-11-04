@@ -5,6 +5,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwdlvQxxNwrSSRTkFpMVRNBaaisC4aAxURpxt+UgAeCxnqwa2UUv+mmH58yT6e4huPeIOcSYuRN53FAJ2H/+AZ+w==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>f3df4650-f80d-4bdc-a8b4-ef90407a8b82</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>ef610fd018f9de0ca4dc78279f2266d392573f0a8087e8db5d2b872b9748d622</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.15">
       <enabledColorBlindSupport>false</enabledColorBlindSupport>
@@ -29,6 +41,7 @@
       <roles>
         <string># All Dinner</string>
         <string>authenticated</string>
+        <string>AWS_Jira_Users</string>
         <string>AI-Engineering</string>
         <string># All Cars</string>
         <string>Allowed RODC Password Replication Group</string>
@@ -56,7 +69,7 @@
         <string># All Airport City</string>
         <string># R&amp;D DevOps</string>
       </roles>
-      <timestamp>1539244999480</timestamp>
+      <timestamp>1541318482480</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.model.MyViewsProperty>
       <primaryViewName></primaryViewName>
