@@ -132,7 +132,7 @@
   </scm>
   <assignedNode>ipp-android</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -172,6 +172,7 @@ createTag() {
   echo Find $repoName in default.xml and replace the revision to be the new TAG
   sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;refs/tags/$NEWTAG\&quot;\2:&quot; default.xml
   rm -f default.xml.bak
+  echo Set to user $LastUser
   git add default.xml
   git config --global user.name &quot;$LastUser&quot;
   git commit -m &quot;Change in: $repoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
