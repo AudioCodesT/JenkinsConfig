@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAw8y2iQ4fSRTmeJy1DrZhTt7A4vM4bccQuohiHpe+lJchNB/QXEU486EHIAeWQMGVRkmnR5ExV+5yJwjlFkhF9QA==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>4d91a69e-3a26-4966-acb5-5bf9c264ad84</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>2c31df93def369c569e301c9093df5c3ba937dba9ab1464697709b8c612f53d5</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -33,6 +45,7 @@
         <string>Agile users</string>
         <string>authenticated</string>
         <string>System_Software</string>
+        <string>AWS_Jira_Users</string>
         <string># All Cars</string>
         <string>cc_users</string>
         <string>Allowed RODC Password Replication Group</string>
@@ -40,6 +53,7 @@
         <string>ActionBase Users</string>
         <string>cc_nsc</string>
         <string>Sp365-Devops-Read</string>
+        <string># ClearCase R&amp;D</string>
         <string># All R&amp;D</string>
         <string># R&amp;D System Software</string>
         <string># All Lunch</string>
@@ -53,6 +67,7 @@
         <string># All Managers</string>
         <string>cc_oracle</string>
         <string>Password Manager Apply</string>
+        <string># Agile users</string>
         <string>Clearcase</string>
         <string># Employee Mobility</string>
         <string># All ISRAEL</string>
@@ -64,6 +79,7 @@
         <string>Vopp</string>
         <string>Linuxusers</string>
         <string>AudioCodes_VPN</string>
+        <string># RnD Israel</string>
         <string>cc_sys_users</string>
         <string># All AudioCodes</string>
         <string>Certificate Service DCOM Access</string>
@@ -72,7 +88,7 @@
         <string>Sp365-DevOps-modify</string>
         <string># R&amp;D DevOps</string>
       </roles>
-      <timestamp>1540112227138</timestamp>
+      <timestamp>1541335301834</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Yossi.Merzbach@audiocodes.com</emailAddress>
