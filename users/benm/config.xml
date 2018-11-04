@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwNZTDRGBea1QbLKt2otJQ4RF2WYP1v3yxCQRWguHEpB1qF72c3dUP9MjLNzLZhtHtBwVx06C4YSkqWSD/pCjquA==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>4f06096c-de91-40eb-a4b9-21710f070f8b</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>95cfae2cc56d1889c1228c164b9c5a8871a3c27504863db5962a67d24f83f1e6</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
@@ -38,6 +50,7 @@
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
         <string>authenticated</string>
+        <string>AWS_Jira_Users</string>
         <string># All ISRAEL</string>
         <string>Allowed RODC Password Replication Group</string>
         <string>Users</string>
@@ -53,7 +66,7 @@
         <string>Logistics_maintenance</string>
         <string># R&amp;D DevOps</string>
       </roles>
-      <timestamp>1538456434657</timestamp>
+      <timestamp>1541318590952</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Ben.Magriso@audiocodes.com</emailAddress>
