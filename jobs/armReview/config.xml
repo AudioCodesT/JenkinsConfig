@@ -165,7 +165,7 @@ jdkver=&quot;1.8.0_162&quot;
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
 	jdkver=&quot;1.8.0_92&quot;
 fi
-
+jdkver=&quot;1.8.0_191&quot;
 # Set Java
 #sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
 jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
