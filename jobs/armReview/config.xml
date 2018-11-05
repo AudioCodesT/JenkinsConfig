@@ -163,22 +163,22 @@ jdkver=&quot;1.8.0_162&quot;
 
 # Branch 7.8 needs version 1.8.0_92
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
-	jdkver=&quot;1.8.0_92&quot;
+#	jdkver=&quot;1.8.0_92&quot;
 fi
 
 # Set Java
-sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
-jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
-echo &quot;Java version set to: $jver&quot;
+	#sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
+#jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
+#echo &quot;Java version set to: $jver&quot;
 
 # Set JavaC
-sudo alternatives --set javac /usr/java/jdk&quot;$jdkver&quot;/bin/javac
-jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
-echo &quot;javac version set to: $jcver&quot;
+#sudo alternatives --set javac /usr/java/jdk&quot;$jdkver&quot;/bin/javac
+#jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
+#echo &quot;javac version set to: $jcver&quot;
 
 # Set JAVA_HOME
-sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
-. /etc/environment
+#sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
+#. /etc/environment
 
 #new scrip to prepare database env
 #this is per Igor request for his new trick to reduce unit-tests time
