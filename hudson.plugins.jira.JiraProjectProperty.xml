@@ -1,18 +1,19 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<hudson.plugins.jira.JiraProjectProperty_-DescriptorImpl plugin="jira@2.5">
+<hudson.plugins.jira.JiraProjectProperty_-DescriptorImpl plugin="jira@3.0.4">
   <sites>
     <hudson.plugins.jira.JiraSite>
       <url>http://acjira:8080/</url>
       <alternativeUrl>http://acjira:8080/</alternativeUrl>
       <useHTTPAuth>false</useHTTPAuth>
-      <userName>shukyr</userName>
-      <password>{AQAAABAAAAAQvN98Gam/rcS5TPaDkl0ShdAZlV16ArdJEIR5Bp7SCUQ=}</password>
+      <credentialsId>0489d422-1dd9-4da9-bc87-ee30b79cb38e</credentialsId>
       <supportsWikiStyleComment>false</supportsWikiStyleComment>
       <recordScmChanges>false</recordScmChanges>
       <disableChangelogAnnotations>false</disableChangelogAnnotations>
       <userPattern>([a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*)([^.]|\.[^0-9]|\.$|$)</userPattern>
       <updateJiraIssueForAllStatus>true</updateJiraIssueForAllStatus>
       <timeout>10</timeout>
+      <readTimeout>30</readTimeout>
+      <threadExecutorNumber>10</threadExecutorNumber>
       <dateTimePattern></dateTimePattern>
       <appendChangeTimestamp>false</appendChangeTimestamp>
     </hudson.plugins.jira.JiraSite>
