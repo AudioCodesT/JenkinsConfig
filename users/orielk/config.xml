@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAw+2Irny6dr0/M1/EnBH8gXdrnp+tk+FPQsWaMWskfItpfsl4V9tfAOOTYXl4xW8Cty59bE3wqErOU3pYhUYU6BA==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>3919793b-2406-4b75-894b-3457045eb26a</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>04f5419659b2525f5873c81b2ba90c95979c87c7e63b3ba37ccf36e6a5e34a24</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -40,6 +52,7 @@
         <string>ActionBase Users</string>
         <string>Sp365-Devops-Read</string>
         <string>Allow Office365 Groups</string>
+        <string># ClearCase R&amp;D</string>
         <string>#All Breakfast</string>
         <string># All R&amp;D</string>
         <string># R&amp;D System Software</string>
@@ -59,6 +72,7 @@
         <string>Vopp</string>
         <string>Linuxusers</string>
         <string>AudioCodes_VPN</string>
+        <string># RnD Israel</string>
         <string># IPP RnD</string>
         <string>cc_sys_users</string>
         <string># All AudioCodes</string>
@@ -69,7 +83,7 @@
         <string>IppSwReleases</string>
         <string># R&amp;D Sys SW Team Leaders</string>
       </roles>
-      <timestamp>1540189804294</timestamp>
+      <timestamp>1541439122754</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Oriel.Krispin@audiocodes.com</emailAddress>
