@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwlbuSOjjrFFG3TaALAJ21pXZ+ur64/sl5gUeXSm30jBGweXRKBF7UxhVWIJQY0u7NMChvMXwtXfvxvlOgbIpfsA==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>c9f81996-dc1b-4fdf-a988-26ca204bfe20</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>c78bf3e1bcee3fa116f5b97d6709c8347c8299e61d464e01ec5aa172726c6e5e</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
@@ -56,6 +68,7 @@
         <string>CI_IPP_developers</string>
         <string>CMBU</string>
         <string>Password Manager Apply</string>
+        <string># Agile users</string>
         <string># All ISRAEL</string>
         <string>Offer Remote Assistance Helpers</string>
         <string>FTP_default</string>
@@ -73,7 +86,7 @@
         <string>IppSwReleases</string>
         <string>Citrix_Allow_Project</string>
       </roles>
-      <timestamp>1536754593176</timestamp>
+      <timestamp>1541405538377</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Oleg.Friedman@audiocodes.com</emailAddress>
