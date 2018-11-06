@@ -128,6 +128,8 @@ PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
 git log --first-parent --pretty=format:&quot;%B&quot; $PreviousTAG..$NEWTAG &gt; $NEWTAG.txt
 cp -f $NEWTAG.txt releaseNotes.txt
 AuthorCommitter=$(grep User: $NEWTAG.txt | sed &apos;s/.*User: //&apos; | sort -u )
+realPROJECT=$(grep &quot;Change in:&quot; $NEWTAG.txt | sed &apos;s/.*Change in: //; s/,.*//&apos; | sort -u )
+
 RN=&quot;&quot;
 orgHash=&quot;&quot;
 IFS=&apos;&apos;
@@ -139,7 +141,7 @@ while read -r line; do
         orgHash=&quot;&quot;
       else
         Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
-        subject=&quot;${subject}$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)&quot;
+        subject=&quot;${subject}$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;) ($realPROJECT)&quot;
       fi
     fi
     if echo $line | grep -q &quot;\-\-Hash:&quot;; then 
