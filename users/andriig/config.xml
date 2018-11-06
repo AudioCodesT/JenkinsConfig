@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwfK985zMqVqJF4gL6qqKIsfvYHFz0yV5L0xlFEsc96Swa9RvxdQEvxgAf1iwNsadE6sF8NyPETCUZFHU9uz0XhQ==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>b94c83e0-5bda-4eee-b8c3-e77c8d34d7ae</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>ddd28bf57c3f2283ef2e9ccf4943f684ef443c5d4f5d449a825db5065ba40e0b</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -41,6 +53,7 @@
         <string>FTP_default</string>
         <string>Mailvision Branch Office Users</string>
         <string># IPP</string>
+        <string>Linuxusers</string>
         <string>SSL_Ukraine_Chip</string>
         <string>Allow Office365 Groups</string>
         <string># IPP RnD</string>
@@ -51,7 +64,7 @@
         <string># IPP RnD – GL</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1529396603972</timestamp>
+      <timestamp>1541493158370</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>andrii.gladets@globallogic.com</emailAddress>
