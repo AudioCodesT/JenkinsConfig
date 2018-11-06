@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwul/SEEy+6y/twPHpiKzXsN9hdmk91ifQAmbudow/f9pD5mIHOQ5O8rXm+PcSHtWwjGwF7uDQBoosRoGIz2RP2Q==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>3001a554-11f3-4605-a591-15f9a79a06b1</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>2f514e3ca7d3e89bec396da2875c01f9d9f569aa16d1f22a452710944253db80</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -41,6 +53,7 @@
         <string>Citrix_Allow_Visio</string>
         <string>WirelessUsers</string>
         <string>Sp365-Devops-Read</string>
+        <string># R&amp;D Support Escalation</string>
         <string># All Lunch</string>
         <string>Logistics_maintenance</string>
         <string># All Beer Sheva</string>
@@ -80,7 +93,7 @@
         <string>Citrix_Allow_Project</string>
         <string># R&amp;D DevOps</string>
       </roles>
-      <timestamp>1529854347663</timestamp>
+      <timestamp>1541508001671</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Natan.Merfish@audiocodes.com</emailAddress>
