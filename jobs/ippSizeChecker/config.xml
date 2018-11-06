@@ -151,6 +151,12 @@ then
 else
 	echo &quot;ipp Size Checker not running for ${BUILD_BRANCH}&quot;
 fi
+#Script not working in these branches
+if [[ &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_device_manager&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_IGS&quot; ]]
+then
+needToSendEmail=&quot;False&quot;
+fi
+
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
@@ -158,6 +164,8 @@ if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;
 then
 exit 3
 fi
+
+
 
 #Arik.Kabessa,Nirit.Beglaubter,Oriel.Krispin,Oleg.Friedman,Kenny.Xuan </command>
     </hudson.tasks.Shell>
