@@ -1,5 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
   <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG in IPP/Android/repo_manifests</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -135,7 +136,7 @@
   </scm>
   <assignedNode>ipp-android</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
