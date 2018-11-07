@@ -141,7 +141,9 @@ while read -r line; do
         orgHash=&quot;&quot;
       else
         Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
-        subject=&quot;${subject}$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;) (Repo: $realPROJECT)&quot;
+        if  [[ -z $subject &amp;&amp; ! -z $line ]]; then
+          subject=&quot;$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;) (Repo: $realPROJECT)&quot;
+        fi
       fi
     fi
     if echo $line | grep -q &quot;\-\-Hash:&quot;; then 
