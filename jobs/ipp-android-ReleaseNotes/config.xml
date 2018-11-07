@@ -128,7 +128,6 @@ PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
 git log --first-parent --pretty=format:&quot;%B&quot; $PreviousTAG..$NEWTAG &gt; $NEWTAG.txt
 cp -f $NEWTAG.txt releaseNotes.txt
 AuthorCommitter=$(grep User: $NEWTAG.txt | sed &apos;s/.*User: //&apos; | sort -u )
-realPROJECT=$(grep &quot;Change in:&quot; $NEWTAG.txt | sed &apos;s/.*Change in: //; s/,.*//&apos; | sort -u )
 
 RN=&quot;&quot;
 orgHash=&quot;&quot;
