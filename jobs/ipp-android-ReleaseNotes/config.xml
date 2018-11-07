@@ -139,7 +139,10 @@ while read -r line; do
         echo $RN
         orgHash=&quot;&quot;
       else
-        Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
+        # Find the Jira issue and don&apos;t override it in others lines without it.
+        if  [ -z $Jira ]; then
+          Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
+        fi
         # Take the subject line only
         if  [ -z $subject ]; then
           subject=&quot;$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)&quot;
@@ -149,6 +152,7 @@ while read -r line; do
     if echo $line | grep -q &quot;\-\-Hash:&quot;; then 
       orgHash=$(echo $line | cut -d: -f2);
       subject=&quot;&quot;
+      Jira=&quot;&quot;
     fi
 done &lt; $NEWTAG.txt
 
