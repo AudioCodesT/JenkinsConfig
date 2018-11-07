@@ -70,7 +70,7 @@ repo sync -c --no-clone-bundle -j16 --force-sync
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>yossim</recipients>
+      <recipients>yossim,Oriel.Krispin</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
