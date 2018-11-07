@@ -95,8 +95,8 @@
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
 
 # second need to sync on latest changes off all other repositories
-echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
+echo ----- repo sync -c --no-clone-bundle -j16 --force-sync
+repo sync -c --no-clone-bundle -j16 --force-sync
 
 # cd to releant path
 echo Fetch this change $GERRIT_REFSPEC
@@ -112,7 +112,7 @@ git log -2 --oneline
 
 cd $WORKSPACE
 
-./build/tools/make_c450hd.sh --clean</command>
+./build/tools/make_c450hd.sh</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
