@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwqAGcdlV/s3AzHpQ3AFdxpBYilRE5E1wGIbjOeT/FvUVKJxtxjkDoEG9LNT9EKeDzLWsZe16+1enAUOV+c2eAoA==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>d9eafa17-9fd2-450e-903c-713485b67f91</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>d33696b783401f58903d8e02f8f6802efbc56fe5e5bb02edbb7d704f39d1b04b</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -73,10 +85,11 @@
         <string>Certificate Service DCOM Access</string>
         <string>Domain Users</string>
         <string># All Airport City</string>
+        <string>tgcustomersupport_forward</string>
         <string>ARM-FC</string>
         <string>CI_ARM_developers</string>
       </roles>
-      <timestamp>1534060999083</timestamp>
+      <timestamp>1541575294648</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Moshe.Ben-Eliezer@audiocodes.com</emailAddress>
