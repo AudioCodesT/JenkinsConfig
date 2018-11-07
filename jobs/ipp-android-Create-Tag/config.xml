@@ -218,6 +218,7 @@ do
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
   cd $WORKSPACE
 
+  if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
   echo Check $LastTag..$GERRIT_BRANCH
   git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; CommitChangesList
   echo &gt;&gt; CommitChangesList
