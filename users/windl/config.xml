@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAw0AtEoIOR2pVABrodMfq1L3E6Dbk1uPWqzhW54UEzn7WViPlD4DPvocx0z+sLcGd+vgrrgUFS+5xbSLjyeIKe4w==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>7d8c49d6-7734-4291-beae-2068e1297a0f</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>b7436fec0980ee062dc0f90058ea25ae4c6bfbccccfb5e24f6eea4fa1b1486fa</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -39,6 +51,7 @@
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
         <string>CI_IPP_developers</string>
+        <string># ROW employees</string>
         <string>authenticated</string>
         <string>Vopp_Tech_Support_RO</string>
         <string># IPP RnD – SZ</string>
@@ -60,7 +73,7 @@
         <string># IPP Allen SW SZ</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1531211245262</timestamp>
+      <timestamp>1541576104677</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
   </properties>
 </user>
