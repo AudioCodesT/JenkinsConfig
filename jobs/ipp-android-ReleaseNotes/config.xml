@@ -142,7 +142,7 @@ while read -r line; do
       else
         Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
         if  [[ -z $subject &amp;&amp; ! -z $line ]]; then
-          subject=&quot;$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;) (Repo: $realPROJECT)&quot;
+          subject=&quot;$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)&quot;
         fi
       fi
     fi
