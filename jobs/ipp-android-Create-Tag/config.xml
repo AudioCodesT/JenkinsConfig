@@ -170,17 +170,15 @@ createTag() {
   echo Create new TAG $NEWTAG 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $LastSha1
   git push $localRepoName $NEWTAG
-  fullSha1=$(git rev-parse $LastSha1)
   
   (
   echo Update default.xml file, create a new Commit and create this TAG in repo_manifests too
   cd ../repo_manifests
   echo Find $repoName in default.xml and replace the revision to be the new TAG
-  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\).*\( .*\):\1\&quot;refs/tags/$NEWTAG\&quot;\2:&quot; default.xml
+  # sed -i.bak -e &apos;s:\(.*&apos;$repoName&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; default.xml
+  sed -i.bak -e &quot;s:\(.*$repoName\&quot;.* revision=\&quot;\)[^&apos; &apos;]*\(\&quot; .*\):\1refs/tags/$NEWTAG\2:&quot; default.xml
   rm -f default.xml.bak
-  echo Set to user $LastUser
   git add default.xml
-  git config --global user.name &quot;$LastUser&quot;
   git commit -m &quot;Change in: $repoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
   git tag -a -m &quot;Jenkins auto tag for $repoName by $LastUser&quot; $NEWTAG
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
@@ -245,6 +243,7 @@ do
 done
 
 </command>
+      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -280,7 +279,7 @@ done
     </hudson.plugins.emailext.ExtendedEmailPublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>Try again later after 300 seconds</regexpForRerun>
-      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunIfUnstable>true</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
       <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
