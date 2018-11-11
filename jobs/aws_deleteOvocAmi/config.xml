@@ -99,41 +99,6 @@ deleteAmis(imagesListOf7_6_1000)
  
  
  
-#count=0
-#sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
-
-#for image in sortedAmis7_6:
-#     print(&quot;image %s is %s&quot; % (count, image.name))
-#     if count &gt;= 3:
-#     	print &quot;Delete AmI %s&quot; % image.id
-#        image.deregister()
-# 	    # Search for additional snapshots for the current image and delete them
-#        for snapshot in snapshots:
-#             if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
-#                print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
-#                snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
-#     count=count+1
-     
-#count=0
-#sortedAmis7_6_1000 = sorted(imagesListOf7_6_1000,key=lambda im: im.creation_date, reverse=True)
-
-#print &quot;images in Branch 7.6.1000&quot;
-
-#for image in sortedAmis7_6_1000:
-#     print(&quot;image %s is %s&quot; % (count, image.name))
-#     if count &gt;= 3:
-#     	print &quot;Delete AmI %s&quot; % image.id
-#        image.deregister()
-# 	    # Search for additional snapshots for the current image and delete them
-#        for snapshot in snapshots:
-#             if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
-#                print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
-#                snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
-#     count=count+1     
-     
-
-
-
 EOS</command>
     </hudson.tasks.Shell>
   </builders>
