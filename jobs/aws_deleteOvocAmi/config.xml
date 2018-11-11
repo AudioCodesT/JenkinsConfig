@@ -117,7 +117,7 @@ deleteAmis(imagesListOf7_6_1000)
 
 
 def deleteAmis (imagesList):
-	count=0
+	 count=0
 	sortedAmis = sorted(imagesList,key=lambda im: im.creation_date, reverse=True)
 	for image in sortedAmis:
      	print(&quot;image %s is %s&quot; % (count, image.name))
