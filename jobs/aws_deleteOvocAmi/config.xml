@@ -65,12 +65,12 @@ def deleteAmis (imagesList):
      	 print(&quot;image %s is %s&quot; % (count, image.name))
      	 if count &gt;= 3:
             print &quot;Delete AmI %s&quot; % image.id
-           #image.deregister()
+            image.deregister()
  	    # Search for additional snapshots for the current image and delete them
             for snapshot in snapshots:
                  if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
                     print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
-                    #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+                    snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
      	 count=count+1          
 
 
