@@ -92,11 +92,11 @@ for image in sortedAmis7_6:
      count=count+1
      
 count=0
-imagesListOf7_6_1000 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
+sortedAmis7_6_1000 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
 
 print &quot;images in Branch 7.6.1000&quot;
 
-for image in imagesListOf7_6_1000:
+for image in sortedAmis7_6_1000:
      print(&quot;image %s is %s&quot; % (count, image.name))
      if count &gt;= 3:
      	print &quot;Delete AmI %s&quot; % image.id
