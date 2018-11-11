@@ -67,10 +67,10 @@ imagesListOf7_6 = []
 imagesListOf7_6_1000 = []
 # Loop through each image of our current instance
 for image in images:
-	 if image.name.startswith(&apos;ovocAMI_7.6&apos;):
-       	for tag in image.tags:
-           	 if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6&apos;:
-     		    imagesListOf7_6.append(image)
+     if image.name.startswith(&apos;ovocAMI_7.6&apos;):
+        for tag in image.tags:
+             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6&apos;:
+                imagesListOf7_6.append(image)
              if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
      		    imagesListOf7_6_1000.append(image)    
                
