@@ -72,7 +72,7 @@ for image in images:
            	 if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6&apos;:
      		    imagesListOf7_6.append(image)
              elif tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
-     		       imagesListOf7_6_1000.append(image)    
+     		    imagesListOf7_6_1000.append(image)    
                
 count=0
 sortedAmis7_6 = sorted(imagesListOf7_6,key=lambda im: im.creation_date, reverse=True)
