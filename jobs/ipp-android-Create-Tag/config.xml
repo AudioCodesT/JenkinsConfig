@@ -196,7 +196,7 @@ createTag() {
       if git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then
         createCommitFileList
         while IFS=_ read -r Sha1 User When; do
-          if [ &quot;$LastUser&quot; == &quot;$User&quot; ]; then
+          if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
             subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG) %n%b %n&quot; $Sha1 -n1)&quot;
             commitToTAG=$Sha1
           else 
@@ -212,7 +212,8 @@ createTag() {
     fi
   done
   
-  (  
+  (
+  cd ../repo_manifests
   git commit -m &quot;Change in: $MainRepoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
   git tag -a -m &quot;Jenkins auto tag for $MainRepoName by $LastUser&quot; $NEWTAG
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
