@@ -243,7 +243,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>ipp-teams</keyFromSelect>
+          <keyFromSelect>ipp-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -278,7 +278,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;Android/build/${GERRIT_BRANCH}/${NEWTAG}</deployPattern>
+      <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/Android/${GERRIT_BRANCH}/${NEWTAG}</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
