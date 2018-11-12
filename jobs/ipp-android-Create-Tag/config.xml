@@ -158,7 +158,7 @@
 updateManifests() {
   echo Create new TAG $NEWTAG 
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $localRepoName/$NEWTAG $commitToTAG
-  git push $localRepoName $NEWTAG
+  git push $localRepoName $localRepoName/$NEWTAG
   
   (
   echo Update default.xml file, create a new Commit and create this TAG in repo_manifests too
