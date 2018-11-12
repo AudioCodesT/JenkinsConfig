@@ -157,6 +157,7 @@
 # Output = No output
 updateManifests() {
   echo Create new TAG $NEWTAG
+  # Need to delete the TAG before creating it again in another repository
   if git tag --list | grep -q &quot;$NEWTAG&quot;; then git tag -d &quot;$NEWTAG&quot;; fi
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $commitToTAG
   git push $localRepoName $NEWTAG
@@ -165,8 +166,8 @@ updateManifests() {
   echo Update default.xml file, create a new Commit and create this TAG in repo_manifests too
   cd ../repo_manifests
   echo Find $repoToTAG in default.xml and replace the revision to be the new TAG
-  # sed -i.bak -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; default.xml
-  sed -i.bak -e &quot;s:\(.*$repoToTAG\&quot;.* revision=\&quot;\)[^&apos; &apos;]*\(\&quot; .*\):\1refs/tags/$NEWTAG\2:&quot; default.xml
+  sed -i.bak -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; default.xml
+  # sed -i.bak -e &quot;s:\(.*$repoToTAG\&quot;.* revision=\&quot;\)[^&apos; &apos;]*\(\&quot; .*\):\1refs/tags/$NEWTAG\2:&quot; default.xml
   rm -f default.xml.bak
   git add default.xml
   )
