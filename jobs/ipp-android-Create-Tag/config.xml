@@ -157,7 +157,7 @@
 # Output = No output
 updateManifests() {
   echo Create new TAG $NEWTAG 
-  git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $commitToTAG
+  git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $localRepoName/$NEWTAG $commitToTAG
   git push $localRepoName $NEWTAG
   
   (
@@ -254,7 +254,7 @@ do
   MainlocalRepoName=$(echo $remote | cut -d/ -f2)
   GERRIT_BRANCH=$(echo $remote | cut -d/ -f2-)
   # Find real repository name - to find the line in default.xml 
-  MainRepoName=$(git remote -v | grep push | grep &quot;^$localRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+  MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
 
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
   if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
