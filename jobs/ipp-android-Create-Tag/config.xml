@@ -157,7 +157,7 @@
 # Output = No output
 updateManifests() {
   echo Create new TAG $NEWTAG
-  git tag -d $NEWTAG
+  if git tag --list | grep -q &quot;$NEWTAG&quot;; then git tag -d &quot;$NEWTAG&quot;; fi
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $commitToTAG
   git push $localRepoName $NEWTAG
   
