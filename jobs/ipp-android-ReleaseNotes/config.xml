@@ -141,7 +141,7 @@ while read -r line; do
       else
         # Find the Jira issue and don&apos;t override it in others lines without it.
         if  [ -z $Jira ]; then
-          Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[//; s/\].*//&apos;)
+          Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP//; s/\].*//&apos;)
         fi
         # Take the subject line only
         if  [ -z $subject ]; then
