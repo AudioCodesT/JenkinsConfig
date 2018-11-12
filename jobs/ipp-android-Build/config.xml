@@ -82,7 +82,7 @@ repo sync -c --no-clone-bundle -j16 --force-sync
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>ipp-teams</keyFromSelect>
+          <keyFromSelect>ipp-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -117,10 +117,10 @@ repo sync -c --no-clone-bundle -j16 --force-sync
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/${NEWTAG}.zip=&gt;Android/build/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/out/target/product/c450hd/system_raw.img=&gt;Android/build/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/out/target/product/c450hd/userdata_raw.img=&gt;Android/build/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/out/target/product/c450hd/boot.img=&gt;Android/build/${BUILD_BRANCH}/${NEWTAG}</deployPattern>
+      <deployPattern>${WORKSPACE}/${NEWTAG}.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
+${WORKSPACE}/out/target/product/c450hd/system_raw.img=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
+${WORKSPACE}/out/target/product/c450hd/userdata_raw.img=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
+${WORKSPACE}/out/target/product/c450hd/boot.img=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>false</deployBuildInfo>
