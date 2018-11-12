@@ -186,7 +186,7 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 done
 
-if [ &quot;$AUTOPRD&quot; == &quot;C450HD&quot; ]; then
+if [[ &quot;$AUTOPRD&quot; = &quot;C450HD&quot; &amp;&amp; &quot;$BUILD_BRANCH&quot; = &quot;3.2&quot; ]]; then
   rm -f build/image/UCC450HD_*.bin*
 fi
 
