@@ -156,9 +156,10 @@
 # Input = The local repository name: $localRepoName, and the full repository name: $repoToTAG
 # Output = No output
 updateManifests() {
-  echo Create new TAG $NEWTAG 
-  git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $localRepoName/$NEWTAG $commitToTAG
-  git push $localRepoName $localRepoName/$NEWTAG
+  echo Create new TAG $NEWTAG
+  git tag -d $NEWTAG
+  git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $commitToTAG
+  git push $localRepoName $NEWTAG
   
   (
   echo Update default.xml file, create a new Commit and create this TAG in repo_manifests too
