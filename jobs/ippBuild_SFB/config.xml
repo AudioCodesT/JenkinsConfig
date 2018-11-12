@@ -187,7 +187,7 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 
 if [ &quot;$AUTOPRD&quot; == &quot;C450HD&quot; ]; then
-  rm -f build/image/UCC450HD_*.bin build/image/UCC450HD_*.bin.md5.txt
+  rm -f build/image/UCC450HD_*.bin build/image/UCC450HD_*.bin.*
 fi
 
 
