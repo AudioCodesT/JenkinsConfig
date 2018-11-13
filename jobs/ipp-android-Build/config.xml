@@ -62,8 +62,7 @@ repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/
 echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 repo sync -c --no-clone-bundle -j16 --force-sync
 
-./build/tools/make_c450hd.sh --clean
-
+./build/tools/make_c450hd.sh –-clean –-zip-images
 
 </command>
     </hudson.tasks.Shell>
@@ -117,10 +116,9 @@ repo sync -c --no-clone-bundle -j16 --force-sync
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/${NEWTAG}.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/out/target/product/c450hd/system_raw.img=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/out/target/product/c450hd/userdata_raw.img=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/out/target/product/c450hd/boot.img=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}</deployPattern>
+      <deployPattern>${WORKSPACE}/${NEWTAG}*.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
+
+</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>false</deployBuildInfo>
