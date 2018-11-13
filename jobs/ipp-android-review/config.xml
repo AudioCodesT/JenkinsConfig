@@ -112,7 +112,8 @@ git log -2 --oneline
 
 cd $WORKSPACE
 
-./build/tools/make_c450hd.sh</command>
+./build/tools/make_c450hd.sh --zip-images
+</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -134,7 +135,7 @@ cd $WORKSPACE
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>ipp-teams</keyFromSelect>
+          <keyFromSelect>ipp-review</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -169,7 +170,7 @@ cd $WORKSPACE
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/${NEWTAG}.zip=&gt;Android/review/${GERRIT_BRANCH}/${BUILD_NUMBER}
+      <deployPattern>${WORKSPACE}/${NEWTAG}.android_images.zip=&gt;Android/${GERRIT_BRANCH}/${BUILD_NUMBER}
 </deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
