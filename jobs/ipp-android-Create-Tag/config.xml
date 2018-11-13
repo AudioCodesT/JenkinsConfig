@@ -254,7 +254,7 @@ do
   # Find remote repository name
   remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
   MainlocalRepoName=$(echo $remote | cut -d/ -f2)
-  GERRIT_BRANCH=$(echo $remote | cut -d/ -f2-)
+  GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
   # Find real repository name - to find the line in default.xml 
   MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
 
