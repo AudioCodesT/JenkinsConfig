@@ -94,8 +94,6 @@ OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_
 echo &quot;OLD TAG == $OLDTAG&quot;
 
 
-mkdir build
-
 if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_device_manager&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_IGS&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/EMS_Client&quot; ]]
 then
 	
@@ -123,6 +121,7 @@ then
       # run comparison between the old csv to the new csv
         set +e
         sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
+        #make size_diff ref={OLDTAG}_size_report.csv new=${NEWTAG}_size_report.csv
         RetunedValue=$?
         set -e
         
