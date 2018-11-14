@@ -135,11 +135,11 @@ then
             echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
             echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
         fi
-        if [[ -e build/size_diff_report_${allChilds[i]}.txt ]]
+        if [[ -e build/size_diff_report_${NEWTAG}.txt ]]
         then
             #mv size_report.txt size_report_${allChilds[i]}.txt
            
-            mv build/size_diff_report_${allChilds[i]}.txt size_report_${allChilds[i]}.txt
+            mv build/size_diff_report_${NEWTAG}.txt size_report_${allChilds[i]}.txt
             
             #push the report to artifactory to each children
             curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
