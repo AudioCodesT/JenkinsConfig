@@ -117,6 +117,7 @@ repo sync -c --no-clone-bundle -j16 --force-sync
         <spec></spec>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/${NEWTAG}.android_images.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
+${WORKSPACE}/${NEWTAG}.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
 
 </deployPattern>
       <resolvePattern></resolvePattern>
