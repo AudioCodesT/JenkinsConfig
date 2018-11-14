@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwjfYXFfyHgZQS0fS7S0jKiQssjLzOMGB/sgjGqU9ThDQKAEWBXMX54U6jQoPNKwMpz72ABgCSsUxfQqNSS8Zu6w==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>7c902316-8a27-43ea-909e-448e2b1b850b</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>71cdd6a787263a542cfa1dab7fc0d69b61447c17c38fda9ad8db4b87c7f72509</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -38,6 +50,7 @@
         <string>authenticated</string>
         <string># R&amp;D Managers</string>
         <string>CI_NSC_admins</string>
+        <string>AWS_Jira_Users</string>
         <string># All Orange</string>
         <string># All Cars</string>
         <string>Allowed RODC Password Replication Group</string>
@@ -52,6 +65,7 @@
         <string>Voca Team</string>
         <string>CMBU</string>
         <string>Password Manager Apply</string>
+        <string># Agile users</string>
         <string># All ISRAEL</string>
         <string># All NSC R&amp;D</string>
         <string>Offer Remote Assistance Helpers</string>
@@ -68,7 +82,7 @@
         <string>Domain Users</string>
         <string># All Airport City</string>
       </roles>
-      <timestamp>1537109169470</timestamp>
+      <timestamp>1542188362570</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.2.0">
       <providerId>default</providerId>
