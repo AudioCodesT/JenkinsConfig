@@ -129,7 +129,8 @@ do
   LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
   RealLastTag=$LastTag
   if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then
-    LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
+    LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 $(git log --merges -n1 --pretty=format:%H)^2)) --sort=-taggerdate | head -1`
+    # LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
   fi
   LastUser=&quot;&quot;
   while IFS=_ read -r Sha1 User When
