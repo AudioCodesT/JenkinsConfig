@@ -157,7 +157,7 @@ outputName=$(curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${
 if [ &quot;$outputName&quot; != &quot;&quot; ]; then
    lastTAG=$(git describe --tags --abbrev=0)
    echo Found: $outputName ----- Last TAG is: $lastTAG
-   if [[ &quot;$outputName&quot; =~ &quot;_$lastTAG_&quot; ]]; then
+   if [[ &quot;$outputName&quot; =~ &quot;_${lastTAG}_&quot; ]]; then
      echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
      exit 0
    fi
