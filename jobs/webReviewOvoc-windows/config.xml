@@ -187,6 +187,28 @@ fi
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
+            <command>#!c:\cygwin64\bin\bash --login -i
+if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]
+then
+CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Verified | cut -d: -f2 |sed &apos;s/&quot;//g&apos;)
+if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
+then 
+ssh -p 29418 benm@gerrit gerrit review \
+--code-review +2 \
+--submit ${GERRIT_CHANGE_ID}
+fi</command>
+          </condition>
+          <publisherList/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*java.nio.channels.ClosedChannelException*.</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
