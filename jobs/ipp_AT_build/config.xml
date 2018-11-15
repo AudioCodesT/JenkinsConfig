@@ -153,8 +153,8 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
 User=$artifactory_user:$artifactory_pass
 
 if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
-outputName=$(curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep UC${SHORTAUTOPRD}_ || echo true)
-if [ &quot;$outputName&quot; != &quot;true&quot; ]; then
+outputName=$(curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep UC${SHORTAUTOPRD}_ || true)
+if [ &quot;$outputName&quot; != &quot;&quot; ]; then
    lastTAG=$(git describe --tags --abbrev=0)
    echo Found: $outputName ----- Last TAG is: $lastTAG
    if [[ &quot;$outputName&quot; =~ &quot;_${lastTAG}_&quot; ]]; then
