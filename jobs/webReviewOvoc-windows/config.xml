@@ -194,7 +194,7 @@ fi
             <command>#!c:\cygwin64\bin\bash --login -i
 if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]
 then
-CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+CURL=&quot;curl -kn -u jenkins:$jpass --silent&quot;
 verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Verified | cut -d: -f2 |sed &apos;s/&quot;//g&apos;)
 if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
 then 
@@ -249,6 +249,16 @@ fi</command>
     </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQaYi6cmoE497D7Fkb5bVOAZ2bVFG8oJN2/a+9ScfbwbI=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}_branch:$GERRIT_BRANCH</template>
       <runAtStart>true</runAtStart>
