@@ -153,9 +153,13 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
 User=$artifactory_user:$artifactory_pass
 
 if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
-if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep -q UC${SHORTAUTOPRD}_; then
-	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
-    exit 0
+outputName=$(curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep UC${SHORTAUTOPRD}_)
+if [ &quot;$outputName&quot; != &quot;&quot; ]; then
+   echo Found: $outputName
+   if [[ &quot;$outputName&quot; =~ &quot;_$(git describe --tags --abbrev)_&quot; ]]; then
+     echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
+     exit 0
+   fi
 fi
 
 # ipp_AT_build is running now?
