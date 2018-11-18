@@ -120,7 +120,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cat &lt;&lt; EOF &gt;&gt; sshConnection.py
+      <command>cat &lt;&lt; EOF &gt; sshConnectionTestJira.py
 python &lt;&lt;-EOS
 
 import paramiko
@@ -139,6 +139,7 @@ from git import Repo
 
 server_ip=sys.argv[1]
 modified_files=sys.argv[2]
+jira_dest_path=sys.argv[3]
 
 # Functions definitions
 def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
@@ -163,7 +164,24 @@ EOS
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command></command>
+      <command>#show all files that modified in the current change
+server_ip=&quot;test-acjira&quot;
+modifiedFiles=($(git diff --name-only HEAD~1 HEAD))
+#extract from first line in the modified file, the path of the file in test-acjira Server
+seperator=&quot;#PATH:&quot;
+#ARRAY=()
+jiraDestPaths=()
+for filePath in ${modifiedFiles[@]}
+do
+	jiraDestPath=$(cat ${filePath} | head -1)
+	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
+    jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
+    #ARRAY+=(&quot;${filePath}:${jiraDestPath}&quot;)
+    scp -i .ssh/AudioCodes-CICD-Apps.pem ${filePath} centos@${server_ip}:/home/centos/tempFilesToCopy
+done
+
+
+python2.7 sshConnection.py $server_ip ${filePath[@]} ${jiraDestPaths[@]}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
