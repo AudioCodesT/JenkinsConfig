@@ -25,31 +25,6 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue>3.1.0</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
-          <name></name>
-          <description></description>
-          <allowedSlaves>
-            <string>ipp-Auto7</string>
-            <string>ipp-Auto8</string>
-            <string>ipp-Auto9</string>
-          </allowedSlaves>
-          <defaultSlaves>
-            <string>ipp-Auto7</string>
-            <string>ipp-Auto8</string>
-            <string>ipp-Auto9</string>
-          </defaultSlaves>
-          <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
-          <allowMultiNodeSelection>false</allowMultiNodeSelection>
-          <triggerConcurrentBuilds>false</triggerConcurrentBuilds>
-          <ignoreOfflineNodes>false</ignoreOfflineNodes>
-          <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
-        </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -60,11 +35,11 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>ipp-Auto7</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -75,136 +50,10 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
-User=&quot;$artifactory_user:$artifactory_password&quot;
-net use z: /delete
-net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
-
-# The &apos;artifactory&apos; alias name doesn&apos;t work well so use the IP instead: 172.16.133.170
-#artifactory_ip=$(ping artifactory -n 1 | grep Reply | sed &apos;s/Reply from //; s/:.*//&apos;)
-
-artifactory_ip=artifactory
-ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
-
-echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
-
-curl -ks -u $User -X GET $ARTIFACTORY &gt; $TAG.txt
-echo Check $TAG
-if grep -q &quot;Unable to find item&quot; $TAG.txt; then
-  echo $TAG does not exist, exit with error; 
-  exit 2; 
-fi
-
-echo Start copying files
-# should be 10, the 5 types for .img and .sim.tgz
-countImages=$(( ${#ImagesList[@]} * 2 ))
-
-#for each type
-for PRD in ${ImagesList[@]}; do
-    echo Check $PRD
-    for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
-      # Check if this image was copied already, if not, transfer $Image
-      if [ ! -f z:/$Image ]; then
-        # The exact download name
-        downloadUri=$(curl -ks -u $User -X GET $ARTIFACTORY/${PRD}/$Image | grep downloadUri | cut -d&apos;&quot;&apos; -f4)
-        echo curl -ks -X GET $ARTIFACTORY/${PRD}/$Image
-        if [ &quot;$downloadUri&quot; != &quot;&quot; ]; then 
-          echo ----      Download $Image to z:
-          curl -ks -u $User -X GET $downloadUri --output z:/$Image
-          ((countImages--))
-        else 
-          echo ----      $Image is missing  ----
-        fi
-      else 
-        echo ----      z:/$Image already exist.. skip the download...
-        ((countImages--))
-      fi
-    done
-done
-
-echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
-date
-# Check if the 10 images were copied or were already there
-# In case of fail, the job will restart after 20 minutes
-echo  $(expr 10 - $countImages ) files exists
-if [ $countImages -ne 0 ]; then
-  echo $countImages files were not found ... abort
-  exit 2
-fi
-
-
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>properties.txt</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
-  <publishers>
-    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun></regexpForRerun>
-      <rerunIfUnstable>true</rerunIfUnstable>
-      <rerunMatrixPart>false</rerunMatrixPart>
-      <checkRegexp>false</checkRegexp>
-      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
-      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>1200</delay>
-      </delay>
-      <maxSchedule>2</maxSchedule>
-    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-      <configs>
-        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-          <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>REFSPEC=
-GERRIT_BRANCH=$GERRIT_BRANCH
-MODEL=450
-IMAGENAMES=$ImageNames
-</properties>
-              <textParamValueOnNewLine>false</textParamValueOnNewLine>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
-              <name>PC2RUN</name>
-              <nodeLabel>$NODE_NAME</nodeLabel>
-            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
-          </configs>
-          <projects>ipp_AT_parent</projects>
-          <condition>SUCCESS</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-          <triggerFromChildProjects>false</triggerFromChildProjects>
-        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-      </configs>
-    </hudson.plugins.parameterizedtrigger.BuildTrigger>
-  </publishers>
-  <buildWrappers>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
-      <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
-          <script></script>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-    </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
-      <injectGlobalPasswords>false</injectGlobalPasswords>
-      <maskPasswordParameters>true</maskPasswordParameters>
-      <passwordEntries>
-        <EnvInjectPasswordEntry>
-          <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQr8gqwIQUzKtJXLCSueP3uG9nqtGNlRCRS/f1kOQzSzM=}</value>
-        </EnvInjectPasswordEntry>
-      </passwordEntries>
-    </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} ${TAG} $GERRIT_BRANCH</template>
-      <runAtStart>true</runAtStart>
-      <runAtEnd>true</runAtEnd>
-    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
-  </buildWrappers>
+  <publishers/>
+  <buildWrappers/>
 </project>
