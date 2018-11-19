@@ -70,6 +70,12 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.BatchFile>
+      <command>set&#xd;
+&#xd;
+cd&#xd;
+</command>
+    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash --login
 date
