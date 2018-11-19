@@ -70,6 +70,9 @@ if new code then build and deploy arm-ui-7.0.zip</description>
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
+      <hudson.plugins.git.extensions.impl.LocalBranch>
+        <localBranch>$GERRIT_BRANCH</localBranch>
+      </hudson.plugins.git.extensions.impl.LocalBranch>
     </extensions>
   </scm>
   <assignedNode>Web-UI-Win-Dynamic</assignedNode>
