@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwqysGgfwlXA1uJwOKHbwmWf2XpmCHfCEKq7eKsM7uNfOaiAKlyW8eGRs3w9ObsdNndeDAVkqlqgE6Evxd+kRhsw==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>80710130-4a10-420f-bd56-af7653fb51a4</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>1a453a371a1a06d3c8f1b3aa29a2c8e0d6831a4aeec4651da66ce80fbd6ad2e0</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -44,6 +56,7 @@
         <string>Offer Remote Assistance Helpers</string>
         <string>FTP_default</string>
         <string>Mailvision Branch Office Users</string>
+        <string>AudioCodes_VPN</string>
         <string># All AudioCodes</string>
         <string>Certificate Service DCOM Access</string>
         <string>Domain Users</string>
@@ -53,7 +66,7 @@
         <string>Logistics_maintenance</string>
         <string>CI_ARM_developers</string>
       </roles>
-      <timestamp>1530086850645</timestamp>
+      <timestamp>1542619683758</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Natali.Elashvili@audiocodes.com</emailAddress>
