@@ -129,8 +129,12 @@ do
   LastTag=`git tag --points-at $(git rev-list -n1 $(git describe --tags --abbrev=0 --first-parent origin/$GERRIT_BRANCH)) --sort=-taggerdate | head -1`
   RealLastTag=$LastTag
   if [[ $GERRIT_BRANCH =~ &quot;feature&quot; ]]; then
+    # Find the merged commit TAG (option &apos;--merges&apos;)
+    # the feature branches should start with it, 
+    # for example: 3.2.0.445.HTT.1 was merged from 3.2.0.445
     LastMergedTag=`git tag --points-at $(git log --merges -n1 --pretty=format:%H)^2 --sort=-taggerdate | head -1`
     echo LastTag = $LastTag ------------- LastMergedTag = $LastMergedTag
+    # The last merged TAG must be with 3 periods kike: 3.2.0.445 this TAG came from the main branch
     if [[ ! &quot;$LastTag&quot; =~ &quot;$LastMergedTag&quot; &amp;&amp; $(echo $LastMergedTag | awk -F. &apos;{ print NF - 1 }&apos;) == 3 ]]; then
       LastTag=$LastMergedTag;
       echo set to $LastMergedTag;
