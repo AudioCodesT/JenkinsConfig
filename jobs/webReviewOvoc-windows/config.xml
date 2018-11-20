@@ -201,7 +201,7 @@ if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
 then 
 ssh -p 29418 benm@gerrit gerrit review \
 --code-review +2 \
---submit ${GERRIT_CHANGE_ID}
+--submit ${GERRIT_PATCHSET_REVISION}
 fi
 fi</command>
           </condition>
