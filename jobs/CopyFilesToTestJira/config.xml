@@ -121,8 +121,6 @@
   <builders>
     <hudson.tasks.Shell>
       <command>cat &lt;&lt; EOF &gt; sshConnectionTestJira.py
-python &lt;&lt;-EOS
-
 import paramiko
 import select
 import time
@@ -160,7 +158,7 @@ except paramiko.ssh_exception.AuthenticationException:
     shell = None
 
 
-EOS
+
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
