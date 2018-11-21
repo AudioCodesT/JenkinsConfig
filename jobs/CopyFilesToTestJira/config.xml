@@ -176,7 +176,7 @@ do
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     jiraDestPaths+=(${jiraDestPath})
     sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-    jiraSourcePaths+=(/home/centos/tempFileToCopyTestJira/${sourcePath}
+    jiraSourcePaths+=(/home/centos/tempFileToCopyTestJira/${sourcePath})
     #ARRAY+=(&quot;${filePath}:${jiraDestPath}&quot;)
     scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:/home/centos/tempFilesToCopyTestJira
 done
