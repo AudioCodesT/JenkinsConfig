@@ -166,7 +166,6 @@ IMGNAME=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:.:g&apos;`
 make auto AUTOPRD=${AUTOPRD}__SIM SUBVERSION=${IMGNAME}
 
 </command>
-      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
