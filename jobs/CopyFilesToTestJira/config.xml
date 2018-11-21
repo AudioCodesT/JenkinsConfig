@@ -159,12 +159,17 @@ except paramiko.ssh_exception.AuthenticationException:
 
 
 
+
+
+sendWait(rm -rf $HOME/tempFilesToCopyTestJira/*)
+channel.close
+client.close
+sys.exit(0);
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#show all files that modified in the current change
 server_ip=&quot;test-acjira&quot;
-mkdir tempFilesToCopyTestJira
 modifiedFiles=($(git diff --name-only HEAD~1 HEAD))
 #extract from first line in the modified file, the path of the file in test-acjira Server
 seperator=&quot;#PATH:&quot;
@@ -179,14 +184,14 @@ do
     sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
     jiraSourcePaths+=(&quot;/home/centos/tempFileToCopyTestJira/${sourcePath}&quot;)
     #ARRAY+=(&quot;${filePath}:${jiraDestPath}&quot;)
-    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:/home/centos/tempFilesToCopyTestJira
+    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;/home/centos/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
 done
 
 echo &quot;${jiraSourcePaths[@]}&quot;
 echo &quot;${jiraDestPaths[@]}&quot;
 #python2.7 sshConnection.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}
 
-#rm -rf tempFilesToCopyTestJira</command>
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
