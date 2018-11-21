@@ -164,6 +164,7 @@ EOF</command>
     <hudson.tasks.Shell>
       <command>#show all files that modified in the current change
 server_ip=&quot;test-acjira&quot;
+mkdir tempFilesToCopyTestJira
 modifiedFiles=($(git diff --name-only HEAD~1 HEAD))
 #extract from first line in the modified file, the path of the file in test-acjira Server
 seperator=&quot;#PATH:&quot;
@@ -183,7 +184,9 @@ done
 
 echo &quot;${jiraSourcePaths[@]}&quot;
 echo &quot;${jiraDestPaths[@]}&quot;
-#python2.7 sshConnection.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}</command>
+#python2.7 sshConnection.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}
+
+rm -rf tempFilesToCopyTestJira</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
