@@ -173,7 +173,7 @@ for filePath in ${modifiedFiles[@]}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-    jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
+    jiraDestPaths+=(${jiraDestPath})
     #ARRAY+=(&quot;${filePath}:${jiraDestPath}&quot;)
     scp -i .ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:/home/centos/tempFilesToCopy
 done
