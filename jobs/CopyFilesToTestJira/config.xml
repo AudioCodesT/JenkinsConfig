@@ -175,11 +175,11 @@ do
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
     #ARRAY+=(&quot;${filePath}:${jiraDestPath}&quot;)
-    scp -i .ssh/AudioCodes-CICD-Apps.pem ${filePath} centos@${server_ip}:/home/centos/tempFilesToCopy
+    scp -i .ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:/home/centos/tempFilesToCopy
 done
 
 
-python2.7 sshConnection.py $server_ip ${filePath[@]} ${jiraDestPaths[@]}</command>
+#python2.7 sshConnection.py $server_ip ${filePath[@]} ${jiraDestPaths[@]}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
