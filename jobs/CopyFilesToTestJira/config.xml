@@ -188,7 +188,7 @@ done
 
 echo &quot;${jiraSourcePaths[@]}&quot;
 echo &quot;${jiraDestPaths[@]}&quot;
-python2.7 sshConnection.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}
+python2.7 sshConnectionTestJira.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}
 
 </command>
     </hudson.tasks.Shell>
