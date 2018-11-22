@@ -145,16 +145,16 @@ def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
 
 #open SSH session to the server
 try:
-   	client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(server_ip, port=22, username=centos, password=null)
-    transport = client.get_transport()
-    channel = transport.open_session()
-    channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
-    channel.invoke_shell()
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client.connect(server_ip, port=22, username=centos, password=null)
+	transport = client.get_transport()
+	channel = transport.open_session()
+	channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-    print &quot;We had an authentication exception!&quot;
-    shell = None
+	print &quot;We had an authentication exception!&quot;
+	shell = None
 
 sendWait(cd $HOME/tempFilesToCopyTestJira)
 
