@@ -157,7 +157,7 @@ except paramiko.ssh_exception.AuthenticationException:
     print &quot;We had an authentication exception!&quot;
     shell = None
 
-
+sendWait(cd $HOME/tempFilesToCopyTestJira)
 
 
 
@@ -182,13 +182,13 @@ do
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
     sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-    jiraSourcePaths+=(&quot;/home/centos/tempFileToCopyTestJira/${sourcePath}&quot;)
-    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;/home/centos/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
+    jiraSourcePaths+=(&quot;$HOME/tempFileToCopyTestJira/${sourcePath}&quot;)
+    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
 done
 
 echo &quot;${jiraSourcePaths[@]}&quot;
 echo &quot;${jiraDestPaths[@]}&quot;
-#python2.7 sshConnection.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}
+python2.7 sshConnection.py $server_ip ${jiraSourcePaths[@]} ${jiraDestPaths[@]}
 
 </command>
     </hudson.tasks.Shell>
