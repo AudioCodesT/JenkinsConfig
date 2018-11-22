@@ -120,14 +120,25 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cat &lt;&lt; EOF &gt; cnlsender.py
+      <command>cat &lt;&lt; EOF &gt; sshConnectionTestJira.py
 import paramiko
 import select
 import time
 import re
 import sys
 import traceback
- 
+import cnlsender
+import re
+import os
+import subprocess
+from subprocess import Popen, PIPE
+
+
+server_ip=sys.argv[1]
+modified_files=sys.argv[2]
+jira_dest_path=sys.argv[3]
+
+# Functions definitions
 def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
     channel.send(command + &quot;\n&quot;)
     return justWait(channel, timeout, waitfor)
@@ -171,31 +182,7 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
         if time.time()&gt;t+timeout:
             print &quot;\n\nTime out. Call stack:&quot;
             traceback.print_stack(file=sys.stdout)
-            sys.exit(1);         
-EOF            </command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>cat &lt;&lt; EOF &gt; sshConnectionTestJira.py
-import paramiko
-import select
-import time
-import re
-import sys
-import traceback
-import cnlsender
-import re
-import os
-import subprocess
-from subprocess import Popen, PIPE
-
-
-server_ip=sys.argv[1]
-modified_files=sys.argv[2]
-jira_dest_path=sys.argv[3]
-
-# Functions definitions
-def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
-    return cnlsender.sendWait(channel, command, timeout, waitfor)
+            sys.exit(1);
 
 
 #open SSH session to the server
