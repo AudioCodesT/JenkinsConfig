@@ -127,6 +127,7 @@ import time
 import re
 import sys
 import traceback
+import cnlsender
 import re
 import os
 import subprocess
@@ -141,6 +142,51 @@ centos_username=&apos;centos&apos;
 centos_password=&apos;&apos;
 port=22
 # Functions definitions
+# Functions definitions
+def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.sendWait(channel, command, timeout, waitfor)
+ 
+def sendWithoutWait(command):
+    return cnlsender.sendWithoutWait(channel, command)
+ 
+def justWait(timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.justWait(channel, timeout, waitfor)
+
+#open SSH session to the server
+try:
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client.connect(server_ip, port, centos_username, centos_password)
+	transport = client.get_transport()
+	channel = transport.open_session()
+	channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel.invoke_shell()
+except paramiko.ssh_exception.AuthenticationException:
+	print &quot;We had an authentication exception!&quot;
+	shell = None
+
+
+
+
+sendWait(&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
+sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
+
+
+channel.close
+client.close
+sys.exit(0);
+EOF</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>cat &lt;&lt; EOF &gt; cnlsender.py
+import paramiko
+import select
+import time
+import re
+import sys
+import traceback
+
+
 def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
     channel.send(command + &quot;\n&quot;)
     return justWait(channel, timeout, waitfor)
@@ -187,29 +233,26 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
             sys.exit(1);
 
 
-#open SSH session to the server
-try:
-	client = paramiko.SSHClient()
-	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	client.connect(server_ip, port, centos_username, centos_password)
-	transport = client.get_transport()
-	channel = transport.open_session()
-	channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
-	channel.invoke_shell()
-except paramiko.ssh_exception.AuthenticationException:
-	print &quot;We had an authentication exception!&quot;
-	shell = None
 
 
 
 
-sendWait(channel,&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
-sendWait(channel,&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
 
-channel.close
-client.close
-sys.exit(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
