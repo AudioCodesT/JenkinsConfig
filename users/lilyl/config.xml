@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwDVz3OaOTCW8uE0nwd1HXwI5w1tR/KWZ76XUjEZAU/cszdk8BiR/4JJ/jRq67E/BSmVSU2CsnEhecBzROkBRQbQ==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>db42f726-0b79-4f00-8fb4-40cf73b11df0</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>6e4e1b3354178b8346e95ea0520b30255152e7da31038dfaa322abe5e936c74a</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -33,6 +45,7 @@
     </hudson.search.UserSearchProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
+        <string># ROW employees</string>
         <string>authenticated</string>
         <string># IPP RnD – SZ</string>
         <string>Password Manager Apply</string>
@@ -53,7 +66,7 @@
         <string>Domain Users</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1528883540410</timestamp>
+      <timestamp>1542851083781</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Lily.Li@audiocodes.com</emailAddress>
