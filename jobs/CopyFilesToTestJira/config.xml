@@ -139,7 +139,7 @@ jira_dest_path=sys.argv[3]
 
 centos_username=&apos;centos&apos;
 centos_password=&apos;&apos;
-
+port=22
 # Functions definitions
 def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
     channel.send(command + &quot;\n&quot;)
@@ -191,7 +191,7 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
 try:
 	client = paramiko.SSHClient()
 	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	client.connect(server_ip, port=22, centos_username, centos_password)
+	client.connect(server_ip, port, centos_username, centos_password)
 	transport = client.get_transport()
 	channel = transport.open_session()
 	channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
