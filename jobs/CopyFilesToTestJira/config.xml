@@ -159,7 +159,8 @@ except paramiko.ssh_exception.AuthenticationException:
 
 
 
-sendWait(cd $HOME/tempFilesToCopyTestJira)
+sendWait(&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
+sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
 
 channel.close
