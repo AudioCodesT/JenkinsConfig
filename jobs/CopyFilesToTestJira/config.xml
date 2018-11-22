@@ -156,11 +156,12 @@ except paramiko.ssh_exception.AuthenticationException:
 	print &quot;We had an authentication exception!&quot;
 	shell = None
 
+
+
+
 sendWait(cd $HOME/tempFilesToCopyTestJira)
-
-
-
 sendWait(rm -rf $HOME/tempFilesToCopyTestJira/*)
+
 channel.close
 client.close
 sys.exit(0);
