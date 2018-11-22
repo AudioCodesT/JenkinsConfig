@@ -120,6 +120,61 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>cat &lt;&lt; EOF &gt; cnlsender.py
+import paramiko
+import select
+import time
+import re
+import sys
+import traceback
+ 
+def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
+    channel.send(command + &quot;\n&quot;)
+    return justWait(channel, timeout, waitfor)
+def sendWithoutWait(channel, command, timeout=15.0, waitfor=&quot;#&quot;):
+    channel.send(command + &quot;\n&quot;)
+    return &quot;&quot;
+    
+def manualFlush(channel):
+    for x in range(5):
+        rl, wl, xl = select.select([channel],[],[],1.0)
+        if len(rl) &gt; 0:
+            line = channel.recv(1024)
+            print line
+    
+def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;acems&quot;):
+    t=time.time()
+    received=&quot;&quot;
+    while True:
+        rl, wl, xl = select.select([channel],[],[],1.0)
+        if len(rl) &gt; 0:
+            line = channel.recv(1024)
+            print line,
+            received+=line
+            if re.search(&quot;Press Enter to continue&quot;,line):
+                channel.send(&quot;\n&quot;)
+            if re.search(&quot;Press Enter to reboot...&quot;,line):
+                channel.send(&quot;\n&quot;)
+                time.sleep(200)
+                return &apos;reboot&apos;
+            if re.search(&quot;FATAL ERROR:&quot;,line):
+                return &apos;fatalerror&apos;
+            if re.search(&quot;patch installation may take up to&quot;,line):
+                timeout=timeout+1800.0 # patch installation -- enlarge the timeout by 30 minutes
+            expression = r&quot;%s&quot; % waitfor
+            if re.search(expression, line):
+                line_list=received.split(&apos;\n&apos;);
+                line_list.pop(0)
+                if len(line_list)&gt;0:
+                    line_list.pop()
+                return &apos;\n&apos;.join(line_list)
+        if time.time()&gt;t+timeout:
+            print &quot;\n\nTime out. Call stack:&quot;
+            traceback.print_stack(file=sys.stdout)
+            sys.exit(1);         
+EOF            </command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>cat &lt;&lt; EOF &gt; sshConnectionTestJira.py
 import paramiko
 import select
