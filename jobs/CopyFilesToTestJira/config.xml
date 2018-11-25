@@ -167,9 +167,7 @@ except paramiko.ssh_exception.AuthenticationException:
 	print &quot;We had an authentication exception!&quot;
 	shell = None
 
-
-
-
+justWait(20.0,&quot;\$&quot;)
 sendWait(&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
 sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
