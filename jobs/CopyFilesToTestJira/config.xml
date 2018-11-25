@@ -144,7 +144,7 @@ centos_username=&apos;centos&apos;
 centos_password=&apos;&apos;
 privateKey = paramiko.RSAKey.from_private_key_file(&quot;/home/centos/.ssh/AudioCodes-CICD-Apps.pem&quot;)
 # Functions definitions
-# Functions definitions
+
 def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
     return cnlsender.sendWait(channel, command, timeout, waitfor)
  
