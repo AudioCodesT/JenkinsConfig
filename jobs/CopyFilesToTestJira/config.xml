@@ -282,8 +282,7 @@ do
     scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
 done
 
-echo &quot;${jiraSourcePaths[@]}&quot;
-echo &quot;${jiraDestPaths[@]}&quot;
+
 python2.7 sshConnectionTestJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
 
 </command>
