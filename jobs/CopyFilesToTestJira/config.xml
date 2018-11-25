@@ -170,7 +170,6 @@ except paramiko.ssh_exception.AuthenticationException:
 justWait(20.0,&quot;\$&quot;)
 sendWait(&quot;sudo -i&quot;,20.0)
 sendWait(&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
-sendWait(&quot;echo ${modified_files[@]}&quot;)
 sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
 
