@@ -135,8 +135,8 @@ from subprocess import Popen, PIPE
 
 
 server_ip=sys.argv[1]
-modified_files=sys.argv[2]
-jira_dest_path=sys.argv[3]
+modified_files=sys.argv[2].split(&apos;,&apos;)
+jira_dest_path=sys.argv[3].split(&apos;,&apos;)
 
 
 
@@ -263,15 +263,21 @@ modifiedFiles=($(git diff --name-only HEAD~1 HEAD))
 #extract from first line in the modified file, the path of the file in test-acjira Server
 seperator=&quot;#PATH:&quot;
 #ARRAY=()
-jiraDestPaths=()
-jiraSourcePaths=()
-for filePath in ${modifiedFiles[@]}
+#jiraDestPaths=()
+#jiraSourcePaths=()
+jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
+jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
+jiraDestPaths=$jiraDestPath
+sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
+jiraSourcePaths=$HOME/tempFileToCopyTestJira/
+for filePath in ${modifiedFiles[@]:1}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-    jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
+    #jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
+    jiraDestPaths+=&quot;,${jiraDestPath}&quot;
     sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-    jiraSourcePaths+=(&quot;$HOME/tempFileToCopyTestJira/${sourcePath}&quot;)
+    jiraSourcePaths+=&quot;,$HOME/tempFileToCopyTestJira/${sourcePath}&quot;
     scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
 done
 
