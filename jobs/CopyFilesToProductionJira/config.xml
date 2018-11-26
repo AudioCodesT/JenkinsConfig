@@ -185,6 +185,83 @@ sys.exit(0);
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
+      <command>cat &lt;&lt; EOF &gt; sshConnectionProductionJiraChecksumCheck.py
+import paramiko
+import select
+import time
+import re
+import sys
+import traceback
+import cnlsender
+import re
+import os
+import subprocess
+from subprocess import Popen, PIPE
+
+
+server_ip=sys.argv[1]
+jira_source_path=sys.argv[2].split(&apos;,&apos;)
+jira_dest_path=sys.argv[3].split(&apos;,&apos;)
+
+print (jira_source_path)
+print (jira_dest_path)
+
+centos_username=&apos;centos&apos;
+centos_password=&apos;&apos;
+privateKey = paramiko.RSAKey.from_private_key_file(&quot;/home/centos/.ssh/AudioCodes-CICD-Apps.pem&quot;)
+# Functions definitions
+
+def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.sendWait(channel, command, timeout, waitfor)
+ 
+def sendWithoutWait(command):
+    return cnlsender.sendWithoutWait(channel, command)
+ 
+def justWait(timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.justWait(channel, timeout, waitfor)
+
+#open SSH session to the server
+try:
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client.connect(server_ip, port=22, username=centos_username,pkey=privateKey)
+	transport = client.get_transport()
+	channel = transport.open_session()
+	channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel.invoke_shell()
+except paramiko.ssh_exception.AuthenticationException:
+	print &quot;We had an authentication exception!&quot;
+	shell = None
+
+#switch to root user
+justWait(20.0,&quot;\$&quot;)
+sendWait(&quot;sudo -i&quot;,20.0)
+
+#copy all files to the directory
+sendWait(&quot;cd /home/centos/tempFilesToCopyTestJira&quot;)
+for source_path in jira_source_path:
+  sendWait(&apos;jiraSourcePaths+=&quot;{} &quot;&apos;.format(source_path))
+for dest_path in jira_dest_path:
+  sendWait(&apos;jiraDestPaths+=&quot;{} &quot;&apos;.format(dest_path))  
+  
+sendWait(&quot;jiraSourcePaths=(\${jiraSourcePaths})&quot;)
+sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
+for i in range(len(jira_source_path)):
+	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
+	sendWait(&quot;echo ----cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}-------&quot;)
+	sendWait(&quot;echo \${jiraSourcePaths[0]}&quot;)
+sendWait(&quot;echo \${jiraDestPaths[0]}&quot;)
+
+sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
+
+
+
+channel.close
+client.close
+sys.exit(0);
+EOF</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>cat &lt;&lt; EOF &gt; cnlsender.py
 import paramiko
 import select
@@ -267,6 +344,10 @@ done
 
 parentCommitID=$(git cat-file -p ${GERRIT_PATCHSET_REVISION} | grep parent | cut -d&apos; &apos; -f2)
 git checkout $parentCommitID
+
+python2.7 sshConnectionProductionJiraChecksumCheck.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
+
+git checkout $GERRIT_PATCHSET_REVISION
 
 python2.7 sshConnectionProductionJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
 
