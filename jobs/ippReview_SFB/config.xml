@@ -236,7 +236,7 @@ done
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.1&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.0.4.GA&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.0.40&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; ]]
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.1&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.0.4.GA&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;feature/3.2/media_separation&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;feature/3.2/device_manager&quot; ]]
 then exit 1
 fi</command>
           </condition>
