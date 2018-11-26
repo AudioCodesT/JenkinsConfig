@@ -136,7 +136,7 @@
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
-  <assignedNode>ipp-android-jonatan-instance</assignedNode>
+  <assignedNode>ipp-android</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -213,8 +213,9 @@ createTag() {
       fi
     fi
   done
-  
+  git checkout $MainlocalRepoName/$BRANCH
   (
+  
   cd ../repo_manifests
   git commit -m &quot;Change in: $MainRepoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
   git tag -a -m &quot;Jenkins auto tag for $MainRepoName by $LastUser&quot; $NEWTAG
