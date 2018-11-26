@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwfnV1nbyUlgrhIZzAx1jOeYvSPvypRXWnyItfwaPVF6M7ypxnBw7CKnmmhKQWUwH8/v0Cc0zcGHCy1B+gy7fw1A==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>7c51360d-fbdc-4bc4-a2c3-6013875704da</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>088146575ae9b6d712bbfa68ffffe5bd0ce568ee626fb4ac63712553ce7efc35</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -51,6 +63,7 @@
         <string># All Beer Sheva</string>
         <string>CI_WEB-UI_developers</string>
         <string>Password Manager Apply</string>
+        <string># Agile users</string>
         <string># All ISRAEL</string>
         <string>Offer Remote Assistance Helpers</string>
         <string># R&amp;D HDGW GROUP</string>
@@ -67,7 +80,7 @@
         <string># OVOC</string>
         <string>EMS_RW_Access</string>
       </roles>
-      <timestamp>1536235439165</timestamp>
+      <timestamp>1543222035929</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Erez.NejatHaim@audiocodes.com</emailAddress>
