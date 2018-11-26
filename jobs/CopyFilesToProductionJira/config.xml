@@ -109,8 +109,6 @@
   <builders>
     <hudson.tasks.Shell>
       <command>cat &lt;&lt; EOF &gt; sshConnectionProductionJira.py
-python &lt;&lt;-EOS
-
 import paramiko
 import select
 import time
@@ -122,33 +120,126 @@ import re
 import os
 import subprocess
 from subprocess import Popen, PIPE
-from git import Repo
 
 
 server_ip=sys.argv[1]
-modified_files=sys.argv[2]
-jira_dest_path=sys.argv[3]
+jira_source_path=sys.argv[2].split(&apos;,&apos;)
+jira_dest_path=sys.argv[3].split(&apos;,&apos;)
 
+print (jira_source_path)
+print (jira_dest_path)
+
+centos_username=&apos;centos&apos;
+centos_password=&apos;&apos;
+privateKey = paramiko.RSAKey.from_private_key_file(&quot;/home/centos/.ssh/AudioCodes-CICD-Apps.pem&quot;)
 # Functions definitions
+
 def sendWait(command, timeout=20.0, waitfor=&quot;#&quot;):
     return cnlsender.sendWait(channel, command, timeout, waitfor)
-
+ 
+def sendWithoutWait(command):
+    return cnlsender.sendWithoutWait(channel, command)
+ 
+def justWait(timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.justWait(channel, timeout, waitfor)
 
 #open SSH session to the server
 try:
-   	client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(server_ip, port=22, username=centos, password=null)
-    transport = client.get_transport()
-    channel = transport.open_session()
-    channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
-    channel.invoke_shell()
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client.connect(server_ip, port=22, username=centos_username,pkey=privateKey)
+	transport = client.get_transport()
+	channel = transport.open_session()
+	channel.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-    print &quot;We had an authentication exception!&quot;
-    shell = None
+	print &quot;We had an authentication exception!&quot;
+	shell = None
+
+#switch to root user
+justWait(20.0,&quot;\$&quot;)
+sendWait(&quot;sudo -i&quot;,20.0)
+
+#copy all files to the directory
+sendWait(&quot;cd /home/centos/tempFilesToCopyTestJira&quot;)
+for source_path in jira_source_path:
+  sendWait(&apos;jiraSourcePaths+=&quot;{} &quot;&apos;.format(source_path))
+for dest_path in jira_dest_path:
+  sendWait(&apos;jiraDestPaths+=&quot;{} &quot;&apos;.format(dest_path))  
+  
+sendWait(&quot;jiraSourcePaths=(\${jiraSourcePaths})&quot;)
+sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
+for i in range(len(jira_source_path)):
+	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
+	sendWait(&quot;echo ----cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}-------&quot;)
+	sendWait(&quot;echo \${jiraSourcePaths[0]}&quot;)
+sendWait(&quot;echo \${jiraDestPaths[0]}&quot;)
+
+sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
 
-EOS
+
+channel.close
+client.close
+sys.exit(0);
+EOF</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>cat &lt;&lt; EOF &gt; cnlsender.py
+import paramiko
+import select
+import time
+import re
+import sys
+import traceback
+
+
+def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
+    channel.send(command + &quot;\n&quot;)
+    return justWait(channel, timeout, waitfor)
+def sendWithoutWait(channel, command, timeout=15.0, waitfor=&quot;#&quot;):
+    channel.send(command + &quot;\n&quot;)
+    return &quot;&quot;
+    
+def manualFlush(channel):
+    for x in range(5):
+        rl, wl, xl = select.select([channel],[],[],1.0)
+        if len(rl) &gt; 0:
+            line = channel.recv(1024)
+            print line
+    
+def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;acems&quot;):
+    t=time.time()
+    received=&quot;&quot;
+    while True:
+        rl, wl, xl = select.select([channel],[],[],1.0)
+        if len(rl) &gt; 0:
+            line = channel.recv(1024)
+            print line,
+            received+=line
+            if re.search(&quot;Press Enter to continue&quot;,line):
+                channel.send(&quot;\n&quot;)
+            if re.search(&quot;Press Enter to reboot...&quot;,line):
+                channel.send(&quot;\n&quot;)
+                time.sleep(200)
+                return &apos;reboot&apos;
+            if re.search(&quot;FATAL ERROR:&quot;,line):
+                return &apos;fatalerror&apos;
+            if re.search(&quot;patch installation may take up to&quot;,line):
+                timeout=timeout+1800.0 # patch installation -- enlarge the timeout by 30 minutes
+            expression = r&quot;%s&quot; % waitfor
+            if re.search(expression, line):
+                line_list=received.split(&apos;\n&apos;);
+                line_list.pop(0)
+                if len(line_list)&gt;0:
+                    line_list.pop()
+                return &apos;\n&apos;.join(line_list)
+        if time.time()&gt;t+timeout:
+            print &quot;\n\nTime out. Call stack:&quot;
+            traceback.print_stack(file=sys.stdout)
+            sys.exit(1);
+
+
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
@@ -157,20 +248,29 @@ server_ip=&quot;acjira&quot;
 modifiedFiles=($(git diff --name-only HEAD~1 HEAD))
 #extract from first line in the modified file, the path of the file in test-acjira Server
 seperator=&quot;#PATH:&quot;
-#ARRAY=()
-jiraDestPaths=()
-for filePath in ${modifiedFiles[@]}
+jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
+jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
+jiraDestPaths=$jiraDestPath
+echo $jiraDestPaths
+sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
+jiraSourcePaths=$HOME/tempFilesToCopyProductionJira/${sourcePath}
+echo $jiraSourcePaths
+for filePath in ${modifiedFiles[@]:1}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-    jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
-    #ARRAY+=(&quot;${filePath}:${jiraDestPath}&quot;)
-    #scp -i .ssh/AudioCodes-CICD-Apps.pem ${filePath} centos@${server_ip}:/home/centos/tempFilesToCopy
+    jiraDestPaths+=&quot;,${jiraDestPath}&quot;
+    sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
+    jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyProductionJira/${sourcePath}&quot;
+    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyProductionJira/${sourcePath}&apos;&quot;
 done
 
 parentCommitID=$(git cat-file -p ${GERRIT_PATCHSET_REVISION} | grep parent | cut -d&apos; &apos; -f2)
+git checkout $parentCommitID
 
-git checkout $parentCommitID</command>
+python2.7 sshConnectionProductionJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
+
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
