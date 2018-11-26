@@ -168,8 +168,11 @@ except paramiko.ssh_exception.AuthenticationException:
 	print &quot;We had an authentication exception!&quot;
 	shell = None
 
+#switch to root user
 justWait(20.0,&quot;\$&quot;)
 sendWait(&quot;sudo -i&quot;,20.0)
+
+#copy all files to the directory
 sendWait(&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
 sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
