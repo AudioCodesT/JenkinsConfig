@@ -124,6 +124,9 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
 set -e
 cd $WORKSPACE
 
+# adding ac-infra
+git submodule init
+git submodule update
 
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
