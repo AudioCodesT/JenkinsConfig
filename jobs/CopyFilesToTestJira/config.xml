@@ -179,8 +179,8 @@ for source_path in jira_source_path:
 for dest_path in jira_dest_path:
   sendWait(&apos;jiraDestPaths+=&quot;{} &quot;&apos;.format(dest_path))  
   
-sendWait(&quot;jiraSourcePaths=($jiraSourcePaths)&quot;)
-sendWait(&quot;jiraDestPaths=($jiraDestPaths)&quot;)
+sendWait(&quot;jiraSourcePaths=(${jiraSourcePaths})&quot;)
+sendWait(&quot;jiraDestPaths=(${jiraDestPaths})&quot;)
 
 sendWait(&quot;echo ${jiraSourcePaths[0]}&quot;)
 sendWait(&quot;echo ${jiraDestPaths[0]}&quot;)
