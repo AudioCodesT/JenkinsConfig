@@ -286,7 +286,7 @@ jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
 jiraDestPaths=$jiraDestPath
 echo $jiraDestPaths
 sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
-jiraSourcePaths=$HOME/tempFileToCopyTestJira/
+jiraSourcePaths=$HOME/tempFileToCopyTestJira/${sourcePath}
 echo $jiraSourcePaths
 for filePath in ${modifiedFiles[@]:1}
 do
