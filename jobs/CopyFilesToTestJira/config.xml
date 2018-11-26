@@ -135,10 +135,10 @@ from subprocess import Popen, PIPE
 
 
 server_ip=sys.argv[1]
-modified_files=sys.argv[2].split(&apos;,&apos;)
+jira_source_path=sys.argv[2].split(&apos;,&apos;)
 jira_dest_path=sys.argv[3].split(&apos;,&apos;)
 
-print (modified_files)
+print (jira_source_path)
 print (jira_dest_path)
 
 centos_username=&apos;centos&apos;
@@ -173,9 +173,20 @@ justWait(20.0,&quot;\$&quot;)
 sendWait(&quot;sudo -i&quot;,20.0)
 
 #copy all files to the directory
-sendWait(&quot;cd $HOME/tempFilesToCopyTestJira&quot;)
-sendWait(&quot;echo ${modified_files[@]}&quot;)
+sendWait(&quot;cd /home/centos/tempFilesToCopyTestJira&quot;)
+for source_path in jira_source_path:
+  sendWait(&apos;jiraSourcePaths+=&quot;{} &quot;&apos;.format(source_path))
+for dest_path in jira_dest_path:
+  sendWait(&apos;jiraDestPaths+=&quot;{} &quot;&apos;.format(dest_path))  
+  
+sendWait(&quot;jiraSourcePaths=($jiraSourcePaths)&quot;)
+sendWait(&quot;jiraDestPaths=($jiraDestPaths)&quot;)
+
+sendWait(&quot;echo ${jiraSourcePaths[0]}&quot;)
+sendWait(&quot;echo ${jiraDestPaths[0]}&quot;)
+
 sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
+
 
 
 channel.close
