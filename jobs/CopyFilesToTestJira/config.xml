@@ -273,8 +273,10 @@ seperator=&quot;#PATH:&quot;
 jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
 jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
 jiraDestPaths=$jiraDestPath
+echo $jiraDestPaths
 sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
 jiraSourcePaths=$HOME/tempFileToCopyTestJira/
+echo $jiraSourcePaths
 for filePath in ${modifiedFiles[@]:1}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
