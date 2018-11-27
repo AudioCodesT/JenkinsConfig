@@ -252,7 +252,7 @@ sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
 #preform a checksum 
 for i in range(len(jira_source_checksum)):
 	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
-    destPathMD5Checksum=sendWait(&quot;md5sum \${jiraDestPaths[\$i]} | cut -d&apos; &apos; -f1&quot;)
+    destPathMD5Checksum=sendWait(&quot;md5sum \${jiraDestPaths[\$i]} | cut -d&apos; &apos; -f1)
     if (jira_source_checksum[i] != destPathMD5Checksum):
     	AllMD5ChecksumPass=&quot;False&quot;
         
@@ -358,11 +358,11 @@ done
 parentCommitID=$(git cat-file -p ${GERRIT_PATCHSET_REVISION} | grep parent | cut -d&apos; &apos; -f2)
 git checkout $parentCommitID
 #get list of all the checksum of the modified files
-sourceChecksum=$(md5sum ${modifiedFiles[0]} | cut -d&apos; &apos; -f1&quot;)
+sourceChecksum=$(md5sum ${modifiedFiles[0]} | cut -d&apos; &apos; -f1)
 allSourceChecksum=&quot;$sourceChecksum&quot;
 for filePath in ${modifiedFiles[@]:1}
 do
-sourceChecksum=$(md5sum ${filePath} | cut -d&apos; &apos; -f1&quot;)
+sourceChecksum=$(md5sum ${filePath} | cut -d&apos; &apos; -f1)
 allSourceChecksum+=&quot;,$sourceChecksum&quot;
 done
 
