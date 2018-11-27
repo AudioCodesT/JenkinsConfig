@@ -255,10 +255,10 @@ for i in range(len(jira_source_checksum)):
     #save only numbers and letters, remove all hidden characters
 	remote_md5 = filter(str.isalnum,remote_md5)
 	local_md5 = filter(str.isalnum,jira_source_checksum[i])
-    print(&quot;remote_md5&quot;)
+	print(&quot;remote_md5&quot;)
 	print(remote_md5)
 	print(&quot;local_md5&quot;)
-	print(local_md5[i])
+	print(local_md5)
     #if the checksum failing even once, fail the build and not copying anything to jira
 	if (local_md5 != remote_md5):
 		AllMD5ChecksumPass=&quot;False&quot;
