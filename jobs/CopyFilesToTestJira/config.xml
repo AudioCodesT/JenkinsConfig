@@ -186,7 +186,7 @@ for i in range(len(jira_source_path)):
 	sendWait(&quot;echo ----cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}-------&quot;)
 	sendWait(&quot;cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}/&quot;)
 
-#sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
+sendWait(&quot;rm -rf $HOME/tempFilesToCopyTestJira/*&quot;)
 
 
 
