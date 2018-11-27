@@ -252,9 +252,9 @@ sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
 #preform a checksum 
 for i in range(len(jira_source_checksum)):
 	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
-    destPathMD5Checksum=sendWait(&quot;md5sum \${jiraDestPaths[\$i]} | cut -d&apos; &apos; -f1)
-    if (jira_source_checksum[i] != destPathMD5Checksum):
-    	AllMD5ChecksumPass=&quot;False&quot;
+	destPathMD5Checksum=sendWait(&quot;md5sum \${jiraDestPaths[\$i]} | cut -d&apos; &apos; -f1)
+	if (jira_source_checksum[i] != destPathMD5Checksum):
+		AllMD5ChecksumPass=&quot;False&quot;
         
 
 #all files Failed to pass MD5 Checksum test
