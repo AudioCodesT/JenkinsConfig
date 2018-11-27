@@ -124,6 +124,11 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
 set -e
 cd $WORKSPACE
 
+cat .gitmodules
+echo &quot;[submodule \&quot;src/app/angular2/infra2\&quot;]&quot; &gt; .gitmodules
+echo &quot;path = src/app/angular2/infra2&quot; &gt;&gt; .gitmodules
+echo &quot;url = ../web-ui/ac-infra&quot; &gt;&gt; .gitmodules
+echo &quot;branch = 7.6.1000&quot; &gt;&gt; .gitmodules
 # adding ac-infra
 echo &quot;git submodule init&quot;
 git submodule init
