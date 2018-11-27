@@ -251,7 +251,7 @@ print(AllMD5ChecksumPass)
 #preform a checksum 
 for i in range(len(jira_source_checksum)):
 	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
-	remote_md5=sendWait(&quot;md5sum ${jiraDestPaths[$i]} | cut -d&apos; &apos; -f1&quot;)
+	remote_md5=sendWait(&quot;md5sum \${jiraDestPaths[\$i]} | cut -d&apos; &apos; -f1&quot;)
     #save only numbers and letters, remove all hidden characters
 	remote_md5 = filter(str.isalnum,remote_md5)
 	local_md5 = filter(str.isalnum,jira_source_checksum[i])
