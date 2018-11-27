@@ -316,7 +316,6 @@ do
    		#string is in file at least once
    		jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     	sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-        jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
         if [[ &quot;$jiraSourcePaths&quot; == &quot;&quot; || &quot;$jiraDestPaths&quot; == &quot;&quot; ]]
         then
           jiraSourcePaths+=&quot;$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
