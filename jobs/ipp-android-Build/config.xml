@@ -60,7 +60,7 @@ repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/
 
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-repo sync -c --no-clone-bundle -j16 --force-sync
+repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 
 #./build/tools/make_c450hd.sh --clean --zip-images
 ./build/tools/make_c450hd.sh --zip-images
