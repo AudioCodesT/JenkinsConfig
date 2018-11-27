@@ -129,6 +129,9 @@ echo &quot;[submodule \&quot;src/app/angular2/infra2\&quot;]&quot; &gt; .gitmodu
 echo &quot;path = src/app/angular2/infra2&quot; &gt;&gt; .gitmodules
 echo &quot;url = ../web-ui/ac-infra&quot; &gt;&gt; .gitmodules
 echo &quot;branch = 7.6.1000&quot; &gt;&gt; .gitmodules
+
+cat .gitmodules
+
 # adding ac-infra
 echo &quot;git submodule init&quot;
 git submodule init
