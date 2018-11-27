@@ -98,7 +98,11 @@
       <customUrl></customUrl>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>false</excludeNoCodeChange>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
       <triggerConfigURL></triggerConfigURL>
@@ -338,10 +342,9 @@ seperator=&quot;#PATH:&quot;
 jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
 jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
 jiraDestPaths=$jiraDestPath
-echo $jiraDestPaths
 sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
 jiraSourcePaths=$HOME/tempFilesToCopyProductionJira/${sourcePath}
-echo $jiraSourcePaths
+scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${modifiedFiles[0]} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyProductionJira/${sourcePath}&apos;&quot;
 for filePath in ${modifiedFiles[@]:1}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
@@ -363,6 +366,8 @@ do
 sourceChecksum=$(md5sum ${filePath} | cut -d&apos; &apos; -f1&quot;)
 allSourceChecksum+=&quot;,$sourceChecksum&quot;
 done
+
+echo &quot;${allSourceChecksum}&quot;
 
 #make MD5 checksum test between the modified files in the parent commit to the files in Jira (check if before the changes the files didnt change)
 python2.7 sshConnectionProductionJiraChecksumCheck.py $server_ip ${allSourceChecksum} ${jiraDestPaths}
