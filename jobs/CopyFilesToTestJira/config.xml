@@ -307,13 +307,15 @@ do
 	else
    #string is in file at least once
    		jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-    	jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
     	sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-        if [[ &quot;$jiraSourcePaths&quot; == &quot;&quot; ]]
+        jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
+        if [[ &quot;$jiraSourcePaths&quot; == &quot;&quot; || &quot;$jiraDestPaths&quot; == &quot;&quot; ]]
         then
           jiraSourcePaths+=&quot;$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
+          jiraDestPaths+=&quot;${jiraDestPath}/&quot;
         else
           jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
+          jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
         fi
     	scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
 	fi
