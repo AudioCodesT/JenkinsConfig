@@ -158,6 +158,8 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 -jenkinsUserGerrit $EMAIL \
 -ci 1 -rerunFailedAuto 1
 
+ echo Gerrit change is: $REFSPEC
+
  set -o pipefail
  tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
