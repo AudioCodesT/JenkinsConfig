@@ -127,7 +127,7 @@ cd $WORKSPACE
 cat .gitmodules
 echo &quot;[submodule \&quot;src/app/angular2/infra2\&quot;]&quot; &gt; .gitmodules
 echo &quot;path = src/app/angular2/infra2&quot; &gt;&gt; .gitmodules
-echo &quot;url = ../web-ui/ac-infra&quot; &gt;&gt; .gitmodules
+echo &quot;url = ssh://jenkins@gerrit:29418/web-ui/ac-infra&quot; &gt;&gt; .gitmodules
 echo &quot;branch = 7.6.1000&quot; &gt;&gt; .gitmodules
 
 cat .gitmodules
