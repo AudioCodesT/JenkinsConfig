@@ -304,10 +304,10 @@ do
     isFileNeedToBeCopied=$(echo $jiraDestPath | grep -c &quot;PATH:&quot;)
     if [ $isInFile -eq 0 ]
     then
-   #string not contained in file
+   		#string not contained in file
    		echo &quot;File Dont need to be Copy, Doesnt Contain PATH:&quot;
 	else
-   #string is in file at least once
+   		#string is in file at least once
    		jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     	sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
         jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
