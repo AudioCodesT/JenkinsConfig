@@ -44,7 +44,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp-android</assignedNode>
+  <assignedNode>ipp-android-jonatan-instance</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -60,7 +60,9 @@ repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/
 
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
+# The first execution only need the flag: &quot;--no-tags&quot; 
+# to save 50G of disk space of all TAGS in the entire project
+repo sync -c --no-clone-bundle -j16 --force-sync
 
 #./build/tools/make_c450hd.sh --clean --zip-images
 ./build/tools/make_c450hd.sh --zip-images
