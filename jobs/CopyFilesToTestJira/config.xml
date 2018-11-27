@@ -283,21 +283,39 @@ seperator=&quot;//PATH:&quot;
 #jiraDestPaths=()
 #jiraSourcePaths=()
 jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
-jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-jiraDestPaths=&quot;${jiraDestPath}/&quot;
-sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
-jiraSourcePaths=$HOME/tempFilesToCopyTestJira/${sourcePath}
-scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${modifiedFiles[0]} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
+isFileNeedToBeCopied=$(echo $jiraDestPath | grep -c &quot;PATH:&quot;)
+if [[ $isFileNeedToBeCopied -eq 0 ]] then
+   #string not contained in file
+   echo &quot;File Dont need to be Copy, Doesnt Contain PATH:&quot;
+   jiraDestPaths=&quot;&quot;
+   jiraSourcePaths=&quot;&quot;
+else
+   #string is in file at least once
+	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
+	jiraDestPaths=&quot;${jiraDestPath}/&quot;
+	sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
+	jiraSourcePaths=$HOME/tempFilesToCopyTestJira/${sourcePath}
+	scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${modifiedFiles[0]} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
+fi
 for filePath in ${modifiedFiles[@]:1}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
-	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-    #jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
-    jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
-    sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-    jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
-    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
+    isFileNeedToBeCopied=$(echo $jiraDestPath | grep -c &quot;PATH:&quot;)
+    if [ $isInFile -eq 0 ]; then
+   #string not contained in file
+   		echo &quot;File Dont need to be Copy, Doesnt Contain PATH:&quot;
+	else
+   #string is in file at least once
+   		jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
+    	jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
+    	sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
+    	jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
+    	scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
+	fi
 done
+
+#check if JiraSourcePath is empty, not copy anything
+
 
 
 python2.7 sshConnectionTestJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
