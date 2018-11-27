@@ -125,7 +125,9 @@ set -e
 cd $WORKSPACE
 
 # adding ac-infra
+echo &quot;git submodule init&quot;
 git submodule init
+echo &quot;git submodule update&quot;
 git submodule update
 
 #connect repositories using https instead opf git:
