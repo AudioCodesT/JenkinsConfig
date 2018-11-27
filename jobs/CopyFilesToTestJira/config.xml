@@ -284,7 +284,8 @@ seperator=&quot;//PATH:&quot;
 #jiraSourcePaths=()
 jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
 isFileNeedToBeCopied=$(echo $jiraDestPath | grep -c &quot;PATH:&quot;)
-if [[ $isFileNeedToBeCopied -eq 0 ]] then
+if [[ $isFileNeedToBeCopied -eq 0 ]] 
+then
    #string not contained in file
    echo &quot;File Dont need to be Copy, Doesnt Contain PATH:&quot;
    jiraDestPaths=&quot;&quot;
