@@ -367,7 +367,7 @@ sourceChecksum=$(md5sum ${modifiedFiles[0]} | cut -d&apos; &apos; -f1)
 allSourceChecksum=&quot;$sourceChecksum&quot;
 for filePath in ${modifiedFiles[@]:1}
 do
-sourceChecksum=$(md5sum ${filePath} | cut -d&apos; &apos; -f1)
+sourceChecksum=$(md5sum ${filePath} | cut -d&apos; &apos; -f1 | cut -c 1-32 )
 allSourceChecksum+=&quot;,$sourceChecksum&quot;
 done
 
