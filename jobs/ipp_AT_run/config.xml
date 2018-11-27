@@ -155,7 +155,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
--jenkinsUserGerrit $EMAIL -gerritChangeId $REFSPEC \
+-jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
 
  set -o pipefail
@@ -163,7 +163,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
--jenkinsUserGerrit $EMAIL -gerritChangeId $REFSPEC \
+-jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
 
  ExitCode=$?
