@@ -251,12 +251,14 @@ print(AllMD5ChecksumPass)
 #preform a checksum 
 for i in range(len(jira_source_checksum)):
 	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
-	destPathMD5Checksum=sendWait(&quot;md5sum \${jiraDestPaths[\$i]} | cut -d&apos; &apos; -f1 | cut -c 1-32&quot;)
-	print(&quot;destPathMD5Checksum&quot;)
-	print(destPathMD5Checksum)
-	print(&quot;jira_source_checksum&quot;)
-	print(jira_source_checksum[i])
-	if (jira_source_checksum[i] != destPathMD5Checksum):
+	remote_md5=sendWait(&quot;md5sum ${jiraDestPaths[$i]} | cut -d&apos; &apos; -f1&quot;)
+	remote_md5 = filter(str.isalnum,remote_md5)
+	local_md5 = filter(str.isalnum,jira_source_checksum[i])
+    print(&quot;remote_md5&quot;)
+	print(remote_md5)
+	print(&quot;local_md5&quot;)
+	print(local_md5[i])
+	if (local_md5 != remote_md5):
 		AllMD5ChecksumPass=&quot;False&quot;
         
 print(AllMD5ChecksumPass)
