@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwRJm4br4ZB1XSIrecXF7yXWqx0WRDFa7/TzeVjQwrXeBi/sK8aAXniEqWOJFGQ98PSYP1v9l+zsT47CqGmXUd+w==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>1a3f863c-252c-49e4-83de-fff1981a1c13</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>2d5ec54a28de3fb0bb2b5342d63fd6cc723e9da1f5321f877a1a0ddba61e9fd2</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -38,6 +50,7 @@
         <string>ActionBase Users</string>
         <string>WirelessUsers</string>
         <string># Support Escalation</string>
+        <string># R&amp;D Support Escalation</string>
         <string># All Sales</string>
         <string># All Lunch</string>
         <string>Logistics_maintenance</string>
@@ -72,6 +85,7 @@
         <string>BIS Service</string>
         <string>CatalogApps_Everyone</string>
         <string># Gym</string>
+        <string># Agile users</string>
         <string># IPP Support</string>
         <string>SPS_Allow_PM</string>
         <string># IPP</string>
@@ -81,7 +95,7 @@
         <string>IppSwReleases</string>
         <string># ippbeta</string>
       </roles>
-      <timestamp>1537089553458</timestamp>
+      <timestamp>1543320240252</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Ami.Lahav@audiocodes.com</emailAddress>
