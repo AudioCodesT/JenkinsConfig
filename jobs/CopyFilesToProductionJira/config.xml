@@ -259,7 +259,7 @@ for i in range(len(jira_source_checksum)):
 	if (jira_source_checksum[i] != destPathMD5Checksum):
 		AllMD5ChecksumPass=&quot;False&quot;
         
-
+print(AllMD5ChecksumPass)
 #all files Failed to pass MD5 Checksum test
 if (AllMD5ChecksumPass == &quot;False&quot;):
 	channel.close
