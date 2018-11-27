@@ -284,17 +284,16 @@ seperator=&quot;#PATH:&quot;
 #jiraSourcePaths=()
 jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
 jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-jiraDestPaths=$jiraDestPath
-echo $jiraDestPaths
+jiraDestPaths=&quot;${jiraDestPath}/&quot;
 sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
 jiraSourcePaths=$HOME/tempFileToCopyTestJira/${sourcePath}
-echo $jiraSourcePaths
+ scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
 for filePath in ${modifiedFiles[@]:1}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
 	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     #jiraDestPaths+=(&quot;${jiraDestPath}&quot;)
-    jiraDestPaths+=&quot;,${jiraDestPath}&quot;
+    jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
     sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
     jiraSourcePaths+=&quot;,$HOME/tempFileToCopyTestJira/${sourcePath}&quot;
     scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
