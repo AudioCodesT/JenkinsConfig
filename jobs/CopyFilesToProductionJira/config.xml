@@ -242,12 +242,12 @@ sendWait(&quot;sudo -i&quot;,20.0)
 
 #copy all files to the directory
 sendWait(&quot;cd /home/centos/tempFilesToCopyProductionJira&quot;)
-for source_path in jira_source_path:
-  sendWait(&apos;jiraSourcePaths+=&quot;{} &quot;&apos;.format(source_path))
+for source_path in jira_source_checksum:
+  sendWait(&apos;jiraSourceCheckSum+=&quot;{} &quot;&apos;.format(source_path))
 for dest_path in jira_dest_path:
   sendWait(&apos;jiraDestPaths+=&quot;{} &quot;&apos;.format(dest_path))  
   
-sendWait(&quot;jiraSourcePaths=(\${jiraSourcePaths})&quot;)
+sendWait(&quot;jiraSourceCheckSums=(\${jiraSourceCheckSum})&quot;)
 sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
 #preform a checksum 
 for i in range(len(jira_source_checksum)):
