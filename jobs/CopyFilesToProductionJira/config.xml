@@ -381,7 +381,7 @@ echo &quot;${jiraDestPathForChecksum}&quot;
 #make MD5 checksum test between the modified files in the parent commit to the files in Jira (check if before the changes the files didnt change)
 python2.7 sshConnectionProductionJiraChecksumCheck.py $server_ip ${allSourceChecksum} ${jiraDestPathForChecksum}
 checksumTest=$?
-
+echo $checksumTest
 git checkout $GERRIT_PATCHSET_REVISION
 #if all files passed MD5 Checksum TEST then copy all files
 if [[ &quot;$checksumTest&quot; == &quot;0&quot; ]]
