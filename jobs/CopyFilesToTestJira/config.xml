@@ -320,9 +320,11 @@ do
 done
 
 #check if JiraSourcePath is empty, not copy anything
-
-
-
+if [[ &quot;$jiraSourcePaths&quot; == &quot;&quot; ]]
+then
+	echo &quot;Does not Copy Any file, None of the files Contain PATH:&quot;
+    exit 0
+fi
 python2.7 sshConnectionTestJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
 
 </command>
