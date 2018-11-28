@@ -82,7 +82,7 @@ function RemoveFolder() {
   if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
     echo Delete $Folder
     echo ---------------------
-    #curl -ks -u $User -X DELETE https://$ARTIFACTORY/$Folder
+    curl -ks -u $User -X DELETE https://$ARTIFACTORY/$Folder
   else
     echo $Folder is not old - check its sub folders
     curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*true&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
@@ -98,7 +98,7 @@ function RemoveFolder() {
         if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
           echo Delete ${Folder}$uri
           echo ---------------------
-          #curl -ks -u $User -X DELETE https://$ARTIFACTORY/${Folder}$uri
+          curl -ks -u $User -X DELETE https://$ARTIFACTORY/${Folder}$uri
         fi
       done  
     fi
