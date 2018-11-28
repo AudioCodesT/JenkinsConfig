@@ -307,7 +307,9 @@ for filePath in ${modifiedFiles[@]}
 do
 	jiraDestPath=$(cat ${filePath} | head -1)
     #check if file needs to be copied
+    set +e
     isFileNeedToBeCopied=$(echo $jiraDestPath | grep -c &quot;PATH:&quot;)
+    set -e
 	if [[ $isFileNeedToBeCopied -eq 0 ]] 
     then
    		#string not contained in file
