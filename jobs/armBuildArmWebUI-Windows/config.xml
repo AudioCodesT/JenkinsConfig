@@ -42,7 +42,6 @@ if new code then build and deploy arm-ui-7.0.zip</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -135,6 +134,15 @@ set -e
 set -x
 
 cd $WORKSPACE
+
+
+# adding ac-infra
+echo &quot;git submodule init&quot;
+git submodule init
+echo &quot;git submodule update&quot;
+git submodule update
+echo &quot;finish submodule&quot;
+
 
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
