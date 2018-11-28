@@ -183,8 +183,8 @@ sendWait(&quot;jiraSourcePaths=(\${jiraSourcePaths})&quot;)
 sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
 for i in range(len(jira_source_path)):
 	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
-    sendWait(&quot;echo \${jiraSourcePaths[\$i]}&quot;)
-    sendWait(&quot;echo \${jiraDestPaths[\$i]}&quot;)
+	sendWait(&quot;echo \${jiraSourcePaths[\$i]}&quot;)
+	sendWait(&quot;echo \${jiraDestPaths[\$i]}&quot;)
 	sendWait(&quot;echo *******cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}*******&quot;)
 	sendWait(&quot;\cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}&quot;)
 
