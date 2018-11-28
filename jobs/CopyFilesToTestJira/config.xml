@@ -285,25 +285,6 @@ jiraDestPaths=&quot;&quot;
 jiraSourcePaths=&quot;&quot;
 
 
-#jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
-
-#check if file needs to be copied
-#isFileNeedToBeCopied=$(echo $jiraDestPath | grep -c &quot;PATH:&quot;)
-#if [[ $isFileNeedToBeCopied -eq 0 ]] 
-#then
-#   #string not contained in file
-#   echo &quot;File Dont need to be Copy, Doesnt Contain PATH:&quot;
-#   jiraDestPaths=&quot;&quot;
-#   jiraSourcePaths=&quot;&quot;
-#else
-#   #string is in file at least once
-#	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-#	jiraDestPaths=&quot;${jiraDestPath}/&quot;
-#	sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
-#	jiraSourcePaths=$HOME/tempFilesToCopyTestJira/${sourcePath}
-#	scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${modifiedFiles[0]} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
-#fi
-
 #go through all files
 for filePath in ${modifiedFiles[@]}
 do
