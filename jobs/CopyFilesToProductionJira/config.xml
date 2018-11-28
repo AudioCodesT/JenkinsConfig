@@ -340,28 +340,6 @@ modifiedFiles=($(git diff --name-only HEAD~1 HEAD))
 seperator=&quot;//PATH:&quot;
 
 
-
-jiraDestPath=$(cat ${modifiedFiles[0]} | head -1)
-jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-jiraDestPaths=&quot;$jiraDestPath/&quot;
-sourcePath=$(echo ${modifiedFiles[0]} | awk -F/ &apos;{print $NF}&apos;)
-jiraSourcePaths=$HOME/tempFilesToCopyProductionJira/${sourcePath}
-jiraDestPathForChecksum=&quot;$jiraDestPath/$sourcePath&quot;
-scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${modifiedFiles[0]} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyProductionJira/${sourcePath}&apos;&quot;
-for filePath in ${modifiedFiles[@]:1}
-do
-	jiraDestPath=$(cat ${filePath} | head -1)
-	jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
-    jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
-    sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
-    jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyProductionJira/${sourcePath}&quot;
-    jiraDestPathForChecksum+=&quot;,$jiraDestPath/$sourcePath&quot;
-    scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyProductionJira/${sourcePath}&apos;&quot;
-done
-
-
-
-
 #go through all files
 for filePath in ${modifiedFiles[@]}
 do
@@ -404,13 +382,18 @@ fi
 #copy all files that modified from parent commit
 parentCommitID=$(git cat-file -p ${GERRIT_PATCHSET_REVISION} | grep parent | cut -d&apos; &apos; -f2)
 git checkout $parentCommitID
+
 #get list of all the checksum of the modified files
-sourceChecksum=$(md5sum ${modifiedFiles[0]} | cut -d&apos; &apos; -f1)
-allSourceChecksum=&quot;$sourceChecksum&quot;
-for filePath in ${modifiedFiles[@]:1}
+allSourceChecksum=&quot;&quot;
+for filePath in ${modifiedFiles[@]}
 do
 sourceChecksum=$(md5sum ${filePath} | cut -d&apos; &apos; -f1 | cut -c 1-32 )
-allSourceChecksum+=&quot;,$sourceChecksum&quot;
+if [[ &quot;$allSourceChecksum&quot; == &quot;&quot; ]]
+then
+	allSourceChecksum=&quot;$sourceChecksum&quot;
+else
+	allSourceChecksum+=&quot;,$sourceChecksum&quot;
+fi
 done
 
 echo &quot;${allSourceChecksum}&quot;
