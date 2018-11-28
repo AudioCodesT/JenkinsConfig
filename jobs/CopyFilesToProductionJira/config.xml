@@ -375,9 +375,10 @@ do
    		#string not contained in file
    		echo &quot;File Dont need to be Copy, Doesnt Contain PATH:&quot;
 	else
-   		#string is in file at least once
+   		#The File Contain &quot;PATH:&quot; so it need to be copied
    		jiraDestPath=$(echo &quot;${jiraDestPath//$seperator/$&apos;&apos;}&quot;)
     	sourcePath=$(echo ${filePath} | awk -F/ &apos;{print $NF}&apos;)
+        #if is the first PATH added, add with out &apos;,&apos;
         if [[ &quot;$jiraSourcePaths&quot; == &quot;&quot; || &quot;$jiraDestPaths&quot; == &quot;&quot; || &quot;$jiraDestPathForChecksum&quot; == &quot;&quot; ]]
         then
           jiraSourcePaths+=&quot;$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
@@ -398,15 +399,6 @@ then
 	echo &quot;Does not Copy Any file, None of the files Contain PATH:&quot;
     exit 0
 fi
-
-
-
-
-
-
-
-
-
 
 
 #copy all files that modified from parent commit
