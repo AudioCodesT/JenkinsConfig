@@ -396,9 +396,6 @@ else
 fi
 done
 
-echo &quot;${allSourceChecksum}&quot;
-echo &quot;${jiraDestPathForChecksum}&quot;
-
 #make MD5 checksum test between the modified files in the parent commit to the files in Jira (check if before the changes the files didnt change)
 python2.7 sshConnectionProductionJiraChecksumCheck.py $server_ip ${allSourceChecksum} ${jiraDestPathForChecksum}
 checksumTest=$?
