@@ -172,7 +172,7 @@ sendWait(&quot;jiraDestPaths=(\${jiraDestPaths})&quot;)
 for i in range(len(jira_source_path)):
 	sendWait(&apos;i=&quot;{}&quot;&apos;.format(i))
 	sendWait(&quot;echo ----cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}-------&quot;)
-	sendWait(&quot;\cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}&quot;)
+	#sendWait(&quot;\cp \${jiraSourcePaths[\$i]} \${jiraDestPaths[\$i]}&quot;)
 
 sendWait(&quot;rm -rf $HOME/tempFilesToCopyProductionJira/*&quot;)
 
@@ -405,6 +405,8 @@ checksumTest=$?
 echo $checksumTest
 git checkout $GERRIT_PATCHSET_REVISION
 #if all files passed MD5 Checksum TEST then copy all files
+echo &quot;${jiraSourcePaths}&quot;
+echo &quot;${jiraDestPaths}&quot;
 if [[ &quot;$checksumTest&quot; == &quot;0&quot; ]]
 then
 python2.7 sshConnectionProductionJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
