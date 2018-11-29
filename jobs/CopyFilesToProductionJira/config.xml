@@ -405,8 +405,7 @@ checksumTest=$?
 echo $checksumTest
 git checkout $GERRIT_PATCHSET_REVISION
 #if all files passed MD5 Checksum TEST then copy all files
-echo &quot;${jiraSourcePaths}&quot;
-echo &quot;${jiraDestPaths}&quot;
+
 if [[ &quot;$checksumTest&quot; == &quot;0&quot; ]]
 then
 python2.7 sshConnectionProductionJira.py $server_ip ${jiraSourcePaths} ${jiraDestPaths}
