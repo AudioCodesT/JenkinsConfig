@@ -105,7 +105,9 @@ function createTag {
     extNameLong=$(echo $GERRIT_BRANCH | awk -F/ &apos;{print $NF}&apos; | cut -c1-6)
     if [[ ! $(echo $LastTag | cut -d. -f5-) =~ &quot;$extName&quot; ]]; then
       # In case the found TAG is already long like &quot;3.2.0.241.med.53&quot;, change it to &quot;3.2.0.241&quot;
-      if [[ $(echo $LastTag | awk -F. &apos;{ print NF - 1 }&apos;) &gt; 3 ]]; then LastTag=$LastMergedTag; fi
+      if [[ $(echo $LastMergedTag | awk -F. &apos;{ print NF - 1 }&apos;) == 3 ]]; then
+        if [[ $(echo $LastTag | awk -F. &apos;{ print NF - 1 }&apos;) &gt; 3 ]]; then LastTag=$LastMergedTag; fi
+      fi
       # It is the first TAG so add 3 characters from the branch name and add it to the last current TAG
       # Start with number 1 (0 will chnage to 1), in case it is exist add 6 characters
       if git rev-parse $LastTag.$extName.1 &gt;/dev/null 2&gt;&amp;1; then extName=$extNameLong; fi
