@@ -105,9 +105,7 @@ function createTag {
     extNameLong=$(echo $GERRIT_BRANCH | awk -F/ &apos;{print $NF}&apos; | cut -c1-6)
     if [[ ! $(echo $LastTag | cut -d. -f5-) =~ &quot;$extName&quot; ]]; then
       # In case the found TAG is already long like &quot;3.2.0.241.med.53&quot;, change it to &quot;3.2.0.241&quot;
-      if [[ $(echo $LastMergedTag | awk -F. &apos;{ print NF - 1 }&apos;) == 3 ]]; then
-        if [[ $(echo $LastTag | awk -F. &apos;{ print NF - 1 }&apos;) &gt; 3 ]]; then LastTag=$LastMergedTag; fi
-      fi
+      if [[ $(echo $LastTag | awk -F. &apos;{ print NF - 1 }&apos;) &gt; 3 ]]; then LastTag=$LastMergedTag; fi
       # It is the first TAG so add 3 characters from the branch name and add it to the last current TAG
       # Start with number 1 (0 will chnage to 1), in case it is exist add 6 characters
       if git rev-parse $LastTag.$extName.1 &gt;/dev/null 2&gt;&amp;1; then extName=$extNameLong; fi
@@ -136,10 +134,10 @@ do
     # Find the merged commit TAG (option &apos;--merges&apos;)
     # the feature branches should start with it, 
     # for example: 3.2.0.445.HTT.1 was merged from 3.2.0.445
-    LastMergedTag=`git tag --points-at $(git log --merges -n1 --pretty=format:%H)^2 --sort=-taggerdate | head -1`
+    LastMergedTag=`git tag --points-at $(git log --merges -n1 --pretty=format:%H)^2 --sort=-taggerdate | head -1 | cut -d. -f1-4`
     echo LastTag = $LastTag ------------- LastMergedTag = $LastMergedTag
     # The last merged TAG must be with 3 periods kike: 3.2.0.445 this TAG came from the main branch
-    if [[ ! &quot;$LastTag&quot; =~ &quot;$LastMergedTag&quot; &amp;&amp; $(echo $LastMergedTag | awk -F. &apos;{ print NF - 1 }&apos;) == 3 ]]; then
+    if [[ ! &quot;$LastTag&quot; =~ &quot;$LastMergedTag&quot; ]]; then
       LastTag=$LastMergedTag;
       echo set to $LastMergedTag;
     else 
