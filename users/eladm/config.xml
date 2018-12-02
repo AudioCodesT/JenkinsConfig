@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwCJQXUmEqrrJojIZQCUl+Mxe4+mIYs8PBP7uoI/fXU9y0tOOIBuSBRjddq7Oxvjadd9TOL1rUnaWv78HVKPaR7A==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>9889d825-f3dc-48ab-8f1f-9080d2fa9e9f</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>c5a7ddd2b224c5a711d8d476eefb60cd064d467900ed9996c56fb75338103020</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -50,13 +62,15 @@
         <string>SSL_TandemG</string>
         <string># IPP RnD – Israel</string>
         <string># IPP</string>
+        <string>Linuxusers</string>
         <string># IPP RnD</string>
+        <string># IPP TandemG</string>
         <string>Certificate Service DCOM Access</string>
         <string>Domain Users</string>
         <string>IppSwReleases</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1526966523476</timestamp>
+      <timestamp>1543747422058</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
   </properties>
 </user>
