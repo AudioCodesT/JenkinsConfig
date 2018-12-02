@@ -136,7 +136,7 @@ do
     # for example: 3.2.0.445.HTT.1 was merged from 3.2.0.445
     LastMergedTag=`git tag --points-at $(git log --merges -n1 --pretty=format:%H)^2 --sort=-taggerdate | head -1 | cut -d. -f1-4`
     echo LastTag = $LastTag ------------- LastMergedTag = $LastMergedTag
-    # The last merged TAG must be with 3 periods kike: 3.2.0.445 this TAG came from the main branch
+    # The last merged TAG must be with 3 periods kike: 3.2.0.445 this TAG came from the merged branch
     if [[ ! &quot;$LastTag&quot; =~ &quot;$LastMergedTag&quot; ]]; then
       LastTag=$LastMergedTag;
       echo set to $LastMergedTag;
