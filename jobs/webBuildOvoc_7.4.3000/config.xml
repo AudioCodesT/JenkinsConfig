@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>poll SCM every 15 minutes&#xd;
-if new code then build and deploy ovoc-7.4.2000.zip</description>
+if new code then build and deploy ovoc-7.4.3000.zip</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -48,7 +48,7 @@ if new code then build and deploy ovoc-7.4.2000.zip</description>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>7.4.2000</name>
+        <name>7.4.3000</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -173,7 +173,7 @@ mv dist/ovoc*.zip dist/ovoc-7.4.0.zip
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
-      <deployPattern>dist/ovoc*.zip=&gt;com/ac/ems/ovoc_client/7.4.2000
+      <deployPattern>dist/ovoc*.zip=&gt;com/ac/ems/ovoc_client/7.4.3000/
 </deployPattern>
       <resolvePattern></resolvePattern>
       <matrixParams></matrixParams>

@@ -1,0 +1,144 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>30</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_CHANGE_ID</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_PATCHSET_REVISION</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_CHANGE_NUMBER</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>ipp-build</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#list of branches, sort from older to newer
+#array is NL_branches which is non lync branches
+declare -a NL_branches=(&quot;nonLync_2.2.12&quot; &quot;2.2.14&quot; &quot;2.2.16&quot;)
+#if the current gerrit branch is the last on the list then exit:
+#because there is no need to cherry pick it to anywhere
+if [ &quot;${NL_branches[${#NL_branches[@]}-1]}&quot; == &quot;${GERRIT_BRANCH}&quot; ]; then exit 0; fi
+
+#some init params
+url=&quot;https://gerrit/a/changes/?q=&quot;
+vote=1
+declare -a missingBranches
+
+#loop the branch list
+for i in &quot;${!NL_branches[@]}&quot;; do
+   #find the gerrit branch in list
+   if [[ &quot;${NL_branches[$i]}&quot; = &quot;${GERRIT_BRANCH}&quot; ]]; then
+	   echo &quot;***  NL_branches[$i] is THE current branch  ***&quot;
+       index=${i};
+       continue;
+   else     
+   	   echo &quot;***  NL_branches[$i] is not the current branch  ***&quot;
+   fi
+   #if gerrit branch was already found, then check if current branch has this change-ID
+   if [[ $index ]]; then
+      exist=$(curl -k -s --digest --basic -u jenkins:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${NL_branches[$i]}\&quot;&quot; || true);
+      if [[ &quot;$exist&quot; = &quot;0&quot; ]]; then
+        echo &quot;*** Change-ID was not found in branch ${NL_branches[$i]} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${NL_branches[$i]}&quot;)
+      else
+        echo &quot;*** Change-ID does exist in branch ${NL_branches[$i]} ***&quot;
+      fi
+   fi
+done
+
+echo &quot;*** check was done. need to vote $vote to gerrit  ***&quot;
+echo &quot;*** these are the branched without cherry-pick:  ${missingBranches[@]}  ***&quot;
+
+#############################
+#reply vote to gerrit label Cherry-Pick + message
+if [[ &quot;$vote&quot; = &quot;-1&quot; ]]; then
+#	ssh -vvv -p 29418 jenkins@gerrit gerrit review  --project IPP/SFB --message &quot;&apos;missing cherry-pick to branch: ${missingBranches[@]}, please retry when done: $BUILD_URL&apos;&quot;  --label Cherry-Pick=-1 $GERRIT_PATCHSET_REVISION
+    curl -k  -u jenkins:$curl_pass --basic -X POST https://gerrit/a/changes/${GERRIT_CHANGE_NUMBER}/revisions/${GERRIT_PATCHSET_REVISION}/review -d &quot;{\&quot;message\&quot;: \&quot;missing cherry-pick to branch: ${missingBranches[@]}, please retry when done: ${BUILD_URL}\&quot;, \&quot;labels\&quot;: {\&quot;Cherry-Pick\&quot;: \&quot;-1\&quot;}}&quot; -H &apos;Content-Type:application/json&apos;	
+else
+#	ssh -vvv -p 29418 jenkins@gerrit gerrit review  --project IPP/SFB --message &quot;&apos;No missing cherry-pick&apos;&quot; --label Cherry-Pick=1 $GERRIT_PATCHSET_REVISION
+    curl -k  -u jenkins:$curl_pass --basic -X POST https://gerrit/a/changes/${GERRIT_CHANGE_NUMBER}/revisions/${GERRIT_PATCHSET_REVISION}/review -d &quot;{\&quot;message\&quot;: \&quot;No missing cherry-pick\&quot;, \&quot;labels\&quot;: {\&quot;Cherry-Pick\&quot;: \&quot;+1\&quot;}}&quot; -H &apos;Content-Type:application/json&apos;
+fi
+
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>shuky.riechard</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>curl_pass</name>
+          <value>{AQAAABAAAAAQxfqkbcsKaaE7h1KJuzAfikxK825r2hC1RWBKnZ1ZVgQ=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER}__change#$GERRIT_CHANGE_NUMBER</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+</project>

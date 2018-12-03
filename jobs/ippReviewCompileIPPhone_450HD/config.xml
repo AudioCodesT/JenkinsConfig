@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.7.1">
+<?xml version='1.1' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.12">
   <actions/>
   <description>Compile after “Push to Gerrit”:&#xd;
 in branch 3.0.0_450HD, 3.0.2  :  440, 450&#xd;
@@ -21,10 +21,10 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -34,10 +34,11 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
           <name>GERRIT_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
-    <EnvInjectJobProperty plugin="envinject@1.92.1">
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
@@ -47,8 +48,9 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
       <overrideBuildParameters>false</overrideBuildParameters>
       <contributors/>
     </EnvInjectJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -72,9 +74,10 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
         <reference></reference>
         <timeout>10</timeout>
         <depth>10</depth>
+        <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -88,7 +91,7 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -157,6 +160,7 @@ in 3.0.6:  405, 402, 440, 450, 445 </description>
       <dependencyJobsNames></dependencyJobsNames>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
       <buildStartMessage></buildStartMessage>
       <buildFailureMessage></buildFailureMessage>
       <buildSuccessfulMessage></buildSuccessfulMessage>
@@ -222,7 +226,7 @@ then exit 1
 fi</command>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -231,6 +235,7 @@ fi</command>
                   <projects>ippVerifyCherryPick</projects>
                   <condition>ALWAYS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
+                  <triggerFromChildProjects>false</triggerFromChildProjects>
                 </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
@@ -242,7 +247,7 @@ fi</command>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
       <details>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -265,6 +270,7 @@ fi</command>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
         <credentials>
@@ -273,6 +279,7 @@ fi</command>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}
 ${WORKSPACE}/build/image/phone.bin=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/gerrit-change-${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}
@@ -287,11 +294,15 @@ ${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/$AUTOPRD/build-${BUILD_NUMBER}/ger
       </envVarsPatterns>
       <discardOldBuilds>true</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
       <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
+      <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">

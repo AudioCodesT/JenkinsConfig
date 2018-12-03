@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.7.1">
+<?xml version='1.1' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.12">
   <actions/>
   <description>a copy of ippBuild_450HD_Lync&#xd;
 -----------------------------------------------&#xd;
@@ -13,10 +13,10 @@ Compile and deploy 450HD</description>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -26,10 +26,11 @@ Compile and deploy 450HD</description>
           <name>BUILD_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
-    <EnvInjectJobProperty plugin="envinject@1.92.1">
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
@@ -39,8 +40,9 @@ Compile and deploy 450HD</description>
       <overrideBuildParameters>false</overrideBuildParameters>
       <contributors/>
     </EnvInjectJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -66,6 +68,7 @@ Compile and deploy 450HD</description>
         <noTags>false</noTags>
         <reference></reference>
         <depth>100</depth>
+        <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
@@ -102,7 +105,7 @@ echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;${IPP_MAJOR_VER}_450HD&quot;; fi;
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
+    <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
@@ -135,14 +138,14 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.16">
+    <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>shuky.riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
       <details>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -165,6 +168,7 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
         <credentials>
@@ -173,6 +177,7 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <deployPattern>${WORKSPACE}/build/image/*$AUTOPRD*.img=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/$AUTOPRD/${BUILD_BRANCH}/
 ${WORKSPACE}/build/image/*$AUTOPRD*.img.md5.txt=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/$AUTOPRD/${BUILD_BRANCH}
@@ -192,11 +197,15 @@ ${WORKSPACE}/build/image/binGroupdefFor450HD.def=&gt;SFB/DEBUG/${IPP_MAJOR_VER}/
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
       <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
+      <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}___${BUILD_BRANCH}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">

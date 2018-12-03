@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.20">
+<?xml version='1.1' encoding='UTF-8'?>
+<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.29">
   <actions/>
   <description>execute Sanity jobs on parallel&#xd;
 1. suite-1 / branch a&#xd;
@@ -13,10 +13,10 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -26,11 +26,13 @@
           <name>LASTBL</name>
           <description></description>
           <defaultValue>None</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
           <description>Build brunch Release</description>
           <defaultValue>3.0.1</defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>PC2RUN</name>
@@ -60,11 +62,12 @@
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>master</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -76,6 +79,7 @@
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_child</jobName>
           <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -85,23 +89,26 @@
           <abortAllJob>false</abortAllJob>
           <condition></condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=basic1of4
 model=$MODEL
 SuiteName=basic1of4
 </properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
               <nodeLabel>${PC2RUN}</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_child</jobName>
           <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -111,23 +118,26 @@ SuiteName=basic1of4
           <abortAllJob>false</abortAllJob>
           <condition></condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=basic2of4
 model=$MODEL
 SuiteName=basic2of4
 </properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.1">
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
               <nodeLabel>${PC2RUN}</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_child</jobName>
           <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -137,18 +147,21 @@ SuiteName=basic2of4
           <abortAllJob>true</abortAllJob>
           <condition></condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=basic3of4
 model=$MODEL
 SuiteName=basic3of4</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_child</jobName>
           <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -158,14 +171,16 @@ SuiteName=basic3of4</properties>
           <abortAllJob>true</abortAllJob>
           <condition></condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=basic4of4
 model=$MODEL
 SuiteName=basic4of4</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
           <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>

@@ -41,7 +41,9 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippTestAuto</assignedNode>
@@ -199,6 +201,7 @@ date
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login

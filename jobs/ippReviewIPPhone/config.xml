@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>Execute cppcheck after “Push to Gerrit”</description>
@@ -18,14 +18,14 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
-    <EnvInjectJobProperty plugin="envinject@1.92.1">
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <propertiesContent>JAVA_HOME=/opt/jenkinsslave/jdk
 PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</propertiesContent>
@@ -37,8 +37,9 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
       <overrideBuildParameters>false</overrideBuildParameters>
       <contributors/>
     </EnvInjectJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -62,9 +63,10 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
         <reference></reference>
         <timeout>20</timeout>
         <depth>8</depth>
+        <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.21.1">
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -73,11 +75,11 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <quietPeriod>90</quietPeriod>
   <assignedNode>ipp-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.21.1">
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -106,6 +108,7 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
       <dependencyJobsNames></dependencyJobsNames>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
       <buildStartMessage></buildStartMessage>
       <buildFailureMessage></buildFailureMessage>
       <buildSuccessfulMessage></buildSuccessfulMessage>
@@ -129,9 +132,6 @@ PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH:${JAVA_HOME}/bin:$HOME/bin</properties
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command></command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
       <command>#Cleanup unnecessary files and optimize the local repository
 git gc --aggressive --prune=all &amp;
 
@@ -142,24 +142,27 @@ if [ -f &quot;needcppcheck&quot; ]; then rm -f needcppcheck; fi
 git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; &gt; changedFiles.txt || { echo &quot;*****  no files to check  *****&quot;; exit 0; }
 touch needcppcheck
 # Static code analysis - CPP Check
-cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml
+#cppcheck --enable=all --inconclusive --xml --xml-version=2 --file-list=changedFiles.txt 2&gt; cppcheck.xml
+
+#start using cppcheck.sh - a script from IPP group that will run cppcheck with their configuration
+sh cppcheck.sh
 
 #prepare env variable
 echo COMMIT_CHANGED_FILES=`git diff-tree --no-commit-id --name-only --diff-filter=ACMRT -r ${GERRIT_PATCHSET_REVISION} | egrep &apos;\.c$|\.cpp$|\.h$&apos; | sed &apos;:a;N;$!ba;s/\n/,/g&apos;` &gt; changedFiles.prop</command>
     </hudson.tasks.Shell>
-    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.3">
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
       <runCondition class="org.jenkins_ci.plugins.run_condition.core.FileExistsCondition" plugin="run-condition@1.0">
         <file>needcppcheck</file>
         <baseDir class="org.jenkins_ci.plugins.run_condition.common.BaseDirectory$Workspace"/>
       </runCondition>
       <conditionalbuilders>
-        <EnvInjectBuilder plugin="envinject@1.92.1">
+        <EnvInjectBuilder plugin="envinject@2.1.5">
           <info>
             <propertiesFilePath>changedFiles.prop</propertiesFilePath>
           </info>
         </EnvInjectBuilder>
-        <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.3">
+        <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.6.1">
           <project></project>
           <properties># Required metadata
 sonar.projectKey=com.ac.ipp
@@ -229,33 +232,7 @@ sonar.report.export.path=sonar-report.json</properties>
                 </configGraph>
               </cppcheckConfig>
             </org.jenkinsci.plugins.cppcheck.CppcheckPublisher>
-            <org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher plugin="sonar-gerrit@1.0.6">
-              <sonarURL>http://sanjer:9000</sonarURL>
-              <subJobConfigs>
-                <org.jenkinsci.plugins.sonargerrit.SubJobConfig>
-                  <projectPath></projectPath>
-                  <sonarReportPath>.sonar/sonar-report.json</sonarReportPath>
-                </org.jenkinsci.plugins.sonargerrit.SubJobConfig>
-              </subJobConfigs>
-              <severity>MINOR</severity>
-              <changedLinesOnly>true</changedLinesOnly>
-              <newIssuesOnly>true</newIssuesOnly>
-              <noIssuesToPostText>Code Analysis violations have not been found.</noIssuesToPostText>
-              <someIssuesToPostText>&lt;total_count&gt; Code Analysis violations have been found.</someIssuesToPostText>
-              <issueComment>&lt;severity&gt; SonarQube violation:
-
-
-&lt;message&gt;
-
-
-Read more: &lt;rule_url&gt;</issueComment>
-              <postScore>true</postScore>
-              <category>Code-Review</category>
-              <noIssuesScore>0</noIssuesScore>
-              <issuesScore>-1</issuesScore>
-              <noIssuesNotification>NONE</noIssuesNotification>
-              <issuesNotification>OWNER</issuesNotification>
-            </org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher>
+            <org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher plugin="sonar-gerrit@2.3"/>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
@@ -264,7 +241,7 @@ Read more: &lt;rule_url&gt;</issueComment>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.17.1">
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
         <timeoutMinutes>20</timeoutMinutes>
       </strategy>

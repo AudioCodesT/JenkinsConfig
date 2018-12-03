@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description>Activated at ~11:00AM and at ~23:00PM, this job create a new TAG and execute the 2 following jobs:&#xd;
@@ -13,14 +13,14 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
-    <EnvInjectJobProperty plugin="envinject@1.92.1">
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <propertiesContent>BUILD_BRANCH=3.0.0_450HD</propertiesContent>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -31,8 +31,9 @@
       <overrideBuildParameters>false</overrideBuildParameters>
       <contributors/>
     </EnvInjectJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -104,7 +105,7 @@ fi</command>
 #echo IPP_VER=${IPP_VER} &gt;&gt; generated_ipp_version.properties
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
+    <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
@@ -118,7 +119,7 @@ fi</command>
             <token>$NEW_TAG</token>
           </condition>
           <publisherList>
-            <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
+            <hudson.plugins.git.GitPublisher plugin="git@3.8.0">
               <configVersion>2</configVersion>
               <pushMerge>false</pushMerge>
               <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
@@ -133,17 +134,19 @@ fi</command>
                 </hudson.plugins.git.GitPublisher_-TagToPush>
               </tagsToPush>
             </hudson.plugins.git.GitPublisher>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.30">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                       <properties>BUILD_BRANCH=${BUILD_BRANCH}</properties>
+                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
                   <projects>ippBuild_450HD_ReleaseNotes,ippBuild_450HD_Lync</projects>
                   <condition>SUCCESS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
+                  <triggerFromChildProjects>false</triggerFromChildProjects>
                 </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
@@ -155,8 +158,10 @@ fi</command>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.5.1">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}___${IPP_VER}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>

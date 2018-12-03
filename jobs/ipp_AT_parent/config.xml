@@ -78,7 +78,9 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippTestAuto</assignedNode>
@@ -328,6 +330,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
                       <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
@@ -383,6 +386,7 @@ echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
                       <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <EnvInjectBuilder plugin="envinject@2.1.5">
                         <info>
@@ -396,6 +400,7 @@ echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
@@ -428,6 +433,7 @@ $change,$newPS
                       <string>SUCCESS</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash --login
@@ -460,6 +466,7 @@ $change,$newPS
                       <string>ABORTED</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash --login

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -10,10 +10,10 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -23,11 +23,13 @@
           <name>VERSION_NAME</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -59,7 +61,7 @@
     <hudson.tasks.Shell>
       <command>cp /home/centos/jenkinsslave/arm-frontend-pom.xml pom.xml</command>
     </hudson.tasks.Shell>
-    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.3">
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
       <runCondition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
         <command>#check if VERSION_NAME var is set
@@ -71,7 +73,7 @@
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
-    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.3">
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
       <runCondition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
         <command>#check if VERSION_NAME var is unset
@@ -87,12 +89,12 @@ echo &quot;FE_VERSION=$version&quot; &gt; env.properties</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
-    <EnvInjectBuilder plugin="envinject@1.92.1">
+    <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
         <propertiesFilePath>env.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>versions:set -DnewVersion=${FE_VERSION}</goals>
@@ -101,7 +103,7 @@ echo &quot;FE_VERSION=$version&quot; &gt; env.properties</command>
     <hudson.tasks.Shell>
       <command>cp env.properties latest.txt</command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>clean package -Dmaven.test.skip=true</goals>
@@ -113,7 +115,7 @@ cp env.properties latest.txt</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.git.GitPublisher plugin="git@2.4.4">
+    <hudson.plugins.git.GitPublisher plugin="git@3.8.0">
       <configVersion>2</configVersion>
       <pushMerge>false</pushMerge>
       <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
@@ -130,7 +132,7 @@ cp env.properties latest.txt</command>
     </hudson.plugins.git.GitPublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.4.7">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
       <details>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -153,6 +155,7 @@ cp env.properties latest.txt</command>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
         <credentials>
@@ -161,6 +164,7 @@ cp env.properties latest.txt</command>
         </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <deployPattern>target/arm-frontend-*.war=&gt;com/ac/arm/arm-frontend/${FE_VERSION}/
 latest.txt=&gt;com/ac/arm/arm-frontend</deployPattern>
@@ -174,7 +178,9 @@ latest.txt=&gt;com/ac/arm/arm-frontend</deployPattern>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
+      <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
   </buildWrappers>
 </project>

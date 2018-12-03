@@ -1,0 +1,148 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>manual run</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://jenkins@gerrit:29418/mediatech/mrcp</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
+      <url>https://gerrit/plugins/gitblit/</url>
+      <projectName>mediatech/mrcp</projectName>
+    </browser>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+    </extensions>
+  </scm>
+  <assignedNode>nsc-Build</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!&quot;C:\Program Files\Git\git-bash.exe&quot; -xe
+
+cd $WORKSPACE
+#
+fullBranch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1`
+BRANCH=`echo $fullBranch | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+OLDTAG=`git describe --abbrev=0 --first-parent --tags HEAD^`
+DATE=`date`
+
+#calculate new tag
+# If vesion number is to be handled by Jenkins,
+# parse it from OLDTAG here.
+#
+# Define new build number
+# Note that suffix &quot;I&quot; is hard coded!!
+MAJOR=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $1}&apos;`
+MINOR=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $2}&apos;`
+POINT=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $3}&apos;`
+OLDBUILD=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $NF}&apos; | sed &apos;{s/[^0-9]//g}&apos;`
+NEWBUILD=`echo $OLDTAG | gawk -F&apos;.&apos; &apos;{print $NF+1}&apos; | sed &apos;{s/[^0-9]//g}&apos;`
+NEWTAG=$MAJOR.$MINOR.$POINT.$NEWBUILD
+VERSION=$MAJOR.$MINOR.$POINT
+
+# Need these details for the UpdateVI job
+AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $OLDTAG..$fullBranch | grep -v Jenkins | sort -u | sed s/$/\;/g`
+RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $OLDTAG..$fullBranch | sed s/\&quot;/\&apos;/g`
+VIS=`git log --pretty=format:&quot;%B&quot; $OLDTAG..$fullBranch | grep ^Issue | sed &apos;s/^Issue: \(VI\|\)//g; s/ .*//g&apos; | sort -u`
+EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $OLDTAG..$fullBranch | sort -u`
+GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5 | sed &apos;s:\.git::&apos;`
+
+echo NEWBUILD=$NEWBUILD &gt; release.prop
+echo NEWTAG=$NEWTAG &gt;&gt; release.prop
+echo VERSION=$VERSION &gt;&gt; release.prop
+echo VERSION=${VERSION} &gt;&gt; release.prop
+echo RN=${RN} &gt;&gt; release.prop
+echo VIS=${VIS} &gt;&gt; release.prop
+echo EMAIL=${EMAIL} &gt;&gt; release.prop
+echo PROJECT=${GERRIT_PROJECT} &gt;&gt; release.prop
+echo DATE=${DATE} &gt;&gt; release.prop
+echo AuthorCommitter=${AuthorCommitter} &gt;&gt; release.prop
+
+echo cat release.prop:
+cat release.prop
+
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>release.prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
+      <token></token>
+      <remoteJenkinsName>test-jenkins</remoteJenkinsName>
+      <job>UpdateVI</job>
+      <shouldNotFailBuild>true</shouldNotFailBuild>
+      <pollInterval>10</pollInterval>
+      <connectionRetryLimit>5</connectionRetryLimit>
+      <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
+      <blockBuildUntilComplete>false</blockBuildUntilComplete>
+      <enhancedLogging>false</enhancedLogging>
+      <parameters>NEWTAG=$NEWTAG
+RN=$RN
+VIS=$VIS
+EMAIL=$EMAIL
+PROJECT=$PROJECT
+DATE=$DATE
+GERRIT_BRANCH=$BRANCH
+AuthorCommitter=$AuthorCommitter</parameters>
+      <parameterList>
+        <string>NEWTAG=$NEWTAG</string>
+        <string>RN=$RN</string>
+        <string>VIS=$VIS</string>
+        <string>EMAIL=$EMAIL</string>
+        <string>PROJECT=$PROJECT</string>
+        <string>DATE=$DATE</string>
+        <string>GERRIT_BRANCH=$BRANCH</string>
+        <string>AuthorCommitter=$AuthorCommitter</string>
+      </parameterList>
+      <overrideAuth>false</overrideAuth>
+      <auth>
+        <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
+          <NONE>none</NONE>
+          <API__TOKEN>apiToken</API__TOKEN>
+          <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
+        </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
+      </auth>
+      <loadParamsFromFile>false</loadParamsFromFile>
+      <parameterFile></parameterFile>
+      <queryString></queryString>
+    </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

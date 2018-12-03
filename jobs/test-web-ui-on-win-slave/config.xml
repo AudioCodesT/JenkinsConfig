@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
   <description></description>
@@ -10,10 +10,10 @@
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.1">
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -25,9 +25,11 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -37,7 +39,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>7.4.3000</name>
+        <name>7.4.2000</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -55,7 +57,7 @@
     <hudson.tasks.Shell>
       <command>#!&quot;C:\cygwin64\bin\bash.exe&quot; --login -i
 
-echo `date`
+
 cd $WORKSPACE
 
 
@@ -80,36 +82,37 @@ fi
 #bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
 #bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
 
-GERRIT_BRANCH=&quot;7.4.3000&quot;
-echo `date`
-echo &quot;RUN:  install&quot;
+GERRIT_BRANCH=&quot;7.4.2000&quot;
+
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
-then npm install
-else yarn install
+then 
+echo &quot;RUN:npm install&quot;
+npm install
+else
+echo &quot;RUN: yarn install&quot;
+yarn install
 fi
 
 echo &quot;RUN: bower install --force-latest&quot;
 bower install --force-latest
-echo &quot;RUN:  dist&quot;
 
-#cygstart chrome 
-#cygstart iexplore -extoff
 
-#cygstart firefox http://localhost:9018/
-echo `date`
+
+
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
-then grunt dist
-else npm run dist
+then
+echo &quot;RUN: grunt dist&quot;
+grunt dist
+else 
+echo &quot;RUN: npm dist&quot;
+npm run dist
 fi
-echo `date`
-#taskkill /f /im chrome.exe
-#taskkill /f /im iexplore.exe
-#taskkill /f /im firefox.exe
+
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.30">
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>.git/**</pattern>
