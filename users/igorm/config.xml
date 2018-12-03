@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAw0NOnIqOSbl4FqYR74zyA2ZYLarwaaKKuoRXNbXUQa1bot/nybfh1qizPQNr78IiaY2Z7YSvBNTnWvuramiSkBw==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>ad75698d-be7d-4b60-80e2-73773e2ad49f</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>8fa8ca372e98b76dc16fe9297e1577af41c63305e9e23bc626df41f3d19421ac</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -33,8 +45,8 @@
         <string># All Beer Sheva</string>
         <string>authenticated</string>
         <string>Password Manager Apply</string>
-        <string># RnD ARM Configurator</string>
         <string>AWS_Jira_Users</string>
+        <string># RnD ARM Configurator</string>
         <string># RnD ARM</string>
         <string># All ISRAEL</string>
         <string># All__Beer_Sheva</string>
@@ -55,7 +67,7 @@
         <string>Logistics_maintenance</string>
         <string>CI_ARM_developers</string>
       </roles>
-      <timestamp>1535982024018</timestamp>
+      <timestamp>1543842818406</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Igor.Maller@audiocodes.com</emailAddress>
