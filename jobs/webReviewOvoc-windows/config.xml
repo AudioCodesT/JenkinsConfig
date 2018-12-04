@@ -206,7 +206,7 @@ sleep 20
 verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Verified | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
 if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
 then 
-ssh -p 29418 jenkins@gerrit gerrit review \
+ssh -p 29418 benm@gerrit gerrit review \
 --code-review +2 \
 --submit ${GERRIT_PATCHSET_REVISION}
 fi
