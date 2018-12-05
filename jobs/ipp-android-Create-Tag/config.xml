@@ -348,6 +348,11 @@ done
       </delay>
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>shuky.riechard yossim</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
