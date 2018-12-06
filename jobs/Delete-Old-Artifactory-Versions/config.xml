@@ -20,6 +20,7 @@ Executed periodically every night.&#xd;
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
+    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -46,7 +47,6 @@ Executed periodically every night.&#xd;
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -113,6 +113,7 @@ deep=1
 ARTIFACTORY=artifactory
 RemoveFolder ipp-review/nonLync
 RemoveFolder ipp-review/SFB
+RemoveFolder ipp-review/Android
 RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.1000/latest_iso
 RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.2000/latest_iso
 RemoveFolder ems-release/com/ac/ems/ovoc_server/7.4.3000/latest_iso
