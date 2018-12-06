@@ -198,6 +198,7 @@ fi
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
             <command>#!C:\Program Files\Git\bin\bash --login -i
 set -x
+sleep 60
 if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]
 then
 CURL=&quot;curl -kn -u jenkins:$jpass --silent&quot;
@@ -206,7 +207,6 @@ verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/r
 echo $verifiedStatus
 if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
 then 
-
 #ssh -p 29418 benm@gerrit gerrit review \
 #--code-review +2 \
 #--submit ${GERRIT_PATCHSET_REVISION}
