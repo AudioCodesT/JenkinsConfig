@@ -185,12 +185,6 @@ else
 
 fi
 
-if [[ &quot;$GERRIT_BRANCH&quot; == 7.6 ]]
-then
-echo &quot;The branch is 7.6, deleting node_modules, for 7.6.1000 will pass next build&quot;
-rm -rf node_modules
-fi
-
 
 
 
