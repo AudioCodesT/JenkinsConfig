@@ -228,7 +228,7 @@ sleep 20
 if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]
 then
 CURL=&quot;curl -kn -u jenkins:$jpass --silent&quot;
-sleep 60
+sleep 20
 verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Verified | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
 echo $verifiedStatus
 if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
