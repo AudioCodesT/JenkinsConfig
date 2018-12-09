@@ -25,9 +25,7 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
@@ -361,15 +359,15 @@ do
         #if is the first PATH added, add with out &apos;,&apos;
         if [[ &quot;$jiraSourcePaths&quot; == &quot;&quot; || &quot;$jiraDestPaths&quot; == &quot;&quot; || &quot;$jiraDestPathForChecksum&quot; == &quot;&quot; ]]
         then
-          jiraSourcePaths+=&quot;$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
+          jiraSourcePaths+=&quot;$HOME/tempFilesToCopyProductionJira/${sourcePath}&quot;
           jiraDestPaths+=&quot;${jiraDestPath}/&quot;
           jiraDestPathForChecksum+=&quot;$jiraDestPath/$sourcePath&quot;
         else
-          jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyTestJira/${sourcePath}&quot;
+          jiraSourcePaths+=&quot;,$HOME/tempFilesToCopyProductionJira/${sourcePath}&quot;
           jiraDestPaths+=&quot;,${jiraDestPath}/&quot;
           jiraDestPathForChecksum+=&quot;,$jiraDestPath/$sourcePath&quot;
         fi
-    	scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyTestJira/${sourcePath}&apos;&quot;
+    	scp -i $HOME/.ssh/AudioCodes-CICD-Apps.pem ${WORKSPACE}/${filePath} centos@${server_ip}:&quot;&apos;$HOME/tempFilesToCopyProductionJira/${sourcePath}&apos;&quot;
 	fi
 done
 
