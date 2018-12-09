@@ -227,7 +227,7 @@ verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/r
 echo $verifiedStatus&#xd;
 if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]&#xd;
 then &#xd;
-ssh -p 29418 benm@gerrit gerrit review \&#xd;
+ssh -p 29418 jenkins@gerrit gerrit review \&#xd;
 --code-review +2 \&#xd;
 --submit ${GERRIT_PATCHSET_REVISION}&#xd;
 fi&#xd;
