@@ -210,33 +210,43 @@ fi
             </bestResult>
           </condition>
           <publisherList>
-            <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
-              <tasks>
-                <hudson.plugins.postbuildtask.TaskProperties>
-                  <logTexts/>
-                  <EscalateStatus>false</EscalateStatus>
-                  <RunIfJobSuccessful>false</RunIfJobSuccessful>
-                  <script>#!C:\Program Files\Git\bin\bash --login -i&#xd;
-set -x&#xd;
-sleep 20&#xd;
-if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]&#xd;
-then&#xd;
-CURL=&quot;curl -kn -u jenkins:$jpass --silent&quot;&#xd;
-sleep 60&#xd;
-verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Verified | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)&#xd;
-echo $verifiedStatus&#xd;
-if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]&#xd;
-then &#xd;
-ssh -p 29418 jenkins@gerrit gerrit review \&#xd;
---code-review +2 \&#xd;
---submit ${GERRIT_PATCHSET_REVISION}&#xd;
-fi&#xd;
-fi</script>
-                </hudson.plugins.postbuildtask.TaskProperties>
-              </tasks>
-            </hudson.plugins.postbuildtask.PostbuildTask>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!C:\Program Files\Git\bin\bash --login -i
+set -x
+sleep 20
+if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]
+then
+CURL=&quot;curl -kn -u jenkins:$jpass --silent&quot;
+sleep 60
+verifiedStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Verified | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
+echo $verifiedStatus
+if [[ &quot;$verifiedStatus&quot; == &quot;+1&quot; ]]
+then 
+ssh -p 29418 jenkins@gerrit gerrit review \
+--code-review +2 \
+--submit ${GERRIT_PATCHSET_REVISION}
+fi
+fi</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
