@@ -132,7 +132,9 @@
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
+          <separator>#</separator>
+        </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
