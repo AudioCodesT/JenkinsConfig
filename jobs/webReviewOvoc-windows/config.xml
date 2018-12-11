@@ -19,7 +19,6 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -176,13 +175,29 @@ else
       echo &quot;killing the proccess of the protractor proxy server&quot;
 	  taskkill /F /PID &quot;$pidNumber&quot;
    fi
-   echo &quot;RUN: yarn run protractorProxyServer&quot;
-    yarn run protractorProxyServer &amp; sleep 15
-    echo &quot;RUN: yarn run protractorServer&quot;
-    yarn run protractorServer &amp; sleep 15
-    echo &quot;RUN: yarn run protractor&quot;
-    yarn run protractor
-
+   #for branch 7.6 run protractor
+   if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
+   then
+   		echo &quot;RUN: yarn run protractorProxyServer&quot;
+    	yarn run protractorProxyServer &amp; sleep 15
+    	echo &quot;RUN: yarn run protractorServer&quot;
+    	yarn run protractorServer &amp; sleep 15
+    	echo &quot;RUN: yarn run protractor&quot;
+    	yarn run protractor
+        #all others branches run uiTests
+	else
+    	#change serverName to proxy server ip
+    	sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
+        #change username and password
+    	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.js
+        sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.js
+        echo &quot;RUN: yarn run protractorProxyServer&quot; 
+    	yarn run protractorProxyServer &amp; sleep 15
+        echo &quot;RUN: yarn run proxyServer&quot;
+  	    yarn run proxyServer &amp; sleep 15
+        echo &quot;RUN: yarn run uiTests&quot;
+        yarn run uiTests
+    fi
 fi
 
 
