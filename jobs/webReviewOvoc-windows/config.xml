@@ -163,8 +163,11 @@ else
       echo &quot;killing the proccess of the protractor proxy server&quot;
 	  taskkill /F /PID &quot;$pidNumber&quot;
    fi
+   if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4.3000&quot; ]]
+   then
+   		echo &quot;for 7.4.3000 NO Protractor or UITests running&quot;
    #for branch 7.6 run protractor TESTS
-   if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
+   elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
    then
    		echo &quot;RUN: yarn run protractorProxyServer&quot;
     	yarn run protractorProxyServer &amp; sleep 15
