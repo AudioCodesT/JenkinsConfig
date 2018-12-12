@@ -175,7 +175,7 @@ else
       echo &quot;killing the proccess of the protractor proxy server&quot;
 	  taskkill /F /PID &quot;$pidNumber&quot;
    fi
-   #for branch 7.6 run protractor
+   #for branch 7.6 run protractor TESTS
    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
    then
    		echo &quot;RUN: yarn run protractorProxyServer&quot;
