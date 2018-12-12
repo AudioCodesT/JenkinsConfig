@@ -289,7 +289,7 @@ fi</command>
                       <hudson.tasks.Shell>
                         <command>#!C:\Program Files\Git\bin\bash --login -i
 set -x
-message=&quot;all The Videos tests are in ${BUILD_URL}artifact/cypress/videos/ovoc/&quot;
+message=&quot;UITests failed all videos of the failed tests are in this url: ${BUILD_URL}artifact/cypress/videos/ovoc/&quot;
 CURL=&quot;curl -kn -u jenkins:$jpass --silent&quot;
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
