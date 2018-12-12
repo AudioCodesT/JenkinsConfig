@@ -44,9 +44,7 @@ if new code then build and deploy ovoc-7.6.zip</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
@@ -201,14 +199,28 @@ then
   	    echo &quot;killing the proccess of the protractor proxy server&quot;
         taskkill /F /PID &quot;$pidNumber&quot;
 	  fi
-      
-      
-      echo &quot;RUN: yarn run protractorProxyServer&quot;
-      yarn run protractorProxyServer &amp; sleep 15
-      echo &quot;RUN: yarn run protractorServer&quot;
-      yarn run protractorServer &amp; sleep 15
-      echo &quot;RUN: yarn run protractor&quot;
-      yarn run protractor
+      		
+         if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
+  		 then
+   			echo &quot;RUN: yarn run protractorProxyServer&quot;
+    		yarn run protractorProxyServer &amp; sleep 15
+    		echo &quot;RUN: yarn run protractorServer&quot;
+    		yarn run protractorServer &amp; sleep 15
+    		echo &quot;RUN: yarn run protractor&quot;
+    		yarn run protractor
+    	    #all others branches run uiTests
+		else
+    		#change serverName to proxy server ip
+    		sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
+            #change username and password
+    		sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.js
+    	    sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.js
+    	    echo &quot;RUN: yarn run proxyServer&quot;
+  		    yarn run proxyServer &amp; sleep 15
+       		echo &quot;RUN: yarn run uiTests&quot;
+    	    yarn run uiTests
+    	fi
+    
       echo &quot;RUN: yarn run replaceStrings&quot;
       yarn run replaceStrings 
       echo &quot;RUN:yarn run zip&quot;
