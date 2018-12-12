@@ -239,9 +239,9 @@ fi
                       <hudson.tasks.Shell>
                         <command>#!C:\Program Files\Git\bin\bash --login -i
 set -x
-sleep 20
 if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;jenkins&quot; &amp;&amp; &quot;$GERRIT_CHANGE_SUBJECT&quot; == &quot;Auto-Copy from Ovoc server: REST Schemas change&quot; ]]
 then
+sleep 20
 ssh -p 29418 jenkins@gerrit gerrit review \
 --code-review +2 \
 #--verified +1 \
