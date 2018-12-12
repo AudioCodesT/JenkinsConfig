@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwTmb/UKKY+juW32jHlbT3Bc1nb/FpYV4rWE1AnjZTkiazh29csgq/3k7z7dT4C2wEi1cXs6L+98kbyLbwBkoYtw==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>3997d64a-0b51-4de2-986c-f2d70971254b</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>2642c4e1830601cf69061ae1669a4c64322a370f8fe2b2f507ea03e49d70c9d2</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -30,8 +42,8 @@
     </hudson.search.UserSearchProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
-        <string># All Dinner</string>
         <string># R&amp;D HDGW SYSTEM</string>
+        <string># All Dinner</string>
         <string>authenticated</string>
         <string>TG1000</string>
         <string>AWS_Jira_Users</string>
@@ -67,7 +79,7 @@
         <string>tgcustomersupport_forward</string>
         <string>CI_ARM_developers</string>
       </roles>
-      <timestamp>1538539414980</timestamp>
+      <timestamp>1544629821937</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Kobi.Levi@audiocodes.com</emailAddress>
