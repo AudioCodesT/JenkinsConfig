@@ -142,6 +142,11 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
+    <org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger plugin="startup-trigger-plugin@2.8">
+      <spec></spec>
+      <quietPeriod>300</quietPeriod>
+      <runOnChoice>ON_CONNECT</runOnChoice>
+    </org.jvnet.hudson.plugins.triggers.startup.HudsonStartupTrigger>
     <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
       <spec></spec>
       <gerritProjects>
