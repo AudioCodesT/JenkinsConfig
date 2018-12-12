@@ -199,7 +199,7 @@ then
   	    echo &quot;killing the proccess of the protractor proxy server&quot;
         taskkill /F /PID &quot;$pidNumber&quot;
 	  fi
-      		
+      	# for BRANCH 7.6 run protractor TESTS	
          if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
   		 then
    			echo &quot;RUN: yarn run protractorProxyServer&quot;
@@ -208,7 +208,7 @@ then
     		yarn run protractorServer &amp; sleep 15
     		echo &quot;RUN: yarn run protractor&quot;
     		yarn run protractor
-    	    #all others branches run uiTests
+    	    #all others branches (7.6.1000 and up) run uiTests
 		else
     		#change serverName to proxy server ip
     		sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
