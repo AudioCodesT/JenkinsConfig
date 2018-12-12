@@ -198,7 +198,7 @@ fi
   <publishers>
     <hudson.tasks.ArtifactArchiver>
       <artifacts>cypress\videos\ovoc\**\*.mp4</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
+      <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
       <defaultExcludes>true</defaultExcludes>
