@@ -299,7 +299,7 @@ checkIfMP4Exists=$(find &quot;$pathToVideos&quot; -name *.mp4)
 
 if [[ &quot;$checkIfMP4Exists&quot; != &quot;&quot; ]]
 then
-#$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;}&quot;
 fi</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
