@@ -181,7 +181,8 @@ else
     	sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
         #change username and password
     	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.js
-        sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.js
+        #sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.js correct one!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        sed -i -- &apos;s/%password%/pass_123456/g&apos; ${WORKSPACE}/cypress/support/config.js
         echo &quot;RUN: yarn run proxyServer&quot;
   	    yarn run proxyServer &amp; sleep 15
         echo &quot;RUN: yarn run uiTests&quot;
