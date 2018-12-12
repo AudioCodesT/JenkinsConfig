@@ -244,8 +244,9 @@ then
 sleep 20
 ssh -p 29418 jenkins@gerrit gerrit review \
 --code-review +2 \
+--verified +1 \
 --submit ${GERRIT_PATCHSET_REVISION}
-#--verified +1 \
+
 
 fi</command>
                       </hudson.tasks.Shell>
