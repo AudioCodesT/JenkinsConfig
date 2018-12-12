@@ -295,6 +295,9 @@ base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+pathToVideos=&quot;cypress/videos/ovoc&quot;
+checkIfMP4Exists=$(find &quot;$pathToVideos&quot; -name *.mp4)
+
 if [[ -e cypress\videos\ovoc\**\*.mp4 ]]
 then
 #$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$escapedMessage\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
