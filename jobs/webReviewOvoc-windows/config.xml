@@ -140,18 +140,6 @@ if [[ -z &quot;$output&quot; ]]
 then private-bower &amp; sleep 15
 fi
 
-# register the packages.
-#echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
-#bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git
-#echo &quot;RUN: bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git&quot;
-#bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git
-#echo &quot;RUN: bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git&quot;
-#bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git
-#echo &quot;RUN: bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git&quot;
-#bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
-#echo &quot;RUN: bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git &quot;
-#bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
-
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
 then 
   echo &quot;RUN:npm install&quot;
