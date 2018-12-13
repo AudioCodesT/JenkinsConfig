@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwqABPD7YHtLBf+vAOOQIhgm3txjtsKAER7ups4++vKDQbl4pWdxOM5irj6NivmoAuzE771iJPFJCHTSnc67ljEQ==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>db2e42ee-087a-4247-a337-9d9af1a28578</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>f6515172ceb77967448c756fce05b2e58b59c4a1715a942f8143714368c94623</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -36,6 +48,7 @@
     </hudson.tasks.Mailer_-UserProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
+        <string># ROW employees</string>
         <string>authenticated</string>
         <string>Password Manager Apply</string>
         <string>AWS_Jira_Users</string>
@@ -58,7 +71,7 @@
         <string># IPP QA - SZ</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1524643471520</timestamp>
+      <timestamp>1544672662705</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
   </properties>
 </user>
