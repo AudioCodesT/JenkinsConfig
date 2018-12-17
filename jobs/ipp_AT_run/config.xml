@@ -18,7 +18,6 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -158,7 +157,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
 -firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
--jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
+-jenkinsUserGerrit &quot;$EMAIL&quot; -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
 
  set -o pipefail
