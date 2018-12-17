@@ -100,6 +100,7 @@
       <command>#!/bin/bash -x
 #the above line is needed because we are going to use &quot;source&quot; command
 
+rm -f *.zip
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
 
 # second need to sync on latest changes off all other repositories
