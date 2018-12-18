@@ -75,7 +75,6 @@
 date
 
 echo BUILD_USER: $BUILD_USER
-echo JENKINS_STARTED_BY: $JENKINS_STARTED_BY
 echo BUILD_USER_EMAIL: $BUILD_USER_EMAIL
 
 User=&quot;$artifactory_user:$artifactory_password&quot;
@@ -135,7 +134,6 @@ if [ $countImages -ne 0 ]; then
   echo $countImages files were not found ... abort
   exit 2
 fi
-echo BUILD_USER_EMAIL=oren.assoulin@audiocodes.com &gt;&gt; ${WORKSPACE}/properties.txt
 
 </command>
       <unstableReturn>2</unstableReturn>
