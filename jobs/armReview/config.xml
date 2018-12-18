@@ -33,10 +33,8 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <org.jenkinsci.plugins.junitrealtimetestreporter.PerJobConfiguration plugin="junit-realtime-test-reporter@0.6"/>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
@@ -197,6 +195,34 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
+    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.1">
+      <execPattern>**/**.exec</execPattern>
+      <classPattern>**/target/**/classes</classPattern>
+      <sourcePattern>**/src/main/java</sourcePattern>
+      <inclusionPattern></inclusionPattern>
+      <exclusionPattern></exclusionPattern>
+      <skipCopyOfSrcFiles>false</skipCopyOfSrcFiles>
+      <minimumInstructionCoverage>0</minimumInstructionCoverage>
+      <minimumBranchCoverage>0</minimumBranchCoverage>
+      <minimumComplexityCoverage>0</minimumComplexityCoverage>
+      <minimumLineCoverage>0</minimumLineCoverage>
+      <minimumMethodCoverage>0</minimumMethodCoverage>
+      <minimumClassCoverage>0</minimumClassCoverage>
+      <maximumInstructionCoverage>0</maximumInstructionCoverage>
+      <maximumBranchCoverage>0</maximumBranchCoverage>
+      <maximumComplexityCoverage>0</maximumComplexityCoverage>
+      <maximumLineCoverage>0</maximumLineCoverage>
+      <maximumMethodCoverage>0</maximumMethodCoverage>
+      <maximumClassCoverage>0</maximumClassCoverage>
+      <changeBuildStatus>false</changeBuildStatus>
+      <deltaInstructionCoverage>0</deltaInstructionCoverage>
+      <deltaBranchCoverage>0</deltaBranchCoverage>
+      <deltaComplexityCoverage>0</deltaComplexityCoverage>
+      <deltaLineCoverage>0</deltaLineCoverage>
+      <deltaMethodCoverage>0</deltaMethodCoverage>
+      <deltaClassCoverage>0</deltaClassCoverage>
+      <buildOverBuild>false</buildOverBuild>
+    </hudson.plugins.jacoco.JacocoPublisher>
     <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
       <config>
         <scriptFiles/>
@@ -211,7 +237,6 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
               <string>UNSTABLE</string>
             </results>
             <role>BOTH</role>
-            <executeOn>BOTH</executeOn>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>######### OLD Sputnik #############
