@@ -60,9 +60,7 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
@@ -75,6 +73,9 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash --login
 date
+
+echo BUILD_USER: $BUILD_USER
+echo BUILD_USER_EMAIL: $BUILD_USER_EMAIL
 
 User=&quot;$artifactory_user:$artifactory_password&quot;
 net use z: /delete
@@ -133,7 +134,7 @@ if [ $countImages -ne 0 ]; then
   echo $countImages files were not found ... abort
   exit 2
 fi
-
+echo BUILD_USER_EMAIL=oren.assoulin@audiocodes.com &gt;&gt; ${WORKSPACE}/properties.txt
 
 </command>
       <unstableReturn>2</unstableReturn>
@@ -165,7 +166,7 @@ fi
 GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=450
 IMAGENAMES=$ImageNames
-</properties>
+EMAIL=${BUILD_USER_EMAIL}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
