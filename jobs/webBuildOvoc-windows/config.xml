@@ -215,6 +215,7 @@ then
             #change username and password
     		sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.js
     	    sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.js
+           #sed -i -- &apos;s/%version%/${BUILD_NUMBER}/g&apos; ${WORKSPACE}/cypress/support/config.js
     	    echo &quot;RUN: yarn run proxyServer&quot;
   		    yarn run proxyServer &amp; sleep 15
        		echo &quot;RUN: yarn run uiTests&quot;
