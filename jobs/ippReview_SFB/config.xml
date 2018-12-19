@@ -19,7 +19,6 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -293,7 +292,7 @@ Owner=$GERRIT_PATCHSET_UPLOADER_NAME
 if [[ ! $GERRIT_BRANCH =~ private ]]; then
   if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] ; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
-      CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+      CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
       base=https://$GERRIT_HOST/a/changes
 
@@ -319,7 +318,7 @@ if [[ -e GTest.sh ]]; then
      set -e 
      message=$(sed -e :a -e &apos;$q;N;19,$D;ba&apos; GTestLogFile.txt)
      escapedMessage=$(printf &apos;%s&apos; &quot;$message&quot; | sed &apos;s/[^a-zA-Z0-9/ \r\n]*//g&apos;)
-     CURL=&quot;curl -kn -u jenkins:jenkins@ac --silent&quot;
+     CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
      base=https://$GERRIT_HOST/a/changes
 
       id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
@@ -418,6 +417,10 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
           <value>{AQAAABAAAAAQhYeTcVWTOs+2wXDu3jovLBzIUwyXm8elke2OBdOHbWQ=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>jenkins_pass</name>
+          <value>{AQAAABAAAAAQ1Uf51l9jeQ6OX5yVW7TUfrUizZePzVyxIH3PJIlxv3Q=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
