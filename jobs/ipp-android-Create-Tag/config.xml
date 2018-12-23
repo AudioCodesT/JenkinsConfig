@@ -380,7 +380,7 @@ done
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>Try again later after 300 seconds</regexpForRerun>
+      <regexpForRerun>.*(Try again later after 300 seconds|Killed by signal 15|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>true</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
