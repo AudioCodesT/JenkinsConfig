@@ -87,10 +87,6 @@
               <compareType>ANT</compareType>
               <pattern>3.2</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>feature/3.2/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -134,7 +130,8 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+      <command>#feature/3.2/**
+CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
