@@ -53,7 +53,6 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -67,7 +66,6 @@
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
-      <contributors/>
     </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -115,18 +113,11 @@
       <values>
         <string>boards2compile.yml</string>
       </values>
-      <computedValues>
-        <string>auto AUTOPRD=405HD &amp; binary</string>
-        <string>auto AUTOPRD=430HD &amp; binary</string>
-        <string>auto AUTOPRD=440HD &amp; binary</string>
-        <string>auto AUTOPRD=445HD &amp; binary</string>
-        <string>auto AUTOPRD=450HD &amp; binary</string>
-      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp-build</string>
+        <string>ipp-centos7.4</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
@@ -167,7 +158,7 @@ echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_
       <command>User=&quot;$artifactory_user:$artifactory_password&quot;
 
 # Check if the image exist already in the Artifactory - if exist, exit without error
-if curl -ks -u $User https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
+if curl -ks -u $User https://artifactory/api/storage/ipp-review/com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
 	echo ${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img exist already... Abort without error;
     exit 0
 fi
@@ -261,7 +252,7 @@ fi</command>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
           <keyFromText></keyFromText>
-          <keyFromSelect>ipp-release</keyFromSelect>
+          <keyFromSelect>ipp-review</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
         <stagingPlugin/>
@@ -296,20 +287,20 @@ fi</command>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
-${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
-${WORKSPACE}/build/product/config.csv=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/product/status.csv=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/*_size_report.csv=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/bootloader.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/env.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/logo_image=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/phone.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
-${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/build.tgz=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/build_tgz
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+${WORKSPACE}/build/product/config.csv=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/product/status.csv=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/*_size_report.csv=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/bootloader.img=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/env.bin=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/logo_image=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/phone.bin=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
+${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/benTests/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 </deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
@@ -322,7 +313,7 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
