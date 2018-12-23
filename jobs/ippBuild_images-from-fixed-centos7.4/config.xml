@@ -70,7 +70,6 @@ here we trigger manually, to produce images from centos7.4 and test it</descript
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
@@ -106,7 +105,7 @@ here we trigger manually, to produce images from centos7.4 and test it</descript
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
   <assignedNode>ipp-matrix-parents-centos7.4</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
