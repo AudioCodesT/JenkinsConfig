@@ -138,7 +138,8 @@ id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
 
-
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.2&quot; ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.2/device_manager&quot; ]] 
+then
 set -e -x
 echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
 
@@ -184,7 +185,7 @@ $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: applicati
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind Gtest $valgrindSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
 
 fi
-</command>
+fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
