@@ -137,14 +137,14 @@ base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-
+model=&apos;auto AUTOPRD=450HD &apos;
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.2&quot; ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.2/device_manager&quot; ]] 
 then
 set -e -x
 echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
 
 # Compile project
-make GTEST=1
+make GTEST=1 $model
 #for the retuned value from script wont failed the build
 set +e
 #run gtest
