@@ -149,7 +149,8 @@ then
    echo &quot;RUN: grunt dist&quot;
   grunt dist
 else
-	rm -rf yarn.lock
+	# delete yarn.lock file (auto generated in yarn install)
+    rm -rf yarn.lock
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
  	echo &quot;RUN: yarn install&quot;
