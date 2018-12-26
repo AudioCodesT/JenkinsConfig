@@ -189,7 +189,7 @@ gtestSign=$([ $gtestFailuresNum == 0 ] &amp;&amp; echo 1 || echo -1)
 valgrindSign=$([ $valgrindRetValue == 2 ] &amp;&amp; echo -1 || echo 1)
 
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;GTest $gtestSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind Gtest $valgrindSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind Gtest $valgrindSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
 
 fi
 </command>
