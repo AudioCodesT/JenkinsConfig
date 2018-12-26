@@ -144,6 +144,10 @@ set -e -x
 echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
 
 # Compile project
+export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
+export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
+yes | make distclean
+
 make GTEST=1 $model
 #for the retuned value from script wont failed the build
 set +e
