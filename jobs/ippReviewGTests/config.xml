@@ -166,7 +166,7 @@ do
 	gtestFailuresNum=`grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; $f`
 
 	# no need to parse other files if there is already a failure
-	if [ $gtestFailuresNum = 1 ]
+	if [[ &quot;$gtestFailuresNum&quot; == &quot;1&quot; ]]
     then 
     	break
     fi
