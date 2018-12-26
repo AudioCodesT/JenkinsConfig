@@ -164,7 +164,6 @@ gtestFailuresNum=0
 for f in &quot;build/GTestLogs/*&quot;
 do
 	gtestFailuresNum=`grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; $f`
-
 	# no need to parse other files if there is already a failure
 	if [[ &quot;$gtestFailuresNum&quot; == &quot;1&quot; ]]
     then 
