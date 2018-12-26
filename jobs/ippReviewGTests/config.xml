@@ -161,7 +161,7 @@ valgrindRetValue=$?
 set -e 
 #fetch gtest errors
 gtestFailuresNum=0
-for f in &quot;$IPP_DIR/build/GTestLogs/*&quot;
+for f in &quot;build/GTestLogs/*&quot;
 do
 	gtestFailuresNum=`grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; $f`
 
@@ -176,7 +176,7 @@ done
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 ARTIFACTORY_PATH=https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}
 
-for f in &quot;$IPP_DIR/build/GTestLogs/*&quot;
+for f in &quot;build/GTestLogs/*&quot;
 do
 	curl -ks -u ipp-push-gtest:ipp-push-gtest -X PUT &quot;$ARTIFACTORY_PATH/$f&quot; -T $f &gt; /dev/null
 done
