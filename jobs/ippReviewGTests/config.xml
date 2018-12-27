@@ -172,7 +172,7 @@ else
 
 #run valgrind/gtest
 valgrindRetValue=$(./vSFB.sh gtest_valgrind &gt; gtest_valgrind_LOG.txt; echo $?)
-
+cat gtest_valgrind_LOG.txt
 #fetch gtest errors
 
 gtestFailed=$(grep &apos;FAILED TEST&apos; build/GTestLogs/* &gt;/dev/null; echo $?)
