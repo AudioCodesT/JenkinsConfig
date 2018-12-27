@@ -163,7 +163,7 @@ then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;The Compilation of 450HD Sim Failed, for running GTest and Valgrind\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
 fi
 #for the retuned value from script wont failed the build
-set +e
+
 #run gtest
 valgrindRetValue=$(./vSFB.sh gtest_valgrind)
 
