@@ -77,7 +77,7 @@
   <scmCheckoutRetryCount>1</scmCheckoutRetryCount>
   <assignedNode>ipp-centos7.4</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -128,7 +128,7 @@
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>false</excludeNoCodeChange>
+          <excludeNoCodeChange>true</excludeNoCodeChange>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
