@@ -146,40 +146,37 @@ id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
 model=&apos;auto AUTOPRD=450HD__SIM&apos;
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.2&quot; ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.2/device_manager&quot; ]] 
-then
-set -e -x
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+echo TARGET=${TARGET} &gt; generated_ipp_version.properties
+ARTIFACTORY_PATH=https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}
+
 echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
 
 # Compile project
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 #export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
-
-make GTEST=1 $model
+compileFailed=&quot;False&quot;
+make GTEST=1 $model || compileFailed=&quot;True&quot;
+if [[ &quot;$compileFailed&quot; == &quot;True&quot; ]] 
+then
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;The Compilation of 450HD Sim Failed, for running GTest and Valgrind\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+fi
 #for the retuned value from script wont failed the build
 set +e
 #run gtest
-./vSFB.sh gtest_valgrind
-valgrindRetValue=$?
+valgrindRetValue=$(./vSFB.sh gtest_valgrind)
+
 
 #fetch gtest errors
+gtestFailed=$(grep &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/*)
+if [[ &quot;$gtestFailed&quot; == &quot;1&quot; ]]
+then
 gtestFailuresNum=0
-for f in &quot;build/GTestLogs/*&quot;
-do
-	gtestFailuresNum=$(grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; $f)
-	# no need to parse other files if there is already a failure
-	if [[ &quot;$gtestFailuresNum&quot; == &quot;1&quot; ]]
-    then 
-    	break
-    fi
-done
-set -e 
+else
+gtestFailuresNum=1
+fi
 
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt; generated_ipp_version.properties
-
-ARTIFACTORY_PATH=https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}
 
 echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
 
@@ -192,8 +189,8 @@ valgrindSign=$([ $valgrindRetValue == 2 ] &amp;&amp; echo -1 || echo 1)
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;GTest $gtestSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind Gtest $valgrindSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
 
-fi
-echo TARGET=${TARGET} &gt; generated_ipp_version.properties</command>
+
+</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
