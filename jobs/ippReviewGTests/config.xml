@@ -96,6 +96,10 @@
               <compareType>ANT</compareType>
               <pattern>feature/3.2/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>feature/EMS_Client</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -165,12 +169,10 @@ $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: applicati
 # the compilation of 450HD Pass successfully, continue the build
 else
 
-set +e
-#run valgrind/gtest
-./vSFB.sh gtest_valgrind
-valgrindRetValue=$?
 
-set -e
+#run valgrind/gtest
+valgrindRetValue=$(./vSFB.sh gtest_valgrind &gt; gtest_valgrind_LOG.txt; echo $?)
+
 #fetch gtest errors
 
 gtestFailed=$(grep &apos;FAILED TEST&apos; build/GTestLogs/* &gt;/dev/null; echo $?)
