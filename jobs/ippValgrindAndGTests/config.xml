@@ -172,6 +172,7 @@ else
 
 #run valgrind/gtest
 valgrindRetValue=$(./vSFB.sh gtest_valgrind &gt; gtest_valgrind_LOG.txt; echo $?)
+# print valgrind output
 cat gtest_valgrind_LOG.txt
 #fetch gtest errors
 
@@ -184,6 +185,7 @@ else
 gtestFailuresNum=1
 fi
 
+cat build/GTestLogs/*
 echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
 
 
