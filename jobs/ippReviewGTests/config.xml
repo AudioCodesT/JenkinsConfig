@@ -158,15 +158,15 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 compileFailed=&quot;False&quot;
 make GTEST=1 $model || compileFailed=&quot;True&quot;
+#if comilation of 450HD Sim Fail =&gt; add message to gerrit
 if [[ &quot;$compileFailed&quot; == &quot;True&quot; ]] 
 then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;The Compilation of 450HD Sim Failed, for running GTest and Valgrind\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+# the compilation of 450HD Pass successfully, continue the build
 else
-#for the retuned value from script wont failed the build
 
-#run gtest
+#run valgrind/gtest
 valgrindRetValue=$(./vSFB.sh gtest_valgrind)
-
 
 #fetch gtest errors
 gtestFailed=$(grep &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/*)
