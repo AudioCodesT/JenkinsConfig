@@ -194,8 +194,8 @@ echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT -------------
 gtestSign=$([ $gtestFailuresNum == 0 ] &amp;&amp; echo 1 || echo -1)
 valgrindSign=$([ $valgrindRetValue == 2 ] &amp;&amp; echo -1 || echo 1)
 
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;GTest $gtestSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind Gtest $valgrindSign: $ARTIFACTORY_PATH\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${BUILD_URL}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${BUILD_URL}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
 fi
 
 </command>
@@ -214,63 +214,6 @@ fi
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
-      <deployerDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>ipp-review</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </deployerDetails>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
-      <uploadSpec>
-        <spec></spec>
-      </uploadSpec>
-      <downloadSpec>
-        <spec></spec>
-      </downloadSpec>
-      <deployPattern>${WORKSPACE}/build/GTestLogs/*=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
-      <deployBuildInfo>false</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <asyncBuildRetention>false</asyncBuildRetention>
-      <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
-      <overrideBuildName>false</overrideBuildName>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
