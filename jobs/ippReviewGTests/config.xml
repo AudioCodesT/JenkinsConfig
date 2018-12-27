@@ -167,9 +167,10 @@ else
 
 
 #run valgrind/gtest
-./vSFB.sh gtest_valgrind &gt; /dev/null
+./vSFB.sh gtest_valgrind &gt; vSFBLog.txt
 valgrindRetValue=$?
 
+cat vSFBLog.txt
 #fetch gtest errors
 
 grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/* &gt; /dev/null
