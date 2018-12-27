@@ -169,6 +169,7 @@ else
 valgrindRetValue=$(./vSFB.sh gtest_valgrind)
 
 #fetch gtest errors
+set +e
 grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/*
 gtestFailed=$?
 if [[ &quot;$gtestFailed&quot; == &quot;1&quot; ]]
@@ -177,7 +178,7 @@ gtestFailuresNum=0
 else
 gtestFailuresNum=1
 fi
-
+set -e
 
 echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
 
