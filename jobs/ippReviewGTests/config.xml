@@ -165,15 +165,15 @@ $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: applicati
 # the compilation of 450HD Pass successfully, continue the build
 else
 
-
+set +e
 #run valgrind/gtest
-./vSFB.sh gtest_valgrind &gt; vSFBLog.txt
+./vSFB.sh gtest_valgrind
 valgrindRetValue=$?
 
 cat vSFBLog.txt
 #fetch gtest errors
 
-grep &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/* &gt; /dev/null
+grep &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/*
 gtestFailed=$?
 if [[ &quot;$gtestFailed&quot; == &quot;1&quot; ]]
 then
@@ -181,7 +181,7 @@ gtestFailuresNum=0
 else
 gtestFailuresNum=1
 fi
-
+set -e
 echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
 
 
