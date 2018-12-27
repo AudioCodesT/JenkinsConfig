@@ -165,7 +165,7 @@ make GTEST=1 $model || compileFailed=&quot;True&quot;
 #if comilation of 450HD Sim Fail =&gt; add message to gerrit
 if [[ &quot;$compileFailed&quot; == &quot;True&quot; ]] 
 then
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;The Compilation of 450HD Sim Failed, for running GTest and Valgrind\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest Failed because the Compilation of 450HD SIM Failed. \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
 # the compilation of 450HD Pass successfully, continue the build
 else
 
