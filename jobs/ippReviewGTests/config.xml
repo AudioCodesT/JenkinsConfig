@@ -164,7 +164,7 @@ then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;The Compilation of 450HD Sim Failed, for running GTest and Valgrind\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
 # the compilation of 450HD Pass successfully, continue the build
 else
-
+#adding set -e for the return code from running the scripts wont fail the build
 set +e
 #run valgrind/gtest
 ./vSFB.sh gtest_valgrind
@@ -180,9 +180,7 @@ gtestFailuresNum=0
 else
 gtestFailuresNum=1
 fi
-
 set -e
-
 echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
 
 
