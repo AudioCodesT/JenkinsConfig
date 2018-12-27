@@ -173,7 +173,7 @@ valgrindRetValue=$?
 cat vSFBLog.txt
 #fetch gtest errors
 
-grep -Ec &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/* &gt; /dev/null
+grep &apos;[[:digit:]]+ FAILED TEST&apos; build/GTestLogs/* &gt; /dev/null
 gtestFailed=$?
 if [[ &quot;$gtestFailed&quot; == &quot;1&quot; ]]
 then
