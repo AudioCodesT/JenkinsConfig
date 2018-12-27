@@ -141,7 +141,7 @@ base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-model=&apos;auto AUTOPRD=450HD__SIM &apos;
+model=&apos;auto AUTOPRD=450HD__SIM&apos;
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.2&quot; ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/3.2/device_manager&quot; ]] 
 then
 set -e -x
