@@ -171,9 +171,9 @@ else
 
 set +e
 #run valgrind/gtest
-valgrindRetValue=$(./vSFB.sh gtest_valgrind &gt; gtest_valgrind_LOG.txt; echo $?)
+valgrindRetValue=$(./vSFB.sh gtest_valgrind &gt; vSFB_LOG.txt; echo $?)
 # print valgrind output
-cat gtest_valgrind_LOG.txt
+cat vSFB_LOG.txt
 #fetch gtest errors
 set -e
 gtestFailed=$(grep &apos;FAILED TEST&apos; build/GTestLogs/* &gt;/dev/null; echo $?)
@@ -208,7 +208,7 @@ fi
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>build/GTestLogs/*,gtest_valgrind_LOG.txt</artifacts>
+      <artifacts>build/GTestLogs/*,vSFB_LOG.txt</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
