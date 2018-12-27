@@ -142,12 +142,15 @@ set -e
 cd $WORKSPACE
 
 
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]]
+then
 # adding ac-infra
 echo &quot;git submodule init&quot;
 git submodule init
 echo &quot;git submodule update&quot;
 git submodule update
 echo &quot;finish submodule&quot;
+fi
 
 
 #connect repositories using https instead opf git:
