@@ -150,6 +150,7 @@ git submodule init
 echo &quot;git submodule update&quot;
 git submodule update
 echo &quot;finish submodule&quot;
+rm -rf yarn.lock
 fi
 
 
@@ -177,7 +178,7 @@ then
 	  	bower install --force-latest
       # for version 7.4.3000 and up, use yarn
       else
-        rm -rf yarn.lock
+        
       	yarn config set registry https://artifactory/api/npm/npm/
 		yarn config set strict-ssl false
       	echo &quot;RUN: yarn install&quot;
