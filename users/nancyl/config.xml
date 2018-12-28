@@ -1,14 +1,26 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <user>
   <fullName>Nancy Liao</fullName>
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwH+bD/NMZymII1v5qglPI+tLmcTMkU1NL4kqrNc7XeDHrlFiOLaEXtlUUQBGYEey67InE0m7akHKfm392aHy+gg==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>b1b60e60-9b5a-48c7-827e-57cc8e7fddbf</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>8f1f324488cc01c7f0110ccc421b2407c6bfc87c99b8c7d78cf4ad09b166030f</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
-    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
+    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.62">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
     <hudson.model.MyViewsProperty>
@@ -30,12 +42,13 @@
     <hudson.search.UserSearchProperty>
       <insensitiveSearch>false</insensitiveSearch>
     </hudson.search.UserSearchProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.20">
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Nancy.Liao@audiocodes.com</emailAddress>
     </hudson.tasks.Mailer_-UserProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
       <roles>
         <string>CI_IPP_developers</string>
+        <string># ROW employees</string>
         <string>authenticated</string>
         <string>Vopp_Tech_Support_RO</string>
         <string># IPP RnD – SZ</string>
@@ -59,9 +72,9 @@
         <string># IPP Allen SW SZ</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1520933334652</timestamp>
+      <timestamp>1545978639631</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
-    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.0">
+    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.2.0">
       <providerId>default</providerId>
     </org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty>
   </properties>
