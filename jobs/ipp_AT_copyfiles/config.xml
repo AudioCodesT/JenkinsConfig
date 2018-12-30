@@ -62,7 +62,6 @@
       <limitOneJobWithMatchingParams>true</limitOneJobWithMatchingParams>
       <paramsToUseForLimit>REFSPEC</paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ipp_copyfiles</assignedNode>
@@ -184,9 +183,11 @@ done
 echo Check the checksum...
 # Check the checksum of the 5 img files before executing the AT itself
 for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
+  echo $Artifactory/$REFTARGET/$(basename $f)
   checkSum1=$(curl -ks -u $User -X GET \
             $Artifactory/$REFTARGET/$(basename $f) | \
             grep md5 | head -1 | cut -d\&quot; -f4)
+  echo $f
   checkSum2=$(md5sum $f | cut -d&quot; &quot; -f1)
   echo checksum: $checkSum1 and $checkSum2
   if [ &quot;$checkSum1&quot; != &quot;$checkSum2&quot; ]; then
