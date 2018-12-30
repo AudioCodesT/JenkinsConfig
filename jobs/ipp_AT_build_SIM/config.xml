@@ -19,7 +19,6 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -143,9 +142,10 @@
 TARGET=`echo $REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; generated_ipp_version.properties
 User=$artifactory_user:$artifactory_pass
+SubTAG=$(git describe --tags --abbrev=0 | cut -d. -f1-4)
 
 # Check if the image exist already in the Artifactory - if exist, exit without error
-if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep sim.tgz | grep -q ${AUTOPRD}_; then
+if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep sim.tgz | grep -q ${AUTOPRD}_ | grep SubTAG; then
 	echo ${GERRIT_BRANCH}/$TARGET/$AUTOPRD exist already... Abort without error;
     exit 0
 fi
