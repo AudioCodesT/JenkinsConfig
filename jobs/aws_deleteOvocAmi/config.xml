@@ -33,9 +33,7 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -78,6 +76,7 @@ def deleteAmis (imagesList):
 
 ec = boto3.client(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
 ec2 = boto3.resource(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
+boto3.set_stream_logger(&apos;boto&apos;)
 filters = [{&apos;Name&apos;:&apos;owner-id&apos;, &apos;Values&apos;:[&apos;858367874798&apos;]}]
 images = ec2.images.filter(Filters=filters)
 # Select all snapshots owned by me
