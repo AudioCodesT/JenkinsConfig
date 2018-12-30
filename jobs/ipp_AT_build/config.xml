@@ -60,7 +60,6 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -74,9 +73,7 @@
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
-      <contributors/>
     </EnvInjectJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
@@ -126,14 +123,6 @@
       <values>
         <string>boards2review.yml</string>
       </values>
-      <computedValues>
-        <string>auto AUTOPRD=405HD</string>
-        <string>auto AUTOPRD=430HD</string>
-        <string>auto AUTOPRD=440HD</string>
-        <string>auto AUTOPRD=445HD</string>
-        <string>auto AUTOPRD=450HD</string>
-        <string>auto AUTOPRD=450HD LOG=1</string>
-      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
@@ -163,8 +152,10 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
 # The grep -v flag exclude the pattern, needed when the img name contains _logs_ in case of LOG=1
 User=$artifactory_user:$artifactory_pass
 
+SubTAG=$(git describe --tags --abbrev=0 | cut -d. -f1-4)
+
 if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
-outputName=$(curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep UC${SHORTAUTOPRD}_ || true)
+outputName=$(curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep UC${SHORTAUTOPRD}_ | grep $SubTAG || true)
 if [ &quot;$outputName&quot; != &quot;&quot; ]; then
    lastTAG=$(git describe --tags --abbrev=0)
    echo Found: $outputName ----- Last TAG is: $lastTAG
@@ -249,7 +240,6 @@ done
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
-                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <EnvInjectBuilder plugin="envinject@2.1.5">
                         <info>
