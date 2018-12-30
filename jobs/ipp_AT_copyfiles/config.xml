@@ -206,6 +206,7 @@ for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
   fi
 done
 
+echo Send message to Jenkins: Automation test is in queue, for $change,$ps
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 date
