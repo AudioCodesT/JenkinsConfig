@@ -335,6 +335,7 @@ do
   if [ -z $LastWhen ]; then continue; fi
 
   echo Check the last commit if 5 minutes passed...
+  date
   CurrentTime=`date +%s`
   if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
     createTag
