@@ -183,7 +183,7 @@ AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IP
 RN=&quot;&quot;
 while read -r hash; do 
   subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
-  Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
+  Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[I&quot; | sed &apos;s/.*\[I/I/; s/\].*//&apos;)
   RN+=---$subject::$hash::$Jira
 done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $IPP_VER_PREV..$IPP_VER)&quot;
 
