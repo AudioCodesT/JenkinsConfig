@@ -117,7 +117,7 @@
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
-        <string>ipp-build</string>
+        <string>ipp-centos7.4</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
@@ -313,7 +313,7 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
