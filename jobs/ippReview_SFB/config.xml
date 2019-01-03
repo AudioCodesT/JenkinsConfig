@@ -224,7 +224,7 @@ fi
 #compile:
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
-yes | make distclean
+y | make distclean
 
 NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
 
