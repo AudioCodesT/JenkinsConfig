@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>this job is triggered periodically&#xd;
-purpose: STOP instance for Alex Agranov to test his scripts for virtual SSBC</description>
+purpose: STOP i-0d1e9251707de1444 (MeetingRecorder-Build-Slave-Static) IP: 172.16.143.61</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -34,7 +34,6 @@ purpose: STOP instance for Alex Agranov to test his scripts for virtual SSBC</de
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -51,7 +50,10 @@ purpose: STOP instance for Alex Agranov to test his scripts for virtual SSBC</de
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>aws ec2 stop-instances --instance-ids i-0d1e9251707de1444</command>
+      <command>echo &quot;***********************************************************************************&quot;
+echo &quot;Stopping i-0d1e9251707de1444 (MeetingRecorder-Build-Slave-Static) IP: 172.16.143.61&quot;
+echo &quot;***********************************************************************************&quot;
+aws ec2 stop-instances --instance-ids i-0d1e9251707de1444</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
