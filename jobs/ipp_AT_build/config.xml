@@ -286,19 +286,34 @@ $change,$ps
                 <command>#not fail the buiild
 set +e
 
+
 User=&quot;$artifactory_user:$artifactory_pass&quot;
 artifactory_host=artifactory
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 curlHasFailed=&quot;False&quot;
+if [[ -e build ]]
+then
 cd build
+else
+echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
+fi
 NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2)
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
 if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 then
-	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD}&quot;
-    exit 0
-else
+	# download older Tag and make comparasion between them
+	curlHasFailed=&quot;False&quot;
+	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD} of ${OLDTAG}&quot;
+    OLDTAG=$(git describe --tags --abbrev=0 ${OLDTAG}^ --first-parent origin/$GERRIT_BRANCH | head -n1)
+    echo &quot;trying to download older size report from ${OLDTAG}&quot;
+    curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+    if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
+	then
+    	echo &quot;Failed To Download Older Tag Version&quot;
+   		exit 0
+    fi
+fi
     currentPath=$(pwd)
     RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
     echo $RetunedValue
@@ -309,10 +324,10 @@ else
     then
     	echo &quot;${AUTOPRD} img size test passed&quot;
     else
-		echo &quot;${AUTOPRD} img size test failed&quot;
+		echo &quot;${AUTOPRD} img size test failed&quot; 
     fi
     echo &quot;*********************************************************&quot;
-fi
+
 
 </command>
               </hudson.tasks.Shell>
