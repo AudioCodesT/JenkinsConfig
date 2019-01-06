@@ -294,12 +294,12 @@ then
 	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD}&quot;
     exit 1
 else
-	set +e
+	#set +e
     currentPath=$(pwd)
-    make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport}
-    RetunedValue=$?
-    RetunedValue1=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
-    echo $RetunedValue1
+    #make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport}
+    #RetunedValue=$?
+    RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+    echo $RetunedValue
     cat size_diff_log.txt
     set -e
     echo &quot;*********************************************************&quot;
