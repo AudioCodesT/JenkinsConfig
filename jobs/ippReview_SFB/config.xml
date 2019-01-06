@@ -283,7 +283,7 @@ fi</command>
                 <command>User=&quot;$artifactory_user:$artifactory_password&quot;
 artifactory_host=artifactory
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
-failedToCurlOnceAtLeast=&quot;False&quot;
+curlHasFailed=&quot;False&quot;
 cd build
 NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2)
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
@@ -294,14 +294,12 @@ then
 	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD}&quot;
     exit 1
 else
-	#set +e
     currentPath=$(pwd)
     #make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport}
     #RetunedValue=$?
     RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
     echo $RetunedValue
     cat size_diff_log.txt
-    set -e
     echo &quot;*********************************************************&quot;
     #return 0 if the script succeseded else if failed
     if [[ $RetunedValue == &quot;0&quot; ]]
