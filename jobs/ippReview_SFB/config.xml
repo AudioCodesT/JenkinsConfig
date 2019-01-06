@@ -298,7 +298,7 @@ else
     currentPath=$(pwd)
     make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport}
     RetunedValue=$?
-    RetunedValue1=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new==${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+    RetunedValue1=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
     echo $RetunedValue1
     cat size_diff_log.txt
     set -e
