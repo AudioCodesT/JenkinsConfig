@@ -271,6 +271,54 @@ $change,$ps
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+      <config>
+        <scriptFiles/>
+        <groovyScripts/>
+        <buildSteps>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>SUCCESS</string>
+            </results>
+            <role>BOTH</role>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+artifactory_host=artifactory
+artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
+curlHasFailed=&quot;False&quot;
+cd build
+NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2)
+OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
+curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
+then
+	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD}&quot;
+    exit 0
+else
+    currentPath=$(pwd)
+    RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+    echo $RetunedValue
+    cat size_diff_log.txt
+    echo &quot;*********************************************************&quot;
+    #return 0 if the script succeseded else if failed
+    if [[ $RetunedValue == &quot;0&quot; ]]
+    then
+    	echo &quot;${AUTOPRD} img size test passed&quot;
+    else
+		echo &quot;${AUTOPRD} img size test failed&quot;
+    fi
+    echo &quot;*********************************************************&quot;
+fi
+
+</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+        </buildSteps>
+        <markBuildUnstable>false</markBuildUnstable>
+      </config>
+    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
     <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
