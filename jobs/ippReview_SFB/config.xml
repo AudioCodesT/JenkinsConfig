@@ -290,7 +290,6 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
 if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 then
-	failedToCurlOnceAtLeast=&quot;True&quot;
 	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD}&quot;
     exit 0
 else
