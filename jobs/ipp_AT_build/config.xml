@@ -283,7 +283,10 @@ $change,$ps
             <role>BOTH</role>
             <buildSteps>
               <hudson.tasks.Shell>
-                <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+                <command>#not fail the buiild
+set +e
+
+User=&quot;$artifactory_user:$artifactory_password&quot;
 artifactory_host=artifactory
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 curlHasFailed=&quot;False&quot;
