@@ -301,14 +301,14 @@ else
     #return 0 if the script succeseded else if failed
     if [[ $RetunedValue == &quot;0&quot; ]]
     then
-    	echo &quot;${AUTOPRD} img size test passed&quot;
+    	echo &quot;${AUTOPRD} img size test passed&quot; &gt;&gt; temp.txt
     else
-		echo &quot;${AUTOPRD} img size test failed&quot;
+		echo &quot;${AUTOPRD} img size test failed&quot; &gt;&gt; temp.txt
     fi
     echo &quot;*********************************************************&quot;
 fi
 
-</command>
+cat temp.txt</command>
               </hudson.tasks.Shell>
             </buildSteps>
           </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
