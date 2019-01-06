@@ -22,7 +22,6 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -119,12 +118,9 @@ then
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
         curlHasFailed=&quot;False&quot;
       else
-      # run comparison between the old csv to the new csv
-        set +e
-        #sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv
-        make size_diff ref=${OLDTAG}_size_report.csv new=${NEWTAG}_size_report.csv
-        RetunedValue=$?
-        set -e
+        # run comparison between the old csv to the new csv
+        RetunedValue=$(make size_diff ref=${OLDTAG}_size_report.csv new=${NEWTAG}_size_report.csv &gt; size_diff_log.txt; echo $?)
+
         
         #return 0 if the script succeseded else if failed
         if [[ $RetunedValue == &quot;0&quot; ]]
