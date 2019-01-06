@@ -230,7 +230,11 @@ NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{pri
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
+  if [[ $PARAMS =~ &quot;LOG=1&quot; ]]; then
+    make $PARAMS
+  else
+    make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
+  fi
 done
 </command>
     </hudson.tasks.Shell>
