@@ -292,7 +292,7 @@ if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 then
 	failedToCurlOnceAtLeast=&quot;True&quot;
 	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD}&quot;
-    exit 1
+    exit 0
 else
     currentPath=$(pwd)
     #make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport}
