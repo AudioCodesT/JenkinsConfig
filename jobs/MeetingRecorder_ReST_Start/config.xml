@@ -2,7 +2,8 @@
 <project>
   <actions/>
   <description>this job is triggered from URL&#xd;
-purpose: start instance for Alex Agranov to test his scripts for virtual SSBC</description>
+purpose: start MeetingRecorder instance for Brian.&#xd;
+No build job. Only start the instance.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -34,7 +35,6 @@ purpose: start instance for Alex Agranov to test his scripts for virtual SSBC</d
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -48,7 +48,10 @@ purpose: start instance for Alex Agranov to test his scripts for virtual SSBC</d
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>aws ec2 start-instances --instance-ids i-0d1e9251707de1444
+      <command>echo &quot;***********************************************************************************&quot;
+echo &quot;Starting i-0d1e9251707de1444 (MeetingRecorder-Build-Slave-Static) IP: 172.16.143.61&quot;
+echo &quot;***********************************************************************************&quot;
+aws ec2 start-instances --instance-ids i-0d1e9251707de1444
 </command>
     </hudson.tasks.Shell>
   </builders>
