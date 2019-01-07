@@ -286,7 +286,8 @@ $change,$ps
                 <command>#not fail the buiild
 set +e
 
-
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
 User=&quot;$artifactory_user:$artifactory_pass&quot;
 artifactory_host=artifactory
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
@@ -314,6 +315,7 @@ then
    		exit 0
     fi
 fi
+	echo &quot;*********************************************************&quot;
     currentPath=$(pwd)
     RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
     echo $RetunedValue
@@ -324,9 +326,10 @@ fi
     then
     	echo &quot;${AUTOPRD} img size test passed&quot;
     else
-		echo &quot;${AUTOPRD} img size test failed&quot; 
+    	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
+        ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
     fi
-    echo &quot;*********************************************************&quot;
+  
 
 
 </command>
