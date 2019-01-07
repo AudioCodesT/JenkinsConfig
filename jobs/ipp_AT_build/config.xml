@@ -324,7 +324,7 @@ fi
     #return 0 if the script succeseded else if failed
     if [[ $RetunedValue == &quot;0&quot; ]]
     then
-    	echo &quot;${AUTOPRD} img size test passed&quot;
+    	echo &quot;size_diff Test has passed on model ${AUTOPRD}&quot;
     else
     	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
         ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
