@@ -288,12 +288,12 @@ User=&quot;$artifactory_user:$artifactory_password&quot;
 artifactory_host=artifactory
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 curlHasFailed=&quot;False&quot;
-if [[ -e build ]]
+if [[ ! -e build ]]
 then
-cd build
-else
 echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
+exit 0
 fi
+cd build
 NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2)
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
