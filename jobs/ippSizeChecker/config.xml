@@ -119,7 +119,7 @@ then
         curlHasFailed=&quot;False&quot;
       else
         # run comparison between the old csv to the new csv
-        RetunedValue=$(make size_diff ref=${OLDTAG}_size_report.csv new=${NEWTAG}_size_report.csv &gt; size_diff_log.txt; echo $?)
+        RetunedValue=$(make size_diff ref=${OLDTAG}_size_report.csv new=${NEWTAG}_size_report.csv &gt; size_diff_log.txt 2&gt;&amp;1; echo $?)
 
         
         #return 0 if the script succeseded else if failed
