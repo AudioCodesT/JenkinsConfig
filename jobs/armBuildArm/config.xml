@@ -33,9 +33,8 @@
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>master</string>
+              <string>8.4</string>
               <string>8.2</string>
-              <string>8.0</string>
-              <string>7.8</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
@@ -68,9 +67,7 @@ otherwise - it is a night build and there is no version name change</description
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
