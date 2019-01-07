@@ -142,7 +142,7 @@ set -e
 cd $WORKSPACE
 
 
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.2000&quot; ]]
 then
 # adding ac-infra
 echo &quot;git submodule init&quot;
