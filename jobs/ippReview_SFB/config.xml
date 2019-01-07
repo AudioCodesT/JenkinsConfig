@@ -266,21 +266,28 @@ fi</command>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
-      <config>
-        <scriptFiles/>
-        <groovyScripts/>
-        <buildSteps>
-          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-            <results>
-              <string>SUCCESS</string>
-            </results>
-            <role>BOTH</role>
-            <buildSteps>
-              <hudson.tasks.Shell>
-                <command>#not fail the buiild
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.0&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;3.1&quot;* ]]
+then
+exit 1
+fi
+</command>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#not fail the buiild
 set +e
 change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
 ps=`echo $GERRIT_REFSPEC | cut -d/ -f5`
@@ -329,13 +336,19 @@ fi
 
 
 </command>
-              </hudson.tasks.Shell>
-            </buildSteps>
-          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-        </buildSteps>
-        <markBuildUnstable>false</markBuildUnstable>
-      </config>
-    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
