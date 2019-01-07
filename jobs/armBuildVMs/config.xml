@@ -41,7 +41,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -57,7 +56,6 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
     <configVersion>2</configVersion>
@@ -103,6 +101,30 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
     </EnvInjectBuilder>
   </builders>
   <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+            <arg1>${BRANCH}</arg1>
+            <arg2>master</arg2>
+            <ignoreCase>false</ignoreCase>
+          </condition>
+          <publisherList>
+            <hudson.tasks.BuildTrigger>
+              <childProjects>armReleaseSanity</childProjects>
+              <threshold>
+                <name>SUCCESS</name>
+                <ordinal>0</ordinal>
+                <color>BLUE</color>
+                <completeBuild>true</completeBuild>
+              </threshold>
+            </hudson.tasks.BuildTrigger>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.ArtifactArchiver>
       <artifacts>aws_buildRouterVM_log.out, aws_buildTopologyVM_log.out</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
