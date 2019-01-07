@@ -322,8 +322,7 @@ fi
     then
     	echo &quot;${AUTOPRD} img size test passed&quot;
     else
-    	message=&quot;size_diff Test has failed on model ${AUTOPRD}.\nYou can see the output here: $BUILD_URL&quot;
-		message=$(printf &quot;%s${message}&quot;)
+    	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
         ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
     fi
   
