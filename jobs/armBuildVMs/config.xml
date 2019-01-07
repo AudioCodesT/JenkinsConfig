@@ -101,6 +101,14 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
     </EnvInjectBuilder>
   </builders>
   <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>aws_buildRouterVM_log.out, aws_buildTopologyVM_log.out</artifacts>
+      <allowEmptyArchive>true</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
@@ -120,28 +128,11 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
               </threshold>
             </hudson.tasks.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>aws_buildRouterVM_log.out, aws_buildTopologyVM_log.out</artifacts>
-      <allowEmptyArchive>true</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
-    <hudson.tasks.BuildTrigger>
-      <childProjects>armReleaseSanity</childProjects>
-      <threshold>
-        <name>SUCCESS</name>
-        <ordinal>0</ordinal>
-        <color>BLUE</color>
-        <completeBuild>true</completeBuild>
-      </threshold>
-    </hudson.tasks.BuildTrigger>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>shukyr</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
