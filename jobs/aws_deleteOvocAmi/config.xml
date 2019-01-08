@@ -92,8 +92,8 @@ for image in images:
                 imagesListOf7_6.append(image)
              if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
      		    imagesListOf7_6_1000.append(image)    
- 			 if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
-     		    imagesListOf7_6_2000.append(image)  
+             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
+                imagesListOf7_6_2000.append(image)  
  
 print &quot;images in Branch 7.6&quot;
 deleteAmis(imagesListOf7_6)
