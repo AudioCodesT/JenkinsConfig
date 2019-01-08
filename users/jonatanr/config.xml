@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwMrajdveC67+I7NeWT3qHN9TjLlxmjDdwsGKJKgXUdfPx76Kv+NESwZXhzfYNWpCSR/mAws+sfUgPMHy4HxBfiQ==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>5f1d9ba7-295a-46bc-b221-c1053d2fd47f</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>d0f81dd078fd72acc9bfd40068fe1ae32df3b4f5e2f819286c6f06815d7d5b81</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -36,6 +48,7 @@
         <string>Allowed RODC Password Replication Group</string>
         <string>Users</string>
         <string>ActionBase Users</string>
+        <string># ClearCase R&amp;D</string>
         <string>CatalogApps_Everyone</string>
         <string>Logistics_maintenance</string>
         <string>CI_IPP_developers</string>
@@ -48,6 +61,7 @@
         <string># IPP</string>
         <string>Linuxusers</string>
         <string>AudioCodes_VPN</string>
+        <string># RnD Israel</string>
         <string># IPP RnD</string>
         <string># All AudioCodes</string>
         <string>Certificate Service DCOM Access</string>
@@ -56,7 +70,7 @@
         <string># IPP Oriel SW IL</string>
         <string>Citrix_Allow_Project</string>
       </roles>
-      <timestamp>1526896404577</timestamp>
+      <timestamp>1546958960969</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Jonatan.Reberger@audiocodes.com</emailAddress>
