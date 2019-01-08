@@ -83,6 +83,7 @@ images = ec2.images.filter(Filters=filters)
 snapshots = ec.describe_snapshots(MaxResults=1000, OwnerIds=[&apos;858367874798&apos;])[&apos;Snapshots&apos;]
 imagesListOf7_6 = []
 imagesListOf7_6_1000 = []
+imagesListOf7_6_2000 = []
 # Loop through each image of our current instance
 for image in images:
      if image.name.startswith(&apos;ovocAMI_7.6&apos;):
@@ -91,13 +92,15 @@ for image in images:
                 imagesListOf7_6.append(image)
              if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
      		    imagesListOf7_6_1000.append(image)    
- 
+ 			 if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
+     		    imagesListOf7_6_2000.append(image)  
  
 print &quot;images in Branch 7.6&quot;
 deleteAmis(imagesListOf7_6)
 print &quot;images in Branch 7.6.1000&quot;
 deleteAmis(imagesListOf7_6_1000) 
- 
+print &quot;images in Branch 7.6.21000&quot;
+deleteAmis(imagesListOf7_6_2000)  
  
  
 EOS</command>
