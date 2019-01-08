@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwq1/ofoBLR+7xKkPD8ceC11LIhjRHexOyEnkYzwpaYHDBEZizUU0APURxZO1T6azMi9PJtdPhfT4rLY5/tgWovw==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>46dd5946-2ea0-48cb-856d-c029ee9909e8</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>ab8b8c95cecb0327ee2b2d537519a66c9510d93c8324bb6ec65d016d45620d1c</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -46,6 +58,8 @@
         <string>Vopp</string>
         <string># IPP Alex SW SZ</string>
         <string>AudioCodes_VPN</string>
+        <string># ClearCase R&amp;D</string>
+        <string># RnD Israel</string>
         <string># IPP RnD</string>
         <string># All AudioCodes</string>
         <string>Certificate Service DCOM Access</string>
@@ -53,7 +67,7 @@
         <string>Citrix_Allow_Project</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1540799533670</timestamp>
+      <timestamp>1546926867914</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Claire.Song@audiocodes.com</emailAddress>
