@@ -295,6 +295,8 @@ User=&quot;$artifactory_user:$artifactory_password&quot;
 artifactory_host=artifactory
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 curlHasFailed=&quot;False&quot;
+sizeReduced=&quot;False&quot;
+echo sizeReduced=${sizeReduced} &gt; properties
 if [[ ! -e build ]]
 then
 echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
@@ -318,25 +320,75 @@ then
    		exit 0
     fi
 fi
-	echo &quot;*********************************************************&quot;
-    currentPath=$(pwd)
-    RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
-    echo $RetunedValue
-    cat size_diff_log.txt
-    echo &quot;*********************************************************&quot;
-    #return 0 if the script succeseded else if failed
-    if [[ $RetunedValue == &quot;0&quot; ]]
-    then
-    	echo &quot;size_diff Test has passed on model ${AUTOPRD}&quot;
-    else
-    	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
-        ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
+echo &quot;*********************************************************&quot;
+currentPath=$(pwd)
+RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+echo $RetunedValue
+cat size_diff_log.txt
+echo &quot;*********************************************************&quot;
+    
+#get Size Current Status
+CURL=&apos;curl -kn -u jenkins:$jenkins_pass --silent&apos;
+sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
+ 
+
+# 0 =&gt; Size Checker Passed
+if [[ $RetunedValue == &quot;0&quot; ]]
+then
+	echo &quot;size_diff Test has passed on model ${AUTOPRD}&quot;
+	if [[ $sizeStatus == &quot;0&quot; ]]
+	then
+		ssh -p 29418 jenkins@gerrit gerrit review --label Size=+1 ${GERRIT_PATCHSET_REVISION}
+	fi
+# 1 =&gt; Size Checker Failed    
+elif [[ $RetunedValue == &quot;1&quot; ]]
+then
+	if [[ $sizeStatus == &quot;0&quot; ]]
+	then
+		ssh -p 29418 jenkins@gerrit gerrit review --label Size=-1 ${GERRIT_PATCHSET_REVISION}
+	elif [[ $sizeStatus == &quot;+1&quot; ]]
+	then
+		ssh -p 29418 jenkins@gerrit gerrit review --label Size=-1 ${GERRIT_PATCHSET_REVISION}
     fi
+	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
+    ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
+# 2 =&gt; Size Checker Passed and reduced model size    
+elif [[ $RetunedValue == &quot;2&quot; ]]
+then
+	if [[ $sizeStatus == &quot;0&quot; ]]
+	then
+		ssh -p 29418 jenkins@gerrit gerrit review --label Size=+1 ${GERRIT_PATCHSET_REVISION}
+	fi
+   	sizeReduced=&quot;True&quot;
+else
+   	echo &quot;ERROR&quot;
+fi
   
-
-
+echo sizeReduced=${sizeReduced} &gt; properties
+    
+#    #return 0 if the script succeseded else if failed
+#    if [[ $RetunedValue == &quot;0&quot; ]]
+#    then
+#    	echo &quot;size_diff Test has passed on model ${AUTOPRD}&quot;
+#    elif [[ $RetunedValue == &quot;1&quot; ]]
+#    then
+#    	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
+#        ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
+#    elif [[ $RetunedValue == &quot;2&quot; ]]
+#    then
+#    	sizeReduced=&quot;True&quot;
+#    else
+#    	echo &quot;ERROR&quot;
+#    fi
+#  
+#echo sizeReduced=${sizeReduced} &gt;&gt; properties
 </command>
                       </hudson.tasks.Shell>
+                      <EnvInjectBuilder plugin="envinject@2.1.5">
+                        <info>
+                          <propertiesFilePath>properties</propertiesFilePath>
+                        </info>
+                      </EnvInjectBuilder>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                 </buildSteps>
@@ -347,8 +399,59 @@ fi
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+            <arg1>sizeReduced</arg1>
+            <arg2>True</arg2>
+            <ignoreCase>false</ignoreCase>
+          </condition>
+          <publisherList>
+            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+              <recipientList>ben.magriso</recipientList>
+              <configuredTriggers>
+                <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+                  <email>
+                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+                    <body>$PROJECT_DEFAULT_CONTENT</body>
+                    <recipientProviders>
+                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+                    </recipientProviders>
+                    <attachmentsPattern></attachmentsPattern>
+                    <attachBuildLog>false</attachBuildLog>
+                    <compressBuildLog>false</compressBuildLog>
+                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+                    <contentType>project</contentType>
+                  </email>
+                </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+              </configuredTriggers>
+              <contentType>default</contentType>
+              <defaultSubject>${AUTOPRD} Size has been reduced</defaultSubject>
+              <defaultContent>$DEFAULT_CONTENT</defaultContent>
+              <attachmentsPattern>size_diff_report*.txt</attachmentsPattern>
+              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+              <attachBuildLog>false</attachBuildLog>
+              <compressBuildLog>false</compressBuildLog>
+              <replyTo>$DEFAULT_REPLYTO</replyTo>
+              <from></from>
+              <saveOutput>false</saveOutput>
+              <disabled>false</disabled>
+              <matrixTriggerMode>ONLY_CONFIGURATIONS</matrixTriggerMode>
+            </hudson.plugins.emailext.ExtendedEmailPublisher>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>size_diff_report*.txt</artifacts>
+      <allowEmptyArchive>true</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
