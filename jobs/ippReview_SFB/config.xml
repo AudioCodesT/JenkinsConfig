@@ -328,7 +328,7 @@ cat size_diff_log.txt
 echo &quot;*********************************************************&quot;
     
 #get Size Current Status
-CURL=&apos;curl -kn -u jenkins:$jenkins_pass --silent&apos;
+CURL=&quot;curl -kn -u jenkins:$jenkins_pass --silent&quot;
 sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
  
 
@@ -445,7 +445,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>size_diff_report*.txt</artifacts>
+      <artifacts>build/size_diff_report*.txt</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
