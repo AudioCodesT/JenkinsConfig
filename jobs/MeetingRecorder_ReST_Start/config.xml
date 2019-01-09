@@ -51,7 +51,8 @@ No build job. Only start the instance.</description>
       <command>echo &quot;***********************************************************************************&quot;
 echo &quot;Starting i-0d1e9251707de1444 (MeetingRecorder-Build-Slave-Static) IP: 172.16.143.61&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0d1e9251707de1444
+#aws ec2 start-instances --instance-ids i-0d1e9251707de1444
+aws ec2 start-instances --instance-ids i-02bdc0b58db0f077e # For Brian YY
 </command>
     </hudson.tasks.Shell>
   </builders>
