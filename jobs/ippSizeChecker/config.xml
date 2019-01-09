@@ -120,7 +120,7 @@ then
       else
         # run comparison between the old csv to the new csv
         set +e
-        RetunedValue=$(make size_diff ref=${OLDTAG}_size_report.csv new=${NEWTAG}_size_report.csv &gt; size_diff_log.txt; echo $?)
+        RetunedValue=$(sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv &gt; size_diff_log.txt; echo $?)
 		set -e
         
         #return 0 if the script succeseded else if failed
