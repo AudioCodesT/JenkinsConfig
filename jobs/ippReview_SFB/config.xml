@@ -370,25 +370,7 @@ else
    	echo &quot;ERROR&quot;
 fi
   
-echo sizeReduced=${sizeReduced} &gt; properties
-    
-#    #return 0 if the script succeseded else if failed
-#    if [[ $RetunedValue == &quot;0&quot; ]]
-#    then
-#    	echo &quot;size_diff Test has passed on model ${AUTOPRD}&quot;
-#    elif [[ $RetunedValue == &quot;1&quot; ]]
-#    then
-#    	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
-#        ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
-#    elif [[ $RetunedValue == &quot;2&quot; ]]
-#    then
-#    	sizeReduced=&quot;True&quot;
-#    else
-#    	echo &quot;ERROR&quot;
-#    fi
-#  
-#echo sizeReduced=${sizeReduced} &gt;&gt; properties
-</command>
+echo sizeReduced=${sizeReduced} &gt; properties</command>
                       </hudson.tasks.Shell>
                       <EnvInjectBuilder plugin="envinject@2.1.5">
                         <info>
