@@ -434,7 +434,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
               </configuredTriggers>
               <contentType>default</contentType>
               <defaultSubject>${AUTOPRD} Size has been reduced</defaultSubject>
-              <defaultContent>You can see the output of the log here: ${BUILD_URL}artifact</defaultContent>
+              <defaultContent>You can see the full report here ${BUILD_URL}artifact</defaultContent>
               <attachmentsPattern>size_diff_report*.txt</attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
