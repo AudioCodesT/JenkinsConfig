@@ -302,6 +302,7 @@ then
 echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
 exit 0
 fi
+#get from build folder the CSV REPORTS
 cd build
 NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2)
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
@@ -320,9 +321,10 @@ then
    		exit 0
     fi
 fi
+cd {WORKSPACE}
 echo &quot;*********************************************************&quot;
 currentPath=$(pwd)
-RetunedValue=$(sh ${WORKSPACE}/scripts/mtds_size.sh size_diff ${currentPath}/${OLDTAG}_size_report.csv ${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+RetunedValue=$(sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
 echo $RetunedValue
 cat size_diff_log.txt
 echo &quot;*********************************************************&quot;
