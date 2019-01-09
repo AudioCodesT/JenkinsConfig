@@ -329,7 +329,7 @@ echo &quot;*********************************************************&quot;
     
 #get Size Current Status
 CURL=&quot;curl -kn -u jenkins:$jenkins_pass --silent&quot;
-sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/$GERRIT_CHANGE_ID/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
+sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/${GERRIT_PATCHSET_REVISION}/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
  
 
 # 0 =&gt; Size Checker Passed
