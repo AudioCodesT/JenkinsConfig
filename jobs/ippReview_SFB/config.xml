@@ -321,7 +321,7 @@ then
    		exit 0
     fi
 fi
-cd {WORKSPACE}
+cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
 currentPath=$(pwd)
 RetunedValue=$(sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
