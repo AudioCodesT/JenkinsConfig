@@ -395,6 +395,14 @@ echo sizeReduced=${sizeReduced} &gt; properties
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+            <hudson.tasks.ArtifactArchiver>
+              <artifacts>build/size_diff_report*.txt</artifacts>
+              <allowEmptyArchive>true</allowEmptyArchive>
+              <onlyIfSuccessful>false</onlyIfSuccessful>
+              <fingerprint>false</fingerprint>
+              <defaultExcludes>true</defaultExcludes>
+              <caseSensitive>true</caseSensitive>
+            </hudson.tasks.ArtifactArchiver>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
@@ -444,14 +452,6 @@ echo sizeReduced=${sizeReduced} &gt; properties
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>build/size_diff_report*.txt</artifacts>
-      <allowEmptyArchive>true</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
