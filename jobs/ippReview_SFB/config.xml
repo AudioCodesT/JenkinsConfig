@@ -350,7 +350,7 @@ then
 	then
 		ssh -p 29418 jenkins@gerrit gerrit review --label Size=-1 ${GERRIT_PATCHSET_REVISION}
     fi
-	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: $BUILD_URL&quot;
+	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact&quot;
     ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
 # 2 =&gt; Size Checker Passed and reduced model size    
 elif [[ $RetunedValue == &quot;2&quot; ]]
@@ -409,7 +409,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
-            <arg1>sizeReduced</arg1>
+            <arg1>${sizeReduced}</arg1>
             <arg2>True</arg2>
             <ignoreCase>false</ignoreCase>
           </condition>
@@ -434,7 +434,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
               </configuredTriggers>
               <contentType>default</contentType>
               <defaultSubject>${AUTOPRD} Size has been reduced</defaultSubject>
-              <defaultContent>$DEFAULT_CONTENT</defaultContent>
+              <defaultContent>You can see the output of the log here: ${BUILD_URL}artifact</defaultContent>
               <attachmentsPattern>size_diff_report*.txt</attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
