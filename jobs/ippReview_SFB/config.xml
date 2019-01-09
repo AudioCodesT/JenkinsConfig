@@ -322,11 +322,15 @@ then
 fi
 echo &quot;*********************************************************&quot;
 currentPath=$(pwd)
-RetunedValue=$(make size_diff ref=${currentPath}/${OLDTAG}_size_report.csv new=${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+RetunedValue=$(sh scripts/mtds_size.sh size_diff ${currentPath}/${OLDTAG}_size_report.csv ${currentPath}/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
 echo $RetunedValue
 cat size_diff_log.txt
 echo &quot;*********************************************************&quot;
-    
+
+
+
+
+
 #get Size Current Status
 CURL=&quot;curl -kn -u jenkins:$jenkins_pass --silent&quot;
 sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/${GERRIT_PATCHSET_REVISION}/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
