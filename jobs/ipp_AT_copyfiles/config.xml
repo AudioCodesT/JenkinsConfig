@@ -153,7 +153,7 @@ echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 
 # Don&apos;t execute the next job in case you don&apos;t found 5 files
 if [ `ls $Target/*$ImageNames.img | wc -l` != 5 ]; then echo &quot;Missing img files, exiting job&quot;; exit 2; fi
-if [ `ls $Target/*$ImageNames.sim.tgz | wc -l` != 5 ]; then echo &quot;Missing .sim.tgz files, exiting job&quot;; exit 2; fi
+#if [ `ls $Target/*$ImageNames.sim.tgz | wc -l` != 5 ]; then echo &quot;Missing .sim.tgz files, exiting job&quot;; exit 2; fi
 
 # Check if ipp_AT_parent job is in the queue or already running
 # to avoid more than one sbc-drt-request execution
@@ -182,7 +182,8 @@ done
 
 echo Check the checksum...
 # Check the checksum of the 5 img files before executing the AT itself
-for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
+#for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
+for f in $Target/*$ImageNames.img; do
   echo $Artifactory/$REFTARGET/$(basename $f)
   checkSum1=$(curl -ks -u $User -X GET \
             $Artifactory/$REFTARGET/$(basename $f) | \
