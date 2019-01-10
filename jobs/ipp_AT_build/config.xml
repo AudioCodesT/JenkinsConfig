@@ -391,7 +391,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
             <hudson.tasks.ArtifactArchiver>
               <artifacts>build/size_diff_report*.txt</artifacts>
-              <allowEmptyArchive>false</allowEmptyArchive>
+              <allowEmptyArchive>true</allowEmptyArchive>
               <onlyIfSuccessful>false</onlyIfSuccessful>
               <fingerprint>false</fingerprint>
               <defaultExcludes>true</defaultExcludes>
