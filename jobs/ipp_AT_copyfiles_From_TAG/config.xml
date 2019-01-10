@@ -89,7 +89,7 @@ ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERR
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;430HD&quot; &quot;405HD&quot;)
+ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;405HD&quot;)
 
 curl -ks -u $User -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
@@ -100,12 +100,14 @@ fi
 
 echo Start copying files
 # should be 10, the 5 types for .img and .sim.tgz
-countImages=$(( ${#ImagesList[@]} * 2 ))
+#countImages=$(( ${#ImagesList[@]} * 2 ))
+countImages=$(( ${#ImagesList[@]} ))
 
 #for each type
 for PRD in ${ImagesList[@]}; do
     echo Check $PRD
-    for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
+    #for Image in UC${PRD}_$TAG.img UC${PRD}_$TAG.sim.tgz; do
+    for Image in UC${PRD}_$TAG.img; do
       # Check if this image was copied already, if not, transfer $Image
       if [ ! -f z:/$Image ]; then
         # The exact download name
@@ -129,7 +131,7 @@ echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
 date
 # Check if the 10 images were copied or were already there
 # In case of fail, the job will restart after 20 minutes
-echo  $(expr 10 - $countImages ) files exists
+echo  $(expr 4 - $countImages ) files exists
 if [ $countImages -ne 0 ]; then
   echo $countImages files were not found ... abort
   exit 2
