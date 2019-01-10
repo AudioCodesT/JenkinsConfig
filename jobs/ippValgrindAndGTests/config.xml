@@ -171,7 +171,7 @@ else
 
 
 #run valgrind/gtest
-valgrindRetValue=$(sudo ./vSFB.sh gtest_valgrind &gt; vSFB_LOG.txt; echo $?)
+valgrindRetValue=$(./vSFB.sh gtest_valgrind &gt; vSFB_LOG.txt; echo $?)
 # print valgrind output
 cat vSFB_LOG.txt
 #fetch gtest errors
