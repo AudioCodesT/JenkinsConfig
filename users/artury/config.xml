@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAw+xF3Up9ey/rHHWeKfbWO1fAXHhtBQDC2tnilOOxTuB7o4ERyZlcgFVAJyWAFOT4fuEBT79ORnflMZdEumNSyhQ==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>e6323ca5-7613-4fdc-8b49-82eebdf0a11d</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>3fc4be6a7ed2e3e762602a172a356ac0d0cbcec9d201973ee5405a26d638f5a8</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -45,6 +57,8 @@
         <string>Mailvision Branch Office Users</string>
         <string># IPP</string>
         <string>SSL_Ukraine_Chip</string>
+        <string># ClearCase R&amp;D</string>
+        <string># RnD Israel</string>
         <string># IPP RnD</string>
         <string>Certificate Service DCOM Access</string>
         <string>Domain Users</string>
@@ -52,7 +66,7 @@
         <string># IPP RnD – GL</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1533728788101</timestamp>
+      <timestamp>1547477548880</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
   </properties>
 </user>
