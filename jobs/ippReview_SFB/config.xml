@@ -321,6 +321,13 @@ then
    		exit 0
     fi
 fi
+#if its running with flag LOG=1 dont run the script	
+if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]
+then
+	echo &quot;Running with Flag LOG=1, Not Running the Script&quot;
+    exit 0
+fi
+
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
 RetunedValue=$(sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
