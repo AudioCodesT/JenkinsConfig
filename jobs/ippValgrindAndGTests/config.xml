@@ -144,6 +144,13 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#
+
+if [[ &quot;$GERRIT_CHANGE_OWNER_NAME&quot; != &quot;Viktoriia Gamar&quot; &amp;&amp; &quot;$GERRIT_CHANGE_OWNER_NAME&quot; == &quot;Ben Magriso&quot; ]]
+then
+echo &quot;Test Only if change of viktoriia Gamar or Ben Magriso&quot;
+exit 0
+fi
+
 CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
