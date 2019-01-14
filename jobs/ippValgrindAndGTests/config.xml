@@ -34,7 +34,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -162,7 +161,7 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 #export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 compileFailed=&quot;False&quot;
-#make GTEST=1 $model || compileFailed=&quot;True&quot;
+make GTEST=1 $model || compileFailed=&quot;True&quot;
 #if comilation of 450HD Sim Fail =&gt; add message to gerrit
 if [[ &quot;$compileFailed&quot; == &quot;True&quot; ]] 
 then
