@@ -174,11 +174,10 @@ else
 set +e
 sudo ./vSFB.sh gtest_valgrind
 valgrindRetValue=$?
-set -e
+
 #fetch gtest errors
-
 gtestFailed=$(grep &apos;FAILED TEST&apos; build/GTestLogs/* &gt;/dev/null; echo $?)
-
+set -e
 if [[ &quot;$gtestFailed&quot; == &quot;1&quot; ]]
 then
 gtestFailuresNum=0
