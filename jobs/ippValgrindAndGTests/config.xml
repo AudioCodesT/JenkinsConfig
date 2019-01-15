@@ -173,23 +173,33 @@ else
 #run valgrind/gtest
 set +e
 sudo ./vSFB.sh gtest_valgrind
+
+#fetch valgrind Errors
+grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; &gt;/dev/null build/GTestLogs/*
 valgrindRetValue=$?
-echo &quot;*************************************************************************************&quot;
-echo &quot;Valgrid return: ${valgrindRetValue}&quot;
-echo &quot;*************************************************************************************&quot;
+if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
+then
+valgrindSign=1
+else
+valgrindSign=0
+fi
 #fetch gtest errors
-grep &apos;FAILED TEST&apos; build/GTestLogs/*
-gtestFailed=$?
+grep -E &apos;[1-9]+ FAILED TEST&apos; &gt;/dev/null build/GTestLogs/*
+gtestRetValue=$?
+if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
+then
+gtestSign=1
+else
+gtestSign=0
+fi
 set -e
 
-if [[ &quot;$gtestFailed&quot; == &quot;1&quot; ]]
-then
-gtestFailuresNum=0
-else
-gtestFailuresNum=1
-fi
+
 echo &quot;*************************************************************************************&quot;
-echo &quot;gtestFailuresNum : ${gtestFailuresNum}&quot;
+echo &quot;Valgrid sign: ${valgrindSign}&quot;
+echo &quot;*************************************************************************************&quot;
+echo &quot;*************************************************************************************&quot;
+echo &quot;Gtest Sign : ${gtestSign}&quot;
 echo &quot;*************************************************************************************&quot;
 #print GTests Logs
 cat build/GTestLogs/*
@@ -198,8 +208,8 @@ echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT -------------
 
 
 
-gtestSign=$([ $gtestFailuresNum == 0 ] &amp;&amp; echo 1 || echo -1)
-valgrindSign=$([ $valgrindRetValue == 2 ] &amp;&amp; echo -1 || echo 1)
+#gtestSign=$([ $gtestFailuresNum == 0 ] &amp;&amp; echo 1 || echo -1)
+#valgrindSign=$([ $valgrindFailuresNum == 0 ] &amp;&amp; echo 1 || echo -1) 
 
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${BUILD_URL}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;$gtestSign\&quot;}}&quot;
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${BUILD_URL}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
