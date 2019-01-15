@@ -174,7 +174,9 @@ else
 set +e
 sudo ./vSFB.sh gtest_valgrind
 valgrindRetValue=$?
-
+echo &quot;*************************************************************************************&quot;
+echo &quot;Valgrid return: ${valgrindRetValue}&quot;
+echo &quot;*************************************************************************************&quot;
 #fetch gtest errors
 grep &apos;FAILED TEST&apos; build/GTestLogs/*
 gtestFailed=$?
@@ -186,6 +188,9 @@ gtestFailuresNum=0
 else
 gtestFailuresNum=1
 fi
+echo &quot;*************************************************************************************&quot;
+echo &quot;gtestFailuresNum : ${gtestFailuresNum}&quot;
+echo &quot;*************************************************************************************&quot;
 #print GTests Logs
 cat build/GTestLogs/*
 echo ----------------------------- GTEST FINISH_RUNNING_THE_SCRIPT ---------------------------------------------------
