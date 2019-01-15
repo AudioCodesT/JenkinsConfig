@@ -179,18 +179,18 @@ grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; &gt;/dev/null build/GTestLogs/*
 valgrindRetValue=$?
 if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
 then
-valgrindSign=1
+valgrindSign=&quot;-1&quot;
 else
-valgrindSign=0
+valgrindSign=&quot;1&quot;
 fi
 #fetch gtest errors
 grep -E &apos;[1-9]+ FAILED TEST&apos; &gt;/dev/null build/GTestLogs/*
 gtestRetValue=$?
 if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
 then
-gtestSign=1
+gtestSign=&quot;-1&quot;
 else
-gtestSign=0
+gtestSign=&quot;1&quot;
 fi
 set -e
 
