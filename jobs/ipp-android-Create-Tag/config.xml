@@ -134,6 +134,14 @@
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
         <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <timeout>20</timeout>
+        <depth>0</depth>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <assignedNode>sanjer</assignedNode>
