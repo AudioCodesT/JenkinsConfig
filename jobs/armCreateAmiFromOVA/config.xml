@@ -32,12 +32,13 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -62,7 +63,7 @@ cat &lt;&lt; EOF &gt; containers_Conf.json
     &quot;Format&quot;: &quot;ova&quot;,
     &quot;UserBucket&quot;: {
         &quot;S3Bucket&quot;: &quot;arm-ova2ami&quot;,
-        &quot;S3Key&quot;: &quot;ARM-Conf_${TAG}.ova&quot;
+        &quot;S3Key&quot;: &quot;${TAG}/ARM-Conf_${TAG}.ova&quot;
     }
 }]
 EOF
@@ -74,24 +75,34 @@ cat &lt;&lt; EOF &gt; containers_Router.json
     &quot;Format&quot;: &quot;ova&quot;,
     &quot;UserBucket&quot;: {
         &quot;S3Bucket&quot;: &quot;arm-ova2ami&quot;,
-        &quot;S3Key&quot;: &quot;ARM-Router_${TAG}.ova&quot;
+        &quot;S3Key&quot;: &quot;${TAG}/ARM-Router_${TAG}.ova&quot;
     }
 }]
 EOF
 #import OVA 2 AMI
 ImportTaskId_Conf=$(aws ec2 import-image --description &quot;ARM Configurator ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Conf.json)
+ImportTaskId_Conf=$(echo $ImportTaskId_Conf | cut -d&apos; &apos; -f4)
 ImportTaskId_Router=$(aws ec2 import-image --description &quot;ARM Router ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Router.json)
+ImportTaskId_Router=$(echo $ImportTaskId_Router | cut -d&apos; &apos; -f4)
 
-conf_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf})
-router_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router})
 
-while [[ &quot;$conf_status&quot; != &quot;completed&quot; || &quot;$router_status&quot; != &quot;completed&quot; ]]
+conf_status_ret=1
+router_status_ret=1
+while [[ &quot;$conf_status_ret&quot; != &quot;0&quot; $$ &quot;$router_status_ret&quot; != &quot;0&quot; ]]
 then
 echo &quot;importing both OVA files to AMI&quot;
 sleep 100
+#check if complete create AMI
+conf_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf} | grep IMPORTIMAGETASKS | grep completed)
+conf_status_ret=$?
+router_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}| grep IMPORTIMAGETASKS | grep completed)
+router_status_ret=$?
 fi
 echo &quot;finish importing both OVA Files to AMI&quot;
-
+confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
+confAmi=${confAmi[5]}
+routerAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}))
+routerAmi=${routerAmi[5]}
 </command>
     </hudson.tasks.Shell>
   </builders>
