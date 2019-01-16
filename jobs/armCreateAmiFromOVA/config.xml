@@ -81,8 +81,15 @@ EOF
 ImportTaskId_Conf=$(aws ec2 import-image --description &quot;ARM Configurator ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Conf.json)
 ImportTaskId_Router=$(aws ec2 import-image --description &quot;ARM Router ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Router.json)
 
-aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}
-aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}
+conf_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf})
+router_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router})
+
+while [[ &quot;$conf_status&quot; != &quot;completed&quot; || &quot;$router_status&quot; != &quot;completed&quot; ]]
+then
+echo &quot;importing both OVA files to AMI&quot;
+sleep 100
+fi
+echo &quot;finish importing both OVA Files to AMI&quot;
 
 </command>
     </hudson.tasks.Shell>
