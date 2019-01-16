@@ -50,8 +50,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#copy files 2 OVA FIles to S3 bucket
-aws s3 cp ovaFiles/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova
-aws s3 cp ovaFiles/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
+aws s3 cp ovaFiles/ARM-Conf_${TAG}.ova
+aws s3 cp ovaFiles/ARM-Router_${TAG}.ova
 
 #configutration to import both OVA Files to S3 bucket
 cat &lt;&lt; EOF &gt; containers_Conf.json 
@@ -144,7 +144,8 @@ echo &quot;finish importing both OVA Files to AMI&quot;
         <spec></spec>
       </downloadSpec>
       <deployPattern></deployPattern>
-      <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/*.*=&gt;${workspace}/ovaFiles</resolvePattern>
+      <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
+libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>false</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
