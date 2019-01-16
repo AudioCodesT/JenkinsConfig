@@ -1,15 +1,156 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
+  <description>create Ami from Ova:&#xd;
+1. download from artifactory 2 OVA Files&#xd;
+2.copy both ova to S3 Bucket (arm-ova2ami)&#xd;
+3. import both OVA files to AMI (ARM_Configurator,arm_Router)&#xd;
+4.share both AMIs to QA</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>TAG</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>arm-build</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
-  <publishers/>
-  <buildWrappers/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#copy files 2 OVA FIles to S3 bucket
+aws s3 cp ovaFiles/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova
+aws s3 cp ovaFiles/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
+
+#configutration to import both OVA Files to S3 bucket
+cat &lt;&lt; EOF &gt; containers_Conf.json 
+[
+  {
+    &quot;Description&quot;: &quot;ARM Configurator ${TAG} OVA&quot;,
+    &quot;Format&quot;: &quot;ova&quot;,
+    &quot;UserBucket&quot;: {
+        &quot;S3Bucket&quot;: &quot;arm-ova2ami&quot;,
+        &quot;S3Key&quot;: &quot;ARM-Conf_${TAG}.ova&quot;
+    }
+}]
+EOF
+
+cat &lt;&lt; EOF &gt; containers_Router.json 
+[
+  {
+    &quot;Description&quot;: &quot;ARM Router ${TAG} OVA&quot;,
+    &quot;Format&quot;: &quot;ova&quot;,
+    &quot;UserBucket&quot;: {
+        &quot;S3Bucket&quot;: &quot;arm-ova2ami&quot;,
+        &quot;S3Key&quot;: &quot;ARM-Router_${TAG}.ova&quot;
+    }
+}]
+EOF
+#import OVA 2 AMI
+ImportTaskId_Conf=$(aws ec2 import-image --description &quot;ARM Configurator ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Conf.json)
+ImportTaskId_Router=$(aws ec2 import-image --description &quot;ARM Router ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Router.json)
+
+aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}
+aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect>libs-release-local</keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>false</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec></spec>
+      </downloadSpec>
+      <deployPattern></deployPattern>
+      <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/*.*=&gt;${workspace}/ovaFiles</resolvePattern>
+      <deploymentProperties></deploymentProperties>
+      <deployBuildInfo>false</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+  </buildWrappers>
 </project>
