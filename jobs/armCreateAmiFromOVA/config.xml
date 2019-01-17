@@ -57,7 +57,7 @@ then
 echo &quot;****************************************************************************&quot;
 echo &quot;FAILED to Download ${TAG} from artifactory,Please check if ${TAG} OVA Exists&quot;
 echo &quot;****************************************************************************&quot;
-exit 0
+exit 1
 fi
 
 aws s3 cp ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova s3://arm-ova2ami/${TAG}/
