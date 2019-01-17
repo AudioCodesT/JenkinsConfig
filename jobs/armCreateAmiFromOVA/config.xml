@@ -51,7 +51,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#copy files 2 OVA FIles to S3 bucket
+      <command>pip install awscli --user
+
+#copy files 2 OVA FIles to S3 bucket
 aws s3 cp ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova s3://arm-ova2ami/${TAG}/
 aws s3 cp ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova s3://arm-ova2ami/${TAG}/
 
