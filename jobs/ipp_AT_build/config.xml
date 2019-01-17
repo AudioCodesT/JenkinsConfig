@@ -355,26 +355,26 @@ then
 	echo &quot;size_diff Test has passed on model ${AUTOPRD}&quot;
 	if [[ $sizeStatus == &quot;0&quot; ]]
 	then
-		ssh -p 29418 jenkins@gerrit gerrit review --label Size=+1 ${GIT_COMMIT}
+		ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GIT_COMMIT}
 	fi
 # 1 =&gt; Size Checker Failed    
 elif [[ $RetunedValue == &quot;1&quot; ]]
 then
 	if [[ $sizeStatus == &quot;0&quot; ]]
 	then
-		ssh -p 29418 jenkins@gerrit gerrit review --label Size=-1 ${GIT_COMMIT}
+		ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
 	elif [[ $sizeStatus == &quot;+1&quot; ]]
 	then
-		ssh -p 29418 jenkins@gerrit gerrit review --label Size=-1 ${GIT_COMMIT}
+		ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
     fi
 	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact/build&quot;
-    ssh -p 29418 jenkins@gerrit gerrit review --message &quot;&apos;${message}&apos;&quot; $change,$ps
+    ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
 # 2 =&gt; Size Checker Passed and reduced model size    
 elif [[ $RetunedValue == &quot;2&quot; ]]
 then
 	if [[ $sizeStatus == &quot;0&quot; ]]
 	then
-		ssh -p 29418 jenkins@gerrit gerrit review --label Size=+1 ${GIT_COMMIT}
+		ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GIT_COMMIT}
 	fi
    	sizeReduced=&quot;True&quot;
 else
