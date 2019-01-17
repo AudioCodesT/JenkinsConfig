@@ -81,10 +81,13 @@ cat &lt;&lt; EOF &gt; containers_Router.json
 EOF
 #import OVA 2 AMI
 ImportTaskId_Conf=$(aws ec2 import-image --description &quot;ARM Configurator ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Conf.json)
+echo $ImportTaskId_Conf
 ImportTaskId_Conf=$(echo $ImportTaskId_Conf | cut -d&apos; &apos; -f4)
+echo $ImportTaskId_Conf
 ImportTaskId_Router=$(aws ec2 import-image --description &quot;ARM Router ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Router.json)
+echo $ImportTaskId_Router
 ImportTaskId_Router=$(echo $ImportTaskId_Router | cut -d&apos; &apos; -f4)
-
+echo $ImportTaskId_Router
 
 conf_status_ret=1
 router_status_ret=1
@@ -103,6 +106,7 @@ confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_
 confAmi=${confAmi[5]}
 routerAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}))
 routerAmi=${routerAmi[5]}
+#give permissions to QA
 </command>
     </hudson.tasks.Shell>
   </builders>
