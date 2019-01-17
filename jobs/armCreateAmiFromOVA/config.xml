@@ -91,16 +91,20 @@ echo $ImportTaskId_Router
 
 conf_status_ret=1
 router_status_ret=1
+#if return value in while is 1 =&gt;dont fail the build (true not good in this case)
+set +e
 while [[ &quot;$conf_status_ret&quot; != &quot;0&quot; ]] &amp;&amp; [[ &quot;$router_status_ret&quot; != &quot;0&quot; ]]
 do
   echo &quot;importing both OVA files to AMI&quot;
   sleep 100
   #check if complete create AMI
+
   conf_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf} | grep IMPORTIMAGETASKS | grep completed)
   conf_status_ret=$?
   router_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}| grep IMPORTIMAGETASKS | grep completed)
   router_status_ret=$?
 done
+set -e
 echo &quot;finish importing both OVA Files to AMI&quot;
 confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
 confAmi=${confAmi[6]}
