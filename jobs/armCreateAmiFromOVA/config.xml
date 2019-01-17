@@ -52,6 +52,13 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#copy files 2 OVA FIles to S3 bucket
+if [[ ! -e ovaFiles/com/* ]]
+then
+echo &quot;****************************************************************************&quot;
+echo &quot;FAILED to Download ${TAG} from artifactory,Please check if ${TAG} OVA Exists&quot;
+echo &quot;****************************************************************************&quot;
+fi
+
 aws s3 cp ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova s3://arm-ova2ami/${TAG}/
 aws s3 cp ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova s3://arm-ova2ami/${TAG}/
 
@@ -129,7 +136,7 @@ aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;AR
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients></recipients>
+      <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
