@@ -82,25 +82,25 @@ EOF
 #import OVA 2 AMI
 ImportTaskId_Conf=$(aws ec2 import-image --description &quot;ARM Configurator ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Conf.json)
 echo $ImportTaskId_Conf
-ImportTaskId_Conf=$(echo $ImportTaskId_Conf | cut -d&apos; &apos; -f4)
+ImportTaskId_Conf=$(echo $ImportTaskId_Conf | cut -d&apos; &apos; -f5)
 echo $ImportTaskId_Conf
 ImportTaskId_Router=$(aws ec2 import-image --description &quot;ARM Router ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Router.json)
 echo $ImportTaskId_Router
-ImportTaskId_Router=$(echo $ImportTaskId_Router | cut -d&apos; &apos; -f4)
+ImportTaskId_Router=$(echo $ImportTaskId_Router | cut -d&apos; &apos; -f5)
 echo $ImportTaskId_Router
 
 conf_status_ret=1
 router_status_ret=1
 while [[ &quot;$conf_status_ret&quot; != &quot;0&quot; $$ &quot;$router_status_ret&quot; != &quot;0&quot; ]]
-then
-echo &quot;importing both OVA files to AMI&quot;
-sleep 100
-#check if complete create AMI
-conf_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf} | grep IMPORTIMAGETASKS | grep completed)
-conf_status_ret=$?
-router_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}| grep IMPORTIMAGETASKS | grep completed)
-router_status_ret=$?
-fi
+do
+  echo &quot;importing both OVA files to AMI&quot;
+  sleep 100
+  #check if complete create AMI
+  conf_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf} | grep IMPORTIMAGETASKS | grep completed)
+  conf_status_ret=$?
+  router_status=$(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}| grep IMPORTIMAGETASKS | grep completed)
+  router_status_ret=$?
+done
 echo &quot;finish importing both OVA Files to AMI&quot;
 confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
 confAmi=${confAmi[5]}
@@ -110,11 +110,11 @@ routerAmi=${routerAmi[5]}
 confSnapshotId=$(aws ec2 describe-images --image-ids $confAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 #give name to the AMI 
-aws ec2 create-tags --resources $confAmi --tags Key=Name,Value=ArmConfAMI_${TAG}
-aws ec2 create-tags --resources $routerAmi --tags Key=Name,Value=ArmRouterAMI_${TAG}
+aws ec2 create-tags --resources $confAmi --tags Key=Name,Value=&quot;ARM-ConfiguratorAMI_${TAG}&quot;
+aws ec2 create-tags --resources $routerAmi --tags Key=Name,Value=&quot;ARM-RouterAMI_${TAG}&quot;
 #give name to the snapshot 
-aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=ArmConfAMI_${TAG}
-aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=ArmRouterAMI_${TAG}
+aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value&quot;ARM-ConfiguratorAMI_${TAG}&quot;
+aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;ARM-RouterAMI_${TAG}&quot;
 #give permissions to QA
 #qaAccount=&quot;&quot;
 #give permissions to ovoc QA Account to the AMI
