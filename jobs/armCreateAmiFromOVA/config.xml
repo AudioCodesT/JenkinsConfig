@@ -52,7 +52,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#copy files 2 OVA FIles to S3 bucket
-if [[ ! -e ovaFiles/com/* ]]
+if [[ ! -e &quot;ovaFiles&quot; ]]
 then
 echo &quot;****************************************************************************&quot;
 echo &quot;FAILED to Download ${TAG} from artifactory,Please check if ${TAG} OVA Exists&quot;
