@@ -50,7 +50,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo $PATH</command>
+      <command>#!/bin/bash
+echo $PATH</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
