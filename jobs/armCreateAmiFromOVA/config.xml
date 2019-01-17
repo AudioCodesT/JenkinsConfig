@@ -109,10 +109,17 @@ routerAmi=${routerAmi[5]}
 #get Snapshot id -  we need it in order to tag the snapshot as well
 confSnapshotId=$(aws ec2 describe-images --image-ids $confAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
-
-
+#give name to the AMI 
+aws ec2 create-tags --resources $confAmi --tags Key=Name,Value=ArmConfAMI_${TAG}
+aws ec2 create-tags --resources $routerAmi --tags Key=Name,Value=ArmRouterAMI_${TAG}
+#give name to the snapshot 
+aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=ArmConfAMI_${TAG}
+aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=ArmRouterAMI_${TAG}
 #give permissions to QA
-</command>
+#qaAccount=&quot;&quot;
+#give permissions to ovoc QA Account to the AMI
+#aws ec2 modify-image-attribute --image-id $confAmi --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
+#aws ec2 modify-image-attribute --image-id $routerAmi --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
