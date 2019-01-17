@@ -105,6 +105,7 @@ do
   router_status_ret=$?
 done
 set -e
+sleep 20
 echo &quot;finish importing both OVA Files to AMI&quot;
 confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
 confAmi=${confAmi[6]}
