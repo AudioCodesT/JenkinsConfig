@@ -106,13 +106,18 @@ confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_
 confAmi=${confAmi[5]}
 routerAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}))
 routerAmi=${routerAmi[5]}
+#get Snapshot id -  we need it in order to tag the snapshot as well
+confSnapshotId=$(aws ec2 describe-images --image-ids $confAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
+routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
+
+
 #give permissions to QA
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>ben.magriso</recipients>
+      <recipients></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
