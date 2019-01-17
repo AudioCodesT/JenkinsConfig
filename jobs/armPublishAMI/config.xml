@@ -89,7 +89,7 @@ aws ec2 modify-image-attribute --image-id ${RouterImageId} --launch-permission &
 for destRegionName in ${OTHER_REGIONS[@]}
 do
 		#copy both AMI to the new region
-    	ConfNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-ConfiguratorAMI_${TAG}&quot; --description &quot;ovoc AMI ${TAG}&quot; --source-image-id ${ConfImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
+    	ConfNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-ConfiguratorAMI_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${ConfImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
         RouterNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-RouterAMI_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${RouterImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
         sleep 20
         #wait for The image to Create
