@@ -151,7 +151,7 @@ done</command>
         </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>text/html</contentType>
-      <defaultSubject>ARM Router And Configurator AMIs</defaultSubject>
+      <defaultSubject>ARM Router And Configurator ${TAG} AMIs</defaultSubject>
       <defaultContent>ARM Configurator AMIs
 &lt;pre&gt;
 ${FILE,path=&quot;ConfRegionsNameAndIds.txt&quot;}
