@@ -52,7 +52,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>aws=&quot;/home/centos/.local/bin/aws&quot;
-echo $HOME
+echo $PATH
+setx PATH=&quot;$PATH:/home/centos/.local/bin/aws&quot;
 echo $PATH
 #copy files 2 OVA FIles to S3 bucket
 $aws s3 cp ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova s3://arm-ova2ami/${TAG}/
@@ -94,7 +95,7 @@ echo $ImportTaskId_Router
 
 conf_status_ret=1
 router_status_ret=1
-while [[ &quot;$conf_status_ret&quot; != &quot;0&quot; $$ &quot;$router_status_ret&quot; != &quot;0&quot; ]]
+while [[ &quot;$conf_status_ret&quot; != &quot;0&quot; ]] &amp;&amp; [[ &quot;$router_status_ret&quot; != &quot;0&quot; ]]
 do
   echo &quot;importing both OVA files to AMI&quot;
   sleep 100
