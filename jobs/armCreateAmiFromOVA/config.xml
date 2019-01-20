@@ -166,7 +166,7 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
       <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Ram.Nizani@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
             <subject>$PROJECT_DEFAULT_SUBJECT</subject>
             <body>$PROJECT_DEFAULT_CONTENT</body>
@@ -180,7 +180,7 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
             <contentType>project</contentType>
           </email>
-        </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>ARM ${TAG} AMI were created successfully</defaultSubject>
