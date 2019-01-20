@@ -89,6 +89,7 @@ snapshots = ec.describe_snapshots(MaxResults=1000, OwnerIds=[&apos;858367874798&
 imagesListArmConf = []
 imagesListArmRouter = []
 # Loop through each image of our current instance
+print &quot;start searching for images&quot;
 for image in images:
 	 for tag in image.tags:
     	 if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
