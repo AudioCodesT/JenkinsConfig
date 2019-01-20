@@ -63,7 +63,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all</command>
+      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
+&#xd;
+echo Finish stop all</command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
