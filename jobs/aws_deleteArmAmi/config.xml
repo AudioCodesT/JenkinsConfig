@@ -49,8 +49,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>python &lt;&lt;-EOS
-
+      <command>cat &lt;&lt; EOF &gt; deleteArmAMI.py
 import boto3
 import collections
 import datetime
@@ -58,23 +57,28 @@ import time
 import sys
 
 
-def deleteAmis (imagesList):
-	 count=0
-	 sortedAmis = sorted(imagesList,key=lambda im: im.creation_date, reverse=True)
-	 for image in sortedAmis:
-     	 tag=image.name.split(&apos;_&apos;)
-     	 print(&quot;image %s is %s&quot; % (count, image.name))
-     	 if count &gt;= 0:
-            print &quot;Delete AmI %s&quot; % image.id
-            #image.deregister()
- 	    # Search for additional snapshots for the current image and delete them
-            for snapshot in snapshots:
-                 if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
-                    print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
-                    #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
-			print &quot;Delete OVA from S3 Bucket &quot; +&quot;/&quot;+tag[1]
-            #bucket.objects.filter(Prefix=tag[1]).delete
-        count=count+1
+def deleteAmis (imagesList,):
+        count=0
+        index=0
+        sortedAmis = sorted(imagesList,key=lambda im: im.creation_date, reverse=True)
+        for image in sortedAmis:
+                        for tag in image.tags:
+                                if tag[&apos;Key&apos;] == &apos;Name&apos;:
+                                                imageFullName = tag[&apos;Value&apos;]
+                        nameTag = imageFullName.split(&apos;_&apos;)
+                        nameTag = nameTag[1]
+                        print(&quot;image %s is %s&quot; % (count, imageFullName))
+                        if count &gt;= 0:
+                                        print &quot;Delete AmI %s&quot; % image.id
+                                        #image.deregister()
+                                        #Search for additional snapshots for the current image and delete them
+                                        for snapshot in snapshots:
+                                                        if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
+                                                                                print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
+                                                                                #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+                                        print &quot;Delete OVA from S3 Bucket &quot; +&quot;/&quot;+nameTag
+                                        #bucket.objects.filter(Prefix=tag[1]).delete()
+                        count=count+1
 
 
 ec = boto3.client(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
@@ -91,23 +95,32 @@ imagesListArmRouter = []
 # Loop through each image of our current instance
 print &quot;start searching for images&quot;
 for image in images:
-	 for tag in image.tags:
-    	 if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
-        	 imagesListArmConf.append(image)
-		 if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
-         	 imagesListArmRouter.append(image)    
+                if image.tags is not None:
+                                for tag in image.tags:
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
+                                                                imagesListArmConf.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
+                                                                imagesListArmRouter.append(image)
 
- 
+
+
 print &quot;images of ARM Router&quot;
 deleteAmis(imagesListArmRouter)
 print &quot;images of ARM COnfigurator&quot;
-deleteAmis(imagesListArmConf) 
+deleteAmis(imagesListArmConf)
 
-
- 
-EOS</command>
+EOF</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>python2.7 deleteArmAMI.py</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients></recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers/>
 </project>
