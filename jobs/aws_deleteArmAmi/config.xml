@@ -74,7 +74,7 @@ def deleteAmis (imagesList):
                     #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
 			print &quot;Delete OVA from S3 Bucket &quot; +&quot;/&quot;+tag[1]
             #bucket.objects.filter(Prefix=tag[1]).delete
-     	 count=count+1
+         count=count+1
 
 
 ec = boto3.client(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
