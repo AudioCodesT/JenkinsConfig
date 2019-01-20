@@ -97,7 +97,7 @@ print &quot;start searching for images&quot;
 for image in images:
                 if image.tags is not None:
                                 for tag in image.tags:
-                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Configurator_&apos;):
                                                                 imagesListArmConf.append(image)
                                                 if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
                                                                 imagesListArmRouter.append(image)
