@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwLztClBTk5J+6F4T1GAK7Ha2I/q72Rg7YHROC2j9o4KmIRx2uUpWex/6k+qtPpyPf7XtUHEUMWW1m3BhDdx5a8w==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>5133e4ac-ce99-45b1-a3cf-5197d8ca7a73</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>fac16f4972bc293caa2806a53c99535802adfda3cbecd2c4f2d7fd596d1baae8</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -42,6 +54,7 @@
         <string>ActionBase Users</string>
         <string>Sp365-Devops-Read</string>
         <string>Allow Office365 Groups</string>
+        <string># ClearCase R&amp;D</string>
         <string># R&amp;D Support Escalation</string>
         <string># All R&amp;D</string>
         <string>Jira leaders</string>
@@ -63,6 +76,7 @@
         <string>Linuxusers</string>
         <string># BatchRunnerBlockStream</string>
         <string>AudioCodes_VPN</string>
+        <string># RnD Israel</string>
         <string># IPP RnD</string>
         <string>cc_sys_users</string>
         <string># All AudioCodes</string>
@@ -76,7 +90,7 @@
         <string># R&amp;D Application Group</string>
         <string>Citrix_Allow_Project</string>
       </roles>
-      <timestamp>1540119926421</timestamp>
+      <timestamp>1547997606942</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Arik.Kabessa@audiocodes.com</emailAddress>
