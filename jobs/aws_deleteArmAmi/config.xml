@@ -76,7 +76,7 @@ def deleteAmis (imagesList,):
                                                         if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
                                                                                 print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
                                                                                 #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
-                                        print &quot;Delete OVA from S3 Bucket &quot; +&quot;/&quot;+nameTag
+                                        print &quot;Delete OVA from S3 Bucket &quot; +bucket+&quot;/&quot;+nameTag
                                         #bucket.objects.filter(Prefix=tag[1]).delete()
                         count=count+1
 
@@ -117,7 +117,7 @@ EOF</command>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients></recipients>
+      <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
