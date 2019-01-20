@@ -91,9 +91,9 @@ imagesListArmRouter = []
 # Loop through each image of our current instance
 for image in images:
 	 for tag in image.tags:
-    	 if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
+    	 if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
         	 imagesListArmConf.append(image)
-		 if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
+		 if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
          	 imagesListArmRouter.append(image)    
 
  
