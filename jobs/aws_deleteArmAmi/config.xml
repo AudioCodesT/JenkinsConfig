@@ -57,7 +57,7 @@ import time
 import sys
 
 
-def deleteAmis (imagesList,):
+def deleteAmis (imagesList):
         count=0
         index=0
         sortedAmis = sorted(imagesList,key=lambda im: im.creation_date, reverse=True)
@@ -68,7 +68,7 @@ def deleteAmis (imagesList,):
                         nameTag = imageFullName.split(&apos;_&apos;)
                         nameTag = nameTag[1]
                         print(&quot;image %s is %s&quot; % (count, imageFullName))
-                        if count &gt;= 0:
+                        if count &gt;= 3:
                                         print &quot;Delete AmI %s&quot; % image.id
                                         #image.deregister()
                                         #Search for additional snapshots for the current image and delete them
@@ -76,8 +76,8 @@ def deleteAmis (imagesList,):
                                                         if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
                                                                                 print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
                                                                                 #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
-                                        print &quot;Delete OVA from S3 Bucket &quot; +bucket+&quot;/&quot;+nameTag
-                                        #bucket.objects.filter(Prefix=tag[1]).delete()
+                                        print &quot;Delete OVA from S3:// &quot; +bucket.name+&quot;/&quot;+nameTag
+                                        #bucket.objects.filter(Prefix=nameTag).delete()
                         count=count+1
 
 
