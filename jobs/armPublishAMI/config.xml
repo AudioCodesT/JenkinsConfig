@@ -152,6 +152,7 @@ done</command>
             <body>$PROJECT_DEFAULT_CONTENT</body>
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+              <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
             </recipientProviders>
             <attachmentsPattern></attachmentsPattern>
             <attachBuildLog>false</attachBuildLog>
@@ -162,7 +163,7 @@ done</command>
         </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>text/html</contentType>
-      <defaultSubject>ARM Router And Configurator ${TAG} AMIs</defaultSubject>
+      <defaultSubject>ARM ${TAG} : Router and Configurator AMIs were published successfully</defaultSubject>
       <defaultContent>ARM Configurator AMIs
 &lt;pre&gt;
 ${FILE,path=&quot;ConfRegionsNameAndIds.txt&quot;}
