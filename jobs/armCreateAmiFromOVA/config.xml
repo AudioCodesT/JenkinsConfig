@@ -129,24 +129,24 @@ done
 set -e
 sleep 20
 echo &quot;finish importing both OVA Files to AMI&quot;
-confAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
-confAmi=${confAmi[6]}
-routerAmi=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}))
-routerAmi=${routerAmi[6]}
+confAmiID=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
+confAmiID=${confAmiID[6]}
+routerAmiID=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}))
+routerAmiID=${routerAmiID[6]}
 #get Snapshot id -  we need it in order to tag the snapshot as well
-confSnapshotId=$(aws ec2 describe-images --image-ids $confAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
-routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
+confSnapshotId=$(aws ec2 describe-images --image-ids $confAmiID --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
+routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmiID --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 #give name to the AMI 
-aws ec2 create-tags --resources $confAmi --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
-aws ec2 create-tags --resources $routerAmi --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
+aws ec2 create-tags --resources $confAmiID --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
+aws ec2 create-tags --resources $routerAmiID --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
 #give name to the snapshot 
 aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
 aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
 #give permissions to QA
 qaAccount=&quot;191324562914&quot;
 #give permissions to ovoc QA Account to the AMI
-aws ec2 modify-image-attribute --image-id $confAmi --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
-aws ec2 modify-image-attribute --image-id $routerAmi --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;</command>
+aws ec2 modify-image-attribute --image-id $confAmiID --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
+aws ec2 modify-image-attribute --image-id $routerAmiID --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
