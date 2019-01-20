@@ -72,7 +72,7 @@ def deleteAmis (imagesList):
                     print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
                     #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
 			tag=image.name.split(&apos;_&apos;)
-            print &quot;Delete OVA from S3 Bucket &quot; +bucket+&quot;/&quot;+tag[1]
+			print &quot;Delete OVA from S3 Bucket &quot; +bucket+&quot;/&quot;+tag[1]
             #bucket.objects.filter(Prefix=tag[1]).delete
      	 count=count+1          
 
