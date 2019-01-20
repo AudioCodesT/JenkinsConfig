@@ -69,8 +69,8 @@ printf &quot;%s------------------------------------------------------------\n&qu
 OTHER_REGIONS=&quot;us-west-2 us-west-1 us-east-1 eu-west-1 ap-southeast-1&quot;
 OTHER_REGIONS=($OTHER_REGIONS) 
 currentRegion=&quot;eu-central-1&quot;
-ConfImageName=&quot;ARM-ConfiguratorAMI_${TAG}&quot;
-RouterImageName=&quot;ARM-RouterAMI_${TAG}&quot;
+ConfImageName=&quot;ARM-Configurator_${TAG}&quot;
+RouterImageName=&quot;ARM-Router_${TAG}&quot;
 
 #Get Image Id
 ConfImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$ConfImageName --output text --query &apos;Images[*].ImageId&apos;)
@@ -89,8 +89,8 @@ aws ec2 modify-image-attribute --image-id ${RouterImageId} --launch-permission &
 for destRegionName in ${OTHER_REGIONS[@]}
 do
 		#copy both AMI to the new region
-    	ConfNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-ConfiguratorAMI_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${ConfImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
-        RouterNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-RouterAMI_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${RouterImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
+    	ConfNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-Configurator_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${ConfImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
+        RouterNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-Router_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${RouterImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
         sleep 20
         #wait for The image to Create
         OLD_STATE=&quot;&quot;
@@ -118,8 +118,8 @@ do
         conf_snapshotId=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${ConfNewRegionAmiId} --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
         router_snapshotId=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${RouterNewRegionAmiId} --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
         #give name to the snapshot -
-        aws ec2 create-tags --region ${destRegionName} --resources $conf_snapshotId --tags Key=Name,Value=&quot;ARM-ConfiguratorAMI_${TAG}&quot;
-        aws ec2 create-tags --region ${destRegionName} --resources $router_snapshotId --tags Key=Name,Value=&quot;ARM-RouterAMI_${TAG}&quot;
+        aws ec2 create-tags --region ${destRegionName} --resources $conf_snapshotId --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
+        aws ec2 create-tags --region ${destRegionName} --resources $router_snapshotId --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
         # add public permissions to the rest of the regions
         aws ec2 modify-image-attribute --region ${destRegionName} --image-id ${ConfNewRegionAmiId} --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;Group\&quot;:\&quot;all\&quot;}]}&quot;
         aws ec2 modify-image-attribute --region ${destRegionName} --image-id ${RouterNewRegionAmiId} --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;Group\&quot;:\&quot;all\&quot;}]}&quot;
