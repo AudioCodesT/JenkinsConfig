@@ -137,11 +137,11 @@ routerAmi=${routerAmi[6]}
 confSnapshotId=$(aws ec2 describe-images --image-ids $confAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmi --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 #give name to the AMI 
-aws ec2 create-tags --resources $confAmi --tags Key=Name,Value=&quot;ARM-ConfiguratorAMI_${TAG}&quot;
-aws ec2 create-tags --resources $routerAmi --tags Key=Name,Value=&quot;ARM-RouterAMI_${TAG}&quot;
+aws ec2 create-tags --resources $confAmi --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
+aws ec2 create-tags --resources $routerAmi --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
 #give name to the snapshot 
-aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=&quot;ARM-ConfiguratorAMI_${TAG}&quot;
-aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;ARM-RouterAMI_${TAG}&quot;
+aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
+aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
 #give permissions to QA
 qaAccount=&quot;191324562914&quot;
 #give permissions to ovoc QA Account to the AMI
