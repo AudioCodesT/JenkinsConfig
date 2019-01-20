@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>save the newest 3 Ovoc Ami&apos;s and delete the rest</description>
+  <description>save the newest 3 ARM Ami&apos;s and delete the rest</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -33,7 +33,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -66,43 +65,44 @@ def deleteAmis (imagesList):
      	 print(&quot;image %s is %s&quot; % (count, image.name))
      	 if count &gt;= 3:
             print &quot;Delete AmI %s&quot; % image.id
-            image.deregister()
+            #image.deregister()
  	    # Search for additional snapshots for the current image and delete them
             for snapshot in snapshots:
                  if snapshot[&apos;Description&apos;].find(image.id) &gt; 0:
                     print &quot;Deleting snapshot &quot; + snapshot[&apos;SnapshotId&apos;] + &quot; from AMI &quot; + image.id
-                    snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+                    #snap = ec.delete_snapshot(SnapshotId=snapshot[&apos;SnapshotId&apos;])
+			tag=image.name.split(&apos;_&apos;)
+            print &quot;Delete OVA from S3 Bucket &quot; +bucket+&quot;/&quot;+tag[1]
+            #bucket.objects.filter(Prefix=tag[1]).delete
      	 count=count+1          
 
 
 ec = boto3.client(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
 ec2 = boto3.resource(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
+s3 = boto3.resource(&apos;s3&apos;, region_name=&apos;eu-central-1&apos;)
+bucket = s3.Bucket(&apos;arm-ova2ami&apos;)
 boto3.set_stream_logger(&apos;boto&apos;)
 filters = [{&apos;Name&apos;:&apos;owner-id&apos;, &apos;Values&apos;:[&apos;858367874798&apos;]}]
 images = ec2.images.filter(Filters=filters)
 # Select all snapshots owned by me
 snapshots = ec.describe_snapshots(MaxResults=1000, OwnerIds=[&apos;858367874798&apos;])[&apos;Snapshots&apos;]
-imagesListOf7_6 = []
-imagesListOf7_6_1000 = []
-imagesListOf7_6_2000 = []
+imagesListArmConf = []
+imagesListArmRouter = []
 # Loop through each image of our current instance
 for image in images:
-     if image.name.startswith(&apos;ovocAMI_7.6&apos;):
-        for tag in image.tags:
-             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6&apos;:
-                imagesListOf7_6.append(image)
-             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.1000&apos;:
-     		    imagesListOf7_6_1000.append(image)    
-             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.2000&apos;:
-                imagesListOf7_6_2000.append(image)  
+	for tag in image.tags:
+    	if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Conf_&apos;):
+        	imagesListArmConf.append(image)
+		if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
+			imagesListArmRouter.append(image)    
+
  
-print &quot;images in Branch 7.6&quot;
-deleteAmis(imagesListOf7_6)
-print &quot;images in Branch 7.6.1000&quot;
-deleteAmis(imagesListOf7_6_1000) 
-print &quot;images in Branch 7.6.2000&quot;
-deleteAmis(imagesListOf7_6_2000)  
- 
+print &quot;images of ARM Router&quot;
+deleteAmis(imagesListArmRouter)
+print &quot;images of ARM COnfigurator&quot;
+deleteAmis(imagesListArmConf) 
+
+
  
 EOS</command>
     </hudson.tasks.Shell>
