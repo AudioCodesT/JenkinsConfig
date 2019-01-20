@@ -47,7 +47,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -64,7 +63,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all</command>
+      <command>rem cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all</command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
