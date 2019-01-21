@@ -326,15 +326,14 @@ then
     exit 0
 fi
 
-#not fail the buiild
-set +e
+
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
 RetunedValue=0
 sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} || RetunedValue=1 
 echo $RetunedValue
 echo &quot;*********************************************************&quot;
-set -e
+
 
 
 
