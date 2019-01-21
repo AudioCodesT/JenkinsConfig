@@ -136,12 +136,15 @@ routerAmiID=${routerAmiID[6]}
 #get Snapshot id -  we need it in order to tag the snapshot as well
 confSnapshotId=$(aws ec2 describe-images --image-ids $confAmiID --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmiID --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
-#give name to the AMI 
+#give tag name to the AMI 
 aws ec2 create-tags --resources $confAmiID --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
 aws ec2 create-tags --resources $routerAmiID --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
-#give name to the snapshot 
+#give tag name to the snapshot 
 aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
 aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
+#give description to the AMI
+aws ec2 modify-image-attribute --image-id $confAmiID --description &quot;ARM Configurator ${TAG}&quot;
+aws ec2 modify-image-attribute --image-id $routerAmiID --description &quot;ARM Router ${TAG}&quot;
 #give permissions to QA
 qaAccount=&quot;191324562914&quot;
 #give permissions to ovoc QA Account to the AMI
