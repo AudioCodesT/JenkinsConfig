@@ -287,9 +287,7 @@ fi
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>#not fail the buiild
-set +e
-change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
+                        <command>change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
 ps=`echo $GERRIT_REFSPEC | cut -d/ -f5`
 User=&quot;$artifactory_user:$artifactory_password&quot;
 artifactory_host=artifactory
@@ -328,6 +326,8 @@ then
     exit 0
 fi
 
+#not fail the buiild
+set +e
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
 RetunedValue=$(sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
