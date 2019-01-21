@@ -175,10 +175,8 @@ else
 sudo ./vSFB.sh gtest_valgrind
 
 #fetch valgrind Errors
-set +e
-grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; &gt;/dev/null build/GTestLogs/*
-valgrindRetValue=$?
-set -e
+valgrindRetValue=0
+grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; build/GTestLogs/* || valgrindRetValue=$?
 if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
 then
 valgrindSign=&quot;-1&quot;
@@ -190,10 +188,10 @@ echo &quot;ERROR not found GTestLogs Files&quot;
 exit 1
 fi
 #fetch gtest errors
-set +e
-grep -E &apos;[1-9]+ FAILED TEST&apos; &gt;/dev/null build/GTestLogs/*
-gtestRetValue=$?
-set -e
+
+# 0 =&gt; Failed
+gtestRetValue=0
+grep -E &apos;[1-9]+ FAILED TEST&apos; build/GTestLogs/* || gtestRetValue=$?
 if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
 then
 gtestSign=&quot;-1&quot;
