@@ -187,9 +187,9 @@ else
 echo &quot;ERROR not found GTestLogs Files&quot;
 exit 1
 fi
-#fetch gtest errors
 
-# 0 =&gt; Failed
+
+#fetch gtest errors
 gtestRetValue=0
 grep -E &apos;[1-9]+ FAILED TEST&apos; build/GTestLogs/* || gtestRetValue=$?
 if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
