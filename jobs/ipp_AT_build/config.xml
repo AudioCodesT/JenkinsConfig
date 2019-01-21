@@ -290,10 +290,7 @@ fi
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>#not fail the buiild
-set +e
-
-change=`echo $REFSPEC | cut -d/ -f4`
+                        <command>change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 User=&quot;$artifactory_user:$artifactory_pass&quot;
 artifactory_host=artifactory
@@ -332,13 +329,14 @@ then
     exit 0
 fi
 
-
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
-RetunedValue=$(sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+RetunedValue=0
+sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} || RetunedValue=1 
 echo $RetunedValue
-cat size_diff_log.txt
 echo &quot;*********************************************************&quot;
+
+
 
 
 
