@@ -330,9 +330,9 @@ fi
 set +e
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
-RetunedValue=$(sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} &gt; size_diff_log.txt; echo $?)
+RetunedValue=0
+sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} || RetunedValue=1 
 echo $RetunedValue
-cat size_diff_log.txt
 echo &quot;*********************************************************&quot;
 set -e
 
