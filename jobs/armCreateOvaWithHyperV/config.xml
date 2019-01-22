@@ -1,15 +1,332 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
+  <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>TAG</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
+  <assignedNode>arm-build-esxi</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
-  <publishers/>
-  <buildWrappers/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cat &lt;&lt; EOF &gt; cnlsender.py
+import paramiko
+import select
+import time
+import re
+import sys
+import traceback
+ 
+def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
+    channel.send(command + &quot;\n&quot;)
+    return justWait(channel, timeout, waitfor)
+def sendWithoutWait(channel, command, timeout=15.0, waitfor=&quot;#&quot;):
+    channel.send(command + &quot;\n&quot;)
+    return &quot;&quot;
+    
+def manualFlush(channel):
+    for x in range(5):
+        rl, wl, xl = select.select([channel],[],[],1.0)
+        if len(rl) &gt; 0:
+            line = channel.recv(1024)
+            print line
+    
+def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;acems&quot;):
+    t=time.time()
+    received=&quot;&quot;
+    while True:
+        rl, wl, xl = select.select([channel],[],[],1.0)
+        if len(rl) &gt; 0:
+            line = channel.recv(1024)
+            print line,
+            received+=line
+            if re.search(&quot;Press Enter to continue&quot;,line):
+                channel.send(&quot;\n&quot;)
+            if re.search(&quot;Press Enter to reboot...&quot;,line):
+                channel.send(&quot;\n&quot;)
+                time.sleep(200)
+                return &apos;reboot&apos;
+            if re.search(&quot;FATAL ERROR:&quot;,line):
+                return &apos;fatalerror&apos;
+            if re.search(&quot;patch installation may take up to&quot;,line):
+                timeout=timeout+1800.0 # patch installation -- enlarge the timeout by 30 minutes
+            expression = r&quot;%s&quot; % waitfor
+            if re.search(expression, line):
+                line_list=received.split(&apos;\n&apos;);
+                line_list.pop(0)
+                if len(line_list)&gt;0:
+                    line_list.pop()
+                return &apos;\n&apos;.join(line_list)
+        if time.time()&gt;t+timeout:
+            print &quot;\n\nTime out. Call stack:&quot;
+            traceback.print_stack(file=sys.stdout)
+            sys.exit(1);
+            
+EOF            </command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>python &lt;&lt; EOS
+
+import paramiko
+import select
+import time
+import re
+import sys
+import traceback
+import cnlsender
+import re
+import os
+import subprocess
+from subprocess import Popen, PIPE
+
+
+#esxi username and password
+root_username=&apos;root&apos;
+
+
+# Functions definitions
+def sendWait_conf(command, timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.sendWait(channel_conf, command, timeout, waitfor)
+ 
+def sendWithoutWait_conf(command):
+    return cnlsender.sendWithoutWait(channel_conf, command)
+ 
+def justWait_conf(timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.justWait(channel_conf, timeout, waitfor)
+    
+    
+    
+# Functions definitions
+def sendWait_router(command, timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.sendWait(channel_router, command, timeout, waitfor)
+ 
+def sendWithoutWait_router(command):
+    return cnlsender.sendWithoutWait(channel_router, command)
+ 
+def justWait_router(timeout=20.0, waitfor=&quot;#&quot;):
+    return cnlsender.justWait(channel_router, timeout, waitfor)    
+#check if VM name ARM-Conf_$TAG is already exists
+vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE)
+if vm_list == &quot;&quot;:
+	print &quot;ARM-Conf_&quot;+TAG+&quot; already exist, I am exiting now&quot;
+    sys.exit(1)
+    
+    
+#check if VM name ARM-Router_$TAG is already exists
+vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE)
+if vm_list == &quot;&quot;:
+	print &quot;ARM-Router&quot;+TAG+&quot; already exist, I am exiting now&quot;
+    sys.exit(1)    
+#create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
+print &quot;creating new Conf VM from image&quot;
+Popen(&quot;ovftool --disableVerification --noSSLVerify --name=\&quot;ARM-Conf_$TAG\&quot; --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn /root/jenkinsslave/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova vi://${root_user}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
+open_vm_conf=Popen(&quot;echo $?&quot;,shell=True,stdout=PIPE)
+if open_vm_conf != 0:
+	print &quot;Deploy new VM has failed&quot;
+    sys.exit(1)
+
+#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
+print &quot;creating new Conf VM from image&quot;
+Popen(&quot;ovftool --disableVerification --noSSLVerify --name=\&quot;ARM-Router_$TAG\&quot; --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn /root/jenkinsslave/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova vi://${root_user}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
+open_vm_router=Popen(&quot;echo $?&quot;,shell=True,stdout=PIPE)
+if open_vm_conf != 0:
+	print &quot;Deploy new VM has failed&quot;
+    sys.exit(1)
+
+
+#find new VM Configurator location in the host
+newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE)
+#find new VM Router location in the host
+newVmRouterLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE)
+
+#get ip address of the new VM Configurator
+vmConfIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} $newVmConfLocation getguestinfo ip&quot;,shell=True,stdout=PIPE)
+#get ip address of the new VM Router
+vmRouterIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} $newVmRouterLocation getguestinfo ip&quot;,shell=True,stdout=PIPE)
+
+
+#open SSH session to the Configurator server
+try:
+    client_conf = paramiko.SSHClient()
+    client_conf.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client_conf.connect(vmConfIP, port=22, username=root_user)
+    transport_conf = client_conf.get_transport()
+    channel_conf = transport_conf.open_session()
+    channel_conf.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+    channel_conf.invoke_shell()
+except paramiko.ssh_exception.AuthenticationException:
+    print &quot;We had an authentication exception!&quot;
+    shell = None
+    
+#open SSH session to the Configurator server
+try:
+    client_router = paramiko.SSHClient()
+    client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client_router.connect(vmRouterIP, port=22, username=root_user)
+    transport_router = client_conf.get_transport()
+    channel_router = transport_router.open_session()
+    channel_router.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+    channel_router.invoke_shell()
+except paramiko.ssh_exception.AuthenticationException:
+    print &quot;We had an authentication exception!&quot;
+    shell = None    
+
+#download Linux Integration Services v4.2 for Hyper-V and Azure  for Configurator and Router VMS
+sendwait_conf(&quot;curl -fO &quot;)
+sendwait_router(&quot;curl -fO &quot;)
+#extract to directory
+sendwait_conf(&quot;tar -xvzf lis-rpms-4.2.6-1.tar.gz&quot;)
+sendwait_router(&quot;tar -xvzf lis-rpms-4.2.6-1.tar.gz)
+#enter the directory
+sendwait_conf(&quot;mv lis-rpms-* LISISO &amp;&amp; cd LISISO&quot;)
+sendwait_router(&quot;mv lis-rpms-* LISISO &amp;&amp; cd LISISO&quot;)
+#install the integration services
+sendwait_conf(&quot;./install.sh&quot;)
+sendwait_router(&quot;./install.sh&quot;)
+#delete the files
+sendwait_conf(&quot;rm -rf LISISO&quot;)
+sendwait_router(&quot;rm -rf LISISO&quot;)
+sendwait_conf(&quot;rm -rf lis-rpms-*&quot;)
+sendwait_router(&quot;rm -rf lis-rpms-*&quot;)
+
+
+#graceful shutdouwn BOTH VM
+echo &quot;$(date) : shutdown new VM&quot; &gt;&amp;3
+vmware-cmd -H 10.7.20.101 -U root -P rootroot $newVmLocation stop soft
+Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} $newVmConfLocation stop soft&quot;,shell=True,stdout=PIPE)
+Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} $newVmRouterLocation stop soft&quot;,shell=True,stdout=PIPE)
+sys.sleep(30)
+
+#export both VMS to OVA
+print &quot;export BOTH VMs to an OVA files&quot;
+os.mkdirs(&quot;newOVAs&quot;)
+Popen(&quot;ovftool -o --noSSLVerify vi://${root_user}:${root_passworD}@10.7.20.101/ARM-Conf_$TAG $WORKSPACE/newOVAs/ARM-Conf_$TAG.ova&quot;,shell=True,stdout=PIPE)
+Popen(&quot;ovftool -o --noSSLVerify vi://${root_user}:${root_passworD}@10.7.20.101/ARM-Router_$TAG $WORKSPACE/newOVAs/ARM-Router_$TAG.ova&quot;,shell=True,stdout=PIPE)
+
+#terminate both VM MACHINES
+
+
+
+EOS</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+      <deleteDirs>false</deleteDirs>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <deployReleaseRepository>
+          <keyFromText></keyFromText>
+          <keyFromSelect>libs-release-local</keyFromSelect>
+          <dynamicMode>false</dynamicMode>
+        </deployReleaseRepository>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>false</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec></spec>
+      </downloadSpec>
+      <deployPattern>newOVAs/ARM-Conf_${TAG}.ova=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}.ova
+newOVAs/ARM-Router_${TAG}.ova=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}.ova</deployPattern>
+      <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
+libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
+      <deploymentProperties></deploymentProperties>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>root_password</name>
+          <value>{AQAAABAAAAAQJpFlccuyfS37e8Cmeq34Bgx7Tai46uxM7sBwjKu3KLw=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
 </project>
