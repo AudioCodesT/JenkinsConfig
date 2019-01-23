@@ -28,6 +28,8 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -125,41 +127,41 @@ def sendWait_conf(command, timeout=20.0, waitfor=&quot;#&quot;):
     return cnlsender.sendWait(channel_conf, command, timeout, waitfor)
  
 def sendWithoutWait_conf(command):
-    return cnlsender.sendWithoutWait(channel_conf, command)
+	return cnlsender.sendWithoutWait(channel_conf, command)
  
 def justWait_conf(timeout=20.0, waitfor=&quot;#&quot;):
-    return cnlsender.justWait(channel_conf, timeout, waitfor)
+	return cnlsender.justWait(channel_conf, timeout, waitfor)
     
     
     
 # Functions definitions
 def sendWait_router(command, timeout=20.0, waitfor=&quot;#&quot;):
-    return cnlsender.sendWait(channel_router, command, timeout, waitfor)
+	return cnlsender.sendWait(channel_router, command, timeout, waitfor)
  
 def sendWithoutWait_router(command):
-    return cnlsender.sendWithoutWait(channel_router, command)
+	return cnlsender.sendWithoutWait(channel_router, command)
  
 def justWait_router(timeout=20.0, waitfor=&quot;#&quot;):
-    return cnlsender.justWait(channel_router, timeout, waitfor)    
+	return cnlsender.justWait(channel_router, timeout, waitfor)    
 #check if VM name ARM-Conf_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE)
 if vm_list == &quot;&quot;:
 	print &quot;ARM-Conf_&quot;+TAG+&quot; already exist, I am exiting now&quot;
-    sys.exit(1)
+	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE)
 if vm_list == &quot;&quot;:
 	print &quot;ARM-Router&quot;+TAG+&quot; already exist, I am exiting now&quot;
-    sys.exit(1)    
+	sys.exit(1)    
 #create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
 print &quot;creating new Conf VM from image&quot;
 Popen(&quot;ovftool --disableVerification --noSSLVerify --name=\&quot;ARM-Conf_$TAG\&quot; --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn /root/jenkinsslave/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova vi://${root_user}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
 open_vm_conf=Popen(&quot;echo $?&quot;,shell=True,stdout=PIPE)
 if open_vm_conf != 0:
 	print &quot;Deploy new VM has failed&quot;
-    sys.exit(1)
+	sys.exit(1)
 
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
 print &quot;creating new Conf VM from image&quot;
@@ -167,7 +169,7 @@ Popen(&quot;ovftool --disableVerification --noSSLVerify --name=\&quot;ARM-Router
 open_vm_router=Popen(&quot;echo $?&quot;,shell=True,stdout=PIPE)
 if open_vm_conf != 0:
 	print &quot;Deploy new VM has failed&quot;
-    sys.exit(1)
+	sys.exit(1)
 
 
 #find new VM Configurator location in the host
@@ -183,29 +185,29 @@ vmRouterIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_passw
 
 #open SSH session to the Configurator server
 try:
-    client_conf = paramiko.SSHClient()
-    client_conf.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client_conf.connect(vmConfIP, port=22, username=root_user)
-    transport_conf = client_conf.get_transport()
-    channel_conf = transport_conf.open_session()
-    channel_conf.get_pty(term=&apos;xterm&apos;, width=80, height=24)
-    channel_conf.invoke_shell()
+	client_conf = paramiko.SSHClient()
+	client_conf.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client_conf.connect(vmConfIP, port=22, username=root_user)
+	transport_conf = client_conf.get_transport()
+	channel_conf = transport_conf.open_session()
+	channel_conf.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel_conf.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-    print &quot;We had an authentication exception!&quot;
-    shell = None
+	print &quot;We had an authentication exception!&quot;
+	shell = None
     
 #open SSH session to the Configurator server
 try:
-    client_router = paramiko.SSHClient()
-    client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client_router.connect(vmRouterIP, port=22, username=root_user)
-    transport_router = client_conf.get_transport()
-    channel_router = transport_router.open_session()
-    channel_router.get_pty(term=&apos;xterm&apos;, width=80, height=24)
-    channel_router.invoke_shell()
+	client_router = paramiko.SSHClient()
+	client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client_router.connect(vmRouterIP, port=22, username=root_user)
+	transport_router = client_conf.get_transport()
+	channel_router = transport_router.open_session()
+	channel_router.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel_router.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-    print &quot;We had an authentication exception!&quot;
-    shell = None    
+	print &quot;We had an authentication exception!&quot;
+	shell = None    
 
 #download Linux Integration Services v4.2 for Hyper-V and Azure  for Configurator and Router VMS
 sendwait_conf(&quot;curl -fO &quot;)
