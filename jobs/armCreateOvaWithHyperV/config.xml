@@ -152,7 +152,7 @@ if vm_list != &quot;&quot;:
     
 #check if VM name ARM-Router_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE)
-if vm_list == &quot;&quot;:
+if vm_list != &quot;&quot;:
 	print &quot;ARM-Router&quot;+TAG+&quot; already exist, I am exiting now&quot;
 	sys.exit(1)    
 #create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
