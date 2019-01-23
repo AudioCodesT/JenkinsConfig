@@ -4,6 +4,18 @@
   <properties>
     <jenkins.security.ApiTokenProperty>
       <apiToken>{AQAAABAAAAAwhTmwJO5XzZ8L5c+YKvulS11RbX/zb9CEVIdAghFg/opblDfyGITzbsQNxqWHAeA0XJbbW/ozfhhtv5VSH+D+TQ==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>52fe96a4-2f1f-4d7d-a340-958c558a561f</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>99520f7c4e88fe225be0584b8fd3b1b207f828cedcc3a94cc7180e62f3b2a6a5</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
@@ -43,6 +55,7 @@
         <string># IPP QA</string>
         <string>Users</string>
         <string>ActionBase Users</string>
+        <string># ClearCase R&amp;D</string>
         <string>#All Breakfast</string>
         <string># All Lunch</string>
         <string>CatalogApps_Everyone</string>
@@ -56,13 +69,14 @@
         <string>Mailvision Branch Office Users</string>
         <string># IPP</string>
         <string>AudioCodes_VPN</string>
+        <string># RnD Israel</string>
         <string># All AudioCodes</string>
         <string>Certificate Service DCOM Access</string>
         <string>Domain Users</string>
         <string># All Airport City</string>
         <string>IppSwReleases</string>
       </roles>
-      <timestamp>1527088454642</timestamp>
+      <timestamp>1548235174358</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
   </properties>
 </user>
