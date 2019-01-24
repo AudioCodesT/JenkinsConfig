@@ -258,6 +258,7 @@ time.sleep(30)
 #enter the directory
 sendwait(&quot;cd LISISO&quot;)
 #install the integration services
+print &quot;Start installation on Both Servers&quot;
 sendwait(&quot;./install.sh&quot;)
 #wait for installation will be complete
 time.sleep(600)
