@@ -182,9 +182,9 @@ output = deploy_conf.communicate()[0]
 deploy_conf.wait()
 print &quot;deploy Configurator output: \n&quot;+output
 #check if the new VM created
-check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_conf_created == &quot;&quot;:
-	print &quot;Failed to create Configurate VM&quot;
+	print &quot;Failed to create Configurator VM&quot;
 	sys.exit(1)
 
 
@@ -195,7 +195,7 @@ output = deploy_conf.communicate()[0]
 deploy_router.wait()
 print &quot;deploy Configurator output: \n&quot;+output
 #check if the new VM created
-check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_router_created == &quot;&quot;:
 	print &quot;Failed to create Router VM&quot;
 	sys.exit(1)
