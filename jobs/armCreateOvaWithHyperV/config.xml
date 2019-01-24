@@ -176,7 +176,7 @@ if vm_list != &quot;&quot;:
 	sys.exit(1)    
     
 #create a new VM from ARM-Conf_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print &quot;creating new Conf VM from image&quot;
+print &quot;creating new Conf VM from OVA&quot;
 deploy_conf=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
 output = deploy_conf.communicate()[0]
 deploy_conf.wait()
@@ -189,8 +189,8 @@ if check_if_conf_created == &quot;&quot;:
 
 
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print &quot;creating new Router from image&quot;
-deploy_router=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn /root/jenkinsslave/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
+print &quot;creating new Router from OVA&quot;
+deploy_router=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
 output = deploy_conf.communicate()[0]
 deploy_router.wait()
 print &quot;deploy Configurator output: \n&quot;+output
