@@ -262,6 +262,7 @@ sendwait(&quot;./install.sh&quot;)
 #wait for installation will be complete
 time.sleep(600)
 #delete the files
+sendwait(&quot;cd ~/&quot;)
 sendwait(&quot;rm -rf LISISO&quot;)
 sendwait(&quot;rm -rf lis-rpms-*&quot;)
 #reboot VMs
