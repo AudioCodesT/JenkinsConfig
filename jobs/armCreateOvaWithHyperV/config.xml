@@ -212,11 +212,15 @@ vmConfIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_pas
 #get only the IP Address
 vmConfIP=vmConfIP.split(&apos; &apos;)
 vmConfIP=vmConfIP[2]
+print &quot;The Configurator VM IP is: &quot;+vmConfIP
 #get ip address of the new VM Router
 vmRouterIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0]
 #get only the IP Address
 vmRouterIP=vmRouterIP.split(&apos; &apos;)
 vmRouterIP=vmRouterIP[2]
+print &quot;The Router VM IP is: &quot;+vmRouterIP
+
+print &quot;start SSH to the Configurator Server&quot;
 #open SSH session to the Configurator server
 try:
 	client_conf = paramiko.SSHClient()
@@ -229,7 +233,7 @@ try:
 except paramiko.ssh_exception.AuthenticationException:
 	print &quot;We had an authentication exception!&quot;
 	shell = None
-    
+print &quot;start SSH to the Router Server&quot;    
 	#open SSH session to the Configurator server
 try:
 	client_router = paramiko.SSHClient()
