@@ -197,6 +197,10 @@ if check_if_router_created == &quot;&quot;:
 	print &quot;Failed to create Router VM&quot;
 	sys.exit(1)
 print &quot;Created New Router VM Successfully&quot;
+
+#wait for Both VM will power on
+time.sleep(60)
+
 #find new VM Configurator location in the host
 newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 newVmConfLocation=newVmConfLocation.strip()
