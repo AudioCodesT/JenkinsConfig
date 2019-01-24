@@ -288,6 +288,8 @@ output_router=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_
 #wait to it finish to create new OVA
 output_conf.wait()
 output_router.wait()
+print &quot;Finish Exporting BOTH VMs to OVA&quot;
+print &quot;Deleting Both VMs&quot;
 #terminate both VM MACHINES
 #vmConfLocationDir=newVmConfLocation.rsplit(&apos;/&apos;,1)[0]
 #vmRouterLocationDir=newVmRouterLocation.rsplit(&apos;/&apos;,1)[0]
@@ -295,6 +297,8 @@ output_router.wait()
 #unregister_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE)
 #delete_conf=Popen(&quot;&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rmdir {0}&quot;.format(vmConfLocationDir),shell=True,stdout=PIPE)
 #delete_Router=Popen(&quot;&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rmdir {0}&quot;.format(vmRouterLocationDir),shell=True,stdout=PIPE)
+time.sleep(20)
+print &quot;Successfully deleted BOTH VMs&quot;
 
 channel_conf.close
 client_conf.close
