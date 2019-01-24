@@ -99,7 +99,10 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
             print &quot;\n\nTime out. Call stack:&quot;
             traceback.print_stack(file=sys.stdout)
             sys.exit(1)            
-EOF            </command>
+
+
+
+EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>python &lt;&lt; EOS
