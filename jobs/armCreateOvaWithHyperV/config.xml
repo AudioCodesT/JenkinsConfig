@@ -273,8 +273,8 @@ time.sleep(60)
 
 #graceful shutdouwn BOTH VM
 print &quot;shutdown new VMs&quot;
-output_conf=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmConfLocation),shell=True,stdout=PIPE).communicate()[0]
-output_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0]
+output_conf=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmConfLocation),shell=True,stdout=PIPE)
+output_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE)
 #wait for the VM to SHUT DOWN
 output_conf.wait()
 output_router.wait()
