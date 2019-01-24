@@ -149,11 +149,11 @@ def justWait_router(timeout=200.0, waitfor=&quot;#&quot;):
 #Functions unite both functions
 def sendwait(command):
 	sendwait_conf(command)
-    sendwait_router(command)
+	sendwait_router(command)
     
 def sendWithoutWait(command):
 	sendWithoutWait_conf(command)
-    sendWithoutWait_router(command)
+	sendWithoutWait_router(command)
  
 
 #check if VM name ARM-Conf_$TAG is already exists
@@ -179,7 +179,7 @@ print &quot;deploy Configurator output: \n&quot;+output
 check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_conf_created == &quot;&quot;:
 	print &quot;Failed to create Configurate VM&quot;
-    sys.exit(1)
+	sys.exit(1)
 
 
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
@@ -192,7 +192,7 @@ print &quot;deploy Configurator output: \n&quot;+output
 check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_router_created == &quot;&quot;:
 	print &quot;Failed to create Router VM&quot;
-    sys.exit(1)
+	sys.exit(1)
 
 #find new VM Configurator location in the host
 newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
