@@ -518,7 +518,28 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.10">
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-01104ebd13889f541</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-01104ebd13889f541</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-build</requestedLabel>
+            <createdAt>2019-01-24 12:43:13.313 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-0a3a7c37e14d0e505</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0a3a7c37e14d0e505</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-build</requestedLabel>
+            <createdAt>2019-01-24 12:43:34.45 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -626,7 +647,48 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.10">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-044bb4fa1b19ff702</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-044bb4fa1b19ff702</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-01-24 12:43:40.697 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-01216c6ba10bcf497</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-01216c6ba10bcf497</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-01-24 12:43:18.553 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-07da1e25b76f44bed</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-07da1e25b76f44bed</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-01-24 12:42:35.876 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-0bd16ae724fb8f57d</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0bd16ae724fb8f57d</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-01-24 12:42:35.876 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -734,7 +796,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.10">
       <name>sig-756f72a5</name>
       <groupId>sig-756f72a5</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-03c0b5620c5b47377</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-03c0b5620c5b47377</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>Web-UI-Win-Dynamic</requestedLabel>
+            <createdAt>2019-01-24 12:43:03.817 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>Web-UI-Win-Dynamic</labelString>
       <idleTerminationMinutes>60</idleTerminationMinutes>
       <workspaceDir>c:\jenkins</workspaceDir>
@@ -907,6 +980,7 @@
         <string>armCreateAmiFromOVA</string>
         <string>armCreateOvaWithHyperV</string>
         <string>armCreateUpgradeTarball</string>
+        <string>armCreateVHDFromOVA</string>
         <string>armNightSanity</string>
         <string>armPromoteVersion</string>
         <string>armPublishAMI</string>
