@@ -164,14 +164,14 @@ def sendWithoutWait(command):
 #check if VM name ARM-Conf_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if vm_list != &quot;&quot;:
-	print &quot;ARM-Conf_&quot;+TAG+&quot; already exist, I am exiting now&quot;
+	print &quot;ARM-Conf already exist, I am exiting now&quot;
 	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if vm_list != &quot;&quot;:
-	print &quot;ARM-Router&quot;+TAG+&quot; already exist, I am exiting now&quot;
+	print &quot;ARM-Router already exist, I am exiting now&quot;
 	sys.exit(1)    
     
 #create a new VM from ARM-Conf_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
