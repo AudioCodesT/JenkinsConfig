@@ -239,7 +239,7 @@ try:
 	client_router = paramiko.SSHClient()
 	client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	client_router.connect(vmRouterIP, port=22, username=vm_username,password=vm_password)
-	transport_router = client_conf.get_transport()
+	transport_router = client_router.get_transport()
 	channel_router = transport_router.open_session()
 	channel_router.get_pty(term=&apos;xterm&apos;, width=80, height=24)
 	channel_router.invoke_shell()
