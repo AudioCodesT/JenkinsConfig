@@ -282,9 +282,9 @@ output_router.wait()
 
 #export both VMS to OVA
 print &quot;export BOTH VMs to an OVA files&quot;
-os.mkdirs(&quot;newOVAs&quot;)
-output_conf=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_passworD}@10.7.20.101/ARM-Conf_$TAG ${WORKSPACE}/newOVAs/ARM-Conf_$TAG.ova&quot;,shell=True,stdout=PIPE)
-output_router=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_passworD}@10.7.20.101/ARM-Router_$TAG ${WORKSPACE}/newOVAs/ARM-Router_$TAG.ova&quot;,shell=True,stdout=PIPE)
+os.mkdir(&quot;newOVAs&quot;)
+output_conf=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/ARM-Conf_$TAG ${WORKSPACE}/newOVAs/ARM-Conf_$TAG.ova&quot;,shell=True,stdout=PIPE)
+output_router=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/ARM-Router_$TAG ${WORKSPACE}/newOVAs/ARM-Router_$TAG.ova&quot;,shell=True,stdout=PIPE)
 #wait to it finish to create new OVA
 output_conf.wait()
 output_router.wait()
