@@ -43,9 +43,17 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command></command>
-    </hudson.tasks.Shell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
+Get-Module
+
+Expand-7zip -ArchiveFileName ${WORKSPACE}\\ARM-Conf_${TAG} -TargetPath ${WORKSPACE}
+Expand-7zip -ArchiveFileName ${WORKSPACE}\\ARM-Router_${TAG} -TargetPath ${WORKSPACE}
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\\VHD&quot;
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\\VHD&quot;
+
+</command>
+    </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
@@ -101,7 +109,8 @@
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
+      <deployPattern>VHD/ARM-Conf_${TAG}-disk1.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}.vhdx
+newOVAs/ARM-Router_${TAG}.ova=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}.vhdx</deployPattern>
       <resolvePattern>libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
 libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
       <deploymentProperties></deploymentProperties>
