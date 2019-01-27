@@ -49,8 +49,10 @@
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command># Alias for 7-zip 
 set-alias sz &quot;$env:ProgramFiles\7-Zip\7z.exe&quot;
-
-
+Write-Output &quot;outputs:&quot;
+Write-Output &quot;$TAG&quot;
+Write-Output &quot;$ENV:WORKSPACE\\ovaFiles\\com\\ac\\arm\\tempOVA\\8.2.1\\ARM-Conf_8.2.1.ova\\ARM-Conf_8.2.1.ova&quot;
+Write-Output &quot;$ENV:WORKSPACE\\ovaFiles\\com\\ac\\arm\\tempOVA\\$TAG\\ARM-Conf_$TAG.ova\\ARM-Conf_$TAG.ova&quot;
 Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
 Get-Module
 sz x &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}&quot; -o&quot;$ENV:WORKSPACE&quot;
@@ -118,7 +120,9 @@ ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;$ENV:WORKSPACE\\ARM-Conf_
       <deployPattern>VHD/ARM-Conf_${TAG}-disk1.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}.vhdx
 VHD/ARM-Router_${TAG}-disk1.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}.vhdx</deployPattern>
       <resolvePattern>libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
-libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
+libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles
+libs-release-local:com/ac/arm/tempOVA/8.2.1/ARM-Conf_8.2.1.ova/ARM-Conf_8.2.1.ova=&gt;${workspace}/ovaFiles
+libs-release-local:com/ac/arm/tempOVA/8.2.1/ARM-Router_8.2.1.ova/ARM-Router_8.2.1.ova=&gt;${workspace}/ovaFiles</resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
