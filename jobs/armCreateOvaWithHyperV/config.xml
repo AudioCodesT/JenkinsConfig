@@ -35,7 +35,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -163,36 +162,38 @@ def sendWithoutWait(command):
  
 
 #check if VM name ARM-Conf_$TAG is already exists
-vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if vm_list != &quot;&quot;:
-	print &quot;ARM-Conf_&quot;+TAG+&quot; already exist, I am exiting now&quot;
+	print &quot;ARM-Conf already exist, I am exiting now&quot;
 	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
-vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if vm_list != &quot;&quot;:
-	print &quot;ARM-Router&quot;+TAG+&quot; already exist, I am exiting now&quot;
+	print &quot;ARM-Router already exist, I am exiting now&quot;
 	sys.exit(1)    
     
 #create a new VM from ARM-Conf_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
 print &quot;creating new Conf VM from OVA&quot;
-deploy_conf=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
+deploy_conf=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
+#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
+print &quot;creating new Router from OVA&quot;
+deploy_router=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
+
+deploy_router.wait()
 deploy_conf.wait()
+
 #check if the new VM created
-check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_conf_created == &quot;&quot;:
 	print &quot;Failed to create Configurator VM&quot;
 	sys.exit(1)
 
 print &quot;Created New Configurator VM Successfully&quot;
 
-#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print &quot;creating new Router from OVA&quot;
-deploy_router=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
-deploy_router.wait()
 #check if the new VM created
-check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_router_created == &quot;&quot;:
 	print &quot;Failed to create Router VM&quot;
 	sys.exit(1)
@@ -202,10 +203,10 @@ print &quot;Created New Router VM Successfully&quot;
 time.sleep(60)
 
 #find new VM Configurator location in the host
-newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 newVmConfLocation=newVmConfLocation.strip()
 #find new VM Router location in the host
-newVmRouterLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+newVmRouterLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 newVmRouterLocation=newVmRouterLocation.strip()
 #get ip address of the new VM Configurator
 vmConfIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmConfLocation),shell=True,stdout=PIPE).communicate()[0]
@@ -248,7 +249,7 @@ except paramiko.ssh_exception.AuthenticationException:
 	shell = None   
 
 #download Linux Integration Services v4.2 for Hyper-V and Azure  for Configurator and Router VMS
-sendwait(&quot;curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gz&quot;)
+sendwait(&quot;curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gzz&quot;)
 #wait for download will finish
 time.sleep(150)
 #extract to directory
@@ -305,8 +306,14 @@ delete_conf=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --
 delete_Router=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmRouterLocationDir),shell=True,stdout=PIPE)
 delete_conf.wait()
 delete_Router.wait()
+#check if really deleted
+check_if_conf_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-Conf_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
+# check if Deleted VM Successfully
+if check_if_conf_deleted != &quot;&quot; or check_if_router_deleted != &quot;&quot;:
+	print &quot;Failed to Delete VMs&quot;
+	sys.exit(1)
 print &quot;Successfully deleted BOTH VMs&quot;
-
 channel_conf.close
 client_conf.close
 channel_router.close
