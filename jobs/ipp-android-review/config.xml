@@ -177,14 +177,14 @@ cd $WORKSPACE
       <deployPattern>${WORKSPACE}/*.zip=&gt;Android/${GERRIT_BRANCH}/${BUILD_NUMBER}</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
-      <deployBuildInfo>false</deployBuildInfo>
+      <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
         <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>true</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <discardBuildArtifacts>false</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
       <customBuildName></customBuildName>
