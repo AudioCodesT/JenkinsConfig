@@ -53,10 +53,10 @@ set-alias sz &quot;$env:ProgramFiles\7-Zip\7z.exe&quot;
 
 Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
 Get-Module
-sz x &quot;${WORKSPACE}\\ARM-Conf_${TAG}&quot; -o&quot;${WORKSPACE}&quot;
-sz x &quot;${WORKSPACE}\\ARM-Conf_${TAG}&quot; -o&quot;${WORKSPACE}&quot;
-ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\\VHD&quot;
-ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\\VHD&quot;
+sz x &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}&quot; -o&quot;$ENV:WORKSPACE&quot;
+sz x &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}&quot; -o&quot;$ENV:WORKSPACE&quot;
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;$ENV:WORKSPACE\\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\\VHD&quot;
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;$ENV:WORKSPACE\\VHD&quot;
 
 </command>
     </hudson.plugins.powershell.PowerShell>
