@@ -306,8 +306,13 @@ delete_conf=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --
 delete_Router=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmRouterLocationDir),shell=True,stdout=PIPE)
 delete_conf.wait()
 delete_Router.wait()
+#check if really deleted
+check_if_conf_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-Conf_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username root --password rootroot --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
+if check_if_conf_deleted != &quot;&quot; or check_if_router_deleted != &quot;&quot;:
+	print &quot;Failed to Delete VM&quot;
+    sys.exit(1)
 print &quot;Successfully deleted BOTH VMs&quot;
-
 channel_conf.close
 client_conf.close
 channel_router.close
