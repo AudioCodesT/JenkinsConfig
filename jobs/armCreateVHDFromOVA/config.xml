@@ -51,8 +51,8 @@
 set-alias sz &apos;C:\Program Files\7-Zip\7z.exe&apos;
 Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
 Get-Module
-sz x &quot;$WORKSPACE&quot; -o&quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\$TAG\ARM-Conf_${TAG}\ARM-Conf_${TAG}.ova&quot;
-sz x &quot;$WORKSPACE&quot; -o&quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\$TAG\ARM-Router_${TAG}\ARM-Router_$TAG.ova&quot;
+sz x &quot;$WORKSPACE&quot; -o&quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\$TAG\ARM-Conf_${TAG}.ova\ARM-Conf_${TAG}.ova&quot;
+sz x &quot;$WORKSPACE&quot; -o&quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\$TAG\ARM-Router_${TAG}.ova\ARM-Router_$TAG.ova&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
 EOF
