@@ -119,7 +119,7 @@ ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\\ARM-Conf_${
       <deployPattern>VHD/ARM-Conf_${TAG}-disk1.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}.vhdx
 newOVAs/ARM-Router_${TAG}.ova=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}.vhdx</deployPattern>
       <resolvePattern>libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
-libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
+libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
