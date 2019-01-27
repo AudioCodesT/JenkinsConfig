@@ -46,21 +46,20 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command># Alias for 7-zip 
-set-alias sz &quot;$env:ProgramFiles\7-Zip\7z.exe&quot;
-Write-Output &quot;outputs:&quot;
-Write-Output &quot;$TAG&quot;
-Write-Output &quot;$ENV:WORKSPACE\\ovaFiles\\com\\ac\\arm\\tempOVA\\8.2.1\\ARM-Conf_8.2.1.ova\\ARM-Conf_8.2.1.ova&quot;
-Write-Output &quot;$ENV:WORKSPACE\\ovaFiles\\com\\ac\\arm\\tempOVA\\$TAG\\ARM-Conf_$TAG.ova\\ARM-Conf_$TAG.ova&quot;
+    <hudson.tasks.Shell>
+      <command>cat &lt;&lt; EOF &gt; convertToVHD.ps1
+set-alias sz &apos;C:\Program Files\7-Zip\7z.exe&apos;
 Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
 Get-Module
-sz x &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}&quot; -o&quot;$ENV:WORKSPACE&quot;
-sz x &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}&quot; -o&quot;$ENV:WORKSPACE&quot;
-ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;$ENV:WORKSPACE\\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\\VHD&quot;
-ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;$ENV:WORKSPACE\\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;$ENV:WORKSPACE\\VHD&quot;
-
+sz x &quot;$WORKSPACE&quot; -o&quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\$TAG\ARM-Conf_${TAG}\ARM-Conf_${TAG}.ova&quot;
+sz x &quot;$WORKSPACE&quot; -o&quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\$TAG\ARM-Router_${TAG}\ARM-Router_$TAG.ova&quot;
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
+EOF
 </command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>.\convertToVHD.ps1</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
