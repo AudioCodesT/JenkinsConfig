@@ -47,7 +47,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cat &lt;&lt; EOF &gt; convertToVHD.ps1
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+cat &lt;&lt; EOF &gt; convertToVHD.ps1
 set-alias sz &apos;C:\Program Files\7-Zip\7z.exe&apos;
 Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
 Get-Module
