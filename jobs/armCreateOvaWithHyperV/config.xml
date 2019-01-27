@@ -308,7 +308,7 @@ delete_conf.wait()
 delete_Router.wait()
 #check if really deleted
 check_if_conf_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-Conf_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
-check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username root --password rootroot --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_conf_deleted != &quot;&quot; or check_if_router_deleted != &quot;&quot;:
 	print &quot;Failed to Delete VM&quot;
     sys.exit(1)
