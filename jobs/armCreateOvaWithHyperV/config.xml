@@ -198,7 +198,7 @@ if check_if_router_created == &quot;&quot;:
 print &quot;Created New Router VM Successfully&quot;
 
 #wait for Both VM will power on
-time.sleep(100)
+time.sleep(150)
 
 #find new VM Configurator location in the host
 newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
