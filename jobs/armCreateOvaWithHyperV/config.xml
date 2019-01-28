@@ -67,7 +67,7 @@ def manualFlush(channel):
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
             line = channel.recv(1024)
-            print line
+            print(line)
     
 def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;password&quot;):
     t=time.time()
@@ -76,7 +76,7 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
             line = channel.recv(1024)
-            print line,
+            print(line,)
             received+=line
             if re.search(&quot;Press Enter to continue&quot;,line):
                 channel.send(&quot;\n&quot;)
@@ -96,7 +96,7 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
                     line_list.pop()
                 return &apos;\n&apos;.join(line_list)
         if time.time()&gt;t+timeout:
-            print &quot;\n\nTime out. Call stack:&quot;
+            print(&quot;\n\nTime out. Call stack:&quot;)
             traceback.print_stack(file=sys.stdout)
             sys.exit(1)            
 
@@ -105,7 +105,7 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
 EOF</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>python &lt;&lt; EOS
+      <command>python3.6 &lt;&lt; EOS
 
 import paramiko
 import select
@@ -162,21 +162,21 @@ def sendWithoutWait(command):
 #check if VM name ARM-Conf_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if vm_list != &quot;&quot;:
-	print &quot;ARM-Conf already exist, I am exiting now&quot;
+	print(&quot;ARM-Conf already exist, I am exiting now&quot;)
 	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if vm_list != &quot;&quot;:
-	print &quot;ARM-Router already exist, I am exiting now&quot;
+	print(&quot;ARM-Router already exist, I am exiting now&quot;)
 	sys.exit(1)    
     
 #create a new VM from ARM-Conf_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print &quot;creating new Conf VM from OVA&quot;
+print(&quot;creating new Conf VM from OVA&quot;)
 deploy_conf=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print &quot;creating new Router from OVA&quot;
+print(&quot;creating new Router from OVA&quot;)
 deploy_router=Popen(&quot;ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;,shell=True,stdout=PIPE)
 
 deploy_router.wait()
@@ -185,17 +185,17 @@ deploy_conf.wait()
 #check if the new VM created
 check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_conf_created == &quot;&quot;:
-	print &quot;Failed to create Configurator VM&quot;
+	print(&quot;Failed to create Configurator VM&quot;)
 	sys.exit(1)
 
-print &quot;Created New Configurator VM Successfully&quot;
+print(&quot;Created New Configurator VM Successfully&quot;)
 
 #check if the new VM created
 check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
 if check_if_router_created == &quot;&quot;:
-	print &quot;Failed to create Router VM&quot;
+	print(&quot;Failed to create Router VM&quot;)
 	sys.exit(1)
-print &quot;Created New Router VM Successfully&quot;
+print(&quot;Created New Router VM Successfully&quot;)
 
 #wait for Both VM will power on
 time.sleep(150)
@@ -211,15 +211,15 @@ vmConfIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_pas
 #get only the IP Address
 vmConfIP=vmConfIP.split(&apos; &apos;)
 vmConfIP=vmConfIP[2]
-print &quot;The Configurator VM IP is: &quot;+vmConfIP
+print(&quot;The Configurator VM IP is: &quot;+vmConfIP)
 #get ip address of the new VM Router
 vmRouterIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0]
 #get only the IP Address
 vmRouterIP=vmRouterIP.split(&apos; &apos;)
 vmRouterIP=vmRouterIP[2]
-print &quot;The Router VM IP is: &quot;+vmRouterIP
+print(&quot;The Router VM IP is: &quot;+vmRouterIP)
 
-print &quot;start SSH to the Configurator Server&quot;
+print(&quot;start SSH to the Configurator Server&quot;)
 #open SSH session to the Configurator server
 try:
 	paramiko.util.log_to_file(&quot;conf.log&quot;)
@@ -231,9 +231,9 @@ try:
 	channel_conf.get_pty(term=&apos;xterm&apos;, width=80, height=24)
 	channel_conf.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-	print &quot;We had an authentication exception!&quot;
+	print(&quot;We had an authentication exception!&quot;)
 	shell = None
-print &quot;start SSH to the Router Server&quot;    
+print(&quot;start SSH to the Router Server&quot;)
 	#open SSH session to the Configurator server
 try:
 	paramiko.util.log_to_file(&quot;router.log&quot;)
@@ -245,7 +245,7 @@ try:
 	channel_router.get_pty(term=&apos;xterm&apos;, width=80, height=24)
 	channel_router.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-	print &quot;We had an authentication exception!&quot;
+	print(&quot;We had an authentication exception!&quot;)
 	shell = None   
 
 #make the build failed if one of the commands here failing
@@ -261,7 +261,7 @@ time.sleep(30)
 #enter the directory
 sendwait(&quot;cd LISISO&quot;)
 #install the integration services
-print &quot;Start installation on Both Servers&quot;
+prin(&quot;Start installation on Both Servers&quot;)
 sendwait(&quot;./install.sh&quot;)
 #wait for installation will be complete
 time.sleep(600)
@@ -270,14 +270,14 @@ sendwait(&quot;cd ~/&quot;)
 sendwait(&quot;rm -rf LISISO&quot;)
 sendwait(&quot;rm -rf lis-rpms-*&quot;)
 #reboot VMs
-print &quot;VMs going down for reboot...&quot;
+print(&quot;VMs going down for reboot...&quot;)
 sendWithoutWait(&quot;reboot&quot;)
 #wait for VM to UP
 time.sleep(60)
 
 
 #graceful shutdouwn BOTH VM
-print &quot;shutdown new VMs&quot;
+print(&quot;shutdown new VMs&quot;)
 output_conf=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmConfLocation),shell=True,stdout=PIPE)
 output_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE)
 #wait for the VM to SHUT DOWN
@@ -285,7 +285,7 @@ output_conf.wait()
 output_router.wait()
 time.sleep(30)
 #export both VMS to OVA
-print &quot;export BOTH VMs to an OVA files&quot;
+print(&quot;export BOTH VMs to an OVA files&quot;)
 os.mkdir(&quot;newOVAs&quot;)
 output_conf=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Conf_${TAG} ${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova&quot;,shell=True,stdout=PIPE)
 output_router=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Router_${TAG} ${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova&quot;,shell=True,stdout=PIPE)
@@ -293,8 +293,8 @@ output_router=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_
 output_conf.wait()
 output_router.wait()
 time.sleep(60)
-print &quot;Finish Exporting BOTH VMs to OVA&quot;
-print &quot;Deleting Both VMs&quot;
+print(&quot;Finish Exporting BOTH VMs to OVA&quot;)
+print(&quot;Deleting Both VMs&quot;)
 #terminate both VM MACHINES
 vmConfLocationDir=newVmConfLocation.rsplit(&apos;/&apos;,1)[0]
 vmConfLocationDir=vmConfLocationDir.strip()
@@ -313,9 +313,9 @@ check_if_conf_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_us
 check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
 # check if Deleted VM Successfully
 if check_if_conf_deleted != &quot;&quot; or check_if_router_deleted != &quot;&quot;:
-	print &quot;Failed to Delete VMs&quot;
+	print(&quot;Failed to Delete VMs&quot;)
 	sys.exit(1)
-print &quot;Successfully deleted BOTH VMs&quot;
+print(&quot;Successfully deleted BOTH VMs&quot;)
 channel_conf.close
 client_conf.close
 channel_router.close
