@@ -222,6 +222,7 @@ print &quot;The Router VM IP is: &quot;+vmRouterIP
 print &quot;start SSH to the Configurator Server&quot;
 #open SSH session to the Configurator server
 try:
+	paramiko.util.log_to_file(&quot;conf.log&quot;)
 	client_conf = paramiko.SSHClient()
 	client_conf.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	client_conf.connect(vmConfIP, port=22, username=vm_username,password=vm_password)
@@ -235,6 +236,7 @@ except paramiko.ssh_exception.AuthenticationException:
 print &quot;start SSH to the Router Server&quot;    
 	#open SSH session to the Configurator server
 try:
+	paramiko.util.log_to_file(&quot;router.log&quot;)
 	client_router = paramiko.SSHClient()
 	client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	client_router.connect(vmRouterIP, port=22, username=vm_username,password=vm_password)
