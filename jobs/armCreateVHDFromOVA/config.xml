@@ -60,7 +60,8 @@ EOF
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>.\convertToVHD.ps1</command>
+      <command>Set-ExecutionPolicy Unrestricted
+.\convertToVHD.ps1</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
