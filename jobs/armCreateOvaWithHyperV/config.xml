@@ -273,6 +273,10 @@ sendwait(&quot;cd ~/&quot;)
 sendwait(&quot;rm -rf LISISO&quot;)
 sendwait(&quot;rm -rf lis-rpms-*&quot;)
 time.sleep(20)
+#reduce size of the VMS
+sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp&quot;)
+time.sleep(60)
+sendwait(&quot;rm zeroFile.tmp&quot;)
 #reboot VMs
 print(&quot;VMs going down for reboot...&quot;)
 sendWithoutWait(&quot;reboot&quot;)
@@ -288,6 +292,7 @@ output_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${roo
 output_conf.wait()
 output_router.wait()
 time.sleep(30)
+
 #export both VMS to OVA
 print(&quot;export BOTH VMs to an OVA files&quot;)
 os.mkdir(&quot;newOVAs&quot;)
