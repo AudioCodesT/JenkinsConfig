@@ -202,19 +202,23 @@ time.sleep(150)
 
 #find new VM Configurator location in the host
 newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+newVmConfLocation=str(newVmConfLocation)
 newVmConfLocation=newVmConfLocation.strip()
 #find new VM Router location in the host
 newVmRouterLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
+newVmRouterLocation=str(newVmRouterLocation)
 newVmRouterLocation=newVmRouterLocation.strip()
 #get ip address of the new VM Configurator
 vmConfIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmConfLocation),shell=True,stdout=PIPE).communicate()[0]
 #get only the IP Address
+vmConfIP=str(vmConfIP)
 vmConfIP=vmConfIP.split(&apos; &apos;)
 vmConfIP=vmConfIP[2]
 print(&quot;The Configurator VM IP is: &quot;+vmConfIP)
 #get ip address of the new VM Router
 vmRouterIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0]
 #get only the IP Address
+vmRouterIP=str(vmRouterIP)
 vmRouterIP=vmRouterIP.split(&apos; &apos;)
 vmRouterIP=vmRouterIP[2]
 print(&quot;The Router VM IP is: &quot;+vmRouterIP)
@@ -311,6 +315,8 @@ delete_Router.wait()
 #check if really deleted
 check_if_conf_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-Conf_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
 check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0]
+check_if_conf_deleted=str(check_if_conf_deleted)
+check_if_router_deleted=str(check_if_router_deleted)
 # check if Deleted VM Successfully
 if check_if_conf_deleted != &quot;&quot; or check_if_router_deleted != &quot;&quot;:
 	print(&quot;Failed to Delete VMs&quot;)
