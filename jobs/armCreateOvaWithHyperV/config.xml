@@ -274,6 +274,7 @@ sendwait(&quot;rm -rf LISISO&quot;)
 sendwait(&quot;rm -rf lis-rpms-*&quot;)
 time.sleep(20)
 #reduce size of the VMS
+print(&quot;START REDUCE the size of the VMS&quot;)
 sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp&quot;)
 time.sleep(60)
 sendwait(&quot;rm zeroFile.tmp&quot;)
