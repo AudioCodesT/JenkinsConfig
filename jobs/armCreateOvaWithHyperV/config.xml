@@ -272,6 +272,7 @@ time.sleep(600)
 sendwait(&quot;cd ~/&quot;)
 sendwait(&quot;rm -rf LISISO&quot;)
 sendwait(&quot;rm -rf lis-rpms-*&quot;)
+time.sleep(20)
 #reboot VMs
 print(&quot;VMs going down for reboot...&quot;)
 sendWithoutWait(&quot;reboot&quot;)
