@@ -75,8 +75,8 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
     while True:
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
-            line = channel.recv(1024)
-            print(line,)
+            line = channel.recv(1024).decode(&quot;utf-8&quot;)
+            print(line)
             received+=line
             if re.search(&quot;Press Enter to continue&quot;,line):
                 channel.send(&quot;\n&quot;)
