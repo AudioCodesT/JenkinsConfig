@@ -282,7 +282,7 @@ sendwait(&quot;rm zeroFile.tmp&quot;)
 print(&quot;VMs going down for reboot...&quot;)
 sendWithoutWait(&quot;reboot&quot;)
 #wait for VM to UP
-time.sleep(60)
+time.sleep(100)
 
 
 #graceful shutdouwn BOTH VM
