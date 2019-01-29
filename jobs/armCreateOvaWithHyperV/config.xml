@@ -66,7 +66,7 @@ def manualFlush(channel):
     for x in range(5):
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
-            line = channel.recv(1024)
+            line = channel.recv(1024).decode(&quot;utf-8&quot;)
             line = str(line).strip()
             print(line)
     
@@ -76,7 +76,7 @@ def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;roo
     while True:
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
-            line = channel.recv(1024)
+            line = channel.recv(1024).decode(&quot;utf-8&quot;)
             line = str(line).strip()
             print(line)
             received+=line
