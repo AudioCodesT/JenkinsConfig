@@ -161,14 +161,14 @@ def sendWithoutWait(command):
 
 #check if VM name ARM-Conf_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
-if vm_list != &quot;&quot;:
+if &quot;VHD_ARM-Conf_${TAG}&quot; in str(vm_list):
 	print(&quot;ARM-Conf already exist, I am exiting now&quot;)
 	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0]
-if vm_list != &quot;&quot;:
+if &quot;VHD_ARM-Router_${TAG}&quot; in str(vm_list):
 	print(&quot;ARM-Router already exist, I am exiting now&quot;)
 	sys.exit(1)    
     
