@@ -267,12 +267,12 @@ sendwait(&quot;cd LISISO&quot;)
 print(&quot;Start installation on Both Servers&quot;)
 sendwait(&quot;./install.sh&quot;)
 #wait for installation will be complete
-time.sleep(600)
+time.sleep(700)
 #delete the files
 sendwait(&quot;cd ~/&quot;)
 sendwait(&quot;rm -rf LISISO&quot;)
 sendwait(&quot;rm -rf lis-rpms-*&quot;)
-time.sleep(20)
+time.sleep(30)
 #reduce size of the VMS
 print(&quot;START REDUCE the size of the VMS&quot;)
 sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp&quot;)
@@ -302,7 +302,7 @@ output_router=Popen(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_
 #wait to it finish to create new OVA
 output_conf.wait()
 output_router.wait()
-time.sleep(60)
+time.sleep(150)
 print(&quot;Finish Exporting BOTH VMs to OVA&quot;)
 print(&quot;Deleting Both VMs&quot;)
 #terminate both VM MACHINES
