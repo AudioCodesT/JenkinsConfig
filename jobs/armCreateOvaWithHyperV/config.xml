@@ -67,6 +67,7 @@ def manualFlush(channel):
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
             line = channel.recv(1024)
+            line = str(line)
             print(line)
     
 def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;password&quot;):
