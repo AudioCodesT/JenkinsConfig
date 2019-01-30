@@ -13,7 +13,7 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>3</daysToKeep>
+        <daysToKeep>5</daysToKeep>
         <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>5</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
@@ -523,7 +523,7 @@ fi
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
     </com.lookout.jenkins.EnvironmentScript>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
