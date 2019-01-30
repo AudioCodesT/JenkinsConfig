@@ -122,7 +122,8 @@ import subprocess
 from subprocess import Popen, PIPE
 
 
-
+#libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
+#libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles
 
 #esxi username and password
 vm_username=&apos;root&apos;
@@ -384,11 +385,6 @@ EOS</command>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
-      <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
-    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
@@ -432,8 +428,7 @@ EOS</command>
       </downloadSpec>
       <deployPattern>newOVAs/ARM-Conf_${TAG}.ova=&gt;com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}
 newOVAs/ARM-Router_${TAG}.ova=&gt;com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}</deployPattern>
-      <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
-libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
+      <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
