@@ -164,14 +164,14 @@ def sendWithoutWait(command):
  
 
 #check if VM name ARM-Conf_$TAG is already exists
-vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG || echo &apos;&apos;&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
 if &quot;VHD_ARM-Conf_${TAG}&quot; in vm_list:
 	print(&quot;ARM-Conf already exist, I am exiting now&quot;)
 	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
-vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG || echo &apos;&apos;&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
 if &quot;VHD_ARM-Router_${TAG}&quot; in vm_list:
 	print(&quot;ARM-Router already exist, I am exiting now&quot;)
 	sys.exit(1)    
@@ -187,7 +187,7 @@ deploy_router.wait()
 deploy_conf.wait()
 
 #check if the new VM created
-check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG || echo &apos;&apos;&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
 if check_if_conf_created == &quot;&quot;:
 	print(&quot;Failed to create Configurator VM&quot;)
 	sys.exit(1)
@@ -195,7 +195,7 @@ if check_if_conf_created == &quot;&quot;:
 print(&quot;Created New Configurator VM Successfully&quot;)
 
 #check if the new VM created
-check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG || echo &apos;&apos;&quot;,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
 if check_if_router_created == &quot;&quot;:
 	print(&quot;Failed to create Router VM&quot;)
 	sys.exit(1)
