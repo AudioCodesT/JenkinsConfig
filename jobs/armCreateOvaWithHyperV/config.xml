@@ -316,7 +316,7 @@ unregister_conf=Popen(shlex.split(&quot;vmware-cmd -H 10.7.20.101 -U ${root_user
 unregister_router=Popen(shlex.split(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}&quot;.format(newVmRouterLocation)),stdout=PIPE)
 unregister_conf.wait()
 unregister_router.wait()
-delete_conf=Popen(shlex.split&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmConfLocationDir)),stdout=PIPE)
+delete_conf=Popen(shlex.split(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmConfLocationDir)),stdout=PIPE)
 delete_Router=Popen(shlex.split(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmRouterLocationDir)),stdout=PIPE)
 delete_conf.wait()
 delete_Router.wait()
