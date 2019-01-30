@@ -280,7 +280,7 @@ time.sleep(30)
 #reduce size of the VMS
 print(&quot;START REDUCE the size of the VMS&quot;)
 sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp&quot;)
-time.sleep(700)
+time.sleep(500)
 sendwait(&quot;rm -rf zeroFile.tmp&quot;)
 print(&quot;Finish Reduce The Size of VMS&quot;)
 #reboot VMs
