@@ -320,7 +320,7 @@ unregister_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P $
 unregister_conf.wait()
 unregister_router.wait()
 delete_conf=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmConfLocationDir),shell=True,stdout=PIPE)
-delete_Router=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmRouterLocationDir,shell=True),stdout=PIPE)
+delete_Router=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmRouterLocationDir),shell=True,stdout=PIPE)
 delete_conf.wait()
 delete_Router.wait()
 #check if really deleted
