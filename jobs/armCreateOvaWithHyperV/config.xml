@@ -279,7 +279,7 @@ sendwait(&quot;rm -rf lis-rpms-*&quot;)
 time.sleep(30)
 #reduce size of the VMS
 print(&quot;START REDUCE the size of the VMS&quot;)
-sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp&quot;)
+sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp || echo finished&quot;)
 time.sleep(500)
 sendwait(&quot;rm -rf zeroFile.tmp&quot;)
 print(&quot;Finish Reduce The Size of VMS&quot;)
