@@ -332,6 +332,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
 
+echo Start check the change
 date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit; fi
 
@@ -362,7 +363,8 @@ else
 fi
 echo merged=$merged &gt;&gt; ${WORKSPACE}/properties.txt
 echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
-</command>
+echo Finish check the change
+date</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
@@ -401,6 +403,8 @@ echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
 
+echo Start give score
+date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 1; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
@@ -420,7 +424,9 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
-</command>
+
+echo Finish give score
+date</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
@@ -433,6 +439,8 @@ $change,$newPS
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash --login
 
+echo Start give score
+date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
 if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
 
@@ -452,7 +460,8 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
-</command>
+echo Finish give score
+date</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
