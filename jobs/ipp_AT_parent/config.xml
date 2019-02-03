@@ -155,7 +155,7 @@ echo current patchSet is $checkPS - no new code changes, this execution is for P
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
-
+date
 
 </command>
     </hudson.tasks.Shell>
@@ -332,6 +332,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash  --login
 
+date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
