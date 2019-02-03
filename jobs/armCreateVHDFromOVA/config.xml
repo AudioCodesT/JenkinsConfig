@@ -56,8 +56,8 @@ sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\\${
 sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\\${TAG}\ARM-Router_${TAG}\ARM-Router_$TAG.ova&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
-Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vmdk&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}.vmdk&quot;
-Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vmdk&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}.vmdk&quot;
+Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx&quot;
+Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx&quot;
 EOF
 </command>
     </hudson.tasks.Shell>
