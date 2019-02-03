@@ -56,6 +56,8 @@ sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\\${
 sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\\${TAG}\ARM-Router_${TAG}\ARM-Router_$TAG.ova&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
+Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vmdk&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}.vmdk&quot;
+Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vmdk&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}.vmdk&quot;
 EOF
 </command>
     </hudson.tasks.Shell>
@@ -163,8 +165,8 @@ ARM Configurator ${TAG} VHD: https://artifactory/libs-release-local/com/ac/arm/V
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>VHD/ARM-Conf_${TAG}-disk1.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
-VHD/ARM-Router_${TAG}-disk1.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}</deployPattern>
+      <deployPattern>VHD/ARM-Conf_${TAG}.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
+VHD/ARM-Router_${TAG}.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}</deployPattern>
       <resolvePattern>libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
 libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles
 </resolvePattern>
