@@ -1,7 +1,16 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>armConvertOVAtoVHD_1&#xd;
+this is the first job&#xd;
+purpose: add Linux integration for HyperV to the desired ARM OVA (by tag)&#xd;
+steps:&#xd;
+1. take OVA from Artifactory by tag&#xd;
+2. deploy in esxi&#xd;
+3. ssh and install the sw package&#xd;
+4. export to a new OVA&#xd;
+5. deploy to Artifactory to tempo folder&#xd;
+6. call the second job that will convert the temp ova to VHD</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
