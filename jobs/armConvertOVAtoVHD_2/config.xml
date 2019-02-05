@@ -1,7 +1,15 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>armConvertOVAtoVHD_2&#xd;
+triggered by the first job&#xd;
+purpose: convert temp OVA to vhdx&#xd;
+steps:&#xd;
+1. download from Arti&#xd;
+2. with power shell commands unzip ova and convert&#xd;
+3. deploy vhdx to artifactory&#xd;
+4. send email with links&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
