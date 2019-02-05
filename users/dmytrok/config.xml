@@ -1,14 +1,26 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <user>
   <fullName>Dmytro Kozlov</fullName>
   <properties>
     <jenkins.security.ApiTokenProperty>
-      <apiToken>5XGTLKKE10GmQdynKYhGsBK5Ywa2Q5OkHVGIXjMFpBsQV7WSh2DA10Lq4g4XcOmq</apiToken>
+      <apiToken>{AQAAABAAAAAw56o3OI+bPt9jcas3p2S1DoErHs4pZQWm+wbjg3R9naxAO0of1kFxQVMMeXRKikP/Z/HNQ0b9/sTV00ZBbfjn2w==}</apiToken>
+      <tokenStore>
+        <tokenList>
+          <jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+            <uuid>b2708a29-d9f7-47e9-b59a-6a872c31cff5</uuid>
+            <name>Legacy Token</name>
+            <value>
+              <version>10</version>
+              <hash>4169395a4e4b3a65ac8fd26638a6fac8fd4c9b753661cc9731e661c15c70a436</hash>
+            </value>
+          </jenkins.security.apitoken.ApiTokenStore_-HashedToken>
+        </tokenList>
+      </tokenStore>
     </jenkins.security.ApiTokenProperty>
     <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
-    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.41.3">
+    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.62">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
     <hudson.model.MyViewsProperty>
@@ -34,21 +46,30 @@
         <string>SSL_NO_VPN</string>
         <string>authenticated</string>
         <string>Password Manager Apply</string>
+        <string>AWS_Jira_Users</string>
         <string>Allowed RODC Password Replication Group</string>
         <string>Users</string>
         <string>Offer Remote Assistance Helpers</string>
         <string>FTP_default</string>
         <string>Mailvision Branch Office Users</string>
+        <string># IPP</string>
         <string>SSL_Ukraine_Chip</string>
+        <string># ClearCase R&amp;D</string>
+        <string># RnD Israel</string>
+        <string># IPP RnD</string>
         <string>Certificate Service DCOM Access</string>
         <string>Domain Users</string>
         <string>Global Logic</string>
+        <string># IPP RnD – GL</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1511270387023</timestamp>
+      <timestamp>1549378880296</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.16">
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
       <emailAddress>Dmytro.Kozlov@audiocodes.com</emailAddress>
     </hudson.tasks.Mailer_-UserProperty>
+    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.2.0">
+      <providerId>default</providerId>
+    </org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty>
   </properties>
 </user>
