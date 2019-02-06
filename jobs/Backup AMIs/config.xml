@@ -123,6 +123,7 @@ for src_ami in src_amis:
         if wait_image_available(ec2_dst, dst_ami_id):
             dst_ami = list(ec2_resource_dst.images.filter(ImageIds=[dst_ami_id]))[0]
             dst_ami.create_tags(Tags=[{&apos;Key&apos;: &apos;SourceAMI&apos;, &apos;Value&apos;: src_ami_id}])
+            dst_ami.create_tags(Tags=[{&apos;Key&apos;: &apos;Name&apos;, &apos;Value&apos;: &apos;Copy of - &apos; + src_ami_name}])
 
             for dev in dst_ami.block_device_mappings:
                 snap_id = dev[&apos;Ebs&apos;][&apos;SnapshotId&apos;]
