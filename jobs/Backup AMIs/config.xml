@@ -1,15 +1,139 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/usr/bin/env python
+#
+import boto3
+import datetime
+import time
+from pprint import pprint
+
+nowDate = datetime.datetime.now().strftime(&quot;%Y-%m-%d&quot;)
+nowTime = datetime.datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+pprint(nowTime)
+
+src_region = &quot;eu-central-1&quot;
+dst_region = &quot;eu-west-1&quot;
+
+ec2_src = boto3.client(&apos;ec2&apos;,region_name=src_region)
+ec2_dst = boto3.client(&apos;ec2&apos;,region_name=dst_region)
+
+ec2_resource_src = boto3.resource(&apos;ec2&apos;, region_name=src_region)
+ec2_resource_dst = boto3.resource(&apos;ec2&apos;, region_name=dst_region)
+
+########################## Start of functions definitions #############################
+
+def wait_image_available(region_client, image_id):
+    try:
+        available = 0
+        waiting = 0
+        while available == 0:
+            print &quot;image not yet available after %d seconds.. Gonna sleep for 10 seconds&quot; % waiting
+            time.sleep(10)
+            waiting += 10
+            image = region_client.describe_images(ImageIds=[image_id])
+            if image[&apos;Images&apos;][0][&apos;State&apos;] == &apos;available&apos;:
+                available = 1
+        if available == 1:
+            time.sleep(15)
+            print &quot;Image is now available for use.&quot;
+            return True
+    except Exception, e:
+        print e
+
+def is_image_on_destination(image_id):
+    try:
+        images = ec2_dst.describe_images(
+                    Filters=[
+                        {
+                            &apos;Name&apos;:&apos;tag:SourceAMI&apos;,
+                            &apos;Values&apos;:[image_id]
+                        }
+                    ]
+                )[&apos;Images&apos;]
+        return len(images)
+    except Exception, e:
+        print e
+
+########################## End of function definitions ########################
+
+src_amis = ec2_src.describe_images(
+    Filters=[
+        {
+            &apos;Name&apos;:&apos;tag:Backup&apos;,
+            &apos;Values&apos;:[&apos;DevOps&apos;]
+        }
+    ],
+    DryRun=False
+)[&apos;Images&apos;]
+
+for src_ami in src_amis:
+    src_ami_id = src_ami[&apos;ImageId&apos;]
+    src_ami_name = src_ami[&apos;Name&apos;]
+    src_ami_desc = src_ami[&apos;Description&apos;]
+    src_ami_date = src_ami[&apos;CreationDate&apos;]
+    copies = is_image_on_destination(src_ami_id)
+    if copies == 0:
+        pprint(src_ami)
+        print &quot;AMI with id %s not found on region %s. Starting to copy..&quot; % (src_ami_id,dst_region)
+        response = ec2_dst.copy_image(
+                Name=&apos;Copy of - &apos; + src_ami_name,
+                Description=&apos;Copy of &apos; + src_ami_name + &apos; (&apos; + src_ami_date + &apos;) from &apos; + src_region,
+                SourceImageId=src_ami_id,
+                SourceRegion=src_region
+        )
+        dst_ami_id = response[&apos;ImageId&apos;]
+        pprint(dst_ami_id)
+        if wait_image_available(ec2_dst, dst_ami_id):
+            dst_ami = list(ec2_resource_dst.images.filter(ImageIds=[dst_ami_id]))[0]
+            dst_ami.create_tags(Tags=[{&apos;Key&apos;: &apos;SourceAMI&apos;, &apos;Value&apos;: src_ami_id}])
+
+            for dev in dst_ami.block_device_mappings:
+                snap_id = dev[&apos;Ebs&apos;][&apos;SnapshotId&apos;]
+                snap = list(ec2_resource_dst.snapshots.filter(SnapshotIds=[snap_id]))[0]
+                snap.create_tags(Tags=[{&apos;Key&apos;: &apos;Name&apos;, &apos;Value&apos;: dst_ami_name}])
+        else:
+            exit -1
+    else:
+        print &quot;%d copies of AMI %s seems to be on region %s&quot; % (copies,src_ami_id,dst_region)
+
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
   <buildWrappers/>
 </project>
