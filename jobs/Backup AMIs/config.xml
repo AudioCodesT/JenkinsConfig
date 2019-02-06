@@ -131,7 +131,7 @@ for src_ami in src_amis:
         else:
             exit -1
     else:
-        print &quot;%d copies of AMI %s (%s) seems to be on region %s&quot; % (copies,src_ami_id,src_ami_name,dst_region)
+        print &quot;%d copies of AMI %s (%s) found on region %s&quot; % (copies,src_ami_id,src_ami_name,dst_region)
 
 
 </command>
