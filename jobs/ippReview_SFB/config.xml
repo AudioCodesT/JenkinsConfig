@@ -329,8 +329,9 @@ fi
 
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
-RetunedValue=0
-sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} || RetunedValue=1 
+set +e
+sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport}
+RetunedValue=$?
 echo $RetunedValue
 echo &quot;*********************************************************&quot;
 
@@ -342,7 +343,7 @@ echo &quot;*********************************************************&quot;
 CURL=&quot;curl -kn -u jenkins:$jenkins_pass --silent&quot;
 sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/${GERRIT_PATCHSET_REVISION}/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
 #not fail the build if fail give score 
-set +e
+
 # 0 =&gt; Size Checker Passed
 if [[ $RetunedValue == &quot;0&quot; ]]
 then
