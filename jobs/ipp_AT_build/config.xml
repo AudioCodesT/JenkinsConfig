@@ -331,8 +331,9 @@ fi
 
 cd ${WORKSPACE}
 echo &quot;*********************************************************&quot;
-RetunedValue=0
-sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport} || RetunedValue=1 
+set +e
+sh scripts/mtds_size.sh size_diff build/${OLDTAG}_size_report.csv build/${NEWTAGSizeReport}
+RetunedValue=$?
 echo $RetunedValue
 echo &quot;*********************************************************&quot;
 
@@ -497,7 +498,7 @@ echo ======End gerrit message  -  clean AT vote before starting=======</script>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
     </com.lookout.jenkins.EnvironmentScript>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
