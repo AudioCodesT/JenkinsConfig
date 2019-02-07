@@ -427,7 +427,7 @@ echo sizeReduced=${sizeReduced} &gt; properties</command>
                 </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
               </configuredTriggers>
               <contentType>default</contentType>
-              <defaultSubject>${AUTOPRD} Size has been reduced</defaultSubject>
+              <defaultSubject>Size has been reduced for model ${AUTOPRD} in ${GERRIT_BRANCH}</defaultSubject>
               <defaultContent>You can see the full report here ${BUILD_URL}artifact/build</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
