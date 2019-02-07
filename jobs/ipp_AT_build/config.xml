@@ -347,7 +347,7 @@ echo &quot;*********************************************************&quot;
 CURL=&quot;curl -kn -u jenkins:$jenkins_pass --silent&quot;
 sizeStatus=$($CURL -X GET &quot;https://gerrit/a/changes/${GIT_COMMIT}/reviewers/4&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  | grep Size | cut -d: -f2 |sed &apos;s/[&quot;, ]//g&apos;)
  #not fail the build if fail give score 
-set +e
+
 
 # 0 =&gt; Size Checker Passed
 if [[ $RetunedValue == &quot;0&quot; ]]
@@ -417,7 +417,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>ben.magriso,Jonatan.Reberger</recipientList>
+              <recipientList>cc:ben.magriso,Jonatan.Reberger</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
                   <email>
@@ -425,6 +425,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
                     <body>$PROJECT_DEFAULT_CONTENT</body>
                     <recipientProviders>
                       <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+                      <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
                     </recipientProviders>
                     <attachmentsPattern></attachmentsPattern>
                     <attachBuildLog>false</attachBuildLog>
@@ -435,7 +436,7 @@ echo sizeReduced=${sizeReduced} &gt; properties
                 </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
               </configuredTriggers>
               <contentType>default</contentType>
-              <defaultSubject>${AUTOPRD} Size has been reduced</defaultSubject>
+              <defaultSubject>Good job ! ${AUTOPRD} Size has been reduced !</defaultSubject>
               <defaultContent>You can see the full report here ${BUILD_URL}artifact/build</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
