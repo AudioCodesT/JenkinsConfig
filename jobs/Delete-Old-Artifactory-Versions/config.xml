@@ -132,6 +132,7 @@ RemoveFolder sbc-review/com/ac/sbc/acLinux-UGW
 
 
 #delete only after 30 days
+echo &quot;Delete Only After 30 Days&quot;
 OLD=30
 oldThan=$(date +&quot;%Y%m%d&quot; -d &quot;-$OLD days&quot;)
 RemoveFolder sbc-review/com/ac/sbc/user</command>
