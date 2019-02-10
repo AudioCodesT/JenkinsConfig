@@ -81,19 +81,39 @@ def wait_image_available(region_client, image_id):
     except Exception, e:
         print e
 
+#def is_image_on_destination(image_id):
+#    try:
+#        images = ec2_dst.describe_images(
+#                    Filters=[
+#                       {
+#                            &apos;Name&apos;:&apos;tag:SourceAMI&apos;,
+#                            &apos;Values&apos;:[image_id]
+#                        }
+#                    ]
+#                )[&apos;Images&apos;]
+#        return len(images)
+#    except Exception, e:
+#        print e
+
 def is_image_on_destination(image_id):
     try:
-        images = ec2_dst.describe_images(
-                    Filters=[
-                        {
-                            &apos;Name&apos;:&apos;tag:SourceAMI&apos;,
-                            &apos;Values&apos;:[image_id]
-                        }
-                    ]
-                )[&apos;Images&apos;]
-        return len(images)
-    except Exception, e:
+    	filters = [
+        	{
+            	&apos;Name&apos;:&apos;tag:SourceAMI&apos;,
+                &apos;Values&apos;:[image_id]
+            }
+        ]
+    	images = list(ec2_resource_dst.images.filter(Filters=filters))
+        if len(images):
+        	return = dst_images[0].id
+        else:
+        	return False
+	except Exception, e:
         print e
+        
+
+def print_report(region_client):
+	
 
 ########################## End of function definitions ########################
 
@@ -112,9 +132,9 @@ for src_ami in src_amis:
     src_ami_name = src_ami[&apos;Name&apos;]
     src_ami_desc = src_ami[&apos;Description&apos;]
     src_ami_date = src_ami[&apos;CreationDate&apos;]
-    copies = is_image_on_destination(src_ami_id)
-    if copies == 0:
-        pprint(src_ami)
+    dst_ami_id = is_image_on_destination(src_ami_id)
+    if not dst_ami_id:
+        #pprint(src_ami)
         print &quot;AMI with id %s not found on region %s. Starting to copy..&quot; % (src_ami_id,dst_region)
         response = ec2_dst.copy_image(
                 Name=&apos;Copy of - &apos; + src_ami_name,
@@ -137,7 +157,8 @@ for src_ami in src_amis:
         else:
             exit -1
     else:
-        print &quot;%d copies of AMI %s (%s) found on region %s&quot; % (copies,src_ami_id,src_ami_name,dst_region)
+        print &quot;Copy of AMI %s (%s) found on region %s. Copy AMI id is %s&quot; % (src_ami_id,src_ami_name,dst_region,dst_ami_id)
+
 
 
 </command>
