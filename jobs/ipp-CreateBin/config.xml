@@ -97,16 +97,35 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># if Model is C450 make dual bin
+      <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
+then
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
+
+cd ${WORKSPACE}/..
+rm -rf emmc_tools
+git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
+cp emmc_tools/. ${WORKSPACE} 
+
+
+cd ${WORKSPACE}
+fi</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+#${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+
+# if Model is C450 make dual bin
 Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
-
-#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
 echo &quot;C450HD&quot;
+
+
 
 else
 #make normal bin 
@@ -186,5 +205,15 @@ fi</command>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQetCVqLTeMGkMdcogq75RhFNbpnFStiF3Uxk3HZmLr44=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
   </buildWrappers>
 </project>
