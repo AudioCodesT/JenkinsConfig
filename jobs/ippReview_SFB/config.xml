@@ -363,8 +363,7 @@ then
 	then
 		ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GERRIT_PATCHSET_REVISION}
     fi
-	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact/build${NEWLINE}Please make sure this increased size can&apos;t be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.
-&quot;
+	message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact/build${NEWLINE}Please make sure this increased size can&apos;t be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
     ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
 # 2 =&gt; Size Checker Passed and reduced model size    
 elif [[ $RetunedValue == &quot;2&quot; ]]
