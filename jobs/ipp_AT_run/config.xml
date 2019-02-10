@@ -327,7 +327,10 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 #  URL=http://10.59.0.81/index.php/providerSessionReport/generate/$ID
 #fi
 
-URL=http://$PC2RUN/index.php/providerSessionReport/generate/$ID
+URL=$ID
+if [ &quot;$ID&quot; != &quot;NotFound&quot; ]; then
+  URL=http://$PC2RUN/index.php/providerSessionReport/generate/$ID
+fi
 
 labelName=&quot;Automation-Test&quot;;
 if [[ &quot;$CONFIGNAME&quot; =~ &quot;sim&quot; ]]; then labelName=&quot;Automation-Test-Sim&quot;; fi
