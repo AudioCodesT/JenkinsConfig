@@ -117,7 +117,7 @@ yes | make distclean
 make auto AUTOPRD=${Model}
 #create the bin file
 make binary
-#rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
+rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
 fi</command>
     </hudson.tasks.Shell>
   </builders>
