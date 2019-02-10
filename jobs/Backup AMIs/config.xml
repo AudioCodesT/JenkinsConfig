@@ -133,6 +133,7 @@ for src_ami in src_amis:
                 snap_id = dev[&apos;Ebs&apos;][&apos;SnapshotId&apos;]
                 snap = list(ec2_resource_dst.snapshots.filter(SnapshotIds=[snap_id]))[0]
                 snap.create_tags(Tags=[{&apos;Key&apos;: &apos;Name&apos;, &apos;Value&apos;: &apos;Copy of - &apos; + src_ami_name}])
+            print &quot;AMI %s (%s) copied to region %s. Copy AMI id is %s&quot; % (src_ami_id,src_ami_name,dst_region,dst_ami_id)
         else:
             exit -1
     else:
