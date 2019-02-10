@@ -97,18 +97,18 @@ def wait_image_available(region_client, image_id):
 
 def is_image_on_destination(image_id):
     try:
-    	filters = [
-        	{
-            	&apos;Name&apos;:&apos;tag:SourceAMI&apos;,
+        filters = [
+            {
+                &apos;Name&apos;:&apos;tag:SourceAMI&apos;,
                 &apos;Values&apos;:[image_id]
             }
         ]
-    	images = list(ec2_resource_dst.images.filter(Filters=filters))
+        images = list(ec2_resource_dst.images.filter(Filters=filters))
         if len(images):
-        	return dst_images[0].id
+            return dst_images[0].id
         else:
-        	return False
-	except Exception, e:
+            return False
+    except Exception, e:
         print e
        
 
