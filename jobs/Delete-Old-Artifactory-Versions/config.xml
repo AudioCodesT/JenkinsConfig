@@ -121,7 +121,6 @@ RemoveFolder ems-release/com/ac/ems/ovoc_server/7.6.1000/latest_iso
 RemoveFolder ems-release/com/ac/ems/ovoc_server/7.6.2000/latest_iso
 RemoveFolder sbc-review/com/ac/sbc/Firmware
 RemoveFolder sbc-review/com/ac/sbc/DRT
-RemoveFolder sbc-review/com/ac/sbc/user
 RemoveFolder sbc-review/com/ac/sbc/OpenRG
 RemoveFolder sbc-review/com/ac/sbc/acLinux
 RemoveFolder sbc-review/com/ac/sbc/acLinux2.0
@@ -130,7 +129,12 @@ RemoveFolder sbc-review/com/ac/sbc/Hosted02
 RemoveFolder sbc-review/com/ac/sbc/HostedBL
 RemoveFolder sbc-review/com/ac/sbc/OpenRG-UGW
 RemoveFolder sbc-review/com/ac/sbc/acLinux-UGW
-</command>
+
+
+#delete only after 30 days
+OLD=30
+oldThan=$(date +&quot;%Y%m%d&quot; -d &quot;-$OLD days&quot;)
+RemoveFolder sbc-review/com/ac/sbc/user</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
