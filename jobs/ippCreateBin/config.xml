@@ -48,6 +48,8 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -96,10 +98,12 @@
   <builders>
     <hudson.tasks.Shell>
       <command># if Model is C450 make dual bin
+Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
 
-#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
+#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${NEWTAG_SFB}/${Model}/Production
 #${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 #${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/Production
 echo &quot;C450HD&quot;
