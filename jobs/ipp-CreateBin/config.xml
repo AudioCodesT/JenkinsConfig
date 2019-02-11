@@ -27,12 +27,20 @@
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
           <name>Model</name>
           <description></description>
-          <defaultValue></defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>405HD</string>
+              <string>430HD</string>
+              <string>440HD</string>
+              <string>445HD</string>
+              <string>450HD</string>
+              <string>C450HD</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>NEWTAG_SFB</name>
           <description></description>
@@ -99,16 +107,16 @@
     <hudson.tasks.Shell>
       <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
-#cat &lt;&lt;-EOF &gt; ~/.netrc
-#machine test-gerrit login jenkins password $jpass
-#machine gerrit login jenkins password $jpass
-#EOF
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
 
 cd ${WORKSPACE}/..
 rm -rf emmc_tools
-git clone ssh://jenkins@gerrit:29418/IPP/emmc_tools
-#git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
-cp emmc_tools/. ${WORKSPACE} 
+git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
+git checkout origin/master
+cp -R emmc_tools/* ${WORKSPACE} 
 
 
 cd ${WORKSPACE}
@@ -124,16 +132,20 @@ Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; 
 echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
-echo &quot;C450HD&quot;
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/env.bin
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/logo_image
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/rootfs.ext4
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/phone.bin
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDORID}/*.zip
+tar -xvf *.zip
 
-
-
+#create dual bin file
+./genC450bin -u 1 -e 1 -l 200 -p 250 -r 250
 else
 #make normal bin 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
-
 make auto AUTOPRD=${Model}
 #create the bin file
 make binary
@@ -206,6 +218,16 @@ fi</command>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_username=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
@@ -213,6 +235,10 @@ fi</command>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
           <value>{AQAAABAAAAAQetCVqLTeMGkMdcogq75RhFNbpnFStiF3Uxk3HZmLr44=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQ4m3nOfssZDv1um7zw+hHyWsPASbUoLmxthJKmFIKNyQ=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
