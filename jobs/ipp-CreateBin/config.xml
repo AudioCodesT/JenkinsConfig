@@ -147,7 +147,7 @@ unzip ${NEWTAG_ANDROID}.android_images.zip
 unzip ${NEWTAG_ANDROID}.zip
 
 #create dual bin file
-make all
+make gen_C450_bin
 ./gen_C450_bin -u 1 -e 1 -l 200 -p 250 -r 250
 else
 #make normal bin 
