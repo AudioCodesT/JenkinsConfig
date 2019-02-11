@@ -166,6 +166,10 @@ for src_ami in src_amis:
     else:
         print &quot;Copy of AMI %s (%s) found on region %s. Copy AMI id is %s&quot; % (src_ami_id,src_ami_name,dst_region,dst_ami_id)
 
+print &apos;Done processing images for backup&apos;
+print &apos;        Generating report...&apos;
+print &apos;=======================================&apos;
+
 filters = [{&apos;Name&apos;:&apos;tag:SourceAMI&apos;,&apos;Values&apos;:[&apos;ami-*&apos;]}]
 dst_amis = list(ec2_resource_dst.images.filter(Filters=filters))
 
