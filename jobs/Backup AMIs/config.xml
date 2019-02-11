@@ -185,9 +185,9 @@ for dst_ami in dst_amis:
             #pprint(src_ami_name)
             hasSource = True
     if hasSource:
-        print &apos;AMI &apos; + dst_ami.name + &apos; (&apos; + dst_ami.image_id + &apos;) has a source AMI: &apos; + src_ami_name + &apos; (&apos; + src_ami_id + &apos;)&apos;
+        print &apos;AMI &quot;&apos; + dst_ami.name + &apos;&quot; (&apos; + dst_ami.image_id + &apos;) has a source AMI: &apos; + src_ami_name + &apos; (&apos; + src_ami_id + &apos;)&apos;
     else:
-        print &apos;!!! AMI &apos; + dst_ami.name + &apos; (&apos; + dst_ami.image_id + &apos;) has no source AMI tagged for backup !!!&apos;
+        print &apos;!!! AMI &quot;&apos; + dst_ami.name + &apos;&quot; (&apos; + dst_ami.image_id + &apos;) has no source AMI tagged for backup !!!&apos;
 
 </command>
     </hudson.tasks.Shell>
