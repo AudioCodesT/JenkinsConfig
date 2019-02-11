@@ -99,14 +99,15 @@
     <hudson.tasks.Shell>
       <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
-cat &lt;&lt;-EOF &gt; ~/.netrc
-machine test-gerrit login jenkins password $jpass
-machine gerrit login jenkins password $jpass
-EOF
+#cat &lt;&lt;-EOF &gt; ~/.netrc
+#machine test-gerrit login jenkins password $jpass
+#machine gerrit login jenkins password $jpass
+#EOF
 
 cd ${WORKSPACE}/..
 rm -rf emmc_tools
-git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
+git clone ssh://jenkins@gerrit:29418/IPP/emmc_tools
+#git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
 cp emmc_tools/. ${WORKSPACE} 
 
 
