@@ -107,6 +107,7 @@
     <hudson.tasks.Shell>
       <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
+mkdir ${WORKSPACE}/dualBin
 cat &lt;&lt;-EOF &gt; ~/.netrc
 machine test-gerrit login jenkins password $jpass
 machine gerrit login jenkins password $jpass
@@ -115,8 +116,9 @@ EOF
 cd ${WORKSPACE}/..
 rm -rf emmc_tools
 git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
+cd emmc_tools
 git checkout origin/master
-cp -R emmc_tools/* ${WORKSPACE} 
+cp -R * ${WORKSPACE}/dualBin
 
 
 cd ${WORKSPACE}
@@ -132,14 +134,20 @@ Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; 
 echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
+cd ${WORKSPACE}/dualBin
+#download neccerray files from SFB Chosen Tag
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/env.bin
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/logo_image
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/rootfs.ext4
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/phone.bin
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDORID}/*.zip
-tar -xvf *.zip
+#download neccerray files from Android Chosen Tag
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDROID}/${NEWTAG_ANDROID}.android_images.zip
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDROID}/${NEWTAG_ANDROID}.zip
+unzip ${NEWTAG_ANDROID}.android_images.zip
+unzip ${NEWTAG_ANDROID}.zip
 
 #create dual bin file
+make all
 ./genC450bin -u 1 -e 1 -l 200 -p 250 -r 250
 else
 #make normal bin 
