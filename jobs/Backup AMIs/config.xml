@@ -166,16 +166,24 @@ for src_ami in src_amis:
     else:
         print &quot;Copy of AMI %s (%s) found on region %s. Copy AMI id is %s&quot; % (src_ami_id,src_ami_name,dst_region,dst_ami_id)
 
-dst_amis = ec2_dst.describe_images(
-    Filters=[
-        {
-            &apos;Name&apos;:&apos;tag:SourceAMI&apos;,
-            &apos;Values&apos;:[&apos;ami-*&apos;]
-        }
-    ],
-    DryRun=False
-)[&apos;Images&apos;]
+filters = [{&apos;Name&apos;:&apos;tag:SourceAMI&apos;,&apos;Values&apos;:[&apos;ami-*&apos;]}]
+dst_amis = list(ec2_resource_dst.images.filter(Filters=filters))
 
+for dst_ami in dst_amis:
+    hasSource = False
+    for tag in dst_ami.tags:
+        if tag[&apos;Key&apos;] == &apos;SourceAMI&apos;:
+            src_ami_id = tag[&apos;Value&apos;]
+            #pprint(src_ami_id)
+    for src_ami in src_amis:
+        if src_ami.image_id == src_ami_id:
+            src_ami_name = src_ami.name
+            #pprint(src_ami_name)
+            hasSource = True
+    if hasSource:
+        print &apos;AMI &apos; + dst_ami.name + &apos; (&apos; + dst_ami.image_id + &apos;) has a source AMI: &apos; + src_ami_name + &apos; (&apos; + src_ami_id + &apos;)&apos;
+    else:
+        print &apos;AMI &apos; + dst_ami.name + &apos; (&apos; + dst_ami.image_id + &apos;) has no source AMI&apos;
 
 </command>
     </hudson.tasks.Shell>
