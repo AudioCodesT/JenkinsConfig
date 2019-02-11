@@ -117,21 +117,28 @@ def is_image_on_destination(image_id):
 
 ########################## End of function definitions ########################
 
-src_amis = ec2_src.describe_images(
-    Filters=[
-        {
-            &apos;Name&apos;:&apos;tag:Backup&apos;,
-            &apos;Values&apos;:[&apos;DevOps&apos;]
-        }
-    ],
-    DryRun=False
-)[&apos;Images&apos;]
+#src_amis = ec2_src.describe_images(
+#    Filters=[
+#        {
+#            &apos;Name&apos;:&apos;tag:Backup&apos;,
+#            &apos;Values&apos;:[&apos;DevOps&apos;]
+#        }
+#    ],
+#    DryRun=False
+#)[&apos;Images&apos;]
+
+filters = [{&apos;Name&apos;:&apos;tag:Backup&apos;,&apos;Values&apos;:[&apos;DevOps&apos;]}]
+src_amis = list(ec2_resource_src.images.filter(Filters=filters))
 
 for src_ami in src_amis:
-    src_ami_id = src_ami[&apos;ImageId&apos;]
-    src_ami_name = src_ami[&apos;Name&apos;]
-    src_ami_desc = src_ami[&apos;Description&apos;]
-    src_ami_date = src_ami[&apos;CreationDate&apos;]
+#    src_ami_id = src_ami[&apos;ImageId&apos;]
+#    src_ami_name = src_ami[&apos;Name&apos;]
+#    src_ami_desc = src_ami[&apos;Description&apos;]
+#    src_ami_date = src_ami[&apos;CreationDate&apos;]
+    src_ami_id = src_ami.image_id
+    src_ami_name = src_ami.name
+    src_ami_desc = src_ami.description
+    src_ami_date = src_ami.creation_date
     dst_ami_id = is_image_on_destination(src_ami_id)
     if not dst_ami_id:
         #pprint(src_ami)
@@ -159,6 +166,15 @@ for src_ami in src_amis:
     else:
         print &quot;Copy of AMI %s (%s) found on region %s. Copy AMI id is %s&quot; % (src_ami_id,src_ami_name,dst_region,dst_ami_id)
 
+dst_amis = ec2_dst.describe_images(
+    Filters=[
+        {
+            &apos;Name&apos;:&apos;tag:SourceAMI&apos;,
+            &apos;Values&apos;:[&apos;ami-*&apos;]
+        }
+    ],
+    DryRun=False
+)[&apos;Images&apos;]
 
 
 </command>
