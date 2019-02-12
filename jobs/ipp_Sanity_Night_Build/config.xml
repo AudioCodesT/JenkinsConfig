@@ -57,6 +57,26 @@ Should work on 10.59.1.46 - ippAuto</description>
           <defaultValue>0</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ATA_Home</name>
+          <description>if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
+ cd C:/IpPhoneAutomation/ModifeidIterations/ATA
+else
+cd C:/IpPhoneAutomation/ATA (this is suitable for IGS)
+fi
+</description>
+          <defaultValue>C:/IpPhoneAutomation/ATA</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ServerType</name>
+          <description>ServerType == Lync for the lync running 
+ServerType==IGS for IGS running 
+ServerType ==NonLync for NonLync running (currently non implemented )
+</description>
+          <defaultValue>Lync</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name>PC2RUN</name>
           <description></description>
