@@ -63,7 +63,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
+      <command>cd C:\IpPhoneAutomation\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
 &#xd;
 echo Finish stop all</command>
     </hudson.tasks.BatchFile>
@@ -158,7 +158,7 @@ ServerType=IGS</properties>
 model=445
 LASTBL=${LASTBL}
 BuildRelease=${BuildRelease}
-DelayTime=180
+DelayTime=90
 ATA_Home=C:/IpPhoneAutomation/ATA
 ServerType=IGS</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
@@ -197,7 +197,7 @@ ServerType=IGS</properties>
 model=445
 LASTBL=${LASTBL}
 BuildRelease=${BuildRelease}
-DelayTime=360
+DelayTime=180
 ATA_Home=C:/IpPhoneAutomation/ATA
 ServerType=IGS </properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
@@ -236,7 +236,7 @@ ServerType=IGS </properties>
 model=445
 LASTBL=${LASTBL}
 BuildRelease=${BuildRelease}
-DelayTime=540
+DelayTime=270
 ATA_Home=C:/IpPhoneAutomation/ATA
 ServerType=IGS</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
