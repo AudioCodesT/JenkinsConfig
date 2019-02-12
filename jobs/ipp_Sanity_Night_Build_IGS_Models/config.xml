@@ -34,7 +34,7 @@
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
           <description></description>
-          <defaultValue>3.1.0</defaultValue>
+          <defaultValue>3.2</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -71,7 +71,7 @@ echo Finish stop all</command>
       <command>#!c:\cygwin\bin\bash  --login -i
 
 echo Check if free or busy
-if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then
+if curl -s http://Auto1-CMBU/index.php/status/show.xml | grep -q status.busy./status; then
   echo It is busy... exit
   exit 1
 fi
