@@ -108,13 +108,6 @@ ServerType ==NonLync for NonLync running (currently non implemented )
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>&#xd;
-IF NOT EXIST z: ( &#xd;
-  net use z: /DELETE&#xd;
-  net use z: \\10.59.0.87\Firmwares&#xd;
-)</command>
-    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
