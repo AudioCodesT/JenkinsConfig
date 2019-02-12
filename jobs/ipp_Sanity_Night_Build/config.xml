@@ -60,12 +60,12 @@ Should work on 10.59.1.46 - ippAuto</description>
         <hudson.model.StringParameterDefinition>
           <name>ATA_Home</name>
           <description>if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
- cd C:/IpPhoneAutomation/ModifeidIterations/ATA
+   C:/IpPhoneAutomation/ModifeidIterations/ATA
 else
-cd C:/IpPhoneAutomation/ATA (this is suitable for IGS)
-fi
+  C:/IpPhoneAutomation/ATA (this is suitable for IGS)
+
 </description>
-          <defaultValue>C:/IpPhoneAutomation/ATA</defaultValue>
+          <defaultValue>C:/IpPhoneAutomation/ModifeidIterations/ATA</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -129,7 +129,7 @@ if echo $line | grep -q status.busy./status; then
   echo &quot;&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;&quot;
   #exit 1
   echo Kill last build
-  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
+  cd ${ATA_Home} 
   for session in `echo $line | sed &apos;s:&lt;/session&gt;:\n:g&apos;`; do 
     number=$(echo $session | sed &apos;s:.*&lt;session&gt;::&apos;)
     if [[ &quot;$number&quot; =~ ^[0-9]+$ ]]; then
@@ -176,9 +176,9 @@ done
 date
 
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
-  cd C:/IpPhoneAutomation/ModifeidIterations/ATA
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
+  cd ${ATA_Home}
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
 fi
 
 exit $?</command>
