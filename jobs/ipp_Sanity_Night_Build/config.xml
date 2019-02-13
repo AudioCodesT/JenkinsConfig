@@ -170,7 +170,8 @@ for BOARD in $BoardsList; do
     echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
     if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
       echo ----      Download UC${BOARD}_${LASTBL}.img to z:
-      curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_${LASTBL}.img
+      echo curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:/UC${BOARD}_${LASTBL}.img
+      curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:/UC${BOARD}_${LASTBL}.img
     else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
     fi
   else
