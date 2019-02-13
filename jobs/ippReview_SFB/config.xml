@@ -316,9 +316,16 @@ then
     curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
     if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 	then
-    	echo &quot;Failed To Download Older Tag Version&quot;
-       
-   		exit 0
+       	curlHasFailed=&quot;False&quot;
+		echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD} of ${OLDTAG}&quot;
+    	OLDTAG=$(git describe --tags --abbrev=0 ${OLDTAG}^ --first-parent origin/$GERRIT_BRANCH | head -n1)
+    	echo &quot;trying to download older size report from ${OLDTAG}&quot;
+    	curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+    	if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
+        then
+        echo &quot;Failed to download older Tag&quot;
+        #put me and jontan reviewrs
+        fi
     fi
 fi
 #if its running with flag LOG=1 dont run the script	
