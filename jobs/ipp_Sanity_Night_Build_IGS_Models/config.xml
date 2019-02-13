@@ -95,6 +95,7 @@ fi
 echo LASTBL=${LASTBL} &gt; ${WORKSPACE}/Sanity.prop
 
 net use
+echo ls z:/*$LASTBL*
 if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     echo confige again Z: ----------------------
     net use z: /delete
