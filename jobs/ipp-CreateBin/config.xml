@@ -158,7 +158,9 @@ curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ip
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDROID}/${NEWTAG_ANDROID}.zip
 unzip ${NEWTAG_ANDROID}.android_images.zip
 unzip ${NEWTAG_ANDROID}.zip
-
+#change names of system_raw.img and userdata_raw.img
+mv system_raw.img system.img
+mv userdata_raw.img userdata.img
 #create dual bin file
 make clean
 make
