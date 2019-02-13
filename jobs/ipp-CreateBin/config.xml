@@ -141,12 +141,7 @@ cd ${WORKSPACE}
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>#${WORKSPACE}/dualBin/*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-
-# if Model is C450 make dual bin
+      <command># if Model is C450 make dual bin
 Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
 echo &quot;Branch=${Branch}&quot; &gt; properties
 echo &quot;Branch: ${Branch}&quot;
@@ -266,7 +261,10 @@ fi</command>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
+      <deployPattern>${WORKSPACE}/dualBin/*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
