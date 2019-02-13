@@ -142,8 +142,8 @@ fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#${WORKSPACE}/dualBin/*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+#${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+#${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
 #${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
 
 # if Model is C450 make dual bin
