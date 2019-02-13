@@ -133,6 +133,16 @@ if echo $line | grep -q status.busy./status; then
 fi
 
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
+
+if [ &quot;$BuildRelease&quot; ==  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD C450HD&quot;
+else BoardsList=&quot;450HD 445HD 440HD 430HD 405HD C450HD&quot;
+fi
+
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
+  BoardsList=&quot;450HD&quot;
+  ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease/IGS_unified
+fi
+
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo LASTBL: $LASTBL
@@ -141,14 +151,11 @@ if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
   echo Find: $LASTBL
 fi
 
-if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD C450HD&quot;
-else BoardsList=&quot;450HD 445HD 440HD 430HD 405HD C450HD&quot;
-fi
-
 if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
   echo Not find LASTBL - Exit with error
   exit 1
 fi
+
 
 date
 
