@@ -81,7 +81,7 @@ echo Find the Last TAG if None - $LASTBL
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease/IGS_unified
 
 if [ &quot;$LASTBL&quot; == &quot;None&quot; ]; then
-  echo curl -ks -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
+  echo curl -ks -u $User -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
   LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
 fi
 echo Find: $LASTBL
