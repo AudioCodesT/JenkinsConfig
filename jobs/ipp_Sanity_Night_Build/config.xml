@@ -175,6 +175,7 @@ done
 
 date
 
+echo Check if file z:/UC${model}HD_$LASTBL.img
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
   cd ${ATA_Home}
