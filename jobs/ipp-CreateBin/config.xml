@@ -141,8 +141,9 @@ cd ${WORKSPACE}
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-#${WORKSPACE}/build/image/*$SHORTAUTOPRD*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+      <command>#${WORKSPACE}/dualBin/*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+#${WORKSPACE}/build/image/*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+#${WORKSPACE}/build/image/*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
 #${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
 
 # if Model is C450 make dual bin
@@ -305,5 +306,10 @@ fi</command>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER}_${NEWTAG_SFB}_${Model}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
 </project>
