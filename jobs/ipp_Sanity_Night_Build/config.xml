@@ -94,14 +94,14 @@ ServerType ==NonLync for NonLync running (currently non implemented )
       <maxConcurrentPerNode>1</maxConcurrentPerNode>
       <maxConcurrentTotal>2</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
-      <throttleEnabled>true</throttleEnabled>
+      <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl plugin="branch-api@2.0.19">
       <durationName>hour</durationName>
-      <count>2</count>
+      <count>1</count>
       <userBoost>false</userBoost>
     </jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl>
   </properties>
