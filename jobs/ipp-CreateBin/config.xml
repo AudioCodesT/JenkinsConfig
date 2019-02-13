@@ -147,6 +147,7 @@ fi</command>
 
 # if Model is C450 make dual bin
 Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+echo &quot;Branch=${Branch}&quot; &gt; properties
 echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
@@ -177,6 +178,11 @@ make binary
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
 fi</command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
@@ -192,8 +198,8 @@ fi</command>
             <subject>$PROJECT_DEFAULT_SUBJECT</subject>
             <body>$PROJECT_DEFAULT_CONTENT</body>
             <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+              <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
             </recipientProviders>
             <attachmentsPattern></attachmentsPattern>
             <attachBuildLog>false</attachBuildLog>
