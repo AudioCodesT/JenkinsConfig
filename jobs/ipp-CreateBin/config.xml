@@ -1,7 +1,20 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>purpose: create production binary file for spesific Model (if the model is C450HD then create dual bin binary file)&#xd;
+triggered: manually&#xd;
+steps:&#xd;
+if model c450HD:&#xd;
+1. clone repository emmc_tools and copy the files from there to main folder.&#xd;
+2. download all the needed files from artifactory by the chosen Android and SFB Tag.&#xd;
+3. unzip all the zip files downloaded from artifactory.&#xd;
+4. create the dual bin file.&#xd;
+5. upload the binary file to production folder in SFB TAG&#xd;
+else (all other models)&#xd;
+1. clone SFB Repository and checkout to chosen TAG&#xd;
+2. run compilation of the chosen Model&#xd;
+3. run &quot;make binary&quot; to create the bin file&#xd;
+4. upload the file to artifactory</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -108,12 +121,14 @@ else put tag only for SFB</description>
     <hudson.tasks.Shell>
       <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
+#create dualBin folder to copy all the files to this directory.
 mkdir ${WORKSPACE}/dualBin
+#create permissions to clone emmc_tools repository
 cat &lt;&lt;-EOF &gt; ~/.netrc
 machine test-gerrit login jenkins password $jpass
 machine gerrit login jenkins password $jpass
 EOF
-
+# clone emmc_tools repository and copy all the files to dualBin directory in workspace
 cd ${WORKSPACE}/..
 rm -rf emmc_tools
 git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
