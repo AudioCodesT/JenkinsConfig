@@ -307,7 +307,7 @@ ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Mode
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}_${NEWTAG_SFB}_${NEWTAG_ANDROID}_${Model}</template>
+      <template>#${BUILD_NUMBER}_${Model} SFB:${NEWTAG_SFB} Teams:${NEWTAG_ANDROID}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
