@@ -316,7 +316,8 @@ then
     curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
     if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 	then
-    	echo &quot;Failed To Download Older Tag Version&quot;
+    	echo &quot;Failed To Download Older Tag Version, give size+1 not have older report&quot;
+        ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GERRIT_PATCHSET_REVISION}
    		exit 0
     fi
 fi
