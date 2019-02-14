@@ -394,48 +394,6 @@ echo sizeReduced=${sizeReduced} &gt; properties</command>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
-            <arg1>${sizeReduced}</arg1>
-            <arg2>True</arg2>
-            <ignoreCase>false</ignoreCase>
-          </condition>
-          <publisherList>
-            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>cc:ben.magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Arik.Kabessa@audiocodes.com,Oleg.Friedman@audiocodes.com</recipientList>
-              <configuredTriggers>
-                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-                  <email>
-                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-                    <body>$PROJECT_DEFAULT_CONTENT</body>
-                    <recipientProviders/>
-                    <attachmentsPattern></attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
-                    <compressBuildLog>false</compressBuildLog>
-                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
-                  </email>
-                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-              </configuredTriggers>
-              <contentType>default</contentType>
-              <defaultSubject>Good job ! ${AUTOPRD} Size has been reduced !</defaultSubject>
-              <defaultContent>You reduce the size for ${GERRIT_BRANCH} ${AUTOPRD} in commit ${}
-You can see the full report here: ${${BUILD_URL}artifact/build</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
-              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-              <attachBuildLog>false</attachBuildLog>
-              <compressBuildLog>false</compressBuildLog>
-              <replyTo>$DEFAULT_REPLYTO</replyTo>
-              <from></from>
-              <saveOutput>false</saveOutput>
-              <disabled>false</disabled>
-              <matrixTriggerMode>ONLY_CONFIGURATIONS</matrixTriggerMode>
-            </hudson.plugins.emailext.ExtendedEmailPublisher>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
