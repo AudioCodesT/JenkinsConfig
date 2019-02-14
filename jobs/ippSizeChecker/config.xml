@@ -95,9 +95,7 @@ echo &quot;OLD TAG == $OLDTAG&quot;
 
 	
 
-if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/device_manager&quot;  || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/feature/3.2/IGS_unified&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_device_manager&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_IGS&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/EMS_Client&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/IGS_unified&quot; ]]
-then
-	
+
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
   #get all childs names from the spesific TAG
@@ -144,11 +142,6 @@ then
         fi 
       fi  
   done
-  
-else
-	echo &quot;ipp Size Checker not running for ${BUILD_BRANCH}&quot;
-fi
-
 
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;needToSendEmail_reduced_size=$needToSendEmail_reduced_size&quot; &gt;&gt; properties
