@@ -160,8 +160,7 @@ exit 3
 fi
 
 
-#
-#,Ami.Lahav@audiocodes.com,Eli.Carciente@audiocodes.com,Oriel.Krispin@audiocodes.com,Nirit.Beglaubter@audiocodes.com,Oleg.Friedman@audiocodes.com,Arik.Kabessa@audiocodes.com</command>
+#cc:ben.magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Arik.Kabessa@audiocodes.com,Oleg.Friedman@audiocodes.com</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -254,7 +253,7 @@ Build Url: $BUILD_URL
                     <subject>$PROJECT_DEFAULT_SUBJECT</subject>
                     <body>$PROJECT_DEFAULT_CONTENT</body>
                     <recipientProviders>
-                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
+                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
                     </recipientProviders>
                     <attachmentsPattern></attachmentsPattern>
                     <attachBuildLog>false</attachBuildLog>
