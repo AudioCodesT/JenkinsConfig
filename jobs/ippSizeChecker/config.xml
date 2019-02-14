@@ -132,7 +132,7 @@ echo &quot;OLD TAG == $OLDTAG&quot;
             echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
         else
         	needToSendEmail_reduced_size=&quot;True&quot;
-            echo &quot;${allChilds[i]}: You can see the full report here: ${BUILD_URL}artifact/build&quot; &gt;&gt; emailContent_reduced_size.txt       
+            echo &quot;${allChilds[i]}: You can see the full report here: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent_reduced_size.txt       
         fi
         if [[ -e build/size_diff_report_${NEWTAG}.txt ]]
         then            
@@ -258,7 +258,7 @@ Build Url: $BUILD_URL
               </configuredTriggers>
               <contentType>text/html</contentType>
               <defaultSubject>Good job ! Size has been reduced !</defaultSubject>
-              <defaultContent>You reduce the size for ${GERRIT_BRANCH} in models:
+              <defaultContent>You reduce the size for ${BUILD_BRANCH} in models:
 &lt;pre&gt;
 ${FILE,path=&quot;emailContent_reduced_size.txt&quot;}
 &lt;/pre&gt;
