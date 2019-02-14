@@ -217,7 +217,7 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_device_manager&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_IGS&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/EMS_Client&quot; ]]
+            <command>if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.1.0&quot; || &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_device_manager&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_IGS&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/EMS_Client&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/IGS_unified&quot; ]]
 then exit 0 
 else exit 1 
 fi</command>
@@ -246,7 +246,7 @@ fi</command>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
