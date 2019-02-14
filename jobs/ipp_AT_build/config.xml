@@ -311,26 +311,9 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
 if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 then
-	# download older Tag and make comparasion between them
-	curlHasFailed=&quot;False&quot;
-	echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD} of ${OLDTAG}&quot;
-    OLDTAG=$(git describe --tags --abbrev=0 ${OLDTAG}^ --first-parent origin/$GERRIT_BRANCH | head -n1)
-    echo &quot;trying to download older size report from ${OLDTAG}&quot;
-    curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
-    if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
-	then
-       	curlHasFailed=&quot;False&quot;
-		echo &quot;Failed to download sizeReport from Artifactory to ${AUTOPRD} of ${OLDTAG}&quot;
-    	OLDTAG=$(git describe --tags --abbrev=0 ${OLDTAG}^ --first-parent origin/$GERRIT_BRANCH | head -n1)
-    	echo &quot;trying to download older size report from ${OLDTAG}&quot;
-    	curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${AUTOPRD}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
-    	if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
-        then
-        echo &quot;Failed to download older Tag&quot;
-        #put me and jontan reviewrs
-        ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GERRIT_PATCHSET_REVISION}&quot;
-        fi
-    fi
+	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
+	 #put me and jontan reviewrs
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GERRIT_PATCHSET_REVISION}&quot;
 fi
 #if its running with flag LOG=1 dont run the script	
 if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]
