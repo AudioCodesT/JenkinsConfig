@@ -180,8 +180,8 @@ date
 echo Check if file z:/UC${model}HD_$LASTBL.img
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   cd ${ATA_Home}
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1 -restoreDefaults 1
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1 -restoreDefaults 1
 fi
 
 exit $?</command>
