@@ -419,7 +419,7 @@ echo sizeReduced=${sizeReduced} &gt; properties</command>
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>cc:ben.magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com</recipientList>
+              <recipientList>cc:ben.magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Arik.Kabessa@audiocodes.com,Oleg.Friedman@audiocodes.com</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
                   <email>
@@ -436,7 +436,7 @@ echo sizeReduced=${sizeReduced} &gt; properties</command>
               </configuredTriggers>
               <contentType>default</contentType>
               <defaultSubject>Good job ! ${AUTOPRD} Size has been reduced !</defaultSubject>
-              <defaultContent>You can see the full report here ${BUILD_URL}artifact/build</defaultContent>
+              <defaultContent>You can see the full report for ${GERRIT_BRANCH} ${AUTOPRD} here: ${${BUILD_URL}artifact/build</defaultContent>
               <attachmentsPattern></attachmentsPattern>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
