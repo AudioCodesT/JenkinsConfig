@@ -140,6 +140,7 @@ fi
 
 if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
   BoardsList=&quot;445HD&quot;
+  model=445
   ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease/IGS_unified
 fi
 
@@ -176,11 +177,10 @@ done
 
 date
 
-model=$(echo $BoardsList | cut -d&quot; &quot; -f1 | cut -c-3)
 echo Check if file z:/UC${model}HD_$LASTBL.img
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
   cd ${ATA_Home}
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
   tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img -rerunFailedAuto 1
 fi
 
