@@ -258,8 +258,7 @@ Build Url: $BUILD_URL
               </configuredTriggers>
               <contentType>text/html</contentType>
               <defaultSubject>Good job ! Size has been reduced !</defaultSubject>
-              <defaultContent>You reduce the size for ${GERRIT_BRANCH} in commit ${}
-The Models that the size has been reduced are:
+              <defaultContent>You reduce the size for ${GERRIT_BRANCH} in models:
 &lt;pre&gt;
 ${FILE,path=&quot;emailContent_reduced_size.txt&quot;}
 &lt;/pre&gt;
