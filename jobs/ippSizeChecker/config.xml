@@ -88,7 +88,7 @@
 needToSendEmail=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 failedToCurlOnceAtLeast=&quot;False&quot;
-
+needToSendEmail_reduced_size=&quot;False&quot;
 # get one tag before ${NEWTAG} to compare two newest size_report csv
 OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
 echo &quot;OLD TAG == $OLDTAG&quot;
@@ -126,11 +126,15 @@ then
         if [[ $RetunedValue == &quot;0&quot; ]]
         then
             echo &quot;${allChilds[i]} img size test passed&quot;
-        else
+        elif [[ $RetunedValue == &quot;1&quot; ]]
+        then
             needToSendEmail=&quot;True&quot;
             echo &quot;${allChilds[i]}  img size test failed&quot;
             echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
             echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
+        else
+        	needToSendEmail_reduced_size=&quot;True&quot;
+            echo &quot;${allChilds[i]}: You can see the full report here: ${BUILD_URL}artifact/build&quot; &gt;&gt; emailContent_reduced_size.txt       
         fi
         if [[ -e build/size_diff_report_${NEWTAG}.txt ]]
         then            
@@ -147,6 +151,7 @@ fi
 
 
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
+echo &quot;needToSendEmail_reduced_size=$needToSendEmail_reduced_size&quot; &gt;&gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
 if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$needToSendEmail&quot; == &quot;False&quot; ]]
@@ -234,6 +239,51 @@ Build Url: $BUILD_URL
             </hudson.plugins.emailext.ExtendedEmailPublisher>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Run" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
+            <token></token>
+          </condition>
+          <publisherList>
+            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+              <recipientList>$DEFAULT_RECIPIENTS</recipientList>
+              <configuredTriggers>
+                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+                  <email>
+                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+                    <body>$PROJECT_DEFAULT_CONTENT</body>
+                    <recipientProviders>
+                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
+                    </recipientProviders>
+                    <attachmentsPattern></attachmentsPattern>
+                    <attachBuildLog>false</attachBuildLog>
+                    <compressBuildLog>false</compressBuildLog>
+                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+                    <contentType>project</contentType>
+                  </email>
+                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+              </configuredTriggers>
+              <contentType>default</contentType>
+              <defaultSubject>Good job ! Size has been reduced !</defaultSubject>
+              <defaultContent>You reduce the size for ${GERRIT_BRANCH} in commit ${}
+The Models size has been reduced are:
+&lt;pre&gt;
+${FILE,path=&quot;emailContent_reduced_size.txt&quot;}
+&lt;/pre&gt;
+</defaultContent>
+              <attachmentsPattern></attachmentsPattern>
+              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+              <attachBuildLog>false</attachBuildLog>
+              <compressBuildLog>false</compressBuildLog>
+              <replyTo>$DEFAULT_REPLYTO</replyTo>
+              <from></from>
+              <saveOutput>false</saveOutput>
+              <disabled>false</disabled>
+            </hudson.plugins.emailext.ExtendedEmailPublisher>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
