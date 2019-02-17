@@ -145,6 +145,7 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
+echo &quot;change=$change&quot; &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
 if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$needToSendEmail&quot; == &quot;False&quot; ]]
 then
@@ -220,7 +221,7 @@ fi
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__${OLDTAG}</template>
+      <template>#${BUILD_NUMBER}__${OLDTAG}_${$change}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
