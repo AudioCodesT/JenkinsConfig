@@ -84,9 +84,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>changeId=$(git log -1 | grep Change-Id)
-changeId=$(echo $changeId | cut -f2 -d &apos; &apos;)
-change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
+      <command>change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
 ps=`echo $GERRIT_REFSPEC | cut -d/ -f5`
 artifactory_host=artifactory
 needToSendEmail=&quot;False&quot;
@@ -153,7 +151,7 @@ if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;
 then
 	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
 	 #put me and jontan reviewrs
-     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Shuky.Riechard@audiocodes.com ${GIT_COMMIT}&quot;
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com -a shuky.riechard@audiocodes.com ${GIT_COMMIT}&quot;
 fi
 #if at least one Models Are Failed put size-1
 if [[ &quot;$needToSendEmail&quot; == &quot;True&quot; ]]
