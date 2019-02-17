@@ -98,7 +98,7 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
   #get all childs names from the spesific TAG
-  childs=$(cat boards2compile.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
+  childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
   allChilds=($childs)
   allChildsLength=${#allChilds[@]}
   for i in `seq 2 $(($allChildsLength-1))`
