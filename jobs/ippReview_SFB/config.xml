@@ -368,7 +368,7 @@ then
 else
    	echo &quot;ERROR&quot;
 fi
-  
+echo OLDTAG=${OLDTAG}  
 echo sizeReduced=${sizeReduced} &gt; properties</command>
                       </hudson.tasks.Shell>
                       <EnvInjectBuilder plugin="envinject@2.1.5">
@@ -409,7 +409,9 @@ fi
                   <configs>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>GERRIT_REFSPEC=$GERRIT_REFSPEC</properties>
+                      <properties>OLDTAG=$OLDTAG
+BUILD_BRANCH=$GERRIT_BRANCH
+GERRIT_REFSPEC=$GERRIT_REFSPEC</properties>
                       <textParamValueOnNewLine>false</textParamValueOnNewLine>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
