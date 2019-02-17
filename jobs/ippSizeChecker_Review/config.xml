@@ -150,19 +150,19 @@ if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;
 then
 	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
 	 #put me and jontan reviewrs
-     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GERRIT_PATCHSET_REVISION}&quot;
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GIT_COMMIT}&quot;
 fi
 #if at least one Models Are Failed put size-1
 if [[ &quot;$needToSendEmail&quot; == &quot;True&quot; ]]
 then
 echo &quot;size=-1&quot;
-#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GERRIT_PATCHSET_REVISION}
+#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
 #message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact/build${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
 #ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
 else
 #all True put size +1
 echo &quot;Size=+1&quot;
-#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GERRIT_PATCHSET_REVISION}
+#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GIT_COMMIT}
 fi
 </command>
     </hudson.tasks.Shell>
