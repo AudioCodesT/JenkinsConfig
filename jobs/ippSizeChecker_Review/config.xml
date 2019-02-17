@@ -134,7 +134,7 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
         	needToSendEmail_reduced_size=&quot;True&quot;
             echo &quot;${allChilds[i]} full report: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent_reduced_size.txt       
         fi
-        if [[ -e build/size_diff_report_${NEWTAG}.txt ]]
+        if [[ -e build/size_diff_report_${allChilds[i]}.txt ]]
         then            
             mv build/size_diff_report_${NEWTAG}.txt size_report_${allChilds[i]}.txt 
         fi 
@@ -171,6 +171,14 @@ fi
     </EnvInjectBuilder>
   </builders>
   <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>*.txt</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo &apos;origin&apos;).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
@@ -182,14 +190,6 @@ fi
       </delay>
       <maxSchedule>1</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>*.txt</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
