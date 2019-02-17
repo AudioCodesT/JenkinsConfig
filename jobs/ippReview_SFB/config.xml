@@ -547,7 +547,8 @@ fi
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
+      <deployPattern>${WORKSPACE}/build/*_size_report.csv=&gt;SFB/${GERRIT_BRANCH}/$TARGET
+${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/build/image/phone.bin=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/include/ipp_version.h_shipped=&gt;SFB/${GERRIT_BRANCH}/$TARGET
