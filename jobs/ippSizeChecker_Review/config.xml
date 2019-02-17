@@ -113,6 +113,8 @@ NEWLINE=$&apos;\n&apos;
   for i in `seq 2 $(($allChildsLength-1))`
   do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
+   	  #get the New Tag
+      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || curlHasFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
       curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
@@ -123,9 +125,10 @@ NEWLINE=$&apos;\n&apos;
       	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
         curlHasFailed=&quot;False&quot;
       else
+      	
         # run comparison between the old csv to the new csv
         RetunedValue=0
-        sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${NEWTAG}_size_report.csv || RetunedValue=$?
+        sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${allChilds[i]}_size_report.csv || RetunedValue=$?
         #return 0 if the script succeseded else if failed
         if [[ $RetunedValue == &quot;0&quot; ]]
         then
@@ -143,8 +146,6 @@ NEWLINE=$&apos;\n&apos;
         if [[ -e build/size_diff_report_${NEWTAG}.txt ]]
         then            
             mv build/size_diff_report_${NEWTAG}.txt size_report_${allChilds[i]}.txt 
-            #push the report to artifactory to each children
-            #curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
         fi 
       fi  
   done
