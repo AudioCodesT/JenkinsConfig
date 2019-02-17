@@ -237,7 +237,7 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   fi
 done
 #change size_report name to 450HD_SIZE_REPORT.csv
-NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2) || true
+NEWTAGSizeReport=$(find | grep build/*_size_report.csv | cut -d&apos;/&apos; -f2) || true
 mv ${NEWTAGSizeReport} ${AUTOPRD}_size_report.csv || true</command>
     </hudson.tasks.Shell>
   </builders>
