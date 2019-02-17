@@ -31,12 +31,6 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>OLDTAG</name>
-          <description></description>
-          <defaultValue></defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>BUILD_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
@@ -44,12 +38,6 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFSPEC</name>
-          <description></description>
-          <defaultValue></defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>TARGET</name>
           <description></description>
           <defaultValue></defaultValue>
           <trim>false</trim>
@@ -104,6 +92,8 @@ artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 failedToCurlOnceAtLeast=&quot;False&quot;
 User=&quot;$artifactory_user:$artifactory_password&quot;
 NEWLINE=$&apos;\n&apos;
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
