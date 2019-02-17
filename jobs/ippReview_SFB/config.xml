@@ -310,7 +310,7 @@ if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
 then
 	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
 	 #put me and jontan reviewrs
-     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GERRIT_PATCHSET_REVISION}&quot;
+     #ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GERRIT_PATCHSET_REVISION}&quot;
 fi
 #if its running with flag LOG=1 dont run the script	
 if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]
