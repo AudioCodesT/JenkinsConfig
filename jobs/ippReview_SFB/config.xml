@@ -236,7 +236,8 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
     make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
   fi
 done
-</command>
+#NEWTAGSizeReport=$(find | grep *_size_report.csv | cut -d&apos;/&apos; -f2)
+#mv ${NEWTAGSizeReport} ${AUTOPRD}_size_report.csv</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
