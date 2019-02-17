@@ -43,6 +43,12 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -53,7 +59,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
@@ -84,12 +89,26 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.39.1">
+      <project>ippReview_SFB</project>
+      <filter>size_diff_report*.txt</filter>
+      <target></target>
+      <excludes></excludes>
+      <selector class="hudson.plugins.copyartifact.TriggeredBuildSelector">
+        <upstreamFilterStrategy>UseGlobalSetting</upstreamFilterStrategy>
+        <allowUpstreamDependencies>false</allowUpstreamDependencies>
+      </selector>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>artifactory_host=artifactory
+      <command>change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
+ps=`echo $GERRIT_REFSPEC | cut -d/ -f5`
+artifactory_host=artifactory
 needToSendEmail=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 failedToCurlOnceAtLeast=&quot;False&quot;
-needToSendEmail_reduced_size=&quot;False&quot;
+User=&quot;$artifactory_user:$artifactory_password&quot;
+NEWLINE=$&apos;\n&apos;
 # get one tag before ${NEWTAG} to compare two newest size_report csv
 OLDTAG=$(git describe --tags --abbrev=0 ${NEWTAG}^ --first-parent origin/$BUILD_BRANCH | head -n1)
 echo &quot;OLD TAG == $OLDTAG&quot;
@@ -106,10 +125,8 @@ echo &quot;OLD TAG == $OLDTAG&quot;
   for i in `seq 2 $(($allChildsLength-1))`
   do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
-      #get the Current build NEW CSV REPORT
-      curl -k -u ipp-size-check:ipp-size-check --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
-      curl -k -u ipp-size-check:ipp-size-check --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
     
       if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
@@ -139,22 +156,33 @@ echo &quot;OLD TAG == $OLDTAG&quot;
         then            
             mv build/size_diff_report_${NEWTAG}.txt size_report_${allChilds[i]}.txt 
             #push the report to artifactory to each children
-            curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
+            #curl -ks -u ipp-size-check:ipp-size-check -X PUT &quot;${artifactory_url}/${BUILD_BRANCH}/${NEWTAG}/${allChilds[i]}/${NEWTAG}_size_report_result.txt&quot; -T size_report_${allChilds[i]}.txt
         fi 
       fi  
   done
 
 echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
-echo &quot;needToSendEmail_reduced_size=$needToSendEmail_reduced_size&quot; &gt;&gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
 if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$needToSendEmail&quot; == &quot;False&quot; ]]
 then
-exit 3
+	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
+	 #put me and jontan reviewrs
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Jonatan.Reberger@audiocodes.com ${GERRIT_PATCHSET_REVISION}&quot;
 fi
-
-
-#cc:ben.magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com,Ami.Lahav@audiocodes.com,Arik.Kabessa@audiocodes.com,Oleg.Friedman@audiocodes.com</command>
+#if at least one Models Are Failed put size-1
+if [[ &quot;$needToSendEmail&quot; == &quot;True&quot; ]]
+then
+echo &quot;size=-1&quot;
+#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GERRIT_PATCHSET_REVISION}
+#message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact/build${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
+#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
+else
+#all True put size +1
+echo &quot;Size=+1&quot;
+#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GERRIT_PATCHSET_REVISION}
+fi
+</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -187,102 +215,28 @@ fi
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
-      <publishers>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>$needToSendEmail </token>
-          </condition>
-          <publisherList>
-            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com</recipientList>
-              <configuredTriggers>
-                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-                  <email>
-                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-                    <body>$PROJECT_DEFAULT_CONTENT</body>
-                    <recipientProviders>
-                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
-                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-                    </recipientProviders>
-                    <attachmentsPattern></attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
-                    <compressBuildLog>false</compressBuildLog>
-                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
-                  </email>
-                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-              </configuredTriggers>
-              <contentType>text/html</contentType>
-              <defaultSubject>IPP Size Checker ${NEWTAG} Failed</defaultSubject>
-              <defaultContent>&lt;pre&gt;
-${FILE,path=&quot;emailContent.txt&quot;}
-&lt;/pre&gt;
-Build Url: $BUILD_URL
-</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
-              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-              <attachBuildLog>false</attachBuildLog>
-              <compressBuildLog>false</compressBuildLog>
-              <replyTo>$DEFAULT_REPLYTO</replyTo>
-              <from></from>
-              <saveOutput>false</saveOutput>
-              <disabled>false</disabled>
-            </hudson.plugins.emailext.ExtendedEmailPublisher>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Run" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>$needToSendEmail_reduced_size</token>
-          </condition>
-          <publisherList>
-            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>cc:Ben.Magriso@audiocodes.com,Jonatan.Reberger@audiocodes.com</recipientList>
-              <configuredTriggers>
-                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-                  <email>
-                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-                    <body>$PROJECT_DEFAULT_CONTENT</body>
-                    <recipientProviders>
-                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
-                    </recipientProviders>
-                    <attachmentsPattern></attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
-                    <compressBuildLog>false</compressBuildLog>
-                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
-                  </email>
-                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-              </configuredTriggers>
-              <contentType>text/html</contentType>
-              <defaultSubject>Good job ! Size has been reduced !</defaultSubject>
-              <defaultContent>You reduce the size for ${BUILD_BRANCH} in models:
-&lt;pre&gt;
-${FILE,path=&quot;emailContent_reduced_size.txt&quot;}
-&lt;/pre&gt;
-</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
-              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-              <attachBuildLog>false</attachBuildLog>
-              <compressBuildLog>false</compressBuildLog>
-              <replyTo>$DEFAULT_REPLYTO</replyTo>
-              <from></from>
-              <saveOutput>false</saveOutput>
-              <disabled>false</disabled>
-            </hudson.plugins.emailext.ExtendedEmailPublisher>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.43">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQw03EMTEOleY3v3dLAPYhfoJ+0gAn4qM6T5XCBfElcWQ=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
