@@ -153,7 +153,7 @@ if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;
 then
 	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
 	 #put me and jontan reviewrs
-     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Shuky.Riechard@audiocodes.com ${changeId}&quot;
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a Ben.Magriso@audiocodes.com -a Shuky.Riechard@audiocodes.com ${GIT_COMMIT}&quot;
 fi
 #if at least one Models Are Failed put size-1
 if [[ &quot;$needToSendEmail&quot; == &quot;True&quot; ]]
