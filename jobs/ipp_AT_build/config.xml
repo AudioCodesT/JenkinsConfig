@@ -525,7 +525,7 @@ echo ======End gerrit message  -  clean AT vote before starting=======</script>
         <spec></spec>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
-</deployPattern>
+${WORKSPACE}/build/*_size_report.csv=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
