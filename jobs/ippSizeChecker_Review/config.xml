@@ -78,7 +78,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>BUILD_BRANCH</name>
+        <name>$GERRIT_REFSPEC</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -95,7 +95,7 @@
         <reference></reference>
         <timeout>10</timeout>
         <depth>100</depth>
-        <honorRefspec>false</honorRefspec>
+        <honorRefspec>true</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
