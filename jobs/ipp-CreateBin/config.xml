@@ -210,8 +210,10 @@ fi</command>
         </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
-      <defaultSubject>Bin file for ${Model} Production package was created successfully</defaultSubject>
-      <defaultContent>You can see the bin file here: https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production</defaultContent>
+      <defaultSubject>Production binary file for ${Model} was created successfully</defaultSubject>
+      <defaultContent>bin file can be downloaded from this link:
+https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
