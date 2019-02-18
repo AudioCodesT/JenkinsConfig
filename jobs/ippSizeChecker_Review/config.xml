@@ -121,7 +121,7 @@ TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 passAtLeastOnce=&quot;False&quot;
 localCurlFailed=&quot;False&quot;
-localCurlCount=3
+localCurlCount=2
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
