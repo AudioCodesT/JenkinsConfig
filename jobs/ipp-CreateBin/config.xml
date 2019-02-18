@@ -58,13 +58,13 @@ Else provide a tag only for SFB</description>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>NEWTAG_SFB</name>
+          <name>SFB_VERSION</name>
           <description>SFB Tag (e.g.: 3.2.1.20)</description>
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>NEWTAG_ANDROID</name>
+          <name>ANDROID_VERSION</name>
           <description>Teams tag (e.g.: C450HD_TEAMS_0.190)</description>
           <defaultValue></defaultValue>
           <trim>false</trim>
@@ -91,7 +91,7 @@ Else provide a tag only for SFB</description>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$NEWTAG_SFB</name>
+        <name>$SFB_VERSION</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -123,6 +123,11 @@ Else provide a tag only for SFB</description>
     <hudson.tasks.Shell>
       <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
+	if [[ $ANDROID_VERSION == &quot;&quot; ]]
+	then
+		echo &quot;Android Version is empty, please run again with the android version.&quot;
+		exit 1
+	fi
 #create dualBin folder to copy all the files to this directory.
 mkdir ${WORKSPACE}/dualBin
 #create permissions to clone emmc_tools repository
@@ -151,15 +156,15 @@ if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
 cd ${WORKSPACE}/dualBin
 #download neccerray files from SFB Chosen Tag
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/env.bin
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/logo_image
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/rootfs.ext4
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/phone.bin
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin
 #download neccerray files from Android Chosen Tag
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDROID}/${NEWTAG_ANDROID}.android_images.zip
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${NEWTAG_ANDROID}/${NEWTAG_ANDROID}.zip
-unzip ${NEWTAG_ANDROID}.android_images.zip
-unzip ${NEWTAG_ANDROID}.zip
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.android_images.zip
+curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.zip
+unzip ${ANDROID_VERSION}.android_images.zip
+unzip ${ANDROID_VERSION}.zip
 #change names of system_raw.img and userdata_raw.img
 mv system_raw.img system.img
 mv userdata_raw.img userdata.img
@@ -212,7 +217,7 @@ fi</command>
       <contentType>default</contentType>
       <defaultSubject>Production binary file for ${Model} was created successfully</defaultSubject>
       <defaultContent>bin file can be downloaded from this link:
-https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
+https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
 </defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
@@ -267,10 +272,10 @@ https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/dualBin/*mmc*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production
-${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Model}/Production</deployPattern>
+      <deployPattern>${WORKSPACE}/dualBin/*mmc*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
+${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
+${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
+${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
@@ -311,7 +316,7 @@ ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${NEWTAG_SFB}/${Mode
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}_${Model} SFB:${NEWTAG_SFB} Teams:${NEWTAG_ANDROID}</template>
+      <template>#${BUILD_NUMBER}_${Model} SFB:${SFB_VERSION} Teams:${ANDROID_VERSION}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
