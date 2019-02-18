@@ -95,6 +95,7 @@ NEWLINE=$&apos;\n&apos;
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
 passAtLeastOnce=&quot;False&quot;
+localCurlFailed=&quot;False&quot;
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
@@ -106,45 +107,51 @@ passAtLeastOnce=&quot;False&quot;
   do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
    	  #get the New Tag
-      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || echo &quot;Doesnt generated report in ippReview_SFB&quot;
+      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
       curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
-    
-      if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
+      if [[ &quot;$localCurlFailed&quot; == &quot;True&quot; ]]
       then
-      	failedToCurlOnceAtLeast=&quot;True&quot;
-      	echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
-        curlHasFailed=&quot;False&quot;
+      		echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
       else
-      	
-        # run comparison between the old csv to the new csv
-        set +e
-        sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${allChilds[i]}_size_report.csv 
-        RetunedValue=$?
-        set -e
-        #return 0 if the script succeseded else if failed
-        if [[ $RetunedValue == &quot;0&quot; ]]
-        then
-        	passAtLeastOnce=&quot;True&quot;
-            echo &quot;${allChilds[i]} img size test passed&quot;
-        elif [[ $RetunedValue == &quot;1&quot; ]]
-        then
-            failedAtLeastOnce=&quot;True&quot;
-            echo &quot;${allChilds[i]}  img size test failed&quot;
-            echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
-            echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
-            #message=&quot;size_diff Test has failed on model ${allChilds[i]}. You can see the output here: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
-			#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
-        else
-        	needToSendEmail_reduced_size=&quot;True&quot;
-            echo &quot;${allChilds[i]} full report: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent_reduced_size.txt       
-        fi
-        if [[ -e build/size_diff_report_${allChilds[i]}.txt ]]
-        then            
-            mv build/size_diff_report_${allChilds[i]}.txt size_report_${allChilds[i]}.txt 
-        fi 
-      fi  
+        
+        
+          if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
+          then
+            failedToCurlOnceAtLeast=&quot;True&quot;
+            echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
+            curlHasFailed=&quot;False&quot;
+          else
+            
+            # run comparison between the old csv to the new csv
+            set +e
+            sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${allChilds[i]}_size_report.csv 
+            RetunedValue=$?
+            set -e
+            #return 0 if the script succeseded else if failed
+            if [[ $RetunedValue == &quot;0&quot; ]]
+            then
+                passAtLeastOnce=&quot;True&quot;
+                echo &quot;${allChilds[i]} img size test passed&quot;
+            elif [[ $RetunedValue == &quot;1&quot; ]]
+            then
+                failedAtLeastOnce=&quot;True&quot;
+                echo &quot;${allChilds[i]}  img size test failed&quot;
+                echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
+                echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
+                #message=&quot;size_diff Test has failed on model ${allChilds[i]}. You can see the output here: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
+                #ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
+            else
+                needToSendEmail_reduced_size=&quot;True&quot;
+                echo &quot;${allChilds[i]} full report: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent_reduced_size.txt       
+            fi
+            if [[ -e build/size_diff_report_${allChilds[i]}.txt ]]
+            then            
+                mv build/size_diff_report_${allChilds[i]}.txt size_report_${allChilds[i]}.txt 
+            fi 
+          fi
+      fi    
   done
 
 echo &quot;failedAtLeastOnce=$failedAtLeastOnce&quot; &gt; properties
@@ -163,8 +170,6 @@ if [[ &quot;$failedAtLeastOnce&quot; == &quot;True&quot; ]]
 then
 echo &quot;size=-1&quot;
 #ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
-#message=&quot;size_diff Test has failed on model ${AUTOPRD}. You can see the output here: ${BUILD_URL}artifact/build${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
-#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
 else
 #all True put size +1
 echo &quot;Size=+1&quot;
