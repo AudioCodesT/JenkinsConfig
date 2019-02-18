@@ -272,7 +272,7 @@ https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/dualBin/*mmc*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
+      <deployPattern>${WORKSPACE}/dualBin/*mmc*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}
 ${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
 ${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
 ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production</deployPattern>
