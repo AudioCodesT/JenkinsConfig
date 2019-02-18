@@ -144,6 +144,12 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#
+
+if [[ $GERRIT_BRANCH == &quot;feature/3.2/IGS_unified&quot; || $GERRIT_BRANCH == &quot;feature/3.2/device_manager&quot; ]]
+then
+	echo &quot;exit compilation got stuck&quot;
+    exit 1
+fi
 CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
