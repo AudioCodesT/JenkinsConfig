@@ -195,7 +195,9 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
   make $PARAMS SUBVERSION=${IMGNAME}
 done
-
+#change size_report name to 450HD_SIZE_REPORT.csv
+NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
+mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -403,44 +405,36 @@ echo sizeReduced=${sizeReduced} &gt; properties
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
-            <arg1>${sizeReduced}</arg1>
-            <arg2>True</arg2>
-            <ignoreCase>false</ignoreCase>
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.0&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;3.1&quot;* ]]
+then
+exit 1
+fi</command>
           </condition>
           <publisherList>
-            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-              <recipientList>cc:ben.magriso,Jonatan.Reberger</recipientList>
-              <configuredTriggers>
-                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-                  <email>
-                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-                    <body>$PROJECT_DEFAULT_CONTENT</body>
-                    <recipientProviders/>
-                    <attachmentsPattern></attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
-                    <compressBuildLog>false</compressBuildLog>
-                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
-                  </email>
-                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-              </configuredTriggers>
-              <contentType>default</contentType>
-              <defaultSubject>Good job ! ${AUTOPRD} Size has been reduced !</defaultSubject>
-              <defaultContent>You can see the full report here ${BUILD_URL}artifact/build</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
-              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-              <attachBuildLog>false</attachBuildLog>
-              <compressBuildLog>false</compressBuildLog>
-              <replyTo>$DEFAULT_REPLYTO</replyTo>
-              <from></from>
-              <saveOutput>false</saveOutput>
-              <disabled>false</disabled>
-              <matrixTriggerMode>ONLY_CONFIGURATIONS</matrixTriggerMode>
-            </hudson.plugins.emailext.ExtendedEmailPublisher>
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+              <configs>
+                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>BUILD_BRANCH=${GERRIT_BRANCH}
+GERRIT_REFSPEC=${REFSPEC}
+</properties>
+                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  </configs>
+                  <projects>ippSizeChecker_Review</projects>
+                  <condition>SUCCESS</condition>
+                  <triggerWithNoParameters>false</triggerWithNoParameters>
+                  <triggerFromChildProjects>false</triggerFromChildProjects>
+                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+              </configs>
+            </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
