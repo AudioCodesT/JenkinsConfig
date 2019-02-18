@@ -155,6 +155,7 @@ echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
 cd ${WORKSPACE}/dualBin
+echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}&quot; &gt; artifactoryPath.txt
 #download neccerray files from SFB Chosen Tag
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image
@@ -173,6 +174,7 @@ make clean
 make
 ./gen_C450_bin -u 1 -e 1 -l 200 -p 250 -r 250
 else
+echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production&quot; &gt; artifactoryPath.txt
 #make normal bin 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
@@ -217,8 +219,9 @@ fi</command>
       <contentType>default</contentType>
       <defaultSubject>Production binary file for ${Model} was created successfully</defaultSubject>
       <defaultContent>bin file can be downloaded from this link:
-https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
-</defaultContent>
+&lt;pre&gt;
+${FILE,path=&quot;artifactoryPath.txt&quot;}
+&lt;/pre&gt;</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
