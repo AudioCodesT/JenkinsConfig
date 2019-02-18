@@ -106,7 +106,7 @@ passAtLeastOnce=&quot;False&quot;
   do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
    	  #get the New Tag
-      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv
+      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || echo &quot;Doesnt generated report in ippReview_SFB&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
       curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
