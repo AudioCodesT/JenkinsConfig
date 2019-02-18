@@ -193,8 +193,8 @@ fi</command>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>*.txt</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
+      <artifacts>artifactoryPath.txt</artifacts>
+      <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
       <defaultExcludes>true</defaultExcludes>
