@@ -151,11 +151,12 @@ echo &quot;failedAtLeastOnce=$failedAtLeastOnce&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 echo &quot;change=$change&quot; &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
-if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$failedAtLeastOnce&quot; == &quot;False&quot; &amp;&amp; passAtLeastOnce == &quot;False&quot; ]]
+if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; ]]
 then
-	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
+	 echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
 	 #put me and jontan reviewrs
-     #ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com ${GIT_COMMIT}&quot;
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com ${GIT_COMMIT}&quot;
+     exit 0
 fi
 #if at least one Models Are Failed put size-1
 if [[ &quot;$failedAtLeastOnce&quot; == &quot;True&quot; ]]
