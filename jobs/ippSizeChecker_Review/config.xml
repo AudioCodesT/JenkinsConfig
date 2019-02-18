@@ -87,13 +87,14 @@
       <command>change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
 ps=`echo $GERRIT_REFSPEC | cut -d/ -f5`
 artifactory_host=artifactory
-needToSendEmail=&quot;False&quot;
+failedAtLeastOnce=&quot;False&quot;
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
 failedToCurlOnceAtLeast=&quot;False&quot;
 User=&quot;$artifactory_user:$artifactory_password&quot;
 NEWLINE=$&apos;\n&apos;
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
+passAtLeastOnce=&quot;False&quot;
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
@@ -102,10 +103,10 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
   allChilds=($childs)
   allChildsLength=${#allChilds[@]}
   for i in `seq 2 $(($allChildsLength-1))`
-  do
+  do`
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
    	  #get the New Tag
-      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || curlHasFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv
       #get the OLDER CSV REPORT (NEWTAG -1)
       curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
@@ -118,15 +119,18 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
       else
       	
         # run comparison between the old csv to the new csv
-        RetunedValue=0
-        sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${allChilds[i]}_size_report.csv || RetunedValue=$?
+        set +e
+        sh scripts/mtds_size.sh size_diff ${OLDTAG}_size_report.csv ${allChilds[i]}_size_report.csv 
+        RetunedValue=$?
+        set -e
         #return 0 if the script succeseded else if failed
         if [[ $RetunedValue == &quot;0&quot; ]]
         then
+        	passAtLeastOnce=&quot;True&quot;
             echo &quot;${allChilds[i]} img size test passed&quot;
         elif [[ $RetunedValue == &quot;1&quot; ]]
         then
-            needToSendEmail=&quot;True&quot;
+            failedAtLeastOnce=&quot;True&quot;
             echo &quot;${allChilds[i]}  img size test failed&quot;
             echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
             echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
@@ -143,18 +147,18 @@ OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
       fi  
   done
 
-echo &quot;needToSendEmail=$needToSendEmail&quot; &gt; properties
+echo &quot;failedAtLeastOnce=$failedAtLeastOnce&quot; &gt; properties
 echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
 echo &quot;change=$change&quot; &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
-if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$needToSendEmail&quot; == &quot;False&quot; ]]
+if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; &amp;&amp; &quot;$failedAtLeastOnce&quot; == &quot;False&quot; &amp;&amp; passAtLeastOnce == &quot;False&quot; ]]
 then
 	echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
 	 #put me and jontan reviewrs
      ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com ${GIT_COMMIT}&quot;
 fi
 #if at least one Models Are Failed put size-1
-if [[ &quot;$needToSendEmail&quot; == &quot;True&quot; ]]
+if [[ &quot;$failedAtLeastOnce&quot; == &quot;True&quot; ]]
 then
 echo &quot;size=-1&quot;
 #ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
