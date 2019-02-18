@@ -103,7 +103,7 @@ passAtLeastOnce=&quot;False&quot;
   allChilds=($childs)
   allChildsLength=${#allChilds[@]}
   for i in `seq 2 $(($allChildsLength-1))`
-  do`
+  do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
    	  #get the New Tag
       curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv
