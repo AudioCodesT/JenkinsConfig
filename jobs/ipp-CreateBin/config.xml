@@ -155,7 +155,7 @@ echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
 cd ${WORKSPACE}/dualBin
-echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}&quot; &gt; artifactoryPath.txt
+echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}&quot; &gt; ${WORKSPACE}/artifactoryPath.txt
 #download neccerray files from SFB Chosen Tag
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin
 curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image
@@ -193,7 +193,7 @@ fi</command>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>dualBin/artifactoryPath.txt</artifacts>
+      <artifacts>artifactoryPath.txt</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
