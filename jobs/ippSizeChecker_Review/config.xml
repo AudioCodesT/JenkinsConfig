@@ -203,11 +203,11 @@ fi
 if [[ &quot;$failedAtLeastOnce&quot; == &quot;True&quot; ]]
 then
 echo &quot;size=-1&quot;
-#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
 else
 #all True put size +1
 echo &quot;Size=+1&quot;
-#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GIT_COMMIT}
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GIT_COMMIT}
 fi
 </command>
     </hudson.tasks.Shell>
