@@ -194,7 +194,7 @@ then
         exit 1
      fi
      #put me and jontan reviewrs
-     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com- a jonatan.reberger@audiocodes.com ${GIT_COMMIT}&quot;
+     ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com -a jonatan.reberger@audiocodes.com ${GIT_COMMIT}&quot;
      exit 0
 fi
 if [[ ${allChildsLength} == ${localCurlCount} ]]
