@@ -139,7 +139,7 @@ else BoardsList=&quot;440HD 430HD 405HD C450HD 450HD 445HD &quot;
 fi
 
 if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
-  BoardsList=&quot;445HD&quot;
+  BoardsList=&quot;445HD_IGS&quot;
   model=445
   ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease/IGS_unified
 fi
@@ -161,14 +161,17 @@ fi
 date
 
 for BOARD in $BoardsList; do
-  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
+
+  imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
+
+  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
-    echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
-    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
-      echo ----      Download UC${BOARD}_${LASTBL}.img to z:
-      echo curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:/UC${BOARD}_${LASTBL}.img
-      curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:/UC${BOARD}_${LASTBL}.img
-    else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
+    echo -- Check if $imageName exist in z:
+    if [ ! -f z:/$imageName ]; then
+      echo ----      Download $imageName to z:
+      echo curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
+      curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
+    else echo ----      $imageName already exist.. skip the download...
     fi
   else
    echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
