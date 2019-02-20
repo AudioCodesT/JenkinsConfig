@@ -171,6 +171,18 @@ for BOARD in $BoardsList; do
       echo ----      Download $imageName to z:
       echo curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
       curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
+      
+      checkSum1=$(curl -ks -u $User -X GET \
+            $ARTIFACTORY/$LASTBL/$BOARD/$imageName | \
+            grep md5 | head -1 | cut -d\&quot; -f4)
+      checkSum2=$(md5sum z:/$imageName | cut -d&quot; &quot; -f1)
+      echo checksum: $checkSum1 and $checkSum2
+      if [ &quot;$checkSum1&quot; != &quot;$checkSum2&quot; ]; then
+        echo CheckSum is not equel.. abort
+        rm -f z:/$imageName
+        exit 1
+      fi
+      
     else echo ----      $imageName already exist.. skip the download...
     fi
   else
@@ -191,14 +203,17 @@ exit $?</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
-      <config>
-        <scriptFiles/>
-        <groovyScripts/>
-        <buildSteps/>
-        <markBuildUnstable>false</markBuildUnstable>
-      </config>
-    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>CheckSum is not equel</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>30</delay>
+      </delay>
+      <maxSchedule>2</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
