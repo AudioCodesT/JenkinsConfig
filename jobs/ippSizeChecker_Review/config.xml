@@ -194,6 +194,8 @@ then
         exit 1
      fi
      #put me and jontan reviewrs
+     message=&quot;reports could not be downloaded, adding Ben/Jonatan to review&quot;
+     ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
      ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com -a jonatan.reberger@audiocodes.com ${GIT_COMMIT}&quot;
      exit 0
 fi
