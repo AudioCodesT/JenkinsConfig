@@ -141,6 +141,7 @@ localCurlCount=2
       then
       		echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
             ((localCurlCount+=1))
+            localCurlFailed=&quot;False&quot;
       else
         
         
