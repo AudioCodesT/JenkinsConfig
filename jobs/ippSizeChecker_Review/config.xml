@@ -188,15 +188,11 @@ echo &quot;change=$change&quot; &gt;&gt; properties
 if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; ]]
 then
 	 echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
-     if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; ]]
-     then
-     	echo &quot;Exit the build before put me as a reviewer&quot;
-        exit 1
-     fi
      #put me and jontan reviewrs
      message=&quot;reports could not be downloaded, adding Ben/Jonatan to review&quot;
      ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
      ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com -a jonatan.reberger@audiocodes.com ${GIT_COMMIT}&quot;
+     ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
      exit 0
 fi
 if [[ ${allChildsLength} == ${localCurlCount} ]]
