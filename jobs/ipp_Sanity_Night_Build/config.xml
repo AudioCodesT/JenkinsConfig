@@ -162,6 +162,7 @@ date
 
 for BOARD in $BoardsList; do
 
+  # In case of 445HD_IGS, the image name is without the _IGS
   imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
 
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
@@ -172,6 +173,7 @@ for BOARD in $BoardsList; do
       echo curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
       curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
       
+      # checksum the transfered file. If not equel, exit with error and the job will retry after 30 seconds
       checkSum1=$(curl -ks -u $User -X GET \
             $ARTIFACTORY/$LASTBL/$BOARD/$imageName | \
             grep md5 | head -1 | cut -d\&quot; -f4)
