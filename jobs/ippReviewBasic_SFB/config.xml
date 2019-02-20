@@ -239,7 +239,9 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
   make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
 done
-</command>
+#change size_report name to 450HD_SIZE_REPORT.csv
+NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
+mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -284,7 +286,7 @@ fi</command>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -325,7 +327,8 @@ fi</command>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
+      <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
+${WORKSPACE}/build/*_size_report.csv=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
