@@ -37,8 +37,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
-#!c:\cygwin64\bin\bash --login -i
+      <command>#!c:\cygwin64\bin\bash --login -i
 set -e
 cd $WORKSPACE
 
