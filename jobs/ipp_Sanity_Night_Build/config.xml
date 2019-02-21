@@ -193,6 +193,11 @@ for BOARD in $BoardsList; do
 done
 
 date
+# To solve the &quot;Process leaked file descriptors&quot; problem
+# Or: BUILD_ID=dontKillMe nohup ./yourStartScript.sh &amp;
+# see: https://stackoverflow.com/questions/17024441/process-leaked-file-descriptors-error-on-jenkins
+BUILD_ID=dontKillMe
+export $BUILD_ID
 
 echo Check if file z:/UC${model}HD_$LASTBL.img
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
