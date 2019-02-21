@@ -12,8 +12,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>20</daysToKeep>
-        <numToKeep>480</numToKeep>
+        <daysToKeep>21</daysToKeep>
+        <numToKeep>800</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -413,6 +413,9 @@ date
         <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
           <maxRestarts>2</maxRestarts>
         </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
+        <hudson.plugins.build__timeout.operations.WriteDescriptionOperation>
+          <description>Timeout problem</description>
+        </hudson.plugins.build__timeout.operations.WriteDescriptionOperation>
       </operationList>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
