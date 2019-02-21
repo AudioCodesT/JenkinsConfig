@@ -410,7 +410,9 @@ date
         <timeoutSecondsString>900</timeoutSecondsString>
       </strategy>
       <operationList>
-        <hudson.plugins.build__timeout.operations.AbortOperation/>
+        <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
+          <maxRestarts>2</maxRestarts>
+        </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
       </operationList>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
