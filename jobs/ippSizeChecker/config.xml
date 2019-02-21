@@ -248,6 +248,7 @@ Build Url: $BUILD_URL
                     <recipientProviders>
                       <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
                       <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
+                      <hudson.plugins.emailext.plugins.recipients.UpstreamComitterRecipientProvider/>
                     </recipientProviders>
                     <attachmentsPattern></attachmentsPattern>
                     <attachBuildLog>false</attachBuildLog>
