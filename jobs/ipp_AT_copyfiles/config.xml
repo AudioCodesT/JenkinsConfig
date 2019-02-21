@@ -152,7 +152,8 @@ fi
 echo Searce all $ImageNames
 echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 
-# Don&apos;t execute the next job in case you don&apos;t found 5 files
+# Don&apos;t execute the next job in case you don&apos;t found 4 files
+ls $Target/*$ImageNames.img
 if [ `ls $Target/*$ImageNames.img | wc -l` -lt 4 ]; then echo &quot;Missing img files, exiting job&quot;; exit 2; fi
 #if [ `ls $Target/*$ImageNames.sim.tgz | wc -l` != 5 ]; then echo &quot;Missing .sim.tgz files, exiting job&quot;; exit 2; fi
 
