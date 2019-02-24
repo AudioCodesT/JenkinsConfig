@@ -246,7 +246,8 @@ fi
           </logTexts>
           <EscalateStatus>true</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}</script>
+          <script>#!/bin/sh&#xd;
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}</script>
         </hudson.plugins.postbuildtask.TaskProperties>
         <hudson.plugins.postbuildtask.TaskProperties>
           <logTexts>
@@ -257,7 +258,8 @@ fi
           </logTexts>
           <EscalateStatus>true</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>exit 1</script>
+          <script>#!/bin/sh&#xd;
+exit 1</script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
