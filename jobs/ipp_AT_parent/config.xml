@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.29">
+<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -57,6 +57,12 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ServerType</name>
+          <description></description>
+          <defaultValue>Lync</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name>PC2RUN</name>
           <description></description>
@@ -105,8 +111,14 @@ PHISICALPHONE=&quot;&quot;
 #fi
 
 net use
-echo ls1
-ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+
+ATA_Home=C:/IpPhoneAutomation/ATA
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
+  ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+fi
+
+
+ls $ATA_Home/Resources/Firmwares/UC*HD_${IMAGENAMES}.*
 
 if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     echo confige again Z: ----------------------
@@ -114,7 +126,7 @@ if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 fi
 
-if [ `ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
+if [ `ls $ATA_Home/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
   echo &quot;the images files were not found (ClosedChannel)... try again&quot;
   exit 1;
 fi
@@ -130,8 +142,9 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 
 echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
 echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
+echo ATA_Home=$ATA_Home &gt;&gt; ${WORKSPACE}/properties.txt
 
-echo Results: &gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+echo Results: &gt; $ATA_Home/$IMAGENAMES.txt
 
 while IFS= read -r line
 do
@@ -169,6 +182,7 @@ date
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_AT_run</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -203,6 +217,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_AT_run</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -237,6 +252,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_AT_run</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -271,6 +287,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_AT_run</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -415,8 +432,8 @@ labelGrade=&quot;--label $labelName=-1&quot;
 # No grade if this patch-set was merged already
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
-ATRun=`cat C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt`
-rm -f C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
+rm -f $ATA_Home/ATA/$IMAGENAMES.txt
 
 echo Send failed message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
@@ -451,8 +468,8 @@ if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automati
 labelGrade=&quot;--label $labelName=1&quot;
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
-ATRun=`cat C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt`
-rm -f C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
+rm -f $ATA_Home/$IMAGENAMES.txt
 
 echo Send OK message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
