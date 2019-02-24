@@ -1,0 +1,533 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>15</daysToKeep>
+        <numToKeep>250</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MODEL</name>
+          <description></description>
+          <defaultValue>450</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>IMAGENAMES</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>EMAIL</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
+          <name>PC2RUN</name>
+          <description></description>
+          <allowedSlaves/>
+          <defaultSlaves/>
+          <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
+          <allowMultiNodeSelection>false</allowMultiNodeSelection>
+          <triggerConcurrentBuilds>false</triggerConcurrentBuilds>
+          <ignoreOfflineNodes>false</ignoreOfflineNodes>
+          <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
+        </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>1</maxConcurrentPerNode>
+      <maxConcurrentTotal>3</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>true</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>ippTestAuto</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>cd C:\IpPhoneAutomation\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
+</command>
+    </hudson.tasks.BatchFile>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash --login
+
+echo $NODE_NAME
+PHISICALPHONE=&quot;&quot;
+#echo check if equel to ippTestAuto8
+#if [ &quot;$NODE_NAME&quot; == &quot;ippTestAuto8&quot; ]; then
+#  PHISICALPHONE=sim
+#  echo set to sim
+#fi
+
+net use
+echo ls1
+ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+
+if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
+    echo confige again Z: ----------------------
+    net use z: /delete
+    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+fi
+
+if [ `ls C:/IpPhoneAutomation/ATA/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
+  echo &quot;the images files were not found (ClosedChannel)... try again&quot;
+  exit 1;
+fi
+
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then
+  echo RunPhases=1 &gt; ${WORKSPACE}/properties.txt
+  echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
+  exit 0;
+fi
+
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+
+echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
+echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
+
+echo Results: &gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+
+while IFS= read -r line
+do
+  field=`echo $line | cut -d: -f1` # Could be: number or kind
+  value=`echo $line | sed &apos;s/.*: //&apos;` # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
+  if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
+  else
+    echo  Patch set: $checkPS,  change kind: $value
+    if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
+      echo It is a newest patch-set... abort action
+      echo -----------------------------------------
+      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation test for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+      echo RunPhases=0 &gt;&gt; ${WORKSPACE}/properties.txt
+      exit 0;
+    fi
+  fi
+done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
+
+echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
+
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
+date
+
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>${WORKSPACE}/properties.txt</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>Split session</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_AT_run</jobName>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>false</abortAllJob>
+          <condition>${RunPhases} == 1</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>REFSPEC=$REFSPEC
+GERRIT_BRANCH=$GERRIT_BRANCH
+CONFIGNAME=basic1of4${PHISICALPHONE}
+MODEL=$MODEL
+SUITENAME=basic1of4
+IMAGENAMES=$IMAGENAMES
+PHASE=1
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_AT_run</jobName>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>false</abortAllJob>
+          <condition>${RunPhases} == 1</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>REFSPEC=$REFSPEC
+GERRIT_BRANCH=$GERRIT_BRANCH
+CONFIGNAME=basic2of4${PHISICALPHONE}
+MODEL=$MODEL
+SUITENAME=basic2of4
+IMAGENAMES=$IMAGENAMES
+PHASE=2
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_AT_run</jobName>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>false</abortAllJob>
+          <condition>${RunPhases} == 1</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>REFSPEC=$REFSPEC
+GERRIT_BRANCH=$GERRIT_BRANCH
+CONFIGNAME=basic3of4${PHISICALPHONE}
+MODEL=$MODEL
+SUITENAME=basic3of4
+IMAGENAMES=$IMAGENAMES
+PHASE=3
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_AT_run</jobName>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>false</abortAllJob>
+          <condition>${RunPhases} == 1</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>REFSPEC=$REFSPEC
+GERRIT_BRANCH=$GERRIT_BRANCH
+CONFIGNAME=basic4of4${PHISICALPHONE}
+MODEL=$MODEL
+SUITENAME=basic4of4
+IMAGENAMES=$IMAGENAMES
+PHASE=4
+EMAIL=${EMAIL}
+BUILD_PARENT=${BUILD_NUMBER}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>SUCCESSFUL</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+  </builders>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash  --login
+
+echo Start check the change
+date
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit; fi
+
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+RunPhases=1
+
+echo Check if the change was submitted already
+merged=no
+if ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -q &quot;status: MERGED&quot;; then
+  echo Change was already merged, do not give grade
+  merged=yes
+else
+  #Check if they are not a new PS - if yes, check if the code was changed
+  #In case the code was not changed, give the score to the last PS - should be store in the checkPS variable. 
+  checkPS=$ps
+  while IFS= read -r line
+  do
+    field=`echo $line | cut -d: -f1` # Could be: number or kind
+    value=`echo $line | sed &apos;s/.*: //&apos;` # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
+    if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value; echo Check Patch set $value;
+    else if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
+      RunPhases=0
+    fi; fi
+  done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
+
+  if [[ &quot;$RunPhases&quot; -eq 1 ]]; then ps=$checkPS; fi
+fi
+echo merged=$merged &gt;&gt; ${WORKSPACE}/properties.txt
+echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
+echo Finish check the change
+date</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <EnvInjectBuilder plugin="envinject@2.1.5">
+                        <info>
+                          <propertiesFilePath>${WORKSPACE}/properties.txt</propertiesFilePath>
+                        </info>
+                      </EnvInjectBuilder>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>FAILURE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash  --login
+
+echo Start give score
+date
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 1; fi
+
+change=`echo $REFSPEC | cut -d/ -f4`
+# ps=`echo $REFSPEC | cut -d/ -f5`
+if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
+
+labelGrade=&quot;--label $labelName=-1&quot;
+# No grade if this patch-set was merged already
+if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
+
+ATRun=`cat C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt`
+rm -f C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+
+echo Send failed message to Gerrit - $change,$newPS
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;$labelName failed: $BUILD_URL ------ $ATRun&apos;&quot; \
+--notify OWNER $labelGrade \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+
+echo Finish give score
+date</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash --login
+
+echo Start give score
+date
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
+if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
+
+change=`echo $REFSPEC | cut -d/ -f4`
+# ps=`echo $REFSPEC | cut -d/ -f5`
+if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
+
+labelGrade=&quot;--label $labelName=1&quot;
+if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
+
+ATRun=`cat C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt`
+rm -f C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+
+echo Send OK message to Gerrit - $change,$newPS
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;$labelName OK: $BUILD_URL ------ $ATRun&apos;&quot; \
+--notify OWNER $labelGrade \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+echo Finish give score
+date</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>ABORTED</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash --login
+
+if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
+if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
+
+change=`echo $REFSPEC | cut -d/ -f4`
+
+echo Send abort message to Gerrit - $change,$newPS
+ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Automation-Test was aborted: $BUILD_URL&apos;&quot; \
+--notify OWNER \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+            <hudson.tasks.Mailer plugin="mailer@1.21">
+              <recipients>Oren.Assoulin IPPhoneAutomation</recipients>
+              <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+              <sendToIndividuals>false</sendToIndividuals>
+            </hudson.tasks.Mailer>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|OrderlyShutdown).*</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>120</delay>
+      </delay>
+      <maxSchedule>3</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+  </publishers>
+  <buildWrappers>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${CHANGE}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+  <pollSubjobs>false</pollSubjobs>
+</com.tikal.jenkins.plugins.multijob.MultiJobProject>
