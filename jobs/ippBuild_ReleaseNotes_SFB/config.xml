@@ -143,7 +143,7 @@ IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^`
 
 FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
 
-FULL_BRANCH_NAME=origin/release/3.2.0/3.2.0.1003.X
+#FULL_BRANCH_NAME=origin/release/3.2.0/3.2.0.1003.X
 
 if [[ $FULL_BRANCH_NAME == &quot;&quot; ]]; then 
   echo Branch name not found...   exit with error; 
