@@ -189,10 +189,10 @@ else
     	#change serverName to proxy server ip
     	sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
         #change username and password
-    	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.js
-        sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.js 
-     	sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.js
-        cat ${WORKSPACE}/cypress/support/config.js
+    	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
+        sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts 
+     	sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
+        cat ${WORKSPACE}/cypress/support/config.ts
         echo &quot;RUN: yarn run proxyServer&quot;
   	    yarn run proxyServer &amp; sleep 15
         echo &quot;RUN: yarn run uiTests&quot;
