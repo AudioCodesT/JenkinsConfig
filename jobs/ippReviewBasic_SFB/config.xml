@@ -195,7 +195,8 @@ fi
     <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
 
-MAKE_CMD=$(grep AUTOPRD boards2review.yml | tail -3 |  head -1 | cut -c 5-)
+#MAKE_CMD=$(grep AUTOPRD boards2review.yml | tail -3 |  head -1 | cut -c 5-)
+MAKE_CMD=&quot;auto AUTOPRD=440HD&quot;
 echo MAKE_CMD=${MAKE_CMD} &gt; generated_ipp_version.properties
 AUTOPRD=$(echo $MAKE_CMD | sed &apos;s:.*AUTOPRD=::&apos; | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
 echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties
