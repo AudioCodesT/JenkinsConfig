@@ -223,8 +223,13 @@ then
     		yarn run protractor
     	    #all others branches (7.6.1000 and up) run uiTests
 		else
-    		#change serverName to proxy server ip
-    		sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
+			if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]]
+        	then
+        		#change serverName to proxy server ip
+    			sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
+        	else
+       			sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
+        	fi
             #change username and password
     		sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
     	    sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts
