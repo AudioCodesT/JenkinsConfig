@@ -41,7 +41,7 @@
 set -e
 cd $WORKSPACE
 
-repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b 722
 repo sync
 cd Gen5
 sh copyModules.sh
