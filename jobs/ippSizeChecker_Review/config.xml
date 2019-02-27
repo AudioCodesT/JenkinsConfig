@@ -82,10 +82,6 @@
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
-      <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>IPP/SFB</projectName>
-    </browser>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
@@ -93,7 +89,7 @@
         <shallow>true</shallow>
         <noTags>false</noTags>
         <reference></reference>
-        <timeout>10</timeout>
+        <timeout>20</timeout>
         <depth>20</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
