@@ -111,7 +111,12 @@ echo current patchSet is $checkPS - no new code changes, this execution is for P
 
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
-echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
+if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+  echo RunPhases=2 &gt;&gt; ${WORKSPACE}/properties.txt
+else
+  echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
+fi
+
 date
 
 </command>
@@ -168,7 +173,7 @@ ServerType=Lync</properties>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>false</abortAllJob>
-          <condition>${RunPhases} == 1</condition>
+          <condition>${RunPhases} == 2</condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
@@ -244,7 +249,7 @@ else
     fi; fi
   done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
 
-  if [[ &quot;$RunPhases&quot; -eq 1 ]]; then ps=$checkPS; fi
+  if [[ &quot;$RunPhases&quot; -ne 0 ]]; then ps=$checkPS; fi
 fi
 echo merged=$merged &gt;&gt; ${WORKSPACE}/properties.txt
 echo newPS=$ps &gt;&gt; ${WORKSPACE}/properties.txt
@@ -323,7 +328,7 @@ date</command>
 echo Start give score
 date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
-if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
+if [ &quot;${RunPhases}&quot; -eq 0 ]; then exit 0; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
@@ -352,7 +357,7 @@ date</command>
                         <command>#!c:\cygwin\bin\bash --login
 
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
-if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
+if [ &quot;${RunPhases}&quot; -eq 0 ]; then exit 0; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 
