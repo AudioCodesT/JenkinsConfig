@@ -83,9 +83,9 @@ echo change $change, PS: $ps
 REFTARGET=${change}-$ps
 
 echo message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
-if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; ]]; then
-  echo Automation Test for branch 3.1.0 or 3.2 only... exit 1
-  message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot;
+if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;feature/3.2/IGS_unified&quot; ]]; then
+  echo Automation Test for branch 3.1.0, 3.2 or feature/3.2/IGS_unified only... exit 1
+  message=&quot;Automation Test do not work for this branch $GERRIT_BRANCH, aborted Automation Test&quot;
   ssh -p 29418 jenkins@gerrit gerrit review \
    --message &quot;&apos;$message&apos;&quot; \
    --notify OWNER \
@@ -121,7 +121,12 @@ fi
 
 ImageNames=&quot;&quot;
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
-ImagesList=&quot;450HD 445HD 440HD 405HD&quot;
+if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+  ImagesList=&quot;445HD&quot;
+else
+  ImagesList=&quot;450HD 445HD 440HD 405HD&quot;
+fi
+
 curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.img&apos; \
     | grep -v logs | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
 if [ -s &quot;$REFTARGET.list&quot; ]; then
@@ -154,7 +159,7 @@ echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
 
 # Don&apos;t execute the next job in case you don&apos;t found 4 files
 ls $Target/*$ImageNames.img
-if [ `ls $Target/*$ImageNames.img | wc -l` -lt 4 ]; then echo &quot;Missing img files, exiting job&quot;; exit 2; fi
+if [ `ls $Target/*$ImageNames.img | wc -l` -lt $(echo $ImagesList | wc -w) ]; then echo &quot;Missing img files, exiting job&quot;; exit 2; fi
 #if [ `ls $Target/*$ImageNames.sim.tgz | wc -l` != 5 ]; then echo &quot;Missing .sim.tgz files, exiting job&quot;; exit 2; fi
 
 # Check if ipp_AT_parent job is in the queue or already running
