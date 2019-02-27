@@ -42,7 +42,12 @@ set -e
 cd $WORKSPACE
 
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests
-repo sync</command>
+repo sync
+cd Gen5
+sh copyModules.sh
+cp /c/TI/NMAKE/NMAKE.exe ${WORKSPACE}/Gen5/Ac505/Device/NMAKE.exe
+NMAKE.exe ReBuildAll BUILD_ON_MACHINE=1
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
