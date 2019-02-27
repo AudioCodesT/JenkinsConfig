@@ -114,8 +114,8 @@ failedToCurlOnceAtLeast=&quot;False&quot;
 User=&quot;$artifactory_user:$artifactory_password&quot;
 NEWLINE=$&apos;\n&apos;
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
-OLDTAG_TEST=$(git describe --abbrev=0 --tags)
+#OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
+OLDTAG=$(git describe --abbrev=0 --tags)
 echo $OLDTAG_TEST
 passAtLeastOnce=&quot;False&quot;
 localCurlFailed=&quot;False&quot;
