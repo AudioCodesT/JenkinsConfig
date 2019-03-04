@@ -174,7 +174,7 @@ cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EX
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.BatchFile>
-      <command>cd &quot;${WORKSPACE}\Gen5\${CHIP_NAME}\Device&quot;&#xd;
+      <command>cd /C &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
 NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
     </hudson.tasks.BatchFile>
   </builders>
