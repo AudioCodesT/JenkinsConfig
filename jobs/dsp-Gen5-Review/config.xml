@@ -152,23 +152,23 @@
 set -e
 cd ${WORKSPACE}
 #delete all files in current path
+echo &quot;rm -rf *&quot;
 rm -rf *
-path=$(pwd)
-echo &quot;path=$path&quot;
 
+echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+echo &quot;repo sync&quot;
 repo sync
 
 # cd to releant path
 cd Gen5
-path=$(pwd)
-echo &quot;path=$path&quot;
 
-echo Fetch this change $GERRIT_REFSPEC
-echo git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC
+echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
 git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
+echo &quot;sh copyModules.sh&quot;
 sh copyModules.sh
+echo &quot;cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE&quot;
 cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
 </command>
