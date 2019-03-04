@@ -150,19 +150,23 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
 set -e
-cd $WORKSPACE
+path=$(pwd)
+echo &quot;path=$path&quot;
 
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
 repo sync
 
 # cd to releant path
 cd Gen5
+path=$(pwd)
+echo &quot;path=$path&quot;
+
 echo Fetch this change $GERRIT_REFSPEC
 echo git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC
 git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 sh copyModules.sh
-cp /c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
+cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
 </command>
     </hudson.tasks.Shell>
@@ -179,6 +183,11 @@ NMAKE.exe ReBuildAll BUILD_ON_MACHINE=1</command>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+      <deleteDirs>false</deleteDirs>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
       <runAtStart>true</runAtStart>
