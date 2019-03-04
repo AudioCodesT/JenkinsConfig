@@ -149,7 +149,15 @@ cd $WORKSPACE
 
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
 repo sync
+
+# cd to releant path
 cd Gen5
+echo Fetch this change $GERRIT_REFSPEC
+echo git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC
+git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+
+
+
 sh copyModules.sh
 cp /c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
