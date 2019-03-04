@@ -171,7 +171,8 @@ date
 for BOARD in $BoardsList; do
 
   # In case of 445HD_IGS, the image name is without the _IGS
-  imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
+  #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
+  imageName=UC${BOARD}_$LASTBL.img
 
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
