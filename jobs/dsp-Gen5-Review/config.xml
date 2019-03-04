@@ -24,6 +24,16 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
@@ -37,7 +47,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>dsp-win-dynamic</assignedNode>
+  <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -96,16 +106,12 @@
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <axes>
-    <ca.silvermaplesolutions.jenkins.plugins.daxis.DynamicAxis plugin="dynamic-axis@1.0.3">
-      <name>Ac505</name>
+    <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
+      <name>CHIP_NAME</name>
       <values>
-        <string>chip_name</string>
+        <string>chips2compile.yml</string>
       </values>
-      <varName>chip_name</varName>
-      <axisValues>
-        <string>default</string>
-      </axisValues>
-    </ca.silvermaplesolutions.jenkins.plugins.daxis.DynamicAxis>
+    </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
@@ -115,13 +121,30 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command></command>
+      <command>#!c:\cygwin64\bin\bash --login -i
+set -e
+cd $WORKSPACE
+
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+repo sync
+cd Gen5
+sh copyModules.sh
+cp /c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
+
+</command>
     </hudson.tasks.Shell>
     <hudson.tasks.BatchFile>
-      <command></command>
+      <command>CD /C ${WORKSPACE}\Gen5\${CHIP_NAME}\Device&#xd;
+NMAKE.exe ReBuildAll BUILD_ON_MACHINE=1</command>
     </hudson.tasks.BatchFile>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}</template>
