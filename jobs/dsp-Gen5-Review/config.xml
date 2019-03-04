@@ -150,6 +150,7 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
 set -e
+cd ${WORKSPACE}
 git config --global user.name &quot;Jenkins&quot;
 git config --global user.email &quot;devops@audiocodes.com&quot;
 path=$(pwd)
