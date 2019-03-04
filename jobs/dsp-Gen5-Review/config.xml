@@ -12,8 +12,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>30</daysToKeep>
-        <numToKeep>-1</numToKeep>
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -174,7 +174,7 @@ cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EX
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.BatchFile>
-      <command>cd /C &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
+      <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
 NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
     </hudson.tasks.BatchFile>
   </builders>
