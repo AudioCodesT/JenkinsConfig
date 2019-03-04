@@ -192,7 +192,7 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}</template>
+      <template>#${BUILD_NUMBER} Branch:${GERRIT_BRANCH} CHIP:${CHIP_NAME}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
