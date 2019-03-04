@@ -151,8 +151,8 @@
       <command>#!c:\cygwin64\bin\bash --login -i
 set -e
 cd ${WORKSPACE}
-git config --global user.name &quot;Jenkins&quot;
-git config --global user.email &quot;devops@audiocodes.com&quot;
+#delete all files in current path
+rm -rf *
 path=$(pwd)
 echo &quot;path=$path&quot;
 
