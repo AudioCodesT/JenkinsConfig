@@ -134,9 +134,12 @@
       <command>#!c:\cygwin\bin\bash  --login
 date
 
-ATA_Home=C:/IpPhoneAutomation/ATA
 if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
   ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+    modelImage=UC${MODEL}HD_IGS_${IMAGENAMES}.img
+else
+  ATA_Home=C:/IpPhoneAutomation/ATA
+  modelImage=UC${MODEL}HD_${IMAGENAMES}.img
 fi
   
 cd $ATA_Home
@@ -163,7 +166,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
  
  echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
--firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img \
+-firmwareVersionMain $modelImage \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
 -jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
@@ -171,7 +174,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
  set -o pipefail
  tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
--firmwareVersionMain UC${MODEL}HD_${IMAGENAMES}.img \
+-firmwareVersionMain $modelImage \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
 -jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
