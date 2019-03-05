@@ -80,7 +80,8 @@ EOF
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>cc:ben.magriso@audiocodes.com cc:Shuky.Riechard@audiocodes.com</recipientList>
+      <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com,
+cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
@@ -100,8 +101,12 @@ EOF
       </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>ARM Router &amp; Configurator ${TAG} VHD created successfully</defaultSubject>
-      <defaultContent>ARM Router ${TAG} VHD: https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}
-ARM Configurator ${TAG} VHD: https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}</defaultContent>
+      <defaultContent>ARM Router ${TAG} VHDX:
+https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}
+
+ARM Configurator ${TAG} VHDX:
+https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
+</defaultContent>
       <attachmentsPattern></attachmentsPattern>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
