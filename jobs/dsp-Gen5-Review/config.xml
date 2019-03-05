@@ -200,5 +200,5 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>
-  <childCustomWorkspace>${WORKSPACE}\Gen5\${GERRIT_BRANCH}\${CHIP_NAME}</childCustomWorkspace>
+  <childCustomWorkspace>Gen5\${GERRIT_BRANCH}\${CHIP_NAME}</childCustomWorkspace>
 </matrix-project>
