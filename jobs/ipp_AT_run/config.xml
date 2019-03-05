@@ -104,6 +104,12 @@
           <defaultValue>Sanity</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ServerType</name>
+          <description></description>
+          <defaultValue>Lync</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -127,11 +133,13 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login
 date
-#if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
-#  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
-#else
-  cd C:/IpPhoneAutomation/ATA
-#fi
+
+ATA_Home=C:/IpPhoneAutomation/ATA
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
+  ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+fi
+  
+cd $ATA_Home
 
 ActiveFolder=`pwd`
 echo active folder is: $ActiveFolder
@@ -254,7 +262,7 @@ echo Find $ID
 
 if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
 
-if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
   cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
 else  
   cd C:/IpPhoneAutomation/ATA
@@ -336,7 +344,13 @@ labelName=&quot;Automation-Test&quot;;
 if [[ &quot;$CONFIGNAME&quot; =~ &quot;sim&quot; ]]; then labelName=&quot;Automation-Test-Sim&quot;; fi
 
 echo $labelName for $SUITENAME $MESSAGE
-echo &quot;--- $labelName for $SUITENAME $MESSAGE: $URL - $BUILD_URL&quot; &gt;&gt; C:/IpPhoneAutomation/ATA/$IMAGENAMES.txt
+
+ATA_Home=C:/IpPhoneAutomation/ATA
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
+  ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+fi
+
+echo &quot;--- $labelName for $SUITENAME $MESSAGE: $URL - $BUILD_URL&quot; &gt;&gt; $ATA_Home/$IMAGENAMES.txt
 
 date
 </command>
