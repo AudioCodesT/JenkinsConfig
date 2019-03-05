@@ -203,7 +203,8 @@ SUITENAME=basic1of4
 IMAGENAMES=$IMAGENAMES
 PHASE=1
 EMAIL=${EMAIL}
-BUILD_PARENT=${BUILD_NUMBER}</properties>
+BUILD_PARENT=${BUILD_NUMBER}
+ServerType=${ServerType}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -238,7 +239,8 @@ SUITENAME=basic2of4
 IMAGENAMES=$IMAGENAMES
 PHASE=2
 EMAIL=${EMAIL}
-BUILD_PARENT=${BUILD_NUMBER}</properties>
+BUILD_PARENT=${BUILD_NUMBER}
+ServerType=${ServerType}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -273,7 +275,8 @@ SUITENAME=basic3of4
 IMAGENAMES=$IMAGENAMES
 PHASE=3
 EMAIL=${EMAIL}
-BUILD_PARENT=${BUILD_NUMBER}</properties>
+BUILD_PARENT=${BUILD_NUMBER}
+ServerType=${ServerType}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -308,7 +311,8 @@ SUITENAME=basic4of4
 IMAGENAMES=$IMAGENAMES
 PHASE=4
 EMAIL=${EMAIL}
-BUILD_PARENT=${BUILD_NUMBER}</properties>
+BUILD_PARENT=${BUILD_NUMBER}
+ServerType=${ServerType}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
