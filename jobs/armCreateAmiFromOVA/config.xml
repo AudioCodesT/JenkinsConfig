@@ -151,8 +151,9 @@ qaAccount=&quot;191324562914&quot;
 aws ec2 modify-image-attribute --image-id $confAmiID --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
 aws ec2 modify-image-attribute --image-id $routerAmiID --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
 #give permissions to ovoc QA Account to the SNAPSHOT
-aws ec2 modify-snapshot-attribute --snapshot-id $confSnapshotId --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
-aws ec2 modify-snapshot-attribute --snapshot-id $routerSnapshotId --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
+aws ec2 modify-snapshot-attribute --snapshot-id $confSnapshotId --attribute createVolumePermission --operation-type add --user-ids $qaAccount
+aws ec2 modify-snapshot-attribute --snapshot-id $routerSnapshotId --attribute createVolumePermission --operation-type add --user-ids $qaAccount
+
 
 echo &quot;confAmiID=${confAmiID}&quot; &gt; properties
 echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
