@@ -192,7 +192,7 @@
       <command>#check disk size if there is no enough space, delete all workspace
 set +e
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo &quot;$disk_size&quot; | tr -s &quot; &quot;)
+disk_size=$(echo &quot;$disk_size&quot; | tr -s &quot; &quot;| cut -d&apos;G&apos; -f1)
 echo $disk_size</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
