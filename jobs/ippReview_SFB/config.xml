@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.12">
+<matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description>Activated by after “Push to Gerrit”:&#xd;
 </description>
@@ -51,7 +51,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -63,7 +63,7 @@
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -188,6 +188,13 @@
     </hudson.matrix.LabelAxis>
   </axes>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#check disk size if there is no enough space, delete all workspace
+set +e
+disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
+disk_size=$(echo &quot;$disk_size&quot; | tr -s &quot; &quot;)
+echo $disk_size</command>
+    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
 AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
@@ -334,7 +341,7 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}
 FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
 Owner=$GERRIT_PATCHSET_UPLOADER_NAME
 if [[ ! $GERRIT_BRANCH =~ private ]]; then
-  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] ; then
+  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Shai Peretz&quot; ] ; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
       CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
@@ -420,7 +427,7 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
