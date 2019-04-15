@@ -12,8 +12,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>21</daysToKeep>
-        <numToKeep>800</numToKeep>
+        <daysToKeep>14</daysToKeep>
+        <numToKeep>300</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -134,13 +134,8 @@
       <command>#!c:\cygwin\bin\bash  --login
 date
 
-if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
-  ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-    modelImage=UC${MODEL}HD_IGS_${IMAGENAMES}.img
-else
-  ATA_Home=C:/IpPhoneAutomation/ATA
-  modelImage=UC${MODEL}HD_${IMAGENAMES}.img
-fi
+ATA_Home=C:/IpPhoneAutomation/ATA
+modelImage=UC${MODEL}HD_${IMAGENAMES}.img
   
 cd $ATA_Home
 
@@ -159,22 +154,28 @@ date
 pwd
 hostname
 net use
+
+addParameters=&quot;&quot;
+if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
+ addParameters=&quot;-firmwareVersion440 UC440HD_3.1.4.116.img -firmwareVersion405 UC405HD_3.1.4.116.img&quot; 
+fi
+
 echo ls -l z:/UC*HD_${IMAGENAMES}.*
 echo ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
 
 if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 0 ]; then
  
- echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
--suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
--firmwareVersionMain $modelImage \
+ echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}${ServerType}Config_${CONFIGNAME}.tcl \
+-suiteName ${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.suite \
+-firmwareVersionMain $modelImage $addParameters \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
 -jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
 
  set -o pipefail
- tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}LyncConfig_${CONFIGNAME}.tcl \
--suiteName ${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.suite \
--firmwareVersionMain $modelImage \
+ tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}${ServerType}Config_${CONFIGNAME}.tcl \
+-suiteName ${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.suite \
+-firmwareVersionMain $modelImage $addParameters \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
 -jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
 -ci 1 -rerunFailedAuto 1
@@ -183,8 +184,8 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 
  if [ &quot;$ExitCode&quot; == &quot;&quot; ]; then  ExitCode=1; fi
 
- echo http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml
- ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+ echo http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.xml
+ ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
  echo Find $ID with the new command
 
  echo ATA was finished
@@ -246,11 +247,7 @@ exit $ExitCode</command>
                 <buildSteps>
                   <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                     <results>
-                      <string>SUCCESS</string>
-                      <string>NOT_BUILT</string>
                       <string>ABORTED</string>
-                      <string>FAILURE</string>
-                      <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
                     <buildSteps>
@@ -258,25 +255,26 @@ exit $ExitCode</command>
                         <command>#!c:\cygwin\bin\bash --login
 
 date
+echo PS list
+pslist
+
 #ID=`grep &quot;session id:&quot; ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2`
-ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}Lync_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
 
 echo Find $ID
 
 if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
 
-if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
-  cd  C:/IpPhoneAutomation/ModifeidIterations/ATA
-else  
-  cd C:/IpPhoneAutomation/ATA
-fi
+cd C:/IpPhoneAutomation/ATA
 
 echo MESSAGE=Aborted &gt;&gt; $WORKSPACE/properties.txt
 echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
 echo CONFIGNAME=${CONFIGNAME} ATA-${ID} &gt;&gt; $WORKSPACE/properties.txt
 
 echo Stop Ata $ID
-tclsh AtaExec.tcl -stop $ID
+if [ &quot;$ID&quot; != &quot;NotFound&quot; ]; then
+  tclsh AtaExec.tcl -stop $ID
+fi
 date
 </command>
                       </hudson.tasks.Shell>
@@ -349,9 +347,6 @@ if [[ &quot;$CONFIGNAME&quot; =~ &quot;sim&quot; ]]; then labelName=&quot;Automa
 echo $labelName for $SUITENAME $MESSAGE
 
 ATA_Home=C:/IpPhoneAutomation/ATA
-if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
-  ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-fi
 
 echo &quot;--- $labelName for $SUITENAME $MESSAGE: $URL - $BUILD_URL&quot; &gt;&gt; $ATA_Home/$IMAGENAMES.txt
 
@@ -427,16 +422,14 @@ date
         <timeoutSecondsString>900</timeoutSecondsString>
       </strategy>
       <operationList>
-        <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
-          <maxRestarts>2</maxRestarts>
-        </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
         <hudson.plugins.build__timeout.operations.WriteDescriptionOperation>
           <description>Timeout problem</description>
         </hudson.plugins.build__timeout.operations.WriteDescriptionOperation>
+        <hudson.plugins.build__timeout.operations.AbortOperation/>
       </operationList>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} ${REFSPEC} ${CONFIGNAME}</template>
+      <template>#${BUILD_NUMBER} ${REFSPEC} ${CONFIGNAME} ${ServerType}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
