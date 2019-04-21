@@ -119,7 +119,7 @@ echo $OLDTAG_TEST
 passAtLeastOnce=&quot;False&quot;
 localCurlFailed=&quot;False&quot;
 localCurlCount=2
-BUILD_BRANCH=$(git branch | tail -1)
+BRANCH=$(git branch | tail -1)
 
 
 if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
@@ -139,7 +139,7 @@ fi
    	  #get the New Tag
       curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
-      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
       if [[ &quot;$localCurlFailed&quot; == &quot;True&quot; ]]
       then
