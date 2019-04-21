@@ -119,7 +119,7 @@ echo $OLDTAG_TEST
 passAtLeastOnce=&quot;False&quot;
 localCurlFailed=&quot;False&quot;
 localCurlCount=2
-BRANCH=$(git branch | tail -1)
+BRANCH=$(git branch | tail -1| cut -d&apos; &apos; -f3)
 
 
 if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
