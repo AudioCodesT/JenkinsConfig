@@ -131,6 +131,14 @@
               <compareType>ANT</compareType>
               <pattern>release/3.2*/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>3.1**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>3.2</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -192,8 +200,14 @@
       <command>#check disk size if there is no enough space, delete all workspace
 set +e
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo &quot;$disk_size&quot; | tr -s &quot; &quot;| cut -d&apos;G&apos; -f1)
-echo $disk_size</command>
+disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
+disk_size=${disk_size%.*}
+if [[ $disk_size -le 8 ]]
+then
+echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
+find /opt/jenkinsslave/workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
+df -h
+fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
@@ -457,5 +471,5 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>
-  <childCustomWorkspace>${SHORT_COMBINATION}</childCustomWorkspace>
+  <childCustomWorkspace>/opt/jenkinsslave/workspace/SFB</childCustomWorkspace>
 </matrix-project>
