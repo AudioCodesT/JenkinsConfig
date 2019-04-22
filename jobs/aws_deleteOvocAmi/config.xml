@@ -95,7 +95,7 @@ for image in images:
      		    imagesListOf7_6_1000.append(image)    
              if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.6.2000&apos;:
                 imagesListOf7_6_2000.append(image)
-	 if image.name.startswith(&apos;ovocAMI_7.8&apos;):
+     if image.name.startswith(&apos;ovocAMI_7.8&apos;):
         for tag in image.tags:
              if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.8&apos;:
                 imagesListOf7_8.append(image)
