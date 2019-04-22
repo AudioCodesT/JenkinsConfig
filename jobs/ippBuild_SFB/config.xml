@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.12">
+<matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description>Activated by ippBuild_ReleaseNotes_SFB</description>
   <keepDependencies>false</keepDependencies>
@@ -12,7 +12,7 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>30</daysToKeep>
+        <daysToKeep>24</daysToKeep>
         <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
@@ -56,7 +56,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -68,7 +68,7 @@
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -93,14 +93,14 @@
         <shallow>true</shallow>
         <noTags>false</noTags>
         <reference></reference>
-        <timeout>20</timeout>
+        <timeout>40</timeout>
         <depth>10</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <scmCheckoutRetryCount>4</scmCheckoutRetryCount>
-  <assignedNode>ipp-centos7.4</assignedNode>
+  <assignedNode>ipp-matrix-parents-centos7.4</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -122,6 +122,18 @@
     </hudson.matrix.LabelAxis>
   </axes>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#check disk size if there is no enough space, delete all workspace
+set +e
+disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
+disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
+disk_size=${disk_size%.*}
+if [[ $disk_size -le 8 ]]
+then
+echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
+find /opt/jenkinsslave/workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete
+fi</command>
+    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Set the IPP_VER variable - first JOB project parameterized
 IPP_VER=$NEWTAG
@@ -182,7 +194,12 @@ NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{pri
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
-  make $PARAMS
+  if [[ &quot;$PARAMS&quot; =~ binary &amp;&amp; ! &quot;${BUILD_BRANCH}&quot; =~ &quot;release&quot; ]]
+  then
+  		echo &quot;dont run make $PARAMS, branch is not release: ${BUILD_BRANCH}&quot;
+  else
+  		make $PARAMS
+  fi
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 done
 
@@ -217,9 +234,9 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$BUILD_BRANCH&quot; == &quot;3.2&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_device_manager&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.1.0.199/HTTP_based_Services_Communication&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/media_separation_IGS&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/EMS_Client&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/3.2/IGS_unified&quot; ]]
-then exit 0 
-else exit 1 
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.0&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;3.1&quot;* ]]
+then
+exit 1
 fi</command>
           </condition>
           <publisherList>
@@ -230,7 +247,7 @@ fi</command>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                   </configs>
                   <projects>ippSizeChecker</projects>
-                  <condition>SUCCESS</condition>
+                  <condition>FAILED_OR_BETTER</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                   <triggerFromChildProjects>false</triggerFromChildProjects>
                 </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
@@ -321,7 +338,7 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -347,5 +364,5 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>
-  <childCustomWorkspace>${SHORT_COMBINATION}</childCustomWorkspace>
+  <childCustomWorkspace>/opt/jenkinsslave/workspace/SFB</childCustomWorkspace>
 </matrix-project>
