@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.12">
+<matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -49,27 +49,24 @@
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
+        <refspec>+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}</refspec>
         <url>ssh://jenkins@gerrit:29418/DSP/Gen5</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>${GERRIT_BRANCH}</name>
+        <name>refs/heads/${GERRIT_BRANCH}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
+      <hudson.plugins.git.extensions.impl.WipeWorkspace/>
       <hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
         <sparseCheckoutPaths>
           <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
@@ -96,14 +93,24 @@
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
+        <string>dsp-centos-dynamic</string>
         <string>dsp-win-dynamic</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
+  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;intel&apos;)</combinationFilter>
   <builders>
-    <hudson.tasks.Shell>
-      <command>#!c:\cygwin64\bin\bash --login -i
-set -e
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+        <arg1>${label}</arg1>
+        <arg2>dsp-win-dynamic</arg2>
+        <ignoreCase>false</ignoreCase>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.tasks.Shell>
+          <command>#!c:\cygwin64\bin\bash --login -i
+set -ex
 cd ${WORKSPACE}
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
@@ -119,24 +126,48 @@ sh copyModules.sh
 echo &quot;cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE&quot;
 cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
-#increase new Tag by one
-OLDTAG=$(git describe --tags --first-parent $GERRIT_BRANCH)
-NEWTAG=`echo $OLDTAG | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $OLDTAG | awk -F. &apos;{print $NF+1}&apos;`
-echo NEWTAG=${NEWTAG} &gt; properties
+
 </command>
-    </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
-    <hudson.tasks.BatchFile>
-      <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
+        </hudson.tasks.Shell>
+        <hudson.tasks.BatchFile>
+          <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
 NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
-    </hudson.tasks.BatchFile>
+        </hudson.tasks.BatchFile>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+        <arg1>${label}</arg1>
+        <arg2>dsp-centos-dynamic</arg2>
+        <ignoreCase>false</ignoreCase>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.tasks.Shell>
+          <command>cd ${WORKSPACE}
+
+echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+echo &quot;repo sync&quot;
+repo sync
+
+# cd to releant path
+cd Gen5
+
+echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
+git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+#copy all modules to relevant path in Gen5 Modules directory
+echo &quot;sh copyModules.sh&quot;
+sh copyModules.sh
+
+
+</command>
+        </hudson.tasks.Shell>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
-    <hudson.plugins.git.GitPublisher plugin="git@3.8.0">
+    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
       <configVersion>2</configVersion>
       <pushMerge>false</pushMerge>
       <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
@@ -158,6 +189,16 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
+      <script>#!/bin/sh
+OLDTAG=$(git describe --abbrev=0 --tags)
+NEWTAG=`echo $OLDTAG | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $OLDTAG | awk -F. &apos;{print $NF+1}&apos;`
+echo OLDTAG=${OLDTAG}
+echo NEWTAG=${NEWTAG}</script>
+      <scriptType>unixScript</scriptType>
+      <runOnlyOnParent>true</runOnlyOnParent>
+      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
+    </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
@@ -199,7 +240,7 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>Gen5/Out=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}</deployPattern>
+      <deployPattern>Gen5/${CHIP_NAME}/Out/*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
