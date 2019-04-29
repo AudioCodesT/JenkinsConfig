@@ -112,7 +112,7 @@
           <command>#!c:\cygwin64\bin\bash --login -i
 set -ex
 cd ${WORKSPACE}
-
+rm -rf *
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
 echo &quot;repo sync&quot;
