@@ -202,10 +202,9 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
       <conditionalbuilders>
         <hudson.tasks.Shell>
           <command>compile_intel(){
-cd ${WORKSPACE}/Intel/$1
+cd ${WORKSPACE}/Gen5/Intel/$1
 make clean
 make all
-
 }
 
 
