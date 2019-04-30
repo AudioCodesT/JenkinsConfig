@@ -353,7 +353,7 @@ fi</command>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
       <recipientList>OVOCWebUI@audiocodes.com, cc:ben.magriso, cc:Shuky.Riechard</recipientList>
       <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.XNthFailureTrigger>
+        <hudson.plugins.emailext.plugins.trigger.StillFailingTrigger>
           <email>
             <subject>$PROJECT_DEFAULT_SUBJECT</subject>
             <body>$PROJECT_DEFAULT_CONTENT</body>
@@ -366,9 +366,7 @@ fi</command>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
             <contentType>project</contentType>
           </email>
-          <failureCount>0</failureCount>
-          <requiredFailureCount>3</requiredFailureCount>
-        </hudson.plugins.emailext.plugins.trigger.XNthFailureTrigger>
+        </hudson.plugins.emailext.plugins.trigger.StillFailingTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>ALERT !!!  OVOC WEB-UI BUILD FAILED AFTER SUBMIT  !!!  ALERT</defaultSubject>
