@@ -98,7 +98,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;intel&apos;)</combinationFilter>
+  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos;)</combinationFilter>
   <builders>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
@@ -144,7 +144,15 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
       </runCondition>
       <conditionalbuilders>
         <hudson.tasks.Shell>
-          <command>cd ${WORKSPACE}
+          <command>compile_intel(){
+cd ${WORKSPACE}/Gen5/Intel/$1
+make clean
+make all
+}
+
+
+cd ${WORKSPACE}
+set -xe
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
@@ -154,11 +162,21 @@ repo sync
 # cd to releant path
 cd Gen5
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
-echo &quot;sh copyModules.sh&quot;
-sh copyModules.sh
+echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
+sh copyModules.sh ${CHIP_NAME}
+
+#run all 4 make in parallel (SoftDsp and SoftHost)
+if [[ ${CHIP_NAME} == &quot;Intel&quot; ]]
+then
+	run_make=(&quot;SoftDsp/communicator_64&quot; &quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/communicator_64&quot; &quot;SoftHost/Hpi_64&quot;)
+	for path_to_run_make in ${run_make[@]}
+	do
+		compile_intel $path_to_run_make &amp;
+	done
+fi
+wait
+echo &quot;Finish running make for SoftDsp and SoftHost&quot;
 
 
 </command>
