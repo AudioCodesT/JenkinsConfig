@@ -289,7 +289,10 @@ echo &quot;Finish running make for SoftDsp and SoftHost&quot;
         <spec></spec>
       </downloadSpec>
       <deployPattern>Gen5/${CHIP_NAME}/Out/*=&gt;com/ac/dsp/Gen5/temp_output/${GERRIT_BRANCH}/${CHIP_NAME}/Out
-Gen5/${CHIP_NAME}/Soft*=&gt;com/ac/dsp/Gen5/temp_output/${GERRIT_BRANCH}/${CHIP_NAME}/Out</deployPattern>
+Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*=&gt;com/ac/dsp/Gen5/temp_output/${GERRIT_BRANCH}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/temp_output/${GERRIT_BRANCH}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*=&gt;com/ac/dsp/Gen5/temp_output/${GERRIT_BRANCH}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/temp_output/${GERRIT_BRANCH}/${CHIP_NAME}/Out</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
