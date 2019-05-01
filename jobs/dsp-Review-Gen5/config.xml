@@ -203,8 +203,9 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
         <hudson.tasks.Shell>
           <command>compile_intel(){
 cd ${WORKSPACE}/Gen5/Intel/$1
+output_textfile_name=$(echo $1 | sed &apos;s/\//_/g&apos;)
 make clean
-make all
+make all &gt; ${WORKSPACE}/$output_textfile_name.txt
 }
 
 
@@ -240,6 +241,14 @@ echo &quot;Finish running make for SoftDsp and SoftHost&quot;
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>SoftDsp_communicator_64.txt,SoftDsp_Hpi_64.txt, SoftHost_communicator_64.txt, SoftHost_Hpi_64.txt</artifacts>
+      <allowEmptyArchive>true</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
