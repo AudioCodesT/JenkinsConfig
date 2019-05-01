@@ -258,7 +258,11 @@ echo NEWTAG=${NEWTAG}</script>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>Gen5/${CHIP_NAME}/Out/*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out</deployPattern>
+      <deployPattern>Gen5/${CHIP_NAME}/Out/*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
@@ -270,7 +274,7 @@ echo NEWTAG=${NEWTAG}</script>
       <discardOldBuilds>true</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;dsp-win-dynamic&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;dsp-win-dynamic&quot; &amp;&amp; label==&quot;dsp-centos-dynamic&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
