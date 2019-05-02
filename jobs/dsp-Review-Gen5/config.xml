@@ -205,7 +205,7 @@ NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
 cd ${WORKSPACE}/Gen5/Intel/$1
 output_textfile_name=$(echo $1 | sed &apos;s/\//_/g&apos;)
 make clean
-make all &gt; ${WORKSPACE}/$output_textfile_name.txt
+make all &gt; ${WORKSPACE}/$output_textfile_name.txt 2&gt;&amp;1
 }
 
 
