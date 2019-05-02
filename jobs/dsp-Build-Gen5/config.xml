@@ -131,18 +131,14 @@ cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EX
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
           <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
-NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1</command>
+NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1&#xd;
+&#xd;
+&#xd;
+cd &quot;%WORKSPACE%\Gen5\${CHIP_NAME}\Out&#xd;
+powershell Compress-Archive . %CHIP_NAME%_%NEWTAG%_Out.zip&#xd;
+cd &quot;%WORKSPACE%\Gen5\${CHIP_NAME}\Misc&#xd;
+powershell Compress-Archive . %CHIP_NAME%_%NEWTAG%_Misc.zip</command>
         </hudson.tasks.BatchFile>
-        <hudson.tasks.Shell>
-          <command>#!c:\cygwin64\bin\bash --login -i
-set -ex
-
-#after compilation finish, make zip file from misc folder and out folder
-cd ${WORKSPACE}/Gen5/${CHIP_NAME}/Out
-tar -cvf ${CHIP_NAME}_${NEWTAG}_Out.tgz .
-cd ${WORKSPACE}/Gen5/${CHIP_NAME}/Misc
-tar -cvf ${CHIP_NAME}_${NEWTAG}_Misc.tgz .</command>
-        </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
