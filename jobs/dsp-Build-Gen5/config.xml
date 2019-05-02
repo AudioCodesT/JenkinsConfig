@@ -134,9 +134,9 @@ cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EX
 NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1&#xd;
 &#xd;
 &#xd;
-cd &quot;%WORKSPACE%\Gen5\${CHIP_NAME}\Out&#xd;
+cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Out&#xd;
 powershell Compress-Archive . %CHIP_NAME%_%NEWTAG%_Out.zip&#xd;
-cd &quot;%WORKSPACE%\Gen5\${CHIP_NAME}\Misc&#xd;
+cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Misc&#xd;
 powershell Compress-Archive . %CHIP_NAME%_%NEWTAG%_Misc.zip</command>
         </hudson.tasks.BatchFile>
       </conditionalbuilders>
