@@ -37,12 +37,14 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
+        <refspec>$GERRIT_REFSPEC</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/C450/C450-linux-kernel</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>c450hd_android_linux_kernel</name>
+        <name>$GERRIT_BRANCH</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
