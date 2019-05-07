@@ -159,8 +159,8 @@ git submodule update
 cd Source
 git checkout ${GERRIT_PATCHSET_REVISION}
 cd ..
-#copy files to IPP/Android/device_dspg_dvg101-kernel
 
+#copy files to IPP/Android/device_dspg_dvg101-kernel
 tail -n +1 ${file_path} | while IFS= read -r line
 do
 	sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
