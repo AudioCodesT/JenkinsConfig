@@ -35,7 +35,7 @@
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -120,6 +120,12 @@
         <name>tinyalsa</name>
         <refspec>+refs/heads/*:refs/remotes/tinyalsa/* +refs/tags/*:refs/tags/tinyalsa/*</refspec>
         <url>ssh://jenkins@gerrit:29418/IPP/Android/external_tinyalsa</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>common</name>
+        <refspec>+refs/heads/*:refs/remotes/common/* +refs/tags/*:refs/tags/common/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_audiocodes_common</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -404,7 +410,7 @@ done
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>shuky.riechard yossim</recipients>
+      <recipients>shuky.riechard yossim ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
