@@ -138,7 +138,7 @@ do
 	cp ${sourcePath} ${destPath}
 done
 
-cat device/dspg/c450hd-kernel/uImage device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/dvf101-c450hd-a1-emmc.dtb device/dspg/c450hd-kernel/uImage-dtb
+cat device/dspg/c450hd-kernel/uImage device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/dvf101-c450hd-a1-emmc.dtb &gt; device/dspg/c450hd-kernel/uImage-dtb
 
 #run android compilation
 ./build/tools/make_c450hd.sh --zip-images
