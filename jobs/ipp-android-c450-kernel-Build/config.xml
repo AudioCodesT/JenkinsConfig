@@ -74,7 +74,7 @@
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
-              <pattern>c450hd_android_linux_kernel</pattern>
+              <pattern>testBranch</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -155,7 +155,7 @@ cd ..
 #create the new commit
 git add .
 git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
-#git push
+git push
 
 </command>
     </hudson.tasks.Shell>
