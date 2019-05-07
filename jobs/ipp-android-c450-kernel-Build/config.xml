@@ -151,8 +151,8 @@ cat &lt;&lt;-EOF &gt; ~/.netrc
 machine test-gerrit login jenkins password $jpass
 machine gerrit login jenkins password $jpass
 EOF
-git -c http.sslverify=false clone -n https://gerrit/IPP/Android/device_dspg_dvg101-kernel
-cd device_dspg_dvg101-kernel
+git -c http.sslverify=false clone -n https://gerrit/IPP/Android/device_dspg_dvf101-kernel
+cd device_dspg_dvf101-kernel
 #update submodule to the current GERRIT_PATCHSET_REVISION of this change
 git submodule init
 git submodule update
