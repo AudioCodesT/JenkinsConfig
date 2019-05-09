@@ -153,6 +153,10 @@ cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divid
 
 #clone IPP/Android/device_dspg_dvg101-kernel repository and create there a new commit
 cd ${WORKSPACE}
+if [[ -e device_dspg_dvf101-kernel ]]
+then
+rm -rf device_dspg_dvf101-kernel
+fi
 git clone ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel
 cd device_dspg_dvf101-kernel
 git checkout master || echo &quot;already on master&quot;
