@@ -307,13 +307,13 @@ git remote -v
 subject=&quot;&quot;
 
 echo Sleep 5 minutes before starting check commits
-#sleep 300
+sleep 300
 
 for BRANCH in master
 do
   # Find remote repository name
   remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
-  remote=remotes/dvf101/master
+  #remote=remotes/dvf101/master
   MainlocalRepoName=$(echo $remote | cut -d/ -f2)
 
   GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
