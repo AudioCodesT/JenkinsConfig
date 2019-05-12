@@ -179,7 +179,7 @@ do
 	sourcePath=${WORKSPACE}/${sourcePath}
 	cp ${sourcePath} .
 done
-
+cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
 #create the new commit
 git add .
 git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
