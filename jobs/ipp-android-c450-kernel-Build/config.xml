@@ -128,7 +128,7 @@ cd ../ipp-android-review
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
 repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 
-#copy all files from list to android dir
+#copy all files from list to android dir (ipp-android-review/....)
 tail -n +1 ${file_path} | while IFS= read -r line
 do
 	sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
