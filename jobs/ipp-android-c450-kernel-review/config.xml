@@ -165,7 +165,9 @@ dvf101_filename=${dvf101_filename##*/}
 cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
 
 #run android compilation
-./build/tools/make_c450hd.sh --zip-images</command>
+./build/tools/make_c450hd.sh --zip-images
+#cp -R *.zip ${WORKSPACE}
+#${WORKSPACE}/*.zip=&gt;Android/${GERRIT_BRANCH}/${BUILD_NUMBER}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
