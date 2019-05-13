@@ -33,6 +33,7 @@
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>master</string>
+              <string>8.6</string>
               <string>8.4</string>
               <string>8.2</string>
             </a>
@@ -69,7 +70,7 @@ otherwise - it is a night build and there is no version name change</description
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -224,7 +225,7 @@ sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties
         <propertiesFilePath>../armBuild.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>clean releaser:release -DforceRelease=parent,arm-reactor</goals>
@@ -301,10 +302,12 @@ AuthorCommitter=$AuthorCommitter</parameters>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.1">
+    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/main/java</sourcePattern>
+      <sourceInclusionPattern>**/*.java</sourceInclusionPattern>
+      <sourceExclusionPattern></sourceExclusionPattern>
       <inclusionPattern></inclusionPattern>
       <exclusionPattern></exclusionPattern>
       <skipCopyOfSrcFiles>false</skipCopyOfSrcFiles>
@@ -366,7 +369,7 @@ BRANCH=$BRANCH</properties>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -430,7 +433,7 @@ RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_username=armdeploy</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
