@@ -175,6 +175,9 @@ if [ $RELEASE_VMS == &quot;YES&quot; ]; then
     done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $LastTag..$VERSION_NAME)&quot;
 
     #EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | sort -u`
+    #Shuky: I dont know why we commented the above EMAIL line, anyway it is not relevant in Arm project
+    #       so we will just send hardcoded email
+    EMAIL=&quot;Lina.Fine@audiocodes.com&quot;
     
 #create new tag in Arm UI
 	cd ..
