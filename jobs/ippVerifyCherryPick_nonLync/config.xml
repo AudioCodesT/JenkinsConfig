@@ -53,7 +53,13 @@
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ipp-build</assignedNode>
@@ -67,7 +73,7 @@
     <hudson.tasks.Shell>
       <command>#list of branches, sort from older to newer
 #array is NL_branches which is non lync branches
-declare -a NL_branches=(&quot;nonLync_2.2.12&quot; &quot;2.2.14&quot; &quot;2.2.16&quot;)
+declare -a NL_branches=(&quot;nonLync_2.2.12&quot; &quot;2.2.16&quot;)
 #if the current gerrit branch is the last on the list then exit:
 #because there is no need to cherry pick it to anywhere
 if [ &quot;${NL_branches[${#NL_branches[@]}-1]}&quot; == &quot;${GERRIT_BRANCH}&quot; ]; then exit 0; fi
