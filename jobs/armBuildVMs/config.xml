@@ -45,7 +45,7 @@
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <propertiesContent>JAVA_HOME=/usr/java/jdk1.8.0_111</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -57,7 +57,7 @@
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -139,7 +139,7 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>Ram.Nizani@audiocodes.com, Liav.Elias@audiocodes.com, Roman.BarAm@audiocodes.com, Gila.Berchayev@audiocodes.com, Igor.Maller@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Kobi.Levi@audiocodes.com,
+      <recipientList>Liav.Elias@audiocodes.com, Roman.BarAm@audiocodes.com, Gila.Berchayev@audiocodes.com, Igor.Maller@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Kobi.Levi@audiocodes.com,
 cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
@@ -179,7 +179,7 @@ cc:Shuky.Riechard@audiocodes.com</recipientList>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
