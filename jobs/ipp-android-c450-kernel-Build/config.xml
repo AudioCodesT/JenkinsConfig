@@ -184,6 +184,12 @@ cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
 git add .
 git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
 git push
+#git push origin HEAD:refs/for/master
+#CommitID=$(git log -1 --format=&quot;%H&quot;)
+#ssh -p 29418 jenkins@gerrit gerrit review \
+#--code-review +2 \
+#--verified +1 \
+#--submit ${CommitID}
 
 </command>
     </hudson.tasks.Shell>
