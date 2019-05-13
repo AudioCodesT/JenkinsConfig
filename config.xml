@@ -637,7 +637,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.12">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-06bbd70b347568d3f</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-06bbd70b347568d3f</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-05-13 13:08:00.461 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1218,6 +1229,9 @@
         <string>ipp_AT_SendTo_parent</string>
         <string>ipp_Sanity_child</string>
         <string>ipp_Sanity_Night_Build</string>
+        <string>ipp_Sanity_Night_Build_450</string>
+        <string>ipp_Sanity_Night_Build_450_2</string>
+        <string>ipp_Sanity_Night_Build_450_3</string>
         <string>ipp_Sanity_Night_Build_IGS_Models</string>
         <string>ipp_Sanity_Night_Build_Models</string>
         <string>ipp_Sanity_Night_Non_lync_Build_Models</string>
