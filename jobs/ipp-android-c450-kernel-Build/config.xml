@@ -129,8 +129,8 @@ file_path=&quot;${WORKSPACE}/binaries_list.txt&quot;
 source make_c450hd_kernel.sh
 
 # enter android folder
-cd ../ipp-android-review
-
+cd ../ipp-android
+rm -f *.zip
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
 repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
 
