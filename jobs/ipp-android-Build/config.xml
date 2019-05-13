@@ -49,7 +49,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -60,6 +59,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
+  <customWorkspace>/home/ubuntu/jenkinsslave/workspace/ipp-android</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
