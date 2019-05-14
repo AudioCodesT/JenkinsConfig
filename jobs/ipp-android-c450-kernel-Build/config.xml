@@ -189,8 +189,8 @@ git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
 git push
 
 
-#trigger sbc-iso job to create ISO
-curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/buildWithParameters?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
+#trigger ipp-android-Create-Tag job to create TAG
+curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
 
 cat output
 #check if job is in queue
