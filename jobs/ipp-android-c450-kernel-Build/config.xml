@@ -123,86 +123,104 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash -xe
 
-file_path=&quot;${WORKSPACE}/binaries_list.txt&quot;
-JENKINS_URL=&apos;https://jenkins&apos;
-JOB_TOKEN=&apos;AutoTagFor_dvf101-kernel&apos;
-JOB_NAME=&apos;job/ipp-android-Create-Tag&apos;
-#compile c450hd kernel
-source make_c450hd_kernel.sh
-
-# enter android folder
-cd ../ipp-android
-rm -f *.zip
-repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
-repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-
-#copy all files from list to android dir (ipp-android-review/....)
-tail -n +1 ${file_path} | while IFS= read -r line
-do
-	sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
-	sourcePath=${WORKSPACE}/${sourcePath}
-	destPath=$(echo $line | cut -d&apos; &apos; -f2)
-	destPath=${destPath}
-	cp ${sourcePath} ${destPath}
-done
-
-uImage_filename=$(cat ${file_path} | head -1 | tail -1)
-uImage_filename=$(echo $uImage_filename | cut -d&apos; &apos; -f1)
-uImage_filename=${uImage_filename##*/}
-dvf101_filename=$(cat ${file_path} | head -2 | tail -1)
-dvf101_filename=$(echo $dvf101_filename | cut -d&apos; &apos; -f1)
-dvf101_filename=${dvf101_filename##*/}
-cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
-
-#run android compilation
-./build/tools/make_c450hd.sh --zip-images
+# we build only if jenkins checked out on the last commit in branch, else exit 0
+LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -f 1 | head -n 1 )
+echo $LastGerritCommitHash
+echo $GERRIT_PATCHSET_REVISION
+#if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
+#then
 
 
+    file_path=&quot;${WORKSPACE}/binaries_list.txt&quot;
+    JENKINS_URL=&apos;https://jenkins&apos;
+    JOB_TOKEN=&apos;AutoTagFor_dvf101-kernel&apos;
+    JOB_NAME=&apos;job/ipp-android-Create-Tag&apos;
+    #compile c450hd kernel
+    source make_c450hd_kernel.sh
+    
+    # enter android folder
+    cd ../ipp-android
+    rm -f *.zip
+    repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
+    repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
+    
+    #copy all files from list to android dir (ipp-android-review/....)
+    tail -n +1 ${file_path} | while IFS= read -r line
+    do
+        sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
+        sourcePath=${WORKSPACE}/${sourcePath}
+        destPath=$(echo $line | cut -d&apos; &apos; -f2)
+        destPath=${destPath}
+        cp ${sourcePath} ${destPath}
+    done
+    
+    uImage_filename=$(cat ${file_path} | head -1 | tail -1)
+    uImage_filename=$(echo $uImage_filename | cut -d&apos; &apos; -f1)
+    uImage_filename=${uImage_filename##*/}
+    dvf101_filename=$(cat ${file_path} | head -2 | tail -1)
+    dvf101_filename=$(echo $dvf101_filename | cut -d&apos; &apos; -f1)
+    dvf101_filename=${dvf101_filename##*/}
+    cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
+    
+    #run android compilation
+    ./build/tools/make_c450hd.sh --zip-images
+    
+    
+    
+    #clone IPP/Android/device_dspg_dvg101-kernel repository and create there a new commit
+    cd ${WORKSPACE}
+    if [[ -e device_dspg_dvf101-kernel ]]
+    then
+    rm -rf device_dspg_dvf101-kernel
+    fi
+    git clone ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel
+    cd device_dspg_dvf101-kernel
+    git checkout master || echo &quot;already on master&quot;
+    #update submodule to the current GERRIT_PATCHSET_REVISION of this change
+    git submodule init
+    git submodule update
+    cd Source
+    git checkout ${GERRIT_PATCHSET_REVISION}
+    cd ..
+    
+    #copy files to IPP/Android/device_dspg_dvg101-kernel
+    tail -n +1 ${file_path} | while IFS= read -r line
+    do
+        sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
+        sourcePath=${WORKSPACE}/${sourcePath}
+        cp ${sourcePath} .
+    done
+    cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
+    #create the new commit
+    git add .
+    git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
+    git push
+    
+    
+    #trigger ipp-android-Create-Tag job to create TAG
+    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
+    
+    cat output
+    #check if job is in queue
+    queueURL=$(cat output | grep Location | cut -d&apos; &apos; -f3)
+    queueURL=$(echo $queueURL | tr -d &apos;\r\n&apos;)
+    echo $queueURL
+    #failed to start the build
+    if [[ $queueURL == &quot;&quot; ]]
+    then
+        echo &quot;Failed to start the job ipp-android-Create-Tag remotely&quot;
+    #	exit 1
+    fi
+    
+    commitsCountWithoutTag=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+    ((commitsCountWithoutTag-=1))
+    commitMsgs=&quot;&quot;
+    for i in $(seq 0 $commitsCountWithoutTag)
+    do 
+        git log --format=%s -n 1 HEAD~${i}
+	done
 
-#clone IPP/Android/device_dspg_dvg101-kernel repository and create there a new commit
-cd ${WORKSPACE}
-if [[ -e device_dspg_dvf101-kernel ]]
-then
-rm -rf device_dspg_dvf101-kernel
-fi
-git clone ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel
-cd device_dspg_dvf101-kernel
-git checkout master || echo &quot;already on master&quot;
-#update submodule to the current GERRIT_PATCHSET_REVISION of this change
-git submodule init
-git submodule update
-cd Source
-git checkout ${GERRIT_PATCHSET_REVISION}
-cd ..
-
-#copy files to IPP/Android/device_dspg_dvg101-kernel
-tail -n +1 ${file_path} | while IFS= read -r line
-do
-	sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
-	sourcePath=${WORKSPACE}/${sourcePath}
-	cp ${sourcePath} .
-done
-cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
-#create the new commit
-git add .
-git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
-git push
-
-
-#trigger ipp-android-Create-Tag job to create TAG
-curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
-
-cat output
-#check if job is in queue
-queueURL=$(cat output | grep Location | cut -d&apos; &apos; -f3)
-queueURL=$(echo $queueURL | tr -d &apos;\r\n&apos;)
-echo $queueURL
-#failed to start the build
-if [[ $queueURL == &quot;&quot; ]]
-then
-	echo &quot;Failed to start the job ipp-android-Create-Tag remotely&quot;
-#	exit 1
-fi
+#fi
 
 
 </command>
