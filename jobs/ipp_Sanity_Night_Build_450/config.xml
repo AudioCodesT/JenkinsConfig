@@ -100,6 +100,14 @@ If suite file name is &quot;Sanity450Lync_Calendar.suite&quot; feature name will
           <defaultValue>basic</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ServerType</name>
+          <description>ServerType == Lync for the lync running 
+ServerType==IGS for IGS running 
+ServerType ==NonLync for NonLync running (currently non implemented )</description>
+          <defaultValue>Lync</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -175,10 +183,10 @@ done
 echo Check z:/UC${model}HD_$LASTBL.img if exist...
 if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   echo cd C:/IpPhoneAutomation/ATA
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
   echo $PATH
   cd C:/IpPhoneAutomation/ATA
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}Lync_${FeatureNme}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureNme}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
 fi</command>
     </hudson.tasks.Shell>
   </builders>
