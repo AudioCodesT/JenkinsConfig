@@ -192,17 +192,17 @@ git push
 #trigger sbc-iso job to create ISO
 curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/buildWithParameters?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
 
-#cat output
-##check if job is in queue
-#queueURL=$(cat output | grep Location | cut -d&apos; &apos; -f3)
-#queueURL=$(echo $queueURL | tr -d &apos;\r\n&apos;)
-#echo $queueURL
-##failed to start the build
-#if [[ $queueURL == &quot;&quot; ]]
-#then
-#	echo &quot;Failed to start the build remotely Exiting the build&quot;
+cat output
+#check if job is in queue
+queueURL=$(cat output | grep Location | cut -d&apos; &apos; -f3)
+queueURL=$(echo $queueURL | tr -d &apos;\r\n&apos;)
+echo $queueURL
+#failed to start the build
+if [[ $queueURL == &quot;&quot; ]]
+then
+	echo &quot;Failed to start the job ipp-android-Create-Tag remotely&quot;
 #	exit 1
-#fi
+fi
 
 
 </command>
