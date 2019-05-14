@@ -191,6 +191,17 @@ echo $GERRIT_PATCHSET_REVISION
         cp ${sourcePath} .
     done
     cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
+    
+    #get all commit message between the last Tag to this commit
+    commitsCountWithoutTag=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+    ((commitsCountWithoutTag-=1))
+    commitMsgs=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
+    for i in $(seq 1 $commitsCountWithoutTag)
+    do 
+        commit_msg=$(git log --format=%s -n 1 HEAD~${i})
+        commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commit_msg}&quot;)&quot;
+	done
+    printf &apos;%s&apos; &quot;$commitMsgs&quot;
     #create the new commit
     git add .
     git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
@@ -212,13 +223,7 @@ echo $GERRIT_PATCHSET_REVISION
     #	exit 1
     fi
     
-    commitsCountWithoutTag=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
-    ((commitsCountWithoutTag-=1))
-    commitMsgs=&quot;&quot;
-    for i in $(seq 0 $commitsCountWithoutTag)
-    do 
-        git log --format=%s -n 1 HEAD~${i}
-	done
+    
 
 #fi
 
