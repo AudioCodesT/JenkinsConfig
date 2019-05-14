@@ -186,7 +186,7 @@ if [ -f z:/UC${model}HD_$LASTBL.img ]; then
   echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
   echo $PATH
   cd C:/IpPhoneAutomation/ATA
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureNme}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
 fi</command>
     </hudson.tasks.Shell>
   </builders>
