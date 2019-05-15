@@ -82,10 +82,6 @@
               <compareType>PLAIN</compareType>
               <pattern>c450hd_android_linux_kernel</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>testBranch</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -167,7 +163,7 @@ then
     cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
     
     #run android compilation
-#    ./build/tools/make_c450hd.sh --zip-images
+    ./build/tools/make_c450hd.sh --zip-images
     
     
     
@@ -208,9 +204,8 @@ then
     printf &apos;%s&apos; &quot;$commitMsgs&quot;
     #create the new commit
     git add .
-#   git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
-	git commit -m &quot;${commitMsgs}&quot;
-#    git push
+    git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
+    git push
     
     
     #trigger ipp-android-Create-Tag job to create TAG
