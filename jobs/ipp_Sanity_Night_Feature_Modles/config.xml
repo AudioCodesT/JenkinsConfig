@@ -1,0 +1,306 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>ConfigName</name>
+          <description></description>
+          <defaultValue>Sanity</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>LASTBL</name>
+          <description></description>
+          <defaultValue>None</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildRelease</name>
+          <description></description>
+          <defaultValue>3.2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>ippSanityTest01</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H 20 * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
+&#xd;
+echo Finish stop all</command>
+    </hudson.tasks.BatchFile>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash  --login -i
+
+echo Check if free or busy
+if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then
+  echo It is busy... exit
+  exit 1
+fi
+
+User=$artifactory_user:$artifactory_pass
+echo Find the Last TAG if None - $LASTBL
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
+
+if [ &quot;$LASTBL&quot; == &quot;None&quot; ]; then
+  echo curl -ks -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
+  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+fi
+echo Find: $LASTBL
+
+if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
+  echo Not find LASTBL - Exit with error
+  exit 1
+fi
+echo LASTBL=${LASTBL} &gt; ${WORKSPACE}/Sanity.prop
+
+net use
+if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
+    echo confige again Z: ----------------------
+    net use z: /delete
+    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+fi
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>Sanity.prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>445</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>false</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition></condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>ConfigName=${ConfigName}
+model=445
+LASTBL=${LASTBL}
+BuildRelease=${BuildRelease}
+DelayTime=0
+ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ServerType=Lync</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>ALWAYS</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>450</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>false</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition></condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>ConfigName=${ConfigName}
+model=450
+LASTBL=${LASTBL}
+BuildRelease=${BuildRelease}
+DelayTime=90
+ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ServerType=Lync</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>ALWAYS</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>440</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>false</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition></condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>ConfigName=${ConfigName}
+model=440
+LASTBL=${LASTBL}
+BuildRelease=${BuildRelease}
+DelayTime=180
+ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ServerType=Lync</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>ALWAYS</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>405</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>false</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition></condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>ConfigName=${ConfigName}
+model=405
+LASTBL=${LASTBL}
+BuildRelease=${BuildRelease}
+DelayTime=270
+ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ServerType=Lync</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>ALWAYS</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+  </builders>
+  <publishers>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>.*(ClosedChannelno workspace from node|Workspace is not accessible).*</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>600</delay>
+      </delay>
+      <maxSchedule>1</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+  </publishers>
+  <buildWrappers>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.53">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_pass</name>
+          <value>{AQAAABAAAAAQ1lsGozNTbbhVwL3l+tz05dQysZP9pa2d8CcFQA2UB4E=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
+  <pollSubjobs>false</pollSubjobs>
+</com.tikal.jenkins.plugins.multijob.MultiJobProject>
