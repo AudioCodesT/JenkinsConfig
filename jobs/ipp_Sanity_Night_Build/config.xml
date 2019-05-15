@@ -1,16 +1,274 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
+  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#xd;
+suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#xd;
+configName - name of the predefined session config, e.g. Sanity440LyncConfig&#xd;
+firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#xd;
+1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
+available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no &apos;HD&apos; in firmware name);&#xd;
+2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
+&#xd;
+Should work on 10.59.1.46 - ippAuto</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>NODE</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>30</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>ConfigName</name>
+          <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
+          <defaultValue>Sanity</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>model</name>
+          <description>model :440/430/320/440/405</description>
+          <defaultValue>440</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>LASTBL</name>
+          <description>Example: 3.0.1.53</description>
+          <defaultValue>None</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildRelease</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DelayTime</name>
+          <description></description>
+          <defaultValue>0</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ATA_Home</name>
+          <description>if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
+   C:/IpPhoneAutomation/ModifeidIterations/ATA
+else
+  C:/IpPhoneAutomation/ATA (this is suitable for IGS)
+
+</description>
+          <defaultValue>C:/IpPhoneAutomation/ModifeidIterations/ATA</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ServerType</name>
+          <description>ServerType == Lync for the lync running 
+ServerType==IGS for IGS running 
+ServerType ==NonLync for NonLync running (currently non implemented )
+</description>
+          <defaultValue>Lync</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
+          <name>PC2RUN</name>
+          <description></description>
+          <allowedSlaves/>
+          <defaultSlaves/>
+          <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
+          <allowMultiNodeSelection>false</allowMultiNodeSelection>
+          <triggerConcurrentBuilds>false</triggerConcurrentBuilds>
+          <ignoreOfflineNodes>false</ignoreOfflineNodes>
+          <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
+        </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>1</maxConcurrentPerNode>
+      <maxConcurrentTotal>2</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders/>
-  <publishers/>
-  <buildWrappers/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash  --login -i
+
+echo sleep $DelayTime
+sleep $DelayTime
+
+User=$artifactory_user:$artifactory_pass
+
+line=$(curl -s http://${COMPUTERNAME}/index.php/status/show.xml | tail -1)
+echo $line
+if echo $line | grep -q status.busy./status; then
+  echo &quot;&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;&quot;
+  #exit 1
+  echo Kill last build
+  cd ${ATA_Home} 
+  for session in `echo $line | sed &apos;s:&lt;/session&gt;:\n:g&apos;`; do 
+    number=$(echo $session | sed &apos;s:.*&lt;session&gt;::&apos;)
+    if [[ &quot;$number&quot; =~ ^[0-9]+$ ]]; then
+      echo tclsh AtaExec.tcl -stop $number
+      tclsh AtaExec.tcl -stop $number
+    fi
+  done 
+fi
+
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
+
+if [ &quot;$BuildRelease&quot; ==  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD C450HD&quot;
+else BoardsList=&quot;440HD 430HD 405HD C450HD 450HD 445HD &quot;
+fi
+
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
+  BoardsList=&quot;445HD_IGS&quot;
+  model=445
+  ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease/IGS_unified
+fi
+
+DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+
+echo LASTBL: $LASTBL
+if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
+  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+  echo Find: $LASTBL
+fi
+
+if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
+  echo Not find LASTBL - Exit with error
+  exit 1
+fi
+
+date
+
+for BOARD in $BoardsList; do
+
+  # In case of 445HD_IGS, the image name is without the _IGS
+  #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
+  imageName=UC${BOARD}_$LASTBL.img
+
+  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
+  if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
+    echo -- Check if $imageName exist in z:
+    if [ ! -f z:/$imageName ]; then
+      echo ----      Download $imageName to z:
+      echo curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
+      curl -ks -u $User -X GET $DOWNLOAD/$LASTBL/$BOARD/$imageName --output z:/$imageName
+      
+      # checksum the transfered file. If not equel, exit with error and the job will retry after 30 seconds
+      checkSum1=$(curl -ks -u $User -X GET \
+            $ARTIFACTORY/$LASTBL/$BOARD/$imageName | \
+            grep md5 | head -1 | cut -d\&quot; -f4)
+      checkSum2=$(md5sum z:/$imageName | cut -d&quot; &quot; -f1)
+      echo checksum: $checkSum1 and $checkSum2
+      if [ &quot;$checkSum1&quot; != &quot;$checkSum2&quot; ]; then
+        echo CheckSum is not equel.. abort
+        rm -f z:/$imageName
+        exit 1
+      fi
+      
+    else echo ----      $imageName already exist.. skip the download...
+    fi
+  else
+   echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
+  fi
+done
+
+date
+# To solve the &quot;Process leaked file descriptors&quot; problem
+# Or: BUILD_ID=dontKillMe nohup ./yourStartScript.sh &amp;
+# see: https://stackoverflow.com/questions/17024441/process-leaked-file-descriptors-error-on-jenkins
+BUILD_ID=dontKillMe
+export $BUILD_ID
+
+if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
+  modelImage=UC${model}HD_IGS_${LASTBL}.img
+else
+  modelImage=UC${model}HD_${LASTBL}.img
+fi
+
+echo Check if file z:/$modelImage
+if [ -f z:/$modelImage ]; then
+  echo cd ${ATA_Home}
+  cd ${ATA_Home}
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 
+fi
+
+exit $?</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>CheckSum is not equel</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>30</delay>
+      </delay>
+      <maxSchedule>2</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
+        <timeoutSecondsString>900</timeoutSecondsString>
+      </strategy>
+      <operationList/>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.53">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_pass</name>
+          <value>{AQAAABAAAAAQYtaWY29XdddPmn0t0Tyzi3TpKb7bezInWfFSUDLJKJA=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${ServerType} ${LASTBL} ${PC2RUN}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
 </project>
