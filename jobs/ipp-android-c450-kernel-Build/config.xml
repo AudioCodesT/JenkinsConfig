@@ -203,7 +203,9 @@ then
         echo &quot;commit-msg: ${commit_msg}&quot;
         commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commit_msg}&quot;)&quot;
 	done
+    echo &quot;******************************&quot;
     printf &apos;%s&apos; &quot;$commitMsgs&quot;
+    echo &quot;******************************&quot;
     #create the new commit
     git add .
     git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
