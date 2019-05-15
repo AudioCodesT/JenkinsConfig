@@ -209,7 +209,7 @@ then
 	do
 		commit_msg=$(git log --format=%s -n 1 HEAD~${index})
 		((index+=1))
-		if [[ &quot;${commit_msg} != &quot;${commitToCompareWith}&quot; ]]
+		if [[ &quot;${commit_msg}&quot; != &quot;${commitToCompareWith}&quot; ]]
 		then
 			commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commit_msg}&quot;)&quot;
 		fi
