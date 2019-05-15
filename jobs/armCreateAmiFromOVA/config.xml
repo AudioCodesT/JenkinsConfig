@@ -43,7 +43,7 @@
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <propertiesContent>PATH=$PATH:/home/centos/.local/bin:/home/centos/bin:/usr/local/git/bin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -171,7 +171,7 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Ram.Nizani@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
+      <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
