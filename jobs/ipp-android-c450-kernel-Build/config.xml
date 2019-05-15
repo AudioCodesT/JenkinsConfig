@@ -196,20 +196,27 @@ echo $GERRIT_PATCHSET_REVISION
     done
     cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
     
-    #get all commit message between the last Tag to this commit
-    commitsCountWithoutTag=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
-    ((commitsCountWithoutTag-=1))
-    echo &quot;number of commits with out tag is: ${commitsCountWithoutTag}&quot;
-    commitMsgs=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
-    for i in $(seq 1 $commitsCountWithoutTag)
-    do 
-        commit_msg=$(git log --format=%s -n 1 HEAD~${i})
-        echo &quot;commit-msg: ${commit_msg}&quot;
-        commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commit_msg}&quot;)&quot;
+    #get all commit message between the commit ${commitToCompareWith} to all commit that were submited
+    commitToCompareWith=$(git log --format=%s -n 1 HEAD)
+    #enter to C450-linux-kernel to check all the commits messages that submited
+    cd ..
+    index=1
+	commitMsgs=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
+	commit_msg=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
+    #add all the commits messages to String until it will be equal to the last commit in  IPP/Android/device_dspg_dvg101-kernel
+    while [[ &quot;${commit_msg} == &quot;${commitToCompareWith}&quot; ]]
+	do
+		commit_msg=$(git log --format=%s -n 1 HEAD~${index})
+		((index+=1))
+		if [[ &quot;${commit_msg} != &quot;${commitToCompareWith}&quot; ]]
+		then
+			commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commit_msg}&quot;)&quot;
+		fi
 	done
     echo &quot;******************************&quot;
     printf &apos;%s&apos; &quot;$commitMsgs&quot;
     echo &quot;******************************&quot;
+    cd device_dspg_dvf101-kernel
     #create the new commit
     git add .
     git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
