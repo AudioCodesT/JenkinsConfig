@@ -196,7 +196,8 @@ echo $GERRIT_PATCHSET_REVISION
     done
     cat ${uImage_filename} divider.txt ${dvf101_filename} &gt; uImage-dtb
     
-    #get all commit message between the commit ${commitToCompareWith} to all commit that were submited
+    #get all commit messages between the last commit in  IPP/Android/device_dspg_dvg101-kernel (${commitToCompareWith}) to
+    #all commits that were submitted in IPP/C450/C450-linux-kernel
     commitToCompareWith=$(git log --format=%s -n 1 HEAD)
     #enter to C450-linux-kernel to check all the commits messages that submited
     cd ..
@@ -221,11 +222,11 @@ echo $GERRIT_PATCHSET_REVISION
     cd device_dspg_dvf101-kernel
     git add .
     git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
-    git push
+#	git push
     
     
     #trigger ipp-android-Create-Tag job to create TAG
-    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
+#    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
     
     cat output
     #check if job is in queue
