@@ -216,8 +216,9 @@ echo $GERRIT_PATCHSET_REVISION
     echo &quot;******************************&quot;
     printf &apos;%s&apos; &quot;$commitMsgs&quot;
     echo &quot;******************************&quot;
-    cd device_dspg_dvf101-kernel
+    
     #create the new commit
+    cd device_dspg_dvf101-kernel
     git add .
     git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
     git push
