@@ -167,7 +167,7 @@ then
     cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
     
     #run android compilation
-#    ./build/tools/make_c450hd.sh --zip-images
+    ./build/tools/make_c450hd.sh --zip-images
     
     
     
@@ -213,11 +213,11 @@ then
     #create the new commit
     git add .
     git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
-#    git push
+    git push
     
     
     #trigger ipp-android-Create-Tag job to create TAG
-#    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
+    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
     
     cat output
     #check if job is in queue
