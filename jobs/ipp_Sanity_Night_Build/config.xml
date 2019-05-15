@@ -96,6 +96,13 @@ ServerType ==NonLync for NonLync running (currently non implemented )
           <ignoreOfflineNodes>false</ignoreOfflineNodes>
           <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
         </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>FeatureName</name>
+          <description>Name of the suite without config name , model , server type and &quot;.suite&quot;
+If suite file name is &quot;Sanity450Lync_Calendar.suite&quot; feature name will be &quot;Calendar&quot;</description>
+          <defaultValue>basic</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -106,7 +113,6 @@ ServerType ==NonLync for NonLync running (currently non implemented )
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -218,8 +224,8 @@ echo Check if file z:/$modelImage
 if [ -f z:/$modelImage ]; then
   echo cd ${ATA_Home}
   cd ${ATA_Home}
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_basic.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 
+  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 
+  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 
 fi
 
 exit $?</command>
