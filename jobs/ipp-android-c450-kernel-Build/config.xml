@@ -205,7 +205,7 @@ then
 	commitMsgs=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
 	commit_msg=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
     #add all the commits messages to String until it will be equal to the last commit in  IPP/Android/device_dspg_dvg101-kernel
-    while [[ &quot;${commit_msg} == &quot;${commitToCompareWith}&quot; ]]
+    while [[ &quot;${commit_msg}&quot; == &quot;${commitToCompareWith}&quot; ]]
 	do
 		commit_msg=$(git log --format=%s -n 1 HEAD~${index})
 		((index+=1))
