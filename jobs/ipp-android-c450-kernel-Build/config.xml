@@ -82,10 +82,6 @@
               <compareType>PLAIN</compareType>
               <pattern>c450hd_android_linux_kernel</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>testBranch</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -133,8 +129,6 @@ echo $LastGerritCommitHash
 echo $GERRIT_PATCHSET_REVISION
 if [[ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]]
 then
-
-	echo &quot;enter the if&quot;
     file_path=&quot;${WORKSPACE}/binaries_list.txt&quot;
     JENKINS_URL=&apos;https://jenkins&apos;
     JOB_TOKEN=&apos;AutoTagFor_dvf101-kernel&apos;
@@ -167,7 +161,7 @@ then
     cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
     
     #run android compilation
-#    ./build/tools/make_c450hd.sh --zip-images
+    ./build/tools/make_c450hd.sh --zip-images
     
     
     
@@ -221,12 +215,12 @@ then
     #create the new commit
     cd device_dspg_dvf101-kernel
     git add .
-    git commit -m &quot;${GERRIT_CHANGE_SUBJECT}&quot;
-#	git push
+    git commit -m &quot;${commitMsgs}&quot;
+	git push
     
     
     #trigger ipp-android-Create-Tag job to create TAG
-#    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
+    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
     
     cat output
     #check if job is in queue
