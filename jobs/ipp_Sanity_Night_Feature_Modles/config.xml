@@ -169,7 +169,7 @@ FeatureName=NewPhoneLock</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
-      <executionType>PARALLEL</executionType>
+      <executionType>SEQUENTIALLY</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>Calendar</phaseName>
@@ -210,7 +210,7 @@ FeatureName=Calendar</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
-      <executionType>PARALLEL</executionType>
+      <executionType>SEQUENTIALLY</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>VVM</phaseName>
@@ -251,7 +251,7 @@ FeatureName=VVM</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
-      <executionType>PARALLEL</executionType>
+      <executionType>SEQUENTIALLY</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>basic</phaseName>
@@ -292,7 +292,7 @@ FeatureName=basic</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
-      <executionType>PARALLEL</executionType>
+      <executionType>SEQUENTIALLY</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
   </builders>
   <publishers>
