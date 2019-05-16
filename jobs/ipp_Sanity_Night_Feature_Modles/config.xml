@@ -56,6 +56,12 @@
           <ignoreOfflineNodes>false</ignoreOfflineNodes>
           <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
         </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ATA_Home</name>
+          <description>Path to ATA home folder</description>
+          <defaultValue>C:\IpPhoneAutomation\ATA</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -82,7 +88,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ModifeidIterations\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
+      <command>cd ${ATA_Home} &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
 &#xd;
 echo Finish stop all</command>
     </hudson.tasks.BatchFile>
@@ -148,7 +154,7 @@ LASTBL=${LASTBL}
 PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
 DelayTime=0
-ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ATA_Home=${ATA_Home}
 ServerType=Lync
 FeatureName=NewPhoneLock</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
@@ -190,7 +196,7 @@ LASTBL=${LASTBL}
 PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
 DelayTime=0
-ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ATA_Home=${ATA_Home}
 ServerType=Lync
 FeatureName=Calendar</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
@@ -232,7 +238,7 @@ LASTBL=${LASTBL}
 PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
 DelayTime=0
-ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ATA_Home=${ATA_Home}
 ServerType=Lync
 FeatureName=VVM</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
@@ -274,7 +280,7 @@ LASTBL=${LASTBL}
 PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
 DelayTime=0
-ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ATA_Home=${ATA_Home}
 ServerType=Lync
 FeatureName=basic</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
