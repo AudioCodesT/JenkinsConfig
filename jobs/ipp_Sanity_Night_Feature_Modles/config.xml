@@ -96,7 +96,7 @@ echo Finish stop all</command>
       <command>#!c:\cygwin\bin\bash  --login -i
 
 echo Check if free or busy
-if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./status; then
+if curl -s http://localhost/index.php/status/show.xml | grep -q status.busy./status; then
   echo It is busy... exit
   exit 1
 fi
