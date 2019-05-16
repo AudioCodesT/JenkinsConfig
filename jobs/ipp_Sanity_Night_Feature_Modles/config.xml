@@ -160,7 +160,7 @@ FeatureName=NewPhoneLock</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>$PC2RUN</nodeLabel>
+              <nodeLabel>$NODE_NAME</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
