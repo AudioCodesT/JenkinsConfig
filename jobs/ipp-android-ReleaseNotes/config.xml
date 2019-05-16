@@ -41,7 +41,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -161,6 +160,8 @@ done &lt; $NEWTAG.txt
 
 echo Find the author email in Gerrit server according the commit SHA1 
 EMAIL=$(ssh -p 29418 jenkins@gerrit gerrit query $SaveOneHash | grep email | sed &apos;s/.*email: //&apos;)
+if [ -z $EMAIL ]; then EMAIL=&quot;IppSwReleases@audiocodes.com&quot;; fi
+
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$NEWTAG`
 GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
