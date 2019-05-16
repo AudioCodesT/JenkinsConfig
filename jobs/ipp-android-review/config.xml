@@ -102,7 +102,7 @@
 #the above line is needed because we are going to use &quot;source&quot; command
 
 rm -f *.zip
-repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b master
+repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $GERRIT_BRANCH
 
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync -c --no-clone-bundle -j16 --force-sync
