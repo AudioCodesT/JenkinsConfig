@@ -197,8 +197,9 @@ then
     #enter to C450-linux-kernel to check all the commits messages that submited
     cd ..
     index=1
-	commitMsgs=&quot;${commiterName}: ${GERRIT_CHANGE_SUBJECT}&quot;
+	last_commit=&quot;${commiterName}: ${GERRIT_CHANGE_SUBJECT}&quot;
 	commit_msg=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
+    commitMsgs=&quot;&quot;
     #add all the commits messages to String until it will be equal to the last commit in  IPP/Android/device_dspg_dvg101-kernel
     while [[ &quot;${commit_msg}&quot; != &quot;${commitToCompareWith}&quot; ]]
 	do
@@ -217,7 +218,7 @@ then
     #create the new commit
     cd device_dspg_dvf101-kernel
     git add .
-    git commit -m &quot;${commitMsgs}&quot;
+    git commit -m &quot;${last_commit}&quot; -m &quot;${commitMsgs}&quot;
 	git push
     
     
