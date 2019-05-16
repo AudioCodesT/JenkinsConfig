@@ -193,19 +193,21 @@ then
     #get all commit messages between the last commit in  IPP/Android/device_dspg_dvg101-kernel (${commitToCompareWith}) to
     #all commits that were submitted in IPP/C450/C450-linux-kernel
     commitToCompareWith=$(git log --format=%s -n 1 HEAD)
+    commiterName=$(git log --format=%an -n 1 HEAD)
     #enter to C450-linux-kernel to check all the commits messages that submited
     cd ..
     index=1
-	commitMsgs=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
+	commitMsgs=&quot;${commiterName}: ${GERRIT_CHANGE_SUBJECT}&quot;
 	commit_msg=&quot;${GERRIT_CHANGE_SUBJECT}&quot;
     #add all the commits messages to String until it will be equal to the last commit in  IPP/Android/device_dspg_dvg101-kernel
     while [[ &quot;${commit_msg}&quot; != &quot;${commitToCompareWith}&quot; ]]
 	do
 		commit_msg=$(git log --format=%s -n 1 HEAD~${index})
+        commiterName=$(git log --format=%an -n 1 HEAD~${index})
 		((index+=1))
 		if [[ &quot;${commit_msg}&quot; != &quot;${commitToCompareWith}&quot; ]]
 		then
-			commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commit_msg}&quot;)&quot;
+			commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commiterName}: ${commit_msg}&quot;)&quot;
 		fi
 	done
     echo &quot;******************************&quot;
