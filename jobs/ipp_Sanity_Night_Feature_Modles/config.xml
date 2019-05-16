@@ -37,6 +37,25 @@
           <defaultValue>3.2</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Model</name>
+          <description>405/420/430/440/445/450</description>
+          <defaultValue>440</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
+          <name>PC2RUN</name>
+          <description></description>
+          <allowedSlaves/>
+          <defaultSlaves>
+            <string>ippSanityTest02</string>
+          </defaultSlaves>
+          <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
+          <allowMultiNodeSelection>false</allowMultiNodeSelection>
+          <triggerConcurrentBuilds>false</triggerConcurrentBuilds>
+          <ignoreOfflineNodes>false</ignoreOfflineNodes>
+          <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
+        </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -106,7 +125,7 @@ fi
       </info>
     </EnvInjectBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>445</phaseName>
+      <phaseName>NewPhoneLock</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
@@ -124,12 +143,14 @@ fi
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
-model=445
+model=${Model}
 LASTBL=${LASTBL}
+PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
 DelayTime=0
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
+ServerType=Lync
+FeatureName=NewPhoneLock</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -146,7 +167,7 @@ ServerType=Lync</properties>
       <executionType>PARALLEL</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>450</phaseName>
+      <phaseName>Calendar</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
@@ -164,12 +185,14 @@ ServerType=Lync</properties>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
-model=450
+model=${Model}
 LASTBL=${LASTBL}
+PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
-DelayTime=90
+DelayTime=0
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
+ServerType=Lync
+FeatureName=Calendar</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -186,7 +209,7 @@ ServerType=Lync</properties>
       <executionType>PARALLEL</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>440</phaseName>
+      <phaseName>VVM</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
@@ -204,12 +227,14 @@ ServerType=Lync</properties>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
-model=440
+model=${Model}
 LASTBL=${LASTBL}
+PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
-DelayTime=180
+DelayTime=0
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
+ServerType=Lync
+FeatureName=VVM</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -226,7 +251,7 @@ ServerType=Lync</properties>
       <executionType>PARALLEL</executionType>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>405</phaseName>
+      <phaseName>basic</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
@@ -244,12 +269,14 @@ ServerType=Lync</properties>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
-model=405
+model=${Model}
 LASTBL=${LASTBL}
+PC2RUN = ${PC2RUN}
 BuildRelease=${BuildRelease}
-DelayTime=270
+DelayTime=0
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
+ServerType=Lync
+FeatureName=basic</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
