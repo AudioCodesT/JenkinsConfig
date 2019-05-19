@@ -354,14 +354,22 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}
       <script>#!/bin/sh
 FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
 Owner=$GERRIT_PATCHSET_UPLOADER_NAME
+message=&quot;&quot;
 if [[ ! $GERRIT_BRANCH =~ private ]]; then
   if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Shai Peretz&quot; ] ; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
-      CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
-      base=https://$GERRIT_HOST/a/changes
+fi
+if [[ $FilesList =~ dspg_kernel ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_c450_developers | grep -q &quot;$Owner&quot;;
+then
+      echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
+      message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
+fi
 
-     #id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
+if [ ! -z &quot;$message&quot; ]; then
+      base=https://$GERRIT_HOST/a/changes
+      CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+      #id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
       id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
       idEscaped=${id////%2F}
 
