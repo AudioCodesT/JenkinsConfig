@@ -130,9 +130,6 @@ echo $GERRIT_PATCHSET_REVISION
 if [[ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]]
 then
     file_path=&quot;${WORKSPACE}/binaries_list.txt&quot;
-    JENKINS_URL=&apos;https://jenkins&apos;
-    JOB_TOKEN=&apos;AutoTagFor_dvf101-kernel&apos;
-    JOB_NAME=&apos;job/ipp-android-Create-Tag&apos;
     #compile c450hd kernel
     source make_c450hd_kernel.sh
     
@@ -223,28 +220,6 @@ then
 	git push
     
     
-    #trigger ipp-android-Create-Tag job to create TAG
-    curl --insecure -v -X POST $JENKINS_URL/$JOB_NAME/build?token=${JOB_TOKEN} &gt;output 2&gt;&amp;1 
-    
-    cat output
-    #check if job is in queue
-    queueURL=$(cat output | grep Location | cut -d&apos; &apos; -f3)
-    queueURL=$(echo $queueURL | tr -d &apos;\r\n&apos;)
-    echo $queueURL
-    #failed to start the build
-    if [[ $queueURL == &quot;&quot; ]]
-    then
-        echo &quot;Failed to start the job ipp-android-Create-Tag remotely&quot;
-    #	exit 1
-    fi
-    
-    
-
-else
-echo &quot;This is the not the last Build, exit the build....&quot;
-fi
-
-
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -254,6 +229,19 @@ fi
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+          </configs>
+          <projects>ipp-android-Create-Tag</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
