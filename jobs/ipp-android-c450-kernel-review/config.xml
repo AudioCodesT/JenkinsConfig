@@ -204,7 +204,10 @@ cp *.zip ${WORKSPACE}
         {
             &quot;pattern&quot;: &quot;${WORKSPACE}/*.zip&quot;,
             &quot;target&quot;: &quot;ipp-review/Android/${GERRIT_BRANCH}/${BUILD_NUMBER}/&quot;,
-            &quot;excludePatterns&quot;: &quot;*android_images*&quot;
+            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
+            &quot;excludePatterns&quot;: [
+             &quot;*android_images*&quot;
+             ]
         }
     ]
 }</spec>
