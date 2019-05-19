@@ -172,11 +172,6 @@ cp *.zip ${WORKSPACE}
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>ipp-review</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
         <stagingPlugin/>
       </deployerDetails>
       <resolverDetails>
@@ -202,9 +197,17 @@ cp *.zip ${WORKSPACE}
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
+      <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/*.zip&quot;,
+            &quot;target&quot;: &quot;ipp-review/Android/${GERRIT_BRANCH}/${BUILD_NUMBER}/&quot;,
+            &quot;excludePatterns&quot;: &quot;*android_images*&quot;
+        }
+    ]
+}</spec>
       </uploadSpec>
       <downloadSpec>
         <spec></spec>
