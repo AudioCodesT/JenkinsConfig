@@ -416,11 +416,6 @@ $BUILD_URL
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>ems-release</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
         <stagingPlugin/>
       </deployerDetails>
       <resolverDetails>
@@ -446,9 +441,18 @@ $BUILD_URL
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
+      <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/dist/ovoc*.zip&quot;,
+            &quot;target&quot;: &quot;ems-release/com/ac/ems/ovoc_client/$GERRIT_BRANCH//&quot;,
+            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }
+    ]
+}</spec>
       </uploadSpec>
       <downloadSpec>
         <spec></spec>
