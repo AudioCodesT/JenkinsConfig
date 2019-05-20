@@ -211,7 +211,7 @@ Arm Router: ${routerAmiID}</defaultContent>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>#!/bin/sh
+      <script>#!/bin/sh -xe
 cd ${workspace}/..
 main_workspace=$(pwd)
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
