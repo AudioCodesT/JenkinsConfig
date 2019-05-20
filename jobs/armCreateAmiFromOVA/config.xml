@@ -210,6 +210,23 @@ Arm Router: ${routerAmiID}</defaultContent>
       <cleanupParameter></cleanupParameter>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
+    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
+      <script>#!/bin/sh
+cd ${workspace}/..
+main_workspace=$(pwd)
+disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
+disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
+disk_size=${disk_size%.*}
+if [[ $disk_size -le 3 ]]
+then
+echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
+find $main_workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
+df -h
+fi</script>
+      <scriptType>unixScript</scriptType>
+      <runOnlyOnParent>false</runOnlyOnParent>
+      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
+    </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
