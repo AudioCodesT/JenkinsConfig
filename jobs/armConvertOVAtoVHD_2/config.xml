@@ -141,11 +141,6 @@ https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
         <stagingPlugin/>
       </deployerDetails>
       <resolverDetails>
@@ -171,12 +166,40 @@ https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
+      <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/VHD/ARM-Conf_${TAG}.vhdx&quot;,
+            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/VHD/ARM-Router_${TAG}.vhdx&quot;,
+            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }   
+    ]
+}</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec>
+
+{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova&quot;,
+            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova&quot;,
+            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        }
+    ]
+}</spec>
       </downloadSpec>
       <deployPattern>VHD/ARM-Conf_${TAG}.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
 VHD/ARM-Router_${TAG}.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}</deployPattern>
