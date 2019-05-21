@@ -194,8 +194,8 @@ then
     #get all commit messages between the last commit in  IPP/Android/device_dspg_dvg101-kernel (${commitToCompareWith}) to
     #all commits that were submitted in IPP/C450/C450-linux-kernel
     commit_msg_in_kernel=$(git log --format=%s -n 1 HEAD)
-    commitToCompareWith=$(echo $commitToCompareWith | cut -d&apos;:&apos; -f2-)
-    commiterName=$(echo $commitToCompareWith | cut -d&apos;:&apos; -f1)
+    commitToCompareWith=$(echo $commit_msg_in_kernel | cut -d&apos;:&apos; -f2-)
+    commiterName=$(echo $commit_msg_in_kernel | cut -d&apos;:&apos; -f1)
     #enter to C450-linux-kernel to check all the commits messages that submited
     cd ..
     index=1
