@@ -223,7 +223,9 @@ then
     git commit -m &quot;${last_commit}&quot; -m &quot;${commitMsgs}&quot;
 #	git push
     
-    
+else
+echo &quot;****************** This is not the last commit, Exit the Build ******************&quot;
+fi
 </command>
     </hudson.tasks.Shell>
   </builders>
