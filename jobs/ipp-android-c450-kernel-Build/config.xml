@@ -82,10 +82,6 @@
               <compareType>PLAIN</compareType>
               <pattern>c450hd_android_linux_kernel</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>testBranch</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -162,7 +158,7 @@ then
     cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
     
     #run android compilation
-#    ./build/tools/make_c450hd.sh --zip-images
+    ./build/tools/make_c450hd.sh --zip-images
     
     
     
@@ -222,7 +218,7 @@ then
     cd device_dspg_dvf101-kernel
     git add .
     git commit -m &quot;${last_commit}&quot; -m &quot;${commitMsgs}&quot;
-#	git push
+	git push
     
 else
 echo &quot;****************** This is not the last commit, Exit the Build ******************&quot;
@@ -231,6 +227,19 @@ fi
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+          </configs>
+          <projects>ipp-android-Create-Tag</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
