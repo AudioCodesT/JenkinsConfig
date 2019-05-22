@@ -60,8 +60,8 @@ cat &lt;&lt; EOF &gt; convertToVHD.ps1
 set-alias sz &apos;C:\Program Files\7-Zip\7z.exe&apos;
 Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
 Get-Module
-sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\\${TAG}\ARM-Conf_${TAG}\ARM-Conf_${TAG}.ova&quot;
-sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\com\ac\arm\tempOVA\\${TAG}\ARM-Router_${TAG}\ARM-Router_$TAG.ova&quot;
+sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\ARM-Conf_${TAG}.ova&quot;
+sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\ARM-Router_$TAG.ova&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
 ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
 Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx&quot;
