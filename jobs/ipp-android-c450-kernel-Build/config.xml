@@ -195,6 +195,7 @@ then
     #all commits that were submitted in IPP/C450/C450-linux-kernel
     commit_msg_in_kernel=$(git log --format=%s -n 1 HEAD)
     commitToCompareWith=$(echo $commit_msg_in_kernel | cut -d&apos;:&apos; -f2-)
+    commitToCompareWith=$(echo $commitToCompareWith | sed -e &apos;s/^[ \t]*//&apos;)
     commiterName=$(echo $commit_msg_in_kernel | cut -d&apos;:&apos; -f1)
     #enter to C450-linux-kernel to check all the commits messages that submited
     cd ..
