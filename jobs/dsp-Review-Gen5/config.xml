@@ -149,11 +149,12 @@
       <name>label</name>
       <values>
         <string>dsp-centos-dynamic</string>
+        <string>dsp-grx-slave</string>
         <string>dsp-win-dynamic</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos; &amp;&amp; CHIP_NAME != &apos;GRX&apos;) || (label == &apos;sbc&apos; &amp;&amp; CHIP_NAME == &apos;GRX&apos;) </combinationFilter>
+  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos; &amp;&amp; CHIP_NAME != &apos;GRX&apos;) || (label == &apos;dsp-grx-slave&apos; &amp;&amp; CHIP_NAME == &apos;GRX&apos;) </combinationFilter>
   <builders>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
@@ -242,7 +243,7 @@ echo &quot;Finish running make for SoftDsp and SoftHost&quot;
     <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
         <arg1>${label}</arg1>
-        <arg2>sbc</arg2>
+        <arg2>dsp-grx-slave</arg2>
         <ignoreCase>false</ignoreCase>
       </condition>
       <buildStep class="hudson.tasks.Shell">
