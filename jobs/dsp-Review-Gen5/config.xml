@@ -270,7 +270,7 @@ git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git che
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
-#run all 4 make in parallel (SoftDsp and SoftHost)
+#run all 2 make in parallel (SoftDsp and SoftHost)
 if [[ ${CHIP_NAME} == &quot;Grx&quot; ]]
 then
 	run_make=(&quot;SoftDspC_98_Integration_Dsp/Hpi_64&quot; &quot;SoftDspC_98_Integration_Host/Hpi_64&quot;)
