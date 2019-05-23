@@ -164,6 +164,14 @@ while read -r line; do
     fi
 done &lt; $NEWTAG.txt
 
+if [ -z &quot;$RN&quot; ]; then
+  while read -r hash; do 
+    subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
+    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[I&quot; | sed &apos;s/.*\[I/I/; s/\].*//&apos;)
+    RN+=---$subject::$hash::$Jira
+  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $OLDTAG..$NEWTAG)&quot;
+fi
+
 echo Find the author email in Gerrit server according the commit SHA1 
 EMAIL=$(ssh -p 29418 jenkins@gerrit gerrit query $SaveOneHash | grep email | sed &apos;s/.*email: //&apos;)
 if [ -z $EMAIL ]; then EMAIL=&quot;IppSwReleases@audiocodes.com&quot;; fi
