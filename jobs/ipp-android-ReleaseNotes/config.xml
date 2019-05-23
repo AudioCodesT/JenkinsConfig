@@ -132,6 +132,8 @@ PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
 git log --first-parent --pretty=format:&quot;%B&quot; $PreviousTAG..$NEWTAG &gt; $NEWTAG.txt
 cp -f $NEWTAG.txt releaseNotes.txt
 AuthorCommitter=$(grep User: $NEWTAG.txt | sed &apos;s/.*User: //&apos; | sort -u )
+ 
+if [ -z &quot;$AuthorCommitter&quot; ]; then AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $OLDTAG..$NEWTAG | sort -u | sed s/$/\;/g`; fi
 
 RN=&quot;&quot;
 orgHash=&quot;&quot;
