@@ -170,7 +170,9 @@ if [ -z $EMAIL ]; then EMAIL=&quot;IppSwReleases@audiocodes.com&quot;; fi
 
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
 DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$NEWTAG`
-GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+#GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+GERRIT_BRANCH=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | sed &apos;s:.*origin/::&apos;)
+
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
 echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
