@@ -360,7 +360,7 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
 fi
-if [[ $FilesList =~ dspg_kernel_need_id_rsa ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_c450_developers | grep -q &quot;$Owner&quot;;
+if [[ $FilesList =~ dspg_kernel ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q &quot;$Owner&quot;;
 then
       echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
       message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
