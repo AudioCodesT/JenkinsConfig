@@ -497,35 +497,40 @@
           <nextSubnet>0</nextSubnet>
         </hudson.plugins.ec2.SlaveTemplate>
         <hudson.plugins.ec2.SlaveTemplate>
-          <ami>ami-06308069</ami>
-          <description>IPP centos7.2 for SIM</description>
+          <ami>ami-0efc5cc87d6b1f551</ami>
+          <description>IPP Android slave</description>
           <zone>eu-central-1b</zone>
+          <spotConfig>
+            <useBidPrice>false</useBidPrice>
+            <spotMaxBidPrice></spotMaxBidPrice>
+            <fallbackToOndemand>true</fallbackToOndemand>
+          </spotConfig>
           <securityGroups>Apps-Basic-SG</securityGroups>
-          <remoteFS>/home/admin/jenkinsslave</remoteFS>
+          <remoteFS>/home/ubuntu/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
           <monitoring>false</monitoring>
           <t2Unlimited>false</t2Unlimited>
-          <labels>ipp-SIM-only</labels>
+          <labels>ipp-android-dynamic</labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
           <userData></userData>
           <numExecutors>1</numExecutors>
-          <remoteAdmin>admin</remoteAdmin>
+          <remoteAdmin>ubuntu</remoteAdmin>
           <jvmopts></jvmopts>
           <subnetId>subnet-8ce472f7</subnetId>
-          <idleTerminationMinutes>5</idleTerminationMinutes>
+          <idleTerminationMinutes>10</idleTerminationMinutes>
           <iamInstanceProfile></iamInstanceProfile>
           <deleteRootOnTermination>false</deleteRootOnTermination>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
-          <instanceCap>60</instanceCap>
+          <instanceCap>10</instanceCap>
           <stopOnTerminate>false</stopOnTerminate>
           <tags>
             <hudson.plugins.ec2.EC2Tag>
               <name>Name</name>
-              <value>ipp-dynamic-slave-SIM-only</value>
+              <value>ipp-android-slave-ec2</value>
             </hudson.plugins.ec2.EC2Tag>
           </tags>
           <connectionStrategy>PRIVATE_IP</connectionStrategy>
@@ -870,11 +875,11 @@
       <name>sig-8ac26a53</name>
       <groupId>sig-8ac26a53</groupId>
       <pendingInstances/>
-      <labelString>ipp-android-dynamic</labelString>
+      <labelString>***ipp-android-dynamic***</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/home/ubuntu/jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>ipp-android-dynamic</hudson.model.labels.LabelAtom>
+        <hudson.model.labels.LabelAtom>&quot;***ipp-android-dynamic***&quot;</hudson.model.labels.LabelAtom>
       </labelSet>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
