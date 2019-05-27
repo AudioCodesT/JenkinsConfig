@@ -62,7 +62,7 @@
   <customWorkspace>/home/ubuntu/jenkinsslave/workspace/ipp-android</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash -x
+      <command>#!/bin/bash -ex
 #the above line is needed because we are going to use &quot;source&quot; command
 
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/$NEWTAG
