@@ -403,6 +403,11 @@
           <ami>ami-0ec68e2a7a10d4917</ami>
           <description>build slave for ARM project</description>
           <zone>eu-central-1b</zone>
+          <spotConfig>
+            <useBidPrice>false</useBidPrice>
+            <spotMaxBidPrice></spotMaxBidPrice>
+            <fallbackToOndemand>true</fallbackToOndemand>
+          </spotConfig>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/home/centos/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
