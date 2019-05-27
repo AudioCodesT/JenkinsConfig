@@ -552,6 +552,57 @@
           <maxTotalUses>-1</maxTotalUses>
           <nextSubnet>0</nextSubnet>
         </hudson.plugins.ec2.SlaveTemplate>
+        <hudson.plugins.ec2.SlaveTemplate>
+          <ami>ami-a8ddee43</ami>
+          <description>IPP Non-Lync slave</description>
+          <zone>eu-central-1b</zone>
+          <spotConfig>
+            <useBidPrice>false</useBidPrice>
+            <spotMaxBidPrice></spotMaxBidPrice>
+            <fallbackToOndemand>true</fallbackToOndemand>
+          </spotConfig>
+          <securityGroups></securityGroups>
+          <remoteFS>/opt/jenkinsslave</remoteFS>
+          <type>M42xlarge</type>
+          <ebsOptimized>false</ebsOptimized>
+          <monitoring>false</monitoring>
+          <t2Unlimited>false</t2Unlimited>
+          <labels>ipp-build</labels>
+          <mode>NORMAL</mode>
+          <initScript></initScript>
+          <tmpDir></tmpDir>
+          <userData></userData>
+          <numExecutors>1</numExecutors>
+          <remoteAdmin>centos</remoteAdmin>
+          <jvmopts></jvmopts>
+          <subnetId>subnet-8ce472f7</subnetId>
+          <idleTerminationMinutes>2</idleTerminationMinutes>
+          <iamInstanceProfile></iamInstanceProfile>
+          <deleteRootOnTermination>false</deleteRootOnTermination>
+          <useEphemeralDevices>false</useEphemeralDevices>
+          <customDeviceMapping></customDeviceMapping>
+          <instanceCap>50</instanceCap>
+          <stopOnTerminate>false</stopOnTerminate>
+          <tags>
+            <hudson.plugins.ec2.EC2Tag>
+              <name>Name</name>
+              <value>ipp-non-lync-slave-EC2</value>
+            </hudson.plugins.ec2.EC2Tag>
+          </tags>
+          <connectionStrategy>PRIVATE_IP</connectionStrategy>
+          <associatePublicIp>false</associatePublicIp>
+          <useDedicatedTenancy>false</useDedicatedTenancy>
+          <amiType class="hudson.plugins.ec2.UnixData">
+            <rootCommandPrefix></rootCommandPrefix>
+            <slaveCommandPrefix></slaveCommandPrefix>
+            <slaveCommandSuffix></slaveCommandSuffix>
+            <sshPort></sshPort>
+          </amiType>
+          <launchTimeout>180</launchTimeout>
+          <connectBySSHProcess>false</connectBySSHProcess>
+          <maxTotalUses>-1</maxTotalUses>
+          <nextSubnet>0</nextSubnet>
+        </hudson.plugins.ec2.SlaveTemplate>
       </templates>
       <region>eu-central-1</region>
       <noDelayProvisioning>false</noDelayProvisioning>
@@ -560,11 +611,11 @@
       <name>sig-b9119121</name>
       <groupId>sig-b9119121</groupId>
       <pendingInstances/>
-      <labelString>ipp-build</labelString>
+      <labelString>***ipp-build***</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>ipp-build</hudson.model.labels.LabelAtom>
+        <hudson.model.labels.LabelAtom>&quot;***ipp-build***&quot;</hudson.model.labels.LabelAtom>
       </labelSet>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
