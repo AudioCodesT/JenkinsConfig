@@ -391,6 +391,8 @@
     <hudson.plugins.ec2.EC2Cloud plugin="ec2@1.43">
       <name>ec2-AC_Cloud</name>
       <useInstanceProfileForCredentials>false</useInstanceProfileForCredentials>
+      <roleArn></roleArn>
+      <roleSessionName></roleSessionName>
       <credentialsId>99f592ed-d031-48b3-9a29-82e43e05e202</credentialsId>
       <privateKey>
         <privateKey>{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}</privateKey>
@@ -435,6 +437,7 @@
           <amiType class="hudson.plugins.ec2.UnixData">
             <rootCommandPrefix></rootCommandPrefix>
             <slaveCommandPrefix></slaveCommandPrefix>
+            <slaveCommandSuffix></slaveCommandSuffix>
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>2147483647</launchTimeout>
@@ -446,13 +449,18 @@
           <ami>ami-02d143adf0de44e70</ami>
           <description>build slave for IPP project</description>
           <zone>eu-central-1b</zone>
+          <spotConfig>
+            <useBidPrice>false</useBidPrice>
+            <spotMaxBidPrice></spotMaxBidPrice>
+            <fallbackToOndemand>true</fallbackToOndemand>
+          </spotConfig>
           <securityGroups>Apps-Basic-SG</securityGroups>
           <remoteFS>/opt/jenkinsslave</remoteFS>
           <type>C42xlarge</type>
           <ebsOptimized>false</ebsOptimized>
           <monitoring>false</monitoring>
           <t2Unlimited>false</t2Unlimited>
-          <labels></labels>
+          <labels>ipp-centos7.4</labels>
           <mode>EXCLUSIVE</mode>
           <initScript></initScript>
           <tmpDir></tmpDir>
@@ -460,13 +468,13 @@
           <numExecutors>1</numExecutors>
           <remoteAdmin>centos</remoteAdmin>
           <jvmopts></jvmopts>
-          <subnetId>subnet-8ce472f7</subnetId>
+          <subnetId>subnet-05e4727e</subnetId>
           <idleTerminationMinutes>10</idleTerminationMinutes>
           <iamInstanceProfile></iamInstanceProfile>
           <deleteRootOnTermination>false</deleteRootOnTermination>
           <useEphemeralDevices>false</useEphemeralDevices>
           <customDeviceMapping></customDeviceMapping>
-          <instanceCap>80</instanceCap>
+          <instanceCap>150</instanceCap>
           <stopOnTerminate>false</stopOnTerminate>
           <tags>
             <hudson.plugins.ec2.EC2Tag>
@@ -480,6 +488,7 @@
           <amiType class="hudson.plugins.ec2.UnixData">
             <rootCommandPrefix></rootCommandPrefix>
             <slaveCommandPrefix></slaveCommandPrefix>
+            <slaveCommandSuffix></slaveCommandSuffix>
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>180</launchTimeout>
@@ -525,6 +534,7 @@
           <amiType class="hudson.plugins.ec2.UnixData">
             <rootCommandPrefix></rootCommandPrefix>
             <slaveCommandPrefix></slaveCommandPrefix>
+            <slaveCommandSuffix></slaveCommandSuffix>
             <sshPort>22</sshPort>
           </amiType>
           <launchTimeout>180</launchTimeout>
@@ -646,12 +656,10 @@
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
       <pendingInstances/>
-      <labelString>ipp-centos7.4</labelString>
+      <labelString></labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>ipp-centos7.4</hudson.model.labels.LabelAtom>
-      </labelSet>
+      <labelSet class="sorted-set"/>
       <usage>EXCLUSIVE</usage>
       <tunnel></tunnel>
       <vmargs></vmargs>
@@ -873,11 +881,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C54xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C54xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
