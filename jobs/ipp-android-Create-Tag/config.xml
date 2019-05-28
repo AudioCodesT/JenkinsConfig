@@ -128,6 +128,12 @@
         <url>ssh://jenkins@gerrit:29418/IPP/Android/device_audiocodes_common</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>uboot</name>
+        <refspec>+refs/heads/*:refs/remotes/uboot/* +refs/tags/*:refs/tags/uboot/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/C450/C450-uboot</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
@@ -167,6 +173,17 @@
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
               <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/C450/C450-uboot</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>c450hd_uboot</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -251,7 +268,10 @@ createTag() {
     localRepoName=$(echo $eachRepo | cut -d: -f1)
     GERRIT_BRANCH=$localRepoName/$BRANCH
     if [ &quot;$localRepoName&quot; != &quot;$MainlocalRepoName&quot; ]; then
-      git checkout $GERRIT_BRANCH
+      if ! git checkout $GERRIT_BRANCH; then 
+        echo Branch $GERRIT_BRANCH does not exist
+        continue
+      fi
       if git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then
         createCommitFileList
         while IFS=_ read -r Sha1 User When; do
@@ -310,8 +330,8 @@ subject=&quot;&quot;
 echo Sleep 5 minutes before starting check commits
 sleep 300
 
-for BRANCH in master
-do
+BRANCH=$GERRIT_BRANCH
+
   # Find remote repository name
   remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
   #remote=remotes/dvf101/master
@@ -364,7 +384,7 @@ do
   #  echo Try again later after 300 seconds
   #  exit 2
   #fi
-done
+
 
 </command>
       <unstableReturn>2</unstableReturn>
