@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>This job check every 10 minutes the Repository and create a new TAG by incrementing the last TAG in IPP/Android/repo_manifests</description>
+  <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -272,6 +272,7 @@ createTag() {
     localRepoName=$(echo $eachRepo | cut -d: -f1)
     GERRIT_BRANCH=$localRepoName/$BRANCH
     if [ &quot;$localRepoName&quot; != &quot;$MainlocalRepoName&quot; ]; then
+      # Check if this branch exist in this repository
       if ! git checkout $GERRIT_BRANCH; then 
         echo Branch $GERRIT_BRANCH does not exist
         continue
@@ -334,6 +335,7 @@ subject=&quot;&quot;
 echo Sleep 5 minutes before starting check commits
 sleep 300
 
+# All this job shoulde start in the repository and in the branch where the Submit was done
 BRANCH=$GERRIT_BRANCH
 
   # Find remote repository name
