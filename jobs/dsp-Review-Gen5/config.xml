@@ -270,8 +270,23 @@ git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git che
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
+
+
+#******************************temporary workaround to copy os module from private/GRX**************************************
+cd ${WORKSPACE}/..
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
+#clone web-ui OVOC
+git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
+cd private_GRX
+git checkout private/GRX
+cp -R Clean_based_on_snapshot_15_4_19/WithGCC_ready_to_be_compiled_MIPS_make/SoftDspC__98_Integration__Dsp/Src/Modules/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
+cd ${WORKSPACE}/Gen5
+#******************************Finish temporary workaround*************************************
 #run all 2 make in parallel (SoftDsp and SoftHost)
-if [[ ${CHIP_NAME} == &quot;Grx&quot; ]]
+if [[ ${CHIP_NAME} == &quot;GRX&quot; ]]
 then
 	run_make=(&quot;SoftDspC_98_Integration_Dsp/Hpi_64&quot; &quot;SoftDspC_98_Integration_Host/Hpi_64&quot;)
 	for path_to_run_make in ${run_make[@]}
@@ -302,6 +317,16 @@ echo &quot;Finish running make for GRX&quot;
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQXE33New0y0o/0ChYBDNqb2U4iLYw1MB/TBcPh10LRxI=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} Branch:${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
