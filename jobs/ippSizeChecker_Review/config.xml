@@ -31,7 +31,7 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>BUILD_BRANCH</name>
+          <name>GERRIT_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
           <trim>false</trim>
@@ -127,7 +127,7 @@ then
 	NAGINATOR_COUNT=0
 fi
 # get one tag before ${NEWTAG} to compare two newest size_report csv
-  echo &quot;In branch ${BUILD_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
+  echo &quot;In branch ${GERRIT_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
   #get all childs names from the spesific TAG
   childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
@@ -137,9 +137,9 @@ fi
   do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
    	  #get the New Tag
-      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${BUILD_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
-      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${BUILD_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
       if [[ &quot;$localCurlFailed&quot; == &quot;True&quot; ]]
       then
