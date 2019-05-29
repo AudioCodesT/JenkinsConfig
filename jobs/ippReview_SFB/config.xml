@@ -276,7 +276,14 @@ fi</command>
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
-                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
+GERRIT_CHANGE_ID=${GERRIT_CHANGE_ID}
+GERRIT_PATCHSET_REVISION=${GERRIT_PATCHSET_REVISION}
+GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
+GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}</properties>
+                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
                   <projects>ippVerifyCherryPick</projects>
                   <condition>ALWAYS</condition>
