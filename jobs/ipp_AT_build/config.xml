@@ -283,9 +283,8 @@ fi</command>
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
-                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>BUILD_BRANCH=${GERRIT_BRANCH}
+                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
 GERRIT_REFSPEC=${REFSPEC}
 </properties>
                       <textParamValueOnNewLine>false</textParamValueOnNewLine>
