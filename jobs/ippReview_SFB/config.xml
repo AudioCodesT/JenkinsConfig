@@ -302,7 +302,11 @@ fi
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
-                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
+GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
+                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
                   <projects>ippSizeChecker_Review</projects>
                   <condition>SUCCESS</condition>
