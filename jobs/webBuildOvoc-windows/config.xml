@@ -351,7 +351,7 @@ fi</command>
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>OVOCWebUI@audiocodes.com, cc:ben.magriso, cc:Shuky.Riechard</recipientList>
+      <recipientList>OVOCWebUI@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.StillFailingTrigger>
           <email>
@@ -384,7 +384,7 @@ $BUILD_URL
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>ben.magriso,Shuky.Riechard</recipients>
+      <recipients>ben.magriso Shuky.Riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
