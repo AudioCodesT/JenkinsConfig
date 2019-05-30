@@ -25,8 +25,8 @@ else (all other models)&#xd;
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>30</daysToKeep>
-        <numToKeep>-1</numToKeep>
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -81,7 +81,7 @@ Else provide a tag only for SFB</description>
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -101,18 +101,18 @@ Else provide a tag only for SFB</description>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.WipeWorkspace/>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
         <reference></reference>
         <timeout>20</timeout>
-        <depth>10</depth>
+        <depth>1</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
-  <assignedNode>ipp-centos7.4</assignedNode>
+  <assignedNode>ipp-centos7.4_test</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -149,21 +149,114 @@ fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># if Model is C450 make dual bin
-Branch=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
 echo &quot;Branch=${Branch}&quot; &gt; properties
 echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
-cd ${WORKSPACE}/dualBin
 echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}&quot; &gt; ${WORKSPACE}/artifactoryPath.txt
+cd ${WORKSPACE}/dualBin
+#mount aclnas03 to local directory
+#sudo mount -a
+#check if the Tags exists in artifactory or not
+SFB_exists_in_artifactory=&quot;False&quot;
+Android_exists_in_artifactory=&quot;False&quot;
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION} | grep &quot;Not Found&quot; || SFB_exists_in_artifactory=&quot;True&quot;
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION} | grep &quot;Not Found&quot; || Android_exists_in_artifactory=&quot;True&quot;
+#if SFB not in artifactory, copy files from aclnas03
+if [[ &quot;$SFB_exists_in_artifactory&quot; == &quot;False&quot; ]]
+then
+	files_to_copy=(&quot;env.bin&quot; &quot;logo_image&quot; &quot;phone.bin&quot; &quot;rootfs.ext4&quot;)
+    echo &quot;Copy files for ${SFB_VERSION} from aclnas03&quot;
+    for file in ${files_to_copy[@]}
+    do
+		cp $HOME/aclnas03_ipp/SFB/${Branch}/${SFB_VERSION}/C450HD/$file ${WORKSPACE}/dualBin/$file
+        local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d&apos; &apos; -f1)
+        remote_md5=$(md5sum $HOME/aclnas03_ipp/SFB/${Branch}/${SFB_VERSION}/C450HD/$file | cut -d&apos; &apos; -f1)
+        if [[ $remote_md5 != $local_md5 ]]
+		then
+     		   echo &quot;Failed to copy file from aclnas03&quot;
+       		   exit 1
+		fi
+	done
+fi
+if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;False&quot; ]]
+then
+	files_to_copy=(&quot;${ANDROID_VERSION}.android_images.zip&quot; &quot;${ANDROID_VERSION}.zip&quot;)
+    echo &quot;Copy files for ${ANDROID_VERSION} from aclnas03&quot;
+	for file in ${files_to_copy[@]}
+    do	
+		cp $HOME/aclnas03_ipp/Android/master/${ANDROID_VERSION}/$file ${WORKSPACE}/dualBin/$file
+        local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d&apos; &apos; -f1)
+        remote_md5=$(md5sum $HOME/aclnas03_ipp/Android/master/${ANDROID_VERSION}/$file | cut -d&apos; &apos; -f1)
+        if [[ $remote_md5 != $local_md5 ]]
+		then
+     		   echo &quot;Failed to copy file from aclnas03&quot;
+       		   exit 1
+		fi
+	done
+fi
+
+
 #download neccerray files from SFB Chosen Tag
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin
+if [[ &quot;$SFB_exists_in_artifactory&quot; == &quot;True&quot; ]] 
+then
+    echo &quot;Copy files for ${SFB_VERSION} from artifactory&quot;
+	curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin
+	remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin| grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+	local_md5=$(md5sum env.bin| cut -d&apos; &apos; -f1)
+	if [[ $remote_md5 != $local_md5 ]]
+	then
+          echo &quot;Failed to download file from artifactory&quot;
+          exit 1
+	fi
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    local_md5=$(md5sum logo_image| cut -d&apos; &apos; -f1)
+    if [[ $remote_md5 != $local_md5 ]]
+    then
+        echo &quot;Failed to download file from artifactory&quot;
+        exit 1
+    fi
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4 | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    local_md5=$(md5sum rootfs.ext4| cut -d&apos; &apos; -f1)
+    if [[ $remote_md5 != $local_md5 ]]
+    then
+        echo &quot;Failed to download file from artifactory&quot;
+        exit 1
+    fi
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    local_md5=$(md5sum phone.bin| cut -d&apos; &apos; -f1)
+    if [[ $remote_md5 != $local_md5 ]]
+    then
+        echo &quot;Failed to download file from artifactory&quot;
+        exit 1
+    fi
+fi
+
 #download neccerray files from Android Chosen Tag
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.android_images.zip
-curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.zip
+if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;True&quot; ]] 
+then
+	echo &quot;Copy files for ${ANDROID_VERSION} from artifactory&quot;
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.android_images.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    local_md5=$(md5sum ${ANDROID_VERSION}.android_images.zip| cut -d&apos; &apos; -f1)
+    if [[ $remote_md5 != $local_md5 ]]
+    then
+        echo &quot;Failed to download file from artifactory&quot;
+        exit 1
+    fi
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    local_md5=$(md5sum ${ANDROID_VERSION}.zip| cut -d&apos; &apos; -f1)
+    if [[ $remote_md5 != $local_md5 ]]
+    then
+        echo &quot;Failed to download file from artifactory&quot;
+        exit 1
+    fi
+fi
 unzip ${ANDROID_VERSION}.android_images.zip
 unzip ${ANDROID_VERSION}.zip
 #change names of system_raw.img and userdata_raw.img
@@ -305,7 +398,7 @@ ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Mod
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_username=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
