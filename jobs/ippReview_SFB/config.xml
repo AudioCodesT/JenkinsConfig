@@ -236,8 +236,8 @@ if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRA
 fi
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
-if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-#if [[ &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+#if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
 	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
     	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
 fi
