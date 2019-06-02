@@ -206,12 +206,12 @@ then
      if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;$NAGINATOR_MAXCOUNT&quot; ]]
      then
      	#put me and jontan reviewrs
-		message=&quot;reports could not be downloaded, adding Ben/Jonatan to review&quot;
+		message=&quot;Size check report of the tag you are based on cannot be download, adding Ben/Jonatan to review&quot;
      	#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
      	ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; --label Size=-1 ${GIT_COMMIT}
      	ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com -a jonatan.reberger@audiocodes.com ${GIT_COMMIT}&quot;    
      else
-     	message=&quot;reports could not be downloaded, retry again in 15 minutes&quot;
+     	message=&quot;Size check report of the tag you are based on cannot be download, retry again in 15 minutes&quot;
         echo $message
         if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;1&quot; ]]
         then
