@@ -36,7 +36,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -58,9 +58,14 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
-      <hudson.plugins.git.extensions.impl.CheckoutOption>
-        <timeout>25</timeout>
-      </hudson.plugins.git.extensions.impl.CheckoutOption>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <timeout>20</timeout>
+        <depth>0</depth>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <assignedNode>Web-UI-Win-Dynamic</assignedNode>
@@ -163,7 +168,7 @@ else
  	echo &quot;RUN: yarn install&quot;
     yarn install
     echo &quot;RUN: yarn run dist&quot;
-    yarn run dist
+    yarn run distTest 
    #kill the Proxy Server process
    pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
   echo &quot;pidNumber = $pidNumber&quot;
@@ -297,6 +302,10 @@ fi</command>
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>node_modules/**</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>.git/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
