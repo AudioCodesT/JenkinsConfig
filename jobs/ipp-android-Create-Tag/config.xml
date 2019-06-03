@@ -354,7 +354,7 @@ git remote -v
 subject=&quot;&quot;
 
 echo Sleep 5 minutes before starting check commits
-sleep 30
+sleep 300
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
