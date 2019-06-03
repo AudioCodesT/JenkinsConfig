@@ -29,7 +29,18 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
+          <description>you must provide the branch name when you execute it manually</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>PROJECT</name>
+          <description>you can provide the project name when you want to execute it on this specific repository.
+If it is empty, the last repository will be checked
+Could be for examples:
+IPP/Android/device_dspg_dvf101-kernel
+IPP/Android/device_audiocodes_common
+uboot/c450hd_uboot</description>
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -343,7 +354,7 @@ git remote -v
 subject=&quot;&quot;
 
 echo Sleep 5 minutes before starting check commits
-sleep 300
+sleep 30
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
@@ -352,11 +363,15 @@ if [ -z $GERRIT_BRANCH ]; then
 fi
 BRANCH=$GERRIT_BRANCH
 
+if [ -z $PROJECT ]; then
   # Find remote repository name
   remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
-  #remote=remotes/dvf101/master
-  MainlocalRepoName=$(echo $remote | cut -d/ -f2)
+else
+  # find the repository name that was configured in this job
+  remote=remotes/$(git remote -v | grep $PROJECT | head -1 | awk &apos;{print $1}&apos;)/$BRANCH
+fi
 
+  MainlocalRepoName=$(echo $remote | cut -d/ -f2)
   GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
   # Find real repository name - to find the line in default.xml 
   MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
