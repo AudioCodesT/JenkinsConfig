@@ -288,7 +288,7 @@ cd ${WORKSPACE}/Gen5
 #run all 2 make in parallel (SoftDsp and SoftHost)
 if [[ ${CHIP_NAME} == &quot;GRX&quot; ]]
 then
-	run_make=(&quot;SoftDspC_98_Integration_Dsp/Hpi_64&quot; &quot;SoftDspC_98_Integration_Host/Hpi_64&quot;)
+	run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHostmake /Hpi_64&quot;)
 	for path_to_run_make in ${run_make[@]}
 	do
 		compile_grx $path_to_run_make &amp;
