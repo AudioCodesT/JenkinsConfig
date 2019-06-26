@@ -1,7 +1,11 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>Manually triggered when the user want to create a new tag.&#xd;
+1. Promote version tag automatically (last Tag+1)&#xd;
+    For example: 1.1.2_5 promote to 1.1.3_6&#xd;
+2. Deploy products to Artifactory&#xd;
+</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
