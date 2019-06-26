@@ -320,7 +320,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 
 labelGrade=&quot;--label Automation-Test=-1&quot;
 # No grade if this patch-set was merged already
-if [ &quot;$merged&quot; == &quot;yes&quot; ] || $GiveScore; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
  
 echo Send failed message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
@@ -351,7 +351,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
 
 labelGrade=&quot;--label Automation-Test=1&quot;
-if [ &quot;$merged&quot; == &quot;yes&quot; ] || $GiveScore; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
 
 echo Send OK message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
