@@ -65,7 +65,7 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>GiveScore</name>
-          <description>If $GiveScore == 0, do not give score</description>
+          <description>If $GiveScore == false, do not give score</description>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
@@ -433,7 +433,7 @@ if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automati
 
 labelGrade=&quot;--label $labelName=-1&quot;
 # No grade if this patch-set was merged already
-if [[ &quot;$merged&quot; == &quot;yes&quot; || &quot;$GiveScore&quot; == 0 ]]; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/ATA/$IMAGENAMES.txt
@@ -469,7 +469,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
 labelGrade=&quot;--label $labelName=1&quot;
-if [[ &quot;$merged&quot; == &quot;yes&quot; || &quot;$GiveScore&quot; == 0 ]]; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/$IMAGENAMES.txt
