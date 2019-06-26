@@ -25,27 +25,11 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>GERRIT_BRANCH</name>
+        <hudson.model.BooleanParameterDefinition>
+          <name>FLAG</name>
           <description></description>
-          <defaultValue>3.1.0</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
-          <name></name>
-          <description></description>
-          <allowedSlaves>
-            <string>ipp-Auto7</string>
-          </allowedSlaves>
-          <defaultSlaves>
-            <string>ipp-Auto7</string>
-          </defaultSlaves>
-          <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
-          <allowMultiNodeSelection>false</allowMultiNodeSelection>
-          <triggerConcurrentBuilds>false</triggerConcurrentBuilds>
-          <ignoreOfflineNodes>false</ignoreOfflineNodes>
-          <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.AllNodeEligibility"/>
-        </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -56,12 +40,10 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp-Auto7</assignedNode>
+  <assignedNode>ipp-Auto9</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -73,6 +55,7 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
+echo $FLAG
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
