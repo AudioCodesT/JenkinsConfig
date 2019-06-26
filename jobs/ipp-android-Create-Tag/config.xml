@@ -155,6 +155,18 @@ uboot/c450hd_uboot</description>
         <url>ssh://jenkins@gerrit:29418/IPP/C450/C450-uboot</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>x86emu</name>
+        <refspec>+refs/heads/*:refs/remotes/x86emu/* +refs/tags/*:refs/tags/x86emu/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_generic_x86emu</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>system_core</name>
+        <refspec>+refs/heads/*:refs/remotes/system_core/* +refs/tags/*:refs/tags/system_core/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_core</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
@@ -189,7 +201,7 @@ uboot/c450hd_uboot</description>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>REG_EXP</compareType>
-          <pattern>.*\/Android\/?.*</pattern>
+          <pattern>IPP\/Android\/?.*</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
@@ -207,8 +219,8 @@ uboot/c450hd_uboot</description>
           <pattern>IPP/C450/C450-uboot</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>c450hd_uboot</pattern>
+              <compareType>ANT</compareType>
+              <pattern>*/c450hd_uboot</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -289,6 +301,7 @@ createTag() {
 
   for eachRepo in $(git remote -v | grep &quot;(push)&quot; | sed &apos;s:\(.*\)\sssh.*29418/\(.*\) .*:\1\:\2:&apos;); do
     # repoToTAG represent the full repository name, we need it to find it in the default.xml file
+    echo Check repository $eachRepo.......................................
     repoToTAG=$(echo $eachRepo | cut -d: -f2)
     localRepoName=$(echo $eachRepo | cut -d: -f1)
     GERRIT_BRANCH=$localRepoName/$BRANCH
@@ -298,7 +311,8 @@ createTag() {
         echo Branch $GERRIT_BRANCH does not exist
         continue
       fi
-      if git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then
+      if ! git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then
+      #if git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then
         createCommitFileList
         while IFS=_ read -r Sha1 User When; do
           if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
@@ -335,11 +349,30 @@ createTag() {
 # Output = the file &lt;reposiroty name&gt;.list
 createCommitFileList() {
   echo Find the last TAG name in repository $localRepoName
-  LastTag=$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH)
+  LastTag=$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH || echo NOTAG)
+  #If no TAGS exist at all in this branch, check the last commit only
+  if [ &quot;$LastTag&quot; == &quot;NOTAG&quot; ]; then LastTag=&quot;$GERRIT_BRANCH^&quot;; fi
   if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
   echo Check $LastTag..$GERRIT_BRANCH
   git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; $localRepoName.list
   echo &gt;&gt; $localRepoName.list
+}
+
+#######################################################################################
+# Create (if not exist yet) the repo_manifests and find the last TAG
+# Output = LastManifestTag
+createLocalManifests() {
+  echo Create &apos;repo_manifests&apos; and find the last TAG 
+  cd ..
+  if [ ! -d repo_manifests ]; then
+    git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
+  fi
+  cd repo_manifests
+  # Create a local branch and checkout to 
+  if ! git branch | grep -q $BRANCH; then git checkout -f -b $BRANCH $GERRIT_BRANCH; fi
+  git reset --hard
+  git pull --rebase
+  LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
 }
 
 #######################################################################################
@@ -352,73 +385,96 @@ echo Starting...
 git status
 git remote -v
 subject=&quot;&quot;
+LastManifestTag=&quot;&quot;
 
 echo Sleep 5 minutes before starting check commits
-sleep 300
+sleep 30
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
-  echo &quot;No branch found, exit with error&quot;
-  exit 1
+  echo &quot;No branch found, set to default branch: master&quot;
+  GERRIT_BRANCH=&quot;master&quot;
 fi
 BRANCH=$GERRIT_BRANCH
 
-if [ -z $PROJECT ]; then
-  # Find remote repository name
-  remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
-else
-  # find the repository name that was configured in this job
-  remote=remotes/$(git remote -v | grep $PROJECT | head -1 | awk &apos;{print $1}&apos;)/$BRANCH
+# If the job was executed manually, $PROJECT should be defined
+if [ ! -z &quot;$PROJECT&quot; ]; then GERRIT_PROJECT=$PROJECT; fi
+
+if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+  #Create a TAG on manifests and exit
+  createLocalManifests
+  NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
+  git tag -a -m &quot;Jenkins auto tag&quot; $NEWTAG
+  manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
+  git push origin HEAD:$manifestBranch
+  git push origin $NEWTAG
+  exit 0
 fi
 
-  MainlocalRepoName=$(echo $remote | cut -d/ -f2)
-  GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
-  # Find real repository name - to find the line in default.xml 
-  MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
-
-  echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
-  if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
-  
-  echo Create &apos;repo_manifests&apos; and find the last TAG 
-  cd ..
-  if [ ! -d repo_manifests ]; then
-    git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
+# If the job was automatically triggered, the $GERRIT_PROJECT should be defined.
+# If not (no matter, automatically or manually), skip this &apos;checkout&apos; and hope the next commands will find the $MainlocalRepoName
+if [ ! -z &quot;$GERRIT_PROJECT&quot; ]; then
+  echo &quot;Checkout to the right project/branch&quot;
+  # Most of case it was checkedout already to this project/branch
+  findProject=$(git remote -v | grep $GERRIT_PROJECT | head -1 | awk &apos;{print $1}&apos;)
+  if [ -z &quot;$findProject&quot; ]; then
+    # Probably this repository wasn&apos;t defined in this job
+    echo &quot;This local project was not defined in this job , exit with error&quot;
+    exit 1;  
+  else 
+    git checkout $findProject/$BRANCH
   fi
-  cd repo_manifests
-  # Create a local branch and checkout to 
-  if ! git branch | grep -q $BRANCH; then git checkout -f -b $BRANCH $GERRIT_BRANCH; fi
-  git reset --hard
-  git pull --rebase
-  LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
-  cd $WORKSPACE
+fi
 
-  git checkout $GERRIT_BRANCH
-  localRepoName=$MainlocalRepoName
-  createCommitFileList
+# Find remote repository name
+remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
+MainlocalRepoName=$(echo $remote | cut -d/ -f2)
+
+if [ -z $MainlocalRepoName ]; then
+  echo &quot;No local project was found, exit with error&quot;
+  exit 1;
+fi
+
+GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
+# Find real repository name - to find the line in default.xml 
+MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+
+echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
+if git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then exit 0; fi
+#if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
   
-  LastUser=&quot;&quot;
-  while IFS=_ read -r Sha1 User When
-  do
+echo Create &apos;repo_manifests&apos; and find the last TAG
+createLocalManifests
+echo Last TAG found is $LastManifestTag
+cd $WORKSPACE
+
+git checkout $GERRIT_BRANCH
+localRepoName=$MainlocalRepoName
+createCommitFileList
+  
+LastUser=&quot;&quot;
+while IFS=_ read -r Sha1 User When
+do
     if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; subject=&quot;&quot;; fi
     LastUser=$User
     LastSha1=$Sha1
     subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $MainRepoName) %n%b %n&quot; $LastSha1 -n1)&quot;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-  done &lt; $MainlocalRepoName.list
+done &lt; $MainlocalRepoName.list
 
-  if [ -z $LastWhen ]; then continue; fi
+if [ -z $LastWhen ]; then continue; fi
 
-  echo Check the last commit if 5 minutes passed...
-  date
+echo Check the last commit if 5 minutes passed...
+date
 
-  echo Create TAG for the last user
-  #CurrentTime=`date +%s`
-  #if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
-    createTag
-  #else
-  #  echo Try again later after 300 seconds
-  #  exit 2
-  #fi
+echo Create TAG for the last user
+#CurrentTime=`date +%s`
+#if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
+  createTag
+#else
+#  echo Try again later after 300 seconds
+#  exit 2
+#fi
 
 
 </command>
