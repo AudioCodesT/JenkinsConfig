@@ -1,7 +1,8 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
   <actions/>
-  <description></description>
+  <description>This job is triggered by the Automation-Test button after the copying of the relevant images was done.&#xd;
+The role of this job is to execute the ipp_AT_parent on the slave (ipp_auto7 or ipp_auto8 for LYNC and ipp_auto11 for IGS) and give score to the Automation-Test label. </description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -13,7 +14,7 @@
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
         <daysToKeep>15</daysToKeep>
-        <numToKeep>250</numToKeep>
+        <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -82,14 +83,14 @@
       <command>#!c:\cygwin\bin\bash --login
 
 echo $NODE_NAME
-PHISICALPHONE=&quot;&quot;
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
 echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
-echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
 
+echo Find the last patch-set
+# In case the PS was updated with code changes, abort this execution
 while IFS= read -r line
 do
   field=`echo $line | cut -d: -f1` # Could be: number or kind
@@ -111,11 +112,24 @@ echo current patchSet is $checkPS - no new code changes, this execution is for P
 
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
+# With $runPhases flag variable you have control of which parameters and where executing the ipp_AT_parent
+# If $runPhases = 0, the ipp_AT_parent will not start
 if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
-  echo RunPhases=2 &gt;&gt; ${WORKSPACE}/properties.txt
+  echo RunPhases=3 &gt;&gt; ${WORKSPACE}/properties.txt
+  PC2RUN1=&quot;ipp-Auto9&quot;
+  PC2RUN2=&quot;IPP-Auto11&quot;
 else
   echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
+  #if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then PC2RUN=&quot;ipp-Auto9&quot;
+  #else 
+    PC2RUN1=&quot;ippTestAuto&quot;
+  #fi
 fi
+
+echo PC2RUN1=$PC2RUN1 &gt;&gt; ${WORKSPACE}/properties.txt
+echo PC2RUN2=$PC2RUN2 &gt;&gt; ${WORKSPACE}/properties.txt
+echo GiveScoreLYNC=1 &gt;&gt; ${WORKSPACE}/properties.txt
+echo GiveScoreIGS=1 &gt;&gt; ${WORKSPACE}/properties.txt
 
 date
 
@@ -133,7 +147,7 @@ date
           <jobName>ipp_AT_parent</jobName>
           <jobAlias></jobAlias>
           <currParams>true</currParams>
-          <aggregatedTestResults>false</aggregatedTestResults>
+          <aggregatedTestResults>true</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -141,7 +155,7 @@ date
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>false</abortAllJob>
-          <condition>${RunPhases} == 1</condition>
+          <condition>${RunPhases} == 1 || ${RunPhases} == 3</condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
@@ -149,12 +163,13 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=450
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
-ServerType=Lync</properties>
+ServerType=Lync
+GiveScore=$GiveScoreLYNC</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>ippTestAuto</nodeLabel>
+              <nodeLabel>$PC2RUN1</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>UNSTABLE</killPhaseOnJobResultCondition>
@@ -165,7 +180,7 @@ ServerType=Lync</properties>
           <jobName>ipp_AT_parent</jobName>
           <jobAlias></jobAlias>
           <currParams>true</currParams>
-          <aggregatedTestResults>false</aggregatedTestResults>
+          <aggregatedTestResults>true</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -173,7 +188,7 @@ ServerType=Lync</properties>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>false</abortAllJob>
-          <condition>${RunPhases} == 2</condition>
+          <condition>${RunPhases} == 2 || ${RunPhases} == 3</condition>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
@@ -181,12 +196,13 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=445
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
-ServerType=IGS</properties>
+ServerType=IGS
+GiveScore=$GiveScoreIGS</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
               <name>PC2RUN</name>
-              <nodeLabel>IPP-Auto11</nodeLabel>
+              <nodeLabel>$PC2RUN2</nodeLabel>
             </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
           </configs>
           <killPhaseOnJobResultCondition>UNSTABLE</killPhaseOnJobResultCondition>
@@ -299,9 +315,8 @@ if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 1; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
-if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
-labelGrade=&quot;--label $labelName=-1&quot;
+labelGrade=&quot;--label Automation-Test=-1&quot;
 # No grade if this patch-set was merged already
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
@@ -332,9 +347,8 @@ if [ &quot;${RunPhases}&quot; -eq 0 ]; then exit 0; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
-if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
-labelGrade=&quot;--label $labelName=1&quot;
+labelGrade=&quot;--label Automation-Test=1&quot;
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
 echo Send OK message to Gerrit - $change,$newPS
