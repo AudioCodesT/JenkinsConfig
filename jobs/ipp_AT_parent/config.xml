@@ -13,7 +13,7 @@
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
         <daysToKeep>15</daysToKeep>
-        <numToKeep>250</numToKeep>
+        <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -63,6 +63,11 @@
           <defaultValue>Lync</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>GiveScore</name>
+          <description>If $GiveScore == 0, do not give score</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name>PC2RUN</name>
           <description></description>
@@ -78,7 +83,7 @@
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <maxConcurrentPerNode>1</maxConcurrentPerNode>
-      <maxConcurrentTotal>3</maxConcurrentTotal>
+      <maxConcurrentTotal>4</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>true</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -87,7 +92,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ippTestAuto</assignedNode>
+  <assignedNode>${PC2RUN}</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -95,10 +100,6 @@
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
-</command>
-    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash --login
 
@@ -110,15 +111,13 @@ PHISICALPHONE=&quot;&quot;
 #  echo set to sim
 #fi
 
+cd C:/IpPhoneAutomation/ATA &amp;&amp; tclsh AtaExec.tcl -stop all
+
 net use
 
 ATA_Home=C:/IpPhoneAutomation/ATA
-if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
-  ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-fi
 
-
-ls $ATA_Home/Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+ls $ATA_Home/Resources/Firmwares/UC*_${IMAGENAMES}.*
 
 if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     echo confige again Z: ----------------------
@@ -126,7 +125,7 @@ if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
 fi
 
-if [ `ls $ATA_Home/Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
+if [ `ls $ATA_Home/Resources/Firmwares/UC*_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -eq 0 ]; then
   echo &quot;the images files were not found (ClosedChannel)... try again&quot;
   exit 1;
 fi
@@ -434,7 +433,7 @@ if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automati
 
 labelGrade=&quot;--label $labelName=-1&quot;
 # No grade if this patch-set was merged already
-if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
+if [[ &quot;$merged&quot; == &quot;yes&quot; || &quot;$GiveScore&quot; == 0 ]]; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/ATA/$IMAGENAMES.txt
@@ -470,7 +469,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
 labelGrade=&quot;--label $labelName=1&quot;
-if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
+if [[ &quot;$merged&quot; == &quot;yes&quot; || &quot;$GiveScore&quot; == 0 ]]; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/$IMAGENAMES.txt
@@ -539,7 +538,7 @@ $change,$newPS
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} ${CHANGE} ${ServerType} ${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER} ${REFSPEC} ${ServerType} ${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
