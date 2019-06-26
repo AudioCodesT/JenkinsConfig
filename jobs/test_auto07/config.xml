@@ -26,7 +26,7 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
-          <name>FLAG</name>
+          <name>GiveScore</name>
           <description></description>
           <defaultValue>true</defaultValue>
         </hudson.model.BooleanParameterDefinition>
@@ -55,7 +55,10 @@
       <command>#!c:\cygwin\bin\bash --login
 date
 
-echo $FLAG
+echo $GiveScore
+
+if [&quot;$GiveScore&quot; == 0 ]; then echo 123; fi
+
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
