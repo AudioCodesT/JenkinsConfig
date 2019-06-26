@@ -1,7 +1,9 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>gerrit trigger when new patchset&#xd;
+1. run gradle tasks if all pass successfully:&#xd;
+Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verified-1 if failed</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
