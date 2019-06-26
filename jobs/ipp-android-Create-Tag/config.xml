@@ -312,7 +312,8 @@ createTag() {
         continue
       fi
       if ! git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then
-      #if git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then
+        LastTag=$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH || echo NOTAG)
+        if [ &quot;$LastTag&quot; == &quot;NOTAG&quot; ]; then continue; fi
         createCommitFileList
         while IFS=_ read -r Sha1 User When; do
           if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
@@ -345,11 +346,10 @@ createTag() {
 
 #######################################################################################
 # Find the last TAG and create a file with all the new commits in this repository
-# Input = The local repository name: $localRepoName
+# Input = The last TAG: $LastTag, and the local repository name: $localRepoName
 # Output = the file &lt;reposiroty name&gt;.list
 createCommitFileList() {
-  echo Find the last TAG name in repository $localRepoName
-  LastTag=$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH || echo NOTAG)
+  echo TAG: $LastTag ------------------- on: $localRepoName -------------------
   #If no TAGS exist at all in this branch, check the last commit only
   if [ &quot;$LastTag&quot; == &quot;NOTAG&quot; ]; then LastTag=&quot;$GERRIT_BRANCH^&quot;; fi
   if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
@@ -450,6 +450,8 @@ cd $WORKSPACE
 
 git checkout $GERRIT_BRANCH
 localRepoName=$MainlocalRepoName
+echo Find the last TAG name in repository $localRepoName
+LastTag=$(git describe --tags --abbrev=0 --first-parent $GERRIT_BRANCH || echo NOTAG)
 createCommitFileList
   
 LastUser=&quot;&quot;
