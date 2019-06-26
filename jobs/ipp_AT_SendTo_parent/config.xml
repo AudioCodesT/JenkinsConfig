@@ -116,16 +116,16 @@ ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test
 # If $runPhases = 0, the ipp_AT_parent will not start
 if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
   echo RunPhases=3 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreLYNC=0 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreIGS=0 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScore=1 &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScore=true &gt;&gt; ${WORKSPACE}/properties.txt
   
   PC2RUNLYNC=&quot;ipp-Auto9&quot;
   PC2RUNIGS=&quot;IPP-Auto11&quot;
 else
   echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreLYNC=1 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScore=0 &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreLYNC=true &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScore=false &gt;&gt; ${WORKSPACE}/properties.txt
   PC2RUNLYNC=&quot;ippTestAuto&quot;  
   #if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then PC2RUN=&quot;ipp-Auto9&quot;; fi
 fi
@@ -320,7 +320,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 
 labelGrade=&quot;--label Automation-Test=-1&quot;
 # No grade if this patch-set was merged already
-if [[ &quot;$merged&quot; == &quot;yes&quot; || &quot;$GiveScore&quot; == 0 ]]; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || $GiveScore; then labelGrade=&quot;&quot;; fi
  
 echo Send failed message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
@@ -351,7 +351,7 @@ change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
 
 labelGrade=&quot;--label Automation-Test=1&quot;
-if [[ &quot;$merged&quot; == &quot;yes&quot; || &quot;$GiveScore&quot; == 0 ]]; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || $GiveScore; then labelGrade=&quot;&quot;; fi
 
 echo Send OK message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
