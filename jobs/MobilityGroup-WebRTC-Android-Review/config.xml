@@ -130,15 +130,6 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command>#copy gradle warraper FROM DemoClient to SDK
-#rm -rf SDK/gradle || echo &quot;no folder to delete&quot;
-#mkdir SDK/gradle
-#cp -R DemoClient/gradle/. SDK/gradle/.
-# remove SDK/local.properties (wrong path to NDK and SDK)
-#rm -rf SDK/local.properties
-</command>
-    </hudson.tasks.Shell>
     <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
       <switches></switches>
       <tasks>webrtcsdk:assembleRelease</tasks>
