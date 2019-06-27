@@ -119,19 +119,15 @@ if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
   echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScore=true &gt;&gt; ${WORKSPACE}/properties.txt
-  
-  PC2RUNLYNC=&quot;ipp-Auto9&quot;
-  PC2RUNIGS=&quot;IPP-Auto11&quot;
+  echo PC2RUNLYNC=&quot;ipp-Auto9&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+  echo PC2RUNIGS=&quot;IPP-Auto11&quot; &gt;&gt; ${WORKSPACE}/properties.txt
 else
   echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreLYNC=true &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScore=false &gt;&gt; ${WORKSPACE}/properties.txt
-  PC2RUNLYNC=&quot;ippTestAuto&quot;  
+  echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   #if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then PC2RUN=&quot;ipp-Auto9&quot;; fi
 fi
-
-echo PC2RUNLYNC=$PC2RUNLYNC &gt;&gt; ${WORKSPACE}/properties.txt
-echo PC2RUNIGS=$PC2RUNIGS &gt;&gt; ${WORKSPACE}/properties.txt
 
 date
 
@@ -149,7 +145,7 @@ date
           <jobName>ipp_AT_parent</jobName>
           <jobAlias></jobAlias>
           <currParams>true</currParams>
-          <aggregatedTestResults>true</aggregatedTestResults>
+          <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
@@ -182,7 +178,7 @@ GiveScore=$GiveScoreLYNC</properties>
           <jobName>ipp_AT_parent</jobName>
           <jobAlias></jobAlias>
           <currParams>true</currParams>
-          <aggregatedTestResults>true</aggregatedTestResults>
+          <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
           <parsingRulesPath></parsingRulesPath>
