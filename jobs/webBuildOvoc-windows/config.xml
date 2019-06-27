@@ -150,7 +150,7 @@ git submodule init
 echo &quot;git submodule update&quot;
 git submodule update
 echo &quot;finish submodule&quot;
-#rm -rf yarn.lock
+rm -rf yarn.lock
 fi
 
 
@@ -196,80 +196,73 @@ then
       echo &quot;RUN: grunt dist&quot;
       grunt dist
       else
-      	# set the build number as a version, and run dist
-      	if [ -f webpack.config.js ]; then
-        	echo &quot;*** adding Jenkins BUILD_NUMBER as a version in file webpack.config.js ***&quot;
-			perl -pi -e &quot;s/\&quot;%version%\&quot;/\&quot;${BUILD_NUMBER}\&quot;/g&quot; webpack.config.js
-		fi
-   	  echo &quot;RUN: yarn run dist&quot;
-      yarn run distTest
-      
-       #kill the Proxy Server process
-   	  pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
- 	  echo &quot;pidNumber = $pidNumber&quot;
- 	  if [[ ! -z &quot;$pidNumber&quot; ]]
- 	  then
-  	    echo &quot;killing the proccess of the protractor proxy server&quot;
-        taskkill /F /PID &quot;$pidNumber&quot;
-	  fi
-      	# for BRANCH 7.6 run protractor TESTS	
-         if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
-  		 then
-   			echo &quot;RUN: yarn run protractorProxyServer&quot;
-    		yarn run protractorProxyServer &amp; sleep 15
-    		echo &quot;RUN: yarn run protractorServer&quot;
-    		yarn run protractorServer &amp; sleep 15
-    		echo &quot;RUN: yarn run protractor&quot;
-    		yarn run protractor
-    	    #all others branches (7.6.1000 and up) run uiTests
-		else
-			if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]]
-        	then
-        		#change serverName to proxy server ip
-    			sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
-        	else
-       			sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
-        	fi
-            #change username and password
-    		sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
-    	    sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts
-            sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
-            cat ${WORKSPACE}/cypress/support/config.ts
-    	    echo &quot;RUN: yarn run proxyServer&quot;
-  		    yarn run proxyServer &amp; sleep 15
-       		echo &quot;RUN: yarn run uiTests&quot;
-    	    yarn run uiTests
-    	fi
-    
-      echo &quot;RUN: yarn run replaceStrings&quot;
-      yarn run distFull 
-      echo &quot;RUN:yarn run zip&quot;
-      yarn run zip  
-      fi
+              # set the build number as a version, and run dist
+              if [ -f webpack.config.js ]; then
+                  echo &quot;*** adding Jenkins BUILD_NUMBER as a version in file webpack.config.js ***&quot;
+                  perl -pi -e &quot;s/\&quot;%version%\&quot;/\&quot;${BUILD_NUMBER}\&quot;/g&quot; webpack.config.js
+              fi
+            echo &quot;RUN: yarn run distTest&quot;
+            yarn run distTest
+            
+             #kill the Proxy Server process
+            pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
+            echo &quot;pidNumber = $pidNumber&quot;
+            if [[ ! -z &quot;$pidNumber&quot; ]]
+            then
+              echo &quot;killing the proccess of the protractor proxy server&quot;
+              taskkill /F /PID &quot;$pidNumber&quot;
+            fi
+            if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4.3000&quot; ]]
+            then
+              echo &quot;for 7.4.3000 NO Protractor or UITests running&quot;
+              #for branch 7.6 run protractor TESTS
+            elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot; ]]
+            then
+                  echo &quot;RUN: yarn run protractorProxyServer&quot;
+                  yarn run protractorProxyServer &amp; sleep 15
+                  echo &quot;RUN: yarn run protractorServer&quot;
+                  yarn run protractorServer &amp; sleep 15
+                  echo &quot;RUN: yarn run protractor&quot;
+                  yarn run protractor
+                  #all others branches (7.6.1000 and up) run uiTests
+            else
+                  if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]]
+                  then
+                        #change serverName to proxy server ip
+                        #sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
+                        echo &quot;no commits in 7.6.1000&quot;
+                  elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.2000&quot; ]]
+                  then
+                        sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
+                  else
+                        sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
+                  fi
+                        #change username and password
+                        sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
+                        sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts
+                        sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
+                        cat ${WORKSPACE}/cypress/support/config.ts
+                        echo &quot;RUN: yarn run proxyServer&quot;
+                        yarn run proxyServer &amp; sleep 15
+                        echo &quot;RUN: yarn run uiTests&quot;
+                        yarn run uiTests
+            fi
+            echo &quot;RUN: yarn run distFull&quot;
+            yarn run distFull 
+            echo &quot;RUN:yarn run zip&quot;
+            yarn run zip  
+     fi
       
      
-      #rename zip file to ovoc-7.4.0.zip in order to deploy in one name to artifactory
-      if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.3000&quot; ]]
-      then mv dist/ovoc*.zip dist/ovoc-7.4.0.zip
-      # from 7.6 we use a new name:
-      else mv dist/ovoc*.zip dist/ovoc-ui.zip
-      fi
+#rename zip file to ovoc-7.4.0.zip in order to deploy in one name to artifactory
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.3000&quot; ]]
+then mv dist/ovoc*.zip dist/ovoc-7.4.0.zip
+# from 7.6 we use a new name:
+else mv dist/ovoc*.zip dist/ovoc-ui.zip
+fi
 else
 	echo &quot;******   This is not the last commit. Exit without building  ******&quot;
-fi
-
-              # register the packages.
-      #echo &quot;RUN: bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git&quot;
-      #bower register ac-polyfill ssh://tg@gerrit:29418/web-ui/ac-polyfill.git
-      #echo &quot;RUN: bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git&quot;
-      #bower register object-hash ssh://tg@gerrit:29418/web-ui/object-hash.git
-      #echo &quot;RUN: bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git&quot;
-      #bower register kendo-ui ssh://tg@gerrit:29418/web-ui/kendo.git
-      #echo &quot;RUN: bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git&quot;
-      #bower register ac-infra ssh://tg@gerrit:29418/web-ui/ac-infra.git
-      #echo &quot;RUN: bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git&quot;
-      #bower register fingerprintjs2sync ssh://tg@gerrit:29418/web-ui/fingerprintjs2sync.git 
-      </command>
+fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
