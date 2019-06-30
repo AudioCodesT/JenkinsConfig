@@ -4,7 +4,7 @@
   <description>First, the user build manually the job  &quot;MobilityGroup-WebRTC-Android-Build&quot; in order to create a new TAG.&#xd;
 Then, this job automatically triggered by new TAG on WebRTC Android.&#xd;
 &#xd;
-The job get all the information on the commits between the old tag to the new tag, and trigger the job &quot;UpdateVI-Jira&quot; which send an email to notify on a new TAG.</description>
+This job get all the information on the commits between the old tag to the new tag, and trigger the job &quot;UpdateVI-Jira&quot; which send an email to notify on a new TAG.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
