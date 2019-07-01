@@ -63,16 +63,18 @@
     <hudson.tasks.Shell>
       <command>
 # Check if ipp_AT_parent job is in the queue or already running
-# to avoid more than one sbc-drt-request execution
-echo Check if job $JobName exist
-for job in \
-  $(curl -ks https://jenkins/queue/api/json | \
-  sed -e &apos;s/REFSPEC/\n/g; s/&quot;url&quot;:&quot;/\n/g&apos; | grep $JobName); do
-  echo Check $job.......
-  if [[ $job =~ /$BuildNumber/ ]]; then
-    echo &quot;-------------------------------Find-------------------------------&quot;;
-  fi
-done
+
+allInQueue=$(curl -ks https://jenkins/queue/api/json |  grep $JobName)
+
+#echo Check if job $JobName exist
+#for job in \
+#  $(curl -ks https://jenkins/queue/api/json | \
+#  sed -e &apos;s/REFSPEC/\n/g; s/&quot;url&quot;:&quot;/\n/g&apos; | grep $JobName); do
+#  echo Check $job.......
+#  if [[ $job =~ /$BuildNumber/ ]]; then
+#    echo &quot;-------------------------------Find-------------------------------&quot;;
+#  fi
+#done
 
 # ipp_AT_parent is running Already?
 allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
