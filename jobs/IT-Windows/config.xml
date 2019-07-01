@@ -1,0 +1,180 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Run a Windows instance on AWS for IT use.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Action</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Run</string>
+              <string>Terminate</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>InstanceID</name>
+          <description>Instance id to terminate
+Only valid if &apos;Action&apos; is &apos;Terminate&apos;</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>master</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cd /var/lib/jenkins/jobs/IT-Windows/builds/${BUILD_ID}
+user=$(head -n 1 log | cut -d &apos;[&apos; -f3)
+user=${user:2}
+
+if [[ &quot;$Action&quot; == &quot;Run&quot; ]]; then
+    instance=$(aws ec2 run-instances --output json --image-id ami-018c2bcdc530c0630 --count 1 --instance-type t3.small --instance-market-options MarketType=spot --tag-specifications &apos;ResourceType=instance,Tags=[{Key=Ownner,Value=IT},{Key=Name,Value=IT Windows}]&apos; --key-name IT --security-group-ids sg-00705b93f88448f53 --subnet-id subnet-77285b1e)
+    inst_id=$(echo $instance | jq .Instances[0].InstanceId)
+    inst_ip=$(echo $instance | jq .Instances[0].NetworkInterfaces[0].PrivateIpAddresses[0].PrivateIpAddress)
+    
+    inst_id=${inst_id//\&quot;/}
+    inst_ip=${inst_ip//\&quot;/}
+    
+    aws ec2 wait instance-running --instance-ids $inst_id
+    sleep 240
+    
+    password=$(aws ec2 get-password-data --output json --instance-id $inst_id --priv-launch-key /var/lib/jenkins/.ssh/IT.pem)
+    inst_pw=$(echo $password | jq .PasswordData)    
+    inst_pw=${inst_pw//\&quot;/}
+    
+    vol_id=$(aws ec2 describe-instances --output json --instance-id $inst_id | jq .Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId)
+    vol_id=${vol_id//\&quot;/}
+    
+    resilt=$(aws ec2 create-tags --resources $vol_id --tags Key=Ownner,Value=IT)
+    
+    
+    echo &quot;Instance id is: ${inst_id}&quot; &gt; ${WORKSPACE}/output.txt
+    echo &quot;Instance IP is: ${inst_ip}&quot; &gt;&gt; ${WORKSPACE}/output.txt
+    echo &quot;Admin Password is: ${inst_pw}&quot; &gt;&gt; ${WORKSPACE}/output.txt
+    
+elif [[ &quot;$Action&quot; == &quot;Terminate&quot; ]]; then
+    # Verify instance exists
+    inst_id=$(aws ec2 describe-instances --output json --instance-ids $InstanceID 2&gt;/dev/null | jq .Reservations[0].Instances[0].InstanceId)
+    inst_id=${inst_id//\&quot;/}
+    if [[ -z $inst_id ]]; then
+        echo &quot;Could not find instance with id $InstanceID!!&quot; &gt; ${WORKSPACE}/output.txt
+        exit
+    fi
+
+    # Identify IT Windows instance by authentication KeyPair
+    keyname=$(aws ec2 describe-instances --output json --instance-id $InstanceID | jq .Reservations[0].Instances[0].KeyName)
+    keyname=${keyname//\&quot;/}
+    # Identify IT Windows instance by tag
+    tagkey=$(aws ec2 describe-instances --output json --instance-id $InstanceID | jq .Reservations[0].Instances[0].Tags[0].Key)
+    tagkey=${tagkey//\&quot;/}
+    tagval=$(aws ec2 describe-instances --output json --instance-id $InstanceID | jq .Reservations[0].Instances[0].Tags[0].Value)
+    tagval=${tagval//\&quot;/}
+    
+    vol_id=$(aws ec2 describe-instances --output json --instance-id $InstanceID | jq .Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId)
+    vol_id=${vol_id//\&quot;/}
+    
+    if [[ &quot;$keyname&quot; == &quot;IT&quot; &amp;&amp; &quot;$tagkey&quot; == &quot;Name&quot; &amp;&amp; &quot;$tagval&quot; == &quot;IT Windows&quot; ]]; then
+        # Terminate instance by given instance id in job parameter
+        terminate=$(aws ec2 terminate-instances --output json --instance-ids $InstanceID)
+        aws ec2 wait instance-terminated --instance-ids $InstanceID
+        echo &quot;Instance id $InstanceID terminated!!&quot; &gt; ${WORKSPACE}/output.txt
+        # Make sure volume is deleted after instance termination
+        checkVol=$(aws ec2 describe-volumes --output json --volume-id $vol_id | jq .Volumes[0].Size)
+        if [[ $checkVol ]]; then
+            delVol=$(aws ec2 delete-volume --volume-id $vol_id)
+            echo &quot;Volume id $vol_id deleted!!&quot; &gt;&gt; ${WORKSPACE}/output.txt
+        fi
+    else
+        echo &quot;Instance id $InstanceID is not IT Windows machine!!!&quot; &gt; ${WORKSPACE}/output.txt
+    fi
+fi</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+      <recipientList>amir.kagan@audiocodes.com omrik@audiocodes.com cc:yuvaly@audiocodes.com cc:shuky.riechard@audiocodes.com</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
+          <email>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>Run IT Windows  job executed</defaultSubject>
+      <defaultContent>$DEFAULT_CONTENT</defaultContent>
+      <attachmentsPattern>output.txt</attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
+      <patterns>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>output.txt</pattern>
+          <type>INCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+      </patterns>
+      <deleteDirs>false</deleteDirs>
+      <skipWhenFailed>false</skipWhenFailed>
+      <cleanWhenSuccess>true</cleanWhenSuccess>
+      <cleanWhenUnstable>true</cleanWhenUnstable>
+      <cleanWhenFailure>true</cleanWhenFailure>
+      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+      <cleanWhenAborted>true</cleanWhenAborted>
+      <notFailBuild>true</notFailBuild>
+      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <externalDelete></externalDelete>
+    </hudson.plugins.ws__cleanup.WsCleanup>
+  </publishers>
+  <buildWrappers/>
+</project>
