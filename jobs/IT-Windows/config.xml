@@ -63,7 +63,7 @@ user=$(head -n 1 log | cut -d &apos;[&apos; -f3)
 user=${user:2}
 
 if [[ &quot;$Action&quot; == &quot;Run&quot; ]]; then
-    instance=$(aws ec2 run-instances --output json --image-id ami-018c2bcdc530c0630 --count 1 --instance-type t3.small --instance-market-options MarketType=spot --tag-specifications &apos;ResourceType=instance,Tags=[{Key=Ownner,Value=IT},{Key=Name,Value=IT Windows}]&apos; --key-name IT --security-group-ids sg-00705b93f88448f53 --subnet-id subnet-77285b1e)
+    instance=$(aws ec2 run-instances --output json --image-id ami-018c2bcdc530c0630 --count 1 --instance-type t3.small --instance-market-options MarketType=spot --tag-specifications &apos;ResourceType=instance,Tags=[{Key=Name,Value=IT Windows}]&apos; --key-name IT --security-group-ids sg-00705b93f88448f53 --subnet-id subnet-77285b1e)
     inst_id=$(echo $instance | jq .Instances[0].InstanceId)
     inst_ip=$(echo $instance | jq .Instances[0].NetworkInterfaces[0].PrivateIpAddresses[0].PrivateIpAddress)
     
