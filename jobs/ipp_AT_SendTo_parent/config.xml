@@ -116,9 +116,9 @@ ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test
 # If $runPhases = 0, the ipp_AT_parent will not start
 if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
   echo RunPhases=3 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreLYNC=true &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScore=true &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScore=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo PC2RUNLYNC=&quot;ipp-Auto9&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   echo PC2RUNIGS=&quot;IPP-Auto11&quot; &gt;&gt; ${WORKSPACE}/properties.txt
 else
