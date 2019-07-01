@@ -61,11 +61,10 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>true</limitOneJobWithMatchingParams>
       <paramsToUseForLimit>REFSPEC</paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp_copyfiles</assignedNode>
+  <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -229,77 +228,8 @@ date
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>properties.txt</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
-  <publishers>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-      <configs>
-        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-          <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>REFSPEC=$REFSPEC
-GERRIT_BRANCH=$GERRIT_BRANCH
-MODEL=$MODEL
-IMAGENAMES=$ImageNames
-EMAIL=${EMAIL}
-
-</properties>
-              <textParamValueOnNewLine>false</textParamValueOnNewLine>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-          </configs>
-          <projects>ipp_AT_SendTo_parent</projects>
-          <condition>SUCCESS</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-          <triggerFromChildProjects>false</triggerFromChildProjects>
-        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-      </configs>
-    </hudson.plugins.parameterizedtrigger.BuildTrigger>
-    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>is differ, copy again</regexpForRerun>
-      <rerunIfUnstable>true</rerunIfUnstable>
-      <rerunMatrixPart>false</rerunMatrixPart>
-      <checkRegexp>true</checkRegexp>
-      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
-      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>5</delay>
-      </delay>
-      <maxSchedule>6</maxSchedule>
-    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>$DEFAULT_RECIPIENTS</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-          <email>
-            <recipientList>yossim</recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders/>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
-      </configuredTriggers>
-      <contentType>default</contentType>
-      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
-      <defaultContent>$DEFAULT_CONTENT</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
-      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-      <attachBuildLog>false</attachBuildLog>
-      <compressBuildLog>false</compressBuildLog>
-      <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
-      <saveOutput>false</saveOutput>
-      <disabled>false</disabled>
-    </hudson.plugins.emailext.ExtendedEmailPublisher>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
