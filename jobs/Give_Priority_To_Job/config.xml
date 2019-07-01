@@ -1,16 +1,269 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
+  <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>5</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>IMAGE</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>EMAIL</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>true</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>true</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit>REFSPEC</paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash --login
+date
+
+User=&quot;$artifactory_user:$artifactory_password&quot;
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+echo change $change, PS: $ps
+REFTARGET=${change}-$ps
+
+# No need this code, the Automation-Test label appears in the permitted branches only 
+#echo message=&quot;Automation Test for branch 3.1.0, 3.2 only or IGS, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
+#if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;feature/3.2/IGS_unified&quot; ]]; then
+#  echo Automation Test for branch 3.1.0, 3.2 or feature/3.2/IGS_unified only... exit 1
+#  message=&quot;Automation Test do not work for this branch $GERRIT_BRANCH, aborted Automation Test&quot;
+#  ssh -p 29418 jenkins@gerrit gerrit review \
+#   --message &quot;&apos;$message&apos;&quot; \
+#   --notify OWNER \
+#   --tag &quot;&apos;Automation&apos;&quot; \
+#   $change,$ps
+#   exit 1
+#fi
+
+Artifactory=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
+DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
+
+echo ============== Image: $IMAGE
+# if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
+if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
+  sleep 30
+  echo Wait 30 seconds to $IMAGE deploy is complete 
+  if ! curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep -q $IMAGE; then
+    echo Deploy of $BOARD was not done yet, is differ, copy again...
+    exit 1
+  fi
+fi
+
+Target=d:/Firmwares
+# In case it is not the Ftp server 10.59.0.87 &quot;ATAFtp&quot;
+if [ ! -d $Target ]; then
+  Target=z:
+  if ! net use | grep -iqE &quot;OK .* $Target.*Firmwares&quot;; then
+    echo Define again the mapping to Z:
+    net use $Target /delete
+    net use $Target &quot;\\\\10.59.0.87\\Firmwares&quot;
+  fi
+fi
+
+ImageNames=&quot;&quot;
+# Go over all cmp files in the Artifactory and copy them to z: ($Target)
+if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+  ImagesList=&quot;445HD_IGS 450HD_SFB 445HD_SFB&quot;
+  MODEL=445
+#else if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
+#  ImagesList=&quot;450HD&quot;
+#  MODEL=450
+else
+  ImagesList=&quot;450HD 445HD 440HD 405HD&quot;
+  MODEL=450
+#fi; fi
+fi
+
+echo MODEL=$MODEL &gt;&gt; ${WORKSPACE}/properties.txt
+
+curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.img&apos; \
+    | grep -v logs | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
+if [ -s &quot;$REFTARGET.list&quot; ]; then
+   while read -r FileName
+   do
+     copyItflag=&quot;&quot;
+     echo Check if copy $FileName to $Target
+     for eachImage in $ImagesList; do 
+       if [[ $FileName =~ UC$eachImage ]]; then copyItflag=1; fi
+     done
+     if [ -z $copyItflag ]; then echo skip it; continue; fi
+     if [ -f $ImageNames ]; then
+       ImageNames=$(echo $FileName | sed &apos;s:.*HD\(_SFB\|_IGS\|\)_::; s:.sim.tgz::; s:.img::&apos;)
+     fi
+     if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName already exist; continue; fi
+     echo Download $FileName to $Target
+     curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
+   done &lt; &quot;$REFTARGET.list&quot;
+fi
+
+if [ -f $ImageNames ]; then
+  echo Not Image file was found, exit with error
+  exit 1
+fi
+echo Searce all $ImageNames
+echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
+
+# Don&apos;t execute the next job in case you don&apos;t found 4 files
+ls $Target/*$ImageNames.img
+if [ `ls $Target/*$ImageNames.img | wc -l` -lt $(echo $ImagesList | wc -w) ]; then echo &quot;Missing img files, exiting job&quot;; exit 2; fi
+#if [ `ls $Target/*$ImageNames.sim.tgz | wc -l` != 5 ]; then echo &quot;Missing .sim.tgz files, exiting job&quot;; exit 2; fi
+
+# Check if ipp_AT_parent job is in the queue or already running
+# to avoid more than one sbc-drt-request execution
+echo Check if job ipp_AT_parent or ipp_AT_SendTo_parent exist already
+for job in \
+  $(curl -ks https://jenkins/queue/api/json | \
+  sed -e &apos;s/REFSPEC/\n/g; s/&quot;url&quot;:&quot;/\n/g&apos; | grep ipp_AT | grep parent); do
+  echo Check $job.......
+  if echo $job | grep -q $REFSPEC; then
+    echo &quot;Automation-Test was executed and waiting in the queue&quot;; 
+    exit 2
+  fi
+done
+
+# ipp_AT_parent is running Already?
+allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
+oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
+sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep AT)
+
+for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT | grep parent); do
+  if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
+    echo &quot;Automation-Test was executed already, job $job&quot;; 
+    exit 2
+  fi
+done
+
+echo Check the checksum...
+# Check the checksum of the 5 img files before executing the AT itself
+#for f in $Target/*$ImageNames.img $Target/*$ImageNames.sim.tgz; do
+for f in $Target/*$ImageNames.img; do
+  echo $Artifactory/$REFTARGET/$(basename $f)
+  checkSum1=$(curl -ks -u $User -X GET \
+            $Artifactory/$REFTARGET/$(basename $f) | \
+            grep md5 | head -1 | cut -d\&quot; -f4)
+  echo $f
+  checkSum2=$(md5sum $f | cut -d&quot; &quot; -f1)
+  echo checksum: $checkSum1 and $checkSum2
+  if [ &quot;$checkSum1&quot; != &quot;$checkSum2&quot; ]; then
+    # ipp_AT_build is running now?
+    for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_build); do
+      if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
+        echo &quot;ipp_AT_build is running now, job $job, the files are not ready yet&quot;;
+        rm -f $f
+        exit 2
+      fi
+    done
+
+    echo Abort - the CheckSum of $(basename $f) is differ, copy again
+    rm -f $f
+    exit 1
+  fi
+done
+
+echo Send message to Jenkins: Automation test is in queue, for $change,$ps
+# ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+date
+
+</command>
+      <unstableReturn>2</unstableReturn>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
+        <timeoutSecondsString>900</timeoutSecondsString>
+      </strategy>
+      <operationList>
+        <hudson.plugins.build__timeout.operations.AbortOperation/>
+      </operationList>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.53">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQcH9pEUk4/5lSdo2bkaY6NcdAFjLC0nimKv8BtHDoiHo=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${REFSPEC} $GERRIT_BRANCH</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
 </project>
