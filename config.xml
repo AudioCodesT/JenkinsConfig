@@ -247,9 +247,7 @@
           <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
-        <assignedSIDs>
-          <sid># RnD Mobility</sid>
-        </assignedSIDs>
+        <assignedSIDs/>
       </role>
     </roleMap>
     <roleMap type="globalRoles">
@@ -691,7 +689,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-588d4297</name>
       <groupId>sig-588d4297</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-065063b7a18852c51</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-065063b7a18852c51</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>arm-build</requestedLabel>
+            <createdAt>2019-07-02 12:30:26.856 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>arm-build</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
@@ -741,7 +750,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-06d1b1947a59028fd</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-06d1b1947a59028fd</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-07-02 12:30:31.153 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
