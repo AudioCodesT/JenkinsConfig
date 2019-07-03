@@ -135,7 +135,17 @@
 date
 
 ATA_Home=C:/IpPhoneAutomation/ATA
-modelImage=UC${MODEL}HD_${IMAGENAMES}.img
+
+HD=&quot;HD&quot;
+if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+  if [ &quot;$ServerType&quot; == &quot;Lync&quot; ]; then
+    HD=&quot;HD_SFB&quot;
+  else
+    HD=&quot;HD_IGS&quot;
+  fi
+fi
+
+modelImage=UC${MODEL}${HD}_${IMAGENAMES}.img
   
 cd $ATA_Home
 
@@ -156,21 +166,21 @@ hostname
 net use
 
 addParameters=&quot;&quot;
-if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
- addParameters=&quot;-firmwareVersion440 UC440HD_3.1.4.116.img -firmwareVersion405 UC405HD_3.1.4.116.img&quot; 
-fi
+#if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
+# addParameters=&quot;-firmwareVersion440 UC440HD_3.1.4.116.img -firmwareVersion405 UC405HD_3.1.4.116.img&quot; 
+#fi
 
-echo ls -l z:/UC*HD_${IMAGENAMES}.*
-echo ls -l Resources/Firmwares/UC*HD_${IMAGENAMES}.*
+echo ls -l z:/UC*_${IMAGENAMES}.*
+echo ls -l Resources/Firmwares/UC*_${IMAGENAMES}.*
 
-if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 0 ]; then
+if [ `ls Resources/Firmwares/UC*_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 0 ]; then
  
  echo tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}${ServerType}Config_${CONFIGNAME}.tcl \
 -suiteName ${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.suite \
 -firmwareVersionMain $modelImage $addParameters \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
 -jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
--ci 1 -rerunFailedAuto 1
+-ci 1 -rerunFailedAuto 1 -forceUpgrade 1
 
  set -o pipefail
  tclsh AtaExec.tcl -configName ${REGRESSIONTYPE}${MODEL}${ServerType}Config_${CONFIGNAME}.tcl \
@@ -178,7 +188,7 @@ if [ `ls Resources/Firmwares/UC*HD_${IMAGENAMES}.* 2&gt; /dev/null | wc -l` -gt 
 -firmwareVersionMain $modelImage $addParameters \
 -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} \
 -jenkinsUserGerrit $EMAIL -gerritChangeId $(echo $BUILDNAME | cut -d/ -f1) \
--ci 1 -rerunFailedAuto 1
+-ci 1 -rerunFailedAuto 1 -forceUpgrade 1
 
  ExitCode=$?
 
