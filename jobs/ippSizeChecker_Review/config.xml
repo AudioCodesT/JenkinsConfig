@@ -85,14 +85,6 @@
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.CloneOption>
-        <shallow>true</shallow>
-        <noTags>false</noTags>
-        <reference></reference>
-        <timeout>20</timeout>
-        <depth>20</depth>
-        <honorRefspec>false</honorRefspec>
-      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <assignedNode>ipp-centos7.4</assignedNode>
@@ -119,8 +111,15 @@ echo $OLDTAG_TEST
 passAtLeastOnce=&quot;False&quot;
 localCurlFailed=&quot;False&quot;
 localCurlCount=2
-BRANCH=$(git branch | tail -1| cut -d&apos; &apos; -f3)
-echo &quot;branch is:$BRANCH&quot;
+#get OLD TAG BRANCH (could been rebase from another branch)
+git fetch || echo &quot;git fetch has failed, not failing the build&quot;
+OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
+echo &quot;branch is:$OLDTAG_BRANCH&quot;
+
+if [[ -z ${OLDTAG_BRANCH} ]]
+then
+OLDTAG_BRANCH=$GERRIT_BRANCH
+fi
 
 if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
 then
@@ -139,7 +138,7 @@ fi
    	  #get the New Tag
       curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed=&quot;True&quot;
       #get the OLDER CSV REPORT (NEWTAG -1)
-      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${GERRIT_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
       # if curl failed to download the report (not running the comparison)
       if [[ &quot;$localCurlFailed&quot; == &quot;True&quot; ]]
       then
