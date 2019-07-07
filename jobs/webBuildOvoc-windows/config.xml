@@ -245,7 +245,7 @@ then
                         echo &quot;RUN: yarn run proxyServer&quot;
                         yarn run proxyServer &amp; sleep 15
                         echo &quot;RUN: yarn run uiTests&quot;
-                        yarn run uiTests
+                        yarn test:jenkins
             fi
             echo &quot;RUN: yarn run distFull&quot;
             yarn run distFull 
