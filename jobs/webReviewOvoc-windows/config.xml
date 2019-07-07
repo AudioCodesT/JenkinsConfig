@@ -194,9 +194,13 @@ else
         if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.1000&quot; ]]
         then
         	#change serverName to proxy server ip
-    		sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
-        else
+    		#sed -i -- &apos;s/%serverName%/172.17.118.91/g&apos; ${WORKSPACE}/proxyServer.js
+            echo &quot;no commits in 7.6.1000&quot;
+        elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.2000&quot; ]]
+        then
        		sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
+        else
+        	sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
         fi
         #change username and password
     	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
@@ -206,7 +210,7 @@ else
         echo &quot;RUN: yarn run proxyServer&quot;
   	    yarn run proxyServer &amp; sleep 15
         echo &quot;RUN: yarn run uiTests&quot;
-        yarn run uiTests
+        yarn test:jenkins
     fi
 fi
 
