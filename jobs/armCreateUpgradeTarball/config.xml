@@ -37,7 +37,7 @@
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -67,6 +67,8 @@
     <hudson.tasks.Shell>
       <command>#if we need dos 2 unix then we run this sed pre-command
 #sed &apos;s/\r$//&apos; ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh &gt; ArmCommon/Common/.deploy/aws_createUpgradeTarball_unix.sh
+#sudo yum install -y  dos2unix
+#dos2unix ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh
 sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
     </hudson.tasks.Shell>
   </builders>
