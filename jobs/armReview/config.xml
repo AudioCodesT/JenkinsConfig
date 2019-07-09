@@ -131,7 +131,9 @@ do
 	router_md5=$(md5sum ${router_path}/${file})
 	if [[ $configurator_md5 != $router_md5 ]]
 	then
+    	echo &quot;*******************************************************************************************************&quot;
 		echo &quot;The file $file in VMFiles/Configurator directory is different from the file in VMFiles/Router directory&quot;
+        echo &quot;*******************************************************************************************************&quot;
         exit 1
 	fi
 done</command>
