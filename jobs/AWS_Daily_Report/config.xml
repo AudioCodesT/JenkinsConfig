@@ -83,7 +83,7 @@ for r in instances[&apos;Reservations&apos;]:
             for t in instance[&apos;Tags&apos;]:
                 if t[&apos;Key&apos;] == &quot;Name&quot;:
                     instance_name = t[&apos;Value&apos;]
-        else:
+        catch:
             instance_name = &quot;&quot;
         launch_time = instance[&apos;LaunchTime&apos;]
         launch_time = launch_time.replace(tzinfo=pytz.utc)
@@ -113,7 +113,7 @@ for r in instances[&apos;Reservations&apos;]:
             for t in instance[&apos;Tags&apos;]:
                 if t[&apos;Key&apos;] == &quot;Name&quot;:
                     instance_name = t[&apos;Value&apos;]
-        else:
+        catch:
             instance_name = &quot;&quot;
         launch_time = instance[&apos;LaunchTime&apos;]
         launch_time = launch_time.replace(tzinfo=pytz.utc)
@@ -155,14 +155,14 @@ for volume in volumes[&apos;Volumes&apos;]:
     try:
         if volume[&apos;SnapshotId&apos;] != &quot;&quot;:
             volume_snap = volume[&apos;SnapshotId&apos;]
-    else:
+    catch:
         volume_snap = &quot;No Snapshot&quot;
     #
     try:
         for tag in volume[&apos;Tags&apos;]:
             if tag[&apos;Key&apos;] == &quot;Name&quot;:
                 volume_name = tag[&apos;Value&apos;]
-    else:
+    catch:
         volume_name = &quot;&quot;
     #
     VOLmessage = (VOLmessage + &quot;&lt;tr&gt;&lt;td&gt;&quot; + volume_name + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_id + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_type + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_size + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_date + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_snap + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
