@@ -25,9 +25,7 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>Sanjer</assignedNode>
@@ -53,7 +51,7 @@ import boto3
 from botocore.exceptions import ClientError
 import datetime
 import pytz
-import pprint
+from pprint import pprint
 import json
 from dateutil.tz import tzutc
 
@@ -64,14 +62,17 @@ header = &quot;&lt;html&gt;&lt;head&gt;&lt;style&gt;table, th, td {border: 1px s
 footer = &quot;&lt;/body&gt;&lt;/html&gt;&quot;
 
 ###########################################################################################################################################
+# Spotinst instances launched more then 8 hours ago
 
 ec2 = boto3.client(&apos;ec2&apos;)
-si_header = &quot;&lt;h2&gt;Spotinst instances launched more then 8 hours ago&lt;/h2&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;ID&lt;/td&gt;&lt;td&gt;Name&lt;/td&gt;&lt;td&gt;Launched on&lt;/td&gt;&lt;td&gt;at&lt;/td&gt;&lt;/tr&gt;&quot;
-si_footer = &quot;&lt;/table&gt;&quot;
+insts_header = &quot;&lt;h2&gt;Provisional instances launched more then 8 hours ago&lt;/h2&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;ID&lt;/td&gt;&lt;td&gt;Name&lt;/td&gt;&lt;td&gt;Launched on&lt;/td&gt;&lt;td&gt;at&lt;/td&gt;&lt;/tr&gt;&quot;
+insts_footer = &quot;&lt;/table&gt;&quot;
 
-message = &quot;&quot;
-
+# Spotinst instances
 instances = ec2.describe_instances(Filters=[{&apos;Name&apos;:&apos;tag:Creator&apos;,&apos;Values&apos;:[&apos;Spotinst&apos;]},{&apos;Name&apos;:&apos;instance-state-name&apos;,&apos;Values&apos;:[&apos;running&apos;]}])
+
+SImessage = &quot;&quot;
+
 for r in instances[&apos;Reservations&apos;]:
     for instance in r[&apos;Instances&apos;]:
         #pprint.pprint(instance)
@@ -83,56 +84,93 @@ for r in instances[&apos;Reservations&apos;]:
         launch_time = launch_time.replace(tzinfo=pytz.utc)
         launch_date_str = launch_time.strftime(&apos;%d/%m/%Y&apos;)
         launch_hour_str = launch_time.strftime(&apos;%H:%M&apos;)
-
+        #
         if (oldage &gt; launch_time):
-            message = (message + &quot;&lt;tr&gt;&lt;td&gt;&quot; + instance_id + &quot;&lt;/td&gt;&lt;td&gt;&quot; + instance_name + &quot;&lt;/td&gt;&lt;td&gt;&quot; + launch_date_str + &quot;&lt;/td&gt;&lt;td&gt;&quot; + launch_hour_str + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
+            SImessage = (SImessage + &quot;&lt;tr&gt;&lt;td&gt;&quot; + instance_id + &quot;&lt;/td&gt;&lt;td&gt;&quot; + instance_name + &quot;&lt;/td&gt;&lt;td&gt;&quot; + launch_date_str + &quot;&lt;/td&gt;&lt;td&gt;&quot; + launch_hour_str + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
 
-print(message)
+print(&quot;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&quot;)
+print(SImessage)
+print(&quot;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&quot;)
 
-if message == &quot;&quot;:
-    message = &quot;&lt;tr&gt;&lt;td colspan=\&quot;4\&quot;&gt;&lt;h3&gt;No Spotinst instances older then 1 day&lt;/h3&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
+if SImessage == &quot;&quot;:
+    SImessage = &quot;&lt;tr&gt;&lt;td colspan=\&quot;4\&quot;&gt;&lt;h3&gt;No Spotinst instances older then 1 day&lt;/h3&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
 
-si_message = (si_header + message + si_footer)
+# IT instances
+instances = ec2.describe_instances(Filters=[{&apos;Name&apos;:&apos;tag:Ownner&apos;,&apos;Values&apos;:[&apos;IT&apos;]},{&apos;Name&apos;:&apos;instance-state-name&apos;,&apos;Values&apos;:[&apos;running&apos;]}])
+
+ITmessage = &quot;&quot;
+
+for r in instances[&apos;Reservations&apos;]:
+    for instance in r[&apos;Instances&apos;]:
+        #pprint.pprint(instance)
+        instance_id = instance[&apos;InstanceId&apos;]
+        for t in instance[&apos;Tags&apos;]:
+            if t[&apos;Key&apos;] == &quot;Name&quot;:
+                instance_name = t[&apos;Value&apos;]
+        launch_time = instance[&apos;LaunchTime&apos;]
+        launch_time = launch_time.replace(tzinfo=pytz.utc)
+        launch_date_str = launch_time.strftime(&apos;%d/%m/%Y&apos;)
+        launch_hour_str = launch_time.strftime(&apos;%H:%M&apos;)
+        #
+        if (oldage &gt; launch_time):
+            ITmessage = (ITmessage + &quot;&lt;tr&gt;&lt;td&gt;&quot; + instance_id + &quot;&lt;/td&gt;&lt;td&gt;&quot; + instance_name + &quot;&lt;/td&gt;&lt;td&gt;&quot; + launch_date_str + &quot;&lt;/td&gt;&lt;td&gt;&quot; + launch_hour_str + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
+
+print(&quot;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&quot;)
+print(ITmessage)
+print(&quot;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&quot;)
+
+if ITmessage == &quot;&quot;:
+    ITmessage = &quot;&lt;tr&gt;&lt;td colspan=\&quot;4\&quot;&gt;&lt;h3&gt;No IT instances older then 1 day&lt;/h3&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
+
+
+# Combine instances messages
+insts_message = (insts_header + SImessage + ITmessage + insts_footer)
 
 ###########################################################################################################################################
+# Volumes in status &quot;Available&quot;
 
-ec2 = boto3.resource(&apos;ec2&apos;, region_name=&apos;eu-central-1&apos;)
-
-vols_header = &quot;&lt;h2&gt;Volumes in status \&quot;Available\&quot;&lt;/h2&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;ID&lt;/td&gt;&lt;td&gt;Type&lt;/td&gt;&lt;td&gt;Size&lt;/td&gt;&lt;td&gt;Created&lt;/td&gt;&lt;td&gt;Snap&lt;/td&gt;&lt;/tr&gt;&quot;
+vols_header = &quot;&lt;h2&gt;Volumes in status \&quot;Available\&quot;&lt;/h2&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;Name&lt;/td&gt;&lt;td&gt;ID&lt;/td&gt;&lt;td&gt;Type&lt;/td&gt;&lt;td&gt;Size&lt;/td&gt;&lt;td&gt;Created&lt;/td&gt;&lt;td&gt;Snap&lt;/td&gt;&lt;/tr&gt;&quot;
 vols_footer = &quot;&lt;/table&gt;&quot;
 
 message = &quot;&quot;
 
-volumes = ec2.volumes.filter(Filters=[{&apos;Name&apos;: &apos;status&apos;, &apos;Values&apos;: [&apos;available&apos;]}])
+volumes = ec2.describe_volumes(Filters=[{&apos;Name&apos;: &apos;status&apos;, &apos;Values&apos;: [&apos;available&apos;]}])
 
-for v in volumes:
-    v_id = str(v.id)
-    v_size = str(v.size)
-    v_type = str(v.volume_type)
-    v_date = str(v.create_time.strftime(&apos;%d-%m-%Y&apos;))
-    if v.snapshot_id != &quot;&quot;:
-        v_snap = v.snapshot_id
+for volume in volumes[&apos;Volumes&apos;]:
+    volume_id = volume[&apos;VolumeId&apos;]
+    volume_size = str(volume[&apos;Size&apos;])
+    volume_type = volume[&apos;VolumeType&apos;]
+    create_time = volume[&apos;CreateTime&apos;]
+    create_time = create_time.replace(tzinfo=pytz.utc)
+    volume_date = create_time.strftime(&apos;%d/%m/%Y&apos;)
+
+    if volume[&apos;SnapshotId&apos;] != &quot;&quot;:
+        volume_snap = volume[&apos;SnapshotId&apos;]
     else:
-        v_snap = &quot;No Snapshot&quot;
-    
-    message = (message + &quot;&lt;tr&gt;&lt;td&gt;&quot; + v_id + &quot;&lt;/td&gt;&lt;td&gt;&quot; + v_type + &quot;&lt;/td&gt;&lt;td&gt;&quot; + v_size + &quot;&lt;/td&gt;&lt;td&gt;&quot; + v_date + &quot;&lt;/td&gt;&lt;td&gt;&quot; + v_snap + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
+        volume_snap = &quot;No Snapshot&quot;
+    for t in volume[&apos;Tags&apos;]:
+        if t[&apos;Key&apos;] == &quot;Name&quot;:
+            volume_name = t[&apos;Value&apos;]
+
+    message = (message + &quot;&lt;tr&gt;&lt;td&gt;&quot; + volume_name + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_id + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_type + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_size + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_date + &quot;&lt;/td&gt;&lt;td&gt;&quot; + volume_snap + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;)
 
 print(message)
 
 if message == &quot;&quot;:
-    message = &quot;&lt;tr&gt;&lt;td colspan=\&quot;5\&quot;&gt;&lt;h3&gt;No volumes in status \&quot;Available\&quot;&lt;/h3&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
+    message = &quot;&lt;tr&gt;&lt;td colspan=\&quot;6\&quot;&gt;&lt;h3&gt;No volumes in status \&quot;Available\&quot;&lt;/h3&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
 
 vols_message = (vols_header + message + vols_footer)
 
 ###########################################################################################################################################
 
-env_var = &apos;report=&apos; + header + si_message + vols_message + footer
+env_var = &apos;report=&apos; + header + insts_message + vols_message + footer
 
-print repr(env_var)
+print str(env_var)
 
 f1=open(&apos;/home/centos/env_properties.txt&apos;, &apos;w+&apos;)
 f1.write(env_var)
 f1.close()
+
 
 
 EOS</command>
@@ -145,7 +183,7 @@ EOS</command>
   </builders>
   <publishers>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>shuky.riechard@audiocodes.com,yuval.yosha@audiocodes.com</recipientList>
+      <recipientList>yuval.yosha@audiocodes.com,Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
           <email>
