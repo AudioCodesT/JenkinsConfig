@@ -166,8 +166,9 @@ vols_message = (vols_header + message + vols_footer)
 ###########################################################################################################################################
 
 env_var = &apos;report=&apos; + header + insts_message + vols_message + footer
+env_var = repr(env_var)
 
-print repr(env_var)
+print(env_var)
 
 f1=open(&apos;/home/centos/env_properties.txt&apos;, &apos;w+&apos;)
 f1.write(env_var)
