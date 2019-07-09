@@ -5,19 +5,11 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
-      <useBuildBlocker>true</useBuildBlocker>
+      <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
       <blockingJobs>armBuildVMs</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <jenkins.model.BuildDiscarderProperty>
-      <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>-1</daysToKeep>
-        <numToKeep>45</numToKeep>
-        <artifactDaysToKeep>30</artifactDaysToKeep>
-        <artifactNumToKeep>-1</artifactNumToKeep>
-      </strategy>
-    </jenkins.model.BuildDiscarderProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -46,18 +38,6 @@ otherwise - it is a night build and there is no version name change</description
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>RELEASE_VMS</name>
-          <description>if ==YES then it is a new release to QA:
-1. push new tag to Arm and to Arm-UI
-2. at the end will call the following jobs: armBuildVMs, armCreateUpgradeTarball</description>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>NO</string>
-              <string>YES</string>
-            </a>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -68,7 +48,6 @@ otherwise - it is a night build and there is no version name change</description
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -99,12 +78,7 @@ otherwise - it is a night build and there is no version name change</description
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.SCMTrigger>
-      <spec>H 22 * * *</spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -135,308 +109,20 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 #this is per Igor request for his new trick to reduce unit-tests time
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
-
-#find the last tag in this branch:
-LastTag=`git describe --abbrev=0 --tags origin/$BRANCH`
-if [ -z &quot;$VERSION_NAME&quot; ]; then
-majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$LastTag&quot;).$(cut -d &quot;.&quot; -f 2 &lt;&lt;&lt; &quot;$LastTag&quot;)
-else
-majorVersion=$(cut -d &quot;.&quot; -f 1 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;).$(cut -d &quot;.&quot; -f 2 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
-fi
-
-
-#if this is a night build, need to run maven with the last version name:
-mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$LastTag&quot;)
-
-#Inithilize the properties file
-echo VERSION_NAME=${VERSION_NAME} &gt; ../armBuild.properties
-
-#if this is a new release, then
-#create new tag in Arm repo:
-if [ $RELEASE_VMS == &quot;YES&quot; ]; then
-	git config --global user.name &quot;Jenkins&quot;
-	git config --global user.email devops@audiocodes.com
-    git checkout $BRANCH
-    git pull --rebase origin $BRANCH
-    git tag -d $VERSION_NAME || true
-    git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
-    git push origin $VERSION_NAME
-    
-    # Gathering information to UpdateVI
-    GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
-    DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$VERSION_NAME`
-    AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
-    #RN=`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
-    #VIS=`git log $LastTag..$VERSION_NAME | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;`
-    RN=&quot;&quot;
-    while read -r hash; do 
-      subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g; s/\$//g&apos;)
-      VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;)
-      RN+=---$subject::$hash::$VI
-    done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $LastTag..$VERSION_NAME)&quot;
-
-    #EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $LastTag..$VERSION_NAME | sort -u`
-    #Shuky: I dont know why we commented the above EMAIL line, anyway it is not relevant in Arm project
-    #       so we will just send hardcoded email
-    EMAIL=&quot;Lina.Fine@audiocodes.com&quot;
-    
-#create new tag in Arm UI
-	cd ..
-    if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
-    git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
-    cd armUI
-    git checkout $BRANCH
-    git tag -d $VERSION_NAME || true
-    git tag -a $VERSION_NAME -m &quot;automatic tag&quot;
-    git push origin $VERSION_NAME
- 
-    # Gathering information to UpdateVI from armUI repository too
-    AuthorCommitter+=&quot; &quot;`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $LastTag..$VERSION_NAME | grep -v Jenkins | sort -u | sed s/$/\;/g`
-    #RN+=&quot; &quot;`git log --first-parent --pretty=format:&quot;&lt;a href=&apos;https://gerrit/r/%h&apos;&gt;%h&lt;/a&gt; - %s&quot; $LastTag..$VERSION_NAME | sed s/\&quot;/\&apos;/g`
-    #VIS+=&quot; &quot;`git log $LastTag..$VERSION_NAME | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;`
-    #VIS=`echo $VIS |tr &quot; &quot; &quot;\n&quot; | sort -u`
-    while read -r hash; do
-      if [ &quot;$hash&quot; != &quot;&quot; ]; then
-        subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g; s/\$//g&apos;)
-        VI=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep Issue | sed &apos;s/.*: \(VI\|\)//g; s/ .*//g&apos;)
-        RN+=---$subject::$hash::$VI
-      fi
-    done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $LastTag..$VERSION_NAME)&quot;
-
-    cd ${WORKSPACE}
-#need to run maven with the new version name:
-    mavenBuildNumber=$(cut -d &quot;.&quot; -f 3 &lt;&lt;&lt; &quot;$VERSION_NAME&quot;)
-    
-    # Save all UpdateVI information into the properties file
-    echo RN=${RN} &gt;&gt; ../armBuild.properties
-    echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; ../armBuild.properties
-    echo EMAIL=${EMAIL} &gt;&gt; ../armBuild.properties
-    echo PROJECT=${GERRIT_PROJECT} &gt;&gt; ../armBuild.properties
-    echo DATE=${DATE} &gt;&gt; ../armBuild.properties
-    echo AuthorCommitter=${AuthorCommitter} &gt;&gt; ../armBuild.properties
-fi
-
-echo majorVersion=${majorVersion} &gt;&gt; ../armBuild.properties
-echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
-
-#replace backslash with space, because it is not a valid properties file if it includes a backslash char
-#it save a &quot;&lt;name&gt;.bak&quot; backup file for debug if we will encounter problems
-sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>../armBuild.properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>clean releaser:release -DforceRelease=parent,arm-reactor</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
-    <hudson.tasks.Shell>
-      <command>if [ &quot;$BRANCH&quot; != &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$BRANCH.jar; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e TopologyManager/TopologyManagement/target/*.war ]; then cp TopologyManager/TopologyManagement/target/*.war TopologyManagement-$majorVersion.war; fi
-if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/RoutingManager/target/*.war ]; then cp RoutingManager/RoutingManager/target/*.war RoutingManager-$majorVersion.war; fi</command>
-    </hudson.tasks.Shell>
-    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
-      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-      <runCondition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-        <token>$RELEASE_VMS</token>
-      </runCondition>
-      <conditionalbuilders>
-        <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-          <token>VI-Jira</token>
-          <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-          <job>UpdateVI-Jira</job>
-          <shouldNotFailBuild>true</shouldNotFailBuild>
-          <pollInterval>3</pollInterval>
-          <connectionRetryLimit>5</connectionRetryLimit>
-          <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
-          <blockBuildUntilComplete>false</blockBuildUntilComplete>
-          <enhancedLogging>false</enhancedLogging>
-          <parameters>NEWTAG=$VERSION_NAME
-RN=$RN
-GERRIT_HOST=$GERRIT_HOST
-EMAIL=$EMAIL
-PROJECT=$PROJECT
-DATE=$DATE
-GERRIT_BRANCH=$BRANCH
-AuthorCommitter=$AuthorCommitter</parameters>
-          <parameterList>
-            <string>NEWTAG=$VERSION_NAME</string>
-            <string>RN=$RN</string>
-            <string>GERRIT_HOST=$GERRIT_HOST</string>
-            <string>EMAIL=$EMAIL</string>
-            <string>PROJECT=$PROJECT</string>
-            <string>DATE=$DATE</string>
-            <string>GERRIT_BRANCH=$BRANCH</string>
-            <string>AuthorCommitter=$AuthorCommitter</string>
-          </parameterList>
-          <overrideAuth>false</overrideAuth>
-          <auth>
-            <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-              <NONE>none</NONE>
-              <API__TOKEN>apiToken</API__TOKEN>
-              <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
-            </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-          </auth>
-          <loadParamsFromFile>false</loadParamsFromFile>
-          <parameterFile></parameterFile>
-          <queryString></queryString>
-        </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
-      </conditionalbuilders>
-    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
-  <publishers>
-    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
-      <tasks>
-        <hudson.plugins.postbuildtask.TaskProperties>
-          <logTexts>
-            <hudson.plugins.postbuildtask.LogProperties>
-              <logText>Build was aborted</logText>
-              <operator>AND</operator>
-            </hudson.plugins.postbuildtask.LogProperties>
-          </logTexts>
-          <EscalateStatus>false</EscalateStatus>
-          <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done</script>
-        </hudson.plugins.postbuildtask.TaskProperties>
-      </tasks>
-    </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
-      <execPattern>**/**.exec</execPattern>
-      <classPattern>**/target/**/classes</classPattern>
-      <sourcePattern>**/src/main/java</sourcePattern>
-      <sourceInclusionPattern>**/*.java</sourceInclusionPattern>
-      <sourceExclusionPattern></sourceExclusionPattern>
-      <inclusionPattern></inclusionPattern>
-      <exclusionPattern></exclusionPattern>
-      <skipCopyOfSrcFiles>false</skipCopyOfSrcFiles>
-      <minimumInstructionCoverage>0</minimumInstructionCoverage>
-      <minimumBranchCoverage>0</minimumBranchCoverage>
-      <minimumComplexityCoverage>0</minimumComplexityCoverage>
-      <minimumLineCoverage>0</minimumLineCoverage>
-      <minimumMethodCoverage>0</minimumMethodCoverage>
-      <minimumClassCoverage>0</minimumClassCoverage>
-      <maximumInstructionCoverage>0</maximumInstructionCoverage>
-      <maximumBranchCoverage>0</maximumBranchCoverage>
-      <maximumComplexityCoverage>0</maximumComplexityCoverage>
-      <maximumLineCoverage>0</maximumLineCoverage>
-      <maximumMethodCoverage>0</maximumMethodCoverage>
-      <maximumClassCoverage>0</maximumClassCoverage>
-      <changeBuildStatus>false</changeBuildStatus>
-      <deltaInstructionCoverage>0</deltaInstructionCoverage>
-      <deltaBranchCoverage>0</deltaBranchCoverage>
-      <deltaComplexityCoverage>0</deltaComplexityCoverage>
-      <deltaLineCoverage>0</deltaLineCoverage>
-      <deltaMethodCoverage>0</deltaMethodCoverage>
-      <deltaClassCoverage>0</deltaClassCoverage>
-      <buildOverBuild>false</buildOverBuild>
-    </hudson.plugins.jacoco.JacocoPublisher>
-    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
-      <publishers>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.BooleanCondition" plugin="run-condition@1.0">
-            <token>$RELEASE_VMS</token>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>VERSION_NAME=$VERSION_NAME
-BRANCH=$BRANCH</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>armBuildVMs, armCreateUpgradeTarball</projects>
-                  <condition>SUCCESS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                  <triggerFromChildProjects>false</triggerFromChildProjects>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>shuky.riechard</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
-  </publishers>
+  <publishers/>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
-      <deployerDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </deployerDetails>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
-      <uploadSpec>
-        <spec></spec>
-      </uploadSpec>
-      <downloadSpec>
-        <spec></spec>
-      </downloadSpec>
-      <deployPattern>common-$BRANCH.jar=&gt;com/ac/arm/common/$BRANCH/
-common-$majorVersion.jar=&gt;com/ac/arm/common/$majorVersion/
-TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/
-RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
-</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
-      <deployBuildInfo>true</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <asyncBuildRetention>false</asyncBuildRetention>
-      <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
-      <overrideBuildName>false</overrideBuildName>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
-        <propertiesContent>artifactory_username=armdeploy</propertiesContent>
+        <propertiesContent>artifactory_username=armdeploy122</propertiesContent>
         <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
