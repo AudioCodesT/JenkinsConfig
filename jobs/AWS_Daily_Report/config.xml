@@ -54,7 +54,8 @@ import pytz
 from pprint import pprint
 import json
 from dateutil.tz import tzutc
-import repr
+import repr as reprlib
+import sys
 
 now = datetime.datetime.now(pytz.utc)
 oldage = now - datetime.timedelta(hours=8)
