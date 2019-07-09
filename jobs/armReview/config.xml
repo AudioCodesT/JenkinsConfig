@@ -36,7 +36,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <org.jenkinsci.plugins.junitrealtimetestreporter.PerJobConfiguration plugin="junit-realtime-test-reporter@0.6"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -121,6 +121,22 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they different fail the build
+configurator_path=&quot;ArmCommon/Common/VMFiles/Configurator&quot;
+router_path=&quot;ArmCommon/Common/VMFiles/Router&quot;
+files_to_compare=(&quot;/usr/local/bin/backup.pl&quot; &quot;/usr/local/bin/restore.pl&quot; &quot;/usr/local/bin/watchdog.pl&quot; &quot;/usr/local/bin/log_color.pl&quot; &quot;/usr/local/bin/log.pl&quot; &quot;/etc/bash_completion.d/log&quot;)
+for file in ${files_to_compare[@]}
+do
+	configurator_md5=$(md5sum ${configurator_path}/${file})
+	router_md5=$(md5sum ${router_path}/${file})
+	if [[ $configurator_md5 != $router_md5 ]]
+	then
+		echo &quot;The file $file in VMFiles/Configurator directory is different from the file in VMFiles/Router directory&quot;
+        exit 1
+	fi
+done</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>#check if need to Compile The project
 needToCompile=&quot;True&quot;
 #show all files that modified in the current change
@@ -185,7 +201,7 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
         </hudson.tasks.Shell>
-        <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
+        <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
           <mavenName>Maven_v325</mavenName>
           <rootPom>pom.xml</rootPom>
           <goals>clean install</goals>
@@ -195,10 +211,12 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.1">
+    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
-      <sourcePattern>**/src/main/java</sourcePattern>
+      <sourcePattern>**/src/*/java</sourcePattern>
+      <sourceInclusionPattern>**/*.java</sourceInclusionPattern>
+      <sourceExclusionPattern>com/ac/common/data/**/*,**/*Json.java</sourceExclusionPattern>
       <inclusionPattern></inclusionPattern>
       <exclusionPattern></exclusionPattern>
       <skipCopyOfSrcFiles>false</skipCopyOfSrcFiles>
