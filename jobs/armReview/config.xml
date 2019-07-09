@@ -128,7 +128,9 @@ files_to_compare=(&quot;/usr/local/bin/backup.pl&quot; &quot;/usr/local/bin/rest
 for file in ${files_to_compare[@]}
 do
 	configurator_md5=$(md5sum ${configurator_path}/${file})
+    configurator_md5=$(echo $configurator_md5 | cut -d&apos; &apos; -f1)
 	router_md5=$(md5sum ${router_path}/${file})
+    router_md5=$(echo $router_md5 | cut -d&apos; &apos; -f1)
 	if [[ $configurator_md5 != $router_md5 ]]
 	then
     	echo &quot;*******************************************************************************************************&quot;
