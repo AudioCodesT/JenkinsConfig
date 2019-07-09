@@ -125,6 +125,7 @@ if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
 then
 	NAGINATOR_COUNT=0
 fi
+OLDTAG_BRANCH=$GERRIT_BRANCH
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${GERRIT_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
