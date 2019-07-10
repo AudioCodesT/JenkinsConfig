@@ -119,13 +119,13 @@ if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
   echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScore=true &gt;&gt; ${WORKSPACE}/properties.txt
-  echo PC2RUNLYNC=&quot;ipp-Auto9&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+  echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   echo PC2RUNIGS=&quot;IPP-Auto11&quot; &gt;&gt; ${WORKSPACE}/properties.txt
 else
   echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreLYNC=true &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScore=false &gt;&gt; ${WORKSPACE}/properties.txt
-  echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+  echo PC2RUNLYNC=&quot;ipp-Auto9&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   #if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then PC2RUN=&quot;ipp-Auto9&quot;; fi
 fi
 
