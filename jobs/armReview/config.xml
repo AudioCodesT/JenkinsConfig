@@ -122,6 +122,10 @@
   <builders>
     <hudson.tasks.Shell>
       <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they are different fail the build
+echo &quot;**************************************************************************************&quot;
+echo &quot;               COMPARING SOME FILES BETWEEN CONFIGURATOR AND ROUTER                   &quot;
+echo &quot;**************************************************************************************&quot;
+
 fileChanged=&quot;False&quot;
 echo &quot;The Following files are not identical in the directories VMFiles/Configurator and VMFiles/Router:&quot; &gt; changedFiles.txt
 configurator_path=&quot;ArmCommon/Common/VMFiles/Configurator&quot;
@@ -144,6 +148,8 @@ if [[ $fileChanged == &quot;True&quot; ]]
 then
 	echo &quot;**************************************************************************************&quot;
 	cat changedFiles.txt
+    echo &quot;**************************************************************************************&quot;
+    echo &quot;    FAILING THE BUILD      &quot;
     echo &quot;**************************************************************************************&quot;
     exit 1
 fi</command>
