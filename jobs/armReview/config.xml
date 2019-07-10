@@ -121,9 +121,9 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they different fail the build
+      <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they are different fail the build
 fileChanged=&quot;False&quot;
-echo &quot;The Following files are different in the directories VMFiles/Configurator and VMFiles/Router:&quot; &gt; changedFiles.txt
+echo &quot;The Following files are not identical in the directories VMFiles/Configurator and VMFiles/Router:&quot; &gt; changedFiles.txt
 configurator_path=&quot;ArmCommon/Common/VMFiles/Configurator&quot;
 router_path=&quot;ArmCommon/Common/VMFiles/Router&quot;
 files_to_compare=(&quot;/usr/local/bin/backup.pl&quot; &quot;/usr/local/bin/restore.pl&quot; &quot;/usr/local/bin/watchdog.pl&quot; &quot;/usr/local/bin/log_color.pl&quot; &quot;/usr/local/bin/log.pl&quot; &quot;/etc/bash_completion.d/log&quot;)
