@@ -122,6 +122,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they different fail the build
+fileChanged=&quot;False&quot;
+echo &quot;The Following files are different in the directories VMFiles/Configurator and VMFiles/Router:&quot; &gt; changedFiles.txt
 configurator_path=&quot;ArmCommon/Common/VMFiles/Configurator&quot;
 router_path=&quot;ArmCommon/Common/VMFiles/Router&quot;
 files_to_compare=(&quot;/usr/local/bin/backup.pl&quot; &quot;/usr/local/bin/restore.pl&quot; &quot;/usr/local/bin/watchdog.pl&quot; &quot;/usr/local/bin/log_color.pl&quot; &quot;/usr/local/bin/log.pl&quot; &quot;/etc/bash_completion.d/log&quot;)
@@ -133,12 +135,18 @@ do
     router_md5=$(echo $router_md5 | cut -d&apos; &apos; -f1)
 	if [[ $configurator_md5 != $router_md5 ]]
 	then
-    	echo &quot;*******************************************************************************************************&quot;
-		echo &quot;The file $file in VMFiles/Configurator directory is different from the file in VMFiles/Router directory&quot;
-        echo &quot;*******************************************************************************************************&quot;
-        exit 1
+    	fileChanged=&quot;True&quot;
+		echo &quot;$file&quot; &gt;&gt; changedFiles.txt
 	fi
-done</command>
+done
+#if at least 1 file is different, fail the build
+if [[ $fileChanged == &quot;True&quot; ]]
+then
+	echo &quot;**************************************************************************************&quot;
+	cat changedFiles.txt
+    echo &quot;**************************************************************************************&quot;
+    exit 1
+fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#check if need to Compile The project
