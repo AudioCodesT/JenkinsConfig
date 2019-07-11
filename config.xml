@@ -239,6 +239,15 @@
           <sid>#IP Phone Automation</sid>
         </assignedSIDs>
       </role>
+      <role name="manage_AT_queue" pattern="test_ipp_AT_parent">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
       <role name="mobility_developers" pattern="(MobilityGroup.*)">
         <permissions>
           <permission>hudson.model.Item.Read</permission>
@@ -741,7 +750,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-01e3cef1cebb4fbda</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-01e3cef1cebb4fbda</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-07-11 11:47:44.806 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
