@@ -269,7 +269,7 @@ uboot/c450hd_uboot</description>
 updateManifests() {
   echo Create new TAG $NEWTAG
   # Need to delete the TAG before creating it again in another repository
-  if git tag --list | grep -q &quot;$NEWTAG&quot;; then git tag -d &quot;$NEWTAG&quot;; fi
+  if git tag --list | grep -q &quot;$(echo $NEWTAG | sed &apos;s:\.:\\\.:g&apos;)&quot;; then git tag -d &quot;$NEWTAG&quot;; fi
   git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $commitToTAG
   git push $localRepoName $NEWTAG
   
