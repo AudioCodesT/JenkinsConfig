@@ -98,7 +98,7 @@
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos;)</combinationFilter>
+  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos; &amp;&amp; CHIP_NAME != &apos;GRX&apos;) || (label == &apos;dsp-grx-slave&apos; &amp;&amp; CHIP_NAME == &apos;GRX&apos;) </combinationFilter>
   <builders>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
@@ -133,11 +133,14 @@ cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EX
           <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
 NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1&#xd;
 &#xd;
+if %ERRORLEVEL% NEQ 0 exit &#xd;
+echo “Successful completion”&#xd;
+&#xd;
 &#xd;
 cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Out&#xd;
-powershell Compress-Archive . %CHIP_NAME%_%NEWTAG%_Out.zip&#xd;
+powershell Compress-Archive . Out.zip&#xd;
 cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Misc&#xd;
-powershell Compress-Archive . %CHIP_NAME%_%NEWTAG%_Misc.zip</command>
+powershell Compress-Archive . Misc.zip</command>
         </hudson.tasks.BatchFile>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
@@ -190,6 +193,64 @@ echo &quot;Finish running make for SoftDsp and SoftHost&quot;
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+        <arg1>${label}</arg1>
+        <arg2>dsp-grx-slave</arg2>
+        <ignoreCase>false</ignoreCase>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.tasks.Shell>
+          <command>compile_grx(){
+cd ${WORKSPACE}/Gen5/GRX/$1
+output_textfile_name=$(echo $1 | sed &apos;s/\//_/g&apos;)
+make clean
+make all
+}
+run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
+
+cd ${WORKSPACE}
+set -xe
+echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+echo &quot;repo sync&quot;
+repo sync
+
+# cd to releant path
+cd Gen5
+
+echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
+git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+#copy all modules to relevant path in Gen5 Modules directory
+echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
+sh copyModules.sh ${CHIP_NAME}
+
+
+#******************************temporary workaround to copy os module from private/GRX**************************************
+cd ${WORKSPACE}/..
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
+#clone web-ui OVOC
+if [[ -e private_GRX ]]
+then
+    rm -rf private_GRX
+fi
+git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
+cd private_GRX
+git checkout private/GRX
+cp -R Clean_based_on_snapshot_15_4_19/WithGCC_ready_to_be_compiled_MIPS_make/SoftDspC__98_Integration__Dsp/Src/Modules/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
+
+#******************************Finish temporary workaround*************************************
+
+#add neccessary toolchain to the slave machine
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;make all;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;make all&quot;
+</command>
+        </hudson.tasks.Shell>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
@@ -236,11 +297,6 @@ echo NEWTAG=${NEWTAG}</script>
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>dsp-release</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
         <stagingPlugin/>
       </deployerDetails>
       <resolverDetails>
@@ -266,15 +322,50 @@ echo NEWTAG=${NEWTAG}</script>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
+      <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/Out/Out.zip&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/Misc/Misc.zip&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Misc/&quot;,
+            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }, 
+       {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }, 
+       {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }
+    ]
+}</spec>
       </uploadSpec>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>Gen5/${CHIP_NAME}/Out/${CHIP_NAME}_${NEWTAG}_Out.zip=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
-Gen5/${CHIP_NAME}/Misc/${CHIP_NAME}_${NEWTAG}_Misc.zip=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Misc
+      <deployPattern>Gen5/${CHIP_NAME}/Out/Out.zip=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
+Gen5/${CHIP_NAME}/Misc/Misc.zip=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Misc
 Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
 Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
 Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out
@@ -287,10 +378,10 @@ Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${N
         <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
-      <discardOldBuilds>true</discardOldBuilds>
+      <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>(label == &apos;dsp-win-dynamic&apos; || label == &apos;dsp-centos-dynamic&apos;)</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>(label == &apos;dsp-win-dynamic&apos; || label == &apos;dsp-centos-dynamic&apos; || label == &apos;dsp-grx-slave&apos;)</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
