@@ -30,11 +30,11 @@
         <hudson.model.StringParameterDefinition>
           <name>JobName</name>
           <description></description>
-          <defaultValue></defaultValue>
+          <defaultValue>test_ipp_AT_parent</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>BuildNumber</name>
+          <name>GERRIT_CHANGE</name>
           <description></description>
           <defaultValue></defaultValue>
           <trim>false</trim>
@@ -62,33 +62,14 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-# Check if ipp_AT_parent job is in the queue or already running
-
-allInQueue=$(curl -ks https://jenkins/queue/api/json |  grep $JobName)
-
-#echo Check if job $JobName exist
-#for job in \
-#  $(curl -ks https://jenkins/queue/api/json | \
-#  sed -e &apos;s/REFSPEC/\n/g; s/&quot;url&quot;:&quot;/\n/g&apos; | grep $JobName); do
-#  echo Check $job.......
-#  if [[ $job =~ /$BuildNumber/ ]]; then
-#    echo &quot;-------------------------------Find-------------------------------&quot;;
-#  fi
-#done
-
-# ipp_AT_parent is running Already?
-allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
-oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
-sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2)
-
-</command>
+/home/centos/tools/give_priority_to_queued_tasks.pl $JobName $GERRIT_CHANGE</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} ${JobName} $BuildNumber</template>
+      <template>#${BUILD_NUMBER} ${JobName} $GERRIT_CHANGE</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
