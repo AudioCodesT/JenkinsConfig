@@ -61,8 +61,50 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
-/home/centos/tools/give_priority_to_queued_tasks.pl $JobName $GERRIT_CHANGE</command>
+      <command>#!/usr/bin/perl
+
+# This perl script is executed by the Jenkins job: Shift_All_Queued_Tasks
+# Input: the job name
+# Is located in the Sanjer server under the following directory: /opt/devops/tools
+# The queued tasks of this job with shift cerculary 
+# No output
+use MIME::Base64;
+use JSON qw( decode_json );
+
+my $job =  $JobName;
+my $gerritChange =  $GERRIT_CHANGE;
+
+my $user = &quot;compile:1084-po-&quot;;
+my $URL=&quot;https://jenkins&quot;;
+
+my $json=`curl -ks -X GET \&quot;$URL/queue/api/json\&quot;`;
+
+my $decoded = decode_json($json);
+my $parametersLine = &quot;&quot;;
+
+my $countJobe = keys $decoded-&gt;{&apos;items&apos;};
+for my $i (0..$countJobe-1) {
+  my $fields = $decoded-&gt;{&apos;items&apos;}[$i];
+  my $jobName = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
+  if ($jobName eq $job) {
+    $parametersLine = &quot;&quot;;
+    my $countParameters = keys $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;};
+    for my $j (0..$countParameters-1) {
+      my $parameters = $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;}[$j];
+      $parametersLine .= &quot;&amp;$parameters-&gt;{&apos;name&apos;}=$parameters-&gt;{&apos;value&apos;}&quot;;
+    }
+    if (!($parametersLine =~ /\/$gerritChange\//)) {
+      my $id = $fields-&gt;{&apos;id&apos;};
+      print &quot;Stop $parametersLine\n&quot;;
+      `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;      
+      $parametersLine =~ s/^&amp;/?/;
+      `curl -ks -u $user -X POST \&quot;$URL/job/$job/buildWithParameters$parametersLine\&quot;`;
+    }
+  }
+}
+
+exit 0;
+</command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
