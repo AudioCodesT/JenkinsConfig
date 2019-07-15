@@ -359,30 +359,6 @@ date</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                    <results>
-                      <string>ABORTED</string>
-                    </results>
-                    <role>BOTH</role>
-                    <buildSteps>
-                      <hudson.tasks.Shell>
-                        <command>#!c:\cygwin\bin\bash --login
-
-if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
-if [ &quot;${RunPhases}&quot; -eq 0 ]; then exit 0; fi
-
-change=`echo $REFSPEC | cut -d/ -f4`
-
-echo Send abort message to Gerrit - $change,$newPS
-ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;Automation-Test was aborted: $BUILD_URL&apos;&quot; \
---notify OWNER \
---tag &quot;&apos;Automation&apos;&quot; \
-$change,$newPS
-</command>
-                      </hudson.tasks.Shell>
-                    </buildSteps>
-                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
