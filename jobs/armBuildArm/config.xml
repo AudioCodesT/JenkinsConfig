@@ -230,7 +230,7 @@ sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties</command>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release -X -DupdateReleaseInfo=true -DforceRelease=parent,arm-reactor</goals>
+      <goals>clean releaser:release -X -DforceRelease=parent,arm-reactor</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
