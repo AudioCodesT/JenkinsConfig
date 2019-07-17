@@ -237,7 +237,7 @@ sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties</command>
       <command>#add latest_version.txt file, temporary workaround because maven-metadata.xml not working.
 if [[ &quot;${BRANCH}&quot; == &quot;master&quot; ]]
 then
-	echo &quot;latest=${majorVersion}.${mavenBuildNumber}&quot; &gt; latest_version.txt
+	echo &quot;${majorVersion}.${mavenBuildNumber}&quot; &gt; latest_version.txt
 fi
 </command>
     </hudson.tasks.Shell>
