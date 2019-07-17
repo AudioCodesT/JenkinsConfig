@@ -43,11 +43,9 @@ armReleaseSanity
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -131,13 +129,13 @@ EOD</command>
 EOD
 </command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean -U package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path} 333&quot;</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path}&quot;</goals>
@@ -154,7 +152,7 @@ EOD
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>Natali.Elashvili</recipients>
+      <recipients></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
@@ -177,7 +175,7 @@ EOD
 config_file_path=${WORKSPACE}/arm_topology_test/conf/arm_topology_test.conf
 logs_path=${WORKSPACE}/arm_topology_test/logs
 </propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
