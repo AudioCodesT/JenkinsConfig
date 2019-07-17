@@ -220,15 +220,7 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 
 #replace backslash with space, because it is not a valid properties file if it includes a backslash char
 #it save a &quot;&lt;name&gt;.bak&quot; backup file for debug if we will encounter problems
-sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties
-
-
-#add latest_version.txt file, temporary workaround because maven-metadata.xml not working.
-if [[ &quot;${BRANCH}&quot; == &quot;master&quot; ]]
-then
-	echo &quot;${majorVersion}.${mavenBuildNumber}&quot; &gt; latest_version.txt
-fi
-</command>
+sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -241,6 +233,14 @@ fi
       <goals>clean releaser:release -X -DupdateReleaseInfo=true -DforceRelease=parent,arm-reactor</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
+    <hudson.tasks.Shell>
+      <command>#add latest_version.txt file, temporary workaround because maven-metadata.xml not working.
+if [[ &quot;${BRANCH}&quot; == &quot;master&quot; ]]
+then
+	echo &quot;${majorVersion}.${mavenBuildNumber}&quot; &gt; latest_version.txt
+fi
+</command>
+    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>if [ &quot;$BRANCH&quot; != &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$BRANCH.jar; fi
 if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e ArmCommon/Common/target/*.jar ]; then cp ArmCommon/Common/target/*.jar common-$majorVersion.jar; fi
