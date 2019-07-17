@@ -221,6 +221,13 @@ echo mavenBuildNumber=${mavenBuildNumber} &gt;&gt; ../armBuild.properties
 #replace backslash with space, because it is not a valid properties file if it includes a backslash char
 #it save a &quot;&lt;name&gt;.bak&quot; backup file for debug if we will encounter problems
 sed -i.bak &apos;s/\\/ /g&apos; ../armBuild.properties
+
+
+#add latest_version.txt file, temporary workaround because maven-metadata.xml not working.
+if [[ &quot;${BRANCH}&quot; == &quot;master&quot; ]]
+then
+	echo ${majorVersion}.${mavenBuildNumber} &gt; latest_version.txt
+fi
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
@@ -417,7 +424,7 @@ BRANCH=$BRANCH</properties>
 common-$majorVersion.jar=&gt;com/ac/arm/common/$majorVersion/
 TopologyManagement*.war=&gt;com/ac/arm/TopologyManagement/$majorVersion/
 RoutingManager*.war=&gt;com/ac/arm/RoutingManager/$majorVersion/
-</deployPattern>
+latest_version.txt=&gt;com/ac/arm/</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
