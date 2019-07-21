@@ -752,7 +752,18 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-08ec86f2d6ad32113</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-08ec86f2d6ad32113</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-07-21 12:57:45.627 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1542,6 +1553,7 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>dsp-Build-Gen5</string>
+        <string>dsp-ReleaseNotes-Gen5</string>
         <string>dsp-Review-Gen5</string>
         <string>dsp-Review-Gen5_manifest</string>
       </jobNames>
