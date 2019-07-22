@@ -206,6 +206,7 @@
         </permissions>
         <assignedSIDs>
           <sid># DSP</sid>
+          <sid># DSP RnD</sid>
         </assignedSIDs>
       </role>
       <role name="ipp_AT" pattern="(ipp_AT.*)">
@@ -752,18 +753,7 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-08ec86f2d6ad32113</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-08ec86f2d6ad32113</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2019-07-21 12:57:45.627 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
