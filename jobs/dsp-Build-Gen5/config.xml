@@ -274,13 +274,6 @@ sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/S
           <createTag>true</createTag>
           <updateTag>true</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
-        <hudson.plugins.git.GitPublisher_-TagToPush>
-          <targetRepoName>ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests</targetRepoName>
-          <tagName>${NEWTAG}</tagName>
-          <tagMessage>Jenkins Auto tagging</tagMessage>
-          <createTag>true</createTag>
-          <updateTag>true</updateTag>
-        </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
     </hudson.plugins.git.GitPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
