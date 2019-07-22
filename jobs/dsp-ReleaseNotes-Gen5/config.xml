@@ -137,7 +137,7 @@ echo DATE=${DATE} &gt;&gt; DSP_Gen5.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; DSP_Gen5.properties
 
 
-</command>
+exit 1</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -147,7 +147,7 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; DSP_Gen5.properties
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
       <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job></job>
+      <job>UpdateVI-Jira</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
       <pollInterval>3</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
