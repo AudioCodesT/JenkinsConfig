@@ -777,11 +777,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C38xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C38xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1236,7 +1236,6 @@
           <templateDesc>azure test VM</templateDesc>
           <labels>azure_test_te</labels>
           <location>West Europe</location>
-          <availabilityType/>
           <virtualMachineSize>Standard_B1s</virtualMachineSize>
           <storageAccountNameReferenceType>existing</storageAccountNameReferenceType>
           <diskType>managed</diskType>
@@ -1249,9 +1248,9 @@
           <shutdownOnIdle>false</shutdownOnIdle>
           <imageTopLevelType>advanced</imageTopLevelType>
           <imageReference>
-            <publisher>OpenLogic</publisher>
-            <offer>CentOS</offer>
-            <sku>7.5</sku>
+            <publisher>Canonical</publisher>
+            <offer>UbuntuServer</offer>
+            <sku>16.04-LTS</sku>
             <version>latest</version>
             <type>REFERENCE</type>
           </imageReference>
@@ -1262,7 +1261,13 @@
           <osType>Linux</osType>
           <agentLaunchMethod>SSH</agentLaunchMethod>
           <preInstallSsh>false</preInstallSsh>
-          <initScript>sudo yum install -y openjdk-8-jdk openjdk-8-jre </initScript>
+          <initScript># Install Java
+sudo add-apt-repository ppa:openjdk-r/ppa -y
+sudo apt-get -y update
+sudo apt-get install openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk -y
+
+# Install Git
+sudo apt-get install -y git</initScript>
           <credentialsId>3adf16a2-2994-4ba6-927f-aa526366d9ca</credentialsId>
           <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
           <retentionTimeInMin>0</retentionTimeInMin>
