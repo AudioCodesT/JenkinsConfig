@@ -157,7 +157,7 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
 fi
 
 if [ -f $ImageNames ]; then
-  echo Not Image file was found, exit with error
+  echo Not Image file was found, exit without error
   exit 2
 fi
 echo Searce all $ImageNames
