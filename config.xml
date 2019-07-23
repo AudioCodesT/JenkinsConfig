@@ -1261,15 +1261,15 @@
           <osType>Linux</osType>
           <agentLaunchMethod>SSH</agentLaunchMethod>
           <preInstallSsh>false</preInstallSsh>
-          <initScript>sudo yum install openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk -y</initScript>
+          <initScript>sudo yum install -y openjdk-8-jdk openjdk-8-jre </initScript>
           <credentialsId>3adf16a2-2994-4ba6-927f-aa526366d9ca</credentialsId>
           <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
           <retentionTimeInMin>0</retentionTimeInMin>
           <virtualNetworkName>CI_Resource_Group</virtualNetworkName>
           <virtualNetworkResourceGroupName>CI_Resource_Group</virtualNetworkResourceGroupName>
           <subnetName>Net_172.16.100.0</subnetName>
-          <usePrivateIP>false</usePrivateIP>
-          <nsgName></nsgName>
+          <usePrivateIP>true</usePrivateIP>
+          <nsgName>DefaultNSG</nsgName>
           <jvmOptions></jvmOptions>
           <templateDisabled>false</templateDisabled>
           <templateStatusDetails></templateStatusDetails>
