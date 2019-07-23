@@ -1222,6 +1222,69 @@
       <tunnel></tunnel>
       <vmargs></vmargs>
     </hudson.plugins.spotinst.cloud.AzureSpotinstCloud>
+    <com.microsoft.azure.vmagent.AzureVMCloud plugin="azure-vm-agents@1.1.1">
+      <name>azure_VM</name>
+      <cloudName>azure_VM</cloudName>
+      <credentialsId>JenkinsCredsForAzure</credentialsId>
+      <maxVirtualMachinesLimit>10</maxVirtualMachinesLimit>
+      <resourceGroupReferenceType>existing</resourceGroupReferenceType>
+      <newResourceGroupName></newResourceGroupName>
+      <existingResourceGroupName>CI_Resource_Group</existingResourceGroupName>
+      <vmTemplates>
+        <com.microsoft.azure.vmagent.AzureVMAgentTemplate>
+          <templateName>azure-test</templateName>
+          <templateDesc>azure test VM</templateDesc>
+          <labels>azure_test_te</labels>
+          <location>West Europe</location>
+          <virtualMachineSize>Standard_B1s</virtualMachineSize>
+          <storageAccountNameReferenceType>existing</storageAccountNameReferenceType>
+          <diskType>managed</diskType>
+          <osDiskSize>0</osDiskSize>
+          <newStorageAccountName></newStorageAccountName>
+          <existingStorageAccountName>ciresourcegroupdiag</existingStorageAccountName>
+          <storageAccountType>Standard_LRS</storageAccountType>
+          <noOfParallelJobs>1</noOfParallelJobs>
+          <usageMode>EXCLUSIVE</usageMode>
+          <shutdownOnIdle>false</shutdownOnIdle>
+          <imageTopLevelType>basic</imageTopLevelType>
+          <imageReference>
+            <uri></uri>
+            <type>REFERENCE</type>
+          </imageReference>
+          <builtInImage>Ubuntu 16.04 LTS</builtInImage>
+          <installGit>false</installGit>
+          <installMaven>false</installMaven>
+          <installDocker>false</installDocker>
+          <osType>Linux</osType>
+          <agentLaunchMethod>SSH</agentLaunchMethod>
+          <preInstallSsh>true</preInstallSsh>
+          <initScript></initScript>
+          <credentialsId>3adf16a2-2994-4ba6-927f-aa526366d9ca</credentialsId>
+          <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
+          <retentionTimeInMin>0</retentionTimeInMin>
+          <virtualNetworkName></virtualNetworkName>
+          <virtualNetworkResourceGroupName></virtualNetworkResourceGroupName>
+          <subnetName></subnetName>
+          <usePrivateIP>false</usePrivateIP>
+          <nsgName></nsgName>
+          <jvmOptions></jvmOptions>
+          <templateDisabled>false</templateDisabled>
+          <templateStatusDetails></templateStatusDetails>
+          <templateVerified>false</templateVerified>
+          <executeInitScriptAsRoot>true</executeInitScriptAsRoot>
+          <doNotUseMachineIfInitFails>true</doNotUseMachineIfInitFails>
+          <enableMSI>false</enableMSI>
+          <enableUAMI>false</enableUAMI>
+          <uamiID></uamiID>
+          <retentionStrategy class="com.microsoft.azure.vmagent.AzureVMCloudRetensionStrategy">
+            <idleTerminationMillis>300000</idleTerminationMillis>
+            <idleTerminationMinutes>5</idleTerminationMinutes>
+          </retentionStrategy>
+        </com.microsoft.azure.vmagent.AzureVMAgentTemplate>
+      </vmTemplates>
+      <deploymentTimeout>1200</deploymentTimeout>
+      <approximateVirtualMachineCount>0</approximateVirtualMachineCount>
+    </com.microsoft.azure.vmagent.AzureVMCloud>
   </clouds>
   <quietPeriod>5</quietPeriod>
   <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
