@@ -1246,25 +1246,28 @@
           <noOfParallelJobs>1</noOfParallelJobs>
           <usageMode>EXCLUSIVE</usageMode>
           <shutdownOnIdle>false</shutdownOnIdle>
-          <imageTopLevelType>basic</imageTopLevelType>
+          <imageTopLevelType>advanced</imageTopLevelType>
           <imageReference>
-            <uri></uri>
+            <publisher>OpenLogic</publisher>
+            <offer>CentOS</offer>
+            <sku>7.5</sku>
+            <version>latest</version>
             <type>REFERENCE</type>
           </imageReference>
           <builtInImage>Ubuntu 16.04 LTS</builtInImage>
-          <installGit>false</installGit>
+          <installGit>true</installGit>
           <installMaven>false</installMaven>
           <installDocker>false</installDocker>
           <osType>Linux</osType>
           <agentLaunchMethod>SSH</agentLaunchMethod>
-          <preInstallSsh>true</preInstallSsh>
-          <initScript></initScript>
+          <preInstallSsh>false</preInstallSsh>
+          <initScript>sudo yum install openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk -y</initScript>
           <credentialsId>3adf16a2-2994-4ba6-927f-aa526366d9ca</credentialsId>
           <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
           <retentionTimeInMin>0</retentionTimeInMin>
           <virtualNetworkName></virtualNetworkName>
-          <virtualNetworkResourceGroupName></virtualNetworkResourceGroupName>
-          <subnetName></subnetName>
+          <virtualNetworkResourceGroupName>CI_Resource_Group</virtualNetworkResourceGroupName>
+          <subnetName>Net_172.16.100.0</subnetName>
           <usePrivateIP>false</usePrivateIP>
           <nsgName></nsgName>
           <jvmOptions></jvmOptions>
