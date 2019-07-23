@@ -34,6 +34,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -239,6 +240,7 @@ fi
               <string>SUCCESS</string>
             </results>
             <role>BOTH</role>
+            <executeOn>BOTH</executeOn>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>#!C:\Program Files\Git\bin\bash --login -i
@@ -262,6 +264,7 @@ fi</command>
               <string>FAILURE</string>
             </results>
             <role>BOTH</role>
+            <executeOn>BOTH</executeOn>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>#!C:\Program Files\Git\bin\bash --login -i
@@ -306,6 +309,10 @@ fi</command>
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>node_modules/**</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>.git/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
