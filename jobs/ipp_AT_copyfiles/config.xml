@@ -82,17 +82,18 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 echo change $change, PS: $ps
 REFTARGET=${change}-$ps
 
-echo message=&quot;Automation Test for branch 3.1.0 or 3.2 only, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
-if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;feature/3.2/IGS_unified&quot; ]]; then
-  echo Automation Test for branch 3.1.0, 3.2 or feature/3.2/IGS_unified only... exit 1
-  message=&quot;Automation Test do not work for this branch $GERRIT_BRANCH, aborted Automation Test&quot;
-  ssh -p 29418 jenkins@gerrit gerrit review \
-   --message &quot;&apos;$message&apos;&quot; \
-   --notify OWNER \
-   --tag &quot;&apos;Automation&apos;&quot; \
-   $change,$ps
-   exit 1
-fi
+# No need this code, the Automation-Test label appears in the permitted branches only 
+#echo message=&quot;Automation Test for branch 3.1.0, 3.2 only or IGS, aborted Automation Test&quot; &gt; ${WORKSPACE}/properties.txt
+#if [[ &quot;$GERRIT_BRANCH&quot; !=  &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; !=  &quot;feature/3.2/IGS_unified&quot; ]]; then
+#  echo Automation Test for branch 3.1.0, 3.2 or feature/3.2/IGS_unified only... exit 1
+#  message=&quot;Automation Test do not work for this branch $GERRIT_BRANCH, aborted Automation Test&quot;
+#  ssh -p 29418 jenkins@gerrit gerrit review \
+#   --message &quot;&apos;$message&apos;&quot; \
+#   --notify OWNER \
+#   --tag &quot;&apos;Automation&apos;&quot; \
+#   $change,$ps
+#   exit 1
+#fi
 
 Artifactory=https://artifactory/api/storage/ipp-review/SFB/$GERRIT_BRANCH
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
@@ -122,37 +123,42 @@ fi
 ImageNames=&quot;&quot;
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
 if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
-  ImagesList=&quot;445HD_IGS&quot;
+  ImagesList=&quot;445HD_IGS 450HD_SFB 445HD_SFB&quot;
+  MODEL=445
+#else if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
+#  ImagesList=&quot;450HD&quot;
+#  MODEL=450
 else
   ImagesList=&quot;450HD 445HD 440HD 405HD&quot;
+  MODEL=450
+#fi; fi
 fi
+
+echo MODEL=$MODEL &gt;&gt; ${WORKSPACE}/properties.txt
 
 curl -ks -u $User -X GET $Artifactory/$REFTARGET | grep uri | grep &apos;.img&apos; \
     | grep -v logs | cut -d&apos;&quot;&apos; -f4 | cut -c 2- &gt; $REFTARGET.list
 if [ -s &quot;$REFTARGET.list&quot; ]; then
    while read -r FileName
    do
-     if [[ ! $ImagesList =~ &quot;$(echo $FileName | sed &apos;s:.*UC::; s:_.*::&apos;)&quot; ]]; then continue; fi
+     copyItflag=&quot;&quot;
+     echo Check if copy $FileName to $Target
+     for eachImage in $ImagesList; do 
+       if [[ $FileName =~ UC$eachImage ]]; then copyItflag=1; fi
+     done
+     if [ -z $copyItflag ]; then echo skip it; continue; fi
      if [ -f $ImageNames ]; then
-       ImageNames=$(echo $FileName | sed &apos;s:.*HD_::; s:.sim.tgz::; s:.img::&apos;)
+       ImageNames=$(echo $FileName | sed &apos;s:.*HD\(_SFB\|_IGS\|\)_::; s:.sim.tgz::; s:.img::&apos;)
      fi
-     if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName allready exist; continue; fi
+     if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName already exist; continue; fi
      echo Download $FileName to $Target
      curl -ks -u $User -X GET $DOWNLOAD/$REFTARGET/$FileName --output &quot;$Target/$FileName&quot;
-     #ArtSize=`curl -ks -u $User -X GET $Artifactory/$REFTARGET/$FileName | grep \&quot;size\&quot; | cut -d: -f2 | cut -d&apos;&quot;&apos; -f2`
-     #DestSize=`wc -c &lt;$Target/$FileName`
-     #echo Check the size: $ArtSize and $DestSize shoulde be the same
-     #if [ &quot;$ArtSize&quot; != &quot;$DestSize&quot; ]; then 
-     #  echo $ArtSize--$DestSize: $file is differ, copy again...
-     #  rm -f $Target/$FileName
-     #  exit 1
-     #fi
    done &lt; &quot;$REFTARGET.list&quot;
 fi
 
 if [ -f $ImageNames ]; then
   echo Not Image file was found, exit with error
-  exit 1
+  exit 2
 fi
 echo Searce all $ImageNames
 echo ImageNames=${ImageNames} &gt;&gt; ${WORKSPACE}/properties.txt
@@ -164,10 +170,10 @@ if [ `ls $Target/*$ImageNames.img | wc -l` -lt $(echo $ImagesList | wc -w) ]; th
 
 # Check if ipp_AT_parent job is in the queue or already running
 # to avoid more than one sbc-drt-request execution
-echo Check if job ipp_AT_parent exist already
+echo Check if job ipp_AT_parent or ipp_AT_SendTo_parent exist already
 for job in \
   $(curl -ks https://jenkins/queue/api/json | \
-  sed -e &apos;s/REFSPEC/\n/g; s/&quot;url&quot;:&quot;/\n/g&apos; | grep ipp_AT_parent); do
+  sed -e &apos;s/REFSPEC/\n/g; s/&quot;url&quot;:&quot;/\n/g&apos; | grep ipp_AT | grep parent); do
   echo Check $job.......
   if echo $job | grep -q $REFSPEC; then
     echo &quot;Automation-Test was executed and waiting in the queue&quot;; 
@@ -180,7 +186,7 @@ allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[exe
 oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
 sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep AT)
 
-for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_parent); do
+for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT | grep parent); do
   if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
     echo &quot;Automation-Test was executed already, job $job&quot;; 
     exit 2
@@ -215,7 +221,7 @@ for f in $Target/*$ImageNames.img; do
 done
 
 echo Send message to Jenkins: Automation test is in queue, for $change,$ps
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+# ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test is in queue&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 date
 
@@ -236,7 +242,7 @@ date
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
-MODEL=450
+MODEL=$MODEL
 IMAGENAMES=$ImageNames
 EMAIL=${EMAIL}
 
@@ -305,7 +311,7 @@ EMAIL=${EMAIL}
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
