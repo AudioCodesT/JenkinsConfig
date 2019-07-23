@@ -62,7 +62,7 @@ if new code then build and deploy ovoc-7.6.zip</description>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
       <url>https://gerrit/plugins/gitblit/</url>
-      <projectName>web-ui/arm</projectName>
+      <projectName>web-ui/ovoc</projectName>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -244,7 +244,7 @@ then
                         cat ${WORKSPACE}/cypress/support/config.ts
                         echo &quot;RUN: yarn run proxyServer&quot;
                         yarn run proxyServer &amp; sleep 15
-                        echo &quot;RUN: yarn run uiTests&quot;
+                        echo &quot;RUN: yarn test:jenkins&quot;
                         yarn test:jenkins
             fi
             echo &quot;RUN: yarn run distFull&quot;
@@ -385,10 +385,6 @@ $BUILD_URL
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>node_modules/**</pattern>
-          <type>EXCLUDE</type>
-        </hudson.plugins.ws__cleanup.Pattern>
-        <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>.git/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
