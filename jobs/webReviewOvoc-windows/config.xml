@@ -125,7 +125,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
-  <concurrentBuild>true</concurrentBuild>
+  <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
@@ -306,10 +306,6 @@ fi</command>
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>node_modules/**</pattern>
-          <type>EXCLUDE</type>
-        </hudson.plugins.ws__cleanup.Pattern>
-        <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>.git/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
