@@ -276,6 +276,38 @@ sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/S
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
     </hudson.plugins.git.GitPublisher>
+    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+      <config>
+        <scriptFiles/>
+        <groovyScripts/>
+        <buildSteps>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>SUCCESS</string>
+            </results>
+            <role>BOTH</role>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>#tag also repo_manifests repository
+cd ${WORKSPACE}/..
+#clone Gen5/repo_manifests
+if [[ -e repo_manifests ]]
+then
+    rm -rf repo_manifests
+fi
+git clone ssh://jenkins@gerrit/DSP/Gen5/repo_manifests
+cd repo_manifests
+git checkout ${GERRIT_BRANCH}
+head=$(git rev-parse HEAD)
+git tag -a -m &quot;Jenkins auto tag&quot; ${NEWTAG} ${head}
+git push origin ${GERRIT_BRANCH}</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+        </buildSteps>
+        <markBuildUnstable>false</markBuildUnstable>
+      </config>
+    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
