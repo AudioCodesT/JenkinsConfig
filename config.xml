@@ -1249,9 +1249,9 @@
           <shutdownOnIdle>false</shutdownOnIdle>
           <imageTopLevelType>advanced</imageTopLevelType>
           <imageReference>
-            <publisher>Canonical</publisher>
-            <offer>UbuntuServer</offer>
-            <sku>18.04-LTS</sku>
+            <publisher>OpenLogic</publisher>
+            <offer>CentOS</offer>
+            <sku>7.5</sku>
             <version>latest</version>
             <type>REFERENCE</type>
           </imageReference>
@@ -1262,11 +1262,12 @@
           <osType>Linux</osType>
           <agentLaunchMethod>SSH</agentLaunchMethod>
           <preInstallSsh>false</preInstallSsh>
-          <initScript># Install Java
-sudo apt-get install openjdk-8-jre openjdk-8-jdk -y
+          <initScript>#!/bin/bash
+# Install Java
+sudo yum install -y java-1.8.0-openjdk-1.8.0.212.b04-0.el7_6
+sudo yum install -y java-1.8.0-openjdk-devel-1.8.0.212.b04-0.el7_6
 
-# Install Git
-sudo apt-get install -y git</initScript>
+</initScript>
           <credentialsId>3adf16a2-2994-4ba6-927f-aa526366d9ca</credentialsId>
           <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
           <retentionTimeInMin>0</retentionTimeInMin>
