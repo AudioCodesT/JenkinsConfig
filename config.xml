@@ -1263,9 +1263,8 @@
           <agentLaunchMethod>SSH</agentLaunchMethod>
           <preInstallSsh>false</preInstallSsh>
           <initScript># Install Java
-sudo add-apt-repository ppa:openjdk-r/ppa -y
 sudo apt-get -y update
-sudo apt-get install openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk -y
+sudo apt-get install openjdk-8-jre openjdk-8-jdk -y
 
 # Install Git
 sudo apt-get install -y git</initScript>
