@@ -49,15 +49,23 @@ No build job. Only start the instance.</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting&quot;
+echo &quot;Starting 3 instances of STATEFUL_DSP_QA_TESTER&quot;
 echo &quot;***********************************************************************************&quot;
+GROUP_ID=
+ACCOUNT_ID=
+Authorization_Token=
+curl -x PUT -H &quot;{\&quot;Content-Type\&quot;: \&quot;application/json\&quot;,\&quot;Authorization\&quot;:\&quot;Bearer ${Authorization_Token}\&quot;}&quot; \
+-d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
+https://api.spotinst.io/aws/ec2/group/{GROUP_ID}/capacity?accountId={ACCOUNT_ID}?shouldResumeStateful=true
 
-</command>
+echo &quot;***********************************************************************************&quot;
+echo &quot;Starting 3 instances of STATEFUL_DSP_QA&quot;
+echo &quot;***********************************************************************************&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients></recipients>
+      <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
