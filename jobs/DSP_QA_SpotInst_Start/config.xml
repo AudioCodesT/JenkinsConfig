@@ -48,7 +48,11 @@ No build job. Only start the instance.</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;***********************************************************************************&quot;
+      <command># resume all this group stateful
+#curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+#-d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
+#&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true&quot;
+echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA_TESTER&quot;
 echo &quot;***********************************************************************************&quot;
 GROUP_ID=&quot;sig-cc53aa4c&quot; #stateful ACJira - 7.4 (temporary for testing)
@@ -63,14 +67,6 @@ do
 curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 &quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance/${instance}/resume?accountId=${ACCOUNT_ID}&quot;
 done
-
-
-
-# resume all this group stateful
-curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
--d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
-&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true&quot;
-
 
 echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA&quot;
