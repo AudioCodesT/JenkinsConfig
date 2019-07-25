@@ -320,6 +320,7 @@ if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&
  
 echo Send failed message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Automation-Test (SendTo) failed: $BUILD_URL&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
@@ -351,6 +352,7 @@ if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&
 
 echo Send OK message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;Automation-Test (SendTo) OK: $BUILD_URL&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
