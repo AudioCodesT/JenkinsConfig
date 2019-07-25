@@ -53,9 +53,24 @@ echo &quot;Starting 3 instances of STATEFUL_DSP_QA_TESTER&quot;
 echo &quot;***********************************************************************************&quot;
 GROUP_ID=&quot;sig-cc53aa4c&quot; #stateful ACJira - 7.4 (temporary for testing)
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
-curl -x PUT -H &quot;{\&quot;Content-Type\&quot;: \&quot;application/json\&quot;,\&quot;Authorization\&quot;:\&quot;Bearer ${spotinst_token}\&quot;}&quot; \
+
+#get all instances id of this instance
+instances_to_resume=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.id]&apos;)
+#loop over all stateful instances in this group and resume them
+echo $instances_to_resume | jq -r &apos;.[]&apos; | while read instance
+do 
+curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance/${instance}/resume?accountId=${ACCOUNT_ID}&quot;
+done
+
+
+
+# resume all this group stateful
+curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 -d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
-&quot;https://api.spotinst.io/aws/ec2/group/{GROUP_ID}/capacity?accountId={ACCOUNT_ID}?shouldResumeStateful=true&quot;
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true&quot;
+
 
 echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA&quot;
