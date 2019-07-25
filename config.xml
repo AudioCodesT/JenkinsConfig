@@ -754,7 +754,28 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-073b447d9f5e2b51b</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-073b447d9f5e2b51b</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-07-25 11:53:46.641 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-0d4a33fd079036ba9</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0d4a33fd079036ba9</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2019-07-25 11:53:46.641 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1479,6 +1500,7 @@ sudo yum install -y java-1.8.0-openjdk-devel-1.8.0.212.b04-0.el7_6
         <string>CopyFilesToProductionJira</string>
         <string>CopyFilesToTestJira</string>
         <string>Delete-Old-Artifactory-Versions</string>
+        <string>DSP_QA_SpotInst_Start</string>
         <string>ippSizeChecker</string>
         <string>ippSizeChecker_Review</string>
         <string>IT-Windows</string>
