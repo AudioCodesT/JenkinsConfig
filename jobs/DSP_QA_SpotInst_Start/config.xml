@@ -38,7 +38,7 @@ No build job. Only start the instance.</description>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>master</assignedNode>
+  <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -51,10 +51,9 @@ No build job. Only start the instance.</description>
       <command>echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA_TESTER&quot;
 echo &quot;***********************************************************************************&quot;
-GROUP_ID=
-ACCOUNT_ID=
-Authorization_Token=
-curl -x PUT -H &quot;{\&quot;Content-Type\&quot;: \&quot;application/json\&quot;,\&quot;Authorization\&quot;:\&quot;Bearer ${Authorization_Token}\&quot;}&quot; \
+GROUP_ID=&quot;sig-cc53aa4c&quot; #stateful ACJira - 7.4 (temporary for testing)
+ACCOUNT_ID=&quot;act-1fd9f587&quot;
+curl -x PUT -H &quot;{\&quot;Content-Type\&quot;: \&quot;application/json\&quot;,\&quot;Authorization\&quot;:\&quot;Bearer ${spotinst_token}\&quot;}&quot; \
 -d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
 https://api.spotinst.io/aws/ec2/group/{GROUP_ID}/capacity?accountId={ACCOUNT_ID}?shouldResumeStateful=true
 
@@ -70,5 +69,16 @@ echo &quot;*********************************************************************
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>spotinst_token</name>
+          <value>{AQAAABAAAABQQWjdUP9Ttp4COTQ2DDWksEbHPdh7ZC5yCsciq+5+nBwkM46h5GKlGxKpGlvhz4y1LiLIIwdEGzp0bJhzb2GKYj5BHI8lAfZ2cyTdlXjrrXv6MEOk456bEGmEF6kaTl/p}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
 </project>
