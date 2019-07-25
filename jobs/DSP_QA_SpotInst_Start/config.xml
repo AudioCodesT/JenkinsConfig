@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>this job is triggered from URL&#xd;
-purpose: start MeetingRecorder instance for Brian.&#xd;
+purpose: start DSP_QA instances &#xd;
 No build job. Only start the instance.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -35,7 +35,6 @@ No build job. Only start the instance.</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -44,22 +43,21 @@ No build job. Only start the instance.</description>
   <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>MeetingRecorder</authToken>
+  <authToken>DSP_QA</authToken>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting i-0d1e9251707de1444 (MeetingRecorder-Build-Slave-Static) IP: 172.16.143.61&quot;
+echo &quot;Starting&quot;
 echo &quot;***********************************************************************************&quot;
-#aws ec2 start-instances --instance-ids i-0d1e9251707de1444
-aws ec2 start-instances --instance-ids i-02bdc0b58db0f077e # For Brian YY
+
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>shuky.riechard, yuval.yosha</recipients>
+      <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
