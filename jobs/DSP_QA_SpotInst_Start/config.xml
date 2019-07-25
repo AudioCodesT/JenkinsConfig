@@ -55,7 +55,7 @@ GROUP_ID=&quot;sig-cc53aa4c&quot; #stateful ACJira - 7.4 (temporary for testing)
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
 curl -x PUT -H &quot;{\&quot;Content-Type\&quot;: \&quot;application/json\&quot;,\&quot;Authorization\&quot;:\&quot;Bearer ${spotinst_token}\&quot;}&quot; \
 -d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
-https://api.spotinst.io/aws/ec2/group/{GROUP_ID}/capacity?accountId={ACCOUNT_ID}?shouldResumeStateful=true
+&quot;https://api.spotinst.io/aws/ec2/group/{GROUP_ID}/capacity?accountId={ACCOUNT_ID}?shouldResumeStateful=true&quot;
 
 echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA&quot;
