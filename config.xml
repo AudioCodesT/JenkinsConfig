@@ -1209,20 +1209,6 @@
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
-    <hudson.plugins.spotinst.cloud.AzureSpotinstCloud plugin="spotinst@2.0.14">
-      <name>sig-5db2b42a</name>
-      <groupId>sig-5db2b42a</groupId>
-      <pendingInstances/>
-      <labelString>azure_test_temp</labelString>
-      <idleTerminationMinutes>5</idleTerminationMinutes>
-      <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
-      <labelSet class="sorted-set">
-        <hudson.model.labels.LabelAtom>azure_test_temp</hudson.model.labels.LabelAtom>
-      </labelSet>
-      <usage>EXCLUSIVE</usage>
-      <tunnel></tunnel>
-      <vmargs></vmargs>
-    </hudson.plugins.spotinst.cloud.AzureSpotinstCloud>
     <com.microsoft.azure.vmagent.AzureVMCloud plugin="azure-vm-agents@1.1.1">
       <name>azure_VM</name>
       <cloudName>azure_VM</cloudName>
@@ -1272,7 +1258,7 @@ sudo yum install -y java-1.8.0-openjdk-devel-1.8.0.212.b04-0.el7_6
           <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
           <retentionTimeInMin>0</retentionTimeInMin>
           <virtualNetworkName>CI_Resource_Group</virtualNetworkName>
-          <virtualNetworkResourceGroupName></virtualNetworkResourceGroupName>
+          <virtualNetworkResourceGroupName>CI_Resource_Group</virtualNetworkResourceGroupName>
           <subnetName>Net_172.16.100.0</subnetName>
           <usePrivateIP>true</usePrivateIP>
           <nsgName></nsgName>
