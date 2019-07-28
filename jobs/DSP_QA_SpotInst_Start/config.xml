@@ -58,7 +58,7 @@ echo &quot;*********************************************************************
 GROUP_ID=&quot;sig-f25bf829&quot; 
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
 
-#get all instances id of this instance
+#get all stateful instances id of this instance
 instances_to_resume=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 &quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.id]&apos;)
 #loop over all stateful instances in this group and resume them
@@ -72,7 +72,8 @@ echo &quot;*********************************************************************
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA&quot;
 echo &quot;***********************************************************************************&quot;
 GROUP_ID=&quot;sig-a484c578&quot; 
-#get all instances id of this instance
+
+#get all stateful instances id of this instance
 instances_to_resume=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 &quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.id]&apos;)
 #loop over all stateful instances in this group and resume them
@@ -82,8 +83,57 @@ curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization
 &quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance/${instance}/resume?accountId=${ACCOUNT_ID}&quot;
 done
 
-
 </command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>
+GROUP_ID=&quot;sig-f25bf829&quot; 
+ACCOUNT_ID=&quot;act-1fd9f587&quot;
+
+#get all instances id of this instance
+instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.instanceId]&apos;)
+echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
+do 
+AllInstancesIds+=($instance)
+done
+GROUP_ID=&quot;sig-a484c578&quot; 
+
+#get all instances id of this instance
+instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.instanceId]&apos;)
+echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
+do 
+AllInstancesIds+=($instance)
+done
+
+for INSTANCE_ID in ${AllInstancesIds[@]}
+do
+#Wait for the instance to startup
+  echo &quot;Wait until the instance is up&quot;
+  OLD_STATE=&quot;&quot;
+  while true; do
+      sleep 10
+      STATE=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --output text --query &quot;Reservations[0].Instances[0].State.Name&quot;)
+      if [[ $STATE != $OLD_STATE ]]; then
+          echo $STATE
+          OLD_STATE=$STATE
+      fi
+      if [[ $STATE == &quot;running&quot; ]]; then
+          break
+      fi
+  done
+  echo &quot;Wait until instance is fully loaded&quot;
+  sleep 100
+  #get instance serial number
+  
+  
+  #get feature key for that serial number
+  
+  
+  #put that feature key in the SBC Slave
+  
+done</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
