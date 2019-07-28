@@ -55,7 +55,7 @@ No build job. Only start the instance.</description>
 echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA_TESTER&quot;
 echo &quot;***********************************************************************************&quot;
-GROUP_ID=&quot;sig-484654e7&quot; #stateful dev-acjira (temporary for testing)
+GROUP_ID=&quot;sig-f25bf829&quot; 
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
 
 #get all instances id of this instance
@@ -70,7 +70,20 @@ done
 
 echo &quot;***********************************************************************************&quot;
 echo &quot;Starting 3 instances of STATEFUL_DSP_QA&quot;
-echo &quot;***********************************************************************************&quot;</command>
+echo &quot;***********************************************************************************&quot;
+GROUP_ID=&quot;sig-a484c578&quot; 
+#get all instances id of this instance
+instances_to_resume=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.id]&apos;)
+#loop over all stateful instances in this group and resume them
+echo $instances_to_resume | jq -r &apos;.[]&apos; | while read instance
+do 
+curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance/${instance}/resume?accountId=${ACCOUNT_ID}&quot;
+done
+
+
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
