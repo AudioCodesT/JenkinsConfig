@@ -109,30 +109,31 @@ done
 
 for INSTANCE_ID in ${AllInstancesIds[@]}
 do
-#Wait for the instance to startup
-  echo &quot;Wait until the instance is up&quot;
-  OLD_STATE=&quot;&quot;
-  while true; do
-      sleep 10
-      STATE=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --output text --query &quot;Reservations[0].Instances[0].State.Name&quot;)
-      if [[ $STATE != $OLD_STATE ]]; then
-          echo $STATE
-          OLD_STATE=$STATE
-      fi
-      if [[ $STATE == &quot;running&quot; ]]; then
-          break
-      fi
-  done
-  echo &quot;Wait until instance is fully loaded&quot;
-  sleep 100
-  #get instance serial number
-  
-  
-  #get feature key for that serial number
-  
-  
-  #put that feature key in the SBC Slave
-  
+	echo $INSTANCE_ID
+##Wait for the instance to startup
+#  echo &quot;Wait until the instance is up&quot;
+#  OLD_STATE=&quot;&quot;
+#  while true; do
+#      sleep 10
+#      STATE=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --output text --query &quot;Reservations[0].Instances[0].State.Name&quot;)
+#      if [[ $STATE != $OLD_STATE ]]; then
+#          echo $STATE
+#          OLD_STATE=$STATE
+#      fi
+#      if [[ $STATE == &quot;running&quot; ]]; then
+#          break
+#      fi
+#  done
+#  echo &quot;Wait until instance is fully loaded&quot;
+#  sleep 100
+#  #get instance serial number
+#  
+#  
+#  #get feature key for that serial number
+#  
+#  
+# #put that feature key in the SBC Slave
+#  
 done</command>
     </hudson.tasks.Shell>
   </builders>
