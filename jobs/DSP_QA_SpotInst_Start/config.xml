@@ -124,10 +124,13 @@ do
   #get instance serial number
   serial_number=$(curl -k -u ${sbc_username}:${sbc_password} -X GET &quot;https://${instanceIP}/api/v1/license&quot; |  jq -r &apos;.serialNumber&apos;)
   #get feature key for that serial number
-  
+  line=&quot;&quot;
+  replace_line=&quot;&quot;
+  sed -i &quot;s/${line}/${replace_line}/g .ini
+  feature_key=$(cat .out | tail -1)
   
  #put that feature key in the SBC Slave
-  curl -k -u ${sbc_username}:${sbc_password} -X POST \
+  curl -X PUT -k -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Basic ${sbc_password_token}&quot; \
   -d &quot;{\&quot;key\&quot;: \&quot;${feature_key}\&quot;}&quot; \
   &quot;https://${instanceIP}/api/v1/license&quot;
 done</command>
@@ -152,6 +155,10 @@ done</command>
         <EnvInjectPasswordEntry>
           <name>sbc_password</name>
           <value>{AQAAABAAAAAQiIf7/LnXO1Tqnn22j1D7oeLageWvB6WtIiBrxKy6Oks=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>sbc_password_token</name>
+          <value>{AQAAABAAAAAgSB0CJeqGhuQQaelb7GhE35S6E3+yR3SiGf3oUEAgMK7qTmo18ePRhq5RRVlM22EP}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
