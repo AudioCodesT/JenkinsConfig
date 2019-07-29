@@ -241,7 +241,7 @@ fi
 git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
 cd private_GRX
 git checkout private/GRX
-cp -R Clean_based_on_snapshot_15_4_19/WithGCC_ready_to_be_compiled_MIPS_make/SoftDspC__98_Integration__Dsp/Src/Modules/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
+cp -R Clean_based_on_snapshot_15_4_19/Modules_GRX_29_7/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
 
 #******************************Finish temporary workaround*************************************
 
