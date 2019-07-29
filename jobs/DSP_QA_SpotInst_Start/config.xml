@@ -92,7 +92,8 @@ ACCOUNT_ID=&quot;act-1fd9f587&quot;
 
 #get all instances id of this instance
 instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.instanceId]&apos;)
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] | .instanceId]&apos;)
+
 echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
 do 
 AllInstancesIds+=($instance)
@@ -101,7 +102,7 @@ GROUP_ID=&quot;sig-a484c578&quot;
 
 #get all instances id of this instance
 instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] |.instanceId]&apos;)
+&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] | .instanceId]&apos;)
 echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
 do 
 AllInstancesIds+=($instance)
