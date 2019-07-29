@@ -96,7 +96,7 @@ instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quo
 
 echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
 do 
-AllInstancesIds+=($instance)
+AllInstancesIds+=(${instance})
 done
 GROUP_ID=&quot;sig-a484c578&quot; 
 
@@ -105,7 +105,7 @@ instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quo
 &quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] | .instanceId]&apos;)
 echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
 do 
-AllInstancesIds+=($instance)
+AllInstancesIds+=(${instance})
 done
 
 for INSTANCE_ID in ${AllInstancesIds[@]}
