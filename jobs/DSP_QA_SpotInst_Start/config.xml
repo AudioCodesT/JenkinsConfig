@@ -86,55 +86,50 @@ done
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>
-GROUP_ID=&quot;sig-f25bf829&quot; 
-ACCOUNT_ID=&quot;act-1fd9f587&quot;
-
-#get all instances id of this instance
-instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] | .instanceId]&apos;)
-
-echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
-do 
-AllInstancesIds+=(${instance})
-done
+      <command>ACCOUNT_ID=&quot;act-1fd9f587&quot;
 GROUP_ID=&quot;sig-a484c578&quot; 
-
+sbc_username=Admin
 #get all instances id of this instance
 instancesIds=$(curl -X GET -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 &quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/statefulInstance?accountId=${ACCOUNT_ID}&quot; | jq -c &apos;[.response.items[] | .instanceId]&apos;)
+
 echo $instancesIds | jq -r &apos;.[]&apos; | while read instance
 do 
 AllInstancesIds+=(${instance})
 done
+
+
+
 
 for INSTANCE_ID in ${AllInstancesIds[@]}
 do
 	echo $INSTANCE_ID
-##Wait for the instance to startup
-#  echo &quot;Wait until the instance is up&quot;
-#  OLD_STATE=&quot;&quot;
-#  while true; do
-#      sleep 10
-#      STATE=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --output text --query &quot;Reservations[0].Instances[0].State.Name&quot;)
-#      if [[ $STATE != $OLD_STATE ]]; then
-#          echo $STATE
-#          OLD_STATE=$STATE
-#      fi
-#      if [[ $STATE == &quot;running&quot; ]]; then
-#          break
-#      fi
-#  done
-#  echo &quot;Wait until instance is fully loaded&quot;
-#  sleep 100
-#  #get instance serial number
-#  
-#  
-#  #get feature key for that serial number
-#  
-#  
-# #put that feature key in the SBC Slave
-#  
+#Wait for the instance to startup
+  echo &quot;Wait until the instance is up&quot;
+  OLD_STATE=&quot;&quot;
+  while true; do
+      sleep 10
+      STATE=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --output text --query &quot;Reservations[0].Instances[0].State.Name&quot;)
+      if [[ $STATE != $OLD_STATE ]]; then
+          echo $STATE
+          OLD_STATE=$STATE
+      fi
+      if [[ $STATE == &quot;running&quot; ]]; then
+          break
+      fi
+  done
+  echo &quot;Wait until instance is fully loaded&quot;
+  sleep 60
+  instanceIP=$(aws ec2 describe-instances --instance-id $INSTANCE_ID --output text --query &apos;Reservations[*].Instances[*].PrivateIpAddress&apos;)
+  #get instance serial number
+  serial_number=$(curl -k -u ${sbc_username}:${sbc_password} -X GET &quot;https://${instanceIP}/api/v1/license&quot; |  jq -r &apos;.serialNumber&apos;)
+  #get feature key for that serial number
+  
+  
+ #put that feature key in the SBC Slave
+  curl -k -u ${sbc_username}:${sbc_password} -X POST \
+  -d &quot;{\&quot;key\&quot;: \&quot;${feature_key}\&quot;}&quot; \
+  &quot;https://${instanceIP}/api/v1/license&quot;
 done</command>
     </hudson.tasks.Shell>
   </builders>
@@ -153,6 +148,10 @@ done</command>
         <EnvInjectPasswordEntry>
           <name>spotinst_token</name>
           <value>{AQAAABAAAABQQWjdUP9Ttp4COTQ2DDWksEbHPdh7ZC5yCsciq+5+nBwkM46h5GKlGxKpGlvhz4y1LiLIIwdEGzp0bJhzb2GKYj5BHI8lAfZ2cyTdlXjrrXv6MEOk456bEGmEF6kaTl/p}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>sbc_password</name>
+          <value>{AQAAABAAAAAQiIf7/LnXO1Tqnn22j1D7oeLageWvB6WtIiBrxKy6Oks=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
