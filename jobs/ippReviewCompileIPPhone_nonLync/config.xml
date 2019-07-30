@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.12">
+<matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description>Compile 440HD, 430HD and 405__8M after “Push to Gerrit”</description>
   <keepDependencies>false</keepDependencies>
@@ -18,7 +18,6 @@
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
@@ -41,7 +40,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -53,7 +52,7 @@
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -188,7 +187,7 @@ make auto AUTOPRD=$AUTOPRD LOG=0
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;nonLync_2.2.12&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;2.2.14&quot; ]]
+            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;nonLync_2.2.12&quot; ]]
 then exit 1
 fi</command>
           </condition>
@@ -232,7 +231,7 @@ fi</command>
     </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
