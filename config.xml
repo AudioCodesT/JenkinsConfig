@@ -1248,7 +1248,8 @@
           <osType>Linux</osType>
           <agentLaunchMethod>SSH</agentLaunchMethod>
           <preInstallSsh>false</preInstallSsh>
-          <initScript>
+          <initScript>sudo yum install -y java-1.8.0-openjdk-1.8.0.212.b04-0.el7_6
+sudo yum install -y java-1.8.0-openjdk-devel-1.8.0.212.b04-0.el7_6
 </initScript>
           <credentialsId>3adf16a2-2994-4ba6-927f-aa526366d9ca</credentialsId>
           <agentWorkspace>/home/centos/jenkinsslave</agentWorkspace>
