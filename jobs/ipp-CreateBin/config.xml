@@ -145,7 +145,6 @@ cd emmc_tools
 git checkout origin/master
 cp -R * ${WORKSPACE}/dualBin
 
-
 cd ${WORKSPACE}
 fi</command>
     </hudson.tasks.Shell>
@@ -156,6 +155,18 @@ echo &quot;Branch=${Branch}&quot; &gt; properties
 echo &quot;Branch: ${Branch}&quot;
 if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
 then
+#check Android Branch
+cd ${WORKSPACE}/..
+rm -rf repo_manifests
+git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
+cd repo_manifests
+git checkout ${ANDROID_VERSION}
+Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
+if [[ $Android_Branch == &quot;&quot; ]]
+then
+	Android_Branch=master
+fi
+cd ${WORKSPACE}
 echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}&quot; &gt; ${WORKSPACE}/artifactoryPath.txt
 cd ${WORKSPACE}/dualBin
 #mount aclnas03 to local directory
@@ -164,7 +175,7 @@ cd ${WORKSPACE}/dualBin
 SFB_exists_in_artifactory=&quot;False&quot;
 Android_exists_in_artifactory=&quot;False&quot;
 curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION} | grep &quot;Not Found&quot; || SFB_exists_in_artifactory=&quot;True&quot;
-curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION} | grep &quot;Not Found&quot; || Android_exists_in_artifactory=&quot;True&quot;
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} | grep &quot;Not Found&quot; || Android_exists_in_artifactory=&quot;True&quot;
 #if SFB not in artifactory, copy files from aclnas03
 if [[ &quot;$SFB_exists_in_artifactory&quot; == &quot;False&quot; ]]
 then
@@ -198,9 +209,9 @@ then
     echo &quot;Copy files for ${ANDROID_VERSION} from aclnas03&quot;
 	for file in ${files_to_copy[@]}
     do	
-		cp $HOME/aclnas03_ipp/Android/master/${ANDROID_VERSION}/$file ${WORKSPACE}/dualBin/$file
+		cp $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file ${WORKSPACE}/dualBin/$file
         local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d&apos; &apos; -f1)
-        remote_md5=$(md5sum $HOME/aclnas03_ipp/Android/master/${ANDROID_VERSION}/$file | cut -d&apos; &apos; -f1)
+        remote_md5=$(md5sum $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file | cut -d&apos; &apos; -f1)
         if [[ $remote_md5 != $local_md5 ]]
 		then
      		   echo &quot;Failed to copy file from aclnas03&quot;
@@ -252,16 +263,16 @@ fi
 if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;True&quot; ]] 
 then
 	echo &quot;Copy files for ${ANDROID_VERSION} from artifactory&quot;
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.android_images.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
     local_md5=$(md5sum ${ANDROID_VERSION}.android_images.zip| cut -d&apos; &apos; -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
         echo &quot;Failed to download file from artifactory&quot;
         exit 1
     fi
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
     local_md5=$(md5sum ${ANDROID_VERSION}.zip| cut -d&apos; &apos; -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
