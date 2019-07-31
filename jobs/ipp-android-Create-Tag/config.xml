@@ -167,6 +167,12 @@ uboot/c450hd_uboot</description>
         <url>ssh://jenkins@gerrit:29418/IPP/Android/system_core</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>legacy</name>
+        <refspec>+refs/heads/*:refs/remotes/legacy/* +refs/tags/*:refs/tags/legacy/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/hardware_libhardware_legacy</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
@@ -502,7 +508,7 @@ echo Create TAG for the last user
             <contentType>project</contentType>
           </email>
           <secureTriggerScript plugin="script-security@1.53">
-            <script>${GERRIT_PROJECT} == &quot;IPP/Android/repo_manifests&quot;</script>
+            <script>build.getBuildVariables().get(&quot;GERRIT_PROJECT&quot;) == &quot;IPP/Android/repo_manifests&quot;</script>
             <sandbox>false</sandbox>
           </secureTriggerScript>
         </hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
