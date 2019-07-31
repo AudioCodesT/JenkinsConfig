@@ -1,0 +1,558 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>20</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description>you must provide the branch name when you execute it manually</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>PROJECT</name>
+          <description>you can provide the project name when you want to execute it on this specific repository.
+If it is empty, the last repository will be checked
+Could be for examples:
+IPP/Android/device_dspg_dvf101-kernel
+IPP/Android/device_audiocodes_common
+uboot/c450hd_uboot</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>dvf101</name>
+        <refspec>+refs/heads/*:refs/remotes/dvf101/* +refs/tags/*:refs/tags/dvf101/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>dvf101-kernel</name>
+        <refspec>+refs/heads/*:refs/remotes/dvf101-kernel/* +refs/tags/*:refs/tags/dvf101-kernel/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>pkgSettings</name>
+        <refspec>+refs/heads/*:refs/remotes/pkgSettings/* +refs/tags/*:refs/tags/pkgSettings/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_apps_Settings</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>pkgMSPartner</name>
+        <refspec>+refs/heads/*:refs/remotes/pkgMSPartner/* +refs/tags/*:refs/tags/pkgMSPartner/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_services_MSPartner</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>systemEngine</name>
+        <refspec>+refs/heads/*:refs/remotes/systemEngine/* +refs/tags/*:refs/tags/systemEngine/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_update_engine</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>systemCrt</name>
+        <refspec>+refs/heads/*:refs/remotes/systemCrt/* +refs/tags/*:refs/tags/systemCrt/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_ca_certificates</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>platformNetd</name>
+        <refspec>+refs/heads/*:refs/remotes/platformNetd/* +refs/tags/*:refs/tags/platformNetd/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/platform_system_netd</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>platformBuild</name>
+        <refspec>+refs/heads/*:refs/remotes/platformBuild/* +refs/tags/*:refs/tags/platformBuild/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/platform_build</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>pkgLatinIME</name>
+        <refspec>+refs/heads/*:refs/remotes/pkgLatinIME/* +refs/tags/*:refs/tags/pkgLatinIME/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_inputmethods_LatinIME</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>frameworksAV</name>
+        <refspec>+refs/heads/*:refs/remotes/frameworksAV/* +refs/tags/*:refs/tags/frameworksAV/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_av</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>frameworksBase</name>
+        <refspec>+refs/heads/*:refs/remotes/frameworksBase/* +refs/tags/*:refs/tags/frameworksBase/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_base</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>frameworksNtv</name>
+        <refspec>+refs/heads/*:refs/remotes/frameworksNtv/* +refs/tags/*:refs/tags/frameworksNtv/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_native</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>frameworksNet</name>
+        <refspec>+refs/heads/*:refs/remotes/frameworksNet/* +refs/tags/*:refs/tags/frameworksNet/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_opt_net_ethernet</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>tinyalsa</name>
+        <refspec>+refs/heads/*:refs/remotes/tinyalsa/* +refs/tags/*:refs/tags/tinyalsa/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/external_tinyalsa</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>common</name>
+        <refspec>+refs/heads/*:refs/remotes/common/* +refs/tags/*:refs/tags/common/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_audiocodes_common</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>uboot</name>
+        <refspec>+refs/heads/*:refs/remotes/uboot/* +refs/tags/*:refs/tags/uboot/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/C450/C450-uboot</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>x86emu</name>
+        <refspec>+refs/heads/*:refs/remotes/x86emu/* +refs/tags/*:refs/tags/x86emu/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_generic_x86emu</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>system_core</name>
+        <refspec>+refs/heads/*:refs/remotes/system_core/* +refs/tags/*:refs/tags/system_core/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_core</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>**</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
+        <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <timeout>20</timeout>
+        <depth>0</depth>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
+    </extensions>
+  </scm>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <authToken>AutoTagFor_dvf101-kernel</authToken>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>REG_EXP</compareType>
+          <pattern>IPP\/Android\/?.*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/C450/C450-uboot</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>*/c450hd_uboot</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <dynamicGerritProjects class="empty-list"/>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>false</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>BASE64</commentTextParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
+#######################################################################################
+# Create the new TAG in the repository and update the relevant line of this repository in the default.xml file
+# Input = The local repository name: $localRepoName, and the full repository name: $repoToTAG
+# Output = No output
+updateManifests() {
+  echo Create new TAG $NEWTAG
+  # Need to delete the TAG before creating it again in another repository
+  if git tag --list | grep -q &quot;$(echo $NEWTAG | sed &apos;s:\.:\\\.:g&apos;)&quot;; then git tag -d &quot;$NEWTAG&quot;; fi
+  git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAG $commitToTAG
+  git push $localRepoName $NEWTAG
+  
+  (
+  echo Update default.xml file, create a new Commit and create this TAG in repo_manifests too
+  cd ../repo_manifests
+  echo Find $repoToTAG in default.xml and replace the revision to be the new TAG
+  sed -i.bak -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; default.xml
+  # sed -i.bak -e &quot;s:\(.*$repoToTAG\&quot;.* revision=\&quot;\)[^&apos; &apos;]*\(\&quot; .*\):\1refs/tags/$NEWTAG\2:&quot; default.xml
+  rm -f default.xml.bak
+  git add default.xml
+  )
+}
+
+#######################################################################################
+# Create TAG in the main found repository (by the poll), search if others repositories were changed too 
+# Create a commit withh the commits detailed in $subject variable and TAG the repo_manifests
+createTag() {
+  if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
+    echo Do not create a TAG for DevOps commits
+    return
+  fi
+  echo Add one to the last TAG
+  NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
+
+  commitToTAG=$LastSha1
+  repoToTAG=$MainRepoName
+  updateManifests
+
+  for eachRepo in $(git remote -v | grep &quot;(push)&quot; | sed &apos;s:\(.*\)\sssh.*29418/\(.*\) .*:\1\:\2:&apos;); do
+    # repoToTAG represent the full repository name, we need it to find it in the default.xml file
+    echo Check repository $eachRepo.......................................
+    repoToTAG=$(echo $eachRepo | cut -d: -f2)
+    localRepoName=$(echo $eachRepo | cut -d: -f1)
+    GERRIT_BRANCH=$localRepoName/$BRANCH
+    if [ &quot;$localRepoName&quot; != &quot;$MainlocalRepoName&quot; ]; then
+      # Check if this branch exist in this repository
+      if ! git checkout $GERRIT_BRANCH; then 
+        echo Branch $GERRIT_BRANCH does not exist
+        continue
+      fi
+      if ! git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then
+        LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
+        # Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
+        if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then continue; fi
+        createCommitFileList
+        while IFS=_ read -r Sha1 User When; do
+          if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
+            subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG) %n%b %n&quot; $Sha1 -n1)&quot;
+            commitToTAG=$Sha1
+          else 
+            break
+          fi              
+        done &lt; $localRepoName.list
+        if [ &quot;$commitToTAG&quot; != &quot;$LastSha1&quot; ]; then
+          updateManifests
+          # $commitToTAG =! $LastSha1 in case a commit was found only, set it again for the next repository
+          commitToTAG=$LastSha1
+        fi
+      fi
+    fi
+  done
+  git checkout $MainlocalRepoName/$BRANCH
+  (
+  
+  cd ../repo_manifests
+  git commit -m &quot;Change in: $MainRepoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
+  git tag -a -m &quot;Jenkins auto tag for $MainRepoName by $LastUser&quot; $NEWTAG
+  manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
+  git push origin HEAD:$manifestBranch
+  git push origin $NEWTAG
+  )
+  LastManifestTag=$NEWTAG
+}
+
+#######################################################################################
+# Find the last TAG and create a file with all the new commits in this repository
+# Input = The last TAG: $LastTag, and the local repository name: $localRepoName
+# Output = the file &lt;reposiroty name&gt;.list
+createCommitFileList() {
+  echo TAG: $LastTag ------------------- on: $localRepoName -------------------
+  #If no TAGS exist at all in this branch, check the last commit only
+  if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then LastTag=&quot;$GERRIT_BRANCH^&quot;; fi
+  if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
+  echo Check $LastTag..$GERRIT_BRANCH
+  git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; $localRepoName.list
+  echo &gt;&gt; $localRepoName.list
+}
+
+#######################################################################################
+# Create (if not exist yet) the repo_manifests and find the last TAG
+# Output = LastManifestTag
+createLocalManifests() {
+  echo Create &apos;repo_manifests&apos; and find the last TAG 
+  cd ..
+  if [ ! -d repo_manifests ]; then
+    git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
+  fi
+  cd repo_manifests
+  # Create a local branch and checkout to 
+  if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH $GERRIT_BRANCH; fi
+  git reset --hard
+  git pull --rebase
+  LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
+}
+
+#######################################################################################
+# The main program
+# If found new commit, execute &apos;createTag&apos;
+
+git config --global user.name &quot;Jenkins&quot;
+git config --global user.email devops@audiocodes.com
+echo Starting...
+git status
+git remote -v
+git clean -fd
+subject=&quot;&quot;
+LastManifestTag=&quot;&quot;
+
+echo Sleep 5 minutes before starting check commits
+sleep 30
+
+# All this job shoulde start in the repository and in the branch where the Submit was done
+if [ -z $GERRIT_BRANCH ]; then
+  echo &quot;No branch found, set to default branch: master&quot;
+  GERRIT_BRANCH=&quot;master&quot;
+fi
+BRANCH=$GERRIT_BRANCH
+
+# If the job was executed manually, $PROJECT should be defined
+if [ ! -z &quot;$PROJECT&quot; ]; then GERRIT_PROJECT=$PROJECT; fi
+
+if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+  #Create a TAG on manifests and exit
+  createLocalManifests
+  NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
+  git tag -a -m &quot;Jenkins auto tag&quot; $NEWTAG
+  manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
+  git push origin HEAD:$manifestBranch
+  git push origin $NEWTAG
+  echo The TAG $NEWTAG was created in $GERRIT_PROJECT, including the following Commits:
+  git log --first-parent $LastManifestTag..$NEWTAG
+  git diff $LastManifestTag..$NEWTAG
+  exit 0
+fi
+
+# If the job was automatically triggered, the $GERRIT_PROJECT should be defined.
+# If not (no matter, automatically or manually), skip this &apos;checkout&apos; and hope the next commands will find the $MainlocalRepoName
+if [ ! -z &quot;$GERRIT_PROJECT&quot; ]; then
+  echo &quot;Checkout to the right project/branch&quot;
+  # Most of case it was checkedout already to this project/branch
+  findProject=$(git remote -v | grep $GERRIT_PROJECT | head -1 | awk &apos;{print $1}&apos;)
+  if [ -z &quot;$findProject&quot; ]; then
+    # Probably this repository wasn&apos;t defined in this job
+    echo &quot;This local project was not defined in this job , exit with error&quot;
+    exit 1;  
+  else 
+    git checkout $findProject/$BRANCH
+  fi
+fi
+
+# Find remote repository name
+remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
+MainlocalRepoName=$(echo $remote | cut -d/ -f2)
+
+if [ -z $MainlocalRepoName ]; then
+  echo &quot;No local project was found, exit with error&quot;
+  exit 1;
+fi
+
+GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
+# Find real repository name - to find the line in default.xml 
+MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+
+echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
+if git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then exit 0; fi
+#if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
+  
+echo Create &apos;repo_manifests&apos; and find the last TAG
+createLocalManifests
+echo Last TAG found is $LastManifestTag
+cd $WORKSPACE
+
+git checkout $GERRIT_BRANCH
+localRepoName=$MainlocalRepoName
+echo Find the last TAG name in repository $localRepoName
+LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
+# Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
+createCommitFileList
+  
+LastUser=&quot;&quot;
+while IFS=_ read -r Sha1 User When
+do
+    if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; subject=&quot;&quot;; fi
+    LastUser=$User
+    LastSha1=$Sha1
+    subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $MainRepoName) %n%b %n&quot; $LastSha1 -n1)&quot;
+    LastWhen=`echo $When | cut -d&quot; &quot; -f1`
+done &lt; $MainlocalRepoName.list
+
+if [ -z $LastWhen ]; then continue; fi
+
+echo Check the last commit if 5 minutes passed...
+date
+
+echo Create TAG for the last user
+#CurrentTime=`date +%s`
+#if [ `expr $CurrentTime - $LastWhen` -gt 300 ]; then
+  createTag
+#else
+#  echo Try again later after 300 seconds
+#  exit 2
+#fi
+
+
+</command>
+      <unstableReturn>2</unstableReturn>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+      <recipientList>$DEFAULT_RECIPIENTS</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
+          <email>
+            <recipientList>yossim,Shuky.Riechard</recipientList>
+            <subject>A commit to repo_manifests was done</subject>
+            <body>Add the new repo into $BUILD_URL (If needed)</body>
+            <recipientProviders/>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>true</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+          <secureTriggerScript plugin="script-security@1.53">
+            <script>${GERRIT_PROJECT} == &quot;IPP/Android/repo_manifests&quot;</script>
+            <sandbox>false</sandbox>
+          </secureTriggerScript>
+        </hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
+      <defaultContent>$DEFAULT_CONTENT</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>.*(Try again later after 300 seconds|Killed by signal 15|JNLP4-connect connection).*</regexpForRerun>
+      <rerunIfUnstable>true</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>300</delay>
+      </delay>
+      <maxSchedule>2</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>shuky.riechard yossim ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQIQUHSP2LKnFBulwLwOnUN9d7K2PJPkgyAeidd9y+smo=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} - ${BUILD_LOG_REGEX, regex=&quot;^.*NEWTAG=(\S*)&quot;,substText=&quot;$1&quot;,showTruncatedLines=false}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+</project>
