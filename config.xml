@@ -754,48 +754,7 @@
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.14">
       <name>sig-9290e243</name>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-036919f7dcbfe7d01</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-036919f7dcbfe7d01</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2019-07-31 11:23:35.17 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-0169f1893e1dfd4e9</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-0169f1893e1dfd4e9</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2019-07-31 11:23:45.224 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-00c1c978e0867758c</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-00c1c978e0867758c</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2019-07-31 11:23:45.224 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-02d321548f3261ad0</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-02d321548f3261ad0</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2019-07-31 11:23:35.16 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1425,6 +1384,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>test_armReviewArm-fullRepo</string>
         <string>test_auto07</string>
         <string>test_ipp_AT_parent</string>
+        <string>test_ippBuild_SFB</string>
         <string>test_windowsSlave</string>
       </jobNames>
       <jobFilters/>
