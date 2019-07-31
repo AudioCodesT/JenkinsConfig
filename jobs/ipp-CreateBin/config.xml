@@ -184,7 +184,14 @@ then
 fi
 if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;False&quot; ]]
 then
-	files_to_copy=(&quot;${ANDROID_VERSION}.android_images.zip&quot; &quot;${ANDROID_VERSION}.zip&quot;)
+	# if tag is below 1.0.0 its contain C450HD_TEAMS in the tag
+	if [[ &quot;${ANDROID_VERSION}&quot; =~ &quot;C450HD_TEAMS&quot; ]]
+    then
+    	files_to_copy=(&quot;${ANDROID_VERSION}.android_images.zip&quot; &quot;${ANDROID_VERSION}.zip&quot;)
+    else
+    	files_to_copy=(&quot;C450HD_TEAMS_${ANDROID_VERSION}.android_images.zip&quot; &quot;C450HD_TEAMS_${ANDROID_VERSION}.zip&quot;)
+    fi
+	
     echo &quot;Copy files for ${ANDROID_VERSION} from aclnas03&quot;
 	for file in ${files_to_copy[@]}
     do	
