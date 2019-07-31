@@ -118,7 +118,7 @@
             <contentType>project</contentType>
           </email>
           <secureTriggerScript plugin="script-security@1.53">
-            <script>env.GERRIT_PROJECT== &quot;IPP/Android/repo_manifests&quot;</script>
+            <script>(&quot;${GERRIT_PROJECT}&quot;== &quot;IPP/Android/repo_manifests&quot;)</script>
             <sandbox>false</sandbox>
           </secureTriggerScript>
         </hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
