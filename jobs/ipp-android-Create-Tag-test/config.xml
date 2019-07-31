@@ -127,10 +127,11 @@
     then:
         fileContent
         fileContent instanceof String
-        fileContent.contains(&quot;&quot;&quot;&apos;IPP/Android/repo_manifests&quot;&quot;&quot;)
+        return fileContent.contains(&quot;&apos;IPP/Android/repo_manifests&quot;)
 }
-</script>
-            <sandbox>true</sandbox>
+
+echo Hiiiii</script>
+            <sandbox>false</sandbox>
           </secureTriggerScript>
         </hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
       </configuredTriggers>
