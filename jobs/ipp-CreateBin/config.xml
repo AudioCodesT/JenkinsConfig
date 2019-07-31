@@ -182,16 +182,19 @@ then
 		fi
 	done
 fi
-if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;False&quot; ]]
-then
-	# if tag is below 1.0.0 its contain C450HD_TEAMS in the tag
+
+# if tag is below 1.0.0 its contain C450HD_TEAMS in the tag
 	if [[ &quot;${ANDROID_VERSION}&quot; =~ &quot;C450HD_TEAMS&quot; ]]
     then
-    	files_to_copy=(&quot;${ANDROID_VERSION}.android_images.zip&quot; &quot;${ANDROID_VERSION}.zip&quot;)
+    	android_file_name=${ANDROID_VERSION}
     else
-    	files_to_copy=(&quot;C450HD_TEAMS_${ANDROID_VERSION}.android_images.zip&quot; &quot;C450HD_TEAMS_${ANDROID_VERSION}.zip&quot;)
+    	android_file_name=&quot;C450HD_TEAMS_${ANDROID_VERSION}&quot;
     fi
-	
+
+
+if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;False&quot; ]]
+then
+    files_to_copy=(&quot;${android_file_name}.android_images.zip&quot; &quot;${android_file_name}.zip&quot;)
     echo &quot;Copy files for ${ANDROID_VERSION} from aclnas03&quot;
 	for file in ${files_to_copy[@]}
     do	
@@ -249,16 +252,16 @@ fi
 if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;True&quot; ]] 
 then
 	echo &quot;Copy files for ${ANDROID_VERSION} from artifactory&quot;
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.android_images.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.android_images.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
     local_md5=$(md5sum ${ANDROID_VERSION}.android_images.zip| cut -d&apos; &apos; -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
         echo &quot;Failed to download file from artifactory&quot;
         exit 1
     fi
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${ANDROID_VERSION}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/master/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
     local_md5=$(md5sum ${ANDROID_VERSION}.zip| cut -d&apos; &apos; -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
@@ -266,8 +269,8 @@ then
         exit 1
     fi
 fi
-unzip ${ANDROID_VERSION}.android_images.zip
-unzip ${ANDROID_VERSION}.zip
+unzip ${android_file_name}.android_images.zip
+unzip ${android_file_name}.zip
 #change names of system_raw.img and userdata_raw.img
 mv system_raw.img system.img
 mv userdata_raw.img userdata.img
