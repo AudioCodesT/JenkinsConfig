@@ -200,6 +200,7 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
   		make $PARAMS
   		# run make binary on release branches on all models
   elif [[ &quot;$PARAMS&quot; =~ binary &amp;&amp; ! &quot;${BUILD_BRANCH}&quot; =~ &quot;release&quot; ]]
+  then
   		echo &quot;dont run make $PARAMS, branch is not release: ${BUILD_BRANCH}&quot;
   else
   		make $PARAMS
@@ -334,8 +335,7 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
-      <multiConfProject>true</multiConfProject>
+      <multiConfProject>false</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
