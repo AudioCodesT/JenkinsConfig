@@ -119,7 +119,9 @@
             <contentType>project</contentType>
           </email>
           <secureTriggerScript plugin="script-security@1.53">
-            <script>build.getBuildVariables().get(&quot;GERRIT_PROJECT&quot;) == &quot;&apos;IPP/Android/device_audiocodes_common&quot;
+            <script>println(build.getBuildVariables().get(&quot;GERRIT_PROJECT&quot;))
+
+build.getBuildVariables().get(&quot;GERRIT_PROJECT&quot;) == &quot;&apos;IPP/Android/device_audiocodes_common&quot;
 </script>
             <sandbox>false</sandbox>
           </secureTriggerScript>
