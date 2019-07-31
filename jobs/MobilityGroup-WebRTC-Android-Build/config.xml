@@ -168,7 +168,7 @@ echo NEWTAG=$NEWTAG &gt; prop</command>
 cd SDK
 zip -r Javadocs.zip Javadocs
 cd ${WORKSPACE}
-zip -r --exclude=&apos;prop&apos; --exclude=&apos;.git&apos; --exclude=&apos;SDK&apos; --exclude=&apos;DemoClient/.gradle&apos; --exclude=&apos;DemoClient/.idea&apos; --exclude=&apos;DemoClient/webrtcclient/build&apos; --exclude=&apos;DemoClient/webrtcclient/webrtcclient.iml&apos; --exclude=&apos;DemoClient/DemoClient.iml&apos;  DemoClient.zip *</command>
+zip -r -x=&apos;*prop*&apos; -x=&apos;*.git*&apos; -x=&apos;*SDK*&apos; -x=&apos;*DemoClient/.gradle*&apos; -x=&apos;*DemoClient/.idea*&apos; -x=&apos;*DemoClient/webrtcclient/build*&apos; -x=&apos;*DemoClient/webrtcclient/webrtcclient.iml*&apos; -x=&apos;*DemoClient/DemoClient.iml*&apos;  DemoClient.zip *</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
