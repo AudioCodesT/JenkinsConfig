@@ -408,6 +408,7 @@ if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; th
   git push origin $NEWTAG
   echo The TAG $NEWTAG was created in $GERRIT_PROJECT, including the following Commits:
   git log --first-parent $LastManifestTag..$NEWTAG
+  git diff $LastManifestTag..$NEWTAG
   exit 0
 fi
 
