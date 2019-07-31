@@ -265,7 +265,7 @@ then
 	echo &quot;Copy files for ${ANDROID_VERSION} from artifactory&quot;
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip
     remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum ${ANDROID_VERSION}.android_images.zip| cut -d&apos; &apos; -f1)
+    local_md5=$(md5sum ${android_file_name}.android_images.zip| cut -d&apos; &apos; -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
         echo &quot;Failed to download file from artifactory&quot;
@@ -273,7 +273,7 @@ then
     fi
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip
     remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum ${ANDROID_VERSION}.zip| cut -d&apos; &apos; -f1)
+    local_md5=$(md5sum ${android_file_name}.zip| cut -d&apos; &apos; -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
         echo &quot;Failed to download file from artifactory&quot;
