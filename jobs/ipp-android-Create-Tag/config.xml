@@ -406,6 +406,8 @@ if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; th
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
+  echo The TAG $NEWTAG was created in $GERRIT_PROJECT, including the following Commits:
+  git log --first-parent $LastManifestTag..$NEWTAG
   exit 0
 fi
 
@@ -493,7 +495,7 @@ echo Create TAG for the last user
             <body>Add the new repo into $BUILD_URL (If needed)</body>
             <recipientProviders/>
             <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
+            <attachBuildLog>true</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
             <contentType>project</contentType>
