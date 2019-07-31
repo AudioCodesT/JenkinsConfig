@@ -49,7 +49,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -111,6 +110,8 @@
     <hudson.tasks.Shell>
       <command>
 
+
+  echo $GERRIT_PROJECT
   exit 0
 </command>
       <unstableReturn>2</unstableReturn>
@@ -133,7 +134,7 @@
             <contentType>project</contentType>
           </email>
           <secureTriggerScript plugin="script-security@1.53">
-            <script>$GERRIT_PROJECT == &quot;IPP/Android/repo_manifests&quot;</script>
+            <script>&quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/repo_manifests&quot;</script>
             <sandbox>false</sandbox>
           </secureTriggerScript>
         </hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
