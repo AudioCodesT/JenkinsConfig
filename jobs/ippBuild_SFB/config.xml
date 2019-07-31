@@ -194,8 +194,12 @@ NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{pri
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
   PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
   if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
-  if [[ &quot;$PARAMS&quot; =~ binary &amp;&amp; ! &quot;${BUILD_BRANCH}&quot; =~ &quot;release&quot; ]]
+  # run make binary in all branches in model C450HD
+  if [[ &quot;$PARAMS&quot; =~ binary &amp;&amp; &quot;$AUTOPRD&quot; = &quot;C450HD&quot; ]]
   then
+  		make $PARAMS
+  		# run make binary on release branches on all models
+  elif [[ &quot;$PARAMS&quot; =~ binary &amp;&amp; ! &quot;${BUILD_BRANCH}&quot; =~ &quot;release&quot; ]]
   		echo &quot;dont run make $PARAMS, branch is not release: ${BUILD_BRANCH}&quot;
   else
   		make $PARAMS
