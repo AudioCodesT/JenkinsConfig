@@ -43,7 +43,7 @@ The role of this job is to execute the ipp_AT_parent on the slave (ipp_auto7 or 
         <hudson.model.StringParameterDefinition>
           <name>MODEL</name>
           <description></description>
-          <defaultValue>450</defaultValue>
+          <defaultValue>C450</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -158,7 +158,7 @@ date
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
-MODEL=450
+MODEL=C450
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
 ServerType=Lync
