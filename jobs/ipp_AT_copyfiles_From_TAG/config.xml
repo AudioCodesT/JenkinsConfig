@@ -27,19 +27,21 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue>3.1.0</defaultValue>
+          <description>Could be: 3.1.0, 3.2 or feature/3.2/IGS_unified</description>
+          <defaultValue>3.2</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name></name>
           <description></description>
           <allowedSlaves>
+            <string>IPP-Auto11</string>
             <string>ipp-Auto7</string>
             <string>ipp-Auto8</string>
             <string>ipp-Auto9</string>
           </allowedSlaves>
           <defaultSlaves>
+            <string>IPP-Auto11</string>
             <string>ipp-Auto7</string>
             <string>ipp-Auto8</string>
             <string>ipp-Auto9</string>
@@ -89,7 +91,14 @@ ARTIFACTORY=https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERR
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
 
 echo Looking after https://$artifactory_ip/api/storage/ipp-release/com/ac/ipp/SFB/$GERRIT_BRANCH/$TAG
-ImagesList=(&quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;405HD&quot;)
+
+if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+  ImagesList=(&quot;445HD_IGS&quot;)
+  echo MODEL=445 &gt; ${WORKSPACE}/properties.txt
+else
+  ImagesList=(&quot;C450HD&quot; &quot;450HD&quot; &quot;445HD&quot; &quot;440HD&quot; &quot;405HD&quot;)
+  echo MODEL=C450 &gt; ${WORKSPACE}/properties.txt
+fi
 
 curl -ks -u $User -X GET $ARTIFACTORY &gt; $TAG.txt
 echo Check $TAG
@@ -102,6 +111,8 @@ echo Start copying files
 # should be 10, the 5 types for .img and .sim.tgz
 #countImages=$(( ${#ImagesList[@]} * 2 ))
 countImages=$(( ${#ImagesList[@]} ))
+NumberImages=$countImages
+
 
 #for each type
 for PRD in ${ImagesList[@]}; do
@@ -127,11 +138,11 @@ for PRD in ${ImagesList[@]}; do
     done
 done
 
-echo ImageNames=${TAG} &gt; ${WORKSPACE}/properties.txt
+echo ImageNames=${TAG} &gt;&gt; ${WORKSPACE}/properties.txt
 date
 # Check if the 10 images were copied or were already there
 # In case of fail, the job will restart after 20 minutes
-echo  $(expr 4 - $countImages ) files exists
+echo  $( $NumberImages - $countImages ) files exists
 if [ $countImages -ne 0 ]; then
   echo $countImages files were not found ... abort
   exit 2
@@ -165,7 +176,7 @@ fi
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>REFSPEC=
 GERRIT_BRANCH=$GERRIT_BRANCH
-MODEL=450
+MODEL=$MODEL
 IMAGENAMES=$ImageNames
 EMAIL=${BUILD_USER_EMAIL}</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
@@ -187,7 +198,7 @@ EMAIL=${BUILD_USER_EMAIL}</properties>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
