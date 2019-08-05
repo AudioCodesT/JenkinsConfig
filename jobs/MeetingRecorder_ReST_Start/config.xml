@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>this job is triggered from URL&#xd;
-purpose: start MeetingRecorder instance for Brian.&#xd;
+purpose: start Stateful DSP QA tests instance for Shalva.&#xd;
 No build job. Only start the instance.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -38,27 +38,34 @@ No build job. Only start the instance.</description>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>master</assignedNode>
+  <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>MeetingRecorder</authToken>
+  <authToken>DSP_QA</authToken>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting i-0d1e9251707de1444 (MeetingRecorder-Build-Slave-Static) IP: 172.16.143.61&quot;
+echo &quot;Starting i-03222de4315e8592b  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
 echo &quot;***********************************************************************************&quot;
-#aws ec2 start-instances --instance-ids i-0d1e9251707de1444
-aws ec2 start-instances --instance-ids i-02bdc0b58db0f077e # For Brian YY
+aws ec2 start-instances --instance-ids i-03222de4315e8592b 
+echo &quot;***********************************************************************************&quot;
+echo &quot;Starting i-0da25f5e755b06947 (Stateful DSP QA tests) IP: 172.16.134.132&quot;
+echo &quot;***********************************************************************************&quot;
+aws ec2 start-instances --instance-ids i-0da25f5e755b06947
+echo &quot;***********************************************************************************&quot;
+echo &quot;Starting i-0c840a2a5cbce73d4 (Stateful DSP QA tests) IP: 172.16.134.133&quot;
+echo &quot;***********************************************************************************&quot;
+aws ec2 start-instances --instance-ids i-0c840a2a5cbce73d4 
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>shuky.riechard, yuval.yosha</recipients>
+      <recipients>shuky.riechard, ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
