@@ -225,7 +225,20 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+      <command>#****************************************************************************
+#************************** Probe system status *****************************
+#****************************************************************************
+
+curl -k -O -u admin:$artifactory_password https://artifactory:443/Devops/Tools/AWS/Linux/sysprobe.sh
+
+chmod +x sysprobe.sh
+./sysprobe.sh &amp;
+
+#****************************************************************************
+#****************************************************************************
+#****************************************************************************
+
+User=&quot;$artifactory_user:$artifactory_password&quot;
 
 # Check if the image exist already in the Artifactory - if exist, exit without error
 # The grep -v flag exclude the pattern, needed when the img name contains _logs_ in case of LOG=1
@@ -259,7 +272,26 @@ for ((i=1;i&lt;=$NumExecuting;i++)); do
 done
 #change size_report name to 450HD_SIZE_REPORT.csv
 NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
-mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true</command>
+mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
+
+
+#****************************************************************************
+#************************** Probe system status *****************************
+#****************************************************************************
+
+cd ${WORKSPACE}
+
+echo &quot;Kill probe process&quot;
+kill -9 $(ps | grep sysprobe.sh | gawk &apos;{print $1}&apos;)
+
+echo &quot;Archive probe csv &amp; upload to Artifactory&quot;
+mv sysprobe.csv ${BUILD_NUMBER}-${AUTOPRD}.csv
+tar zcfv ${BUILD_NUMBER}-${AUTOPRD}.tar.gz ${BUILD_NUMBER}-${AUTOPRD}.csv
+curl -u admin:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz &quot;https://artifactory/Devops/Probes/ippReview_SFB/${BUILD_NUMBER}/${BUILD_NUMBER}-${AUTOPRD}.tar.gz&quot;
+
+#****************************************************************************
+#****************************************************************************
+#****************************************************************************</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
