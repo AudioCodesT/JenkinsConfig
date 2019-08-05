@@ -1210,6 +1210,7 @@
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <com.microsoft.azure.vmagent.AzureVMCloud plugin="azure-vm-agents@1.1.1">
+      <actions/>
       <name>azure_VM</name>
       <cloudName>azure_VM</cloudName>
       <credentialsId>JenkinsCredsForAzure</credentialsId>
@@ -1272,7 +1273,7 @@ sudo yum install -y git-2.18.0</initScript>
           <nsgName></nsgName>
           <jvmOptions></jvmOptions>
           <templateDisabled>false</templateDisabled>
-          <templateStatusDetails></templateStatusDetails>
+          <templateStatusDetails>java.io.IOException: Agent failed to connect, even though the launcher didn&apos;t report it. See the log output for details.</templateStatusDetails>
           <templateVerified>false</templateVerified>
           <executeInitScriptAsRoot>true</executeInitScriptAsRoot>
           <doNotUseMachineIfInitFails>true</doNotUseMachineIfInitFails>
@@ -1474,6 +1475,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>CopyFilesToProductionJira</string>
         <string>CopyFilesToTestJira</string>
         <string>Delete-Old-Artifactory-Versions</string>
+        <string>DSP_QA_ReST_Start</string>
         <string>DSP_QA_SpotInst_Start</string>
         <string>DSP_QA_SpotInst_Stop</string>
         <string>ippSizeChecker</string>
@@ -1481,7 +1483,6 @@ sudo yum install -y git-2.18.0</initScript>
         <string>IT-Windows</string>
         <string>MatrixJobsReport</string>
         <string>MatrixJobStatisticsReport</string>
-        <string>MeetingRecorder_ReST_Start</string>
         <string>MeetingRecorder_Sched_Off</string>
       </jobNames>
       <jobFilters/>
