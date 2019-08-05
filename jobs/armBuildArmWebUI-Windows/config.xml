@@ -134,7 +134,8 @@ set -e
 set -x
 
 cd $WORKSPACE
-
+#yarn dist failing without this command (memory out of heap failure)
+export NODE_OPTIONS=&quot;--max_old_space_size=4096&quot;
 
 # adding ac-infra
 echo &quot;git submodule init&quot;
