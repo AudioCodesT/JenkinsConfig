@@ -44,7 +44,6 @@ if new code then build and deploy ovoc-7.6.zip</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -243,6 +242,7 @@ then
                         sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts
                         sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
                         cat ${WORKSPACE}/cypress/support/config.ts
+                        cat ${WORKSPACE}/proxyServer.js
                         echo &quot;RUN: yarn run proxyServer&quot;
                         yarn run proxyServer &amp; sleep 15
                         echo &quot;RUN: yarn test:jenkins&quot;
@@ -285,7 +285,6 @@ fi</command>
               <string>FAILURE</string>
             </results>
             <role>BOTH</role>
-            <executeOn>BOTH</executeOn>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>#!C:\Program Files\Git\bin\bash --login -i
@@ -311,7 +310,6 @@ fi</command>
               <string>SUCCESS</string>
             </results>
             <role>BOTH</role>
-            <executeOn>BOTH</executeOn>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>#!C:\Program Files\Git\bin\bash --login -i
