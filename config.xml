@@ -766,45 +766,45 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T22xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C38xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C48xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C34xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
       <executorsForTypes>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M44xlarge</awsInstanceType>
+          <awsInstanceType>M32xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C34xlarge</awsInstanceType>
+          <awsInstanceType>M42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C44xlarge</awsInstanceType>
+          <awsInstanceType>C32xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C38xlarge</awsInstanceType>
+          <awsInstanceType>C42xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C48xlarge</awsInstanceType>
+          <awsInstanceType>T22xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
@@ -1210,7 +1210,6 @@
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <com.microsoft.azure.vmagent.AzureVMCloud plugin="azure-vm-agents@1.1.1">
-      <actions/>
       <name>azure_VM</name>
       <cloudName>azure_VM</cloudName>
       <credentialsId>JenkinsCredsForAzure</credentialsId>
@@ -1224,7 +1223,6 @@
           <templateDesc>azure test VM</templateDesc>
           <labels>azure_test_te</labels>
           <location>West Europe</location>
-          <availabilityType/>
           <virtualMachineSize>Standard_B1s</virtualMachineSize>
           <storageAccountNameReferenceType>existing</storageAccountNameReferenceType>
           <diskType>managed</diskType>
@@ -1273,7 +1271,7 @@ sudo yum install -y git-2.18.0</initScript>
           <nsgName></nsgName>
           <jvmOptions></jvmOptions>
           <templateDisabled>false</templateDisabled>
-          <templateStatusDetails>java.io.IOException: Agent failed to connect, even though the launcher didn&apos;t report it. See the log output for details.</templateStatusDetails>
+          <templateStatusDetails></templateStatusDetails>
           <templateVerified>false</templateVerified>
           <executeInitScriptAsRoot>true</executeInitScriptAsRoot>
           <doNotUseMachineIfInitFails>true</doNotUseMachineIfInitFails>
