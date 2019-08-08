@@ -28,6 +28,8 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -51,6 +53,11 @@ then
 
 fi</command>
     </hudson.tasks.Shell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>#convert the files from vhdx to vhd
+Convert-VHD –Path ${WORKSPACE}\ARM-Conf_${TAG}.vhdx –DestinationPath &quot;${WORKSPACE}&quot; -VHDType Fixed
+Convert-VHD –Path ${WORKSPACE}\ARM-Router_${TAG}.vhdx –DestinationPath &quot;${WORKSPACE}&quot; -VHDType Fixed</command>
+    </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers/>
   <buildWrappers>
@@ -119,6 +126,24 @@ fi</command>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>test_jenkins_secret_key</name>
+          <value>{AQAAABAAAAAwLDpjoGvToSWd80STY6XvVpJCvffoVfn2n5BAxyX2hYOGGJfvAcZxGyIMp0Winvs43MHPT1kPBGFJrOA943a40A==}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>admin_password</name>
+          <value>{AQAAABAAAAAQSXK4ipuDwmFWsz+BWhv78s7D/6d0ZXTvyLg7PyRkGk8=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>connection_string</name>
+          <value>{AQAAABAAAADQAtLmAutMwCxtLf8G0wXN8MbGRmyPH7wHHEnvZA6QihCyeLLtPoEiVPa2Mqc+g65+rut4lcwKZPk3SljUrGdmyhU87gJheWpbeCxvpnHd8GhGrZ2nhppNcbTvmj7KUnkE+iJeLBltQ4Ekts+gKWQF2QUDO7ghBMvnNEFCYfh+FlEH2nYYkSJi5PHmkRuEXB4FBsOcQBmgCq/E+u6tdFnRsnKvWdoCg1y2vKsrr2IbanjBQmJtYgf0tr0tavDhTiW5j9hB7WyPwUSROdYI5bJHExbpaZ8TYt1YHtpTnXc3T/o=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__${TAG}</template>
       <runAtStart>true</runAtStart>
