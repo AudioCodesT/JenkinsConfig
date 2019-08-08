@@ -139,12 +139,12 @@ fi
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
-echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
-echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
+echo PHISICALPHONE=$PHISICALPHONE &gt; ${WORKSPACE}/properties.txt
 echo ATA_Home=$ATA_Home &gt;&gt; ${WORKSPACE}/properties.txt
 
 echo Results: &gt; $ATA_Home/$IMAGENAMES.txt
 
+echo This execution is for PatchSet $ps
 while IFS= read -r line
 do
   field=`echo $line | cut -d: -f1` # Could be: number or kind
@@ -152,17 +152,20 @@ do
   if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
   else
     echo  Patch set: $checkPS,  change kind: $value
-    if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
-      echo It is a newest patch-set... abort action
-      echo -----------------------------------------
-      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation test for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
-      echo RunPhases=0 &gt;&gt; ${WORKSPACE}/properties.txt
-      exit 0;
+    if [ &quot;$checkPS&quot; -gt &quot;$ps&quot; ]; then
+      if [ &quot;$value&quot; == &quot;REWORK&quot; ]; then
+        echo It is a newest patch-set... abort action
+        echo -----------------------------------------
+        ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation test for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$checkPS
+        echo RunPhases=0 &gt;&gt; ${WORKSPACE}/properties.txt
+        exit 0;
+      else
+        ps=$checkPS
+        echo Current patchSet is $ps - no new code was changes.
+      fi
     fi
   fi
 done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
-
-echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
 
 ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
