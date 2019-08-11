@@ -54,9 +54,14 @@ then
 fi</command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>#convert the files from vhdx to vhd
+      <command>#parameters for the build
+$jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
+$jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
+#convert the files from vhdx to vhd
 Convert-VHD –Path ${WORKSPACE}\ARM-Conf_${TAG}.vhdx –DestinationPath &quot;${WORKSPACE}&quot; -VHDType Fixed
-Convert-VHD –Path ${WORKSPACE}\ARM-Router_${TAG}.vhdx –DestinationPath &quot;${WORKSPACE}&quot; -VHDType Fixed</command>
+Convert-VHD –Path ${WORKSPACE}\ARM-Router_${TAG}.vhdx –DestinationPath &quot;${WORKSPACE}&quot; -VHDType Fixed
+#connect to azure cli
+az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers/>
@@ -131,8 +136,8 @@ Convert-VHD –Path ${WORKSPACE}\ARM-Router_${TAG}.vhdx –DestinationPath &quot
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
         <EnvInjectPasswordEntry>
-          <name>test_jenkins_secret_key</name>
-          <value>{AQAAABAAAAAwLDpjoGvToSWd80STY6XvVpJCvffoVfn2n5BAxyX2hYOGGJfvAcZxGyIMp0Winvs43MHPT1kPBGFJrOA943a40A==}</value>
+          <name>jenkins_secret_key</name>
+          <value>{AQAAABAAAAAw18TKRYDosE9iNcay6EJX0ulRJpPW0MFtwQiPJjSv585SNYm6u3apPTnmivn9r6mygG3e/hTM639sj4gNaxmyVg==}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>admin_password</name>
