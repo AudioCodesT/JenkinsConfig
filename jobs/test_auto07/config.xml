@@ -43,7 +43,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp-Auto9</assignedNode>
+  <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -52,17 +52,54 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!c:\cygwin\bin\bash --login
-date
+      <command>download_URL=&quot;https://ciresourcegroupstorage.blob.core.windows.net/vhds/OVOC_7.6.2112.vhd?st=2019-08-07T13%3A33%3A53Z&amp;se=2019-08-09T13%3A33%3A53Z&amp;sp=rl&amp;sv=2018-11-09&amp;sr=c&amp;sig=UYfd3QvIpUkRywpZxkvfRknK57eCslPJ7RKvxUk17Co%3D&quot;
 
-echo $GiveScore
+echo &quot;download_URL=${download_URL}&quot; &gt; prop
+ 
 
-if [ $GiveScore ]; then echo 123; fi
 
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+      <recipientList>ben.magriso@audiocodes.com</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+          <email>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+      </configuredTriggers>
+      <contentType>text/html</contentType>
+      <defaultSubject>ready</defaultSubject>
+      <defaultContent>can be downloaded here: 
+${download_URL}</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+  </publishers>
   <buildWrappers/>
 </project>
