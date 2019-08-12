@@ -125,7 +125,7 @@ output: upgrade tarball in a temp dir in artifactory</description>
 #sed &apos;s/\r$//&apos; ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh &gt; ArmCommon/Common/.deploy/aws_createUpgradeTarball_unix.sh
 #sudo yum install -y  dos2unix
 #dos2unix ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh
-VERSION_NAME=$(git describe --abbrev=0)
+export VERSION_NAME=$(git describe --abbrev=0)
 sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
     </hudson.tasks.Shell>
   </builders>
