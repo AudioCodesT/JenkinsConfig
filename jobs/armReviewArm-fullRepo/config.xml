@@ -14,8 +14,8 @@ java --&gt; pmd, findbugs&#xd;
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>30</daysToKeep>
-        <numToKeep>-1</numToKeep>
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -35,11 +35,9 @@ java --&gt; pmd, findbugs&#xd;
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -79,6 +77,41 @@ java --&gt; pmd, findbugs&#xd;
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command># Setting jdk version for branches
+# Default version is 1.8.0_162
+jdkver=&quot;1.8.0_162&quot;
+
+# Branch 7.8 needs version 1.8.0_92
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
+	jdkver=&quot;1.8.0_92&quot;
+fi
+#jdkver=&quot;1.8.0_191&quot;
+# Set Java
+sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
+jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
+echo &quot;Java version set to: $jver&quot;
+
+# Set JavaC
+sudo alternatives --set javac /usr/java/jdk&quot;$jdkver&quot;/bin/javac
+jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
+echo &quot;javac version set to: $jcver&quot;
+
+# Set JAVA_HOME
+sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
+. /etc/environment
+
+#new scrip to prepare database env
+#this is per Igor request for his new trick to reduce unit-tests time
+#It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
+bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
+    </hudson.tasks.Shell>
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
+      <mavenName>Maven_v325</mavenName>
+      <rootPom>pom.xml</rootPom>
+      <goals>clean install</goals>
+      <mavenOpts></mavenOpts>
+    </org.jfrog.hudson.maven3.Maven3Builder>
+    <hudson.tasks.Shell>
       <command>## Run pmd on entire repository java files
 cat &lt;&lt;-EOF &gt; ~/.netrc
 machine test-gerrit login jenkins password $jpass
@@ -104,82 +137,54 @@ cd ${WORKSPACE}
 
 
 ## Run FindBugs on entire repository java files
-/opt/findbugs/bin/findbugs -medium -xml -output findbugs.xml -textui .
+/opt/findbugs/bin/findbugs -textui -maxHeap 2048 -medium -xml -output findbugs.xml \
+${WORKSPACE}/ArmCommon/Common/target/*.jar \
+${WORKSPACE}/ArmCdrUtil/ArmCdrUtil/target/arm-cdr-util-*-SNAPSHOT.jar \
+${WORKSPACE}/LdapConnector/LdapConnector/target/*.jar \
+${WORKSPACE}/RoutingManager/RoutingManager/target/*.war \
+${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
+
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.pmd.PmdPublisher plugin="pmd@3.50">
-      <healthy></healthy>
-      <unHealthy></unHealthy>
-      <thresholdLimit>low</thresholdLimit>
-      <pluginName>[PMD] </pluginName>
-      <defaultEncoding></defaultEncoding>
-      <canRunOnFailed>true</canRunOnFailed>
-      <usePreviousBuildAsReference>false</usePreviousBuildAsReference>
-      <useStableBuildAsReference>false</useStableBuildAsReference>
-      <useDeltaValues>false</useDeltaValues>
-      <thresholds plugin="analysis-core@1.95">
-        <unstableTotalAll></unstableTotalAll>
-        <unstableTotalHigh></unstableTotalHigh>
-        <unstableTotalNormal></unstableTotalNormal>
-        <unstableTotalLow></unstableTotalLow>
-        <unstableNewAll></unstableNewAll>
-        <unstableNewHigh></unstableNewHigh>
-        <unstableNewNormal></unstableNewNormal>
-        <unstableNewLow></unstableNewLow>
-        <failedTotalAll></failedTotalAll>
-        <failedTotalHigh></failedTotalHigh>
-        <failedTotalNormal></failedTotalNormal>
-        <failedTotalLow></failedTotalLow>
-        <failedNewAll></failedNewAll>
-        <failedNewHigh></failedNewHigh>
-        <failedNewNormal></failedNewNormal>
-        <failedNewLow></failedNewLow>
-      </thresholds>
-      <shouldDetectModules>false</shouldDetectModules>
-      <dontComputeNew>true</dontComputeNew>
-      <doNotResolveRelativePaths>false</doNotResolveRelativePaths>
-      <pattern>**/pmd.xml</pattern>
-    </hudson.plugins.pmd.PmdPublisher>
-    <hudson.plugins.findbugs.FindBugsPublisher plugin="findbugs@4.72">
-      <healthy></healthy>
-      <unHealthy></unHealthy>
-      <thresholdLimit>low</thresholdLimit>
-      <pluginName>[FINDBUGS] </pluginName>
-      <defaultEncoding></defaultEncoding>
-      <canRunOnFailed>true</canRunOnFailed>
-      <usePreviousBuildAsReference>false</usePreviousBuildAsReference>
-      <useStableBuildAsReference>false</useStableBuildAsReference>
-      <useDeltaValues>false</useDeltaValues>
-      <thresholds plugin="analysis-core@1.95">
-        <unstableTotalAll></unstableTotalAll>
-        <unstableTotalHigh></unstableTotalHigh>
-        <unstableTotalNormal></unstableTotalNormal>
-        <unstableTotalLow></unstableTotalLow>
-        <unstableNewAll></unstableNewAll>
-        <unstableNewHigh></unstableNewHigh>
-        <unstableNewNormal></unstableNewNormal>
-        <unstableNewLow></unstableNewLow>
-        <failedTotalAll></failedTotalAll>
-        <failedTotalHigh></failedTotalHigh>
-        <failedTotalNormal></failedTotalNormal>
-        <failedTotalLow></failedTotalLow>
-        <failedNewAll></failedNewAll>
-        <failedNewHigh></failedNewHigh>
-        <failedNewNormal></failedNewNormal>
-        <failedNewLow></failedNewLow>
-      </thresholds>
-      <shouldDetectModules>false</shouldDetectModules>
-      <dontComputeNew>true</dontComputeNew>
-      <doNotResolveRelativePaths>false</doNotResolveRelativePaths>
-      <pattern>**/findbugs.xml</pattern>
-      <isRankActivated>false</isRankActivated>
-      <excludePattern></excludePattern>
-      <includePattern></includePattern>
-    </hudson.plugins.findbugs.FindBugsPublisher>
+    <io.jenkins.plugins.analysis.core.steps.IssuesRecorder plugin="warnings-ng@3.0.3">
+      <analysisTools>
+        <io.jenkins.plugins.analysis.warnings.Pmd>
+          <id></id>
+          <name></name>
+          <pattern>**/pmd.xml</pattern>
+          <reportEncoding>UTF-8</reportEncoding>
+        </io.jenkins.plugins.analysis.warnings.Pmd>
+        <io.jenkins.plugins.analysis.warnings.FindBugs>
+          <id></id>
+          <name></name>
+          <pattern>**/findbugs.xml</pattern>
+          <reportEncoding>UTF-8</reportEncoding>
+          <useRankAsPriority>false</useRankAsPriority>
+        </io.jenkins.plugins.analysis.warnings.FindBugs>
+      </analysisTools>
+      <sourceCodeEncoding></sourceCodeEncoding>
+      <ignoreQualityGate>false</ignoreQualityGate>
+      <ignoreFailedBuilds>true</ignoreFailedBuilds>
+      <referenceJobName>-</referenceJobName>
+      <healthy>0</healthy>
+      <unhealthy>0</unhealthy>
+      <minimumSeverity plugin="analysis-model-api@2.1.2">
+        <name>LOW</name>
+      </minimumSeverity>
+      <filters>
+        <io.jenkins.plugins.analysis.core.filter.IncludePackage>
+          <pattern>.*(com.ac|com.audioCodes).*</pattern>
+        </io.jenkins.plugins.analysis.core.filter.IncludePackage>
+      </filters>
+      <isEnabledForFailure>true</isEnabledForFailure>
+      <isAggregatingResults>false</isAggregatingResults>
+      <isBlameDisabled>false</isBlameDisabled>
+      <qualityGates/>
+    </io.jenkins.plugins.analysis.core.steps.IssuesRecorder>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>Shuky.Riechard@audiocodes.com yuval.yosha@audiocodes.com</recipients>
+      <recipients>Shuky.Riechard@audiocodes.com yuval.yosha@audiocodes.com ben.magriso@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
@@ -223,7 +228,7 @@ DevOps Team
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
-        <timeoutMinutes>30</timeoutMinutes>
+        <timeoutMinutes>120</timeoutMinutes>
       </strategy>
       <operationList/>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
