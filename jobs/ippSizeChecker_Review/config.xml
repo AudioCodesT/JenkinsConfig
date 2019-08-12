@@ -94,6 +94,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
+  <customWorkspace>/opt/jenkinsslave/workspace/SFB</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
