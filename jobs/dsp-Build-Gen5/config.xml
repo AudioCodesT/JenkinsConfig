@@ -228,20 +228,20 @@ sh copyModules.sh ${CHIP_NAME}
 
 
 #******************************temporary workaround to copy os module from private/GRX**************************************
-cd ${WORKSPACE}/..
-cat &lt;&lt;-EOF &gt; ~/.netrc
-machine test-gerrit login jenkins password $jpass
-machine gerrit login jenkins password $jpass
-EOF
+#cd ${WORKSPACE}/..
+#cat &lt;&lt;-EOF &gt; ~/.netrc
+#machine test-gerrit login jenkins password $jpass
+#machine gerrit login jenkins password $jpass
+#EOF
 #clone web-ui OVOC
-if [[ -e private_GRX ]]
-then
-    rm -rf private_GRX
-fi
-git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
-cd private_GRX
-git checkout private/GRX
-cp -R Clean_based_on_snapshot_15_4_19/Modules_GRX_29_7/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
+#if [[ -e private_GRX ]]
+#then
+#    rm -rf private_GRX
+#fi
+#git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
+#cd private_GRX
+#git checkout private/GRX
+#cp -R Clean_based_on_snapshot_15_4_19/Modules_GRX_29_7/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
 
 #******************************Finish temporary workaround*************************************
 
@@ -285,7 +285,7 @@ sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/S
             <results>
               <string>SUCCESS</string>
             </results>
-            <role>MASTER</role>
+            <role>BOTH</role>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>#tag also repo_manifests repository
