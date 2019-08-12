@@ -320,10 +320,10 @@ if [[ -e private_GRX ]]
 then
     rm -rf private_GRX
 fi
-git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
-cd private_GRX
-git checkout private/GRX
-cp -R Clean_based_on_snapshot_15_4_19/Modules_GRX_29_7/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
+#git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
+#cd private_GRX
+#git checkout private/GRX
+#cp -R Clean_based_on_snapshot_15_4_19/Modules_GRX_29_7/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
 
 #******************************Finish temporary workaround*************************************
 
