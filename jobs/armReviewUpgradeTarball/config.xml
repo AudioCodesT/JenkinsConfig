@@ -186,7 +186,7 @@ sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>tarFolder/upgrade_$VERSION_NAME.tar.gz=&gt;com/ac/arm/upgrade/review/${GERRIT_CHANGE_NUMBER}
+      <deployPattern>tarFolder/upgrade*.tar.gz=&gt;com/ac/arm/upgrade/review/${GERRIT_CHANGE_NUMBER}
 </deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
