@@ -1,0 +1,208 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>1. Trigger by poll SCM every night at 9 PM&#xd;
+2. Get the latest code from branch 7.6.2000&#xd;
+3. run full sanity tests, if failed send email to OVOC UI.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue>7.6.2000</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://jenkins@gerrit:29418/web-ui/ovoc</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>refs/heads/7.6.2000</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <browser class="hudson.plugins.git.browser.GitBlitRepositoryBrowser">
+      <url>https://gerrit/plugins/gitblit/</url>
+      <projectName>web-ui/ovoc</projectName>
+    </browser>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.LocalBranch>
+        <localBranch>refs/heads/7.6.2000</localBranch>
+      </hudson.plugins.git.extensions.impl.LocalBranch>
+    </extensions>
+  </scm>
+  <assignedNode>Web-UI-Win-Dynamic</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H 21 * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin64\bin\bash --login -i
+set -e
+cd $WORKSPACE
+
+if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.4&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.6&quot; ]]
+then
+# adding ac-infra
+echo &quot;git submodule init&quot;
+git submodule init
+echo &quot;git submodule update&quot;
+git submodule update
+echo &quot;finish submodule&quot;
+# delete yarn.lock file which failing the build (auto generated in yarn install)
+#rm -rf yarn.lock
+fi
+#connect repositories using https instead opf git:
+git config url.https://.insteadOf git://
+
+# checking if the private-bower is running
+output=$( netstat -ano | grep -wF 5678 ) || true
+echo &quot;private-bower check =&quot; $output
+if [[ -z &quot;$output&quot; ]]
+then private-bower &amp; sleep 15
+fi
+
+yarn config set registry https://artifactory/api/npm/npm/
+yarn config set strict-ssl false
+echo &quot;RUN: yarn install&quot;
+yarn install
+echo &quot;RUN: yarn run dist&quot;
+yarn run distTest 
+#kill the Proxy Server process
+pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
+echo &quot;pidNumber = $pidNumber&quot;
+if [[ ! -z &quot;$pidNumber&quot; ]]
+then
+	echo &quot;killing the proccess of the protractor proxy server&quot;
+	taskkill /F /PID &quot;$pidNumber&quot;
+fi
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.2000&quot; ]]
+then
+	sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
+else
+	sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
+fi
+#change username and password
+sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
+sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts 
+sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
+cat ${WORKSPACE}/cypress/support/config.ts
+echo &quot;RUN: yarn run proxyServer&quot;
+yarn run proxyServer &amp; sleep 15
+echo &quot;RUN: yarn test:jenkins:full&quot;
+yarn test:jenkins:full
+
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>cypress\videos\ovoc\**\*.mp4</artifacts>
+      <allowEmptyArchive>true</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo &apos;origin&apos;).*</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>5</delay>
+      </delay>
+      <maxSchedule>2</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+      <recipientList>OVOCWebUI@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+          <email>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>ALERT !!!  OVOC WEB-UI NIGHTLY BUILD FAILD  !!!  ALERT</defaultSubject>
+      <defaultContent>Review console output of this build:
+$BUILD_URL
+</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso Shuky.Riechard</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER}_branch:$GERRIT_BRANCH</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+</project>
