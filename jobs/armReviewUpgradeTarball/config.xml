@@ -72,6 +72,12 @@ output: upgrade tarball in a temp dir in artifactory</description>
               <pattern>master</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
+          <filePaths>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+              <compareType>PLAIN</compareType>
+              <pattern>ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.FilePath>
+          </filePaths>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
@@ -99,7 +105,7 @@ output: upgrade tarball in a temp dir in artifactory</description>
       <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
       <customUrl></customUrl>
       <serverName>gerritHost</serverName>
-      <triggerOnEvents class="linked-list">
+      <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
