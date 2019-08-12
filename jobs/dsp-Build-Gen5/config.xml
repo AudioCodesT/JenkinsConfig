@@ -315,6 +315,7 @@ git push origin ${GERRIT_BRANCH}</command>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh
 OLDTAG=$(git describe --abbrev=0 --tags)
