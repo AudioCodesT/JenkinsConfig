@@ -203,7 +203,7 @@ sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__$VERSION_NAME</template>
+      <template>#${BUILD_NUMBER}__${GERRIT_CHANGE_NUMBER}_${GERRIT_CHANGE_OWNER_NAME}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
