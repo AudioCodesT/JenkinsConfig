@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.29">
+<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
@@ -80,7 +80,7 @@ fi
 
 User=$artifactory_user:$artifactory_pass
 echo Find the Last TAG if None - $LASTBL
-ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease/IGS_unified
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/feature/$BuildRelease
 
 if [ &quot;$LASTBL&quot; == &quot;None&quot; ]; then
   echo curl -ks -u $User -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
@@ -113,6 +113,7 @@ fi
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -152,6 +153,7 @@ ServerType=IGS</properties>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -191,6 +193,7 @@ ServerType=IGS</properties>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -230,6 +233,7 @@ ServerType=IGS </properties>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -282,7 +286,7 @@ ServerType=IGS</properties>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.43">
+        <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
