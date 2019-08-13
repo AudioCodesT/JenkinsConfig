@@ -165,18 +165,14 @@ if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;$(ech
 if [ $GERRIT_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_MAJOR_VER=&quot;3.0.0&quot;; fi;
 
 #where to start history from?
-if [ $GERRIT_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.575.8&quot;
-else if [ $GERRIT_BRANCH == &quot;3.0.1&quot; ]; then IPP_FIRST_PREV=&quot;3.0.1.41&quot;
-else if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_FIRST_PREV=&quot;3.0.0.346.7&quot;
-else if [ $GERRIT_BRANCH == &quot;3.0.2&quot; ]; then IPP_FIRST_PREV=&quot;3.0.2.1&quot;
-else if [[ $GERRIT_BRANCH == &quot;3.0.4&quot; || $GERRIT_BRANCH == &quot;3.0.6&quot; ]]; then IPP_FIRST_PREV=&quot;3.0.4.1&quot;
-else if [ $GERRIT_BRANCH == &quot;3.0.4.GA&quot; ]; then IPP_FIRST_PREV=&quot;3.0.4.1000&quot;
-else if [ $GERRIT_BRANCH == &quot;3.0.40&quot; ]; then IPP_FIRST_PREV=&quot;3.0.40.1&quot;
+if [ $GERRIT_BRANCH == &quot;3.0.1&quot; ]; then IPP_FIRST_PREV=&quot;3.0.1.41&quot;
 else if [ $GERRIT_BRANCH == &quot;3.1.0&quot; ]; then IPP_FIRST_PREV=&quot;3.1.0.1&quot;
 else if [ $GERRIT_BRANCH == &quot;3.2&quot; ]; then IPP_FIRST_PREV=&quot;3.2.0.1&quot;
+else if [ $GERRIT_BRANCH == &quot;4.0.0&quot; ]; then IPP_FIRST_PREV=&quot;4.0.0.1&quot;
+else if [ $GERRIT_BRANCH == &quot;master&quot; ]; then IPP_FIRST_PREV=&quot;4.1.0.1&quot;
 else if [[ $FULL_BRANCH_NAME =~ (release|feature) ]];  then IPP_FIRST_PREV=$IPP_VER_PREV
 else exit 1;
-fi fi; fi; fi; fi; fi; fi; fi; fi; fi;
+fi fi; fi; fi; fi; fi;
 
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
