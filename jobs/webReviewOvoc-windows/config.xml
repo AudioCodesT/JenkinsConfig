@@ -206,6 +206,8 @@ else
     	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
         sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts 
      	sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
+        echo &quot;build number is: ${BUILD_NUMBER}&quot;
+        echo &quot;cat ${WORKSPACE}/cypress/support/config.ts&quot;
         cat ${WORKSPACE}/cypress/support/config.ts
         echo &quot;RUN: yarn run proxyServer&quot;
   	    yarn run proxyServer &amp; sleep 15
