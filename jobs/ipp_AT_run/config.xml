@@ -137,7 +137,7 @@ date
 ATA_Home=C:/IpPhoneAutomation/ATA
 
 HD=&quot;HD&quot;
-if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;4.0.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
   if [ &quot;$ServerType&quot; == &quot;Lync&quot; ]; then
     HD=&quot;HD_SFB&quot;
   else
@@ -292,7 +292,7 @@ ps=`echo $REFSPEC | cut -d/ -f5`
 
 echo Send abort message to Gerrit - $change,$ps
 ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;Test time out (15 minutes without progress) – marking this build as aborted: $BUILD_URL&apos;&quot; \
+--message &quot;&apos;Test time out (5 minutes without progress) – marking this build as aborted: $BUILD_URL&apos;&quot; \
 --notify OWNER \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$ps
@@ -440,7 +440,7 @@ date
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.NoActivityTimeOutStrategy">
-        <timeoutSecondsString>900</timeoutSecondsString>
+        <timeoutSecondsString>300</timeoutSecondsString>
       </strategy>
       <operationList>
         <hudson.plugins.build__timeout.operations.WriteDescriptionOperation>
