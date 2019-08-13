@@ -128,7 +128,7 @@ function createTag {
   LastTag=$NEWTAG
 }
 
-for GERRIT_BRANCH in 3.0.1 3.0.4.GA 3.0.40 3.0.0_450HD 3.1.0 3.2 $(git branch --list -a */feature/* | sed &apos;s:.*/origin/::&apos;)
+for GERRIT_BRANCH in 3.0.1 3.1.0 3.2 4.0.0 master $(git branch --list -a */feature/* | sed &apos;s:.*/origin/::&apos;)
 do
   echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
   if ! git describe --tags --first-parent origin/$GERRIT_BRANCH | grep -q -; then continue; fi
