@@ -176,10 +176,11 @@ if curl -ks -u $User https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/
 fi
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
-if [[ &quot;$BUILD_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
-	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-    	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-fi
+if [[ &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
+#	if [[ &quot;$BUILD_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$BUILD_BRANCH&quot; == *&quot;4.0.0&quot;* || &quot;$BUILD_BRANCH&quot; == &quot;master&quot; ]]
+		then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+    		git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+fi;
 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
@@ -335,7 +336,8 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <multiConfProject>false</multiConfProject>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
+      <multiConfProject>true</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
