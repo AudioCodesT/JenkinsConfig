@@ -114,7 +114,7 @@ ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test
 
 # With $runPhases flag variable you have control of which parameters and where executing the ipp_AT_parent
 # If $runPhases = 0, the ipp_AT_parent will not start
-if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;4.0.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
   echo RunPhases=3 &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
