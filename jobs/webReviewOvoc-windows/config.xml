@@ -205,6 +205,7 @@ else
         #change username and password
     	sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
         sed -i -- &apos;s/%password%/pass_1234/g&apos; ${WORKSPACE}/cypress/support/config.ts 
+        echo &quot;sed -i -- s/%version%/${BUILD_NUMBER}/g ${WORKSPACE}/cypress/support/config.ts&quot;
      	sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
         echo &quot;build number is: ${BUILD_NUMBER}&quot;
         echo &quot;cat ${WORKSPACE}/cypress/support/config.ts&quot;
