@@ -132,6 +132,12 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
 set -e
 cd $WORKSPACE
 
+chrome_version=$(cmd.exe /C &apos;wmic datafile where name=&quot;C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe&quot; get Version /value&apos;)
+
+echo &quot;*********************************************************************************************************************&quot;
+echo &quot;Google Chrome Version is: $chrome_version&quot;
+echo &quot;*********************************************************************************************************************&quot;
+
 if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.4&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.6&quot; ]]
 then
 # adding ac-infra
