@@ -122,7 +122,7 @@ fi
 
 ImageNames=&quot;&quot;
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
-if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;IGS&quot; ]]; then
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;4.0.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
   ImagesList=&quot;445HD_IGS C450HD_SFB 450HD_SFB 445HD_SFB&quot;
   MODEL=445
 #else if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
