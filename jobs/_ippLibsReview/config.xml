@@ -18,6 +18,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -140,10 +142,13 @@ if [ ! -z &quot;$ISSUE&quot; ]; then
      SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
      message:$ISSUE branch:$GERRIT_BRANCH status:open | grep &apos;project: IPP/SFB\|revision&apos;)
      SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref:&apos; &apos;{print $NF}&apos;)
-fi</command>
+fi
+echo &quot;SFB_Revision=${SFB_Revision}&quot; &gt; prop</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info/>
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
     </EnvInjectBuilder>
     <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.35.2">
       <configs>
