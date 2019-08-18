@@ -34,6 +34,12 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_REFSPEC </name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -48,7 +54,6 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -75,7 +80,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$GERRIT_BRANCH</name>
+        <name>$SFB_Revision</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -90,11 +95,6 @@
         <depth>80</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
   <quietPeriod>90</quietPeriod>
@@ -104,91 +104,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>IPP/SFB</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>feature/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>private/3.1*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>release/3.1*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>private/3.2*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>release/3.2*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>3.1**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>3.2</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>4*</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>master</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <dynamicGerritProjects class="empty-list"/>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>true</excludeNoCodeChange>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
@@ -246,16 +162,47 @@ chmod +x sysprobe.sh
 #****************************************************************************
 #****************************************************************************
 #****************************************************************************
-
 User=&quot;$artifactory_user:$artifactory_password&quot;
 
-# Check if the image exist already in the Artifactory - if exist, exit without error
-# The grep -v flag exclude the pattern, needed when the img name contains _logs_ in case of LOG=1
-if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
-if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep -q UC${SHORTAUTOPRD}_; then
-	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
-    exit 0
+#****************************************************************************
+#************************** copy libs submodules *****************************
+#****************************************************************************
+cd ../
+cat &lt;&lt; EOF &gt; ~/.netrc
+machine gerrit login ${jenkins_user} password ${jenkins_pass}
+EOF
+rm -rf sfb_lib_project
+git -c http.sslverify=false clone --depth 10 -n -b $LIB_BRANCH https://gerrit/${LIB_PROJECT} sfb_lib_project
+cd sfb_lib_project
+git checkout LIB_BRANCH
+if [[ -e ${LIB_PROJECT} =~ &quot;apps/emsc&quot; ]]
+then
+	cp -R . ${WORKSPACE}/src/apps/emsc
+elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-device-management&quot; ]]
+then
+	cp -R . ${WORKSPACE}/src/apps/lib/device_management
+elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-text&quot; ]]
+then
+	cp -R . ${WORKSPACE}/src/apps/lib/libtext
+elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-httpc&quot; ]]
+then
+	cp -R . ${WORKSPACE}/src/apps/lib/libhttpc
+elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-ev-app&quot; ]]
+then
+	cp -R libev_app/. ${WORKSPACE}/src/apps/lib/libev_app
+    cp -R libapp/. ${WORKSPACE}/src/apps/lib/libapp
+else
+echo &quot;None of the projects above... exiting the build&quot;
+exit 1
 fi
+cd ${WORKSPACE}
+#****************************************************************************
+#****************************************************************************
+#****************************************************************************
+
+
+
+
 
 #if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
 #if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
@@ -304,73 +251,14 @@ curl -u admin:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz &quot;h
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
-      <publishers>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.1&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;4.0.0&quot; ]]
-then exit 1
-fi</command>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
-GERRIT_CHANGE_ID=${GERRIT_CHANGE_ID}
-GERRIT_PATCHSET_REVISION=${GERRIT_PATCHSET_REVISION}
-GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
-GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>ippVerifyCherryPick</projects>
-                  <condition>ALWAYS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                  <triggerFromChildProjects>false</triggerFromChildProjects>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.0&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;3.1&quot;* ]]
-then
-exit 1
-fi
-</command>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
-GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>ippSizeChecker_Review</projects>
-                  <condition>SUCCESS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                  <triggerFromChildProjects>false</triggerFromChildProjects>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
-          <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-      </publishers>
-    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>ben.magriso</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
@@ -494,7 +382,8 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <propertiesContent>artifactory_user=admin
+jenkins_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.53">
           <script></script>
           <sandbox>false</sandbox>
