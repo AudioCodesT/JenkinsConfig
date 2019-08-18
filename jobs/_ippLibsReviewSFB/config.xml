@@ -173,19 +173,19 @@ rm -rf sfb_lib_project
 git -c http.sslverify=false clone --depth 10 -n -b $LIB_BRANCH https://gerrit/${LIB_PROJECT} sfb_lib_project
 cd sfb_lib_project
 git checkout ${LIB_BRANCH}
-if [[ -e ${LIB_PROJECT} =~ &quot;apps/emsc&quot; ]]
+if [[ ${LIB_PROJECT} =~ &quot;apps/emsc&quot; ]]
 then
 	cp -R . ${WORKSPACE}/src/apps/emsc
-elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-device-management&quot; ]]
+elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-device-management&quot; ]]
 then
 	cp -R . ${WORKSPACE}/src/apps/lib/device_management
-elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-text&quot; ]]
+elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-text&quot; ]]
 then
 	cp -R . ${WORKSPACE}/src/apps/lib/libtext
-elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-httpc&quot; ]]
+elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-httpc&quot; ]]
 then
 	cp -R . ${WORKSPACE}/src/apps/lib/libhttpc
-elif [[ -e ${LIB_PROJECT} =~ &quot;Lib/Lib-ev-app&quot; ]]
+elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-ev-app&quot; ]]
 then
 	cp -R libev_app/. ${WORKSPACE}/src/apps/lib/libev_app
     cp -R libapp/. ${WORKSPACE}/src/apps/lib/libapp
