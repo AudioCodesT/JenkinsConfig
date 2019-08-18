@@ -185,7 +185,7 @@ EOF
 rm -rf sfb_lib_project
 git -c http.sslverify=false clone --depth 10 -n -b $LIB_BRANCH https://gerrit/${LIB_PROJECT} sfb_lib_project
 cd sfb_lib_project
-git checkout LIB_BRANCH
+git checkout ${LIB_BRANCH}
 if [[ -e ${LIB_PROJECT} =~ &quot;apps/emsc&quot; ]]
 then
 	cp -R . ${WORKSPACE}/src/apps/emsc
