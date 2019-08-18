@@ -133,19 +133,6 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>#check disk size if there is no enough space, delete all workspace
-set +e
-disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
-disk_size=${disk_size%.*}
-if [[ $disk_size -le 8 ]]
-then
-echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
-find /opt/jenkinsslave/workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
-df -h
-fi</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
 AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
