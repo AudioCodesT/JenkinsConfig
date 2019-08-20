@@ -114,7 +114,7 @@ localCurlFailed=&quot;False&quot;
 localCurlCount=2
 #get OLD TAG BRANCH (could been rebase from another branch)
 git fetch || echo &quot;git fetch has failed, not failing the build&quot;
-OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
+OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
 echo &quot;branch is:$OLDTAG_BRANCH&quot;
 
 if [[ -z ${OLDTAG_BRANCH} ]]
