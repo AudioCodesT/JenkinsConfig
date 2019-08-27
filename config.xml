@@ -645,8 +645,20 @@
     </hudson.plugins.ec2.EC2Cloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-b9119121</name>
+      <accountId></accountId>
       <groupId>sig-b9119121</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0863c6d12a5c020e9</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0863c6d12a5c020e9</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-build</requestedLabel>
+            <createdAt>2019-08-26 07:08:15.319 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-build</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -658,7 +670,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -666,15 +678,15 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -703,6 +715,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-588d4297</name>
+      <accountId></accountId>
       <groupId>sig-588d4297</groupId>
       <pendingInstances/>
       <labelString>arm-build</labelString>
@@ -716,11 +729,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -728,7 +741,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -753,6 +766,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-9290e243</name>
+      <accountId></accountId>
       <groupId>sig-9290e243</groupId>
       <pendingInstances/>
       <labelString>ipp-centos7.4</labelString>
@@ -766,19 +780,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T22xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T3A2xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -786,11 +788,19 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T22xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -798,7 +808,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -843,6 +857,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-f061906e</name>
+      <accountId></accountId>
       <groupId>sig-f061906e</groupId>
       <pendingInstances/>
       <labelString>NSC-mediatech-SpotInst</labelString>
@@ -856,11 +871,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -868,7 +883,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -893,6 +908,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-756f72a5</name>
+      <accountId></accountId>
       <groupId>sig-756f72a5</groupId>
       <pendingInstances/>
       <labelString>Web-UI-Win-Dynamic</labelString>
@@ -906,11 +922,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -918,7 +934,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -943,6 +959,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-8ac26a53</name>
+      <accountId></accountId>
       <groupId>sig-8ac26a53</groupId>
       <pendingInstances/>
       <labelString>ipp-android-dynamic</labelString>
@@ -993,6 +1010,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-8bfe3a43</name>
+      <accountId></accountId>
       <groupId>sig-8bfe3a43</groupId>
       <pendingInstances/>
       <labelString>dsp-win-dynamic</labelString>
@@ -1006,7 +1024,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1014,7 +1032,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1043,6 +1061,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-42242531</name>
+      <accountId></accountId>
       <groupId>sig-42242531</groupId>
       <pendingInstances/>
       <labelString>dsp-centos-dynamic</labelString>
@@ -1056,7 +1075,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1064,7 +1083,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1093,6 +1112,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-c9121eb6</name>
+      <accountId></accountId>
       <groupId>sig-c9121eb6</groupId>
       <pendingInstances/>
       <labelString>dsp-grx-slave</labelString>
@@ -1106,7 +1126,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1114,7 +1134,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1143,6 +1163,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-7fce0678</name>
+      <accountId></accountId>
       <groupId>sig-7fce0678</groupId>
       <pendingInstances/>
       <labelString>MobilityGroup-android-build</labelString>
@@ -1156,11 +1177,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1168,7 +1189,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1193,6 +1214,7 @@
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
       <name>sig-6bae87e7</name>
+      <accountId></accountId>
       <groupId>sig-6bae87e7</groupId>
       <pendingInstances/>
       <labelString>Web-UI-Win-Dynamic</labelString>
@@ -1206,11 +1228,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1218,7 +1240,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1320,6 +1342,21 @@ sudo yum install -y git-2.18.0</initScript>
       <deploymentTimeout>1200</deploymentTimeout>
       <approximateVirtualMachineCount>0</approximateVirtualMachineCount>
     </com.microsoft.azure.vmagent.AzureVMCloud>
+    <hudson.plugins.spotinst.cloud.AzureSpotinstCloud plugin="spotinst@2.0.16">
+      <name>sig-662f4b53</name>
+      <accountId>act-96d87a11</accountId>
+      <groupId>sig-662f4b53</groupId>
+      <pendingInstances/>
+      <labelString>azure_arm_slave</labelString>
+      <idleTerminationMinutes>5</idleTerminationMinutes>
+      <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>azure_arm_slave</hudson.model.labels.LabelAtom>
+      </labelSet>
+      <usage>EXCLUSIVE</usage>
+      <tunnel></tunnel>
+      <vmargs></vmargs>
+    </hudson.plugins.spotinst.cloud.AzureSpotinstCloud>
   </clouds>
   <quietPeriod>5</quietPeriod>
   <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
@@ -1417,6 +1454,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>test_armBuild</string>
         <string>test_armConvertOVAToAzureImage</string>
         <string>test_armReviewArm-fullRepo</string>
+        <string>test_armuploadVHD</string>
         <string>test_auto07</string>
         <string>test_ipp_AT_parent</string>
         <string>test_ippBuild_SFB_</string>
@@ -1463,7 +1501,6 @@ sudo yum install -y git-2.18.0</initScript>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
-        <string>_ippLibsReviewSFB</string>
         <string>ipp-Create-Tag-SFB</string>
         <string>ipp-CreateBin</string>
         <string>ipp_SFB_CppCheck_fullRepo</string>
@@ -1474,6 +1511,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>ippCentos7.4-buildSIM</string>
         <string>ippCentos7.4-reviewSIM</string>
         <string>ippLibsReview</string>
+        <string>ippLibsReviewSFB</string>
         <string>ippReview_CppCheck</string>
         <string>ippReview_SFB</string>
         <string>ippReview_SFB_before3.1</string>
