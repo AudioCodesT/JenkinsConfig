@@ -132,6 +132,10 @@ if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/SingleImage&quot; ]]
 then
 OLDTAG_BRANCH=master
 fi
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; ]]
+then
+OLDTAG_BRANCH=&quot;4.0.0&quot;
+fi
 
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${GERRIT_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
