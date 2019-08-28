@@ -48,7 +48,7 @@
           <description></description>
           <allowedSlaves/>
           <defaultSlaves>
-            <string>ippSanityTest02</string>
+            <string>ipp-AutoNL2</string>
           </defaultSlaves>
           <triggerIfResult>multiSelectionDisallowed</triggerIfResult>
           <allowMultiNodeSelection>false</allowMultiNodeSelection>
@@ -273,16 +273,12 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ippSanityTest02</assignedNode>
+  <assignedNode>ipp-AutoNL2</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H 20 * * *</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
