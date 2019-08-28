@@ -177,7 +177,7 @@ fi
 
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
 if [[ &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
-#	if [[ &quot;$BUILD_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$BUILD_BRANCH&quot; == *&quot;4.0.0&quot;* || &quot;$BUILD_BRANCH&quot; == &quot;master&quot; ]]
+#	if [[ &quot;$BUILD_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$BUILD_BRANCH&quot; == *&quot;3.4.0&quot;* || &quot;$BUILD_BRANCH&quot; == &quot;master&quot; ]]
 		then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot; &amp;&amp; exit 1 )
     		git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
 fi;
