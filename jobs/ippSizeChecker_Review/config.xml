@@ -126,7 +126,7 @@ if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
 then
 	NAGINATOR_COUNT=0
 fi
-#OLDTAG_BRANCH=$GERRIT_BRANCH
+OLDTAG_BRANCH=$GERRIT_BRANCH
 # temporary solution for feature/SingleImage branch
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/SingleImage&quot; ]]
 then
