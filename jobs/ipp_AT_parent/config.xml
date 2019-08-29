@@ -435,15 +435,16 @@ change=`echo $REFSPEC | cut -d/ -f4`
 if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
 labelGrade=&quot;--label $labelName=-1&quot;
+percent=100
 # No grade if this patch-set was merged already
-if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; percent=50; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/ATA/$IMAGENAMES.txt
 
 echo Send failed message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;$labelName failed: $BUILD_URL ------ $ATRun&apos;&quot; \
+--message &quot;&apos;$labelName failed: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
@@ -472,14 +473,15 @@ change=`echo $REFSPEC | cut -d/ -f4`
 if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
 
 labelGrade=&quot;--label $labelName=1&quot;
-if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
+percent=100
+if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; percent=50; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/$IMAGENAMES.txt
 
 echo Send OK message to Gerrit - $change,$newPS
 ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;$labelName OK: $BUILD_URL ------ $ATRun&apos;&quot; \
+--message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
