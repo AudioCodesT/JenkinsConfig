@@ -134,7 +134,11 @@ OLDTAG_BRANCH=master
 fi
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; ]]
 then
-OLDTAG_BRANCH=&quot;4.0.0&quot;
+lastTagNumber=$(echo $OLDTAG | awk -F. &apos;{print $NF}&apos;)
+  if [[ $lastTagNumber -lt 24 ]]
+  then
+  OLDTAG_BRANCH=&quot;4.0.0&quot;
+  fi
 fi
 
 # get one tag before ${NEWTAG} to compare two newest size_report csv
