@@ -127,11 +127,6 @@ then
 	NAGINATOR_COUNT=0
 fi
 OLDTAG_BRANCH=$GERRIT_BRANCH
-# temporary solution for feature/SingleImage branch
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/SingleImage&quot; ]]
-then
-OLDTAG_BRANCH=master
-fi
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/Genband_SCA_SLA&quot; ]]
 then
 OLDTAG_BRANCH=&quot;4.0.0&quot;
