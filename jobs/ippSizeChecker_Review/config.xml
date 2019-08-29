@@ -132,6 +132,7 @@ if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/SingleImage&quot; ]]
 then
 OLDTAG_BRANCH=master
 fi
+# all tags before 3.4.0.24  are  getting the old tag in git describe
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; ]]
 then
 lastTagNumber=$(echo $OLDTAG | awk -F. &apos;{print $NF}&apos;)
