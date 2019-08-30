@@ -127,10 +127,7 @@ then
 	NAGINATOR_COUNT=0
 fi
 OLDTAG_BRANCH=$GERRIT_BRANCH
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;feature/Genband_SCA_SLA&quot; ]]
-then
-OLDTAG_BRANCH=&quot;4.0.0&quot;
-fi
+
 # all tags before 3.4.0.24  are  getting the old tag in git describe
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; ]]
 then
