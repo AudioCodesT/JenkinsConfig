@@ -144,7 +144,7 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
       <command>IPP_VER=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
 
 IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
-IPP_VER_PERV=&quot;3.4.0.15&quot;
+
 FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
 #FULL_BRANCH_NAME=&quot;origin/release/3.2.0/3.2.0.1003.X&quot;
 
@@ -173,7 +173,7 @@ else if [ $GERRIT_BRANCH == &quot;master&quot; ]; then IPP_FIRST_PREV=&quot;3.4.
 else if [[ $FULL_BRANCH_NAME =~ (release|feature) ]];  then IPP_FIRST_PREV=$IPP_VER_PREV
 else exit 1;
 fi fi; fi; fi; fi; fi;
-
+IPP_FIRST_PREV=&quot;3.4.0.15&quot;
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
