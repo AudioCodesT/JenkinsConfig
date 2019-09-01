@@ -54,7 +54,6 @@ uboot/c450hd_uboot</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -298,6 +297,8 @@ createTag() {
   echo Add one to the last TAG
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
 
+  NEWTAG=1.2.0
+  
   commitToTAG=$LastSha1
   repoToTAG=$MainRepoName
   updateManifests
