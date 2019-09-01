@@ -173,7 +173,7 @@ else if [ $GERRIT_BRANCH == &quot;master&quot; ]; then IPP_FIRST_PREV=&quot;3.4.
 else if [[ $FULL_BRANCH_NAME =~ (release|feature) ]];  then IPP_FIRST_PREV=$IPP_VER_PREV
 else exit 1;
 fi fi; fi; fi; fi; fi;
-IPP_FIRST_PREV=&quot;3.4.0.15&quot;
+
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
 sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
