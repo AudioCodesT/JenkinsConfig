@@ -296,8 +296,6 @@ createTag() {
   fi
   echo Add one to the last TAG
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
-
-  NEWTAG=1.2.0
   
   commitToTAG=$LastSha1
   repoToTAG=$MainRepoName
