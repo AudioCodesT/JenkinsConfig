@@ -144,7 +144,7 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
       <command>IPP_VER=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
 
 IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
-
+IPP_VER_PERV=&quot;3.4.0.15&quot;
 FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
 #FULL_BRANCH_NAME=&quot;origin/release/3.2.0/3.2.0.1003.X&quot;
 
