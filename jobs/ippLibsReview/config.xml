@@ -1,7 +1,9 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>Activated by after “Push to Gerrit” by IPP/Libs/* and IPP/apps/emsc&#xd;
+1. first check if there is another gerrit change with the same Issue on IPP/SFB project.&#xd;
+2. trigger &quot;ippLibsReviewSFB&quot; job for SFB compilation with the correct REFSPEC if there is.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -25,7 +27,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -73,6 +74,17 @@
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
+          <pattern>IPP/Lib/Lib-app</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
           <pattern>IPP/Lib/Lib-text</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
@@ -107,9 +119,9 @@
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
       <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <commitMessageParameterMode>PLAIN</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>BASE64</commentTextParameterMode>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
       <buildStartMessage></buildStartMessage>
       <buildFailureMessage></buildFailureMessage>
       <buildSuccessfulMessage></buildSuccessfulMessage>
@@ -137,14 +149,15 @@
 SFB_Revision=${GERRIT_BRANCH}
 if [ ! -z &quot;$ISSUE&quot; ]; then 
     echo Search this Issue: $ISSUE...
-    SFB_Revision=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
-     message:$ISSUE branch:$GERRIT_BRANCH status:open | grep &apos;project: IPP/SFB\|revision&apos;)
-     SFB_Revision=$(echo $SFB_Revision | awk -F&apos;revision:&apos; &apos;{print $NF}&apos;)
+     SFB_Revision=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
+     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open | grep &apos;revision&apos;)
+     SFB_Revision=$(echo $SFB_Revision | awk -F&apos;revision: &apos; &apos;{print $NF}&apos;)
      SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
-     message:$ISSUE branch:$GERRIT_BRANCH status:open | grep &apos;project: IPP/SFB\|revision&apos;)
-     SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref:&apos; &apos;{print $NF}&apos;)
+     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open | grep &apos;ref&apos;)
+     SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref: &apos; &apos;{print $NF}&apos;)
 fi
-echo &quot;SFB_Revision=${SFB_Revision}&quot; &gt; prop</command>
+echo &quot;SFB_Revision=${SFB_Revision}&quot; &gt; prop
+echo &quot;SFB_REFSPEC=${SFB_REFSPEC}&quot; &gt;&gt;prop</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -157,6 +170,8 @@ echo &quot;SFB_Revision=${SFB_Revision}&quot; &gt; prop</command>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>SFB_Revision=${SFB_Revision}
+SFB_REFSPEC=${SFB_REFSPEC}
+LIB_REFSPEC=${GERRIT_REFSPEC}
 LIB_PROJECT=${GERRIT_PROJECT}
 LIB_BRANCH=${GERRIT_BRANCH}
 </properties>
