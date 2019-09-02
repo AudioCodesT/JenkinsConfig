@@ -112,6 +112,12 @@ echo $OLDTAG_TEST
 passAtLeastOnce=&quot;False&quot;
 localCurlFailed=&quot;False&quot;
 localCurlCount=2
+
+#get all childs names from the spesific TAG
+childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
+allChilds=($childs)
+allChildsLength=${#allChilds[@]}
+
 #get OLD TAG BRANCH (could been rebase from another branch)
 git fetch || echo &quot;git fetch has failed, not failing the build&quot;
 OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
@@ -122,7 +128,7 @@ then
 	NAGINATOR_COUNT=0
 fi
 #check which BRANCH getting the report from artifactory
-curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/405HD/${OLDTAG}_size_report.csv&quot; || oldTagBranchCurlFailed=&quot;True&quot;
+curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[0]}/${OLDTAG}_size_report.csv&quot; || oldTagBranchCurlFailed=&quot;True&quot;
 if [[ &quot;$oldTagBranchCurlFailed&quot; == &quot;True&quot; ]]
 then
 	OLDTAG_BRANCH=$GERRIT_BRANCH
@@ -143,10 +149,7 @@ fi
 # get one tag before ${NEWTAG} to compare two newest size_report csv
   echo &quot;In branch ${GERRIT_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
   echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
-  #get all childs names from the spesific TAG
-  childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
-  allChilds=($childs)
-  allChildsLength=${#allChilds[@]}
+
   for i in `seq 2 $(($allChildsLength-1))`
   do
    echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
