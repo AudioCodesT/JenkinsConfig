@@ -128,7 +128,7 @@ then
 	NAGINATOR_COUNT=0
 fi
 #check which BRANCH getting the report from artifactory
-curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[0]}/${OLDTAG}_size_report.csv&quot; || oldTagBranchCurlFailed=&quot;True&quot;
+curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[2]}/${OLDTAG}_size_report.csv&quot; || oldTagBranchCurlFailed=&quot;True&quot;
 if [[ &quot;$oldTagBranchCurlFailed&quot; == &quot;True&quot; ]]
 then
 	OLDTAG_BRANCH=$GERRIT_BRANCH
