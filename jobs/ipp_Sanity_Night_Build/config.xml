@@ -230,8 +230,17 @@ echo Check if file z:/$modelImage
 if [ -f z:/$modelImage ]; then
   echo cd ${ATA_Home}
   cd ${ATA_Home}
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}${UserType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 -forceUpgrade 1
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}${ServerType}${UserType}Config.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain $modelImage -rerunFailedAuto 1 -forceUpgrade 1
+  echo tclsh AtaExec.tcl \
+  -configName ${ConfigName}${model}${ServerType}${UserType}Config.tcl \
+  -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite \
+  -firmwareVersionMain $modelImage -rerunFailedAuto 1 -forceUpgrade 1 \
+  -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT} 
+  
+  tclsh AtaExec.tcl \
+  -configName ${ConfigName}${model}${ServerType}${UserType}Config.tcl \
+  -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite \
+  -firmwareVersionMain $modelImage -rerunFailedAuto 1 -forceUpgrade 1 \
+  -jenkinsChildId ${BUILD_NUMBER} -jenkinsParentId ${BUILD_PARENT}
 fi
 
 exit $?</command>
