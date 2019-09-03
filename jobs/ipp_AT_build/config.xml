@@ -177,6 +177,20 @@ for job in $(echo $allRunning | sed &apos;s: :\n:g&apos;); do
     fi
 done
 
+
+
+#**********************************************************************************************
+#*********************** temporary branch ***************************************************
+if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/69/30869&quot; ]]
+then
+	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
+	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+fi
+#**********************************************************************************************
+#*********************** temporary branch ***************************************************
+
+
+
 #if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
 #if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* &amp;&amp; &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
 if [[ &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
