@@ -165,6 +165,18 @@ ARTIFACTORY_PATH=https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}
 
 echo ------------------------------ GTEST RUN_SCRIPT --------------------------------------------
 
+
+
+echo &quot;****************************************************TEMP****************************************************&quot;
+if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/69/30869&quot; ]]
+then
+	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
+	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+fi
+echo &quot;****************************************************TEMP****************************************************&quot;
+
+
+
 # Compile project
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 #export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
