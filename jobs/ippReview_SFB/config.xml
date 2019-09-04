@@ -266,7 +266,7 @@ fi
 
 #**********************************************************************************************
 #*********************** temporary branch ***************************************************
-if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/69/30869&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;testBranch&quot; ]]
+if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/33/30933&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;testBranch&quot; ]]
 then
 	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
