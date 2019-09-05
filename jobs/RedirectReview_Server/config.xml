@@ -127,7 +127,7 @@ cd $WORKSPACE
 #to build common.jar 
 cd cd ${WORKSPACE}/RedirectServerCommon
 mvn clean install
-cd ${WORKSPACE}/edirectServerDeviceApi
+cd ${WORKSPACE}/redirectServerDeviceApi
 mvn clean package
 mvn azure-functions:run
 cd cd ${WORKSPACE}/redirect_server_azure
