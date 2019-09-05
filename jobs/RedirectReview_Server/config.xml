@@ -125,7 +125,7 @@ set -xe
 cd $WORKSPACE
 
 #to build common.jar 
-cd cd ${WORKSPACE}/RedirectServerCommon
+cd ${WORKSPACE}/RedirectServerCommon
 mvn clean install
 cd ${WORKSPACE}/redirectServerDeviceApi
 mvn clean package
