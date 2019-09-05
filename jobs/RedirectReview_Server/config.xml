@@ -26,6 +26,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -123,14 +125,17 @@ set -xe
 cd $WORKSPACE
 
 #to build common.jar 
-cd RedirectServerCommon
+cd cd ${WORKSPACE}/RedirectServerCommon
 mvn clean install
-#
-cd redirect_server_azure
-mvn clean package -Dmaven.test.skip=true
+cd ${WORKSPACE}/edirectServerDeviceApi
+mvn clean package
+mvn azure-functions:run
+cd cd ${WORKSPACE}/redirect_server_azure
+mvn clean package
+mvn azure-functions:run
 
 #push to azure function app:
-#mvn azure-functions:run -DenableDebug </command>
+###mvn azure-functions:deploy</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
