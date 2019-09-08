@@ -191,7 +191,9 @@ done
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script></script>
+      <script>#!/bin/sh
+
+</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
