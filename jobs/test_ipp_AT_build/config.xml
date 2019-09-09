@@ -198,8 +198,10 @@ builds_numbers=($(curl --insecure -X GET &quot;https://jenkins/computer/api/json
 
 #get all builds number that in queue
 queue_builds_numbers=($(curl --insecure -X GET &quot;https://jenkins/queue/api/json?depth=1&amp;xpath=//url&amp;pretty=true&quot; | grep nextBuildNumber | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1))
+
 #add the two lists together (those who running and those who in queue)
 builds_numbers=(&quot;${builds_numbers[@]}&quot; &quot;${queue_builds_numbers[@]}&quot;)
+
 #iterate over all current running builds of ippReview_SFB and check if current change is running
 for build_number in ${builds_numbers[@]}
 do
