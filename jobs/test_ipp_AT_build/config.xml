@@ -192,7 +192,7 @@ done
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh
-
+set -e
 #job maybe in queue wait 60 seconds before starting
 sleep 60
 
@@ -205,7 +205,7 @@ do
 echo &quot;build_number: ${build_number}&quot;
 build_gerrit_refspec=$(curl --insecure -X GET &quot;https://jenkins/job/ippReview_SFB/${build_number}/injectedEnvVars/export&quot; | grep &quot;GERRIT_REFSPEC&quot; | cut -d&apos;=&apos; -f2)
 echo &quot;refspec: ${build_gerrit_refspec}&quot;
-if [[ &quot;${GERRIT_REFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]
+if [[ &quot;${REFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]
 then
 current_change_build_number=${build_number}
 fi
