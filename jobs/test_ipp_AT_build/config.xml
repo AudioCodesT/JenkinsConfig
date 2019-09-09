@@ -193,6 +193,9 @@ done
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh
 
+#job maybe in queue wait 60 seconds before starting
+sleep 60
+
 #get all current running builds in ippReview_SFB
 builds_numbers=($(curl --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos;))
 
