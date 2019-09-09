@@ -361,7 +361,7 @@ curl -kns -u jenkins:${jenkins_pass} -X POST https://gerrit/a/changes/$revisions
   -H &apos;Content-Type: application/json&apos;
 echo ======End gerrit message  -  clean AT vote before starting=======
 
-set -x
+echo &quot;******************checking if the build is running also in ippReview_SFB*********************&quot;
 #get all current running builds in ippReview_SFB
 builds_numbers=($(curl --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos;))
 
@@ -387,7 +387,8 @@ do
     	# Grep will return 0 while the build is running
     	curl --insecure -X GET ${CURL_URL} |  grep result\&quot;:null &gt; /dev/null
     	GREP_RETURN_CODE=$?
-done</script>
+done
+echo &quot;******************The build in ippReview_SFB is done**********************&quot;</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
