@@ -247,7 +247,7 @@ $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: applicati
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${BUILD_URL}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;$valgrindSign\&quot;}}&quot;
 fi
 
-#remove GTestLogs directory, created folder as root and make issues.
+#when running the command &quot;sudo ./vSFB.sh gtest_valgrind&quot; it created GTeestLogs directory which created as root, after that when build uses the same machine he cant delete this folder
 cd ${WORKSPACE}
 sudo rm -rf build.450HD__SIM/GTestLogs</command>
     </hudson.tasks.Shell>
