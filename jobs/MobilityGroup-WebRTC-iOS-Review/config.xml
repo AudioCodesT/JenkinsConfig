@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>gerrit trigger when new patchset&#xd;
-1. run gradle tasks if all pass successfully:&#xd;
+1. :&#xd;
 Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verified-1 if failed</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -150,7 +150,9 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>${WORKSPACE}/SDK/MVWebRTCFramework/setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework</command>
+      <command>
+cd ${WORKSPACE}/SDK/MVWebRTCFramework/
+./setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
