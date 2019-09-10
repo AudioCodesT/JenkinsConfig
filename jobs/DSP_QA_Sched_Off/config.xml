@@ -60,7 +60,11 @@ echo &quot;*********************************************************************
 echo &quot;Stopping i-0c840a2a5cbce73d4 (Stateful DSP QA tests) IP: 172.16.134.133&quot;
 echo &quot;***********************************************************************************&quot;
 aws ec2 stop-instances --instance-ids i-0c840a2a5cbce73d4 
-
+#new machine for  eliezer
+echo &quot;***********************************************************************************&quot;
+echo &quot;Stopping 	i-00043538f80ba648c (Stateful DSP QA tests) IP: 172.16.134.150&quot;
+echo &quot;***********************************************************************************&quot;
+aws ec2 stop-instances --instance-ids i-00043538f80ba648c 
 </command>
     </hudson.tasks.Shell>
   </builders>
