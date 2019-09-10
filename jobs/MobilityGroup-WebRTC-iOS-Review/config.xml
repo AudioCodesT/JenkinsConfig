@@ -150,7 +150,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command></command>
+      <command>${WORKSPACE}/SDK/MVWebRTCFramework/setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
