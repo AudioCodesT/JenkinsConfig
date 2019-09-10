@@ -265,14 +265,14 @@ if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRA
 fi
 
 #**********************************************************************************************
-#*********************** temporary branch ***************************************************
-if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/33/30933&quot; || &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/82/31082&quot; ]]
+#***********************  ***************************************************
+if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/33/30933&quot; || &quot;$GERRIT_BRANCH&quot; =~ &quot;feature/lib_submodule&quot; ]]
 then
 	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
 fi
 #**********************************************************************************************
-#*********************** temporary branch ***************************************************
+#***********************  ***************************************************
 
 
 #if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
