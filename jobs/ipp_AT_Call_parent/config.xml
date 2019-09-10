@@ -1,15 +1,144 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
+  <description>This job is triggered by the Automation-Test button after the copying of the relevant images was done.&#xd;
+The role of this job is to execute the ipp_AT_parent on the slave (ipp_auto7 or ipp_auto8 for LYNC and ipp_auto11 for IGS)</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>15</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MODEL</name>
+          <description></description>
+          <defaultValue>C450</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>IMAGENAMES</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>EMAIL</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>ipp_copyfiles</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!c:\cygwin\bin\bash --login
+
+echo $NODE_NAME
+
+change=`echo $REFSPEC | cut -d/ -f4`
+ps=`echo $REFSPEC | cut -d/ -f5`
+
+echo CHANGE=${change}/${ps} &gt; ${WORKSPACE}/properties.txt
+
+echo Find the last patch-set
+# In case the PS was updated with code changes, abort this execution
+while IFS= read -r line
+do
+  field=`echo $line | cut -d: -f1` # Could be: number or kind
+  value=`echo $line | sed &apos;s/.*: //&apos;` # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
+  if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
+  else
+    echo  Patch set: $checkPS,  change kind: $value
+    if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
+      echo It is a newest patch-set... abort action
+      echo -----------------------------------------
+      ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation test for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+      echo RunPhases=0 &gt;&gt; ${WORKSPACE}/properties.txt
+      exit 0;
+    fi
+  fi
+done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
+
+echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
+
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+
+# With $runPhases flag variable you have control of which parameters and where executing the ipp_AT_parent
+# If $runPhases = 0, the ipp_AT_parent will not start
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
+  echo RunPhases=3 &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScore=true &gt;&gt; ${WORKSPACE}/properties.txt
+  echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+  echo PC2RUNIGS=&quot;IGS-CI&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+else
+  echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScoreLYNC=true &gt;&gt; ${WORKSPACE}/properties.txt
+  echo GiveScore=false &gt;&gt; ${WORKSPACE}/properties.txt
+  echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+  # echo PC2RUNLYNC=&quot;ipp-Auto9&quot; &gt;&gt; ${WORKSPACE}/properties.txt
+  #if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then PC2RUN=&quot;ipp-Auto9&quot;; fi
+fi
+
+date
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${REFSPEC} $GERRIT_BRANCH</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
 </project>
