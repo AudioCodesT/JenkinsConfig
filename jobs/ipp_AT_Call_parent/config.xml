@@ -139,57 +139,118 @@ date
         <propertiesFilePath>${WORKSPACE}/properties.txt</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-  </builders>
-  <publishers>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-      <configs>
-        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.logic.Or" plugin="run-condition@1.0">
+        <conditions>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition">
+              <lhs>$RunPhases</lhs>
+              <rhs>1</rhs>
+              <comparator class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition$EqualTo"/>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition">
+              <lhs>$RunPhases</lhs>
+              <rhs>3</rhs>
+              <comparator class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition$EqualTo"/>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+        </conditions>
+      </runCondition>
+      <conditionalbuilders>
+        <EnvInjectBuilder plugin="envinject@2.1.5">
+          <info>
+            <propertiesFilePath>${WORKSPACE}/properties.txt</propertiesFilePath>
+          </info>
+        </EnvInjectBuilder>
+        <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.35.2">
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>REFSPEC=$REFSPEC
+            <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+              <configs>
+                <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=C450
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
 ServerType=Lync
 GiveScore=$GiveScoreLYNC</properties>
-              <textParamValueOnNewLine>false</textParamValueOnNewLine>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
-              <name>PC2RUN</name>
-              <nodeLabel>$PC2RUNLYNC</nodeLabel>
-            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+                  <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+                  <name>PC2RUN</name>
+                  <nodeLabel>$PC2RUNLYNC</nodeLabel>
+                </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+              </configs>
+              <projects>ipp_AT_parent</projects>
+              <condition>ALWAYS</condition>
+              <triggerWithNoParameters>false</triggerWithNoParameters>
+              <triggerFromChildProjects>false</triggerFromChildProjects>
+              <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+            </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
           </configs>
-          <projects>ipp_AT_parent</projects>
-          <condition>SUCCESS</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-          <triggerFromChildProjects>false</triggerFromChildProjects>
-        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+        </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.logic.Or" plugin="run-condition@1.0">
+        <conditions>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition">
+              <lhs>$RunPhases</lhs>
+              <rhs>1</rhs>
+              <comparator class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition$EqualTo"/>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition">
+              <lhs>$RunPhases</lhs>
+              <rhs>2</rhs>
+              <comparator class="org.jenkins_ci.plugins.run_condition.core.NumericalComparisonCondition$EqualTo"/>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+        </conditions>
+      </runCondition>
+      <conditionalbuilders>
+        <EnvInjectBuilder plugin="envinject@2.1.5">
+          <info>
+            <propertiesFilePath>${WORKSPACE}/properties.txt</propertiesFilePath>
+          </info>
+        </EnvInjectBuilder>
+        <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.35.2">
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>REFSPEC=$REFSPEC
+            <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+              <configs>
+                <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=445
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
 ServerType=IGS
 GiveScore=$GiveScoreIGS</properties>
-              <textParamValueOnNewLine>false</textParamValueOnNewLine>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
-              <name>PC2RUN</name>
-              <nodeLabel>$PC2RUNIGS</nodeLabel>
-            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+                  <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+                  <name>PC2RUN</name>
+                  <nodeLabel>$PC2RUNIGS</nodeLabel>
+                </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+              </configs>
+              <projects>ipp_AT_parent</projects>
+              <condition>ALWAYS</condition>
+              <triggerWithNoParameters>false</triggerWithNoParameters>
+              <triggerFromChildProjects>false</triggerFromChildProjects>
+              <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+            </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
           </configs>
-          <projects>ipp_AT_parent</projects>
-          <condition>SUCCESS</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-          <triggerFromChildProjects>false</triggerFromChildProjects>
-        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-      </configs>
-    </hudson.plugins.parameterizedtrigger.BuildTrigger>
-  </publishers>
+        </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+  </builders>
+  <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} ${REFSPEC} $GERRIT_BRANCH</template>
