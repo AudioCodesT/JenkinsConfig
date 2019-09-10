@@ -1349,7 +1349,17 @@ sudo yum install -y git-2.18.0</initScript>
       <name>sig-e90114c2</name>
       <accountId>act-96d87a11</accountId>
       <groupId>sig-e90114c2</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>00afd344-eacd-4676-bd2f-aa49da7c60ca</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <status>PENDING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>azure_redirect_slave</requestedLabel>
+            <createdAt>2019-09-10 12:59:48.202 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>azure_redirect_slave</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>c:\jenkinsslave</workspaceDir>
@@ -1585,6 +1595,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>Give_Priority_To_Job</string>
         <string>ipp_AT_build</string>
         <string>ipp_AT_build_SIM</string>
+        <string>ipp_AT_Call_parent</string>
         <string>ipp_AT_copyfiles</string>
         <string>ipp_AT_copyfiles_From_TAG</string>
         <string>ipp_AT_copyfiles_old</string>
