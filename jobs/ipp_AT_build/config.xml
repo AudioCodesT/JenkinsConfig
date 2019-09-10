@@ -376,7 +376,7 @@ builds_numbers=(&quot;${builds_numbers[@]}&quot; &quot;${queue_builds_numbers[@]
 
 #remove duplicates
 builds_numbers=($(echo ${builds_numbers[@]} | xargs -n1 | sort -u | xargs))
-
+echo &quot;${builds_numbers[@]}&quot;
 
 #iterate over all current running builds of ippReview_SFB and check if current change is running
 for build_number in ${builds_numbers[@]}
