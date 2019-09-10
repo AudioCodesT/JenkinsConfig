@@ -110,7 +110,7 @@ done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-set
 
 echo current patchSet is $checkPS - no new code changes, this execution is for PatchSet $ps
 
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test (Call parents) was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 # With $runPhases flag variable you have control of which parameters and where executing the ipp_AT_parent
 # If $runPhases = 0, the ipp_AT_parent will not start
