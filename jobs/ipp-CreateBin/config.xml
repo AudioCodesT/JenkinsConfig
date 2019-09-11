@@ -162,8 +162,9 @@ rm -rf repo_manifests
 git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
 cd repo_manifests
 git checkout ${ANDROID_VERSION}
-Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
-if [[ $Android_Branch == &quot;&quot; ]]
+Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} || curlFailed=&quot;True&quot;
+if [[ $curlFailed == &quot;True&quot; ]]
 then
 	Android_Branch=master
 fi
