@@ -162,7 +162,7 @@ rm -rf repo_manifests
 git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
 cd repo_manifests
 git checkout ${ANDROID_VERSION}
-Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
+Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
 if [[ $Android_Branch == &quot;&quot; ]]
 then
 	Android_Branch=master
