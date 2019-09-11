@@ -104,12 +104,6 @@
       <command>#!c:\cygwin\bin\bash --login
 
 echo $NODE_NAME
-PHISICALPHONE=&quot;&quot;
-#echo check if equel to ippTestAuto8
-#if [ &quot;$NODE_NAME&quot; == &quot;ippTestAuto8&quot; ]; then
-#  PHISICALPHONE=sim
-#  echo set to sim
-#fi
 
 cd C:/IpPhoneAutomation/ATA &amp;&amp; tclsh AtaExec.tcl -stop all
 
@@ -132,14 +126,12 @@ fi
 
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then
   echo RunPhases=1 &gt; ${WORKSPACE}/properties.txt
-  echo PHISICALPHONE=$PHISICALPHONE &gt;&gt; ${WORKSPACE}/properties.txt
   exit 0;
 fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 ps=`echo $REFSPEC | cut -d/ -f5`
 
-echo PHISICALPHONE=$PHISICALPHONE &gt; ${WORKSPACE}/properties.txt
 echo ATA_Home=$ATA_Home &gt;&gt; ${WORKSPACE}/properties.txt
 
 echo Results: &gt; $ATA_Home/$IMAGENAMES.txt
@@ -199,7 +191,7 @@ date
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
-CONFIGNAME=basic1of4${PHISICALPHONE}
+CONFIGNAME=basic1of4
 MODEL=$MODEL
 SUITENAME=basic1of4
 IMAGENAMES=$IMAGENAMES
@@ -236,7 +228,7 @@ ServerType=${ServerType}</properties>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
-CONFIGNAME=basic2of4${PHISICALPHONE}
+CONFIGNAME=basic2of4
 MODEL=$MODEL
 SUITENAME=basic2of4
 IMAGENAMES=$IMAGENAMES
@@ -273,7 +265,7 @@ ServerType=${ServerType}</properties>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
-CONFIGNAME=basic3of4${PHISICALPHONE}
+CONFIGNAME=basic3of4
 MODEL=$MODEL
 SUITENAME=basic3of4
 IMAGENAMES=$IMAGENAMES
@@ -310,7 +302,7 @@ ServerType=${ServerType}</properties>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>REFSPEC=$REFSPEC
 GERRIT_BRANCH=$GERRIT_BRANCH
-CONFIGNAME=basic4of4${PHISICALPHONE}
+CONFIGNAME=basic4of4
 MODEL=$MODEL
 SUITENAME=basic4of4
 IMAGENAMES=$IMAGENAMES
@@ -436,12 +428,12 @@ if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 1; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
-if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
+labelName=&quot;Automation-Test&quot;
 
 labelGrade=&quot;--label $labelName=-1&quot;
 
-# No grade if this patch-set was merged already
-if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; fi
+# No score if this patch-set was merged already
+if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/ATA/$IMAGENAMES.txt
@@ -474,11 +466,43 @@ if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
-if [ &quot;$PHISICALPHONE&quot; == &quot;&quot; ]; then labelName=&quot;Automation-Test&quot;; else labelName=&quot;Automation-Test-Sim&quot;; fi
-
-labelGrade=&quot;--label $labelName=1&quot;
+labelName=&quot;Automation-Test&quot;
 percent=100
-if [ &quot;$merged&quot; == &quot;yes&quot; ] || ! $GiveScore; then labelGrade=&quot;&quot;; percent=50; fi
+
+currentPS=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &apos;currentPatchSet:\|type: Verified&apos; | grep &apos;number\|value&apos; | cut -d: -f2)
+score=$(echo $currentPS | awk &apos;{print $2}&apos;)
+if [ &quot;$score&quot;  == -1 ]; then
+      labelGrade=&quot;&quot;
+else
+  labelGrade=&quot;--label $labelName=1&quot;
+
+  # Check if ipp_AT_parent job is in the queue or already running
+  # to not give scrore till is finishing 
+  for job in \
+    $(curl -ks https://jenkins/queue/api/json | \
+    sed -e &apos;s/REFSPEC/\n/g&apos; | grep ipp_AT_parent); do
+    if echo $job | grep -q $REFSPEC; then
+      echo &quot;ipp_AT_parent for $REFSPEC is in the queue, do not give score&quot;
+      labelGrade=&quot;&quot;
+      percent=50
+    fi
+  done
+  
+  # sbc-drt-request is running Already?
+  allRunning=$(curl -ks &quot;https://test-jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
+  oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
+  sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_parent)
+  
+  for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_parent); do
+    if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
+      echo &quot;ipp_AT_parent for $REFSPEC is still running, do not give score&quot;
+      labelGrade=&quot;&quot;
+      percent=50
+    fi
+  done
+fi
+
+if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/$IMAGENAMES.txt
