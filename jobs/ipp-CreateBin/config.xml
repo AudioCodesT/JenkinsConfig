@@ -290,6 +290,7 @@ mv userdata_raw.img userdata.img
 make clean
 make
 ./gen_C450_bin -u 1 -e 1 -l 200 -p 250 -r 250
+zip mmc_bin.zip *mmc*.bin
 else
 echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production&quot; &gt; artifactoryPath.txt
 #make normal bin 
@@ -401,6 +402,7 @@ ${FILE,path=&quot;artifactoryPath.txt&quot;}
         <spec></spec>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/dualBin/*mmc*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}
+${WORKSPACE}/dualBin/mmc_bin.zip=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}
 ${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
 ${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
 ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production</deployPattern>
