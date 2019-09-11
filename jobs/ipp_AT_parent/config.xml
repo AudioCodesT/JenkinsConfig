@@ -471,11 +471,14 @@ percent=100
 
 currentPS=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &apos;currentPatchSet:\|type: Verified&apos; | grep &apos;number\|value&apos; | cut -d: -f2)
 score=$(echo $currentPS | awk &apos;{print $2}&apos;)
+echo Score: $score
+
 if [ &quot;$score&quot;  == -1 ]; then
   labelGrade=&quot;&quot;
 else
   labelGrade=&quot;--label $labelName=1&quot;
 
+  echo Check the queue...
   # Check if ipp_AT_parent job is in the queue or already running
   # to not give scrore till is finishing 
   for job in \
@@ -488,6 +491,7 @@ else
     fi
   done
   
+  echo Check running jobs
   # sbc-drt-request is running Already?
   allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
   oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
