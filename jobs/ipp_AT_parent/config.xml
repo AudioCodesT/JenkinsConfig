@@ -472,7 +472,7 @@ percent=100
 currentPS=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &apos;currentPatchSet:\|type: Verified&apos; | grep &apos;number\|value&apos; | cut -d: -f2)
 score=$(echo $currentPS | awk &apos;{print $2}&apos;)
 if [ &quot;$score&quot;  == -1 ]; then
-      labelGrade=&quot;&quot;
+  labelGrade=&quot;&quot;
 else
   labelGrade=&quot;--label $labelName=1&quot;
 
@@ -489,7 +489,7 @@ else
   done
   
   # sbc-drt-request is running Already?
-  allRunning=$(curl -ks &quot;https://test-jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
+  allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
   oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
   sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_parent)
   
