@@ -49,22 +49,22 @@ No build job. Only start the instance.</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting i-0ee10a9a4e0a642bc  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
+echo &quot;Starting 	i-0ee10a9a4e0a642bc  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
 echo &quot;***********************************************************************************&quot;
 aws ec2 start-instances --instance-ids i-0ee10a9a4e0a642bc
 echo &quot;***********************************************************************************&quot;
-echo &quot;Starting i-0f12deb899c7d4c02 (Stateful DSP QA tests) IP: 172.16.134.132&quot;
+echo &quot;Starting i-0092f075ac1855c3a (Stateful DSP QA tests) IP: 172.16.134.132&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0f12deb899c7d4c02
+aws ec2 start-instances --instance-ids i-0092f075ac1855c3a
 echo &quot;***********************************************************************************&quot;
-echo &quot;Starting i-0cc776c6ddb251f2b (Stateful DSP QA tests) IP: 172.16.134.133&quot;
+echo &quot;starting 	i-0c6a5dbf86082389a (Stateful DSP QA tests) IP: 172.16.134.133&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0cc776c6ddb251f2b 
+aws ec2 start-instances --instance-ids i-0c6a5dbf86082389a 
 #new machine for  eliezer
 echo &quot;***********************************************************************************&quot;
-echo &quot;Starting 	i-00043538f80ba648c (Stateful DSP QA tests) IP: 172.16.134.150&quot;
+echo &quot;Starting 	i-063f7fb03ac11b664 (Stateful DSP QA tests) IP: 172.16.134.150&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-00043538f80ba648c </command>
+aws ec2 start-instances --instance-ids i-063f7fb03ac11b664 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
