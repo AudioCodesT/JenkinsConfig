@@ -438,7 +438,9 @@ if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/ATA/$IMAGENAMES.txt
 
-echo Send failed message to Gerrit - $change,$newPS
+gerrit=$(ping jenkins -n 1 | grep &quot;Reply from&quot; | sed &apos;s!^.*from !!; s!:.*!!&apos;)
+
+echo Send failed message to Gerrit - $change,$newPS, $labelGrade
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;$labelName failed: $BUILD_URL ------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
@@ -446,7 +448,19 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 $change,$newPS
 
 echo Finish give score
+
+if ! echo $gerrit | grep -q .; then
+  echo gerrit does not work, execute manually the following:
+  echo ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;$labelName failed: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
+--notify OWNER $labelGrade \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+  exit 2
+fi
+
 date</command>
+                        <unstableReturn>2</unstableReturn>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
@@ -515,6 +529,8 @@ if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/$IMAGENAMES.txt
 
+gerrit=$(ping jenkins -n 1 | grep &quot;Reply from&quot; | sed &apos;s!^.*from !!; s!:.*!!&apos;)
+
 echo Send OK message to Gerrit - $change,$newPS,  $labelGrade
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
@@ -522,7 +538,18 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
 echo Finish give message
+
+if ! echo $gerrit | grep -q .; then
+  echo gerrit does not work, execute manually the following:
+  echo ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
+--notify OWNER $labelGrade \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+  exit 2
+fi
 date</command>
+                        <unstableReturn>2</unstableReturn>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
