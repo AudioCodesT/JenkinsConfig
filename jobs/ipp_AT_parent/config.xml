@@ -498,12 +498,12 @@ else
   # sbc-drt-request is running Already?
   allRunning=$(curl -ks &quot;https://$jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
 oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
-sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_parent)
+sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_run)
   
-  for job in $(echo $allRunning | sed &apos;s: :\n:g&apos; | grep ipp_AT_parent); do
+  for job in $(echo $allRunning | sed &apos;s: :\n:g&apos;); do
     job=$(echo $job | sed &quot;s|jenkins|$jenkins|&quot;)
     if curl -ks &quot;${job}api/json?tree=actions\[parameters\[value\]\]&quot; | grep -q $REFSPEC; then
-      echo &quot;ipp_AT_parent for $REFSPEC is still running, do not give score&quot;
+      echo &quot;ipp_AT_run for $REFSPEC is still running, do not give score&quot;
       labelGrade=&quot;&quot;
       percent=50
     fi
