@@ -154,7 +154,9 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
 machine gerrit login jenkins password ${jpass}
 EOF
 cd ${WORKSPACE}/SDK/MVWebRTCFramework/
-./setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework</command>
+./setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework
+
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -178,7 +180,7 @@ cd ${WORKSPACE}/SDK/MVWebRTCFramework/
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
-          <value>{AQAAABAAAAAQuFQb5aHKo2Ohno4Hsm7f1xMc/TTWuC5luqdyswUFxE0=}</value>
+          <value>{AQAAABAAAAAQ9Vyh+CYGV/rEqVNc4w1ybyK+F8zGpoowvmHQwKSsXko=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
