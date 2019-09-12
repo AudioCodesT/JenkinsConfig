@@ -459,7 +459,7 @@ date</command>
                       <hudson.tasks.Shell>
                         <command>#!c:\cygwin\bin\bash --login
 
-echo Start give score
+echo Start give message
 date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 0; fi
 if [ &quot;${RunPhases}&quot; -ne 1 ]; then exit 0; fi
@@ -515,13 +515,13 @@ if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
 rm -f $ATA_Home/$IMAGENAMES.txt
 
-echo Send OK message to Gerrit - $change,$newPS
+echo Send OK message to Gerrit - $change,$newPS,  $labelGrade
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
-echo Finish give score
+echo Finish give message
 date</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
