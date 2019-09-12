@@ -49,9 +49,9 @@ No build job. Only start the instance.</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting i-03222de4315e8592b  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
+echo &quot;Starting i-0ee10a9a4e0a642bc  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-03222de4315e8592b 
+aws ec2 start-instances --instance-ids i-0ee10a9a4e0a642bc
 echo &quot;***********************************************************************************&quot;
 echo &quot;Starting i-0f12deb899c7d4c02 (Stateful DSP QA tests) IP: 172.16.134.132&quot;
 echo &quot;***********************************************************************************&quot;
