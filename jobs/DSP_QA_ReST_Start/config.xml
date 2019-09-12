@@ -62,9 +62,9 @@ echo &quot;*********************************************************************
 aws ec2 start-instances --instance-ids i-0cc776c6ddb251f2b 
 #new machine for  eliezer
 echo &quot;***********************************************************************************&quot;
-echo &quot;Stopping 	i-00043538f80ba648c (Stateful DSP QA tests) IP: 172.16.134.150&quot;
+echo &quot;Starting 	i-00043538f80ba648c (Stateful DSP QA tests) IP: 172.16.134.150&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 stop-instances --instance-ids i-00043538f80ba648c </command>
+aws ec2 start-instances --instance-ids i-00043538f80ba648c </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
