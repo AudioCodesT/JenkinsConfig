@@ -53,7 +53,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <info>
         <propertiesContent>
 </propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -150,7 +150,9 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
+      <command>cat &lt;&lt; EOF &gt; ~/.netrc
+machine gerrit login jenkins password ${jpass}
+EOF
 cd ${WORKSPACE}/SDK/MVWebRTCFramework/
 ./setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework</command>
     </hudson.tasks.Shell>
@@ -170,5 +172,15 @@ cd ${WORKSPACE}/SDK/MVWebRTCFramework/
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQuFQb5aHKo2Ohno4Hsm7f1xMc/TTWuC5luqdyswUFxE0=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
   </buildWrappers>
 </project>
