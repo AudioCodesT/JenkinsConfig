@@ -478,11 +478,12 @@ if [ &quot;$score&quot;  == -1 ]; then
 else
   labelGrade=&quot;--label $labelName=1&quot;
 
+  jenkins=172.16.146.146
   echo Check the queue...
   # Check if ipp_AT_parent job is in the queue or already running
   # to not give scrore till is finishing 
   for job in \
-    $(curl -ks https://jenkins/queue/api/json | \
+    $(curl -ks https://$jenkins/queue/api/json | \
     sed -e &apos;s/REFSPEC/\n/g&apos; | grep ipp_AT_parent); do
     if echo $job | grep -q $REFSPEC; then
       echo &quot;ipp_AT_parent for $REFSPEC is in the queue, do not give score&quot;
@@ -493,7 +494,7 @@ else
   
   echo Check running jobs
   # sbc-drt-request is running Already?
-  allRunning=$(curl -ks &quot;https://jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
+  allRunning=$(curl -ks &quot;https://$jenkins/computer/api/json?tree=computer\[executors\[currentExecutable\[url\]\],\
   oneOffExecutors\[currentExecutable\[url\]\]\]&quot; | \
   sed -e &apos;s/&quot;url&quot;:&quot;/\n/g&apos; | sed &apos;s/&quot;}}.*//g&apos; | tail -n +2 | grep ipp_AT_parent)
   
