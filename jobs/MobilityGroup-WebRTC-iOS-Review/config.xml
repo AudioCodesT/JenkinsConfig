@@ -184,7 +184,33 @@ cd ${CI_RES_LOCAL_REPO}/Scripts
 ./webrtc_ios_setup_and_build.sh -w &quot;$WORKSPACE&quot;  -j &quot;$CI_RES_LOCAL_REPO&quot;  -c &quot;$CODESIGN_LOCAL_REPO&quot; -o &quot;$BUILD_OUTPUT_DIR&quot; -r &quot;$RELEASE_VERSION&quot; -b &quot;$BUILD_VERSION&quot;</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+      <config>
+        <scriptFiles/>
+        <groovyScripts/>
+        <buildSteps>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>SUCCESS</string>
+              <string>NOT_BUILT</string>
+              <string>ABORTED</string>
+              <string>FAILURE</string>
+              <string>UNSTABLE</string>
+            </results>
+            <role>BOTH</role>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>#remove ~/.netrc file (iOS machine is in Haifa Office)
+rm -rf ~/.netrc</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+        </buildSteps>
+        <markBuildUnstable>false</markBuildUnstable>
+      </config>
+    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
