@@ -181,7 +181,9 @@ CODESIGN_LOCAL_REPO=$(pwd)
 
 #run build
 cd ${CI_RES_LOCAL_REPO}/Scripts
-./webrtc_ios_setup_and_build.sh -w &quot;$WORKSPACE&quot;  -j &quot;$CI_RES_LOCAL_REPO&quot;  -c &quot;$CODESIGN_LOCAL_REPO&quot; -o &quot;$BUILD_OUTPUT_DIR&quot; #-r &quot;$RELEASE_VERSION&quot; -b &quot;$BUILD_VERSION&quot;</command>
+RELEASE_VERSION=2.0.0
+BUILD_VERSION=2.0.8
+./webrtc_ios_setup_and_build.sh -w &quot;$WORKSPACE&quot;  -j &quot;$CI_RES_LOCAL_REPO&quot;  -c &quot;$CODESIGN_LOCAL_REPO&quot; -o &quot;$BUILD_OUTPUT_DIR&quot; -r &quot;$RELEASE_VERSION&quot; -b &quot;$BUILD_VERSION&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
