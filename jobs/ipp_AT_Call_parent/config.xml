@@ -116,15 +116,10 @@ ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test
 # If $runPhases = 0, the ipp_AT_parent will not start
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
   echo RunPhases=3 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreLYNC=false &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreIGS=false &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScore=true &gt;&gt; ${WORKSPACE}/properties.txt
   echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   echo PC2RUNIGS=&quot;IGS-CI&quot; &gt;&gt; ${WORKSPACE}/properties.txt
 else
   echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScoreLYNC=true &gt;&gt; ${WORKSPACE}/properties.txt
-  echo GiveScore=false &gt;&gt; ${WORKSPACE}/properties.txt
   echo PC2RUNLYNC=&quot;ippTestAuto&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   # echo PC2RUNLYNC=&quot;ipp-Auto9&quot; &gt;&gt; ${WORKSPACE}/properties.txt
   #if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then PC2RUN=&quot;ipp-Auto9&quot;; fi
@@ -175,8 +170,7 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=C450
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
-ServerType=Lync
-GiveScore=$GiveScoreLYNC</properties>
+ServerType=Lync</properties>
                   <textParamValueOnNewLine>false</textParamValueOnNewLine>
                 </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                 <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -230,8 +224,7 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 MODEL=445
 IMAGENAMES=$IMAGENAMES
 EMAIL=${EMAIL}
-ServerType=IGS
-GiveScore=$GiveScoreIGS</properties>
+ServerType=IGS</properties>
                   <textParamValueOnNewLine>false</textParamValueOnNewLine>
                 </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                 <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
