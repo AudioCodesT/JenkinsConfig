@@ -88,7 +88,7 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.WipeWorkspace/>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
         <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
           <separator>#</separator>
