@@ -45,7 +45,7 @@
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <propertiesContent>JAVA_HOME=/usr/java/jdk1.8.0_111</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -139,7 +139,7 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>Liav.Elias@audiocodes.com, Roman.BarAm@audiocodes.com, Gila.Berchayev@audiocodes.com, Igor.Maller@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Kobi.Levi@audiocodes.com,
+      <recipientList>Liav.Elias@audiocodes.com, Kfir.Gershon@audiocodes.com, Gila.Berchayev@audiocodes.com, Igor.Maller@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Kobi.Levi@audiocodes.com,
 cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
