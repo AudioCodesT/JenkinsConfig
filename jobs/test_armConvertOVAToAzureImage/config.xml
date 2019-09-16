@@ -50,6 +50,8 @@
       <command>#parameters for the build
 jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
 jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
+NEW_TAG_WithoutDots=${NEW_TAG//./}
+target_container_name=&quot;arm${NEW_TAG_WithoutDots}
 admin_username=&quot;acarm&quot;
 container_name=&quot;vhds&quot;
 VmSize=&quot;Standard_D4s_v3&quot;
@@ -99,7 +101,7 @@ az vm create \
     --nsg ${security_group} \
     --os-type linux \
     --os-disk-name ${Configurator_vhd_name} \
-    --storage-container-name ${container_name} \
+    --storage-container-name ${target_container_name} \
     --tags &apos;Name=AzureArmCreateImage&apos; &apos;Creator=Jenkins&apos;
     
 az vm create \
@@ -117,7 +119,7 @@ az vm create \
     --nsg ${security_group} \
     --os-type linux \
     --os-disk-name ${Router_vhd_name} \
-    --storage-container-name ${container_name} \
+    --storage-container-name ${target_container_name} \
     --tags &apos;Name=AzureArmCreateImage&apos; &apos;Creator=Jenkins&apos;    
 #wait for VMs will be created
 az vm wait -g ${ResourceGroupName} -n ${Configurator_VmName} --created
