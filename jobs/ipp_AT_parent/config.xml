@@ -483,8 +483,8 @@ change=`echo $REFSPEC | cut -d/ -f4`
 labelName=&quot;Automation-Test&quot;
 percent=100
 
-currentPS=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &apos;currentPatchSet:\|type: Automation-Test&apos; | grep &apos;number\|value&apos; | cut -d: -f2)
-score=$(echo $currentPS | awk &apos;{print $2}&apos;)
+echo ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change
+score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A3 &apos;type: Automation-Test&apos; | grep value | cut -d: -f2)
 echo Score: $score
 
 if [ &quot;$score&quot;  == -1 ]; then
