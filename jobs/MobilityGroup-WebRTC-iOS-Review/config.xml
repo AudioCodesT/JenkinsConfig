@@ -161,9 +161,8 @@ machine gerrit login jenkins password ${jpass}
 EOF
 BUILD_OUTPUT_DIR=&quot;${WORKSPACE}/output&quot;
 mkdir ${BUILD_OUTPUT_DIR}
-
-cd ${WORKSPACE}/SDK/MVWebRTCFramework/
-./setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework
+#
+${WORKSPACE}/SDK/MVWebRTCFramework/setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRTCFramework
 
 #clone CI-Resources repository
 cd ${WORKSPACE}/..
