@@ -143,6 +143,12 @@ sleep $DelayTime
 
 User=$artifactory_user:$artifactory_pass
 
+if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
+    echo confige again Z: ----------------------
+    net use z: /delete
+    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+fi
+
 line=$(curl -s http://${COMPUTERNAME}/index.php/status/show.xml | tail -1)
 echo $line
 if echo $line | grep -q status.busy./status; then
