@@ -62,8 +62,8 @@ Configurator_VmName=&quot;ArmConf${TAG}&quot;
 Router_vhd_name=&quot;ARM-Router_${TAG}&quot;
 Router_VmName=&quot;ArmRouter${TAG}&quot;
 ResourceGroupName=&quot;CI_Resource_Group&quot;
-conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/ArmConf${TAG}.vhd&quot;
-router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/ArmRouter${TAG}.vhd&quot;
+conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
+router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
 #if it failed to download vhdx file will fail the build
 if [[ ! -e ARM-Conf_${TAG}.vhdx || ! -e ARM-Router_${TAG}.vhdx ]]
 then
@@ -78,21 +78,10 @@ az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --ten
 export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
 azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
-
-azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/ArmConf.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/ArmRouter.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 #upload created vhds to storage
-#az storage blob upload --connection-string ${connection_string} \
-#    --container-name ${container_name} \
-#    --type page \
-#    --file ${WORKSPACE}/${Configurator_vhd_name}.vhd \
-#	--name ArmConf${TAG}.vhd
-    
-#az storage blob upload --connection-string ${connection_string} \
-#    --container-name ${container_name} \
-#    --type page \
-#    --file ${WORKSPACE}/${Router_vhd_name}.vhd \
-#	--name ArmRouter${TAG}.vhd   
+azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+
 
 # create new VMs from the new VHDs
 az vm create \
