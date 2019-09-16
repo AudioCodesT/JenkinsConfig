@@ -127,13 +127,13 @@ cd $WORKSPACE
 
 #to build common.jar 
 cd ${WORKSPACE}/RedirectServerCommon
-mvn clean install
+mvn clean install 
 cd ${WORKSPACE}/redirectServerDeviceApi
-mvn clean package
-#mvn azure-functions:run
+mvn clean package -Dmaven.test.skip=true
+mvn azure-functions:run
 cd ${WORKSPACE}/redirect_server_azure
-mvn clean package
-#mvn azure-functions:run
+mvn clean package -Dmaven.test.skip=true
+mvn azure-functions:run
 
 #push to azure function app:
 ###mvn azure-functions:deploy</command>
