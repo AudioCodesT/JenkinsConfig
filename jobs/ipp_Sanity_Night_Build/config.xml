@@ -143,6 +143,7 @@ sleep $DelayTime
 
 User=$artifactory_user:$artifactory_pass
 
+net use
 if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
     echo confige again Z: ----------------------
     net use z: /delete
@@ -259,6 +260,73 @@ exit $?</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+            <worstResult>
+              <name>ABORTED</name>
+              <ordinal>4</ordinal>
+              <color>ABORTED</color>
+              <completeBuild>false</completeBuild>
+            </worstResult>
+            <bestResult>
+              <name>ABORTED</name>
+              <ordinal>4</ordinal>
+              <color>ABORTED</color>
+              <completeBuild>false</completeBuild>
+            </bestResult>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>ABORTED</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>#!c:\cygwin\bin\bash --login
+
+date
+echo PS list
+pslist -t
+
+#ID=`grep &quot;session id:&quot; ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2`
+ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+
+echo Find $ID
+
+if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
+
+cd ${ATA_Home}
+
+echo MESSAGE=Aborted &gt;&gt; $WORKSPACE/properties.txt
+echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
+echo CONFIGNAME=${CONFIGNAME} ATA-${ID} &gt;&gt; $WORKSPACE/properties.txt
+
+echo Stop Ata $ID
+if [ &quot;$ID&quot; != &quot;NotFound&quot; ]; then
+  tclsh AtaExec.tcl -stop $ID
+fi
+date</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>CheckSum is not equel</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
