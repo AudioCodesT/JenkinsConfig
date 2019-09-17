@@ -426,7 +426,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp-AutoNL2</assignedNode>
+  <assignedNode>${PC2RUN}</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -434,13 +434,14 @@
   <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>cd %ATA_Home% &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
-&#xd;
-echo Finish stop all</command>
-    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
+
+echo $NODE_NAME
+
+cd C:/IpPhoneAutomation/ATA &amp;&amp; tclsh AtaExec.tcl -stop all
+echo Finish stop all
+net use
 
 echo Check if free or busy
 if curl -s http://localhost/index.php/status/show.xml | grep -q status.busy./status; then
@@ -1398,7 +1399,7 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -1415,6 +1416,11 @@ BUILD_PARENT=${BUILD_NUMBER}</properties>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} ${PC2RUN}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
   </buildWrappers>
   <pollSubjobs>false</pollSubjobs>
 </com.tikal.jenkins.plugins.multijob.MultiJobProject>
