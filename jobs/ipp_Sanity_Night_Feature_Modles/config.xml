@@ -465,12 +465,6 @@ if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then
 fi
 echo LASTBL=${LASTBL} &gt; ${WORKSPACE}/Sanity.prop
 
-net use
-if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
-    echo confige again Z: ----------------------
-    net use z: /delete
-    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
-fi
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
