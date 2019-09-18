@@ -167,14 +167,14 @@ ${WORKSPACE}/SDK/MVWebRTCFramework/setupWorkspace.sh -w ${WORKSPACE}/SDK/MVWebRT
 #clone CI-Resources repository
 cd ${WORKSPACE}/..
 rm -rf CI-Resources || echo &quot;CI-Resources folder not exists&quot;
-git -c http.sslverify=false clone -n https://gerrit/MobilityGroup/WebRTC/iOS/CI-Resources
+git -c http.sslverify=false clone https://gerrit/MobilityGroup/WebRTC/iOS/CI-Resources
 cd CI-Resources
 git checkout &quot;${CI_RES_BRANCH_NAME}&quot;
 CI_RES_LOCAL_REPO=$(pwd)
 #clone codesign-resources repository
 cd ${WORKSPACE}/..
 rm -rf codesign-resources || echo &quot;codesign-resources folder not exists&quot;
-git -c http.sslverify=false clone -n https://gerrit/MobilityGroup/WebRTC/iOS/codesign-resources	
+git -c http.sslverify=false clone https://gerrit/MobilityGroup/WebRTC/iOS/codesign-resources	
 cd codesign-resources
 git checkout &quot;${CODESIGN_BRANCH_NAME}&quot;
 CODESIGN_LOCAL_REPO=$(pwd)
