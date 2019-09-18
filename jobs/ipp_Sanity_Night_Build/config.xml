@@ -160,8 +160,8 @@ if echo $line | grep -q status.busy./status; then
   for session in `echo $line | sed &apos;s:&lt;/session&gt;:\n:g&apos;`; do 
     number=$(echo $session | sed &apos;s:.*&lt;session&gt;::&apos;)
     if [[ &quot;$number&quot; =~ ^[0-9]+$ ]]; then
-      echo tclsh AtaExec.tcl -stop $number
-      tclsh AtaExec.tcl -stop $number
+      echo tclsh AtaExec.tcl -stop all
+      tclsh AtaExec.tcl -stop all
     fi
   done 
 fi
