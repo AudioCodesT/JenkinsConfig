@@ -152,19 +152,8 @@ fi
 
 line=$(curl -s http://${COMPUTERNAME}/index.php/status/show.xml | tail -1)
 echo $line
-if echo $line | grep -q status.busy./status; then
-  echo &quot;&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;&quot;
-  #exit 1
-  echo Kill last build
-  cd ${ATA_Home} 
-  for session in `echo $line | sed &apos;s:&lt;/session&gt;:\n:g&apos;`; do 
-    number=$(echo $session | sed &apos;s:.*&lt;session&gt;::&apos;)
-    if [[ &quot;$number&quot; =~ ^[0-9]+$ ]]; then
-      echo tclsh AtaExec.tcl -stop all
-      tclsh AtaExec.tcl -stop all
-    fi
-  done 
-fi
+cd ${ATA_Home}
+tclsh AtaExec.tcl -stop all
 
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 
