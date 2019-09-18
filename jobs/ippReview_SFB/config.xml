@@ -430,10 +430,10 @@ then
       message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
 fi
 
-if [[ $FilesList =~ src/apps/lib/lib|src/apps/emsc|src/apps/lib/device_management ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q &quot;$Owner&quot;;
+if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/emsc/|ib/device_management/ ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q &quot;$Owner&quot;;
 then
-      echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
-      message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
+      echo  ------------   You do not have permission to change the reference to  the IPP-SFB SubModule ----------------
+      message=&quot;You do not have permission to change the reference to  the IPP-SFB SubModule&quot;
 fi
 
 if [ ! -z &quot;$message&quot; ]; then
