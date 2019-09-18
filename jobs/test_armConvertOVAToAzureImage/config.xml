@@ -73,8 +73,11 @@ then
     exit 1
 fi
 #convert the files from vhdx to vhd
-qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Conf_${TAG}.vhdx ${WORKSPACE}/${Configurator_vhd_name}.vhd
-qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Router_${TAG}.vhdx ${WORKSPACE}/${Router_vhd_name}.vhd
+#qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Conf_${TAG}.vhdx ${WORKSPACE}/${Configurator_vhd_name}.vhd
+#qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Router_${TAG}.vhdx ${WORKSPACE}/${Router_vhd_name}.vhd
+VBoxManage clonehd &quot;${WORKSPACE}/ARM-Conf_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd
+VBoxManage clonehd &quot;${WORKSPACE}/ARM-Router_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot;
+
 #connect to azure cli
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
 export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
