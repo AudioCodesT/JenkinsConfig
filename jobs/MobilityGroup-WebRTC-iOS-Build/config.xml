@@ -154,6 +154,26 @@ ${CI_RES_LOCAL_REPO}/Scripts/webrtc_ios_setup_and_build.sh -w &quot;$WORKSPACE&q
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
+      <configVersion>2</configVersion>
+      <pushMerge>false</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <forcePush>false</forcePush>
+      <tagsToPush>
+        <hudson.plugins.git.GitPublisher_-TagToPush>
+          <targetRepoName>origin</targetRepoName>
+          <tagName>${NEWTAG}</tagName>
+          <tagMessage>Jenkins Auto tagging</tagMessage>
+          <createTag>true</createTag>
+          <updateTag>true</updateTag>
+        </hudson.plugins.git.GitPublisher_-TagToPush>
+      </tagsToPush>
+    </hudson.plugins.git.GitPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
       <config>
         <scriptFiles/>
