@@ -72,10 +72,11 @@ then
 	echo &quot;Could not downloaded vhdx files, please create them and retry again&quot;
     exit 1
 fi
+df -h
 #convert the files from vhdx to vhd
 #qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Conf_${TAG}.vhdx ${WORKSPACE}/${Configurator_vhd_name}.vhd
 #qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Router_${TAG}.vhdx ${WORKSPACE}/${Router_vhd_name}.vhd
-VBoxManage clonehd &quot;${WORKSPACE}/ARM-Conf_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd
+VBoxManage clonehd &quot;${WORKSPACE}/ARM-Conf_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot;
 VBoxManage clonehd &quot;${WORKSPACE}/ARM-Router_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot;
 
 #connect to azure cli
