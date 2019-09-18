@@ -89,6 +89,11 @@ azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=
 azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 
+#az storage blob upload --connection-string ${connection_string} \	
+#    --container-name ${container_name} \
+#    --type page \
+#    --file ${WORKSPACE}/${Router_vhd_name}.vhd \
+#    --name ArmRouter${TAG}.vhd   
 
 # create new VMs from the new VHDs
 az vm create \
