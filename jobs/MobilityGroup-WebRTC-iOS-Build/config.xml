@@ -80,7 +80,7 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
   </scm>
   <assignedNode>MobilityGroup-ios-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -168,6 +168,8 @@ ${CI_RES_LOCAL_REPO}/Scripts/webrtc_ios_setup_and_build.sh -w &quot;$WORKSPACE&q
           <updateTag>true</updateTag>
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
+      <branchesToPush/>
+      <notesToPush/>
     </hudson.plugins.git.GitPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
