@@ -68,7 +68,9 @@ $conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${co
 $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
 
 #convert vhdx to vhd fixed
-Convert-VHD –Path &quot;${WORKSPACE}\ARM-Conf_${TAG}.vhdx&quot; –DestinationPath &quot;${WORKSPACE}\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
+Convert-VHD –Path &quot;${WORKSPACE}\${Configurator_vhd_name}.vhdx&quot; –DestinationPath &quot;${WORKSPACE}\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
+
+Convert-VHD –Path &quot;${WORKSPACE}\${Router_vhd_name}.vhdx&quot; –DestinationPath &quot;${WORKSPACE}\${Router_vhd_name}.vhd&quot; -VHDType Fixed
 
 #start a new VMs
 New-VM -Name &quot;$Configurator_VmName&quot; -MemoryStartupBytes 1GB -VHDPath ${WORKSPACE}\${Configurator_vhd_name}.vhd
