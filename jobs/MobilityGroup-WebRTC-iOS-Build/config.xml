@@ -90,8 +90,7 @@ LastVersionCode=$(echo $LastTag | cut -d&apos;_&apos; -f2)
 echo $LastVersionCode
 LastTagNum=$(echo $LastVersionName |  cut -d&apos;.&apos; -f3)
 LastTagNum=$(expr 1 + $LastTagNum)
-TempVersionName=`echo $LastVersionName | cut -d. -f1-2`.`printf &quot;%d&quot; $LastTagNum`
-NewVersionName=`echo $LastVersionName | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastVersionName | awk -F. &apos;{print $NF+1}&apos;`
+NewVersionName=`echo $LastVersionName | cut -d. -f1-2`.`printf &quot;%d&quot; $LastTagNum`
 echo $NewVersionName
 ((NewVersionCode=${LastVersionCode}+1))
 echo $NewVersionCode
