@@ -233,12 +233,12 @@ rm -rf ~/.netrc</command>
         <spec>{
     &quot;files&quot;: [
         {
-            &quot;pattern&quot;: &quot;SDK/Export/*.ipa&quot;,
+            &quot;pattern&quot;: &quot;output/Export/*.ipa&quot;,
             &quot;target&quot;: &quot;MobilityGroup/WebRTC/iOS/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         },
         {
-            &quot;pattern&quot;: &quot;SDK/Export/*.zip&quot;,
+            &quot;pattern&quot;: &quot;output/Export/*.zip&quot;,
             &quot;target&quot;: &quot;MobilityGroup/WebRTC/iOS/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         }
