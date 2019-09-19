@@ -1,8 +1,8 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>First, the user build manually the job  &quot;MobilityGroup-WebRTC-Android-Build&quot; in order to create a new TAG.&#xd;
-Then, this job automatically triggered by new TAG on WebRTC Android.&#xd;
+  <description>First, the user build manually the job  &quot;MobilityGroup-WebRTC-iOS-Build&quot; in order to create a new TAG.&#xd;
+Then, this job automatically triggered by new TAG on WebRTC iOS.&#xd;
 &#xd;
 This job get all the information on the commits between the old tag to the new tag, and trigger the job &quot;UpdateVI-Jira&quot; which send an email to notify on the new TAG.</description>
   <keepDependencies>false</keepDependencies>
@@ -28,7 +28,6 @@ This job get all the information on the commits between the old tag to the new t
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -55,7 +54,7 @@ This job get all the information on the commits between the old tag to the new t
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
-  <assignedNode>MobilityGroup-android-build</assignedNode>
+  <assignedNode>MobilityGroup-Webrtc-iOS-Slave</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -66,7 +65,7 @@ This job get all the information on the commits between the old tag to the new t
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>MobilityGroup/WebRTC/Android</pattern>
+          <pattern>MobilityGroup/WebRTC/iOS/AC-WebRTC-SDK</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -128,21 +127,21 @@ while read -r hash; do
 done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $OLDTAG..$NEWTAG)&quot;
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $OLDTAG..$NEWTAG | sort -u`
 
-echo NEWTAG=${NEWTAG} &gt; WebRTC_Android.properties
-echo RN=${RN} &gt;&gt; WebRTC_Android.properties
-echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; WebRTC_Android.properties
-echo EMAIL=${EMAIL} &gt;&gt; WebRTC_Android.properties
-echo BRANCH=$BRANCH&gt;&gt; WebRTC_Android.properties
-echo PROJECT=`git config --get remote.origin.url | sed &apos;s:.*29418/::&apos;` &gt;&gt; WebRTC_Android.properties
+echo NEWTAG=${NEWTAG} &gt; WebRTC_iOS.properties
+echo RN=${RN} &gt;&gt; WebRTC_iOS.properties
+echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; WebRTC_iOS.properties
+echo EMAIL=${EMAIL} &gt;&gt; WebRTC_iOS.properties
+echo BRANCH=$BRANCH&gt;&gt; WebRTC_iOS.properties
+echo PROJECT=`git config --get remote.origin.url | sed &apos;s:.*29418/::&apos;` &gt;&gt; WebRTC_iOS.properties
 echo DATE=${DATE} &gt;&gt; WebRTC_Android.properties
-echo AuthorCommitter=${AuthorCommitter} &gt;&gt; WebRTC_Android.properties
+echo AuthorCommitter=${AuthorCommitter} &gt;&gt; WebRTC_iOS.properties
 
 
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
-        <propertiesFilePath>WebRTC_Android.properties</propertiesFilePath>
+        <propertiesFilePath>WebRTC_iOS.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
