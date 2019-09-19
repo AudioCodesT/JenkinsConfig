@@ -35,7 +35,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -48,6 +47,35 @@
   <concurrentBuild>false</concurrentBuild>
   <customWorkspace>/mnt/resource/createArmImage</customWorkspace>
   <builders>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>#parameters for the build
+$jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
+$jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
+$NEW_TAG_WithoutDots=&quot;${TAG}.replace(&quot;.&quot;,&quot;&quot;)&quot;
+$target_container_name=&quot;arm${NEW_TAG_WithoutDots}&quot;
+$admin_username=&quot;acarm&quot;
+$container_name=&quot;vhds&quot;
+$VmSize=&quot;Standard_A2_v2&quot;
+$vhd_storage_account=&quot;ciresourcegroupstorage&quot;
+$subnet=&quot;Net_172.16.100.0&quot;
+$vnet_name=&quot;CI_Resource_Group&quot;
+$security_group=&quot;createOvocImageSG&quot;
+$Configurator_vhd_name=&quot;ARM-Conf_${TAG}&quot;
+$Configurator_VmName=&quot;ArmConf${TAG}&quot;
+$Router_vhd_name=&quot;ARM-Router_${TAG}&quot;
+$Router_VmName=&quot;ArmRouter${TAG}&quot;
+$ResourceGroupName=&quot;CI_Resource_Group&quot;
+$conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
+$router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
+
+#convert vhdx to vhd fixed
+Convert-VHD –Path &quot;${WORKSPACE}\ARM-Conf_${TAG}.vhdx&quot; –DestinationPath &quot;${WORKSPACE}\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
+
+#start a new VMs
+New-VM -Name &quot;$Configurator_VmName&quot; -MemoryStartupBytes 1GB -VHDPath ${WORKSPACE}\${Configurator_vhd_name}.vhd
+
+New-VM -Name &quot;$Router_VmName&quot; -MemoryStartupBytes 1GB -VHDPath ${WORKSPACE}\${Router_vhd_name}.vhd</command>
+    </hudson.plugins.powershell.PowerShell>
     <hudson.tasks.Shell>
       <command>#parameters for the build
 jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
@@ -74,136 +102,21 @@ then
 	echo &quot;Could not downloaded vhdx files, please create them and retry again&quot;
     exit 1
 fi
-df -h
+
 #convert the files from vhdx to vhd
 #qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Conf_${TAG}.vhdx ${WORKSPACE}/${Configurator_vhd_name}.vhd
 #qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Router_${TAG}.vhdx ${WORKSPACE}/${Router_vhd_name}.vhd
-VBoxManage clonehd &quot;${WORKSPACE}/ARM-Conf_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot;
-VBoxManage clonehd &quot;${WORKSPACE}/ARM-Router_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot;
+#VBoxManage clonehd &quot;${WORKSPACE}/ARM-Conf_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot;
+#VBoxManage clonehd &quot;${WORKSPACE}/ARM-Router_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot;
 
 #connect to azure cli
-az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
-azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+#az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+#export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
+#azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 #upload created vhds to storage
-azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-
-#az storage blob upload --connection-string ${connection_string} \	
-#    --container-name ${container_name} \
-#    --type page \
-#    --file ${WORKSPACE}/${Router_vhd_name}.vhd \
-#    --name ArmRouter${TAG}.vhd   
-
-# create new VMs from the new VHDs
-az vm create \
-    --resource-group ${ResourceGroupName} \
-    --name ${Configurator_VmName} \
-    --image ${conf_base_image} \
-    --admin-username ${admin_username} \
-    --admin-password ${admin_password} \
-    --size ${VmSize} \
-	--public-ip-address &quot;&quot; \
-    --use-unmanaged-disk \
-	--storage-account &quot;${vhd_storage_account}&quot; \
-    --subnet ${subnet} \
-    --vnet-name ${vnet_name} \
-    --nsg ${security_group} \
-    --os-type linux \
-    --os-disk-name ${Configurator_vhd_name} \
-    --storage-container-name ${target_container_name} \
-    --tags &apos;Name=AzureArmCreateImage&apos; &apos;Creator=Jenkins&apos;
-    
-az vm create \
-    --resource-group ${ResourceGroupName} \
-    --name ${Router_VmName} \
-    --image ${router_base_image} \
-    --admin-username ${admin_username} \
-    --admin-password ${admin_password} \
-    --size ${VmSize} \
-	--public-ip-address &quot;&quot; \
-    --use-unmanaged-disk \
-	--storage-account &quot;${vhd_storage_account}&quot; \
-    --subnet ${subnet} \
-    --vnet-name ${vnet_name} \
-    --nsg ${security_group} \
-    --os-type linux \
-    --os-disk-name ${Router_vhd_name} \
-    --storage-container-name ${target_container_name} \
-    --tags &apos;Name=AzureArmCreateImage&apos; &apos;Creator=Jenkins&apos;    
-#wait for VMs will be created
-az vm wait -g ${ResourceGroupName} -n ${Configurator_VmName} --created
-az vm wait -g ${ResourceGroupName} -n ${Router_VmName} --created
-
-#get new VM IP
-Conf_vmIP=$(az vm list-ip-addresses -g ${ResourceGroupName} -n ${Configurator_VmName} --query &quot;[*].virtualMachine.network.privateIpAddresses[0]&quot; --output tsv)
-Router_vmIP=$(az vm list-ip-addresses -g ${ResourceGroupName} -n ${Router_VmName} --query &quot;[*].virtualMachine.network.privateIpAddresses[0]&quot; --output tsv)
-
-
-#wait for both VMs will be up
-current_status=$(az vm get-instance-view --name ${Configurator_VmName} --resource-group ${ResourceGroupName} --query instanceView.statuses[1].[code] --output tsv)
-echo &quot;Wait until the VM is up&quot;
-count=0
-while true
-do
-	sleep 20
-	current_status=$(az vm get-instance-view --name ${Configurator_VmName} --resource-group ${ResourceGroupName} --query instanceView.statuses[1].[code] --output tsv)
-	((count+=1))
-	if [[ &quot;$current_status&quot; == &quot;PowerState/running&quot; ]]
-	then
-		break
-	fi
-    #if count=6 (wait 2 min) then exit the job with failure (some error with the VM that is not running)
-    if [[ $count == &quot;6&quot; ]]
-    then
-    	echo &quot;Failed to start the VM... exiting the build&quot;
-        exit 1
-    fi
-done
-#
-current_status=$(az vm get-instance-view --name ${Router_VmName} --resource-group ${ResourceGroupName} --query instanceView.statuses[1].[code] --output tsv)
-echo &quot;Wait until the VM is up&quot;
-count=0
-while true
-do
-	sleep 20
-	current_status=$(az vm get-instance-view --name ${Router_VmName} --resource-group ${ResourceGroupName} --query instanceView.statuses[1].[code] --output tsv)
-	((count+=1))
-	if [[ &quot;$current_status&quot; == &quot;PowerState/running&quot; ]]
-	then
-		break
-	fi
-    #if count=6 (wait 2 min) then exit the job with failure (some error with the VM that is not running)
-    if [[ $count == &quot;6&quot; ]]
-    then
-    	echo &quot;Failed to start the VM... exiting the build&quot;
-        exit 1
-    fi
-done
-echo &quot;Wait until VM is fully loaded&quot;
-sleep 60
-
-
-#run scripts on the new VMs
-
-
-
-
-
-##delete both VMs with all the resources
-#az resource delete --ids $(az resource list --tag Name=AzureArmCreateImage -otable --query &quot;[].id&quot; -otsv)
-
-##create managed disks from the new VHDS
-#az disk create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd
-#az disk create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd
-
-#create new image from the VMs
-az image create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source ${Configurator_VmName}
-az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${Router_VmName}
-
-#delete both VMs with all the resources
-az resource delete --ids $(az resource list --tag Name=AzureArmCreateImage -otable --query &quot;[].id&quot; -otsv)
+#azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+#azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 
 </command>
     </hudson.tasks.Shell>
