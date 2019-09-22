@@ -35,7 +35,6 @@ No build job. Only start the instance.</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -50,22 +49,10 @@ No build job. Only start the instance.</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting 	i-0ee10a9a4e0a642bc  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
-echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0ee10a9a4e0a642bc
-echo &quot;***********************************************************************************&quot;
 echo &quot;Starting i-0092f075ac1855c3a (Stateful DSP QA tests) IP: 172.16.134.132&quot;
 echo &quot;***********************************************************************************&quot;
 aws ec2 start-instances --instance-ids i-0092f075ac1855c3a
-echo &quot;***********************************************************************************&quot;
-echo &quot;starting 	i-0b0fee2721aebfe63 (Stateful DSP QA tests) IP: 172.16.134.133&quot;
-echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0b0fee2721aebfe63
-#new machine for  eliezer
-echo &quot;***********************************************************************************&quot;
-echo &quot;Starting 	i-0751218915f73b3b3 (Stateful DSP QA tests) IP: 172.16.134.150&quot;
-echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0751218915f73b3b3</command>
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
