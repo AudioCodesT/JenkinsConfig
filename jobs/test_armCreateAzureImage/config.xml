@@ -81,8 +81,8 @@ Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
 
 #get VMs IP Adress
-Get-VM -Name &quot;$Configurator_VmName&quot; | Select -ExpandProperty Networkadapters | Select IPAddresses
-Get-VM -Name &quot;$Router_VmName&quot; | Select -ExpandProperty Networkadapters | Select IPAddresses</command>
+$Configurator_VMIP=(Get-VM -Name $Configurator_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
+$Router_VMIP=(Get-VM -Name $Router_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]</command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.tasks.Shell>
       <command>#parameters for the build
