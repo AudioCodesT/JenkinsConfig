@@ -70,13 +70,19 @@ $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${
 
 #convert vhdx to vhd fixed
 Convert-VHD –Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
-
 Convert-VHD –Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
 
 #start a new VMs
-New-VM -Name &quot;$Configurator_VmName&quot; -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
+New-VM -Name &quot;$Configurator_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
+New-VM -Name &quot;$Router_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
 
-New-VM -Name &quot;$Router_VmName&quot; -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Router_vhd_name}.vhd</command>
+#start the new VMs
+Start-VM -name $Configurator_VmName
+Start-VM -name $Router_VmName
+
+#get VMs IP Adress
+Get-VM -Name &quot;$Configurator_VmName&quot; | Select -ExpandProperty Networkadapters | Select IPAddresses
+Get-VM -Name &quot;$Router_VmName&quot; | Select -ExpandProperty Networkadapters | Select IPAddresses</command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.tasks.Shell>
       <command>#parameters for the build
