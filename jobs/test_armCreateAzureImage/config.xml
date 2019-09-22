@@ -74,9 +74,9 @@ Convert-VHD –Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; –
 Convert-VHD –Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
 
 #start a new VMs
-New-VM -Name &quot;$Configurator_VmName&quot; -MemoryStartupBytes 1GB -VHDPath ${WORKSPACE}\${Configurator_vhd_name}.vhd
+New-VM -Name &quot;$Configurator_VmName&quot; -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
 
-New-VM -Name &quot;$Router_VmName&quot; -MemoryStartupBytes 1GB -VHDPath ${WORKSPACE}\${Router_vhd_name}.vhd</command>
+New-VM -Name &quot;$Router_VmName&quot; -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Router_vhd_name}.vhd</command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.tasks.Shell>
       <command>#parameters for the build
