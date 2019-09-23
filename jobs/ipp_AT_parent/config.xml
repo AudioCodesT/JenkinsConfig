@@ -490,7 +490,7 @@ echo ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change
 
 ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change  &gt; allChange.txt
 
-if grep -q change allChange.txt;
+if grep -q change allChange.txt; then
   cat allChange.txt
   rm -f allChange.txt
   echo Failed, Automation-Test string was not found ...
