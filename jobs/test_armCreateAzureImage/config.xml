@@ -86,7 +86,7 @@ $Configurator_vmIP=(Get-VM -Name $Configurator_VmName| Select -ExpandProperty Ne
 $Router_vmIP=(Get-VM -Name $Router_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
 
 
-Write-Output &quot;Configurator_vmIP=$Configurator_vmIP &gt; prop
+Write-Output &quot;Configurator_vmIP=$Configurator_vmIP&quot; &gt; prop
 Write-Output &quot;Router_vmIP=$Router_vmIP&quot; &gt;&gt; prop</command>
     </hudson.plugins.powershell.PowerShell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
