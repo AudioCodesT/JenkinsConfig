@@ -74,7 +74,7 @@ Convert-VHD –Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; –Destin
 
 #start a new VMs
 New-VM -Name &quot;$Configurator_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
-New-VM -Name &quot;$Router_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
+New-VM -Name &quot;$Router_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Router_vhd_name}.vhd
 
 #start the new VMs
 Start-VM -name $Configurator_VmName
