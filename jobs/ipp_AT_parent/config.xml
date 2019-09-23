@@ -495,7 +495,7 @@ if ! echo $ATlabelValue | grep -q Automation-Test; then
   echo gerrit does not work, execute manually the following:
   echo ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
---notify OWNER ----label $labelName=1 \
+--notify OWNER ??--label $labelName=1 \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
   exit 2
