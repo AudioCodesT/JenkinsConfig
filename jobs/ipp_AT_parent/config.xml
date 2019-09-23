@@ -483,21 +483,28 @@ change=`echo $REFSPEC | cut -d/ -f4`
 labelName=&quot;Automation-Test&quot;
 percent=100
 
-gerrit=$(ping gerrit -n 1 | grep &quot;Reply from&quot; | sed &apos;s!^.*from !!; s!:.*!!&apos;)
-echo gerrit ip address is $gerrit - do not use it, only for check DNS name
+ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
+rm -f $ATA_Home/$IMAGENAMES.txt
 
 echo ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change
 
 ATlabelValue=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A2 &apos;type: Automation-Test&apos;)
+echo return: $ATlabelValue
 if ! echo $ATlabelValue | grep -q Automation-Test; then
-  echo Failed, return: $ATlabelValue
-  score=-1
+  echo Failed, Automation-Test string was not found ...
+  echo gerrit does not work, execute manually the following:
+  echo ssh -p 29418 jenkins@gerrit gerrit review \
+--message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
+--notify OWNER (--label $labelName=1) \
+--tag &quot;&apos;Automation&apos;&quot; \
+$change,$newPS
+  exit 2
 else
   score=$(echo $ATlabelValue | sed &apos;s|.*value:||&apos;)
+  echo Score: $score
 fi
 
 if [ -z &quot;$score&quot; ]; then score=0; fi
-echo Score: $score
 
 if [ $score  = -1 ]; then
   labelGrade=&quot;&quot;
@@ -538,9 +545,6 @@ fi
 
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
-ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
-rm -f $ATA_Home/$IMAGENAMES.txt
-
 echo Send OK message to Gerrit - $change,$newPS,  $labelGrade
 ssh -p 29418 jenkins@gerrit gerrit review \
 --message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
@@ -549,15 +553,6 @@ ssh -p 29418 jenkins@gerrit gerrit review \
 $change,$newPS
 echo Finish give message
 
-if ! echo $gerrit | grep -q .; then
-  echo gerrit does not work, execute manually the following:
-  echo ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
---notify OWNER $labelGrade \
---tag &quot;&apos;Automation&apos;&quot; \
-$change,$newPS
-  exit 2
-fi
 date</command>
                         <unstableReturn>2</unstableReturn>
                       </hudson.tasks.Shell>
