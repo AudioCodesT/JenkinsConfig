@@ -83,7 +83,8 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 #azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 #run pyton scripts
-
+cd ..
+cd test_armCreateAzureImage
 python arm_azure_image_prepare.py $Configurator_vmIP
 python arm_azure_image_prepare.py $Router_vmIP
 
