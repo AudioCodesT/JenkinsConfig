@@ -94,7 +94,13 @@ Write-Output &quot;Router_vmIP=$Router_vmIP&quot; &gt;&gt; prop</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>#parameters for the build
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+##!c:\cygwin64\bin\bash --login -i
+set -e
+set -x
+
+cd $WORKSPACE
+#parameters for the build
 jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
 jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
 NEW_TAG_WithoutDots=${TAG//./}
@@ -114,27 +120,21 @@ ResourceGroupName=&quot;CI_Resource_Group&quot;
 conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
 router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
 #if it failed to download vhdx file will fail the build
-if [[ ! -e ARM-Conf_${TAG}.vhdx || ! -e ARM-Router_${TAG}.vhdx ]]
-then
-	echo &quot;Could not downloaded vhdx files, please create them and retry again&quot;
-    exit 1
-fi
 
-#convert the files from vhdx to vhd
-#qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Conf_${TAG}.vhdx ${WORKSPACE}/${Configurator_vhd_name}.vhd
-#qemu-img convert -f vhdx -O vpc -o subformat=fixed  ${WORKSPACE}/ARM-Router_${TAG}.vhdx ${WORKSPACE}/${Router_vhd_name}.vhd
-#VBoxManage clonehd &quot;${WORKSPACE}/ARM-Conf_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot;
-#VBoxManage clonehd &quot;${WORKSPACE}/ARM-Router_${TAG}.vhdx&quot; --format VHD --variant Fixed &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot;
 
 #connect to azure cli
-#az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-#export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
-#azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
+azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+
+#run pyton scripts
+
+python arm_azure_image_prepare.py $Configurator_vmIP
+python arm_azure_image_prepare.py $Router_vmIP
 
 #upload created vhds to storage
 #azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 #azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-
 </command>
     </hudson.tasks.Shell>
   </builders>
