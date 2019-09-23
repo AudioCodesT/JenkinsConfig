@@ -488,12 +488,12 @@ echo gerrit ip address is $gerrit - do not use it, only for check DNS name
 
 echo ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change
 
-ATlabelValue=$(ssh -p 29418 jenkins@$gerrit gerrit query --current-patch-set $change | grep -A3 &apos;type: Automation-Test&apos;)
+ATlabelValue=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change | grep -A2 &apos;type: Automation-Test&apos;)
 if ! echo $ATlabelValue | grep -q Automation-Test; then
   echo Failed, return: $ATlabelValue
   score=-1
 else
-  score=$(echo $ATlabelValue | grep value | cut -d: -f2)
+  score=$(echo $ATlabelValue | sed &apos;s|.*value:||&apos;)
 fi
 
 if [ -z &quot;$score&quot; ]; then score=0; fi
