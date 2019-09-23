@@ -263,12 +263,13 @@ except paramiko.ssh_exception.AuthenticationException:
 #make the build failed if one of the commands here failing
 sendwait(&quot;set -e&quot;)
 #download Linux Integration Services v4.2 for Hyper-V and Azure  for Configurator and Router VMS
-sendwait(&quot;curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gz&quot;)
+#sendwait(&quot;curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gz&quot;)
+sendwait(&quot;curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz)
 #wait for download will finish
 print(&quot;sleep 200&quot;)
 time.sleep(200)
 #extract to directory
-sendwait(&quot;tar -xvzf lis-rpms-4.2.8.tar.gz&quot;)
+sendwait(&quot;tar -xvzf lis-rpms-4.3.1-1.tar.gz&quot;)
 #wait to extracting the file will finish
 print(&quot;sleep 30&quot;)
 time.sleep(30)
@@ -500,7 +501,6 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter></artifactoryCombinationFilter>
       <multiConfProject>false</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
@@ -508,7 +508,7 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>root_username=root</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
