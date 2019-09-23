@@ -78,9 +78,9 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 
 
 #connect to azure cli
-az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
-azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+#az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+#export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
+#azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 #run pyton scripts
 
