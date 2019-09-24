@@ -164,7 +164,7 @@ fi
 if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
   BoardsList=&quot;445HD_IGS&quot;
   model=445
-  ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/master/$BuildRelease
+  ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 fi
 
 DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
