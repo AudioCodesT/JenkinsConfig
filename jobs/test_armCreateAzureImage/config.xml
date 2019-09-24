@@ -67,25 +67,26 @@ $Router_VmName=&quot;ArmRouter${TAG}&quot;
 $ResourceGroupName=&quot;CI_Resource_Group&quot;
 $conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
 $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
-
+Write-Output &quot;Converting VHDX to VHD&quot;
 #convert vhdx to vhd fixed
 Convert-VHD –Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
 Convert-VHD –Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
-
+Write-Output &quot;Creating 2 new VMs on hyper-v&quot;
 #start a new VMs
 New-VM -Name &quot;$Configurator_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
 New-VM -Name &quot;$Router_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 1GB -VHDPath $env:WORKSPACE\${Router_vhd_name}.vhd
-
+Write-Output &quot;starting the 2 VMs&quot;
 #start the new VMs
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
 #sleep 90 seconds
 Start-Sleep -s 90
+Write-Output &quot;Get VMs IP Address&quot;
 #get VMs IP Adress
 $Configurator_vmIP=(Get-VM -Name $Configurator_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
 $Router_vmIP=(Get-VM -Name $Router_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
 
-
+Write-Output &quot;writing IP of the VMS&quot;
 Write-Output &quot;Configurator_vmIP=$Configurator_vmIP&quot; &gt; prop
 Write-Output &quot;Router_vmIP=$Router_vmIP&quot; &gt;&gt; prop</command>
     </hudson.plugins.powershell.PowerShell>
