@@ -67,7 +67,7 @@ ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${T
 Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx&quot;
 Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx&quot;
 EOF
-#Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</command>
+#</command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>.\convertToVHD.ps1</command>
@@ -80,7 +80,7 @@ EOF
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>cc:ben.magriso@audiocodes.com</recipientList>
+      <recipientList>cc:Shuky.Riechard@audiocodes.com,cc:ben.magriso@audiocodes.com,Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
