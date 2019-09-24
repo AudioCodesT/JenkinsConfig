@@ -60,14 +60,11 @@ Set-Variable -Name &quot;Configurator_vhd_name&quot; -Value &quot;ARM-Conf_$env:
 Set-Variable -Name &quot;Configurator_VmName&quot; -Value &quot;ArmConf$env:TAG&quot;
 Set-Variable -Name &quot;Router_vhd_name&quot; -Value &quot;ARM-Router_$env:TAG&quot;
 Set-Variable -Name &quot;Router_VmName&quot; -Value &quot;ArmRouter$env:TAG&quot;
-Write-Output &quot;$Configurator_vhd_name&quot;
-Write-Output &quot;$Router_vhd_name&quot;
+
 Write-Output &quot;Converting VHDX to VHD&quot;
-
-
 #convert vhdx to vhd fixed
-Convert-VHD -Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
-Convert-VHD -Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
+Convert-VHD -Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
+Convert-VHD -Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
 Write-Output &quot;Creating 2 new VMs on hyper-v&quot;
 #start a new VMs
 New-VM -Name &quot;$Configurator_VmName&quot; -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath $env:WORKSPACE\${Configurator_vhd_name}.vhd
