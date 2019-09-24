@@ -127,7 +127,14 @@ echo &quot;cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Devi
 cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
 
-</command>
+echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
+VER=${NEWTAG}
+VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
+SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
+#sed  &quot;/^VER / s/******/${VER}/g&quot; ${CHIP_NAME}/Device/makefile
+#sed  &quot;/^VERSION / s/****/${VERSION}/g&quot; ${CHIP_NAME}/Device/makefile
+#sed  &quot;/^SUBVERSION / s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
+echo &quot;*******************************************************************************************&quot;</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
           <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
@@ -175,6 +182,35 @@ cd Gen5
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
+
+echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
+VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
+SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
+RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
+echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
+#sed  &quot;/#define VERSION/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed  &quot;/#define SUBVERSION/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed  &quot;/#define RELEASE_DATE/ s/****/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+echo &quot;update ${CHIP_NAME}/SoftHost/Src/VersionInfo.h&quot;
+#sed  &quot;/#define VERSION/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+#sed  &quot;/#define SUBVERSION/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+#sed  &quot;/#define RELEASE_DATE/ s/****/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+echo &quot;update ${CHIP_NAME}/SoftDsp/communicator_64/makefile&quot;
+#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+echo &quot;update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile&quot;
+#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+echo &quot;update ${CHIP_NAME}/SoftHost/communicator_64/makefile&quot;
+#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
+#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
+echo &quot;update ${CHIP_NAME}/SoftHost/Hpi_64/makefile&quot;
+#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+
+
+echo &quot;*******************************************************************************************&quot;
+
 
 #run all 4 make in parallel (SoftDsp and SoftHost)
 if [[ ${CHIP_NAME} == &quot;Intel&quot; ]]
@@ -225,6 +261,26 @@ git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git che
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
+
+
+
+echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
+VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
+SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
+RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
+echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
+#sed  &quot;/#define VERSION/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed  &quot;/#define SUBVERSION/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed  &quot;/#define RELEASE_DATE/ s/****/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+echo &quot;update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile&quot;
+#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+
+echo &quot;*******************************************************************************************&quot;
+
+
+
+
 
 
 #******************************temporary workaround to copy os module from private/GRX**************************************
