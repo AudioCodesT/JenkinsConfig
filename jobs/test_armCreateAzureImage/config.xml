@@ -80,6 +80,7 @@ Write-Output &quot;starting the 2 VMs&quot;
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
 #sleep 90 seconds
+Write-Output &quot;sleep 120&quot;
 Start-Sleep -s 120
 Write-Output &quot;Get VMs IP Address&quot;
 #get VMs IP Adress
