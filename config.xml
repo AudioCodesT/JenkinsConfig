@@ -1253,7 +1253,6 @@
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
     <com.microsoft.azure.vmagent.AzureVMCloud plugin="azure-vm-agents@1.1.1">
-      <actions/>
       <name>azure_VM</name>
       <cloudName>azure_VM</cloudName>
       <credentialsId>JenkinsCredsForAzure</credentialsId>
@@ -1332,13 +1331,13 @@ sudo yum install -y git-2.18.0</initScript>
       <approximateVirtualMachineCount>0</approximateVirtualMachineCount>
     </com.microsoft.azure.vmagent.AzureVMCloud>
     <hudson.plugins.spotinst.cloud.AzureSpotinstCloud plugin="spotinst@2.0.16">
-      <name>sig-42fb855e</name>
+      <name>sig-79d01602</name>
       <accountId>act-96d87a11</accountId>
-      <groupId>sig-42fb855e</groupId>
+      <groupId>sig-79d01602</groupId>
       <pendingInstances/>
       <labelString>azure_arm_slave</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
-      <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
+      <workspaceDir>c:\jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
         <hudson.model.labels.LabelAtom>azure_arm_slave</hudson.model.labels.LabelAtom>
       </labelSet>
