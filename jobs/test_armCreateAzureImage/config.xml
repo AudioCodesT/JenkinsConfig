@@ -99,6 +99,31 @@ Write-Output &quot;writing IP of the VMS&quot;
     <hudson.tasks.Shell>
       <command>#!C:\Program Files\Git\bin\bash --login -i
 ##!c:\cygwin64\bin\bash --login -i
+set -ex
+
+cd $WORKSPACE
+
+#run pyton scripts to prepare arm to azure image
+python arm_azure_image_prepare.py $Configurator_vmIP
+python arm_azure_image_prepare.py $Router_vmIP
+
+
+</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>$TAG=&quot;$env:TAG&quot;
+$Configurator_VmName=&quot;ArmConf${TAG}&quot;
+$Router_VmName=&quot;ArmRouter${TAG}&quot;
+
+Save-VM -Name &quot;$Configurator_VmName&quot;
+Save-VM -Name &quot;$Router_VmName&quot; 
+
+Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
+Remove-VM -Name &quot;$Router_VmName&quot; -Force</command>
+    </hudson.plugins.powershell.PowerShell>
+    <hudson.tasks.Shell>
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+##!c:\cygwin64\bin\bash --login -i
 set -e
 set -x
 
@@ -126,9 +151,6 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 #if it failed to download vhdx file will fail the build
 
 
-#run pyton scripts
-python arm_azure_image_prepare.py $Configurator_vmIP
-python arm_azure_image_prepare.py $Router_vmIP
 
 
 #connect to azure cli
