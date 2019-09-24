@@ -34,7 +34,7 @@
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
           <description></description>
-          <defaultValue>3.4.0</defaultValue>
+          <defaultValue>3.4.1</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -286,7 +286,7 @@ ServerType=IGS</properties>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
