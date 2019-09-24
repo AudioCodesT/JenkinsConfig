@@ -126,20 +126,40 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 #if it failed to download vhdx file will fail the build
 
 
+#run pyton scripts
+python arm_azure_image_prepare.py $Configurator_vmIP
+python arm_azure_image_prepare.py $Router_vmIP
+
+
 #connect to azure cli
 #az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
 #export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
 #azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
-#run pyton scripts
-
-python arm_azure_image_prepare.py $Configurator_vmIP
-python arm_azure_image_prepare.py $Router_vmIP
-
 #upload created vhds to storage
 #azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 #azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-</command>
+router_disk_id
+conf_disk_id
+az disk create \
+--resource-group ${ResourceGroupName} \
+--name ${} \
+-- source ${conf_base_image}
+
+az disk create \
+--resource-group ${ResourceGroupName} \
+--name ${} \
+-- source ${router_base_image}
+
+az image create \
+--resource-group ${ResourceGroupName} \
+--name ${} \
+-- source ${conf_disk_id}
+
+az image create \
+--resource-group ${ResourceGroupName} \
+--name ${} \
+-- source ${router_disk_id}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
