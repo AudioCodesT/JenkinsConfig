@@ -154,33 +154,35 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 
 
 #connect to azure cli
-#az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-#export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
-#azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
+azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 #upload created vhds to storage
-#azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-#azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-router_disk_id
-conf_disk_id
-az disk create \
---resource-group ${ResourceGroupName} \
---name ${} \
--- source ${conf_base_image}
+azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 
-az disk create \
+
+
+
+conf_disk_id=$(az disk create \
 --resource-group ${ResourceGroupName} \
---name ${} \
--- source ${router_base_image}
+--name ${Configurator_vhd_name} \
+-- source ${conf_base_image} | grep id | cut -d&apos;:&apos; -f2)
+
+router_disk_id=$(az disk create \
+--resource-group ${ResourceGroupName} \
+--name ${Router_vhd_name} \
+-- source ${router_base_image} | grep id | cut -d&apos;:&apos; -f2)
 
 az image create \
 --resource-group ${ResourceGroupName} \
---name ${} \
+--name $Configurator_vhd_name{} \
 -- source ${conf_disk_id}
 
 az image create \
 --resource-group ${ResourceGroupName} \
---name ${} \
+--name ${Router_vhd_name} \
 -- source ${router_disk_id}</command>
     </hudson.tasks.Shell>
   </builders>
