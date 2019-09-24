@@ -69,6 +69,9 @@ $conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${co
 $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
 Write-Output &quot;Converting VHDX to VHD&quot;
 #convert vhdx to vhd fixed
+Write-Output &quot;$env:WORKSPACE&quot;
+Write-Output &quot;$env:TAG&quot;
+Write-Output &quot;$Configurator_vhd_name&quot;
 Convert-VHD –Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
 Convert-VHD –Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; –DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
 Write-Output &quot;Creating 2 new VMs on hyper-v&quot;
