@@ -122,13 +122,13 @@ fi
 
 ImageNames=&quot;&quot;
 # Go over all cmp files in the Artifactory and copy them to z: ($Target)
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
+if [ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; ]; then
   ImagesList=&quot;445HD_IGS C450HD_SFB 450HD_SFB 445HD_SFB&quot;
   MODEL=445
   
-#else if [[  &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
-# ImagesList=&quot;445HD C450HD 450HD 445HD&quot;
-# MODEL=445
+else if [  &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]; then
+  ImagesList=&quot;445HD C450HD 450HD&quot;
+  MODEL=445
 #else if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
 #  ImagesList=&quot;450HD&quot;
 #  MODEL=450
@@ -136,7 +136,7 @@ else
   ImagesList=&quot;C450HD 450HD 445HD 440HD 405HD&quot;
   MODEL=450
 #fi; fi
-fi
+fi; fi
 
 echo MODEL=$MODEL &gt;&gt; ${WORKSPACE}/properties.txt
 
