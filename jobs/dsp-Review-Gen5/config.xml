@@ -435,7 +435,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
 NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
 echo NEWTAG=${NEWTAG}</script>
       <scriptType>unixScript</scriptType>
-      <runOnlyOnParent>false</runOnlyOnParent>
+      <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
     </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
