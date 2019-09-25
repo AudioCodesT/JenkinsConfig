@@ -170,22 +170,23 @@ azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_
 conf_disk_id=$(az disk create \
 --resource-group ${ResourceGroupName} \
 --name ${Configurator_vhd_name} \
--- source ${conf_base_image} | grep id | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1)
+--source ${conf_base_image} | grep id | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1)
 
 router_disk_id=$(az disk create \
 --resource-group ${ResourceGroupName} \
 --name ${Router_vhd_name} \
--- source ${router_base_image} | grep id | cut -d&apos;:&apos; -f2| cut -d&apos;,&apos; -f1)
+--source ${router_base_image} | grep id | cut -d&apos;:&apos; -f2| cut -d&apos;,&apos; -f1)
 
 az image create \
 --resource-group ${ResourceGroupName} \
 --name $Configurator_vhd_name{} \
--- source ${conf_disk_id}
-
+--source ${conf_disk_id} \
+--os-type linux
 az image create \
 --resource-group ${ResourceGroupName} \
 --name ${Router_vhd_name} \
--- source ${router_disk_id}</command>
+--source ${router_disk_id} \
+--os-type linux</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
