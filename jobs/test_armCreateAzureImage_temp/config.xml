@@ -87,7 +87,7 @@ cd ..
 cd test_armCreateAzureImage
 mv ${WORKSPACE}\\*.py . || echo failed
 mv ${WORKSPACE}\\arm_azure_image_prepare_test.py .
-#python arm_azure_image_prepare_test.py $Configurator_vmIP
+python arm_azure_image_prepare.py $Configurator_vmIP
 python arm_azure_image_prepare.py $Router_vmIP
 
 #upload created vhds to storage
