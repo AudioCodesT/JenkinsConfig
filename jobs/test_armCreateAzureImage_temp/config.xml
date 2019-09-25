@@ -85,7 +85,8 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 #run pyton scripts
 cd ..
 cd test_armCreateAzureImage
-mv ${WORKSPACE}/*.py .
+mv ${WORKSPACE}\\*.py . || echo failed
+mv ${WORKSPACE}\\arm_azure_image_prepare_test.py .
 #python arm_azure_image_prepare_test.py $Configurator_vmIP
 python arm_azure_image_prepare_test.py $Router_vmIP
 
