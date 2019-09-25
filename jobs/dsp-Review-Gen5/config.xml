@@ -280,6 +280,7 @@ NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
 RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
+RELEASE_DATE=$(expr $RELEASE_DATE + 0)
 echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
 sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
 sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
@@ -357,6 +358,7 @@ NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
 RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
+RELEASE_DATE=$(expr $RELEASE_DATE + 0)
 echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
 sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
 sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
