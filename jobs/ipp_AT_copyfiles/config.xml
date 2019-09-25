@@ -125,6 +125,10 @@ ImageNames=&quot;&quot;
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
   ImagesList=&quot;445HD_IGS C450HD_SFB 450HD_SFB 445HD_SFB&quot;
   MODEL=445
+  
+#else if [[  &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]; then
+# ImagesList=&quot;445HD C450HD 450HD 445HD&quot;
+# MODEL=445
 #else if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;device_manager&quot; ]]; then
 #  ImagesList=&quot;450HD&quot;
 #  MODEL=450
@@ -312,7 +316,7 @@ EMAIL=${EMAIL}
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
