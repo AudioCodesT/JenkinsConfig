@@ -214,6 +214,7 @@ cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EX
 
 
 echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
+NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
 VER=${NEWTAG}
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
@@ -275,6 +276,7 @@ sh copyModules.sh ${CHIP_NAME}
 
 
 echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
+NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
 RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
@@ -351,6 +353,7 @@ sh copyModules.sh ${CHIP_NAME}
 
 
 echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
+NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
 RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
@@ -430,14 +433,6 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>#!/bin/sh
-NEWTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
-echo NEWTAG=${NEWTAG}</script>
-      <scriptType>unixScript</scriptType>
-      <runOnlyOnParent>true</runOnlyOnParent>
-      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
-    </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
