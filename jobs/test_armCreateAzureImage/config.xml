@@ -98,12 +98,19 @@ set -ex
 cd $WORKSPACE
 
 #run pyton scripts to prepare arm to azure image
+#python arm_azure_image_prepare.py $Configurator_vmIP
+#python arm_azure_image_prepare.py $Router_vmIP
+
 python arm_azure_image_prepare_test.py $Configurator_vmIP before_reboot
-python remote_reboot.py $Configurator_vmIP
-python arm_azure_image_prepare_test.py $Configurator_vmIP after_reboot
 python arm_azure_image_prepare_test.py $Router_vmIP before_reboot
+
+python remote_reboot.py $Configurator_vmIP
 python remote_reboot.py $Router_vmIP
+
+python arm_azure_image_prepare_test.py $Configurator_vmIP after_reboot
 python arm_azure_image_prepare_test.py $Router_vmIP after_reboot
+
+
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
