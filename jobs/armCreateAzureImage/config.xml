@@ -35,7 +35,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -115,8 +114,6 @@ python arm_azure_image_prepare_test.py $Router_vmIP after_reboot
 $Configurator_VmName=&quot;ArmConf${TAG}&quot;
 $Router_VmName=&quot;ArmRouter${TAG}&quot;
 
-Save-VM -Name &quot;$Configurator_VmName&quot;
-Save-VM -Name &quot;$Router_VmName&quot; 
 
 Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
 Remove-VM -Name &quot;$Router_VmName&quot; -Force</command>
@@ -169,22 +166,24 @@ conf_disk_id=$(az disk create \
 --resource-group ${ResourceGroupName} \
 --name ${Configurator_vhd_name} \
 --source ${conf_base_image} | grep id | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1)
+conf_disk_id=$(echo $conf_disk_id | tr -d &apos;&quot;&apos;)
 
 router_disk_id=$(az disk create \
 --resource-group ${ResourceGroupName} \
 --name ${Router_vhd_name} \
 --source ${router_base_image} | grep id | cut -d&apos;:&apos; -f2| cut -d&apos;,&apos; -f1)
+router_disk_id=$(echo $router_disk_id | tr -d &apos;&quot;&apos;)
 
 az image create \
 --resource-group ${ResourceGroupName} \
 --name $Configurator_vhd_name{} \
 --source ${conf_disk_id} \
---os-type linux
+--os-type Linux
 az image create \
 --resource-group ${ResourceGroupName} \
 --name ${Router_vhd_name} \
 --source ${router_disk_id} \
---os-type linux</command>
+--os-type Linux</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
