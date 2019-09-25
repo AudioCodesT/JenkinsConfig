@@ -131,9 +131,9 @@ echo &quot;******************* change ${CHIP_NAME} makefile version number******
 VER=${NEWTAG}
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
-#sed  &quot;/^VER / s/******/${VER}/g&quot; ${CHIP_NAME}/Device/makefile
-#sed  &quot;/^VERSION / s/****/${VERSION}/g&quot; ${CHIP_NAME}/Device/makefile
-#sed  &quot;/^SUBVERSION / s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
+#sed -i &quot;s/%major.minor%/${VER}/g&quot; ${CHIP_NAME}/Device/makefile
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/Device/makefile
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
 echo &quot;*******************************************************************************************&quot;</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
@@ -188,25 +188,25 @@ VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
 RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
 echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
-#sed  &quot;/#define VERSION/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-#sed  &quot;/#define SUBVERSION/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-#sed  &quot;/#define RELEASE_DATE/ s/****/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed -i &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
 echo &quot;update ${CHIP_NAME}/SoftHost/Src/VersionInfo.h&quot;
-#sed  &quot;/#define VERSION/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
-#sed  &quot;/#define SUBVERSION/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
-#sed  &quot;/#define RELEASE_DATE/ s/****/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+#sed -i &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
 echo &quot;update ${CHIP_NAME}/SoftDsp/communicator_64/makefile&quot;
-#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
-#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
 echo &quot;update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile&quot;
-#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
-#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
 echo &quot;update ${CHIP_NAME}/SoftHost/communicator_64/makefile&quot;
-#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
-#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
 echo &quot;update ${CHIP_NAME}/SoftHost/Hpi_64/makefile&quot;
-#sed  &quot;/VER_NUM :=/ s/*******/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
-#sed  &quot;/SUB_VER_NUM :=/ s/*****/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
 echo &quot;*******************************************************************************************&quot;
 
 
@@ -267,12 +267,12 @@ VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
 SUBVERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f2)
 RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
 echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
-#sed  &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-#sed  &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-#sed  &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+#sed -i &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
 echo &quot;update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile&quot;
-#sed  &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
-#sed  &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+#sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+#sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
 echo &quot;*******************************************************************************************&quot;
 
 
