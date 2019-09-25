@@ -85,6 +85,7 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 #run pyton scripts
 cd ..
 cd test_armCreateAzureImage
+mv ${WORKSPACE}/*.py .
 #python arm_azure_image_prepare_test.py $Configurator_vmIP
 python arm_azure_image_prepare_test.py $Router_vmIP
 
@@ -139,16 +140,6 @@ python arm_azure_image_prepare_test.py $Router_vmIP
       <downloadSpec>
         <spec>{
     &quot;files&quot;: [
-        {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.vhdx&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
-        },
-        {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.vhdx&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
-        },
         {
             &quot;pattern&quot;: &quot;Devops/Tools/Azure/arm/*.py&quot;,
             &quot;target&quot;: &quot;${workspace}/&quot;,
