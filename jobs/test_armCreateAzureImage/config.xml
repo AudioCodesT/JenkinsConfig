@@ -62,18 +62,15 @@ Set-Variable -Name &quot;Router_vhd_name&quot; -Value &quot;ARM-Router_$env:TAG&
 Set-Variable -Name &quot;Router_VmName&quot; -Value &quot;ArmRouter$env:TAG&quot;
 
 Write-Output &quot;Converting VHDX to VHD&quot;
-#convert vhdx to vhd fixed
-Convert-VHD -Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
-Convert-VHD -Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
+Convert-VHD -Path $env:WORKSPACE\${Configurator_vhd_name}.vhdx -DestinationPath $env:WORKSPACE\${Configurator_vhd_name}.vhd -VHDType Fixed
+Write-Output &quot;After First Convert&quot;
+Convert-VHD -Path $env:WORKSPACE\${Router_vhd_name}.vhdx -DestinationPath $env:WORKSPACE\${Router_vhd_name}.vhd -VHDType Fixed
 Write-Output &quot;Creating 2 new VMs on hyper-v&quot;
-#start a new VMs
 New-VM -Name &quot;${Configurator_VmName}&quot; -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot;
 New-VM -Name &quot;${Router_VmName}&quot; -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot;
 Write-Output &quot;starting the 2 VMs&quot;
-#start the new VMs
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
-#sleep 90 seconds
 Write-Output &quot;sleep 120&quot;
 Start-Sleep -s 120
 Write-Output &quot;Get VMs IP Address&quot;
