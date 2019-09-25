@@ -54,8 +54,8 @@ set -x
 
 cd $WORKSPACE
 #parameters for the build
-Configurator_vmIP=&quot;192.168.0.108&quot;
-Router_vmIP=&quot;192.168.0.109&quot;
+Configurator_vmIP=&quot;192.168.0.100&quot;
+Router_vmIP=&quot;192.168.0.101&quot;
 jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
 jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
 NEW_TAG_WithoutDots=${TAG//./}
@@ -85,8 +85,8 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 #run pyton scripts
 cd ..
 cd test_armCreateAzureImage
-#python arm_azure_image_prepare.py $Configurator_vmIP
-python arm_azure_image_prepare.py $Router_vmIP
+#python arm_azure_image_prepare_test.py $Configurator_vmIP
+python arm_azure_image_prepare_test.py $Router_vmIP
 
 #upload created vhds to storage
 #azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
@@ -103,6 +103,76 @@ python arm_azure_image_prepare.py $Router_vmIP
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>true</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.vhdx&quot;,
+            &quot;target&quot;: &quot;${workspace}/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.vhdx&quot;,
+            &quot;target&quot;: &quot;${workspace}/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;Devops/Tools/Azure/arm/*.py&quot;,
+            &quot;target&quot;: &quot;${workspace}/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        }
+    ]
+}</spec>
+      </downloadSpec>
+      <deployPattern></deployPattern>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
