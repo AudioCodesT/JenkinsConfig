@@ -114,6 +114,8 @@ sleep 60
 $Configurator_VmName=&quot;ArmConf${TAG}&quot;
 $Router_VmName=&quot;ArmRouter${TAG}&quot;
 
+
+
 Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
 Stop-VM -Name &quot;$Router_VmName&quot; -Force
 
