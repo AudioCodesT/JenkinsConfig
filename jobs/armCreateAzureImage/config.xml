@@ -178,7 +178,7 @@ router_disk_id=$(echo $router_disk_id | tr -d &apos;&quot;&apos;)
 
 az image create \
 --resource-group ${ResourceGroupName} \
---name $Configurator_vhd_name{} \
+--name $Configurator_vhd_name \
 --source ${conf_disk_id} \
 --os-type Linux
 az image create \
