@@ -100,12 +100,14 @@ cd $WORKSPACE
 
 python arm_azure_image_prepare_test.py $Configurator_vmIP before_reboot
 python remote_reboot.py $Configurator_vmIP
+sleep 30
 python arm_azure_image_prepare_test.py $Configurator_vmIP after_reboot
-
+sleep 30
 python arm_azure_image_prepare_test.py $Router_vmIP before_reboot
 python remote_reboot.py $Router_vmIP
+sleep 30
 python arm_azure_image_prepare_test.py $Router_vmIP after_reboot
-
+sleep 30
 
 </command>
     </hudson.tasks.Shell>
