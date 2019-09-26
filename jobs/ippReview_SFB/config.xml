@@ -267,7 +267,7 @@ if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRA
 	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
     exit 0
 fi
-
+git status
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
 #**********************************************************************************************
 #***********************  ***************************************************
