@@ -69,6 +69,7 @@ $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${
 
 Write-Output &quot;login to az and azcopy&quot;
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+[Environment]::SetEnvironmentVariable(&quot;AZCOPY_SPA_CLIENT_SECRET&quot;, &quot;${jenkins_secret_key}&quot; ,&quot;Machine&quot;)
 $env.AZCOPY_SPA_CLIENT_SECRET=&quot;${jenkins_secret_key}&quot;
 azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}</command>
     </hudson.plugins.powershell.PowerShell>
