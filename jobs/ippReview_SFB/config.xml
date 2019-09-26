@@ -277,6 +277,8 @@ then
     git submodule foreach git clean -fdx || echo &quot;failed&quot;
 	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+    git submodule foreach git reset --hard HEAD
+	git submodule update
 fi
 #**********************************************************************************************
 #***********************  ***************************************************
