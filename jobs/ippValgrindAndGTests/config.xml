@@ -270,7 +270,9 @@ sudo rm -rf build.450HD__SIM/GTestLogs</command>
           <EscalateStatus>true</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
           <script>#!/bin/sh&#xd;
-ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}</script>
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}&#xd;
+cd ${WORKSPACE}&#xd;
+sudo rm -rf build.450HD__SIM/GTestLogs</script>
         </hudson.plugins.postbuildtask.TaskProperties>
         <hudson.plugins.postbuildtask.TaskProperties>
           <logTexts>
@@ -282,6 +284,8 @@ ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRI
           <EscalateStatus>true</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
           <script>#!/bin/sh&#xd;
+cd ${WORKSPACE}&#xd;
+sudo rm -rf build.450HD__SIM/GTestLogs&#xd;
 exit 1</script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
