@@ -162,7 +162,7 @@ else BoardsList=&quot;440HD 430HD 405HD C450HD 450HD 445HD &quot;
 fi
 
 if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
-  BoardsList=&quot;445HD_IGS&quot;
+  BoardsList=&quot;445HD&quot;
   model=445
   ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 fi
@@ -222,11 +222,7 @@ date
 BUILD_ID=dontKillMe
 export $BUILD_ID
 
-if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then
-  modelImage=UC${model}HD_IGS_${LASTBL}.img
-else
-  modelImage=UC${model}HD_${LASTBL}.img
-fi
+modelImage=UC${model}HD_${LASTBL}.img
 
 echo Check if file z:/$modelImage
 if [ -f z:/$modelImage ]; then
