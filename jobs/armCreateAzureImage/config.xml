@@ -113,7 +113,7 @@ sleep 60
       <command>$TAG=&quot;$env:TAG&quot;
 $Configurator_VmName=&quot;ArmConf${TAG}&quot;
 $Router_VmName=&quot;ArmRouter${TAG}&quot;
-
+$jenkins_secret_key=$env:jenkins_secret_key
 $jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
 $jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
 $admin_username=&quot;acarm&quot;
@@ -137,7 +137,7 @@ Remove-VM -Name &quot;$Router_VmName&quot; -Force
 
 Write-Output &quot;login to az and azcopy&quot;
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-$env.AZCOPY_SPA_CLIENT_SECRET = &quot;${jenkins_secret_key}&quot;
+$env.AZCOPY_SPA_CLIENT_SECRET=&quot;${jenkins_secret_key}&quot;
 azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 Write-Output &quot;copy to azure storage&quot;
