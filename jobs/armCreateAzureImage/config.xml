@@ -114,13 +114,62 @@ sleep 60
 $Configurator_VmName=&quot;ArmConf${TAG}&quot;
 $Router_VmName=&quot;ArmRouter${TAG}&quot;
 
-
-
+$jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
+$jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
+$admin_username=&quot;acarm&quot;
+$container_name=&quot;vhds&quot;
+$VmSize=&quot;Standard_A2_v2&quot;
+$vhd_storage_account=&quot;ciresourcegroupstorage&quot;
+$subnet=&quot;Net_172.16.100.0&quot;
+$vnet_name=&quot;CI_Resource_Group&quot;
+$security_group=&quot;createOvocImageSG&quot;
+$Configurator_vhd_name=&quot;ARM-Conf_${TAG}&quot;
+$Router_vhd_name=&quot;ARM-Router_${TAG}&quot;
+$ResourceGroupName=&quot;CI_Resource_Group&quot;
+$conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
+$router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
+Write-Output &quot;Stop VMs&quot;
 Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
 Stop-VM -Name &quot;$Router_VmName&quot; -Force
-
+Write-Output &quot;Delete VMs&quot;
 Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
-Remove-VM -Name &quot;$Router_VmName&quot; -Force</command>
+Remove-VM -Name &quot;$Router_VmName&quot; -Force
+
+Write-Output &quot;login to az and azcopy&quot;
+az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+$env.AZCOPY_SPA_CLIENT_SECRET = &quot;${jenkins_secret_key}&quot;
+azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+
+Write-Output &quot;copy to azure storage&quot;
+azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+
+Write-Output &quot;create managed disk&quot;
+$conf_disk_id=(az disk create \
+--resource-group ${ResourceGroupName} \
+--name ${Configurator_vhd_name} \
+--source ${conf_base_image} --query &apos;id&apos; -o json)
+
+$router_disk_id=$(az disk create \
+--resource-group ${ResourceGroupName} \
+--name ${Router_vhd_name} \
+--source ${router_base_image} --query &apos;id&apos; -o json)
+
+
+Write-Output &quot;Create Image from managed disk&quot;
+
+az image create \
+--resource-group ${ResourceGroupName} \
+--name $Configurator_vhd_name \
+--source ${conf_disk_id} \
+--os-type Linux
+
+az image create \
+--resource-group ${ResourceGroupName} \
+--name ${Router_vhd_name} \
+--source ${router_disk_id} \
+--os-type Linux
+</command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.tasks.Shell>
       <command>#!C:\Program Files\Git\bin\bash --login -i
@@ -133,8 +182,6 @@ cd $WORKSPACE
 
 jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
 jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
-NEW_TAG_WithoutDots=${TAG//./}
-target_container_name=&quot;arm${NEW_TAG_WithoutDots}&quot;
 admin_username=&quot;acarm&quot;
 container_name=&quot;vhds&quot;
 VmSize=&quot;Standard_A2_v2&quot;
@@ -155,39 +202,39 @@ router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${c
 
 
 #connect to azure cli
-az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
-azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
+#az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
+#export AZCOPY_SPA_CLIENT_SECRET=${jenkins_secret_key}
+#azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 #upload created vhds to storage
-azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+#azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+#azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 
 
 
 
-conf_disk_id=$(az disk create \
---resource-group ${ResourceGroupName} \
---name ${Configurator_vhd_name} \
---source ${conf_base_image} | grep id | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1)
-conf_disk_id=$(echo $conf_disk_id | tr -d &apos;&quot;&apos;| tr -d &quot;\n\r&quot;)
+#conf_disk_id=$(az disk create \
+#--resource-group ${ResourceGroupName} \
+#--name ${Configurator_vhd_name} \
+#--source ${conf_base_image} | grep id | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1)
+#conf_disk_id=$(echo $conf_disk_id | tr -d &apos;&quot;&apos;| tr -d &quot;\n\r&quot;)
 
-router_disk_id=$(az disk create \
---resource-group ${ResourceGroupName} \
---name ${Router_vhd_name} \
---source ${router_base_image} | grep id | cut -d&apos;:&apos; -f2| cut -d&apos;,&apos; -f1)
-router_disk_id=$(echo $router_disk_id | tr -d &apos;&quot;&apos; | tr -d &quot;\n\r&quot;)
+#router_disk_id=$(az disk create \
+#--resource-group ${ResourceGroupName} \
+#--name ${Router_vhd_name} \
+#--source ${router_base_image} | grep id | cut -d&apos;:&apos; -f2| cut -d&apos;,&apos; -f1)
+#router_disk_id=$(echo $router_disk_id | tr -d &apos;&quot;&apos; | tr -d &quot;\n\r&quot;)
 
-az image create \
---resource-group ${ResourceGroupName} \
---name $Configurator_vhd_name \
---source ${conf_disk_id} \
---os-type Linux
-az image create \
---resource-group ${ResourceGroupName} \
---name ${Router_vhd_name} \
---source ${router_disk_id} \
---os-type Linux</command>
+#az image create \
+#--resource-group ${ResourceGroupName} \
+#--name $Configurator_vhd_name \
+#--source ${conf_disk_id} \
+#--os-type Linux
+#az image create \
+#--resource-group ${ResourceGroupName} \
+#--name ${Router_vhd_name} \
+#--source ${router_disk_id} \
+#--os-type Linux</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
