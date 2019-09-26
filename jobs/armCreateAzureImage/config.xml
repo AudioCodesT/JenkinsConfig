@@ -145,30 +145,12 @@ azcopy copy &quot;${WORKSPACE}/${Configurator_vhd_name}.vhd&quot; &quot;https://
 azcopy copy &quot;${WORKSPACE}/${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
 
 Write-Output &quot;create managed disk&quot;
-$conf_disk_id=(az disk create \
---resource-group ${ResourceGroupName} \
---name ${Configurator_vhd_name} \
---source ${conf_base_image} --query &apos;id&apos; -o json)
-
-$router_disk_id=$(az disk create \
---resource-group ${ResourceGroupName} \
---name ${Router_vhd_name} \
---source ${router_base_image} --query &apos;id&apos; -o json)
-
+$conf_disk_id=(az disk create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source ${conf_base_image} --query &apos;id&apos; -o json)
+$router_disk_id=$(az disk create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_base_image} --query &apos;id&apos; -o json)
 
 Write-Output &quot;Create Image from managed disk&quot;
-
-az image create \
---resource-group ${ResourceGroupName} \
---name $Configurator_vhd_name \
---source ${conf_disk_id} \
---os-type Linux
-
-az image create \
---resource-group ${ResourceGroupName} \
---name ${Router_vhd_name} \
---source ${router_disk_id} \
---os-type Linux
+az image create --resource-group ${ResourceGroupName} --name $Configurator_vhd_name --source ${conf_disk_id} --os-type Linux
+az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_disk_id} --os-type Linux
 </command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.tasks.Shell>
