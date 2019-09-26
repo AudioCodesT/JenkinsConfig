@@ -65,12 +65,7 @@ $Router_vhd_name=&quot;ARM-Router_${TAG}&quot;
 $ResourceGroupName=&quot;CI_Resource_Group&quot;
 $conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
 $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
-Write-Output &quot;Stop VMs&quot;
-Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
-Stop-VM -Name &quot;$Router_VmName&quot; -Force
-Write-Output &quot;Delete VMs&quot;
-Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
-Remove-VM -Name &quot;$Router_VmName&quot; -Force
+
 
 Write-Output &quot;login to az and azcopy&quot;
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
