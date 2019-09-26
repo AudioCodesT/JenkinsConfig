@@ -100,14 +100,12 @@ cd $WORKSPACE
 
 python arm_azure_image_prepare_test.py $Configurator_vmIP before_reboot
 python remote_reboot.py $Configurator_vmIP
-sleep 30
 python arm_azure_image_prepare_test.py $Configurator_vmIP after_reboot
-sleep 30
+sleep 60
 python arm_azure_image_prepare_test.py $Router_vmIP before_reboot
 python remote_reboot.py $Router_vmIP
-sleep 30
 python arm_azure_image_prepare_test.py $Router_vmIP after_reboot
-sleep 30
+sleep 60
 
 </command>
     </hudson.tasks.Shell>
@@ -116,6 +114,8 @@ sleep 30
 $Configurator_VmName=&quot;ArmConf${TAG}&quot;
 $Router_VmName=&quot;ArmRouter${TAG}&quot;
 
+Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
+Stop-VM -Name &quot;$Router_VmName&quot; -Force
 
 Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
 Remove-VM -Name &quot;$Router_VmName&quot; -Force</command>
