@@ -56,7 +56,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -178,7 +178,7 @@ fi
 
 #**********************************************************************************************
 #***********************  ***************************************************
-if [[ &quot;$GERRIT_REFSPEC&quot; =~ &quot;refs/changes/33/30933&quot; || &quot;$BUILD_BRANCH&quot; =~ &quot;feature/lib_submodule&quot; ]]
+if [[ &quot;$BUILD_BRANCH&quot; =~ &quot;master&quot; || &quot;$BUILD_BRANCH&quot; =~ &quot;feature/lib_submodule&quot; ]]
 then
 	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
@@ -357,7 +357,7 @@ ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_V
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
