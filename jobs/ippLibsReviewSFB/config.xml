@@ -147,22 +147,11 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     <hudson.tasks.Shell>
       <command>User=&quot;$artifactory_user:$artifactory_password&quot;
 GERRIT_BRANCH=${LIB_BRANCH}
-#if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
-#if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-    	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-fi
 
-#**********************************************************************************************
-#*********************** temporary branch ***************************************************
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;testBranch&quot; ]]
-then
-	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-fi
-#**********************************************************************************************
-#*********************** temporary branch ***************************************************
+git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
+git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+
+
 
 
 
@@ -268,7 +257,7 @@ mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
       <info>
         <propertiesContent>artifactory_user=admin
 jenkins_user=jenkins</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
