@@ -168,7 +168,7 @@ echo ------------------------------ GTEST RUN_SCRIPT ---------------------------
 
 
 echo &quot;****************************************************TEMP****************************************************&quot;
-if [[ &quot;$GERRIT_BRANCH&quot; =~ &quot;master&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
 then
 	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
