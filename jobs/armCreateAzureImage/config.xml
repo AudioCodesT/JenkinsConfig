@@ -47,6 +47,12 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>#first time perform a restart to the computer
+if(&quot;$env:NAGINATOR_COUNT&quot;) {
+Restart-Computer
+}</command>
+    </hudson.plugins.powershell.PowerShell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>#parameters for the build
 #$TAG=&quot;$env:TAG&quot;
 #$Configurator_vhd_name=&quot;ARM-Conf_$env:TAG&quot;
