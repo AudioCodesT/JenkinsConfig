@@ -47,30 +47,11 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>$TAG=&quot;$env:TAG&quot;
-$Configurator_VmName=&quot;ArmConf${TAG}&quot;
-$Router_VmName=&quot;ArmRouter${TAG}&quot;
-$jenkins_secret_key=$env:jenkins_secret_key
-$jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
-$jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
-$admin_username=&quot;acarm&quot;
-$container_name=&quot;vhds&quot;
-$VmSize=&quot;Standard_A2_v2&quot;
-$vhd_storage_account=&quot;ciresourcegroupstorage&quot;
-$subnet=&quot;Net_172.16.100.0&quot;
-$vnet_name=&quot;CI_Resource_Group&quot;
-$security_group=&quot;createOvocImageSG&quot;
-$Configurator_vhd_name=&quot;ARM-Conf_${TAG}&quot;
-$Router_vhd_name=&quot;ARM-Router_${TAG}&quot;
-$ResourceGroupName=&quot;CI_Resource_Group&quot;
-$conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
-$router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
-
-
-Write-Output &quot;login to az and azcopy&quot;
-az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-$env:AZCOPY_SPA_CLIENT_SECRET=&quot;${jenkins_secret_key}&quot;
-azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}</command>
+      <command>#first time perform a restart to the computer
+if($env:NAGINATOR_COUNT){
+Write-Output &quot;restarting the computer&quot;
+Restart-Computer
+}</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
@@ -79,6 +60,17 @@ azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun></regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>false</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>5</delay>
+      </delay>
+      <maxSchedule>1</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
