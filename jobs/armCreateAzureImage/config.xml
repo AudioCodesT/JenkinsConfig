@@ -70,7 +70,7 @@ Set-Variable -Name &quot;Router_VmName&quot; -Value &quot;ArmRouter$env:TAG&quot
 
 Write-Output &quot;delete all vms if has&quot;
 Get-VM | where {$_.State -eq &apos;Running&apos;} | Remove-VM -Force
-
+Remove-Item -Recurse -Force &quot;$env:WORKSPACE&quot;
 
 Write-Output &quot;Converting VHDX to VHD&quot;
 Convert-VHD -Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
