@@ -50,7 +50,7 @@
       <command>#first time perform a restart to the computer
 if([string]::IsNullOrEmpty($env:NAGINATOR_COUNT)){
 Write-Output &quot;restarting the computer&quot;
-Restart-Computer
+Restart-Computer -Force
 }</command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
