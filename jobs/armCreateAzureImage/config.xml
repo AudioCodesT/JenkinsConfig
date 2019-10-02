@@ -47,13 +47,6 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>##first time perform a restart to the computer
-#if([string]::IsNullOrEmpty($env:NAGINATOR_COUNT)){
-#Write-Output &quot;restarting the computer&quot;
-#Restart-Computer -Force
-#}</command>
-    </hudson.plugins.powershell.PowerShell>
-    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>#parameters for the build
 #$TAG=&quot;$env:TAG&quot;
 #$Configurator_vhd_name=&quot;ARM-Conf_$env:TAG&quot;
@@ -131,7 +124,7 @@ $jenkins_secret_key=$env:jenkins_secret_key
 $jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
 $jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
 $admin_username=&quot;acarm&quot;
-$container_name=&quot;vhds&quot;
+$container_name=&quot;arm&quot;
 $VmSize=&quot;Standard_A2_v2&quot;
 $vhd_storage_account=&quot;ciresourcegroupstorage&quot;
 $subnet=&quot;Net_172.16.100.0&quot;
