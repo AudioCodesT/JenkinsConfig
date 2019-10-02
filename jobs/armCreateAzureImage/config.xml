@@ -47,11 +47,11 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>#first time perform a restart to the computer
-if([string]::IsNullOrEmpty($env:NAGINATOR_COUNT)){
-Write-Output &quot;restarting the computer&quot;
-Restart-Computer -Force
-}</command>
+      <command>##first time perform a restart to the computer
+#if([string]::IsNullOrEmpty($env:NAGINATOR_COUNT)){
+#Write-Output &quot;restarting the computer&quot;
+#Restart-Computer -Force
+#}</command>
     </hudson.plugins.powershell.PowerShell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>#parameters for the build
