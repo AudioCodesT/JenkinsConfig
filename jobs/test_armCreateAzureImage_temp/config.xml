@@ -48,7 +48,7 @@
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>#first time perform a restart to the computer
-if($env:NAGINATOR_COUNT){
+if([string]::IsNullOrEmpty($env:NAGINATOR_COUNT)){
 Write-Output &quot;restarting the computer&quot;
 Restart-Computer
 }</command>
