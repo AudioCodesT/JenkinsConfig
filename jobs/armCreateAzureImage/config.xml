@@ -115,7 +115,6 @@ python remote_reboot.py $Configurator_vmIP
 python arm_azure_image_prepare_test.py $Configurator_vmIP after_reboot
 python arm_azure_image_prepare_test.py $Configurator_vmIP finish_install
 sleep 60
-
 python arm_azure_image_prepare_test.py $Router_vmIP before_reboot
 python remote_reboot.py $Router_vmIP
 python arm_azure_image_prepare_test.py $Router_vmIP after_reboot
@@ -170,36 +169,6 @@ az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} 
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
-    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
-      <config>
-        <scriptFiles/>
-        <groovyScripts/>
-        <buildSteps>
-          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-            <results>
-              <string>NOT_BUILT</string>
-              <string>ABORTED</string>
-              <string>FAILURE</string>
-              <string>UNSTABLE</string>
-            </results>
-            <role>BOTH</role>
-            <buildSteps>
-              <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-                <command>$TAG=&quot;$env:TAG&quot;
-$Configurator_VmName=&quot;ArmConf${TAG}&quot;
-$Router_VmName=&quot;ArmRouter${TAG}&quot;
-Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
-Stop-VM -Name &quot;$Router_VmName&quot; -Force
-Write-Output &quot;Delete VMs&quot;
-Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
-Remove-VM -Name &quot;$Router_VmName&quot; -Force</command>
-              </hudson.plugins.powershell.PowerShell>
-            </buildSteps>
-          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-        </buildSteps>
-        <markBuildUnstable>false</markBuildUnstable>
-      </config>
-    </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun></regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
@@ -207,7 +176,7 @@ Remove-VM -Name &quot;$Router_VmName&quot; -Force</command>
       <checkRegexp>false</checkRegexp>
       <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
       <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>40</delay>
+        <delay>30</delay>
       </delay>
       <maxSchedule>1</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
