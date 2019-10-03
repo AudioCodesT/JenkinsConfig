@@ -489,6 +489,9 @@ rm -f $ATA_Home/$IMAGENAMES.txt
 echo ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change
 
 ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $change  &gt; allChange.txt
+echo print Gerrit respons:
+cat allChange.txt
+echo ------------------
 
 if ! grep -q change allChange.txt; then
   cat allChange.txt
