@@ -28,11 +28,12 @@ Wait until all builds are ready and check if the last patch-set is a none codes 
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
-        <hudson.model.PasswordParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>REFSPEC</name>
           <description></description>
-          <defaultValue>{AQAAABAAAAAQC4OUA1Mr5wsqrlorzJLl+yAXiY2jwwDWdUlhF+iKSvA=}</defaultValue>
-        </hudson.model.PasswordParameterDefinition>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
           <description></description>
