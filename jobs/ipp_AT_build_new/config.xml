@@ -92,10 +92,12 @@ echo ======End gerrit message  -  clean AT vote before starting=======
 set -x
 echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
 #get all current running builds in ippReview_SFB
-builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos;))
+builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | \
+  grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos; | sort -u))
 
 #get all builds number that in queue
-queue_builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/queue/api/json?depth=1&amp;xpath=//url&amp;pretty=true&quot; | grep -A5 ippReview_SFB | grep nextBuildNumber | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1 | sort -u))
+queue_builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/queue/api/json?depth=1&amp;xpath=//url&amp;pretty=true&quot; | \
+  grep -A5 ippReview_SFB | grep nextBuildNumber | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1 | sort -u))
 
 #add the two lists together (those who running and those who in queue)
 builds_numbers=(&quot;${builds_numbers[@]}&quot; &quot;${queue_builds_numbers[@]}&quot;)
@@ -110,7 +112,7 @@ do
   fi
 done
 
-User=&quot;$artifactory_user:$artifactory_password&quot;
+User=&quot;$artifactory_user:$artifactory_pass&quot;
 Artifactory=&quot;https://artifactory/api/storage/ipp-review/SFB&quot;
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 CHANGES=`echo $REFSPEC | sed &apos;s:refs/changes/../::&apos;`
@@ -122,7 +124,10 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
   echo img was not found, check if this patch-set will be compiled or no code was changed
   change=`echo $CHANGES | cut -d/ -f1`
   ps=`echo $CHANGES | cut -d/ -f2`
-  ssh -p 29418  jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/ //g&apos; &gt; /tmp/$change.txt
+  echo &gt; /tmp/$change.txt
+  if [ $ps -gt 1 ]; then
+    ssh -p 29418  jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/ //g&apos; &gt; /tmp/$change.txt
+  fi
 # $field Could be: number or kind
 # $kind could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
   lastREWORK=1
@@ -135,8 +140,8 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
   done &lt; /tmp/$change.txt
 
   if [ &quot;$ps&quot; -eq &quot;$lastREWORK&quot; ]; then
-    echo img file not ready, try again...
-    exit 2
+    echo img file not exist... ERROR
+    exit 1
   fi
   
   CHANGES=&quot;$change/$lastREWORK&quot;
