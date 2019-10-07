@@ -1,15 +1,125 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
+  <actions/>
+  <description>Activated by Automation Test&#xd;
+Wait until all builds are ready and check if the last patch-set is a none codes changes and use the previous change-set</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>5</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.PasswordParameterDefinition>
+          <name>REFSPEC</name>
+          <description></description>
+          <defaultValue>{AQAAABAAAAAQmNmRomJY4XOsDSYM0duK26ewcRsmBhFt1qIjkx2Ypy4=}</defaultValue>
+        </hudson.model.PasswordParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>EMAIL</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
+      <info>
+        <secureGroovyScript plugin="script-security@1.54.2">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+      <on>true</on>
+      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
+      <keepBuildVariables>true</keepBuildVariables>
+      <overrideBuildParameters>false</overrideBuildParameters>
+    </EnvInjectJobProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+Artifactory=&quot;https://artifactory/api/storage/sbc-review/com/ac/sbc&quot;
+DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
+CHANGES=`echo $REFSPEC | sed &apos;s:refs/changes/../::&apos;`
+REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
+
+# if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
+if ! curl -ks -u $User -X GET $Artifactory/VoiceAiConnector/$REFTARGET | grep -q .tgz; then
+  echo tgz was not found, check if this patch-set will be compiled or no code was changed
+  change=`echo $CHANGES | cut -d/ -f1`
+  ps=`echo $CHANGES | cut -d/ -f2`
+  ssh -p 29418  -i ~/.ssh/id_rsa_jenkins jenkins@test-gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/ //g&apos; &gt; /tmp/$change.txt
+# $field Could be: number or kind
+# $kind could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
+  lastREWORK=1
+  while IFS=: read -r field value; do   
+    if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
+    else
+      echo Check PS $checkPS: $value;
+      if [[ ! &quot;$value&quot; =~ &quot;NO_&quot; ]]; then lastREWORK=$checkPS; fi
+    fi
+  done &lt; /tmp/$change.txt
+
+  if [ &quot;$ps&quot; -eq &quot;$lastREWORK&quot; ]; then
+    echo tgz file not ready, try again...
+    exit 2
+  fi
+  
+  CHANGES=&quot;$change/$lastREWORK&quot;
+  REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
+  if ! curl -ks -u $User -X GET $Artifactory/VoiceAiConnector/$REFTARGET | grep -q .tgz; then
+    echo tgz for patch-set $lastREWORK file not ready, try again...
+    exit 2
+  fi
+fi
+
+echo CHANGES=${CHANGES} &gt; VoiceAI.properties
+echo REFTARGET=${REFTARGET} &gt;&gt; VoiceAI.properties
+echo SBC_GERRIT_BRANCH=7.2.250 &gt;&gt; VoiceAI.properties
+</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
   <buildWrappers/>
 </project>
