@@ -91,7 +91,6 @@ echo ======End gerrit message  -  clean AT vote before starting=======
 
 set -x
 echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
-sleep 90
 #get all current running builds in ippReview_SFB
 builds_numbers=($(curl --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos;))
 
@@ -108,11 +107,13 @@ echo &quot;${builds_numbers[@]}&quot;
 #iterate over all current running builds of ippReview_SFB and check if current change is running
 for build_number in ${builds_numbers[@]}
 do
-build_gerrit_refspec=$(curl --insecure -X GET &quot;https://jenkins/job/ippReview_SFB/${build_number}/injectedEnvVars/export&quot; | grep &quot;GERRIT_REFSPEC&quot; | cut -d&apos;=&apos; -f2)
-if [[ &quot;${REFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]
-then
-current_change_build_number=${build_number}
-fi
+  if [ ! -z ${build_number} ]; then
+    echo Check ${build_number}..............................
+    build_gerrit_refspec=$(curl --insecure -X GET &quot;https://jenkins/job/ippReview_SFB/${build_number}/injectedEnvVars/export&quot; | grep &quot;GERRIT_REFSPEC&quot; | cut -d&apos;=&apos; -f2)
+    if [[ &quot;${REFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]; then
+      current_change_build_number=${build_number}
+    fi
+  fi
 done
 
 #check if job is running
