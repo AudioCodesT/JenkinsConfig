@@ -117,7 +117,7 @@ Artifactory=&quot;https://artifactory/api/storage/ipp-review/SFB&quot;
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 CHANGES=`echo $REFSPEC | sed &apos;s:refs/changes/../::&apos;`
 REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
-NEWREFTARGET=$REFTARGET
+NEWREFTARGET=$REFSPEC
 
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
 if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
