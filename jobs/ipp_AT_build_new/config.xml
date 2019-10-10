@@ -117,7 +117,7 @@ Artifactory=&quot;https://artifactory/api/storage/ipp-review/SFB&quot;
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 CHANGES=`echo $REFSPEC | sed &apos;s:refs/changes/../::&apos;`
 REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
-NEWREFTARGET=$REFSPEC
+NEWREFSPEC=$REFSPEC
 
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
 if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
@@ -143,18 +143,16 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
     echo img file not exist... ERROR
     exit 1
   fi
-  
-  CHANGES=&quot;$change/$lastREWORK&quot;
-  REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
-  if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
+
+  if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/${change}-$lastREWORK | grep -q .img; then
     echo img for patch-set $lastREWORK file not ready, try again...
     exit 2
   fi
   
-  NEWREFTARGET=$(echo $REFSPEC | sed -e &apos;s:\(.*/\).*:\1&apos;$lastREWORK:)
+  NEWREFSPEC=$(echo $REFSPEC | sed -e &apos;s:\(.*/\).*:\1&apos;$lastREWORK:)
 fi
 
-echo NEWREFTARGET=${NEWREFTARGET} &gt; ipp_AT.properties
+echo NEWREFSPEC=${NEWREFSPEC} &gt; ipp_AT.properties
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
@@ -181,7 +179,7 @@ echo NEWREFTARGET=${NEWREFTARGET} &gt; ipp_AT.properties
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>REFSPEC=${NEWREFTARGET}
+              <properties>REFSPEC=${NEWREFSPEC}
 GERRIT_BRANCH=${GERRIT_BRANCH}
 IMAGE=445HD
 EMAIL=${EMAIL}
