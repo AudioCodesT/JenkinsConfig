@@ -99,7 +99,7 @@ findRunningJobs() {
   counter=$((counter+1))
   echo Check number $counter
 
-  echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
+  echo &quot;============ Checking if ippReview_SFB is running ===========&quot;
   #get all current running builds in ippReview_SFB
   builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | \
     grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos; | sort -u))
@@ -179,6 +179,7 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
 fi
 
 echo NEWREFSPEC=${NEWREFSPEC} &gt; ipp_AT.properties
+echo Find images, continue with the next job.....
 
 exit 2
 </command>
