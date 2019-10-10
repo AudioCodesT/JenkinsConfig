@@ -89,7 +89,16 @@ revisions=$(echo $REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:/revisions/:&apos;)
 ###  -H &apos;Content-Type: application/json&apos;
 echo ======End gerrit message  -  clean AT vote before starting=======
 
+counter=0
+
 findRunningJobs() {
+
+  counter=$((counter+1))
+  if [[ &quot;$counter&quot; -gt 15 ]]; then
+    echo Too many checks... Error
+    exit 1
+  fi
+  
   echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
   #get all current running builds in ippReview_SFB
   builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | \
@@ -103,15 +112,20 @@ findRunningJobs() {
   builds_numbers=(&quot;${builds_numbers[@]}&quot; &quot;${queue_builds_numbers[@]}&quot;)
 
 #iterate over all current running builds of ippReview_SFB and check if current change is running
+  findJobFlag=&quot;&quot;
   for build_number in ${builds_numbers[@]}
   do
     build_gerrit_refspec=$(curl -s --insecure -X GET &quot;https://jenkins/job/ippReview_SFB/${build_number}/injectedEnvVars/export&quot; | grep &quot;GERRIT_REFSPEC&quot; | cut -d&apos;=&apos; -f2)
     if [[ &quot;${NEWREFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]; then
-      echo Build is running... sleep 4 minutes
-      sleep 240
-      findRunningJobs
+      findJobFlag=&quot;Find job with this change&quot;
     fi
   done
+  
+  if [ ! -z &quot;$findJobFlag&quot; ]; then
+      echo Build is running... sleep 4 minutes
+      sleep 240
+      findRunningJobs  
+  fi
 }
 
 NEWREFSPEC=$REFSPEC
@@ -159,6 +173,8 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
 fi
 
 echo NEWREFSPEC=${NEWREFSPEC} &gt; ipp_AT.properties
+
+exit 2
 </command>
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
