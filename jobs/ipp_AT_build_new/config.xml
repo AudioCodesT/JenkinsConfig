@@ -92,14 +92,13 @@ echo ======End gerrit message  -  clean AT vote before starting=======
 counter=0
 set -x
 
+########################################## START ###################################################
+### Recursive function - max execution is 15
 findRunningJobs() {
 
   counter=$((counter+1))
-  if [[ &quot;$counter&quot; -gt 15 ]]; then
-    echo Too many checks... Error
-    exit 1
-  fi
-  
+  echo Check number $counter
+
   echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
   #get all current running builds in ippReview_SFB
   builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | \
@@ -123,11 +122,17 @@ findRunningJobs() {
   done
   
   if [ ! -z &quot;$findJobFlag&quot; ]; then
-      echo Build is running... sleep 4 minutes
-      sleep 240
-      findRunningJobs  
+    if [[ &quot;$counter&quot; -gt 15 ]]; then
+      echo Too many checks... Error
+      exit 1
+    fi
+  
+    echo Build is running... sleep 4 minutes
+    sleep 240
+    findRunningJobs  
   fi
 }
+############################################ END #################################################
 
 NEWREFSPEC=$REFSPEC
 findRunningJobs
