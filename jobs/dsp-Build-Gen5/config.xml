@@ -127,6 +127,12 @@ echo &quot;cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Devi
 cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
 
+if [[ ${GERRIT_BRANCH} == &quot;722.28.01&quot; ]]
+then
+	echo &quot;****  Jenkins is not updating version number in files because this is branch ${GERRIT_BRANCH} ****&quot;
+    exit 0
+fi
+
 echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
 VER=${NEWTAG}
 VERSION=$(echo ${NEWTAG} | cut -d&apos;.&apos; -f1)
