@@ -90,6 +90,7 @@ revisions=$(echo $REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:/revisions/:&apos;)
 echo ======End gerrit message  -  clean AT vote before starting=======
 
 counter=0
+set -x
 
 findRunningJobs() {
 
