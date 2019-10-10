@@ -89,36 +89,41 @@ revisions=$(echo $REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:/revisions/:&apos;)
 ###  -H &apos;Content-Type: application/json&apos;
 echo ======End gerrit message  -  clean AT vote before starting=======
 
-set -x
-echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
-#get all current running builds in ippReview_SFB
-builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | \
-  grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos; | sort -u))
+findRunningJobs() {
+  echo &quot; ============checking if the build is running also in ippReview_SFB===========&quot;
+  #get all current running builds in ippReview_SFB
+  builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/computer/api/json?depth=1&amp;xpath=//url&amp;wrapper=builds&amp;pretty=true&quot; | \
+    grep -w &quot;https://jenkins/job/ippReview_SFB/[[:digit:]]*/&quot;  | awk -F&apos;/&apos; &apos;{print $6}&apos; | sort -u))
 
-#get all builds number that in queue
-queue_builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/queue/api/json?depth=1&amp;xpath=//url&amp;pretty=true&quot; | \
-  grep -A5 ippReview_SFB | grep nextBuildNumber | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1 | sort -u))
+  #get all builds number that in queue
+  queue_builds_numbers=($(curl -s --insecure -X GET &quot;https://jenkins/queue/api/json?depth=1&amp;xpath=//url&amp;pretty=true&quot; | \
+    grep -A5 ippReview_SFB | grep nextBuildNumber | cut -d&apos;:&apos; -f2 | cut -d&apos;,&apos; -f1 | sort -u))
 
-#add the two lists together (those who running and those who in queue)
-builds_numbers=(&quot;${builds_numbers[@]}&quot; &quot;${queue_builds_numbers[@]}&quot;)
+  #add the two lists together (those who running and those who in queue)
+  builds_numbers=(&quot;${builds_numbers[@]}&quot; &quot;${queue_builds_numbers[@]}&quot;)
 
 #iterate over all current running builds of ippReview_SFB and check if current change is running
-for build_number in ${builds_numbers[@]}
-do
-  build_gerrit_refspec=$(curl -s --insecure -X GET &quot;https://jenkins/job/ippReview_SFB/${build_number}/injectedEnvVars/export&quot; | grep &quot;GERRIT_REFSPEC&quot; | cut -d&apos;=&apos; -f2)
-  if [[ &quot;${REFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]; then
-    echo find compilation of ippReview_SFB for this patch-set, build number $build_number. Files do not ready
-    exit 2
-  fi
-done
+  for build_number in ${builds_numbers[@]}
+  do
+    build_gerrit_refspec=$(curl -s --insecure -X GET &quot;https://jenkins/job/ippReview_SFB/${build_number}/injectedEnvVars/export&quot; | grep &quot;GERRIT_REFSPEC&quot; | cut -d&apos;=&apos; -f2)
+    if [[ &quot;${NEWREFSPEC}&quot; == &quot;${build_gerrit_refspec}&quot; ]]; then
+      echo Build is running... sleep 4 minutes
+      sleep 240
+      findRunningJobs
+    fi
+  done
+}
+
+NEWREFSPEC=$REFSPEC
+findRunningJobs
 
 User=&quot;$artifactory_user:$artifactory_pass&quot;
 Artifactory=&quot;https://artifactory/api/storage/ipp-review/SFB&quot;
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
-CHANGES=`echo $REFSPEC | sed &apos;s:refs/changes/../::&apos;`
+CHANGES=`echo $NEWREFSPEC | sed &apos;s:refs/changes/../::&apos;`
 REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
-NEWREFSPEC=$REFSPEC
 
+echo Check if images exists in Artifactory: $CHANGES
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
 if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
   echo img was not found, check if this patch-set will be compiled or no code was changed
@@ -144,12 +149,13 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
     exit 1
   fi
 
-  if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/${change}-$lastREWORK | grep -q .img; then
-    echo img for patch-set $lastREWORK file not ready, try again...
-    exit 2
-  fi
-  
   NEWREFSPEC=$(echo $REFSPEC | sed -e &apos;s:\(.*/\).*:\1&apos;$lastREWORK:)
+  echo Check if it is running now for change: $NEWREFSPEC
+  findRunningJobs
+  if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/${change}-$lastREWORK | grep -q .img; then
+    echo img file for $NEWREFSPEC was not exist... ERROR
+    exit 1
+  fi
 fi
 
 echo NEWREFSPEC=${NEWREFSPEC} &gt; ipp_AT.properties
