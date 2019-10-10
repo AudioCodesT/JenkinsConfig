@@ -81,7 +81,7 @@ Wait until all builds are ready and check if the last patch-set is a none codes 
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/sh -x
+      <command>#!/bin/sh +x
 
 echo =====Start Gerrit message =======
 revisions=$(echo $REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:/revisions/:&apos;)
