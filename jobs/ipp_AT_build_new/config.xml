@@ -127,6 +127,7 @@ findRunningJobs() {
       exit 1
     fi
   
+    echo
     echo Build is running... sleep 4 minutes
     sleep 240
     findRunningJobs  
@@ -143,6 +144,7 @@ DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 CHANGES=`echo $NEWREFSPEC | sed &apos;s:refs/changes/../::&apos;`
 REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
 
+echo
 echo Check if images exists in Artifactory: $CHANGES
 # if file was compiled successfully but not yet deployed to artifactory, then wait 30 sec
 if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
