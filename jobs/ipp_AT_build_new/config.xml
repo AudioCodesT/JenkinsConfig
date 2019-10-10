@@ -81,7 +81,8 @@ Wait until all builds are ready and check if the last patch-set is a none codes 
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
+      <command>#!/bin/sh -x
+
 echo =====Start Gerrit message =======
 revisions=$(echo $REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:/revisions/:&apos;)
 ### curl -kns -u jenkins:${jenkins_pass} -X POST https://gerrit/a/changes/$revisions/review \
@@ -90,7 +91,6 @@ revisions=$(echo $REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:/revisions/:&apos;)
 echo ======End gerrit message  -  clean AT vote before starting=======
 
 counter=0
-set -x
 
 ########################################## START ###################################################
 ### Recursive function - max execution is 15
