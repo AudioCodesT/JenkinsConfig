@@ -122,11 +122,8 @@ git log -2 --oneline
 
 cd $WORKSPACE
 
-###  adding temporary condition for Oriel gerri tchange:
-if [[ &quot;$GERRIT_CHANGE_NUMBER&quot; == &quot;24262&quot; ]]
-then	./build/tools/make_c450hd.sh --zip-images --clean
-else	./build/tools/make_c450hd.sh --zip-images
-fi</command>
+./build/tools/make_c450hd.sh --zip-images --clean
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
