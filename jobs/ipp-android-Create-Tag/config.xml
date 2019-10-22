@@ -173,6 +173,18 @@ uboot/c450hd_uboot</description>
         <url>ssh://jenkins@gerrit:29418/IPP/Android/hardware_libhardware_legacy</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>Lib-ev-app</name>
+        <refspec>+refs/heads/*:refs/remotes/Lib-ev-app/* +refs/tags/*:refs/tags/Lib-ev-app/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Lib/Lib-ev-app</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>Lib-app</name>
+        <refspec>+refs/heads/*:refs/remotes/Lib-app/* +refs/tags/*:refs/tags/Lib-app/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Lib/Lib-app</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
@@ -507,7 +519,7 @@ echo Create TAG for the last user
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
             <contentType>project</contentType>
           </email>
-          <secureTriggerScript plugin="script-security@1.53">
+          <secureTriggerScript plugin="script-security@1.54.2">
             <script>build.getBuildVariables().get(&quot;GERRIT_PROJECT&quot;) == &quot;IPP/Android/repo_manifests&quot;</script>
             <sandbox>false</sandbox>
           </secureTriggerScript>
