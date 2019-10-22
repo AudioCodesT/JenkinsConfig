@@ -179,8 +179,8 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
   echo Check if it is running now for change: $NEWREFSPEC
   findRunningJobs
   if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/${change}-$lastREWORK | grep -q .img; then
-    echo img file for $NEWREFSPEC was not exist... ERROR
-    exit 1
+    echo For $NEWREFSPEC img file not exist... Try again after 5 minutes
+    exit 2
   fi
 fi
 
