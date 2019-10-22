@@ -154,16 +154,19 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
   ps=`echo $CHANGES | cut -d/ -f2`
   echo &gt; /tmp/$change.txt
   if [ $ps -gt 1 ]; then
+    echo API to Grrit for change $change.....
     ssh -p 29418  jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2 | sed &apos;s/ //g&apos; &gt; /tmp/$change.txt
   fi
 # $field Could be: number or kind
 # $kind could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
   lastREWORK=1
-  while IFS=: read -r field value; do   
-    if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
-    else
-      echo Check PS $checkPS: $value;
-      if [[ ! &quot;$value&quot; =~ &quot;NO_&quot; ]]; then lastREWORK=$checkPS; fi
+  while IFS=: read -r field value; do
+    if [ ! -z &quot;$field&quot; ]; then
+      if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
+      else
+        echo Check PS $checkPS: $value;
+        if [[ ! &quot;$value&quot; =~ &quot;NO_&quot; ]]; then lastREWORK=$checkPS; fi
+      fi
     fi
   done &lt; /tmp/$change.txt
 
