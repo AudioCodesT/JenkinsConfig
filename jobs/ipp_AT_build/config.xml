@@ -165,22 +165,32 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
       if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value;
       else
         echo Check PS $checkPS: $value;
-        if [[ ! &quot;$value&quot; =~ NO_|TRIVIAL_REBASE ]]; then lastREWORK=$checkPS; fi
+        if [[ ! &quot;$value&quot; =~ NO_ ]]; then lastREWORK=$checkPS; fi
       fi
     fi
   done &lt; /tmp/$change.txt
 
   if [ &quot;$ps&quot; -eq &quot;$lastREWORK&quot; ]; then
-    echo img file not exist... Try again after 5 minutes
-    exit 2
+    if [[ -z &quot;$NAGINATOR_COUNT&quot; || &quot;$NAGINATOR_COUNT&quot; -ne &quot;$NAGINATOR_MAXCOUNT&quot; ]]; then
+      echo img file not exist... Try again after 5 minutes
+      exit 2
+    else
+      echo img file not exist... Exit with error
+      exit 1
+    fi
   fi
 
   NEWREFSPEC=$(echo $REFSPEC | sed -e &apos;s:\(.*/\).*:\1&apos;$lastREWORK:)
   echo Check if it is running now for change: $NEWREFSPEC
   findRunningJobs
   if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/${change}-$lastREWORK | grep -q .img; then
-    echo For $NEWREFSPEC img file not exist... Try again after 5 minutes
-    exit 2
+    if [[ -z &quot;$NAGINATOR_COUNT&quot; || &quot;$NAGINATOR_COUNT&quot; -ne &quot;$NAGINATOR_MAXCOUNT&quot; ]]; then
+      echo For $NEWREFSPEC img file not exist... Try again after 5 minutes
+      exit 2
+    else
+      echo For $NEWREFSPEC img file not exist... Exit with error
+      exit 1
+    fi
   fi
 fi
 
