@@ -26,15 +26,27 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>LASTBL</name>
+          <name>LASTBLA</name>
           <description></description>
           <defaultValue>None</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>BuildRelease</name>
+          <name>BuildReleaseA</name>
           <description></description>
           <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>LASTBLB</name>
+          <description></description>
+          <defaultValue>None</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BuildReleaseB</name>
+          <description></description>
+          <defaultValue>3.2</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -77,20 +89,35 @@ if curl -s http://ippauto/index.php/status/show.xml | grep -q status.busy./statu
 fi
 
 User=$artifactory_user:$artifactory_pass
-echo Find the Last TAG if None - $LASTBL
-ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
+echo Find the Last TAG if None - $LASTBLA
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildReleaseA
 
-if [ &quot;$LASTBL&quot; == &quot;None&quot; ]; then
+if [ &quot;$LASTBLA&quot; == &quot;None&quot; ]; then
   echo curl -ks -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
-  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+  LASTBLA=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
 fi
-echo Find: $LASTBL
+echo Find: $LASTBLA
 
-if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
-  echo Not find LASTBL - Exit with error
+if [ &quot;$LASTBLA&quot; == &quot;&quot; ]; then 
+  echo Not find LASTBLA - Exit with error
   exit 1
 fi
-echo LASTBL=${LASTBL} &gt; ${WORKSPACE}/Sanity.prop
+echo LASTBLA=${LASTBLA} &gt; ${WORKSPACE}/Sanity.prop
+
+echo Find the Last TAG if None - $LASTBLB
+ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildReleaseB
+
+if [ &quot;$LASTBLB&quot; == &quot;None&quot; ]; then
+  echo curl -ks -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
+  LASTBLB=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+fi
+echo Find: $LASTBLB
+
+if [ &quot;$LASTBLB&quot; == &quot;&quot; ]; then 
+  echo Not find LASTBLB - Exit with error
+  exit 1
+fi
+echo LASTBLB=${LASTBLB} &gt; ${WORKSPACE}/Sanity.prop
 
 net use
 if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
@@ -125,11 +152,12 @@ fi
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
 model=445
-LASTBL=${LASTBL}
-BuildRelease=${BuildRelease}
+LASTBL=${LASTBLA}
+BuildRelease=${BuildReleaseA}
 DelayTime=0
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
+ServerType=Lync
+UserType=Online</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
@@ -165,8 +193,8 @@ ServerType=Lync</properties>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
 model=450
-LASTBL=${LASTBL}
-BuildRelease=${BuildRelease}
+LASTBL=${LASTBLB}
+BuildRelease=${BuildReleaseB}
 DelayTime=90
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
 ServerType=Lync</properties>
@@ -205,8 +233,8 @@ ServerType=Lync</properties>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
 model=440
-LASTBL=${LASTBL}
-BuildRelease=${BuildRelease}
+LASTBL=${LASTBLA}
+BuildRelease=${BuildReleaseA}
 DelayTime=180
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
 ServerType=Lync</properties>
@@ -245,11 +273,12 @@ ServerType=Lync</properties>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
               <properties>ConfigName=${ConfigName}
 model=405
-LASTBL=${LASTBL}
-BuildRelease=${BuildRelease}
+LASTBL=${LASTBLB}
+BuildRelease=${BuildReleaseB}
 DelayTime=270
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
+ServerType=Lync
+UserType=Online</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
