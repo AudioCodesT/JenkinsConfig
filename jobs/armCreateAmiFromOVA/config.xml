@@ -5,7 +5,8 @@
 1. download from artifactory 2 OVA Files&#xd;
 2.copy both ova to S3 Bucket (arm-ova2ami)&#xd;
 3. import both OVA files to AMI (ARM_Configurator,arm_Router)&#xd;
-4.share both AMIs to QA</description>
+4.share both AMIs to QA&#xd;
+5. if &quot;PublishAMI&quot; is checked, then call the publish job</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -31,7 +32,8 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>PublishAMI</name>
-          <description>Please choose if to publish AMI</description>
+          <description>No - the AMI is only shared with QA account
+Yes - will call another job that will copy AMI to all regions on the list</description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>No</string>
@@ -53,7 +55,7 @@
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
         <propertiesContent>PATH=$PATH:/home/centos/.local/bin:/home/centos/bin:/usr/local/git/bin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -212,7 +214,7 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
+      <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Liav.Elias@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
