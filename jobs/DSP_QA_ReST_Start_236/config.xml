@@ -35,7 +35,6 @@ No build job. Only start the instance.</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -50,9 +49,9 @@ No build job. Only start the instance.</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Starting		i-0cd5b864f45a0fef9 (Stateful DSP QA tests) IP: 172.16.134.150&quot;
+echo &quot;Starting		i-0cf569363601c6f02 (Stateful DSP QA tests) IP: 172.16.134.236&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 start-instances --instance-ids i-0cd5b864f45a0fef9</command>
+aws ec2 start-instances --instance-ids i-0cf569363601c6f02</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
