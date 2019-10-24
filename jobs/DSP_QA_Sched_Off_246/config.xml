@@ -35,7 +35,6 @@ No build job. Only stop the instances</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -54,9 +53,9 @@ No build job. Only stop the instances</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Stopping 	i-0cd5b864f45a0fef9 (Stateful DSP QA tests) IP: 172.16.134.150&quot;
+echo &quot;Stopping 	i-0cf569363601c6f02 (Special SBC for Oren) IP: 172.16.134.236&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 stop-instances --instance-ids i-0cd5b864f45a0fef9
+aws ec2 stop-instances --instance-ids i-0cf569363601c6f02
 </command>
     </hudson.tasks.Shell>
   </builders>
