@@ -172,7 +172,7 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
 
   if [ &quot;$ps&quot; -eq &quot;$lastREWORK&quot; ]; then
     if [[ -z &quot;$NAGINATOR_COUNT&quot; || &quot;$NAGINATOR_COUNT&quot; -ne &quot;$NAGINATOR_MAXCOUNT&quot; ]]; then
-      echo img file not exist... Try again after 5 minutes
+      echo img file not exist... Try again after 10 minutes
       exit 2
     else
       echo img file not exist... Exit with error
@@ -185,7 +185,7 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
   findRunningJobs
   if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/${change}-$lastREWORK | grep -q .img; then
     if [[ -z &quot;$NAGINATOR_COUNT&quot; || &quot;$NAGINATOR_COUNT&quot; -ne &quot;$NAGINATOR_MAXCOUNT&quot; ]]; then
-      echo For $NEWREFSPEC img file not exist... Try again after 5 minutes
+      echo For $NEWREFSPEC img file not exist... Try again after 10 minutes
       exit 2
     else
       echo For $NEWREFSPEC img file not exist... Exit with error
@@ -241,7 +241,7 @@ echo ======End gerrit message  -  clean AT vote before starting=======
       <checkRegexp>true</checkRegexp>
       <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
       <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>300</delay>
+        <delay>600</delay>
       </delay>
       <maxSchedule>1</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
