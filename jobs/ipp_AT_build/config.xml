@@ -137,13 +137,17 @@ findRunningJobs() {
 ############################################ END #################################################
 
 NEWREFSPEC=$REFSPEC
-findRunningJobs
 
 User=&quot;$artifactory_user:$artifactory_pass&quot;
 Artifactory=&quot;https://artifactory/api/storage/ipp-review/SFB&quot;
 DOWNLOAD=$(echo $Artifactory | sed &apos;s|api/storage/||&apos;)
 CHANGES=`echo $NEWREFSPEC | sed &apos;s:refs/changes/../::&apos;`
 REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
+
+if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
+  sleep 120
+fi
+findRunningJobs
 
 echo
 echo Check if images exists in Artifactory: $CHANGES
