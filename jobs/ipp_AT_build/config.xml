@@ -145,6 +145,7 @@ CHANGES=`echo $NEWREFSPEC | sed &apos;s:refs/changes/../::&apos;`
 REFTARGET=`echo $CHANGES | sed &apos;s:/:-:g&apos;`
 
 if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q .img; then
+  echo Wait 2 minutes before checing if ipp_teview is running.
   sleep 120
 fi
 findRunningJobs
