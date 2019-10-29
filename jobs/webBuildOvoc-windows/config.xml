@@ -163,11 +163,14 @@ echo $LastGerritCommitHash
 echo $GERRIT_PATCHSET_REVISION
 if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
 then
-      #run private-bower
-	  output=$(netstat -ano | grep -wF 5678) || true
-	  if [[ -z &quot;$output&quot; ]]
-	  then private-bower &amp; sleep 15
- 	  fi
+	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot;* ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot;* ]]
+	then
+		output=$( netstat -ano | grep -wF 5678 ) || true
+		echo &quot;private-bower check =&quot; $output
+		if [[ -z &quot;$output&quot; ]]
+		then private-bower &amp; sleep 15
+		fi
+	fi
       
       # for version 7.4.2000 and down, use nmp/bower
       if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
