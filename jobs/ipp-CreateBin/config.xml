@@ -298,6 +298,16 @@ echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSIO
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
+
+echo &quot;************************************ update submodules **********************************&quot;
+git submodule foreach git status || echo &quot;failed&quot;
+git submodule foreach git clean -fdx || echo &quot;failed&quot;
+git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
+git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+git submodule foreach git reset --hard HEAD || echo &quot;failed&quot;
+git submodule update || echo &quot;failed&quot;
+
+
 make auto AUTOPRD=${Model}
 #create the bin file
 make binary
@@ -425,7 +435,7 @@ ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Mod
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_username=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
