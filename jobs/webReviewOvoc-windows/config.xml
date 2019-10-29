@@ -153,10 +153,13 @@ fi
 git config url.https://.insteadOf git://
 
 # checking if the private-bower is running
-output=$( netstat -ano | grep -wF 5678 ) || true
-echo &quot;private-bower check =&quot; $output
-if [[ -z &quot;$output&quot; ]]
-then private-bower &amp; sleep 15
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot;* ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot;* ]]
+then
+	output=$( netstat -ano | grep -wF 5678 ) || true
+	echo &quot;private-bower check =&quot; $output
+	if [[ -z &quot;$output&quot; ]]
+	then private-bower &amp; sleep 15
+	fi
 fi
 
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.1000&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.4.2000&quot; ]]
