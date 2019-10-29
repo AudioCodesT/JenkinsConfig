@@ -62,7 +62,10 @@ Set-Variable -Name &quot;Router_vhd_name&quot; -Value &quot;ARM-Router_$env:TAG&
 Set-Variable -Name &quot;Router_VmName&quot; -Value &quot;ArmRouter$env:TAG&quot;
 
 Write-Output &quot;delete all vms if has&quot;
-Get-VM | where {$_.State -eq &apos;Running&apos;} | Remove-VM -Force
+Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
+Stop-VM -Name &quot;$Router_VmName&quot; -Force
+Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
+Remove-VM -Name &quot;$Router_VmName&quot; -Force
 Remove-Item -Force &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot;
 Remove-Item -Force &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot;
 
