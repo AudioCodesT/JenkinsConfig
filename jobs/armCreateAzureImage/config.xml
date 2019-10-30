@@ -171,7 +171,15 @@ $router_disk_id=$(az disk create --resource-group ${ResourceGroupName} --name ${
 Write-Output &quot;Create Image from managed disk&quot;
 az image create --resource-group ${ResourceGroupName} --name $Configurator_vhd_name --source ${conf_disk_id} --os-type Linux
 az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_disk_id} --os-type Linux
-</command>
+
+
+
+#$start_date=(get-date).AddDays(-1).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
+#$expire_date=(get-date).AddDays(+60).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
+#$CONF_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Configurator_vhd_name}.vhd&quot; -o tsv)
+#$ROUTER_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Router_vhd_name}.vhd&quot; -o tsv)
+#$SAS_URL=$(az storage container generate-sas --connection-string ${connection_string} --name ${container_name} --permissions rl --start &quot;${start_date}&quot; --expiry &quot;${expire_date}&quot; -o tsv)
+#$download_URL=&quot;${URL}?${SAS_URL}&quot;</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
