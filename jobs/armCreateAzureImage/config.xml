@@ -174,15 +174,26 @@ az image create --resource-group ${ResourceGroupName} --name $Configurator_vhd_n
 az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_disk_id} --os-type Linux
 
 
+Write-Output &quot;Create SAS URL&quot;
+$start_date=(get-date).AddDays(-1).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
+$expire_date=(get-date).AddDays(+60).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
+$CONF_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Configurator_vhd_name}.vhd&quot; -o tsv)
+$ROUTER_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Router_vhd_name}.vhd&quot; -o tsv)
+$SAS_URL=$(az storage container generate-sas --connection-string ${connection_string} --name ${container_name} --permissions rl --start &quot;${start_date}&quot; --expiry &quot;${expire_date}&quot; -o tsv)
+$conf_download_URL=&quot;${CONF_URL}?${SAS_URL}&quot;
+$router_download_URL=&quot;${ROUTER_URL}?${SAS_URL}&quot;
 
-#$start_date=(get-date).AddDays(-1).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
-#$expire_date=(get-date).AddDays(+60).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
-#$CONF_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Configurator_vhd_name}.vhd&quot; -o tsv)
-#$ROUTER_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Router_vhd_name}.vhd&quot; -o tsv)
-#$SAS_URL=$(az storage container generate-sas --connection-string ${connection_string} --name ${container_name} --permissions rl --start &quot;${start_date}&quot; --expiry &quot;${expire_date}&quot; -o tsv)
-#$conf_download_URL=&quot;${CONF_URL}?${SAS_URL}&quot;
-#$router_download_URL=&quot;${ROUTER_URL}?${SAS_URL}&quot;</command>
+
+Write-Output &quot;Output Download SAS URL to file&quot;
+&quot;conf_download_URL=$conf_download_URL&quot; | Out-File prop_sas -Encoding ascii
+&quot;router_download_URL=$router_download_URL&quot; | Out-File -append prop_sas -Encoding ascii
+</command>
     </hudson.plugins.powershell.PowerShell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop_sas </propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
@@ -201,6 +212,41 @@ az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} 
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+      <recipientList>cc:ben.magriso@audiocodes.com</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+          <email>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>ARM ${TAG} image for azure is ready</defaultSubject>
+      <defaultContent>ARM_Configurator_${TAG} vhd file can be downloaded here: 
+${conf_download_URL}
+
+ARM_Router_${TAG} vhd file can be downloaded here: 
+${router_download_URL}</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
