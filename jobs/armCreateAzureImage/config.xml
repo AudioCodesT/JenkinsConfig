@@ -123,6 +123,7 @@ sleep 60
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>$TAG=&quot;$env:TAG&quot;
+$connection_string=&quot;$env:connection_string&quot;
 $NEW_TAG_WithoutDots=$TAG -replace &quot;[.]&quot;,&quot;&quot;
 $Configurator_VmName=&quot;ArmConf${TAG}&quot;
 $Router_VmName=&quot;ArmRouter${TAG}&quot;
@@ -179,7 +180,8 @@ az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} 
 #$CONF_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Configurator_vhd_name}.vhd&quot; -o tsv)
 #$ROUTER_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Router_vhd_name}.vhd&quot; -o tsv)
 #$SAS_URL=$(az storage container generate-sas --connection-string ${connection_string} --name ${container_name} --permissions rl --start &quot;${start_date}&quot; --expiry &quot;${expire_date}&quot; -o tsv)
-#$download_URL=&quot;${URL}?${SAS_URL}&quot;</command>
+#$conf_download_URL=&quot;${CONF_URL}?${SAS_URL}&quot;
+#$router_download_URL=&quot;${ROUTER_URL}?${SAS_URL}&quot;</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
