@@ -162,8 +162,8 @@ Write-Output &quot;Create a new container&quot;
 az storage container create --account-name ${vhd_storage_account} --name ${container_name}
 
 Write-Output &quot;copy to azure storage&quot;
-azcopy copy &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
-azcopy copy &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite
+azcopy copy &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite &quot;true&quot;
+azcopy copy &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite &quot;true&quot;
 
 Write-Output &quot;create managed disk&quot;
 $conf_disk_id=(az disk create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source ${conf_base_image} --query &apos;id&apos; -o json)
