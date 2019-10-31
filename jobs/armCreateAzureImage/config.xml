@@ -143,7 +143,7 @@ $ResourceGroupName=&quot;CI_Resource_Group&quot;
 $conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
 $router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
 
-
+$ErrorActionPreference = &quot;Stop&quot;
 
 Write-Output &quot;Stop VMs&quot;
 Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
