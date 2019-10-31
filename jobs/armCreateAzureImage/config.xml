@@ -54,7 +54,7 @@
 #$Router_vhd_name=&quot;ARM-Router_$env:TAG&quot;
 #$Router_VmName=&quot;ArmRouter$env:TAG&quot;
 
-
+Remove-Item -Force &quot;C:\jenkins&quot;
 
 Set-Variable -Name &quot;Configurator_vhd_name&quot; -Value &quot;ARM-Conf_$env:TAG&quot;
 Set-Variable -Name &quot;Configurator_VmName&quot; -Value &quot;ArmConf$env:TAG&quot;
