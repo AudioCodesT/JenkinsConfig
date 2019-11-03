@@ -51,47 +51,81 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>artifactory_host=artifactory
+      <command>
+CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+base=https://$GERRIT_HOST/a/changes
+id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
+idEscaped=${id////%2F}
+endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+
+
+
+artifactory_host=artifactory
 User=&quot;$artifactory_user:$artifactory_password&quot;
 NEWLINE=$&apos;\n&apos;
-
+gtest_message_to_send=&quot;&quot;
+valgrind_message_to_send=&quot;&quot;
+gtestFailedAtLeastOnce=&quot;False&quot;
+valgrindFailedAtLeastOnce=&quot;False&quot;
+artifactory_url=&quot;https://$artifactory_host/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/Gtest-Logs&quot;
 models=(&quot;405HD__SIM&quot; &quot;430HD__SIM&quot; &quot;440HD__SIM&quot; &quot;450HD__SIM&quot;)
 
 for model in ${models[@]}
 do
 
-#fetch valgrind Errors
-valgrindRetValue=0
-grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; ${model}/* || valgrindRetValue=$?
-if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
+  #fetch valgrind Errors
+  valgrindRetValue=0
+  grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; ${model}/* || valgrindRetValue=$?
+  if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
+  then
+  valgrindSign=&quot;-1&quot;
+  valgrind_message_to_send=&quot;${valgrind_message_to_send} ${model},&quot;
+  valgrindFailedAtLeastOnce=&quot;True&quot;
+  elif [[ &quot;$valgrindRetValue&quot; == &quot;1&quot; ]]
+  then
+  valgrindSign=&quot;1&quot;
+  else
+  echo &quot;ERROR not found GTestLogs Files&quot;
+  exit 1
+  fi
+  
+  
+  #fetch gtest errors
+  gtestRetValue=0
+  grep -E &apos;[1-9]+ FAILED TEST&apos; ${model}/* || gtestRetValue=$?
+  if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
+  then
+  gtestSign=&quot;-1&quot;
+  gtest_message_to_send=&quot;${gtest_message_to_send} ${model},&quot;
+  gtestFailedAtLeastOnce=&quot;True&quot;
+  elif [[ &quot;$gtestRetValue&quot; == &quot;1&quot; ]]
+  then
+  gtestSign=&quot;1&quot;
+  else
+  echo &quot;ERROR not found GTestLogs Files&quot;
+  exit 1
+  fi
+  
+  
+
+done
+gtest_message_to_send=&quot;${gtest_message_to_send} Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
+valgrind_message_to_send=&quot;${valgrind_message_to_send} Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
+
+
+if [[ $gtestFailedAtLeastOnce == &quot;True&quot; ]]
 then
-valgrindSign=&quot;-1&quot;
-elif [[ &quot;$valgrindRetValue&quot; == &quot;1&quot; ]]
-then
-valgrindSign=&quot;1&quot;
+
 else
-echo &quot;ERROR not found GTestLogs Files&quot;
-exit 1
+
 fi
 
+if [[ $valgrindFailedAtLeastOnce == &quot;True&quot; ]]
+then
 
-#fetch gtest errors
-gtestRetValue=0
-grep -E &apos;[1-9]+ FAILED TEST&apos; ${model}/* || gtestRetValue=$?
-if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
-then
-gtestSign=&quot;-1&quot;
-elif [[ &quot;$gtestRetValue&quot; == &quot;1&quot; ]]
-then
-gtestSign=&quot;1&quot;
 else
-echo &quot;ERROR not found GTestLogs Files&quot;
-exit 1
-fi
 
-
-
-done</command>
+fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
@@ -174,7 +208,11 @@ done</command>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQaPBXPwC/Hh98cxLBwnIw1mi59BrAerjXOG34kfsguLU=}</value>
+          <value>{AQAAABAAAAAQaWR2kmTfvUqQNPV+VZc2bx/1Nmbc9kuEdfhzBBed31Q=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>jenkins_pass</name>
+          <value>{AQAAABAAAAAQKmFV+2y+3NouDeb+TokJ8asysHn64Jbsxd4SXDvJm9Y=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
