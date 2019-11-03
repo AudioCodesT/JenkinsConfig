@@ -279,6 +279,7 @@ ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRI
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
+                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                       <properties>GERRIT_BRANCH=$GERRIT_BRANCH
 TARGET=$TARGET</properties>
