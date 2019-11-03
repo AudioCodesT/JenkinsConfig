@@ -80,7 +80,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#list of branches, sort from older to newer
-declare -a SFB_branches=(&quot;3.0.1&quot; &quot;3.1.0&quot; &quot;3.2&quot; &quot;3.4.0&quot; &quot;master&quot;)
+declare -a SFB_branches=(&quot;3.0.1&quot; &quot;3.1.0&quot; &quot;3.2&quot; &quot;master&quot;)
 #if the current gerrit branch is the last on the list then exit:
 #because there is no need to cherry pick it to anywhere
 if [ &quot;${SFB_branches[${#SFB_branches[@]}-1]}&quot; == &quot;${GERRIT_BRANCH}&quot; ]; then exit 0; fi
