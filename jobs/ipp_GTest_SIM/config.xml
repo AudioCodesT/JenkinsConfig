@@ -226,18 +226,10 @@ export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
 compileFailed=&quot;False&quot;
-make GTEST=1 $model || compileFailed=&quot;True&quot;
-
-#if comilation of 450HD Sim Fail =&gt; add message to gerrit
-if [[ &quot;$compileFailed&quot; == &quot;True&quot; ]] 
-then
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest Failed because the Compilation of 450HD SIM Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
-# the compilation of 450HD Pass successfully, continue the build
-ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
-else
-#run valgrind/gtest
+make GTEST=1 $MAKE_CMD
+#run valgrind script
 sudo ./vSFB.sh gtest_valgrind
-fi
+
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -246,10 +238,50 @@ fi
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
-          <publisherList/>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>FAILURE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+base=https://$GERRIT_HOST/a/changes
+id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
+idEscaped=${id////%2F}
+endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+
+
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+# the compilation of 450HD Pass successfully, continue the build
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
+
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
           <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <publisherList/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
@@ -320,7 +352,7 @@ fi
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}build.${AUTOPRD}/GTestLogs/*=&gt;SFB/${GERRIT_BRANCH}/$TARGET/Gtest-Logs</deployPattern>
+      <deployPattern>${WORKSPACE}/build.${AUTOPRD}/GTestLogs/*=&gt;SFB/${GERRIT_BRANCH}/$TARGET/Gtest-Logs</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
