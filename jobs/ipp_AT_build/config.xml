@@ -172,7 +172,7 @@ if ! curl -ks -u $User -X GET $Artifactory/${GERRIT_BRANCH}/$REFTARGET | grep -q
         if [ $ps -ge $checkPS ]; then
           if [[ ! &quot;$value&quot; =~ NO_ ]]; then lastREWORK=$checkPS; fi
         else
-          if [[ &quot;$value&quot; =~ NO_ ]]; then lastREWORK=$checkPS; fi        
+          lastREWORK=$checkPS       
         fi
       fi
     fi
