@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.13">
   <actions/>
-  <description>Activated by after “Push to Gerrit”:&#xd;
+  <description>Activated by after “Push to Gerrit”&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -48,21 +48,7 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
-      <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-      <on>true</on>
-      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
-      <keepBuildVariables>true</keepBuildVariables>
-      <overrideBuildParameters>false</overrideBuildParameters>
-    </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
@@ -113,48 +99,8 @@
           <pattern>IPP/SFB</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>feature/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>private/3.1*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>release/3.1*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>private/3.2*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>release/3.2*/**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>3.1**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>3.2</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>3.4**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>master</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
               <pattern>testBranch</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>release/3.4*/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -162,10 +108,10 @@
       </gerritProjects>
       <dynamicGerritProjects class="empty-list"/>
       <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
+        <onSuccessful>true</onSuccessful>
+        <onFailed>true</onFailed>
+        <onUnstable>true</onUnstable>
+        <onNotBuilt>true</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
       <notificationLevel></notificationLevel>
@@ -190,7 +136,6 @@
           <excludeTrivialRebase>false</excludeTrivialRebase>
           <excludeNoCodeChange>true</excludeNoCodeChange>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
       <triggerConfigURL></triggerConfigURL>
@@ -199,12 +144,19 @@
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <axes>
-    <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
+    <hudson.matrix.TextAxis>
       <name>MAKE_CMD</name>
       <values>
-        <string>boards2review.yml</string>
+        <string>auto</string>
+        <string>AUTOPRD=405HD__SIM</string>
+        <string>auto</string>
+        <string>AUTOPRD=430HD__SIM</string>
+        <string>auto</string>
+        <string>AUTOPRD=440HD__SIM</string>
+        <string>auto</string>
+        <string>AUTOPRD=450HD__SIM</string>
       </values>
-    </org.jenkinsci.plugins.yamlaxis.YamlAxis>
+    </hudson.matrix.TextAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
       <values>
@@ -242,28 +194,9 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>#****************************************************************************
-#************************** Probe system status *****************************
-#****************************************************************************
+      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
 
-curl -k -O -u admin:$artifactory_password https://artifactory:443/Devops/Tools/AWS/Linux/sysprobe.sh
 
-chmod +x sysprobe.sh
-./sysprobe.sh &amp;
-
-#****************************************************************************
-#****************************************************************************
-#****************************************************************************
-
-User=&quot;$artifactory_user:$artifactory_password&quot;
-
-# Check if the image exist already in the Artifactory - if exist, exit without error
-# The grep -v flag exclude the pattern, needed when the img name contains _logs_ in case of LOG=1
-if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
-if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep -q UC${SHORTAUTOPRD}_; then
-	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
-    exit 0
-fi
 git status || echo &quot;failed&quot;
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
 #**********************************************************************************************
@@ -280,7 +213,6 @@ fi
 #**********************************************************************************************
 #***********************  ***************************************************
 
-
 #if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
 #if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
 if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
@@ -293,101 +225,28 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
-NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+compileFailed=&quot;False&quot;
+make GTEST=1 $model || compileFailed=&quot;True&quot;
 
-for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  if [[ $PARAMS =~ &quot;LOG=1&quot; ]]; then
-    make $PARAMS
-  else
-    make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
-  fi
-done
-#change size_report name to 450HD_SIZE_REPORT.csv
-NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
-mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
-
-
-#****************************************************************************
-#************************** Probe system status *****************************
-#****************************************************************************
-
-cd ${WORKSPACE}
-
-echo &quot;Kill probe process&quot;
-kill -9 $(ps | grep sysprobe.sh | gawk &apos;{print $1}&apos;)
-
-echo &quot;Archive probe csv &amp; upload to Artifactory&quot;
-mv sysprobe.csv ${BUILD_NUMBER}-${AUTOPRD}.csv
-tar zcfv ${BUILD_NUMBER}-${AUTOPRD}.tar.gz ${BUILD_NUMBER}-${AUTOPRD}.csv
-curl -u admin:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz &quot;https://artifactory/Devops/Probes/ippReview_SFB/${BUILD_NUMBER}/${BUILD_NUMBER}-${AUTOPRD}.tar.gz&quot;
-
-#****************************************************************************
-#****************************************************************************
-#****************************************************************************</command>
+#if comilation of 450HD Sim Fail =&gt; add message to gerrit
+if [[ &quot;$compileFailed&quot; == &quot;True&quot; ]] 
+then
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest Failed because the Compilation of 450HD SIM Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+# the compilation of 450HD Pass successfully, continue the build
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
+else
+#run valgrind/gtest
+sudo ./vSFB.sh gtest_valgrind
+fi
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != &quot;3.0.1&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.1.0&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.2&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;3.4.0&quot; ]]
-then exit 1
-fi</command>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
-GERRIT_CHANGE_ID=${GERRIT_CHANGE_ID}
-GERRIT_PATCHSET_REVISION=${GERRIT_PATCHSET_REVISION}
-GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
-GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>ippVerifyCherryPick</projects>
-                  <condition>ALWAYS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                  <triggerFromChildProjects>false</triggerFromChildProjects>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.0&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;3.1&quot;* ]]
-then
-exit 1
-fi
-</command>
-          </condition>
-          <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
-              <configs>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
-GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                  </configs>
-                  <projects>ippSizeChecker_Review</projects>
-                  <condition>SUCCESS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                  <triggerFromChildProjects>false</triggerFromChildProjects>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-              </configs>
-            </hudson.plugins.parameterizedtrigger.BuildTrigger>
-          </publisherList>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <publisherList/>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
           <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
@@ -420,45 +279,6 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
       <cleanupParameter></cleanupParameter>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>#!/bin/sh
-FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
-Owner=$GERRIT_PATCHSET_UPLOADER_NAME
-message=&quot;&quot;
-if [[ ! $GERRIT_BRANCH =~ private ]]; then
-  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Shai Peretz&quot; ] ; then
-      echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
-      message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
-fi
-if [[ $FilesList =~ src/dspg_kernel|src/u-boot ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q &quot;$Owner&quot;;
-then
-      echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
-      message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
-fi
-
-if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/emsc/|ib/device_management/ ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q &quot;$Owner&quot;;
-then
-      echo  ------------   You do not have permission to change the reference to  the IPP-SFB SubModule ----------------
-      message=&quot;You do not have permission to change the reference to  the IPP-SFB SubModule&quot;
-fi
-
-if [ ! -z &quot;$message&quot; ]; then
-      base=https://$GERRIT_HOST/a/changes
-      CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
-      #id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
-      id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
-      idEscaped=${id////%2F}
-
-      endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-      $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
-      exit 1;
-  fi
-fi
-</script>
-      <scriptType>unixScript</scriptType>
-      <runOnlyOnParent>true</runOnlyOnParent>
-      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
-    </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
@@ -500,12 +320,7 @@ fi
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/build/*_size_report.csv=&gt;SFB/${GERRIT_BRANCH}/$TARGET
-${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
-${WORKSPACE}/build/image/phone.bin=&gt;SFB/${GERRIT_BRANCH}/$TARGET
-${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/${GERRIT_BRANCH}/$TARGET
-${WORKSPACE}/include/ipp_version.h_shipped=&gt;SFB/${GERRIT_BRANCH}/$TARGET
-${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
+      <deployPattern>${WORKSPACE}build.${AUTOPRD}/GTestLogs/*=&gt;SFB/${GERRIT_BRANCH}/$TARGET/Gtest-Logs</deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
