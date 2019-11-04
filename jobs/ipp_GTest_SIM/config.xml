@@ -197,7 +197,7 @@ git status || echo &quot;failed&quot;
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
 #**********************************************************************************************
 #***********************  ***************************************************
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;testBranch&quot; ]]
 then
 	git submodule foreach git status || echo &quot;failed&quot;
     git submodule foreach git clean -fdx || echo &quot;failed&quot;
