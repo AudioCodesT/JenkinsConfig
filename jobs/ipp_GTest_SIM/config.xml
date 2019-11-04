@@ -242,49 +242,6 @@ done
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.NeverRun" plugin="run-condition@1.0"/>
-          <publisherList>
-            <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.6.0">
-              <config>
-                <scriptFiles/>
-                <groovyScripts/>
-                <buildSteps>
-                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                    <results>
-                      <string>FAILURE</string>
-                    </results>
-                    <role>BOTH</role>
-                    <executeOn>MATRIX</executeOn>
-                    <buildSteps>
-                      <hudson.tasks.Shell>
-                        <command>#!/bin/sh
-set -xe
-CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
-base=https://$GERRIT_HOST/a/changes
-id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
-idEscaped=${id////%2F}
-endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-
-
-#$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
-# the compilation of 450HD Pass successfully, continue the build
-#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
-
-</command>
-                      </hudson.tasks.Shell>
-                    </buildSteps>
-                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-                </buildSteps>
-                <markBuildUnstable>false</markBuildUnstable>
-              </config>
-            </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
-          </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
-          <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
-        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
           <publisherList>
             <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
