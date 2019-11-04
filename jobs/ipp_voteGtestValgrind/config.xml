@@ -148,8 +148,8 @@ do
   
 
 done
-gtest_message_to_send=&quot;${gtest_message_to_send} Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
-valgrind_message_to_send=&quot;${valgrind_message_to_send} Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
+gtest_message_to_send=&quot;${gtest_message_to_send} GTest Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
+valgrind_message_to_send=&quot;${valgrind_message_to_send} valgrind Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
 
 echo &quot;Give Score for GTest&quot;
 if [[ $gtestFailedAtLeastOnce == &quot;True&quot; ]]
