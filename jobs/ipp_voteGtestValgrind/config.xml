@@ -111,7 +111,7 @@ do
   if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
   then
   gtestSign=&quot;-1&quot;
-  gtest_message_to_send=&quot;${gtest_message_to_send} ${model},&quot;
+  gtest_message_to_send=&quot;${gtest_message_to_send}${model} &quot;
   gtestFailedAtLeastOnce=&quot;True&quot;
   elif [[ &quot;$gtestRetValue&quot; == &quot;1&quot; ]]
   then
