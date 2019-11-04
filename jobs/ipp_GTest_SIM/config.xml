@@ -256,7 +256,9 @@ done
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+                        <command>#!/bin/sh
+set -xe
+CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
@@ -340,7 +342,9 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>cd ${WORKSPACE}
+                        <command>#!/bin/sh
+set -xe
+cd ${WORKSPACE}
 sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
