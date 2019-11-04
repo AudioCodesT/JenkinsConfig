@@ -151,21 +151,36 @@ ${CI_RES_LOCAL_REPO}/Scripts/webrtc_ios_setup_and_build.sh -w &quot;$WORKSPACE&q
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
-      <configVersion>2</configVersion>
-      <pushMerge>false</pushMerge>
-      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
-      <forcePush>false</forcePush>
-      <tagsToPush>
-        <hudson.plugins.git.GitPublisher_-TagToPush>
-          <targetRepoName>origin</targetRepoName>
-          <tagName>${NEWTAG}</tagName>
-          <tagMessage>Jenkins Auto tagging</tagMessage>
-          <createTag>true</createTag>
-          <updateTag>true</updateTag>
-        </hudson.plugins.git.GitPublisher_-TagToPush>
-      </tagsToPush>
-    </hudson.plugins.git.GitPublisher>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+            <arg1>${GERRIT_BRANCH}</arg1>
+            <arg2>master</arg2>
+            <ignoreCase>false</ignoreCase>
+          </condition>
+          <publisherList>
+            <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
+              <configVersion>2</configVersion>
+              <pushMerge>false</pushMerge>
+              <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+              <forcePush>false</forcePush>
+              <tagsToPush>
+                <hudson.plugins.git.GitPublisher_-TagToPush>
+                  <targetRepoName>origin</targetRepoName>
+                  <tagName>${NEWTAG}</tagName>
+                  <tagMessage>Jenkins Auto tagging</tagMessage>
+                  <createTag>true</createTag>
+                  <updateTag>true</updateTag>
+                </hudson.plugins.git.GitPublisher_-TagToPush>
+              </tagsToPush>
+            </hudson.plugins.git.GitPublisher>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
