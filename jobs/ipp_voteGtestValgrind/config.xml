@@ -82,7 +82,7 @@ gtest_message_to_send=&quot;&quot;
 valgrind_message_to_send=&quot;&quot;
 gtestFailedAtLeastOnce=&quot;False&quot;
 valgrindFailedAtLeastOnce=&quot;False&quot;
-artifactory_url=&quot;https://$artifactory_host/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/Gtest-Logs&quot;
+artifactory_url=&quot;https://$artifactory_host/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs&quot;
 models=(&quot;405HD__SIM&quot; &quot;430HD__SIM&quot; &quot;440HD__SIM&quot; &quot;450HD__SIM&quot;)
 
 for model in ${models[@]}
@@ -130,16 +130,16 @@ valgrind_message_to_send=&quot;${valgrind_message_to_send} Failed.${NEWLINE}You 
 
 if [[ $gtestFailedAtLeastOnce == &quot;True&quot; ]]
 then
-CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${gtest_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${gtest_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
 else
-CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;1\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;1\&quot;}}&quot;
 fi
 
 if [[ $valgrindFailedAtLeastOnce == &quot;True&quot; ]]
 then
-CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${valgrind_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;-1\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${valgrind_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;-1\&quot;}}&quot;
 else
-CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;1\&quot;}}&quot;
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;1\&quot;}}&quot;
 fi</command>
     </hudson.tasks.Shell>
   </builders>
