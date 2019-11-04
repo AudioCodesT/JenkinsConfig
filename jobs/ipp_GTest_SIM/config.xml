@@ -293,8 +293,12 @@ endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
                   <configs>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>GERRIT_BRANCH=${GERRIT_BRANCH}
-GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
+                      <properties>GERRIT_PROJECT=${GERRIT_PROJECT}
+GERRIT_BRANCH=${GERRIT_BRANCH}
+GERRIT_REFSPEC=${GERRIT_REFSPEC}
+GERRIT_CHANGE_ID=${GERRIT_CHANGE_ID}
+GERRIT_PATCHSET_REVISION=${GERRIT_PATCHSET_REVISION}
+GERRIT_HOST=${GERRIT_HOST}</properties>
                       <textParamValueOnNewLine>false</textParamValueOnNewLine>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
