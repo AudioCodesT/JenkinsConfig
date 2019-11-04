@@ -110,7 +110,10 @@ echo &quot;NewVersionName_NewVersionCode: ${NewVersionName}_${NewVersionCode}&qu
 NEWTAG=&quot;${NewVersionName}_${NewVersionCode}&quot;
 RELEASE_VERSION=${NewVersionName}
 BUILD_VERSION=${NewVersionCode}
-
+if [[ $GERRIT_BRANCH == &quot;tests&quot; ]]
+then
+NEWTAG=$(git describe)
+fi
 echo NEWTAG=$NEWTAG &gt; prop
 echo RELEASE_VERSION=$RELEASE_VERSION &gt;&gt; prop
 echo BUILD_VERSION=$BUILD_VERSION &gt;&gt; prop</command>
