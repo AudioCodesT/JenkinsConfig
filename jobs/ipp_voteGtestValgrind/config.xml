@@ -147,8 +147,9 @@ fi</command>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>#!/bin/sh -xe
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`</script>
+      <script>#!/bin/sh 
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+echo &quot;TARGET=${TARGET}&quot;</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>false</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
