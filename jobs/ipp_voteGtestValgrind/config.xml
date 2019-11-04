@@ -94,7 +94,7 @@ do
   if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
   then
   valgrindSign=&quot;-1&quot;
-  valgrind_message_to_send=&quot;${valgrind_message_to_send} ${model},&quot;
+  valgrind_message_to_send=&quot;${valgrind_message_to_send}${model} &quot;
   valgrindFailedAtLeastOnce=&quot;True&quot;
   elif [[ &quot;$valgrindRetValue&quot; == &quot;1&quot; ]]
   then
