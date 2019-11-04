@@ -90,7 +90,7 @@ do
 
   #fetch valgrind Errors
   valgrindRetValue=0
-  grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; ${model}/* || valgrindRetValue=$?
+  grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; ${model}* || valgrindRetValue=$?
   if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
   then
   valgrindSign=&quot;-1&quot;
@@ -107,7 +107,7 @@ do
   
   #fetch gtest errors
   gtestRetValue=0
-  grep -E &apos;[1-9]+ FAILED TEST&apos; ${model}/* || gtestRetValue=$?
+  grep -E &apos;[1-9]+ FAILED TEST&apos; ${model}* || gtestRetValue=$?
   if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
   then
   gtestSign=&quot;-1&quot;
