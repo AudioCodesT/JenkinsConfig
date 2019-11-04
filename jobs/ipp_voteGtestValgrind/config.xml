@@ -1,7 +1,12 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>triggered by the job “ipp_GTest_SIM”&#xd;
+1. download logs for all 4 ipp models&#xd;
+2. run grep per model, per gtest, per valgrind&#xd;
+3. vote aggregated to GTest label&#xd;
+4. vote aggregated to Check-Valgrind label&#xd;
+5. post message to gerrit if failed with the models name and which test it failed (valgrind or gtest)</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -90,15 +95,14 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
+      <command># parameters to post message and score to gerrit
 CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
 
-
-
+#parameters to check valgrind and gtest score
 artifactory_host=artifactory
 User=&quot;$artifactory_user:$artifactory_password&quot;
 NEWLINE=$&apos;\n&apos;
@@ -108,7 +112,7 @@ gtestFailedAtLeastOnce=&quot;False&quot;
 valgrindFailedAtLeastOnce=&quot;False&quot;
 artifactory_url=&quot;https://$artifactory_host/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs&quot;
 models=(&quot;405HD__SIM&quot; &quot;430HD__SIM&quot; &quot;440HD__SIM&quot; &quot;450HD__SIM&quot;)
-
+# run on all models and check if it passed or failed by grep, if failed at least one time, give score -1.
 for model in ${models[@]}
 do
 
@@ -144,21 +148,19 @@ do
   echo &quot;ERROR not found GTestLogs Files&quot;
   exit 1
   fi
-  
-  
-
 done
+#messages to post to gerrit
 gtest_message_to_send=&quot;${gtest_message_to_send} GTest Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
 valgrind_message_to_send=&quot;${valgrind_message_to_send} valgrind Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
 
-echo &quot;Give Score for GTest&quot;
+#Give Score for GTest
 if [[ $gtestFailedAtLeastOnce == &quot;True&quot; ]]
 then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${gtest_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
 else
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;1\&quot;}}&quot;
 fi
-echo &quot;Give Score for Valgrind&quot;
+#Give Score for Valgrind
 if [[ $valgrindFailedAtLeastOnce == &quot;True&quot; ]]
 then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${valgrind_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;-1\&quot;}}&quot;
