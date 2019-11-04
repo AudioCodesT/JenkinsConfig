@@ -228,10 +228,11 @@ sudo ./vSFB.sh gtest_valgrind
 
 
 #change the files names
-for file_name in &quot;${WORKSPACE}/build.${AUTOPRD}/GTestLogs&quot;/*
+files=$(ls ${WORKSPACE}/build.${AUTOPRD}/GTestLogs)
+for file in $files
 do
-  echo &quot;$file_name&quot;
-  mv $file_name ${AUTOPRD}${file_name}
+  file=$(echo &quot;$file&quot; | cut -d&apos;/&apos; -f1)
+  mv $file ${AUTOPRD}_${file}
 done
 
 </command>
