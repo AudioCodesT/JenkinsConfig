@@ -192,7 +192,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     <hudson.tasks.Shell>
       <command>User=&quot;$artifactory_user:$artifactory_password&quot;
 
-exit
+exit 1
 git status || echo &quot;failed&quot;
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
 #**********************************************************************************************
