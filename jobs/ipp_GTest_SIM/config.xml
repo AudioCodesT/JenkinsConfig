@@ -226,6 +226,14 @@ make GTEST=1 $MAKE_CMD
 #run valgrind script
 sudo ./vSFB.sh gtest_valgrind
 
+
+#change the files names
+for file_name in &quot;${WORKSPACE}/build.${AUTOPRD}/GTestLogs&quot;/*
+do
+  echo &quot;$file_name&quot;
+  mv $file_name ${AUTOPRD}${file_name}
+done
+
 </command>
     </hudson.tasks.Shell>
   </builders>
