@@ -20,6 +20,12 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
+          <name>GERRIT_PROJECT</name>
+          <description></description>
+          <defaultValue>IPP/SFB</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
           <description></description>
           <defaultValue></defaultValue>
@@ -29,6 +35,24 @@
           <name>GERRIT_REFSPEC</name>
           <description></description>
           <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_CHANGE_ID</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_PATCHSET_REVISION</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_HOST</name>
+          <description></description>
+          <defaultValue>gerrit</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -127,14 +151,14 @@ done
 gtest_message_to_send=&quot;${gtest_message_to_send} Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
 valgrind_message_to_send=&quot;${valgrind_message_to_send} Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
 
-
+echo &quot;Give Score for GTest&quot;
 if [[ $gtestFailedAtLeastOnce == &quot;True&quot; ]]
 then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${gtest_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
 else
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;1\&quot;}}&quot;
 fi
-
+echo &quot;Give Score for Valgrind&quot;
 if [[ $valgrindFailedAtLeastOnce == &quot;True&quot; ]]
 then
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${valgrind_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;-1\&quot;}}&quot;
