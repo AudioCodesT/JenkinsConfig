@@ -149,9 +149,8 @@ fi</command>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo &quot;TARGET=${TARGET}&quot;
-echo &quot;AUTOPRD=${AUTOPRD}&quot;</script>
+</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>false</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
@@ -194,7 +193,7 @@ echo &quot;AUTOPRD=${AUTOPRD}&quot;</script>
     &quot;files&quot;: [
         {
             &quot;pattern&quot;: &quot;ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/Gtest-Logs/*&quot;,
-            &quot;target&quot;: &quot;${workspace}/${AUTOPRD}/&quot;,
+            &quot;target&quot;: &quot;${workspace}/&quot;,
              &quot;flat&quot;: &quot;true&quot;
         }   
     ]
