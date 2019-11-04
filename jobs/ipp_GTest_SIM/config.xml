@@ -2,7 +2,10 @@
 <matrix-project plugin="matrix-project@1.13">
   <actions/>
   <description>Activated by after “Push to Gerrit”&#xd;
-</description>
+* Compile Gtest SIM for 4 ipp models (405HD,430HD,440HD,450HD)&#xd;
+* Run Valgring script&#xd;
+* push logs to Artifactory&#xd;
+if all models pass successfully Trigger another job: ipp_voteGtestValgrind</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -227,7 +230,7 @@ make GTEST=1 $MAKE_CMD
 sudo ./vSFB.sh gtest_valgrind
 
 
-#change the files names
+#change the files names. add to each file at the begining the model name
 files=$(ls ${WORKSPACE}/build.${AUTOPRD}/GTestLogs)
 for file in $files
 do
