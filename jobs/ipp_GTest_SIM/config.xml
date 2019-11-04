@@ -244,7 +244,7 @@ done
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
           <condition class="org.jenkins_ci.plugins.run_condition.core.NeverRun" plugin="run-condition@1.0"/>
           <publisherList>
-            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+            <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.6.0">
               <config>
                 <scriptFiles/>
                 <groovyScripts/>
@@ -254,6 +254,7 @@ done
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>MATRIX</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>#!/bin/sh
@@ -265,9 +266,9 @@ idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
 
 
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+#$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
 # the compilation of 450HD Pass successfully, continue the build
-ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
+#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
 
 </command>
                       </hudson.tasks.Shell>
@@ -276,7 +277,7 @@ ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRI
                 </buildSteps>
                 <markBuildUnstable>false</markBuildUnstable>
               </config>
-            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+            </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
           </publisherList>
           <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
           <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
@@ -344,8 +345,8 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
                       <hudson.tasks.Shell>
                         <command>#!/bin/sh
 set -xe
-cd ${WORKSPACE}
-sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
+#cd ${WORKSPACE}
+#sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
                       </hudson.tasks.Shell>
                     </buildSteps>
                   </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
@@ -359,6 +360,59 @@ sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.6.0">
+      <config>
+        <scriptFiles/>
+        <groovyScripts/>
+        <buildSteps>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>FAILURE</string>
+            </results>
+            <role>BOTH</role>
+            <executeOn>MATRIX</executeOn>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>#!/bin/sh
+set -xe
+CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+base=https://$GERRIT_HOST/a/changes
+id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
+idEscaped=${id////%2F}
+endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+
+
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+# the compilation of 450HD Pass successfully, continue the build
+ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
+
+</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>SUCCESS</string>
+              <string>NOT_BUILT</string>
+              <string>ABORTED</string>
+              <string>FAILURE</string>
+              <string>UNSTABLE</string>
+            </results>
+            <role>BOTH</role>
+            <executeOn>AXES</executeOn>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>#!/bin/sh
+set -xe
+cd ${WORKSPACE}
+sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+        </buildSteps>
+        <markBuildUnstable>false</markBuildUnstable>
+      </config>
+    </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
       <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection).*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
