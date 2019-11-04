@@ -42,6 +42,19 @@
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <EnvInjectJobProperty plugin="envinject@2.1.5">
+      <info>
+        <secureGroovyScript plugin="script-security@1.54.2">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+      <on>true</on>
+      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
+      <keepBuildVariables>true</keepBuildVariables>
+      <overrideBuildParameters>false</overrideBuildParameters>
+    </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ipp-centos7.4</assignedNode>
@@ -134,7 +147,8 @@ fi</command>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`</script>
+      <script>#!/bin/sh
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>false</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
@@ -176,8 +190,7 @@ fi</command>
         <spec>{
     &quot;files&quot;: [
         {
-
-            &quot;pattern&quot;: &quot;ipp-review/SFB/${GERRIT_BRANCH}/$TARGET/Gtest-Logs/&quot;,
+            &quot;pattern&quot;: &quot;ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/Gtest-Logs/&quot;,
             &quot;target&quot;: &quot;${workspace}/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         }   
