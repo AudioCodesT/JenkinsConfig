@@ -133,6 +133,46 @@ fi
       </info>
     </EnvInjectBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>440</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp_Sanity_Night_Build</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>false</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition></condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>ConfigName=${ConfigName}
+model=440
+LASTBL=${LASTBLA}
+BuildRelease=${BuildReleaseA}
+DelayTime=180
+ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
+ServerType=Lync</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
+              <name>PC2RUN</name>
+              <nodeLabel>$NODE_NAME</nodeLabel>
+            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
+          </configs>
+          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>ALWAYS</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>445</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
@@ -196,46 +236,6 @@ model=450
 LASTBL=${LASTBLB}
 BuildRelease=${BuildReleaseB}
 DelayTime=90
-ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
-ServerType=Lync</properties>
-              <textParamValueOnNewLine>false</textParamValueOnNewLine>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-            <org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter plugin="nodelabelparameter@1.7.2">
-              <name>PC2RUN</name>
-              <nodeLabel>$NODE_NAME</nodeLabel>
-            </org.jvnet.jenkins.plugins.nodelabelparameter.parameterizedtrigger.NodeLabelBuildParameter>
-          </configs>
-          <killPhaseOnJobResultCondition>FAILURE</killPhaseOnJobResultCondition>
-          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
-          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
-        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-      </phaseJobs>
-      <continuationCondition>ALWAYS</continuationCondition>
-      <executionType>PARALLEL</executionType>
-    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
-      <phaseName>440</phaseName>
-      <phaseJobs>
-        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
-          <jobName>ipp_Sanity_Night_Build</jobName>
-          <jobAlias></jobAlias>
-          <currParams>true</currParams>
-          <aggregatedTestResults>false</aggregatedTestResults>
-          <exposedSCM>false</exposedSCM>
-          <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
-          <maxRetries>0</maxRetries>
-          <enableRetryStrategy>false</enableRetryStrategy>
-          <enableCondition>false</enableCondition>
-          <abortAllJob>true</abortAllJob>
-          <condition></condition>
-          <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
-              <properties>ConfigName=${ConfigName}
-model=440
-LASTBL=${LASTBLA}
-BuildRelease=${BuildReleaseA}
-DelayTime=180
 ATA_Home=C:/IpPhoneAutomation/ModifeidIterations/ATA
 ServerType=Lync</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
