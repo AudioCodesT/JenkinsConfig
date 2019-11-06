@@ -151,7 +151,7 @@ echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
       <command>export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 yes | make distclean
 
-if [[ &quot;$BUILD_BRANCH&quot; == &quot;master&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/lib_submodule&quot; ]]
+if [[ &quot;$BUILD_BRANCH&quot; == &quot;master&quot; || &quot;$BUILD_BRANCH&quot; == &quot;feature/&quot;* ]]
 then
 	git submodule foreach git status || echo &quot;failed&quot;
     git submodule foreach git clean -fdx || echo &quot;failed&quot;
