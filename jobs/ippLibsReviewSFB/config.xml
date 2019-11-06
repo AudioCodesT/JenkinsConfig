@@ -148,9 +148,13 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       <command>User=&quot;$artifactory_user:$artifactory_password&quot;
 GERRIT_BRANCH=${LIB_BRANCH}
 
+git submodule foreach git status || echo &quot;failed&quot;
+git submodule foreach git clean -fdx || echo &quot;failed&quot;
+git submodule foreach git checkout -- . || echo &quot;failed&quot;
 git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-
+git submodule foreach git reset --hard HEAD
+git submodule update
 
 
 
