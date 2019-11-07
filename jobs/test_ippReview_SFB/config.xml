@@ -280,7 +280,7 @@ fi
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}_${GERRIT_REFSPEC}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
