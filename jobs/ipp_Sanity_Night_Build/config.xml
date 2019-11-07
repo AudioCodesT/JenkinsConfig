@@ -187,7 +187,7 @@ for BOARD in $BoardsList; do
   # In case of 445HD_IGS, the image name is without the _IGS
   #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
   
-  
+  imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;.img&quot;
   if [ &quot;$BuildRelease&quot; == &quot;master&quot; ]; then
   	if [ &quot;$BOARD&quot; == &quot;440HD&quot; ] || [ &quot;$BOARD&quot; == &quot;430HD&quot; ] || [ &quot;$BOARD&quot; == &quot;405HD&quot; ]; then
     	if [ &quot;$ServetType&quot; == &quot;IGS&quot; ]; then 
@@ -196,7 +196,6 @@ for BOARD in $BoardsList; do
         	imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
         fi
     fi
-  else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;.img&quot;
   fi
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
