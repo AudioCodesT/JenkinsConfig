@@ -312,7 +312,7 @@ id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
 
-#Need to vote and message in 1 POST
+
 $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
 
 
