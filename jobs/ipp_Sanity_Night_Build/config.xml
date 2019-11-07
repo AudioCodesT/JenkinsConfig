@@ -188,21 +188,21 @@ for BOARD in $BoardsList; do
   #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
   
   imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;.img&quot;
-  BUILD = $LASTBL
+  buildN = $LASTBL
   if [ &quot;$BuildRelease&quot; == &quot;master&quot; ]; then
   	if [ &quot;$BOARD&quot; == &quot;440HD&quot; ] || [ &quot;$BOARD&quot; == &quot;430HD&quot; ] || [ &quot;$BOARD&quot; == &quot;405HD&quot; ]; then
     	if [ &quot;$ServetType&quot; == &quot;IGS&quot; ]; then 
         	imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_IGS.img&quot;
-            BUILD = $LASTBL&quot;_IGS&quot;
+            buildN = &quot;${LASTBL}_IGS&quot;
     	else 
         	imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
-            BUILD = $LASTBL&quot;_SFB&quot;
+            buildN = &quot;${LASTBL}_SFB&quot;
         fi
     fi
   fi
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   
-  if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $BUILD.img\&quot;; then
+  if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q ${buildN}.img\&quot;; then
     echo -- Check if $imageName exist in z:
     if [ ! -f z:/$imageName ]; then
       echo ----      Download $imageName to z:
