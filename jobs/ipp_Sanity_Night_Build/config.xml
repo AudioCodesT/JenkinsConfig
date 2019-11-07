@@ -188,10 +188,9 @@ for BOARD in $BoardsList; do
   #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
   
   
-  if [&quot;$BuildRelease&quot; == &quot;master&quot;]; then
-  	imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
-  	if [&quot;$BOARD&quot; == &quot;440HD&quot; ] || [&quot;$BOARD&quot; == &quot;430HD&quot; ] || [&quot;$BOARD&quot; == &quot;405HD&quot; ]; then
-    	if [&quot;$ServetType&quot; == &quot;IGS&quot;]; then imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_IGS.img&quot;
+  if [&quot;$BuildRelease&quot; == *&quot;master&quot;*]; then
+  	if [&quot;$BOARD&quot; == *&quot;440HD&quot;* ] || [&quot;$BOARD&quot; == *&quot;430HD&quot;* ] || [&quot;$BOARD&quot; == *&quot;405HD&quot;* ]; then
+    	if [&quot;$ServetType&quot; == *&quot;IGS&quot;*]; then imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_IGS.img&quot;
     	else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
         fi
     fi
