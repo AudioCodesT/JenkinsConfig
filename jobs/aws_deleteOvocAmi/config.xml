@@ -86,6 +86,7 @@ imagesListOf7_6_1000 = []
 imagesListOf7_6_2000 = []
 imagesListOf7_8 = []
 # Loop through each image of our current instance
+print &quot;Start to check from all the images for ovoc AMIs&quot;
 for image in images:
      if image.name.startswith(&apos;ovocAMI_7.6&apos;):
         for tag in image.tags:
