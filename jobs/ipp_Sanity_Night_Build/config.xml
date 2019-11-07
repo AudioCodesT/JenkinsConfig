@@ -194,7 +194,7 @@ for BOARD in $BoardsList; do
     	else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
         fi
     fi
-  else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
+  else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;.img&quot;
   fi
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
