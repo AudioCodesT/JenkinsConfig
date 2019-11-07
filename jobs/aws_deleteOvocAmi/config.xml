@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>save the newest 3 Ovoc Ami&apos;s and delete the rest</description>
+  <description>save the newest 5 Ovoc Ami&apos;s and delete the rest</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -63,7 +63,7 @@ def deleteAmis (imagesList):
 	 sortedAmis = sorted(imagesList,key=lambda im: im.creation_date, reverse=True)
 	 for image in sortedAmis:
      	 print(&quot;image %s is %s&quot; % (count, image.name))
-     	 if count &gt;= 3:
+     	 if count &gt;= 5:
             print &quot;Delete AmI %s&quot; % image.id
             image.deregister()
  	    # Search for additional snapshots for the current image and delete them
