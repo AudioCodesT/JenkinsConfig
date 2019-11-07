@@ -1,10 +1,11 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.13">
   <actions/>
-  <description>Activated by after “Push to Gerrit”&#xd;
+  <description>Triggered by “Push to Gerrit”&#xd;
+Matrix job&#xd;
 * Compile Gtest SIM for 4 ipp models (405HD,430HD,440HD,450HD)&#xd;
-* Run Valgring script&#xd;
-* push logs to Artifactory&#xd;
+* Run Valgrind script&#xd;
+* push logs to Artifactory per model&#xd;
 if all models pass successfully Trigger another job: ipp_voteGtestValgrind</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -214,7 +215,6 @@ fi
 #***********************  ***************************************************
 
 #if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
-#if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
 if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
 	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
     	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
@@ -312,9 +312,8 @@ id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
 endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
 
-
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;Valgrind and GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
-# the compilation of 450HD Pass successfully, continue the build
+#Need to vote and message in 1 POST
+$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;GTest SIM Compilation Failed.\n${BUILD_URL} \&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
 ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label GTest=-1 ${GERRIT_PATCHSET_REVISION}
 
 </command>
