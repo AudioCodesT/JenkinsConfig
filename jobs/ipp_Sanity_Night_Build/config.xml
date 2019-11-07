@@ -236,7 +236,15 @@ BUILD_ID=dontKillMe
 export $BUILD_ID
 
 modelImage=UC${model}HD_${LASTBL}.img
-
+if [ &quot;$BuildRelease&quot; == &quot;master&quot; ]; then
+  	if [ &quot;$model&quot; == &quot;440HD&quot; ] || [ &quot;$model&quot; == &quot;430HD&quot; ] || [ &quot;$model&quot; == &quot;405HD&quot; ]; then
+    	if [ &quot;$ServetType&quot; == &quot;IGS&quot; ]; then 
+        	modelImage=UC${model}HD_${LASTBL}_IGS.img
+    	else 
+        	modelImage=UC${model}HD_${LASTBL}_SFB.img
+        fi
+    fi
+fi
 echo Check if file z:/$modelImage
 if [ -f z:/$modelImage ]; then
   echo cd ${ATA_Home}
