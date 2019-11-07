@@ -186,8 +186,16 @@ for BOARD in $BoardsList; do
 
   # In case of 445HD_IGS, the image name is without the _IGS
   #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
+  
+  
   imageName=UC${BOARD}_$LASTBL.img
-
+  if [&quot;$BuildRelease&quot; == &quot;master&quot;]; then
+  	if [&quot;$BOARD&quot; == &quot;440HD&quot; ] || [&quot;$BOARD&quot; == &quot;405HD&quot; ]; then
+    	if [&quot;$ServetType&quot; == &quot;IGS&quot;]; then imageName=UC${BOARD}_${LASTBL}_IGS.img
+    	else imageName=UC${BOARD}_${LASTBL}_SFB.img
+        fi
+    fi
+  fi
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
     echo -- Check if $imageName exist in z:
