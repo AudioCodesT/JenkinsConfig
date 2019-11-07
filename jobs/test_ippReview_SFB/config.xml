@@ -153,7 +153,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       <command>
 
 User=&quot;$artifactory_user:$artifactory_password&quot;
-
+git fetch &quot;ssh://jenkins@gerrit:29418/IPP/SFB&quot; refs/changes/87/32287/3 &amp;&amp; git checkout FETCH_HEAD
 
 git status || echo &quot;failed&quot;
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
