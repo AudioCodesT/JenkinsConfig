@@ -307,7 +307,7 @@ echo &quot;*********************************************************************
 #******************************Finish temporary workaround*************************************
 
 #add neccessary toolchain to the slave machine
-sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;make all;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;make all&quot;
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;make_file_grx;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;make_file_grx&quot;
 </command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
@@ -460,6 +460,16 @@ echo NEWTAG=${NEWTAG}</script>
         }, 
        {
             &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;,
+            &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+       {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/ac_fw_grx.fwb&quot;,
+            &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+       {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDSP/Hpi_64/ac_fw_grx.fwb&quot;,
             &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${NEWTAG}/${CHIP_NAME}/Out/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         }
