@@ -188,13 +188,13 @@ for BOARD in $BoardsList; do
   #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
   
   
-  imageName=UC${BOARD}_$LASTBL.img
   if [&quot;$BuildRelease&quot; == &quot;master&quot;]; then
-  	if [&quot;$BOARD&quot; == &quot;440HD&quot; ] || [&quot;$BOARD&quot; == &quot;405HD&quot; ]; then
-    	if [&quot;$ServetType&quot; == &quot;IGS&quot;]; then imageName=UC${BOARD}_${LASTBL}_IGS.img
-    	else imageName=UC${BOARD}_${LASTBL}_SFB.img
+  	if [$BOARD == &quot;440HD&quot; ] || [$BOARD == &quot;430HD&quot; ] || [$BOARD == &quot;405HD&quot; ]; then
+    	if [$ServetType == &quot;IGS&quot;]; then imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_IGS.img&quot;
+    	else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
         fi
     fi
+  else imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;.img&quot;
   fi
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
