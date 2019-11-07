@@ -237,7 +237,7 @@ export $BUILD_ID
 
 modelImage=UC${model}HD_${LASTBL}.img
 if [ &quot;$BuildRelease&quot; == &quot;master&quot; ]; then
-  	if [ &quot;$model&quot; == &quot;440HD&quot; ] || [ &quot;$model&quot; == &quot;430HD&quot; ] || [ &quot;$model&quot; == &quot;405HD&quot; ]; then
+  	if [ &quot;$model&quot; == &quot;440&quot; ] || [ &quot;$model&quot; == &quot;430&quot; ] || [ &quot;$model&quot; == &quot;405&quot; ]; then
     	if [ &quot;$ServetType&quot; == &quot;IGS&quot; ]; then 
         	modelImage=UC${model}HD_${LASTBL}_IGS.img
     	else 
