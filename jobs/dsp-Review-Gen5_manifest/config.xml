@@ -351,7 +351,7 @@ echo &quot;*********************************************************************
 #******************************Finish temporary workaround*************************************
 
 #add neccessary toolchain to the slave machine
-sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 777 make_file_grx;./make_file_grx;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;chmod 777 make_file_grx;./make_file_grx&quot;
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
 #export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
 #export LD_LIBRARY_PATH=&quot;/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib&quot;
 
@@ -450,6 +450,11 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
             &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         },
+       {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/*.fwb&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
         {
             &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot;,
             &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
@@ -457,11 +462,6 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         }, 
        {
             &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
-        },
-       {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDSP/Hpi_64/ac_fw_grx.fwb&quot;,
             &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         }
