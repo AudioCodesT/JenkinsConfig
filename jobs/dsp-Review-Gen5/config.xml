@@ -391,7 +391,7 @@ echo &quot;*********************************************************************
 #******************************Finish temporary workaround*************************************
 
 #add neccessary toolchain to the slave machine
-sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
 #export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
 #export LD_LIBRARY_PATH=&quot;/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib&quot;
 
