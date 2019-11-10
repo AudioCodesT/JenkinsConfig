@@ -1886,8 +1886,8 @@ sudo yum install -y git-2.18.0</initScript>
     <com.tikal.jenkins.plugins.multijob.views.MultiJobView plugin="jenkins-multijob-plugin@1.32">
       <owner class="hudson" reference="../../.."/>
       <name>Running Jobs</name>
-      <filterExecutors>false</filterExecutors>
-      <filterQueue>false</filterQueue>
+      <filterExecutors>true</filterExecutors>
+      <filterQueue>true</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
