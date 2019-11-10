@@ -307,7 +307,7 @@ echo &quot;*********************************************************************
 #******************************Finish temporary workaround*************************************
 
 #add neccessary toolchain to the slave machine
-sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;./make_file_grx;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;./make_file_grx&quot;
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 777 make_file_grx;./make_file_grx;cd ${WORKSPACE}/Gen5/GRX/SoftHost/Hpi_64;make clean;chmod 777 make_file_grx;./make_file_grx&quot;
 </command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
