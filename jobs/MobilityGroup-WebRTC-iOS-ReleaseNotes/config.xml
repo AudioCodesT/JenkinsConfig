@@ -142,12 +142,6 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; WebRTC_iOS.properties
         <propertiesFilePath>WebRTC_iOS.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <hudson.tasks.Shell>
-      <command>#!/bin/bash -xe
-
-exit 1
-exit 1</command>
-    </hudson.tasks.Shell>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
       <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
