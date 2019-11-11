@@ -121,7 +121,7 @@ RN=&quot;&quot;
 while read -r hash; do
   if [ &quot;$hash&quot; != &quot;&quot; ]; then
     subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
-    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep -i ^Issue | sed &apos;s/.* \(VI\|\)//gi; s/ .*//g&apos;)
+    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep -i ^Issue | cut -d&apos; &apos; -f2)
     RN+=---$subject::$hash::$Jira
   fi
 done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $OLDTAG..$NEWTAG)&quot;
