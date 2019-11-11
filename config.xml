@@ -1924,62 +1924,6 @@ sudo yum install -y git-2.18.0</initScript>
       </columns>
       <recurse>true</recurse>
     </listView>
-    <listView>
-      <owner class="hudson" reference="../../.."/>
-      <name>Shuky</name>
-      <filterExecutors>false</filterExecutors>
-      <filterQueue>false</filterQueue>
-      <properties class="hudson.model.View$PropertyList"/>
-      <jobNames>
-        <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView[14]/jobNames/comparator"/>
-      </jobNames>
-      <jobFilters>
-        <hudson.views.UserRelevanceFilter plugin="view-job-filters@2.1.1">
-          <includeExcludeTypeString>includeMatched</includeExcludeTypeString>
-          <buildCountTypeString>Latest</buildCountTypeString>
-          <amountTypeString>Hours</amountTypeString>
-          <amount>0.0</amount>
-          <matchUserId>true</matchUserId>
-          <matchUserFullName>true</matchUserFullName>
-          <ignoreCase>true</ignoreCase>
-          <ignoreWhitespace>true</ignoreWhitespace>
-          <ignoreNonAlphaNumeric>true</ignoreNonAlphaNumeric>
-          <matchBuilder>true</matchBuilder>
-          <matchEmail>true</matchEmail>
-          <matchScmChanges>true</matchScmChanges>
-        </hudson.views.UserRelevanceFilter>
-        <hudson.views.SecurityFilter plugin="view-job-filters@2.1.1">
-          <includeExcludeTypeString>includeMatched</includeExcludeTypeString>
-          <configure>false</configure>
-          <build>false</build>
-          <workspace>false</workspace>
-          <permissionCheckType>MustMatchAll</permissionCheckType>
-        </hudson.views.SecurityFilter>
-      </jobFilters>
-      <columns>
-        <hudson.views.StatusColumn/>
-        <hudson.views.WeatherColumn/>
-        <hudson.views.JobColumn/>
-        <hudson.views.LastSuccessColumn/>
-        <hudson.views.LastFailureColumn/>
-        <hudson.views.LastDurationColumn/>
-        <hudson.views.BuildButtonColumn/>
-        <org.jenkins.plugins.builton.BuiltOnColumn plugin="built-on-column@1.1"/>
-        <io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn plugin="warnings-ng@3.0.3">
-          <selectTools>false</selectTools>
-          <tools>
-            <io.jenkins.plugins.analysis.core.model.ToolSelection>
-              <id></id>
-            </io.jenkins.plugins.analysis.core.model.ToolSelection>
-          </tools>
-          <name># Issues</name>
-          <labelProviderFactory>
-            <jenkins/>
-          </labelProviderFactory>
-        </io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn>
-      </columns>
-      <recurse>false</recurse>
-    </listView>
   </views>
   <primaryView>all</primaryView>
   <slaveAgentPort>45374</slaveAgentPort>
