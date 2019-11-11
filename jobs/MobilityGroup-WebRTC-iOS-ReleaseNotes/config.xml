@@ -135,9 +135,6 @@ echo BRANCH=$BRANCH&gt;&gt; WebRTC_iOS.properties
 echo PROJECT=`git config --get remote.origin.url | sed &apos;s:.*29418/::&apos;` &gt;&gt; WebRTC_iOS.properties
 echo &quot;DATE=${DATE}&quot; &gt;&gt; WebRTC_Android.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; WebRTC_iOS.properties
-
-exit 1
-exit 1
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
@@ -145,6 +142,12 @@ exit 1
         <propertiesFilePath>WebRTC_iOS.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -xe
+
+exit 1
+exit 1</command>
+    </hudson.tasks.Shell>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
       <token>VI-Jira</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
