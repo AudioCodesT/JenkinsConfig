@@ -136,7 +136,8 @@ echo PROJECT=`git config --get remote.origin.url | sed &apos;s:.*29418/::&apos;`
 echo &quot;DATE=${DATE}&quot; &gt;&gt; WebRTC_Android.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; WebRTC_iOS.properties
 
-
+exit 1
+exit 1
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
