@@ -448,7 +448,7 @@ echo Finish give score
 if ! echo $gerrit | grep -q .; then
   echo gerrit does not work, execute manually the following:
   echo ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;$labelName failed: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
+--message &quot;&apos;$labelName $ServerType failed: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
@@ -553,7 +553,7 @@ if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
 
 echo Send OK message to Gerrit - $change,$newPS,  $labelGrade
 ssh -p 29418 jenkins@gerrit gerrit review \
---message &quot;&apos;$labelName OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
+--message &quot;&apos;$labelName $ServerType OK: $BUILD_URL ($percent%)------ $ATRun&apos;&quot; \
 --notify OWNER $labelGrade \
 --tag &quot;&apos;Automation&apos;&quot; \
 $change,$newPS
