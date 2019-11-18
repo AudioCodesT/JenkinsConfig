@@ -53,9 +53,9 @@ No build job. Only stop the instances</description>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Stopping 	i-03ad041c0aeaab209  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
+echo &quot;Stopping 	i-0810d61650c8d7050  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 stop-instances --instance-ids i-03ad041c0aeaab209
+aws ec2 stop-instances --instance-ids i-0810d61650c8d7050
 </command>
     </hudson.tasks.Shell>
   </builders>
