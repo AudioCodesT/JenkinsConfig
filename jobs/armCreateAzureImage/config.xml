@@ -101,7 +101,7 @@ Write-Output &quot;writing IP of the VMS&quot;
 set -ex
 
 cd $WORKSPACE
-
+exit 1
 #run pyton scripts to prepare arm to azure image
 #python arm_azure_image_prepare.py $Configurator_vmIP
 #python arm_azure_image_prepare.py $Router_vmIP
