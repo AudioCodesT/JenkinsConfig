@@ -73,7 +73,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
   </scm>
   <assignedNode>MobilityGroup-android-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -132,13 +132,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
   <builders>
     <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
       <switches></switches>
-      <tasks>release
--Prelease.useAutomaticVersion=true
--Prelease.releaseVersion=${ReleaseVersion}
--Prelease.newVersion=$NextSnapshotVersion
--PJOB_NAME=${JOB_NAME}
--PBUILD_NUMBER=${BUILD_NUMBER}
--PReleaseNotesFile=$fileName</tasks>
+      <tasks>release</tasks>
       <rootBuildScriptDir></rootBuildScriptDir>
       <buildFile></buildFile>
       <gradleName>(Default)</gradleName>
