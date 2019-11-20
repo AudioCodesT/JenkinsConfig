@@ -53,7 +53,7 @@ activated by new TAG on nonLync_2.2.10  or  2.2.12 or 2.2.14 or 2.2.16&#xd;
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.8.0">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -197,9 +197,9 @@ sed -i.bak &apos;s/\\/ /g&apos; generated_ipp_version.properties
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token>VI-Jira</token>
+      <token>Jira-update</token>
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>UpdateVI-Jira</job>
+      <job>Update-Jira</job>
       <shouldNotFailBuild>true</shouldNotFailBuild>
       <pollInterval>3</pollInterval>
       <connectionRetryLimit>5</connectionRetryLimit>
@@ -273,7 +273,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@2.15.1">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
