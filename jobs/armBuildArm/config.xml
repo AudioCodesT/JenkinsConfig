@@ -254,9 +254,9 @@ if [ &quot;$BRANCH&quot; == &quot;master&quot; ] &amp;&amp; [ -e RoutingManager/
       </runCondition>
       <conditionalbuilders>
         <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-          <token>VI-Jira</token>
+          <token>Jira-update</token>
           <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-          <job>UpdateVI-Jira</job>
+          <job>Update-Jira</job>
           <shouldNotFailBuild>true</shouldNotFailBuild>
           <pollInterval>3</pollInterval>
           <connectionRetryLimit>5</connectionRetryLimit>
@@ -443,7 +443,7 @@ latest_version.txt=&gt;com/ac/arm/</deployPattern>
     <EnvInjectBuildWrapper plugin="envinject@2.1.5">
       <info>
         <propertiesContent>artifactory_username=armdeploy</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
