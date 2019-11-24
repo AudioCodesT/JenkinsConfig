@@ -49,7 +49,6 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -74,7 +73,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}</refspec>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/WebRTC/Android</url>
+        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/MSGRT</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -97,26 +96,10 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
-      <switches></switches>
-      <tasks>webrtcsdk:assembleRelease</tasks>
-      <rootBuildScriptDir>SDK</rootBuildScriptDir>
-      <buildFile></buildFile>
-      <gradleName>(Default)</gradleName>
-      <useWrapper>true</useWrapper>
-      <makeExecutable>true</makeExecutable>
-      <useWorkspaceAsHome>false</useWorkspaceAsHome>
-      <wrapperLocation>SDK</wrapperLocation>
-      <passAllAsSystemProperties>false</passAllAsSystemProperties>
-      <projectProperties></projectProperties>
-      <passAllAsProjectProperties>false</passAllAsProjectProperties>
-    </hudson.plugins.gradle.Gradle>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -xe
-cp SDK/webrtcsdk/build/outputs/aar/webrtcsdk-release.aar DemoClient/webrtcsdk-release/webrtcsdk-release.aar
 
 #get Last Tag and all the commits since the last tag in reverse list
-
 LastTag=$(git describe --tags --abbrev=0 --first-parent)
 LastVersionName=$(echo $LastTag | cut -d&apos;_&apos; -f1)
 echo $LastVersionName
@@ -150,32 +133,32 @@ EOF
 
 echo NEWTAG=$NEWTAG &gt; prop</command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
     <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
       <switches></switches>
-      <tasks>assembleRelease</tasks>
+      <tasks>release
+-Prelease.useAutomaticVersion=true
+-Prelease.releaseVersion=$ReleaseVersion
+-Prelease.newVersion=$NextSnapshotVersion
+-PJOB_NAME=$JOB_NAME
+-PBUILD_NUMBER=$BUILD_NUMBER
+-PBUILD_URL=$BUILD_URL
+-PReleaseNotesFile=$fileName</tasks>
       <rootBuildScriptDir>DemoClient</rootBuildScriptDir>
       <buildFile>webrtcclient/build.gradle</buildFile>
       <gradleName>(Default)</gradleName>
       <useWrapper>true</useWrapper>
       <makeExecutable>true</makeExecutable>
       <useWorkspaceAsHome>false</useWorkspaceAsHome>
-      <wrapperLocation>DemoClient</wrapperLocation>
+      <wrapperLocation></wrapperLocation>
       <passAllAsSystemProperties>false</passAllAsSystemProperties>
       <projectProperties></projectProperties>
       <passAllAsProjectProperties>false</passAllAsProjectProperties>
     </hudson.plugins.gradle.Gradle>
-    <hudson.tasks.Shell>
-      <command>#compress SDK/Javadocs directory to upload artifactory
-cd SDK
-zip -r Javadocs.zip Javadocs
-cd ${WORKSPACE}
-zip -r -x=&apos;*prop*&apos; -x=&apos;*.git*&apos; -x=&apos;*SDK*&apos; -x=&apos;*DemoClient/.gradle*&apos; -x=&apos;*DemoClient/.idea*&apos; -x=&apos;*DemoClient/webrtcclient/build*&apos; -x=&apos;*DemoClient/webrtcclient/webrtcclient.iml*&apos; -x=&apos;*DemoClient/DemoClient.iml*&apos;  DemoClient.zip *</command>
-    </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>prop</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
@@ -246,30 +229,8 @@ zip -r -x=&apos;*prop*&apos; -x=&apos;*.git*&apos; -x=&apos;*SDK*&apos; -x=&apos
         <spec>{
     &quot;files&quot;: [
         {
-            &quot;pattern&quot;: &quot;DemoClient/webrtcclient/build/outputs/apk/release/*.apk&quot;,
-            &quot;target&quot;: &quot;MobilityGroup/WebRTC/Android/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
-        },
-        {
-            &quot;pattern&quot;: &quot;SDK/webrtcsdk/build/outputs/aar/webrtcsdk-release.aar&quot;,
-            &quot;target&quot;: &quot;MobilityGroup/WebRTC/Android/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
-        },
-        {
-            &quot;pattern&quot;: &quot;SDK/Javadocs.zip&quot;,
-            &quot;target&quot;: &quot;MobilityGroup/WebRTC/Android/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
-        },
-        {
-            &quot;pattern&quot;: &quot;SDK/releaseNotes/docs/*&quot;,
-            &quot;target&quot;: &quot;MobilityGroup/WebRTC/Android/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
-        },
-        {
-            &quot;pattern&quot;: &quot;DemoClient.zip&quot;,
-            &quot;target&quot;: &quot;MobilityGroup/WebRTC/Android/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
+            &quot;pattern&quot;: &quot;&quot;,
+            &quot;target&quot;: &quot;MobilityGroup/Backend/MSGRT/${GERRIT_BRANCH}/${NEWTAG}/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         }
     ]
