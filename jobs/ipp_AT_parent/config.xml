@@ -143,7 +143,7 @@ do
       if [ &quot;$value&quot; == &quot;REWORK&quot; ]; then
         echo It is a newest patch-set... abort action
         echo -----------------------------------------
-        ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation test for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$checkPS
+        ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation-test $ServerType for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$checkPS
         echo RunPhases=0 &gt;&gt; ${WORKSPACE}/properties.txt
         exit 0;
       else
@@ -154,7 +154,7 @@ do
   fi
 done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --files --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
 
-ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation test was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
+ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Automation-test for $ServerType was started: $BUILD_URL&apos;&quot; --label Automation-Test=0 --tag &quot;&apos;Automation&apos;&quot; $change,$ps
 
 echo RunPhases=1 &gt;&gt; ${WORKSPACE}/properties.txt
 date
