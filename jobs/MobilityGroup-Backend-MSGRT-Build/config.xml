@@ -145,21 +145,6 @@ echo NEWTAG=$NEWTAG &gt; prop</command>
         </htmlpublisher.HtmlPublisherTarget>
       </reportTargets>
     </htmlpublisher.HtmlPublisher>
-    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
-      <configVersion>2</configVersion>
-      <pushMerge>false</pushMerge>
-      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
-      <forcePush>false</forcePush>
-      <tagsToPush>
-        <hudson.plugins.git.GitPublisher_-TagToPush>
-          <targetRepoName>origin</targetRepoName>
-          <tagName>${NEWTAG}</tagName>
-          <tagMessage>Jenkins Auto tagging</tagMessage>
-          <createTag>true</createTag>
-          <updateTag>true</updateTag>
-        </hudson.plugins.git.GitPublisher_-TagToPush>
-      </tagsToPush>
-    </hudson.plugins.git.GitPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
@@ -184,7 +169,7 @@ echo NEWTAG=$NEWTAG &gt; prop</command>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQXpqcHw+FFtWxH4N7RXt/87bQjFUQ7fjva7uJNLNOFqk=}</value>
+          <value>{AQAAABAAAAAQhe1YbALVPJabA+5Znh5YxOWjYUQjX0ZG0u2Raufh5LQ=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
