@@ -112,7 +112,7 @@ NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag |
 if [ -n &quot;$Version&quot; ]
 then
 	echo &quot;Version Name entered by the User&quot;
-    if [[ $Version =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]
+    if [[ $Version =~ ^[0-9]+.[0-9]+.[0-9]+$ || $Version =~ ^[0-9]+.[0-9]$ ]]
     then
     	NEWTAG=${Version}
     else
