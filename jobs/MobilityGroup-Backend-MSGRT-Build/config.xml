@@ -101,18 +101,13 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
 
 #get Last Tag and all the commits since the last tag in reverse list
 LastTag=$(git describe --tags --abbrev=0 --first-parent)
-#if last tag is only 1  point (for example: 1.6), making it 1.6.0
-if [[ $LastTag =~ ^[0-9]+.[0-9]+$ ]]
-then
-LastTag=&quot;${LastTag}.0&quot;
-fi
 NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
 
 #if VersionName is not empty then push VersionName as the new Tag
 if [ -n &quot;$Version&quot; ]
 then
 	echo &quot;Version Name entered by the User&quot;
-    if [[ $Version =~ ^[0-9]+.[0-9]+.[0-9]+$ || $Version =~ ^[0-9]+.[0-9]$ ]]
+    if [[ $Version =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]
     then
     	NEWTAG=${Version}
     else
