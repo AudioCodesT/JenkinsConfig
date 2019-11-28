@@ -63,7 +63,6 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
-      <contributors/>
     </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -147,6 +146,21 @@ echo NEWTAG=$NEWTAG &gt; prop</command>
     </hudson.plugins.gradle.Gradle>
   </builders>
   <publishers>
+    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
+      <configVersion>2</configVersion>
+      <pushMerge>false</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <forcePush>false</forcePush>
+      <tagsToPush>
+        <hudson.plugins.git.GitPublisher_-TagToPush>
+          <targetRepoName>origin</targetRepoName>
+          <tagName>${NEWTAG}</tagName>
+          <tagMessage>Jenkins auto tagging</tagMessage>
+          <createTag>true</createTag>
+          <updateTag>true</updateTag>
+        </hudson.plugins.git.GitPublisher_-TagToPush>
+      </tagsToPush>
+    </hudson.plugins.git.GitPublisher>
     <htmlpublisher.HtmlPublisher plugin="htmlpublisher@1.15">
       <reportTargets>
         <htmlpublisher.HtmlPublisherTarget>
