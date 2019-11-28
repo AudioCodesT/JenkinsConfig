@@ -118,15 +118,18 @@ childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | 
 allChilds=($childs)
 allChildsLength=${#allChilds[@]}
 
-#get OLD TAG BRANCH (could been rebase from another branch)
-git fetch || echo &quot;git fetch has failed, not failing the build&quot;
-OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
-echo &quot;branch is:$OLDTAG_BRANCH&quot;
 
 if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
 then
 	NAGINATOR_COUNT=0
 fi
+
+
+#get OLD TAG BRANCH (could been rebase from another branch)
+git fetch || echo &quot;git fetch has failed, not failing the build&quot;
+OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
+echo &quot;branch is:$OLDTAG_BRANCH&quot;
+
 #check which BRANCH getting the report from artifactory
 curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[2]}/${OLDTAG}_size_report.csv&quot; || oldTagBranchCurlFailed=&quot;True&quot;
 if [[ &quot;$oldTagBranchCurlFailed&quot; == &quot;True&quot; ]]
