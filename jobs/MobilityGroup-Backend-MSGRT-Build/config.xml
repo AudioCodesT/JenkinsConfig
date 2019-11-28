@@ -100,8 +100,8 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       <command>#!/bin/bash -xe
 
 #get Last Tag and all the commits since the last tag in reverse list
-LastTag=$(git describe --tags --abbrev=0 --first-parent)
-NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
+#LastTag=$(git describe --tags --abbrev=0 --first-parent)
+#NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
 
 #if VersionName is not empty then push VersionName as the new Tag
 if [ -n &quot;$Version&quot; ]
