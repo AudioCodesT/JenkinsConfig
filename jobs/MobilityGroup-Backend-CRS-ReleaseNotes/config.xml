@@ -1,8 +1,8 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>First, the user build manually the job  &quot;MobilityGroup-Backend-MSGRT-Build&quot; in order to create a new TAG.&#xd;
-Then, this job automatically triggered by new TAG on Backend MSGRT.&#xd;
+  <description>First, the user build manually the job  &quot;MobilityGroup-Backend-CRS-Build&quot; in order to create a new TAG.&#xd;
+Then, this job automatically triggered by new TAG on Backend CRS.&#xd;
 &#xd;
 This job get all the information on the commits between the old tag to the new tag, and trigger the job &quot;UpdateVI-Jira&quot; which send an email to notify on the new TAG.</description>
   <keepDependencies>false</keepDependencies>
@@ -28,14 +28,13 @@ This job get all the information on the commits between the old tag to the new t
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/MSGRT</url>
+        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/CRS</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -57,7 +56,7 @@ This job get all the information on the commits between the old tag to the new t
   </scm>
   <assignedNode>MobilityGroup-android-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -66,7 +65,7 @@ This job get all the information on the commits between the old tag to the new t
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>MobilityGroup/Backend/MSGRT</pattern>
+          <pattern>MobilityGroup/Backend/CRS</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
