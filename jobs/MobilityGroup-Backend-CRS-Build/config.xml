@@ -46,7 +46,6 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -71,7 +70,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}</refspec>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/MSGRT</url>
+        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/CRS</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
