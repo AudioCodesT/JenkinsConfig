@@ -146,6 +146,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep Issue: | sed &apos;s/.*Issue: //g; s/ .*//g&apos;)
+ISSUE_TEMP=$(echo $GERRIT_CHANGE_SUBJECT | grep -oe &quot;^[[A-Z]*-[0-9]*]&quot; | tr --delete []) || echo &quot;dont fail the build&quot;
 SFB_Revision=${GERRIT_BRANCH}
 if [ ! -z &quot;$ISSUE&quot; ]; then 
     echo Search this Issue: $ISSUE...
@@ -156,6 +157,17 @@ if [ ! -z &quot;$ISSUE&quot; ]; then
      message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open | grep &apos;ref&apos;)
      SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref: &apos; &apos;{print $NF}&apos;)
 fi
+if [ ! -z &quot;$ISSUE_TEMP&quot; ]; then 
+    echo Search this Issue: $ISSUE...
+     SFB_Revision=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
+     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open | grep &apos;revision&apos;)
+     SFB_Revision=$(echo $SFB_Revision | awk -F&apos;revision: &apos; &apos;{print $NF}&apos;)
+     SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
+     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open | grep &apos;ref&apos;)
+     SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref: &apos; &apos;{print $NF}&apos;)
+fi
+
+
 echo &quot;SFB_Revision=${SFB_Revision}&quot; &gt; prop
 echo &quot;SFB_REFSPEC=${SFB_REFSPEC}&quot; &gt;&gt;prop</command>
     </hudson.tasks.Shell>
