@@ -131,7 +131,9 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
           <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
             <configs>
               <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                <properties>GERRIT_BRANCH=&quot;710&quot;</properties>
+                <properties>GERRIT_BRANCH=710
+GERRIT_BRANCH=${GERRIT_PROJECT}
+TARGET=${TARGET}</properties>
                 <textParamValueOnNewLine>false</textParamValueOnNewLine>
               </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             </configs>
@@ -156,7 +158,9 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
           <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
             <configs>
               <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                <properties>GERRIT_BRANCH=&quot;722&quot;</properties>
+                <properties>GERRIT_BRANCH=722
+GERRIT_BRANCH=${GERRIT_PROJECT}
+TARGET=${TARGET}</properties>
                 <textParamValueOnNewLine>false</textParamValueOnNewLine>
               </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             </configs>
@@ -181,7 +185,9 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
           <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
             <configs>
               <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                <properties>GERRIT_BRANCH=&quot;723&quot;</properties>
+                <properties>GERRIT_BRANCH=723
+GERRIT_BRANCH=${GERRIT_PROJECT}
+TARGET=${TARGET}</properties>
                 <textParamValueOnNewLine>false</textParamValueOnNewLine>
               </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
             </configs>
@@ -215,7 +221,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>jenkins_password</name>
-          <value>{AQAAABAAAAAQrGQn1VEXFjcn1VoTGJU9kVsUgVYocwYMk+Nr7eioDTc=}</value>
+          <value>{AQAAABAAAAAQ0QQbD/orYYijI76/gmW8zt5ytH6bbgt+ieXbjtzUfuU=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
