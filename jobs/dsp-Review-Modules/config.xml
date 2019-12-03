@@ -114,9 +114,7 @@ do
     	declare branch_${branch}=&quot;True&quot;
         echo &quot;branch_${branch}=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
     fi
-done
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt;  ${WORKSPACE}/generated_dsp.properties</command>
+done</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
