@@ -103,7 +103,7 @@ EOF
 branches_to_check=(&quot;710&quot; &quot;722&quot; &quot;723&quot;)
 rm -rf Gen5_Modules_repo_manifests
 git -c http.sslverify=false clone https://gerrit/DSP/Gen5/repo_manifests Gen5_Modules_repo_manifests
-cd repo_manifests
+cd Gen5_Modules_repo_manifests
 for branch in ${branches_to_check[@]}
 do
 	module_found=0
