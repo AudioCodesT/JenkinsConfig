@@ -101,7 +101,8 @@ machine gerrit login ${jenkins_user} password ${jenkins_password}
 EOF
 #check which branches in dsp/gen/repo_manifests in default.xml file contain the module that triggered
 branches_to_check=(&quot;710&quot; &quot;722&quot; &quot;723&quot;)
-git -c http.sslverify=false clone https://gerrit/DSP/Gen5/repo_manifests
+rm -rf Gen5_Modules_repo_manifests
+git -c http.sslverify=false clone https://gerrit/DSP/Gen5/repo_manifests Gen5_Modules_repo_manifests
 cd repo_manifests
 for branch in ${branches_to_check[@]}
 do
