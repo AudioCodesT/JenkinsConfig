@@ -210,6 +210,7 @@ cd Modules/${module}
 echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
 git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
+cd ${WORKSPACE}/Gen5
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
 
@@ -291,6 +292,7 @@ cd Modules/${module}
 echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
 git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
+cd ${WORKSPACE}/Gen5
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
 
