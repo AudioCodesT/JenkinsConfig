@@ -33,6 +33,18 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>Module_Project</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_REFSPEC</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -47,55 +59,26 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
-      <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script>import hudson.*
-import jenkins.model.*
-
-
-ProjectName=currentBuild.properties.environment.GERRIT_PROJECT
-map=null
-if (ProjectName.equals(&quot;DSP/Gen5/repo_manifests&quot;))
-{
-return [REFSPEC: &quot;+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}&quot;]
-}
-return map</script>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-      <on>true</on>
-      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
-      <keepBuildVariables>true</keepBuildVariables>
-      <overrideBuildParameters>false</overrideBuildParameters>
-    </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <refspec>$GERRIT_REFSPEC</refspec>
+        <refspec>+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}</refspec>
         <url>ssh://jenkins@gerrit:29418/DSP/Gen5</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>${GERRIT_BRANCH}</name>
+        <name>refs/heads/${GERRIT_BRANCH}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
       <hudson.plugins.git.extensions.impl.WipeWorkspace/>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
       <hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
         <sparseCheckoutPaths>
           <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
@@ -110,58 +93,7 @@ return map</script>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>DSP/Gen5</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>7**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <dynamicGerritProjects class="empty-list"/>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>true</excludeNoCodeChange>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
@@ -202,11 +134,14 @@ repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRAN
 echo &quot;repo sync&quot;
 repo sync
 
-# cd to releant path
-cd Gen5
+# get the module name
+module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+# cd to releant path
+cd Modules/${module}
+
+echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh&quot;
 sh copyModules.sh
@@ -225,7 +160,6 @@ sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
 echo &quot;*******************************************************************************************&quot;
 
 
-cd ${WORKSPACE}
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         </hudson.tasks.Shell>
@@ -266,11 +200,14 @@ repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRAN
 echo &quot;repo sync&quot;
 repo sync
 
-# cd to releant path
-cd Gen5
+# get the module name
+module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+# cd to releant path
+cd Modules/${module}
+
+echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
@@ -318,7 +255,7 @@ then
 fi
 wait
 echo &quot;Finish running make for SoftDsp and SoftHost&quot;
-cd ${WORKSPACE}
+
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         </hudson.tasks.Shell>
@@ -344,11 +281,14 @@ repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRAN
 echo &quot;repo sync&quot;
 repo sync
 
-# cd to releant path
-cd Gen5
+# get the module name
+module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+# cd to releant path
+cd Modules/${module}
+
+echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
@@ -373,41 +313,7 @@ echo &quot;*********************************************************************
 
 
 
-#******************************temporary workaround to copy os module from private/GRX**************************************
-#cd ${WORKSPACE}/..
-#cat &lt;&lt;-EOF &gt; ~/.netrc
-#machine test-gerrit login jenkins password $jpass
-#machine gerrit login jenkins password $jpass
-#EOF
-##clone web-ui OVOC
-#if [[ -e private_GRX ]]
-#then
-#    rm -rf private_GRX
-#fi
-#git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5 private_GRX
-#cd private_GRX
-#git checkout private/GRX
-#cp -R Clean_based_on_snapshot_15_4_19/Modules_GRX_29_7/Os/. ${WORKSPACE}/Gen5/GRX/SoftDsp/Src/Modules/Os
-
-#******************************Finish temporary workaround*************************************
-
-#add neccessary toolchain to the slave machine
 sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
-#export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
-#export LD_LIBRARY_PATH=&quot;/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib&quot;
-
-#run all 2 make in parallel (SoftDsp and SoftHost)
-#if [[ ${CHIP_NAME} == &quot;GRX&quot; ]]
-#then
-#	run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
-#	for path_to_run_make in ${run_make[@]}
-#	do
-#		compile_grx $path_to_run_make
-#	done
-#fi
-#wait
-#echo &quot;Finish running make for GRX&quot;
-cd ${WORKSPACE}
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
       </buildStep>
@@ -420,14 +326,6 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
     </EnvInjectBuilder>
   </builders>
   <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>SoftDsp_communicator_64.txt,SoftDsp_Hpi_64.txt, SoftHost_communicator_64.txt, SoftHost_Hpi_64.txt</artifacts>
-      <allowEmptyArchive>true</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
@@ -540,7 +438,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} Branch:${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}_Module:${Module_Project}_Branch:${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
