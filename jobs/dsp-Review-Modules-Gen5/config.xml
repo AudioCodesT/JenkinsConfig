@@ -162,7 +162,7 @@ echo &quot;*********************************************************************
 
 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
           <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
@@ -259,7 +259,7 @@ wait
 echo &quot;Finish running make for SoftDsp and SoftHost&quot;
 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
@@ -318,7 +318,7 @@ echo &quot;*********************************************************************
 
 sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
       </buildStep>
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
     </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
