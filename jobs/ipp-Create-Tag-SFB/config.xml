@@ -143,8 +143,11 @@ do
     # for example: 3.2.0.445.HTT.1 was merged from 3.2.0.445
     LastMergedTag=`git tag --points-at $(git log --merges -n1 --pretty=format:%H)^2 --sort=-taggerdate 2&gt;/dev/null | head -1 | cut -d. -f1-4 || echo Too old`
     echo LastTag = $LastTag ------------- LastMergedTag = $LastMergedTag
-    # The last merged TAG must be with 3 periods kike: 3.2.0.445 this TAG came from the merged branch
-    if [[ ! &quot;$LastTag&quot; =~ &quot;$LastMergedTag&quot; ]]; then
+    # The last merged TAG must be with 3 periods like: 3.2.0.445 this TAG came from the merged branch
+    # Check 2 conditions to use the last merged TAG instead of the last TAG: 
+    #    1) If the merged TAG (contain 3 periods) is not included in the last TAG.
+    #    2) The 2 first digits of the merged TAG must be the same like the 2 digits of the last TAG. 
+    if [[ ! &quot;$LastTag&quot; =~ &quot;$LastMergedTag&quot; &amp;&amp; $(echo $LastTag | cut -d. -f1,2) == $(echo $LastMergedTag | cut -d. -f1,2) ]]; then
       LastTag=$LastMergedTag;
       echo set to $LastMergedTag;
     else 
