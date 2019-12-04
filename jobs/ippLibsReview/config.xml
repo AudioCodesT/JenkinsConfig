@@ -159,6 +159,8 @@ if [ ! -z &quot;$ISSUE&quot; ]; then
      	SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
      	message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open label:verified| grep &apos;ref&apos;)
      	SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref: &apos; &apos;{print $NF}&apos;)
+     elif
+     	SFB_Revision=${GERRIT_BRANCH}
      fi
 fi
 
