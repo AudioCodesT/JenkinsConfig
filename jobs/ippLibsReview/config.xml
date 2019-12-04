@@ -150,12 +150,16 @@ ISSUE=$(echo $GERRIT_CHANGE_SUBJECT | grep -oe &quot;^[[A-Z]*-[0-9]*]&quot; | tr
 SFB_Revision=${GERRIT_BRANCH}
 if [ ! -z &quot;$ISSUE&quot; ]; then 
     echo Search this Issue: $ISSUE...
+    found_sfb_change=&quot;True&quot;
      SFB_Revision=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
-     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open label:verified| grep &apos;revision&apos;)
-     SFB_Revision=$(echo $SFB_Revision | awk -F&apos;revision: &apos; &apos;{print $NF}&apos;)
-     SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
-     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open label:verified| grep &apos;ref&apos;)
-     SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref: &apos; &apos;{print $NF}&apos;)
+     message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open label:verified| grep &apos;revision&apos;) || found_sfb_change=&quot;False&quot;
+     if [[ $found_sfb_change == &quot;False&quot; ]]
+     then
+     	SFB_Revision=$(echo $SFB_Revision | awk -F&apos;revision: &apos; &apos;{print $NF}&apos;)
+     	SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
+     	message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open label:verified| grep &apos;ref&apos;)
+     	SFB_REFSPEC=$(echo $SFB_REFSPEC | awk -F&apos;ref: &apos; &apos;{print $NF}&apos;)
+     fi
 fi
 
 
