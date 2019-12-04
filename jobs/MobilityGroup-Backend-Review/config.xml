@@ -35,7 +35,6 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -60,7 +59,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>$GERRIT_REFSPEC</refspec>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/CRS</url>
+        <url>ssh://jenkins@gerrit:29418/${GERRIT_PROJECT}</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -90,8 +89,8 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>MobilityGroup/Backend/CRS</pattern>
+          <compareType>ANT</compareType>
+          <pattern>MobilityGroup/Backend/**</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
