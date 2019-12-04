@@ -28,14 +28,13 @@ This job get all the information on the commits between the old tag to the new t
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/Backend/CRS</url>
+        <url>ssh://jenkins@gerrit:29418/${GERRIT_PROJECT}</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -65,8 +64,8 @@ This job get all the information on the commits between the old tag to the new t
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>MobilityGroup/Backend/CRS</pattern>
+          <compareType>ANT</compareType>
+          <pattern>MobilityGroup/Backend/**</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -128,21 +127,21 @@ while read -r hash; do
 done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $OLDTAG..$NEWTAG)&quot;
 EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $OLDTAG..$NEWTAG | sort -u`
 
-echo NEWTAG=${NEWTAG} &gt; Backend_MSGRT.properties
-echo RN=${RN} &gt;&gt; Backend_MSGRT.properties
-echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; Backend_MSGRT.properties
-echo EMAIL=${EMAIL} &gt;&gt; Backend_MSGRT.properties
-echo BRANCH=$BRANCH&gt;&gt; Backend_MSGRT.properties
-echo PROJECT=`git config --get remote.origin.url | sed &apos;s:.*29418/::&apos;` &gt;&gt; Backend_MSGRT.properties
-echo &quot;DATE=${DATE}&quot; &gt;&gt; Backend_MSGRT.properties
-echo AuthorCommitter=${AuthorCommitter} &gt;&gt; Backend_MSGRT.properties
+echo NEWTAG=${NEWTAG} &gt; Backend.properties
+echo RN=${RN} &gt;&gt; Backend.properties
+echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; Backend.properties
+echo EMAIL=${EMAIL} &gt;&gt; Backend.properties
+echo BRANCH=$BRANCH&gt;&gt; Backend.properties
+echo PROJECT=`git config --get remote.origin.url | sed &apos;s:.*29418/::&apos;` &gt;&gt; Backend.properties
+echo &quot;DATE=${DATE}&quot; &gt;&gt; Backend.properties
+echo AuthorCommitter=${AuthorCommitter} &gt;&gt; Backend.properties
 
 
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
-        <propertiesFilePath>Backend_MSGRT.properties</propertiesFilePath>
+        <propertiesFilePath>Backend.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
