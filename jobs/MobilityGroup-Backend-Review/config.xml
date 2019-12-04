@@ -139,7 +139,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
-      <switches>--refresh-dependencies</switches>
+      <switches></switches>
       <tasks>build</tasks>
       <rootBuildScriptDir></rootBuildScriptDir>
       <buildFile></buildFile>
