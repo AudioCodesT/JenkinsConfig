@@ -153,7 +153,7 @@ if [ ! -z &quot;$ISSUE&quot; ]; then
     found_sfb_change=&quot;True&quot;
      SFB_Revision=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
      message:$ISSUE branch:$GERRIT_BRANCH project:IPP/SFB status:open label:verified| grep &apos;revision&apos;) || found_sfb_change=&quot;False&quot;
-     if [[ $found_sfb_change == &quot;False&quot; ]]
+     if [[ $found_sfb_change == &quot;True&quot; ]]
      then
      	SFB_Revision=$(echo $SFB_Revision | awk -F&apos;revision: &apos; &apos;{print $NF}&apos;)
      	SFB_REFSPEC=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
