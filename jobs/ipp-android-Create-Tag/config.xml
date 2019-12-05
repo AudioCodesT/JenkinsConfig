@@ -191,6 +191,12 @@ uboot/c450hd_uboot</description>
         <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_apps_Bluetooth</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>Telephony</name>
+        <refspec>+refs/heads/*:refs/remotes/Telephony/* +refs/tags/*:refs/tags/Telephony/*</refspec>
+        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_opt_telephony</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
