@@ -208,7 +208,7 @@ echo NEWTAG=$NEWTAG &gt; prop</command>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__Project:${GERRIT_PROJECT}__${NEWTAG}</template>
+      <template>#${BUILD_NUMBER}__Project:${project_name}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
