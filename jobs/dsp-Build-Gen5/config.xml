@@ -76,7 +76,7 @@
       </hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
     </extensions>
   </scm>
-  <assignedNode>sanjer</assignedNode>
+  <assignedNode>dsp-centos-dynamic</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -490,8 +490,7 @@ Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${N
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>(label == &apos;dsp-win-dynamic&apos; || label == &apos;dsp-centos-dynamic&apos; || label == &apos;dsp-grx-slave&apos;)</artifactoryCombinationFilter>
-      <multiConfProject>true</multiConfProject>
+      <multiConfProject>false</multiConfProject>
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
