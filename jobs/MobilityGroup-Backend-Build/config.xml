@@ -80,7 +80,6 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
-      <contributors/>
     </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -108,7 +107,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
   </scm>
   <assignedNode>MobilityGroup-android-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
@@ -133,7 +132,8 @@ then
         exit 1
     fi
 fi
-
+project_name=$(echo $GERRIT_PROJECT | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
+echo &quot;project_name=$project_name&quot; &gt;&gt; prop
 
 
 echo NEWTAG=$NEWTAG &gt; prop</command>
