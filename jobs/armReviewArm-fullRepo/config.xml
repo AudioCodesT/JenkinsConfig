@@ -103,7 +103,12 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 #new scrip to prepare database env
 #this is per Igor request for his new trick to reduce unit-tests time
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
-bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0</command>
+bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
+
+
+#Per Kobi Levi request:
+#adding permissions for Router to write into folder /usr/local/etc/
+sudo chmod 777 /usr/local/etc</command>
     </hudson.tasks.Shell>
     <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
       <mavenName>Maven_v325</mavenName>
