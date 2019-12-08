@@ -137,6 +137,9 @@ echo &quot;DATE=${DATE}&quot; &gt;&gt; Backend.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; Backend.properties
 
 
+project_name=$(echo $GERRIT_PROJECT | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
+echo &quot;project_name=$project_name&quot; &gt;&gt; Backend.properties
+
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
@@ -194,7 +197,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__Project:${GERRIT_PROJECT}__${NEWTAG}</template>
+      <template>#${BUILD_NUMBER}__Project:${project_name}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
