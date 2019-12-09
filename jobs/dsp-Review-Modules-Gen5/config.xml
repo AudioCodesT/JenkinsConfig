@@ -1,7 +1,11 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <matrix-project plugin="matrix-project@1.13">
   <actions/>
-  <description></description>
+  <description>triggered by &quot;dsp-Review-Modules&quot;&#xd;
+1. preparing workspace (with repo init, repo sync)&#xd;
+2. go to the module folder and downloading the new change (received by parameter)&#xd;
+3. go to Gen5 Folder and run copyModules.sh script (to prepare Gen5 workspace for compile)&#xd;
+4. compile Gen5</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
