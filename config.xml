@@ -1002,7 +1002,28 @@
       <name>sig-8bfe3a43</name>
       <accountId></accountId>
       <groupId>sig-8bfe3a43</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0d53f5f1c8d39dd9e</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0d53f5f1c8d39dd9e</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>dsp-win-dynamic</requestedLabel>
+            <createdAt>2019-12-09 13:08:32.639 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-092c7988e2d2fd554</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-092c7988e2d2fd554</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>dsp-win-dynamic</requestedLabel>
+            <createdAt>2019-12-09 13:09:08.624 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>dsp-win-dynamic</labelString>
       <idleTerminationMinutes>10</idleTerminationMinutes>
       <workspaceDir>c:\jenkins</workspaceDir>
@@ -1104,7 +1125,18 @@
       <name>sig-c9121eb6</name>
       <accountId></accountId>
       <groupId>sig-c9121eb6</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-062a639a3db5cbd6e</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-062a639a3db5cbd6e</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>dsp-grx-slave</requestedLabel>
+            <createdAt>2019-12-09 13:08:28.637 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>dsp-grx-slave</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
@@ -1528,6 +1560,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>test_armCreateAzureImage</string>
         <string>test_armCreateAzureImage_new</string>
         <string>test_armCreateAzureImage_temp</string>
+        <string>test_armReviewArm</string>
         <string>test_armReviewArm-fullRepo</string>
         <string>test_armuploadVHD</string>
         <string>test_auto07</string>
