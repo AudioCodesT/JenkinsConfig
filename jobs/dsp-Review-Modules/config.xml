@@ -277,7 +277,7 @@ ${BUILD_URL}</defaultContent>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} Module:${GERRIT_PROJECT}</template>
+      <template>#${BUILD_NUMBER} Module:${module}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
