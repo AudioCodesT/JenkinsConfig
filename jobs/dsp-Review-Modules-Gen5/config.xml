@@ -341,6 +341,13 @@ echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
+      <script>module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
+echo &quot;module=${module}&quot;</script>
+      <scriptType>unixScript</scriptType>
+      <runOnlyOnParent>true</runOnlyOnParent>
+      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
+    </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
@@ -445,7 +452,7 @@ echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}_Module:${Module_Project}_Branch:${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}_Module:${module}_Branch:${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
