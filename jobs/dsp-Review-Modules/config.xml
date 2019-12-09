@@ -1,7 +1,10 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
   <actions/>
-  <description></description>
+  <description>Triggered by push to gerrit in &quot;DSP/Modules projects&quot;&#xd;
+1. check if the module exists in DSP/Gen5/repo_manifests (in default.xml file) in branches 710,722,723&#xd;
+2. trigger &quot;dsp-Review-Modules-Gen5&quot; only with the branches that contain the module&#xd;
+3. if compilation in one of the branches failed put verified -1 in the gerrit change</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
