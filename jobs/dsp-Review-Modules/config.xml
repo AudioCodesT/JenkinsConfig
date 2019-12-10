@@ -111,7 +111,7 @@ for branch in ${branches_to_check[@]}
 do
 	module_found=0
 	git checkout ${branch}
-    cat default.xml | grep ${GERRIT_PROJECT} || module_found=$?
+    cat default.xml | grep &apos;&quot;${GERRIT_PROJECT}&quot;&apos; || module_found=$?
     if [[ $module_found == &quot;0&quot; ]]
     then
     	declare branch_${branch}=&quot;True&quot;
