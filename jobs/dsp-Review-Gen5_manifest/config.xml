@@ -157,7 +157,7 @@
       <conditionalbuilders>
         <hudson.tasks.Shell>
           <command>#!c:\cygwin64\bin\bash --login -i
-set -e
+set -ex
 cd ${WORKSPACE}
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_REFSPEC}&quot;
