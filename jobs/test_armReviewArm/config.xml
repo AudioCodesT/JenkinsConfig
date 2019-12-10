@@ -201,13 +201,13 @@ if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
 	jdkver=&quot;1.8.0_92&quot;
 fi
 #if version is greater or equal than version 9.0.1 use java 11
-if [[ &quot;$Version_WithOutTags&quot; -ge &quot;908&quot; ]]
+if [[ &quot;$Version_WithOutTags&quot; -ge &quot;901&quot; ]]
 then
 	jdkver=&quot;-11&quot;
 fi
 #jdkver=&quot;1.8.0_191&quot;
 # Set Java
-if [[ &quot;$Version_WithOutTags&quot; -ge &quot;908&quot; ]]
+if [[ &quot;$Version_WithOutTags&quot; -ge &quot;901&quot; ]]
 then
 	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
 else
@@ -247,28 +247,6 @@ sudo chmod 777 /usr/local/etc</command>
   </builders>
   <publishers>
     <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
-      <healthReports>
-        <minClass>0</minClass>
-        <maxClass>0</maxClass>
-        <minMethod>0</minMethod>
-        <maxMethod>0</maxMethod>
-        <minLine>0</minLine>
-        <maxLine>0</maxLine>
-        <minBranch>0</minBranch>
-        <maxBranch>0</maxBranch>
-        <minInstruction>0</minInstruction>
-        <maxInstruction>0</maxInstruction>
-        <minComplexity>0</minComplexity>
-        <maxComplexity>0</maxComplexity>
-      </healthReports>
-      <deltaHealthReport>
-        <deltaInstruction>0.0</deltaInstruction>
-        <deltaBranch>0.0</deltaBranch>
-        <deltaComplexity>0.0</deltaComplexity>
-        <deltaLine>0.0</deltaLine>
-        <deltaMethod>0.0</deltaMethod>
-        <deltaClass>0.0</deltaClass>
-      </deltaHealthReport>
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/*/java</sourcePattern>
