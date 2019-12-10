@@ -226,7 +226,7 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt; /
 . /etc/environment
 
 
-export PATH=${PATH}:${JAVA_HOME}/bin
+#export PATH=${PATH}:${JAVA_HOME}/bin
 #new scrip to prepare database env
 #this is per Igor request for his new trick to reduce unit-tests time
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
