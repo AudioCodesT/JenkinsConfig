@@ -127,7 +127,7 @@
       <conditionalbuilders>
         <hudson.tasks.Shell>
           <command>#!c:\cygwin64\bin\bash --login -i
-set -e
+set -ex
 cd ${WORKSPACE}
 if [[ -e .repo ]]
 then 
@@ -199,6 +199,8 @@ make clean
 make all
 }
 
+cd ${WORKSPACE}
+set -xe
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
@@ -281,6 +283,9 @@ make clean
 make all
 }
 run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
+
+cd ${WORKSPACE}
+set -xe
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
