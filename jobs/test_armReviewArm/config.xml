@@ -204,13 +204,12 @@ else
 fi
 #jdkver=&quot;1.8.0_191&quot;
 # Set Java
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
-then
-	echo &quot;temp&quot;
-	#sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
-else
+#if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
+#then
+#	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
+#else
 	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
-fi
+#fi
 jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
 echo &quot;Java version set to: $jver&quot;
 
