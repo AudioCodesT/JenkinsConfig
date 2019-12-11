@@ -195,9 +195,9 @@ echo &quot;needToCompile=$needToCompile&quot;
 # Branch 7.8 needs version 1.8.0_92
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
 	jdkver=&quot;1.8.0_92&quot;
-elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
-then
-	jdkver=&quot;-11&quot;
+#elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
+#then
+#	jdkver=&quot;-11&quot;
 else
 	# Default version is 1.8.0_162
 	jdkver=&quot;1.8.0_162&quot;
@@ -206,7 +206,8 @@ fi
 # Set Java
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
 then
-	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
+	echo &quot;temp&quot;
+	#sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
 else
 	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
 fi
