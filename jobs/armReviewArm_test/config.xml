@@ -236,7 +236,7 @@ sudo chmod 777 /usr/local/etc</command>
         <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
           <mavenName>Maven_v325</mavenName>
           <rootPom>pom.xml</rootPom>
-          <goals>clean install -X</goals>
+          <goals>clean install</goals>
           <mavenOpts></mavenOpts>
         </org.jfrog.hudson.maven3.Maven3Builder>
       </conditionalbuilders>
@@ -244,28 +244,6 @@ sudo chmod 777 /usr/local/etc</command>
   </builders>
   <publishers>
     <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
-      <healthReports>
-        <minClass>0</minClass>
-        <maxClass>0</maxClass>
-        <minMethod>0</minMethod>
-        <maxMethod>0</maxMethod>
-        <minLine>0</minLine>
-        <maxLine>0</maxLine>
-        <minBranch>0</minBranch>
-        <maxBranch>0</maxBranch>
-        <minInstruction>0</minInstruction>
-        <maxInstruction>0</maxInstruction>
-        <minComplexity>0</minComplexity>
-        <maxComplexity>0</maxComplexity>
-      </healthReports>
-      <deltaHealthReport>
-        <deltaInstruction>0.0</deltaInstruction>
-        <deltaBranch>0.0</deltaBranch>
-        <deltaComplexity>0.0</deltaComplexity>
-        <deltaLine>0.0</deltaLine>
-        <deltaMethod>0.0</deltaMethod>
-        <deltaClass>0.0</deltaClass>
-      </deltaHealthReport>
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/*/java</sourcePattern>
