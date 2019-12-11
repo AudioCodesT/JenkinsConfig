@@ -192,22 +192,20 @@ echo &quot;needToCompile=$needToCompile&quot;
       <conditionalbuilders>
         <hudson.tasks.Shell>
           <command># Setting jdk version for branches
-# Default version is 1.8.0_162
-jdkver=&quot;1.8.0_162&quot;
-Version=$(git describe --abbrev=0 --tags)
-Version_WithOutTags=$(echo ${Version} | tr -d &apos;.&apos;)
 # Branch 7.8 needs version 1.8.0_92
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
 	jdkver=&quot;1.8.0_92&quot;
 fi
-#if version is greater or equal than version 9.0.1 use java 11
-if [[ &quot;$Version_WithOutTags&quot; -ge &quot;908&quot; ]]
+elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
 then
 	jdkver=&quot;-11&quot;
+else
+	# Default version is 1.8.0_162
+	jdkver=&quot;1.8.0_162&quot;
 fi
 #jdkver=&quot;1.8.0_191&quot;
 # Set Java
-if [[ &quot;$Version_WithOutTags&quot; -ge &quot;908&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
 then
 	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
 else
