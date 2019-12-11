@@ -195,9 +195,9 @@ echo &quot;needToCompile=$needToCompile&quot;
 # Branch 7.8 needs version 1.8.0_92
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
 	jdkver=&quot;1.8.0_92&quot;
-elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
-then
-	jdkver=&quot;-11&quot;
+#elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
+#then
+#	jdkver=&quot;-11&quot;
 else
 	# Default version is 1.8.0_162
 	jdkver=&quot;1.8.0_162&quot;
@@ -236,7 +236,7 @@ sudo chmod 777 /usr/local/etc</command>
         <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
           <mavenName>Maven_v325</mavenName>
           <rootPom>pom.xml</rootPom>
-          <goals>clean install</goals>
+          <goals>clean install -X</goals>
           <mavenOpts></mavenOpts>
         </org.jfrog.hudson.maven3.Maven3Builder>
       </conditionalbuilders>
