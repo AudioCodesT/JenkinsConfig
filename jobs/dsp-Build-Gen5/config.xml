@@ -354,7 +354,11 @@ sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/S
                     <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>#tag also repo_manifests repository
+                        <command>cat &lt;&lt; EOF &gt; ~/.netrc
+machine gerrit login jenkins password ${jpass}
+EOF
+
+#tag also repo_manifests repository
 cd ${WORKSPACE}/..
 #clone Gen5/repo_manifests
 rm -rf dsp_gen5_repo_manifests
@@ -495,6 +499,16 @@ Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*=&gt;com/ac/dsp/Gen5/${GERRIT_BRANCH}/${N
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQLjDxjuqPG/1xrREcxGU2wNtx11xVpMGxmfQJaicz7zA=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} Branch:${GERRIT_BRANCH}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
