@@ -118,16 +118,17 @@ return map</script>
         <string>dsp-centos-dynamic</string>
         <string>dsp-grx-slave</string>
         <string>dsp-win-dynamic</string>
+        <string>azure_arm_win_slave</string>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos; &amp;&amp; CHIP_NAME != &apos;GRX&apos;) || (label == &apos;dsp-grx-slave&apos; &amp;&amp; CHIP_NAME == &apos;GRX&apos;) </combinationFilter>
+  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;azure_arm_win_slave&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos; &amp;&amp; CHIP_NAME != &apos;GRX&apos;) || (label == &apos;dsp-grx-slave&apos; &amp;&amp; CHIP_NAME == &apos;GRX&apos;) </combinationFilter>
   <builders>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
       <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
         <arg1>${label}</arg1>
-        <arg2>dsp-win-dynamic</arg2>
+        <arg2>azure_arm_win_slave</arg2>
         <ignoreCase>false</ignoreCase>
       </runCondition>
       <conditionalbuilders>
@@ -283,7 +284,7 @@ make all
 }
 run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
 
-cd ${WORKSPACE}/repo_Gen5
+cd ${WORKSPACE}
 set -xe
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
