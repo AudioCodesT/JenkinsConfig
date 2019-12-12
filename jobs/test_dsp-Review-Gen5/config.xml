@@ -385,7 +385,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
     <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>repo_Gen5</pattern>
+          <pattern>repo_Gen5/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
