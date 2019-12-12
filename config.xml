@@ -1053,7 +1053,18 @@
       <name>sig-42242531</name>
       <accountId></accountId>
       <groupId>sig-42242531</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0b59b69e726fbd80c</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0b59b69e726fbd80c</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>dsp-centos-dynamic</requestedLabel>
+            <createdAt>2019-12-12 11:59:46.280 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>dsp-centos-dynamic</labelString>
       <idleTerminationMinutes>10</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
@@ -1797,7 +1808,6 @@ sudo yum install -y git-2.18.0</initScript>
         <string>dsp-Review-Gen5_manifest</string>
         <string>dsp-Review-Modules</string>
         <string>dsp-Review-Modules-Gen5</string>
-        <string>test_dsp-Review-Gen5</string>
       </jobNames>
       <jobFilters/>
       <columns>
