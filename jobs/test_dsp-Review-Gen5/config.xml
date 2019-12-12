@@ -202,7 +202,7 @@ make clean
 make all
 }
 
-cd ${WORKSPACE}
+cd ${WORKSPACE}/repo_Gen5
 set -xe
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
@@ -283,7 +283,7 @@ make all
 }
 run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
 
-cd ${WORKSPACE}
+cd ${WORKSPACE}/repo_Gen5
 set -xe
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
