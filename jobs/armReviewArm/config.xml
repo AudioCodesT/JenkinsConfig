@@ -220,7 +220,7 @@ jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
 echo &quot;javac version set to: $jcver&quot;
 
 # Set JAVA_HOME
-sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
+sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt; /etc/environment&quot;
 . /etc/environment
 
 #new scrip to prepare database env
