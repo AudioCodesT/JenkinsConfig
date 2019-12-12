@@ -135,7 +135,8 @@ return map</script>
         <hudson.tasks.Shell>
           <command>#!c:\cygwin64\bin\bash --login -i
 set -xe
-cd ${WORKSPACE}/repo_Gen5
+cd ${WORKSPACE}
+cd repo_Gen5
 if [[ -e .repo ]]
 then 
 rm -rf .repo
@@ -514,5 +515,5 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>
-  <childCustomWorkspace>../Gen5</childCustomWorkspace>
+  <childCustomWorkspace>..\Gen5</childCustomWorkspace>
 </matrix-project>
