@@ -358,7 +358,7 @@ sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/S
                         <command>cat &lt;&lt; EOF &gt; ~/.netrc
 machine gerrit login jenkins password ${jpass}
 EOF
-
+git config --global http.sslVerify &quot;false&quot;
 #tag also repo_manifests repository
 cd ${WORKSPACE}/..
 #clone Gen5/repo_manifests
