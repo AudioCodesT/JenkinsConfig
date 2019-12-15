@@ -152,7 +152,7 @@ if [ -s &quot;$REFTARGET.list&quot; ]; then
      done
      if [ -z $copyItflag ]; then echo skip it; continue; fi
      if [ -f $ImageNames ]; then
-       ImageNames=$(echo $FileName | sed &apos;s:.*HD\(_SFB\|_IGS\|\)_::; s:.sim.tgz::; s:.img::&apos;)
+       ImageNames=$(echo $FileName | sed &apos;s:.*HD\(_SFB\|_IGS\|\)_*\(_SFB\|_IGS\|\)::; s:.sim.tgz::; s:.img::&apos;)
      fi
      if [ -e &quot;$Target/$FileName&quot; ]; then echo $FileName already exist; continue; fi
      echo Download $FileName to $Target
