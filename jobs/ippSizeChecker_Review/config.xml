@@ -139,12 +139,14 @@ do
 	if [[ &quot;$oldTagBranchCurlFailed&quot; == &quot;False&quot; ]]
 	then
 		OLDTAG_BRANCH=${branch}
-        echo &quot;branch is:$OLDTAG_BRANCH&quot;
 	fi
 done
-
-
-
+#if it&apos;s didnt find any branch from the list put the original branch
+if [[ &quot;$OLDTAG_BRANCH&quot; == &quot;&quot; ]]
+then
+	OLDTAG_BRANCH=$GERRIT_BRANCH
+fi
+echo &quot;branch is:$OLDTAG_BRANCH&quot;
 
 
 #OLDTAG_BRANCH=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | tail -1 | cut -d&apos;/&apos; -f2-)
