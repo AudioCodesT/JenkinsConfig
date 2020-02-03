@@ -146,6 +146,7 @@ echo change=$(echo $GERRIT_REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;) &gt
 #******************** temporary not compile rockchip-px30  branch ******************************&quot;
 if [[ $GERRIT_BRANCH == &quot;rockchip-px30&quot; ]]
 then
+	echo &quot;temporary not compile rockchip-px30  branch&quot;
 	exit 0
 fi
 #******************** temporary not compile rockchip-px30  branch ******************************&quot;
