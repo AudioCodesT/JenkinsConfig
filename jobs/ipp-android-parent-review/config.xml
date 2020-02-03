@@ -164,14 +164,16 @@ if [ ! -z &quot;$ISSUE&quot; ]; then
      sed &apos;s%project:%%; s% .*: %:%; s% :%:%g&apos;)
     AllCommits=$(echo $AllCommits | sed &apos;s% :%:%g&apos;)
 fi
+# example for the above:
+# AllCommits=&apos;IPP/Android/device_audiocodes_common:master:refs/changes/73/34773/2 IPP/apps/emsc:master:refs/changes/38/34738/2
 
-#check which branches in android/repo_manifests in default.xml file contain the module that triggered
+#check which branches in android/repo_manifests if default.xml file contain the module that triggered
 rm -rf repo_manifests
 git -c http.sslverify=false clone https://gerrit/IPP/Android/repo_manifests repo_manifests
 cd repo_manifests
 xmlFile=&quot;default.xml&quot;
 
-# The gaol of this parameter is giving score to all changes that participate in this review
+# The goal of this parameter is giving score to all changes that participate in this review
 # This variable should contains all changes exclude the change that wake up this job
 CHANGES=&quot;&quot;
 
@@ -182,7 +184,7 @@ if [[ ! ${main_branches[*]} =~ $GERRIT_BRANCH ]] &amp;&amp; git branch -a | grep
   branches_to_check+=($GERRIT_BRANCH)
 fi
 
-# The gaol of this loop is found right manifest for each branch
+# The gaol of this loop is to found right manifest for each branch
 # If the manifest itself wake up the job - execute compilation to its branch only
 # Else, use the manifet change for each branch or use the branch name
 # Store it in &apos;Manifests_$branchVariable&apos; variable
@@ -293,7 +295,7 @@ cat ${WORKSPACE}/generated_android.properties
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp-android-child-review</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>branch master</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -319,7 +321,7 @@ change=${change}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp-android-child-review</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>branch Android-9</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -345,7 +347,7 @@ change=${change}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp-android-child-review</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>branch audc-rk3399</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -371,7 +373,7 @@ change=${change}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp-android-child-review</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>branch $GERRIT_BRANCH</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
