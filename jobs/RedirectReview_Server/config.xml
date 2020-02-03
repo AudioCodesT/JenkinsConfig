@@ -60,7 +60,7 @@
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
-  <assignedNode>azure_redirect_slave</assignedNode>
+  <assignedNode>azure_win</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -124,19 +124,17 @@
 
 set -xe
 cd $WORKSPACE
-
+#az login -
 #to build common.jar 
 cd ${WORKSPACE}/RedirectServerCommon
 mvn clean install 
 cd ${WORKSPACE}/redirectServerDeviceApi
 mvn clean package -Dmaven.test.skip=true
-#mvn azure-functions:run &amp;
 cd ${WORKSPACE}/redirect_server_azure
 mvn clean package -Dmaven.test.skip=true
-#mvn azure-functions:run &amp;
 
-#push to azure function app:
-###mvn azure-functions:deploy</command>
+
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
