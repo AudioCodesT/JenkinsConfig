@@ -16,7 +16,10 @@
    5.3. Check if the &apos;dest-branch&apos; of the wake up commit equel to this branch:&#xd;
           if not, do not nothing and exit.&#xd;
    5.4. Go over all found commits with the same issue and add all the commits that &apos;dest-branch&apos;=&lt;this branch&gt; to the compilation.&#xd;
-   5.5. Give score to all participant commits of all branches and exit job&#xd;
+   5.5. Execute compilation for this branch.&#xd;
+&#xd;
+6. Wait all branches compilation finished.&#xd;
+7. If one of the compilation is failed, Give to all participant commits of all branches Verified=-1, else give Verified=+1.&#xd;
 &#xd;
    </description>
   <keepDependencies>false</keepDependencies>
