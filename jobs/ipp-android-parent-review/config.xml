@@ -140,6 +140,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
 #the above line is needed because we are going to use &quot;source&quot; command
+#normalize the gerrit change value from &quot;refs/for/xxxx&quot;. example:  change=32456,4
 echo change=$(echo $GERRIT_REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;) &gt; generated_android.properties
 
 #******************** temporary not compile rockchip-px30  branch ******************************&quot;
