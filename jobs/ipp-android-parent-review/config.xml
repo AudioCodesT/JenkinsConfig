@@ -1,0 +1,540 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
+  <actions/>
+  <description>Triggered by push to gerrit in &quot;Android&quot;, this job do all the following:&#xd;
+1. Find all commits with the same wake up commit issue.&#xd;
+2. The wake up commit is a manifest commit:&#xd;
+   2.1. Execute compilation on its branch only&#xd;
+   2.2. Add all &apos;none manifest&apos; commits found with the same jira issue that &apos;dest-branch&apos;=&lt;this branch&gt;&#xd;
+   2.3. Give score to all participant commits and exit job&#xd;
+&#xd;
+3. The wake up commit is not  a manifest commit:&#xd;
+4. If its branch exists in manifest reposity, add this branch to the hardcoded branches: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; (if it is not one of these 3 exiting branches)&#xd;
+ 5. Do the following for each following branchs: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; and &quot;other&quot; (if exist):&#xd;
+   5.1. Find manifest commit with the same issue and use it as your manifest xml file (repo init).&#xd;
+   5.2. If not found, use the branch name (repo init)&#xd;
+   5.3. Check if the &apos;dest-branch&apos; of the wake up commit equel to this branch:&#xd;
+          if not, do not nothing and exit.&#xd;
+   5.4. Go over all found commits with the same issue and add all the commits that &apos;dest-branch&apos;=&lt;this branch&gt; to the compilation.&#xd;
+   5.5. Give score to all participant commits of all branches and exit job&#xd;
+&#xd;
+   </description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>sanjer</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>ANT</compareType>
+          <pattern>IPP/Android/*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>ANT</compareType>
+          <pattern>IPP/Lib/*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/apps/emsc</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <dynamicGerritProjects class="empty-list"/>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>true</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>PLAIN</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>true</excludeNoCodeChange>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -x
+#the above line is needed because we are going to use &quot;source&quot; command
+echo change=$(echo $GERRIT_REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;) &gt; generated_android.properties
+
+#******************** temporary not compile rockchip-px30  branch ******************************&quot;
+if [[ $GERRIT_BRANCH == &quot;rockchip-px30&quot; ]]
+then
+	exit 0
+fi
+#******************** temporary not compile rockchip-px30  branch ******************************&quot;
+
+# NEED to find the branch and compare it to destBranch
+echo find Jira Issue of this change
+ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
+echo found: $ISSUE
+echo &quot;ISSUE=$ISSUE&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+# Find if this build should use another commit with the same Issue
+if [ ! -z &quot;$ISSUE&quot; ]; then 
+    echo Search this Issue: $ISSUE...
+    AllCommits=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
+     message:$ISSUE status:open | grep &apos;project:\|branch:\|ref:&apos; | \
+     sed &apos;s%project:%%; s% .*: %:%; s% :%:%g&apos;)
+    AllCommits=$(echo $AllCommits | sed &apos;s% :%:%g&apos;)
+fi
+
+#check which branches in android/repo_manifests in default.xml file contain the module that triggered
+rm -rf repo_manifests
+git -c http.sslverify=false clone https://gerrit/IPP/Android/repo_manifests repo_manifests
+cd repo_manifests
+xmlFile=&quot;default.xml&quot;
+
+# The gaol of this parameter is giving score to all changes that participate in this review
+# This variable should contains all changes exclude the change that wake up this job
+CHANGES=&quot;&quot;
+
+# Add the branch that wake up this job in case this branch exist in repo_manifests
+main_branches=(&quot;master&quot; &quot;android-9&quot; &quot;audc-rk3399&quot;)
+branches_to_check=${main_branches[*]}
+if [[ ! ${main_branches[*]} =~ $GERRIT_BRANCH ]] &amp;&amp; git branch -a | grep -q origin/$GERRIT_BRANCH; then
+  branches_to_check+=($GERRIT_BRANCH)
+fi
+
+# The gaol of this loop is found right manifest for each branch
+# If the manifest itself wake up the job - execute compilation to its branch only
+# Else, use the manifet change for each branch or use the branch name
+# Store it in &apos;Manifests_$branchVariable&apos; variable
+echo ---------------------- Find manifests for each branch ----------------------------
+for branch in ${branches_to_check[@]}
+do
+  branchVariable=$(echo $branch | sed &apos;s:-:_:&apos;)
+  if [[ ! ${main_branches[*]} =~ &quot;$branch&quot; ]]; then branchVariable=other; fi
+
+  Manifests=&quot;&quot;
+  echo ------- Check the change that wake up this job for branch $branch -------
+  if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+    if [ &quot;$GERRIT_BRANCH&quot; == $branch ]; then 
+      Manifests=$GERRIT_REFSPEC
+      echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+    fi
+  else
+    Manifests=$branch
+    for allSameISSUE in $AllCommits; do 
+      repo=$(echo $allSameISSUE | cut -d: -f1)
+      commitBranch=$(echo $allSameISSUE | cut -d: -f2)
+      revision=$(echo $allSameISSUE | cut -d: -f3)
+      echo Check: $repo, $commitBranch, $revision
+      if [[ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; &amp;&amp; \
+            &quot;$commitBranch&quot; == &quot;$branch&quot; ]]; then
+        Manifests=$revision
+      fi 
+    done
+  fi
+  echo Manifests for $branch is: $Manifests
+  echo Manifests_$branchVariable=${Manifests} &gt;&gt; ${WORKSPACE}/generated_android.properties
+  eval Manifests_$branchVariable=$Manifests
+done
+
+#Find all changes
+echo ---------------------- Find changes for each branch ----------------------------
+for branch in ${branches_to_check[@]}
+do
+    branchVariable=$(echo $branch | sed &apos;s:-:_:&apos;)
+    if [[ ! ${main_branches[*]} =~ $branch ]]; then branchVariable=other; fi
+    eval Manifests=\${Manifests_$branchVariable}
+    
+    if [ &quot;$Manifests&quot; == &quot;$branch&quot; ]; then
+	  git checkout ${branch}
+    else if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
+      git fetch &quot;ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests&quot; $Manifests &amp;&amp; git checkout FETCH_HEAD
+    else
+      continue
+    fi; fi
+    
+    commits=&quot;&quot;
+    
+    # Check the wake up commit if destination branch equel to its branch
+    if [ &quot;$GERRIT_PROJECT&quot; != &quot;IPP/Android/repo_manifests&quot; ]; then
+      destBranch=$(grep $GERRIT_PROJECT $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+      echo Check destination branch: $destBranch, if equel to: $GERRIT_BRANCH
+      if [ &quot;$destBranch&quot; == &quot;$GERRIT_BRANCH&quot; ]; then
+        commits=&quot;$GERRIT_PROJECT:$GERRIT_BRANCH:$GERRIT_REFSPEC&quot;
+        if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
+          CHANGES=&quot;$CHANGES $(echo $Manifests | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;)&quot;
+        fi
+      else
+        continue
+      fi
+    fi
+    
+    echo -------- Check all others found commits with the same issue $ISSUE -------
+    for allSameISSUE in $AllCommits; do 
+      repo=$(echo $allSameISSUE | cut -d: -f1)
+      commitBranch=$(echo $allSameISSUE | cut -d: -f2)
+      revision=$(echo $allSameISSUE | cut -d: -f3)
+      echo Check: $repo, $commitBranch, $revision
+      if [ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then continue; fi
+      if [[ ! &quot;$commits&quot; =~ &quot;$repo&quot; ]]; then
+        destBranch=$(grep $repo $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+        echo Check destination branch: $destBranch, if equel to: $commitBranch
+        if [ &quot;$destBranch&quot; == &quot;$commitBranch&quot; ]; then
+          echo Fetch this change $revision for project $repo
+          commits=&quot;$commits $allSameISSUE&quot;
+          change_API_format=$(echo $revision | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;)
+          if [[ ! &quot;$CHANGES&quot; =~ &quot;$change_API_format&quot; ]]; then
+            CHANGES=&quot;$CHANGES $change_API_format&quot;
+          fi
+        else
+          echo Destination branch not equel - skip this change
+        fi
+      fi
+    done
+    
+    echo Check if you need to execute compilation for branch $branch
+    if [ ! -z &quot;$commits&quot; ]; then
+      echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+      echo CHANGES_$branchVariable=${commits} &gt;&gt; ${WORKSPACE}/generated_android.properties
+    fi
+done
+
+echo CHANGES=${CHANGES} &gt;&gt; ${WORKSPACE}/generated_android.properties
+cat ${WORKSPACE}/generated_android.properties
+</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>generated_android.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+    <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+      <phaseName>Run review Compilation with all manifests branches</phaseName>
+      <phaseJobs>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp-android-child-review</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition>&quot;${branch_master}&quot; == &quot;True&quot;</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>GERRIT_BRANCH=master
+manifestsBranch=${Manifests_master}
+CHANGES=${CHANGES_master}
+change=${change}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp-android-child-review</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition>&quot;${branch_android_9}&quot; == &quot;True&quot;</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>GERRIT_BRANCH=android-9
+manifestsBranch=${Manifests_android_9}
+CHANGES=${CHANGES_android_9}
+change=${change}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp-android-child-review</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition>&quot;${branch_audc_rk3399}&quot; == &quot;True&quot;</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>GERRIT_BRANCH=$GERRIT_BRANCH
+manifestsBranch=${Manifests_audc_rk3399}
+CHANGES=${CHANGES_audc_rk3399}
+change=${change}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp-android-child-review</jobName>
+          <jobAlias></jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition>&quot;${branch_other}&quot; == &quot;True&quot;</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>GERRIT_BRANCH=$GERRIT_BRANCH
+manifestsBranch=${Manifests_other}
+CHANGES=${CHANGES_other}
+change=${change}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+      </phaseJobs>
+      <continuationCondition>ALWAYS</continuationCondition>
+      <executionType>PARALLEL</executionType>
+    </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
+  </builders>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+            <worstResult>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </worstResult>
+            <bestResult>
+              <name>SUCCESS</name>
+              <ordinal>0</ordinal>
+              <color>BLUE</color>
+              <completeBuild>true</completeBuild>
+            </bestResult>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <EnvInjectBuilder plugin="envinject@2.1.5">
+                        <info>
+                          <propertiesFilePath>generated_android.properties</propertiesFilePath>
+                        </info>
+                      </EnvInjectBuilder>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>for rep in $CHANGES; do
+  echo Send OK message to Gerrit - $rep
+  ssh -p 29418  jenkins@gerrit gerrit review \
+  --message &quot;&apos;This change was compiled successfully also with the following changes: \
+  $CHANGES in $BUILD_URL, \
+  which was triggered by change: $change&apos;&quot; \
+  --notify OWNER \
+  --label Verified=1 \
+  $rep
+done
+  
+ssh -p 29418  jenkins@gerrit gerrit review \
+--message &quot;&apos;This change was compiled successfuly with the following changes: \
+$CHANGES in $BUILD_URL&apos;&quot; \
+$change
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>FAILURE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>for rep in $CHANGES; do
+  echo Send OK message to Gerrit - $rep
+  ssh -p 29418  jenkins@gerrit gerrit review \
+  --message &quot;&apos;This change has failed to compile with the following changes: \
+  $CHANGES in $BUILD_URL, \
+  which was triggered by change: $change&apos;&quot; \
+  --notify OWNER \
+  --label Verified=-1 \
+  $rep
+done
+  
+ssh -p 29418  jenkins@gerrit gerrit review \
+--message &quot;&apos;This change has failed to compile with the following changes: \
+$CHANGES in $BUILD_URL&apos;&quot; \
+$change
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+      <patterns>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>**</pattern>
+          <type>INCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+      </patterns>
+      <deleteDirs>true</deleteDirs>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
+    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+      <info>
+        <propertiesContent>jenkins_user=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.54.2">
+          <script></script>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jenkins_password</name>
+          <value>{AQAAABAAAAAQuuzgvJV9XX0rqWfa0aLHhIgRVHvv2B+SoGzPEp+zkXc=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER} $GERRIT_PROJECT $GERRIT_REFSPEC</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+  <pollSubjobs>false</pollSubjobs>
+</com.tikal.jenkins.plugins.multijob.MultiJobProject>
