@@ -265,6 +265,20 @@
           <sid># RnD Mobility</sid>
         </assignedSIDs>
       </role>
+      <role name="redirect_developers" pattern="(Redirect.*)">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Workspace</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.ManualTrigger</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>com.sonyericsson.hudson.plugins.gerrit.trigger.PluginImpl.Retrigger</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs>
+          <sid># RnD REDIRECT SRV</sid>
+        </assignedSIDs>
+      </role>
     </roleMap>
     <roleMap type="globalRoles">
       <role name="ReadOnly" pattern=".*">
@@ -344,6 +358,7 @@
         </permissions>
         <assignedSIDs>
           <sid>orena</sid>
+          <sid>olgaa</sid>
         </assignedSIDs>
       </role>
     </roleMap>
@@ -664,7 +679,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -672,7 +687,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -766,23 +781,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T3A2xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -790,11 +789,27 @@
           <int>1</int>
         </entry>
         <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T3A2xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -857,11 +872,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -908,11 +923,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -955,11 +970,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C54xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M54xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M54xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -967,7 +982,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M44xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C54xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1006,11 +1021,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1018,7 +1029,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1057,11 +1072,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1069,7 +1084,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1108,11 +1123,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1120,7 +1135,7 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M3Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1163,11 +1178,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1214,11 +1229,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1259,6 +1274,7 @@
           <templateDesc>azure test VM</templateDesc>
           <labels>azure_test_te</labels>
           <location>West Europe</location>
+          <availabilityType/>
           <virtualMachineSize>Standard_B1s</virtualMachineSize>
           <storageAccountNameReferenceType>existing</storageAccountNameReferenceType>
           <diskType>managed</diskType>
@@ -1339,12 +1355,12 @@ sudo yum install -y git-2.18.0</initScript>
       <vmargs></vmargs>
     </hudson.plugins.spotinst.cloud.AzureSpotinstCloud>
     <hudson.plugins.spotinst.cloud.AzureSpotinstCloud plugin="spotinst@2.0.16">
-      <name>sig-62a645da</name>
+      <name>sig-cb6f7a75</name>
       <accountId>act-96d87a11</accountId>
-      <groupId>sig-62a645da</groupId>
+      <groupId>sig-cb6f7a75</groupId>
       <pendingInstances/>
       <labelString>azure_redirect_slave</labelString>
-      <idleTerminationMinutes>5</idleTerminationMinutes>
+      <idleTerminationMinutes>10</idleTerminationMinutes>
       <workspaceDir>c:\jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
         <hudson.model.labels.LabelAtom>azure_redirect_slave</hudson.model.labels.LabelAtom>
@@ -1359,7 +1375,7 @@ sudo yum install -y git-2.18.0</initScript>
       <groupId>sig-949dab46</groupId>
       <pendingInstances/>
       <labelString>ipp-centos7.4_test</labelString>
-      <idleTerminationMinutes>2</idleTerminationMinutes>
+      <idleTerminationMinutes>20</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
         <hudson.model.labels.LabelAtom>ipp-centos7.4_test</hudson.model.labels.LabelAtom>
@@ -1369,15 +1385,7 @@ sudo yum install -y git-2.18.0</initScript>
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1385,7 +1393,15 @@ sudo yum install -y git-2.18.0</initScript>
           <int>1</int>
         </entry>
         <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
           <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1420,6 +1436,57 @@ sudo yum install -y git-2.18.0</initScript>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.16">
+      <name>sig-e17b0fee</name>
+      <accountId></accountId>
+      <groupId>sig-e17b0fee</groupId>
+      <pendingInstances/>
+      <labelString>MobilityPlus-android-build</labelString>
+      <idleTerminationMinutes>5</idleTerminationMinutes>
+      <workspaceDir>/home/ubuntu/jenkinsslave</workspaceDir>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>MobilityPlus-android-build</hudson.model.labels.LabelAtom>
+      </labelSet>
+      <usage>EXCLUSIVE</usage>
+      <tunnel></tunnel>
+      <vmargs></vmargs>
+      <executorsForInstanceType>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+      </executorsForInstanceType>
+      <executorsForTypes>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C42xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M32xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+      </executorsForTypes>
+    </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
   </clouds>
   <quietPeriod>5</quietPeriod>
   <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
@@ -1447,7 +1514,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>armCreateAmiFromOVA</string>
         <string>armCreateAzureImage</string>
         <string>armCreateUpgradeTarball</string>
-        <string>armNightSanity</string>
+        <string>armPrepareNightSanity</string>
         <string>armPromoteVersion</string>
         <string>armPublishAMI</string>
         <string>armReleaseSanity</string>
@@ -1461,6 +1528,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>armReviewRouterTestModule</string>
         <string>armReviewUpgradeTarball</string>
         <string>armRunRouterTestModule</string>
+        <string>armRunSanity</string>
         <string>armRunTopologyTest</string>
       </jobNames>
       <jobFilters/>
@@ -1514,7 +1582,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>armReviewArm_test</string>
         <string>artifactory-test</string>
         <string>dsp-Build-Gen5_test</string>
-        <string>echo123</string>
+        <string>echo1234</string>
         <string>test</string>
         <string>test_armBuild</string>
         <string>test_armConvertOVAToAzureImage</string>
@@ -1524,9 +1592,11 @@ sudo yum install -y git-2.18.0</initScript>
         <string>test_armReviewArm-fullRepo</string>
         <string>test_armuploadVHD</string>
         <string>test_auto07</string>
+        <string>test_ipp-android-review</string>
         <string>test_ipp_AT_build</string>
         <string>test_ipp_AT_parent</string>
         <string>test_ippBuild_SFB_</string>
+        <string>test_ippReview_CppCheck</string>
         <string>test_ippReview_SFB</string>
         <string>test_windowsSlave</string>
       </jobNames>
@@ -1665,21 +1735,14 @@ sudo yum install -y git-2.18.0</initScript>
         <string>ipp_AT_Call_parent</string>
         <string>ipp_AT_copyfiles</string>
         <string>ipp_AT_copyfiles_From_TAG</string>
-        <string>ipp_AT_copyfiles_old</string>
         <string>ipp_AT_parent</string>
         <string>ipp_AT_run</string>
         <string>ipp_AT_SendTo_parent</string>
-        <string>ipp_Sanity_child</string>
         <string>ipp_Sanity_Night_Build</string>
         <string>ipp_Sanity_Night_Build_450</string>
-        <string>ipp_Sanity_Night_Build_450_2</string>
-        <string>ipp_Sanity_Night_Build_450_3</string>
         <string>ipp_Sanity_Night_Build_IGS_Models</string>
         <string>ipp_Sanity_Night_Build_Models</string>
         <string>ipp_Sanity_Night_Feature_Modles</string>
-        <string>ipp_Sanity_Night_Non_lync_Build_Models</string>
-        <string>ipp_Sanity_parallel-jobs</string>
-        <string>ipp_Sanity_Pre_build_parallel-jobs</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -1757,9 +1820,12 @@ sudo yum install -y git-2.18.0</initScript>
         <string>ipp-android-Build</string>
         <string>ipp-android-c450-kernel-Build</string>
         <string>ipp-android-c450-kernel-review</string>
+        <string>ipp-android-child-review</string>
         <string>ipp-android-Create-Tag</string>
+        <string>ipp-android-parent-review</string>
         <string>ipp-android-ReleaseNotes</string>
         <string>ipp-android-review</string>
+        <string>ippAndroidVerifyCherryPick</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -1788,6 +1854,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>dsp-Review-Gen5_manifest</string>
         <string>dsp-Review-Modules</string>
         <string>dsp-Review-Modules-Gen5</string>
+        <string>dspVerifyCherryPick</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -1810,15 +1877,27 @@ sudo yum install -y git-2.18.0</initScript>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>MobilityGroup-AudioEngine-Android-Build</string>
+        <string>MobilityGroup-AudioEngine-Android-Review</string>
+        <string>MobilityGroup-AudioEngine-Create-Tag</string>
+        <string>MobilityGroup-AudioEngine-iOS-Build</string>
+        <string>MobilityGroup-AudioEngine-iOS-Review</string>
+        <string>MobilityGroup-AudioEngine-ReleaseNotes</string>
         <string>MobilityGroup-Backend-Build</string>
         <string>MobilityGroup-Backend-ReleaseNotes</string>
         <string>MobilityGroup-Backend-Review</string>
+        <string>MobilityGroup-MobilityPlus-Android-Build</string>
+        <string>MobilityGroup-MobilityPlus-Android-ReleaseNotes</string>
+        <string>MobilityGroup-MobilityPlus-Android-Review</string>
+        <string>MobilityGroup-MobilityPlus-Create-Tag</string>
         <string>MobilityGroup-WebRTC-Android-Build</string>
         <string>MobilityGroup-WebRTC-Android-ReleaseNotes</string>
         <string>MobilityGroup-WebRTC-Android-Review</string>
         <string>MobilityGroup-WebRTC-iOS-Build</string>
         <string>MobilityGroup-WebRTC-iOS-ReleaseNotes</string>
         <string>MobilityGroup-WebRTC-iOS-Review</string>
+        <string>MobilityGroup-WebRTC-Web-Build</string>
+        <string>MobilityGroup-WebRTC-Web-ReleaseNotes</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -1853,9 +1932,12 @@ sudo yum install -y git-2.18.0</initScript>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>RedirectBuild_Server</string>
+        <string>RedirectBuild_UI</string>
         <string>RedirectReview_Server</string>
         <string>RedirectReview_Server_codeAnalysis</string>
         <string>RedirectReview_UI</string>
+        <string>UI</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -1884,7 +1966,7 @@ sudo yum install -y git-2.18.0</initScript>
     </listView>
     <listView>
       <owner class="hudson" reference="../../.."/>
-      <name>Running Jobs</name>
+      <name> Running Jobs</name>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>

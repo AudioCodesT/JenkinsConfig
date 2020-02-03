@@ -1,0 +1,161 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Static Code Analysis&#xd;
+java --&gt; pmd, findbugs&#xd;
+</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>30</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://jenkins@gerrit:29418/ARM/Arm</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>true</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <depth>10</depth>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
+    </extensions>
+  </scm>
+  <assignedNode>arm-build</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>true</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H H(1-2) * * 0</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>## Run pmd on entire repository java files
+cat &lt;&lt;-EOF &gt; ~/.netrc
+machine test-gerrit login jenkins password $jpass
+machine gerrit login jenkins password $jpass
+EOF
+
+cd ${WORKSPACE}/..
+
+rm -rf tools
+git -c http.sslverify=false clone -n https://gerrit/devops/tools
+
+cd tools
+git checkout -f origin/master -- sputnik/gerrit/arm-pmd.properties
+git checkout -f origin/master -- pmd/audc-ruleset.xml
+cp sputnik/gerrit/arm-pmd.properties ${WORKSPACE}/
+cp pmd/audc-ruleset.xml ${WORKSPACE}/
+
+cd ${WORKSPACE}
+
+/opt/pmd/bin/run.sh pmd -d . -f xml -language java -R audc-ruleset.xml -encoding UTF-8 -failOnViolation false &gt; pmd.xml
+
+/usr/bin/sed -i -n &apos;/xml/,$p&apos; pmd.xml
+
+
+## Run FindBugs on entire repository java files
+/opt/findbugs/bin/findbugs -include audc-ruleset.xml -medium -xml -output findbugs.xml -textui .
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <io.jenkins.plugins.analysis.core.steps.IssuesRecorder plugin="warnings-ng@3.0.3">
+      <analysisTools>
+        <io.jenkins.plugins.analysis.warnings.Pmd>
+          <id></id>
+          <name></name>
+          <pattern>**/pmd.xml</pattern>
+          <reportEncoding>UTF-8</reportEncoding>
+        </io.jenkins.plugins.analysis.warnings.Pmd>
+        <io.jenkins.plugins.analysis.warnings.FindBugs>
+          <id></id>
+          <name></name>
+          <pattern>**/findbugs.xml</pattern>
+          <reportEncoding>UTF-8</reportEncoding>
+          <useRankAsPriority>true</useRankAsPriority>
+        </io.jenkins.plugins.analysis.warnings.FindBugs>
+      </analysisTools>
+      <sourceCodeEncoding></sourceCodeEncoding>
+      <ignoreQualityGate>false</ignoreQualityGate>
+      <ignoreFailedBuilds>true</ignoreFailedBuilds>
+      <referenceJobName>-</referenceJobName>
+      <healthy>0</healthy>
+      <unhealthy>0</unhealthy>
+      <minimumSeverity plugin="analysis-model-api@2.1.2">
+        <name>LOW</name>
+      </minimumSeverity>
+      <filters/>
+      <isEnabledForFailure>true</isEnabledForFailure>
+      <isAggregatingResults>false</isAggregatingResults>
+      <isBlameDisabled>false</isBlameDisabled>
+      <qualityGates/>
+    </io.jenkins.plugins.analysis.core.steps.IssuesRecorder>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+        <timeoutMinutes>30</timeoutMinutes>
+      </strategy>
+      <operationList/>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQrVknZ+5SqjkLWgUm71sSa5eEeky8f0ufuwFCYx563sQ=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+  </buildWrappers>
+</project>
