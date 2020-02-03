@@ -2013,6 +2013,9 @@ sudo yum install -y git-2.18.0</initScript>
       <properties class="hudson.model.View$PropertyList"/>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>ipp_GTest_SIM</string>
+        <string>ippLibsReviewSFB</string>
+        <string>ippReview_SFB</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -2026,7 +2029,11 @@ sudo yum install -y git-2.18.0</initScript>
         <org.jenkins.plugins.builton.BuiltOnColumn plugin="built-on-column@1.1"/>
         <io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn plugin="warnings-ng@3.0.3">
           <selectTools>false</selectTools>
-          <tools/>
+          <tools>
+            <io.jenkins.plugins.analysis.core.model.ToolSelection>
+              <id></id>
+            </io.jenkins.plugins.analysis.core.model.ToolSelection>
+          </tools>
           <name># Issues</name>
           <labelProviderFactory>
             <jenkins/>
@@ -2035,13 +2042,28 @@ sudo yum install -y git-2.18.0</initScript>
       </columns>
       <recurse>false</recurse>
       <useCssStyle>false</useCssStyle>
-      <includeStdJobList>false</includeStdJobList>
+      <includeStdJobList>true</includeStdJobList>
       <hideJenkinsPanels>false</hideJenkinsPanels>
       <leftPortletWidth>50%</leftPortletWidth>
       <rightPortletWidth>50%</rightPortletWidth>
-      <leftPortlets/>
-      <rightPortlets/>
-      <topPortlets/>
+      <leftPortlets>
+        <hudson.plugins.view.dashboard.stats.StatBuilds>
+          <name>Build statistics</name>
+        </hudson.plugins.view.dashboard.stats.StatBuilds>
+      </leftPortlets>
+      <rightPortlets>
+        <hudson.plugins.view.dashboard.stats.StatJobs>
+          <name>Job statistics</name>
+        </hudson.plugins.view.dashboard.stats.StatJobs>
+      </rightPortlets>
+      <topPortlets>
+        <hudson.plugins.analysis.collector.dashboard.WarningsTotalsGraphPortlet plugin="analysis-collector@1.52">
+          <name>Warnings trend graph (totals)</name>
+          <width>500</width>
+          <height>200</height>
+          <dayCountString>30</dayCountString>
+        </hudson.plugins.analysis.collector.dashboard.WarningsTotalsGraphPortlet>
+      </topPortlets>
       <bottomPortlets/>
     </hudson.plugins.view.dashboard.Dashboard>
   </views>
