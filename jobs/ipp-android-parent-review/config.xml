@@ -9,12 +9,12 @@
    2.3. Give score to all participant commits and exit job&#xd;
 &#xd;
 3. The wake up commit is not  a manifest commit:&#xd;
-4. If its branch exists in manifest reposity, add this branch to the hardcoded branches: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; (if it is not one of these 3 exiting branches)&#xd;
- 5. Do the following for each following branchs: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; and &quot;other&quot; (if exist):&#xd;
+4. If its branch exists in manifest repository, add this branch to the hard-coded branches: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; (if it is not one of these 3 exiting branches)&#xd;
+ 5. Do the following for each following branches: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; and &quot;other&quot; (if exist):&#xd;
    5.1. Find manifest commit with the same issue and use it as your manifest xml file (repo init).&#xd;
    5.2. If not found, use the branch name (repo init)&#xd;
-   5.3. Check if the &apos;dest-branch&apos; of the wake up commit equel to this branch:&#xd;
-          if not, do not nothing and exit.&#xd;
+   5.3. Check if the &apos;dest-branch&apos; of the wake up commit equal to this branch:&#xd;
+          if not, do nothing and exit.&#xd;
    5.4. Go over all found commits with the same issue and add all the commits that &apos;dest-branch&apos;=&lt;this branch&gt; to the compilation.&#xd;
    5.5. Execute compilation for this branch.&#xd;
 &#xd;
