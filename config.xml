@@ -2005,60 +2005,6 @@ sudo yum install -y git-2.18.0</initScript>
       </columns>
       <recurse>true</recurse>
     </listView>
-    <hudson.plugins.view.dashboard.Dashboard plugin="dashboard-view@2.12">
-      <owner class="hudson" reference="../../.."/>
-      <name>statistics_ipp</name>
-      <filterExecutors>false</filterExecutors>
-      <filterQueue>false</filterQueue>
-      <properties class="hudson.model.View$PropertyList"/>
-      <jobNames>
-        <comparator class="hudson.util.CaseInsensitiveComparator"/>
-        <string>ipp_GTest_SIM</string>
-        <string>ippLibsReviewSFB</string>
-        <string>ippReview_SFB</string>
-      </jobNames>
-      <jobFilters/>
-      <columns>
-        <hudson.views.StatusColumn/>
-        <hudson.views.WeatherColumn/>
-        <hudson.views.JobColumn/>
-        <hudson.views.LastSuccessColumn/>
-        <hudson.views.LastFailureColumn/>
-        <hudson.views.LastDurationColumn/>
-        <hudson.views.BuildButtonColumn/>
-        <org.jenkins.plugins.builton.BuiltOnColumn plugin="built-on-column@1.1"/>
-        <io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn plugin="warnings-ng@3.0.3">
-          <selectTools>false</selectTools>
-          <tools>
-            <io.jenkins.plugins.analysis.core.model.ToolSelection>
-              <id></id>
-            </io.jenkins.plugins.analysis.core.model.ToolSelection>
-          </tools>
-          <name># Issues</name>
-          <labelProviderFactory>
-            <jenkins/>
-          </labelProviderFactory>
-        </io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn>
-      </columns>
-      <recurse>false</recurse>
-      <useCssStyle>false</useCssStyle>
-      <includeStdJobList>true</includeStdJobList>
-      <hideJenkinsPanels>false</hideJenkinsPanels>
-      <leftPortletWidth>50%</leftPortletWidth>
-      <rightPortletWidth>50%</rightPortletWidth>
-      <leftPortlets>
-        <hudson.plugins.view.dashboard.stats.StatBuilds>
-          <name>Build statistics</name>
-        </hudson.plugins.view.dashboard.stats.StatBuilds>
-      </leftPortlets>
-      <rightPortlets>
-        <hudson.plugins.view.dashboard.stats.StatJobs>
-          <name>Job statistics</name>
-        </hudson.plugins.view.dashboard.stats.StatJobs>
-      </rightPortlets>
-      <topPortlets/>
-      <bottomPortlets/>
-    </hudson.plugins.view.dashboard.Dashboard>
   </views>
   <primaryView>all</primaryView>
   <slaveAgentPort>45374</slaveAgentPort>
