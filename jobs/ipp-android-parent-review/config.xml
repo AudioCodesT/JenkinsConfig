@@ -151,7 +151,7 @@ then
 fi
 #******************** temporary not compile rockchip-px30  branch ******************************&quot;
 
-# NEED to find the branch and compare it to destBranch
+# Find all commits with the same wake up commit issue.
 echo find Jira Issue of this change
 ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
 echo found: $ISSUE
