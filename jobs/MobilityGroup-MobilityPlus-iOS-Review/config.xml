@@ -26,6 +26,22 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CI_RES_BRANCH_NAME</name>
+          <description>CI-Resources repo branch name</description>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <maxConcurrentPerNode>0</maxConcurrentPerNode>
       <maxConcurrentTotal>0</maxConcurrentTotal>
@@ -38,32 +54,14 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
-      <info>
-        <propertiesContent>JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-ANDROID_HOME=/home/ubuntu/android-sdk-linux
-PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
-</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-      <on>true</on>
-      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
-      <keepBuildVariables>true</keepBuildVariables>
-      <overrideBuildParameters>false</overrideBuildParameters>
-    </EnvInjectJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>$GERRIT_REFSPEC</refspec>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/MobilityPlus/Android</url>
+        <url>ssh://jenkins@gerrit:29418/MobilityGroup/MobilityPlus/iOS</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -83,7 +81,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
-  <assignedNode>MobilityPlus-android-build</assignedNode>
+  <assignedNode>MobilityGroup-ios-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -94,7 +92,7 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>MobilityGroup/MobilityPlus/Android</pattern>
+          <pattern>MobilityGroup/MobilityPlus/iOS</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -164,26 +162,52 @@ cat &lt;&lt; EOF &gt; BuildNumber.json
 	&quot;VersionName&quot;: &quot;3.0.0&quot;,
 	&quot;VersionCode&quot;: 30,
 }
-EOF</command>
+EOF
+
+cat &lt;&lt; EOF &gt; ~/.netrc
+machine gerrit login jenkins password ${jpass}
+EOF
+
+CODESIGN_BRANCH_NAME=&quot;master&quot;
+BUILD_OUTPUT_DIR=&quot;${WORKSPACE}/output&quot;
+#CERT_PASS=&quot;Audiocodes1!&quot;
+machinePassword=&quot;123456&quot;
+#clone CI-Resources repository
+cd ${WORKSPACE}/..
+rm -rf CI-Resources || echo &quot;CI-Resources folder not exists&quot;
+git -c http.sslverify=false clone https://gerrit/MobilityGroup/WebRTC/iOS/CI-Resources
+cd CI-Resources
+git checkout &quot;${CI_RES_BRANCH_NAME}&quot;
+CI_RES_LOCAL_REPO=$(pwd)
+#clone codesign-resources repository
+cd ${WORKSPACE}/..
+rm -rf codesign-resources || echo &quot;codesign-resources folder not exists&quot;
+git -c http.sslverify=false clone https://gerrit/MobilityGroup/WebRTC/iOS/codesign-resources	
+cd codesign-resources
+git checkout &quot;${CODESIGN_BRANCH_NAME}&quot;
+CODESIGN_LOCAL_REPO=$(pwd)
+
+
+#run build
+cd ${WORKSPACE}
+${CI_RES_LOCAL_REPO}/Scripts/mobility_setup_and_build_project.sh -projectRoot &quot;$WORKSPACE&quot; -outputFolder &quot;$BUILD_OUTPUT_DIR&quot; -releaseVersion  &quot;$RELEASE_VERSION&quot; -buildVersion &quot;$BUILD_VERSION&quot; -target &quot;$CODESIGN_LOCAL_REPO&quot; -ciResourcesPath &quot;$CI_RES_LOCAL_REPO&quot; -machinePassword &quot;$machinePassword&quot; 
+
+</command>
     </hudson.tasks.Shell>
-    <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
-      <switches></switches>
-      <tasks>assembleRelease</tasks>
-      <rootBuildScriptDir>${BRAND_NAME}</rootBuildScriptDir>
-      <buildFile></buildFile>
-      <gradleName>(Default)</gradleName>
-      <useWrapper>true</useWrapper>
-      <makeExecutable>true</makeExecutable>
-      <useWorkspaceAsHome>false</useWorkspaceAsHome>
-      <wrapperLocation></wrapperLocation>
-      <passAllAsSystemProperties>false</passAllAsSystemProperties>
-      <projectProperties></projectProperties>
-      <passAllAsProjectProperties>false</passAllAsProjectProperties>
-    </hudson.plugins.gradle.Gradle>
   </builders>
   <publishers/>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>jpass</name>
+          <value>{AQAAABAAAAAQHK9Pkl30MDa8W7O1w+5HK3rMKNr5nuhRAlIpQ8HqfsQ=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
@@ -193,5 +217,5 @@ EOF</command>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
   </executionStrategy>
-  <childCustomWorkspace>/home/ubuntu/jenkinsslave/workspace/MobilityPlus_android</childCustomWorkspace>
+  <childCustomWorkspace>/home/ubuntu/jenkinsslave/workspace/MobilityPlus_iOS</childCustomWorkspace>
 </matrix-project>
