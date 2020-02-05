@@ -476,13 +476,22 @@ $change
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>for rep in $CHANGES; do
+
+  score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | \
+          cut -d, -f1)  | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
+  verified=&quot;--label Verified=-1&quot;
+  message=&quot;Give Verified=-1&quot;
+  if [ &quot;$score&quot;  == 1 ]; then 
+    verified=&quot;&quot;
+    message=&quot;(Do not give Verified=-1 in case this change has received +1 already)&quot;
+  fi
+
   echo Send OK message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
   --message &quot;&apos;This change has failed to compile with the following changes: \
   $CHANGES in $BUILD_URL, \
-  which was triggered by change: $change&apos;&quot; \
-  --notify OWNER \
-  --label Verified=-1 \
+  which was triggered by change: $change -- $message&apos;&quot; \
+  --notify OWNER $verified \
   $rep
 done
   
