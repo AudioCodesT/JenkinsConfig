@@ -101,8 +101,8 @@
       </gerritProjects>
       <dynamicGerritProjects class="empty-list"/>
       <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
+        <onSuccessful>true</onSuccessful>
+        <onFailed>true</onFailed>
         <onUnstable>true</onUnstable>
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
@@ -449,7 +449,7 @@ change=${change}</properties>
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>for rep in $CHANGES; do
+                        <command>for rep in $CHANGES $change; do
   echo Send OK message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
   --message &quot;&apos;This change was compiled successfully also with the following changes: \
@@ -459,11 +459,6 @@ change=${change}</properties>
   --label Verified=1 \
   $rep
 done
-  
-ssh -p 29418  jenkins@gerrit gerrit review \
---message &quot;&apos;This change was compiled successfuly with the following changes: \
-$CHANGES in $BUILD_URL&apos;&quot; \
-$change
 </command>
                       </hudson.tasks.Shell>
                     </buildSteps>
@@ -475,13 +470,13 @@ $change
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>for rep in $CHANGES; do
+                        <command>for rep in $CHANGES $change; do
 
-  score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | \
-          cut -d, -f1)  | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
+  score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
+        | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
   verified=&quot;--label Verified=-1&quot;
   message=&quot;Give Verified=-1&quot;
-  if [ &quot;$score&quot;  == 1 ]; then 
+  if [ &quot;$score&quot; == 1 ]; then 
     verified=&quot;&quot;
     message=&quot;(Do not give Verified=-1 in case this change has received +1 already)&quot;
   fi
@@ -494,11 +489,6 @@ $change
   --notify OWNER $verified \
   $rep
 done
-  
-ssh -p 29418  jenkins@gerrit gerrit review \
---message &quot;&apos;This change has failed to compile with the following changes: \
-$CHANGES in $BUILD_URL&apos;&quot; \
-$change
 </command>
                       </hudson.tasks.Shell>
                     </buildSteps>
