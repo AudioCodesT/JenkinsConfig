@@ -265,8 +265,8 @@ except paramiko.ssh_exception.AuthenticationException:
 
 #switching user to a root user
 justWait(20.0,&quot;\$&quot;)
-sendWait(&quot;su -&quot;,20.0,&quot;Password:&quot;)
-sendWait(root_password)
+sendwait(&quot;su -&quot;,20.0,&quot;Password:&quot;)
+sendwait(root_password)
 
 #make the build failed if one of the commands here failing
 sendwait(&quot;set -xe&quot;)
