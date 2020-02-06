@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>collect daily data about ippReview_SFB and ippCentos7.4-reviewSIM jobs</description>
+  <description>collect daily data about ippReview_SFB and ippCentos7.4-buildSIM jobs</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -33,9 +33,7 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -64,19 +62,38 @@ arrBranchesIndex=0
 countHowManyBuilds=0
 length_JobName=ipp_Review_SFB
 echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
-#run twice (first time on IPPhone SFB and second time on ippCentos7.4-reviewSIM)
-for j in `seq 0 1`
+#run twice (first time on IPPhone SFB and second time on ippCentos7.4-reviewSIM) 
+for j in `seq 0 3`
 do
 
 #initialize parameters for the second time the job running for ippCentos7.4-reviewSIM
   if [ &quot;$j&quot; == &quot;1&quot; ]
   then
-    JobName=ippCentos7.4-reviewSIM
+    JobName=ippCentos7.4-buildSIM
     arrBranchesIndex=0
     countHowManyBuilds=0
-    length_JobName=reviewSIM
+    length_JobName=buildSIM
     echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
   fi
+  
+  if [ &quot;$j&quot; == &quot;2&quot; ]
+  then
+    JobName=ipp_GTest_SIM
+    arrBranchesIndex=0
+    countHowManyBuilds=0
+    length_JobName=GTest_SIM
+    echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  fi
+  
+  if [ &quot;$j&quot; == &quot;3&quot; ]
+  then
+    JobName=ippLibsReviewSFB
+    arrBranchesIndex=0
+    countHowManyBuilds=0
+    length_JobName=LibsReviewSFB
+    echo -e &quot;\r\n&quot; &gt;&gt; $JobName.txt
+  fi    
+  
 set +x
 #The Main Job Json File (to take all the builds in the jobs)
 JobJsonFile=$(curl -s --insecure -u $User:$ApiToken &quot;https://jenkins/view/$ProjectName/job/$JobName/$apiAdress&quot;)
@@ -324,7 +341,7 @@ done
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>ippCentos7.4-reviewSIM.txt,ippReview_SFB.txt</artifacts>
+      <artifacts>ippCentos7.4-reviewSIM.txt,ippReview_SFB.txt,*.txt</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
@@ -336,6 +353,17 @@ done
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun>.*(Invalid numeric literal).*</regexpForRerun>
+      <rerunIfUnstable>false</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>true</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
+        <delay>5</delay>
+      </delay>
+      <maxSchedule>0</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
