@@ -79,7 +79,7 @@ def manualFlush(channel):
             line = str(line)
             print(line)
     
-def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;armAdmin&quot;,acems_password=&quot;Arm!default1&quot;):
+def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;password&quot;):
     t=time.time()
     received=&quot;&quot;
     while True:
@@ -136,7 +136,7 @@ from subprocess import Popen, PIPE
 #esxi username and password
 vm_username=&apos;armAdmin&apos;
 vm_password=&apos;Arm!default1&apos;
-
+root_password=&apos;password&apos;
 
 # Functions definitions for configuration
 def sendwait_conf(command, timeout=200.0, waitfor=&quot;#&quot;):
@@ -260,6 +260,12 @@ except paramiko.ssh_exception.AuthenticationException:
 	print(&quot;We had an authentication exception!&quot;)
 	shell = None   
 
+
+#switching user to a root user
+justWait(20.0,&quot;\$&quot;)
+sendWait(&quot;su -&quot;,20.0,&quot;Password:&quot;)
+sendWait(root_password)
+
 #make the build failed if one of the commands here failing
 sendwait(&quot;set -xe&quot;)
 sendwait(&quot;echo &apos;Start curl&apos;&quot;)
@@ -278,7 +284,7 @@ time.sleep(30)
 sendwait(&quot;cd LISISO&quot;)
 #install the integration services
 print(&quot;Start installation on Both Servers&quot;)
-sendwait(&quot;sudo ./install.sh&quot;)
+sendwait(&quot;./install.sh&quot;)
 #wait for installation will be complete
 print(&quot;sleep 700&quot;)
 time.sleep(700)
