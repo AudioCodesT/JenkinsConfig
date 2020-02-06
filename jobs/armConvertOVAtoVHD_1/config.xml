@@ -136,7 +136,7 @@ from subprocess import Popen, PIPE
 #esxi username and password
 vm_username=&apos;armAdmin&apos;
 vm_password=&apos;Arm!default1&apos;
-root_password=&apos;password&apos;
+vm_root_password=&apos;password&apos;
 
 # Functions definitions for configuration
 def sendwait_conf(command, timeout=200.0, waitfor=&quot;#&quot;):
@@ -264,9 +264,9 @@ except paramiko.ssh_exception.AuthenticationException:
 
 
 #switching user to a root user
-justWait(20.0,&quot;\$&quot;)
-sendwait(&quot;su -&quot;,20.0,&quot;Password:&quot;)
-sendwait(root_password)
+justWait(200.0,&quot;\$&quot;)
+sendwait(&quot;su -&quot;,200.0,&quot;Password:&quot;)
+sendwait(vm_root_password)
 
 #make the build failed if one of the commands here failing
 sendwait(&quot;set -xe&quot;)
