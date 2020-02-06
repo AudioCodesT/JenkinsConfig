@@ -46,16 +46,16 @@ No build job. Only stop the instances</description>
   <authToken>DSP_QA</authToken>
   <triggers>
     <hudson.triggers.TimerTrigger>
-      <spec>H 18 * * 0-4</spec>
+      <spec>H 8 * * 0-5</spec>
     </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>echo &quot;***********************************************************************************&quot;
-echo &quot;Stopping 	i-0810d61650c8d7050  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
+echo &quot;Stopping 	i-092ad06d473c9c9e2  (Stateful DSP QA tests) IP: 172.16.134.131&quot;
 echo &quot;***********************************************************************************&quot;
-aws ec2 stop-instances --instance-ids i-0810d61650c8d7050
+aws ec2 stop-instances --instance-ids i-092ad06d473c9c9e2
 </command>
     </hudson.tasks.Shell>
   </builders>
