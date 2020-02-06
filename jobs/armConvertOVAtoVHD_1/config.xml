@@ -79,7 +79,7 @@ def manualFlush(channel):
             line = str(line)
             print(line)
     
-def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;password&quot;):
+def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;armAdmin&quot;,acems_password=&quot;Arm!default1&quot;):
     t=time.time()
     received=&quot;&quot;
     while True:
