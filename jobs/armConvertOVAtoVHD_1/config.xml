@@ -170,9 +170,9 @@ def sendWithoutWait(command):
 	sendWithoutWait_conf(command)
 	sendWithoutWait_router(command)
     
-def justWait(command):
-	justWait_conf(command)
-	justWait_router(command)
+def justWait(timeout,waitfor):
+	justWait_conf(timeout,waitfor)
+	justWait_router(timeout,waitfor)
 #check if VM name ARM-Conf_$TAG is already exists
 vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
 if &quot;VHD_ARM-Conf_${TAG}&quot; in vm_list:
