@@ -186,7 +186,7 @@ CODESIGN_LOCAL_REPO=$(pwd)
 #run build
 cd ${WORKSPACE}
 ${CI_RES_LOCAL_REPO}/Scripts/mobility_setup_and_build_project.sh -projectRoot &quot;$WORKSPACE&quot; -outputFolder &quot;$BUILD_OUTPUT_DIR&quot; -releaseVersion  &quot;$RELEASE_VERSION&quot; -buildVersion &quot;$BUILD_VERSION&quot; -target &quot;$BRAND_NAME&quot; -codesignPath &quot;$CODESIGN_LOCAL_REPO&quot; -ciResourcesPath &quot;$CI_RES_LOCAL_REPO&quot; -machinePassword &quot;$machinePassword&quot; 
-echo &quot;exit code: $?&quot;
+
 </command>
     </hudson.tasks.Shell>
   </builders>
