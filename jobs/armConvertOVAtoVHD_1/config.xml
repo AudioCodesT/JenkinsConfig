@@ -163,12 +163,12 @@ def justWait_router(timeout=200.0, waitfor=&quot;#&quot;):
     
 #Functions unite both functions
 def sendwait(command,timeout=200.0, waitfor=&quot;#&quot;):
-	sendwait_conf(command,timeout=200.0, waitfor=&quot;#&quot;)
-	sendwait_router(command,timeout=200.0, waitfor=&quot;#&quot;)
+	sendwait_conf(command,timeout, waitfor)
+	sendwait_router(command,timeout, waitfor)
     
 def sendWithoutWait(command,timeout=200.0, waitfor=&quot;#&quot;):
-	sendWithoutWait_conf(command,timeout=200.0, waitfor=&quot;#&quot;)
-	sendWithoutWait_router(command,timeout=200.0, waitfor=&quot;#&quot;)
+	sendWithoutWait_conf(command,timeout, waitfor)
+	sendWithoutWait_router(command,timeout, waitfor)
     
 def justWait(timeout,waitfor):
 	justWait_conf(timeout,waitfor)
