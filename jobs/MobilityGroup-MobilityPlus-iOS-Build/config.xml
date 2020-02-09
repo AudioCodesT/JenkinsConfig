@@ -54,21 +54,19 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <refspec>$GERRIT_REFSPEC</refspec>
         <url>ssh://jenkins@gerrit:29418/MobilityGroup/MobilityPlus/iOS</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$GERRIT_BRANCH</name>
+        <name>${GERRIT_REFNAME}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -97,7 +95,7 @@
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
-              <pattern>**</pattern>
+              <pattern>refs/tags/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -128,11 +126,7 @@
       <customUrl></customUrl>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>true</excludeNoCodeChange>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginRefUpdatedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
       <triggerConfigURL></triggerConfigURL>
@@ -144,7 +138,7 @@
     <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
       <name>BRAND_NAME</name>
       <values>
-        <string>brands2review.yml</string>
+        <string>brands2compile.yml</string>
       </values>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
@@ -164,6 +158,8 @@ cat &lt;&lt; EOF &gt; ~/.netrc
 machine gerrit login jenkins password ${jpass}
 EOF
 
+RELEASE_VERSION=$(echo $NEWTAG | cut -d&apos;_&apos; -f1)
+BUILD_VERSION=$(echo $NEWTAG | cut -d&apos;_&apos; -f2)
 CODESIGN_BRANCH_NAME=&quot;master&quot;
 BUILD_OUTPUT_DIR=&quot;${WORKSPACE}/output&quot;
 #CERT_PASS=&quot;Audiocodes1!&quot;
@@ -191,9 +187,87 @@ ${CI_RES_LOCAL_REPO}/Scripts/mobility_setup_and_build_project.sh -projectRoot &q
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
+      <script>#!/bin/bash -xe
+
+BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
+echo &quot;NEWTAG=${NEWTAG}&quot;
+echo &quot;BRANCH=$BRANCH&quot;</script>
+      <scriptType>unixScript</scriptType>
+      <runOnlyOnParent>true</runOnlyOnParent>
+      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
+    </com.lookout.jenkins.EnvironmentScript>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>true</useSpecs>
+      <uploadSpec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/output/Export/*.ipa&quot;,
+            &quot;target&quot;: &quot;MobilityGroup/MobilityPlus/iOS/${BRANCH}/${NEWTAG}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }
+    ]
+}</spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec></spec>
+      </downloadSpec>
+      <deployPattern></deployPattern>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <artifactoryCombinationFilter>label==&quot;MobilityGroup-ios-build&quot;</artifactoryCombinationFilter>
+      <multiConfProject>true</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
@@ -205,7 +279,7 @@ ${CI_RES_LOCAL_REPO}/Scripts/mobility_setup_and_build_project.sh -projectRoot &q
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}__branch:${BRANCH}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
