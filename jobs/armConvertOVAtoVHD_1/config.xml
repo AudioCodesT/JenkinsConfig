@@ -166,9 +166,9 @@ def sendwait(command,timeout=200.0, waitfor=&quot;#&quot;):
 	sendwait_conf(command,timeout, waitfor)
 	sendwait_router(command,timeout, waitfor)
     
-def sendWithoutWait(command,timeout=200.0, waitfor=&quot;#&quot;):
-	sendWithoutWait_conf(command,timeout, waitfor)
-	sendWithoutWait_router(command,timeout, waitfor)
+def sendWithoutWait(command):
+	sendWithoutWait_conf(command)
+	sendWithoutWait_router(command)
     
 def justWait(timeout,waitfor):
 	justWait_conf(timeout,waitfor)
