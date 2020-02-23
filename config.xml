@@ -1021,29 +1021,37 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C48xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C38xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M58xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
       <executorsForTypes>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M58xlarge</awsInstanceType>
+          <awsInstanceType>M4Xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C38xlarge</awsInstanceType>
+          <awsInstanceType>M5xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C48xlarge</awsInstanceType>
+          <awsInstanceType>C4Xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>C5xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
