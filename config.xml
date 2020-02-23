@@ -765,28 +765,7 @@
       <name>sig-9290e243</name>
       <accountId></accountId>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-0dad94064170d0dd7</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-0dad94064170d0dd7</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2020-02-19 13:51:52.288 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-        <entry>
-          <string>i-002cd14898ac01845</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-002cd14898ac01845</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-centos7.4</requestedLabel>
-            <createdAt>2020-02-19 13:51:52.289 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -814,11 +793,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T3A2xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>T3A2xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1032,7 +1011,7 @@
       <groupId>sig-8bfe3a43</groupId>
       <pendingInstances/>
       <labelString>dsp-win-dynamic</labelString>
-      <idleTerminationMinutes>10</idleTerminationMinutes>
+      <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>c:\jenkins</workspaceDir>
       <labelSet class="sorted-set">
         <hudson.model.labels.LabelAtom>dsp-win-dynamic</hudson.model.labels.LabelAtom>
@@ -1042,37 +1021,29 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C48xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C38xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
-          <int>1</int>
-        </entry>
-        <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M58xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
       <executorsForTypes>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M4Xlarge</awsInstanceType>
+          <awsInstanceType>M58xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M5xlarge</awsInstanceType>
+          <awsInstanceType>C38xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C4Xlarge</awsInstanceType>
-          <executors>1</executors>
-        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C5xlarge</awsInstanceType>
+          <awsInstanceType>C48xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
@@ -1295,7 +1266,6 @@
           <templateDesc>azure test VM</templateDesc>
           <labels>azure_test_te</labels>
           <location>West Europe</location>
-          <availabilityType/>
           <virtualMachineSize>Standard_B1s</virtualMachineSize>
           <storageAccountNameReferenceType>existing</storageAccountNameReferenceType>
           <diskType>managed</diskType>
