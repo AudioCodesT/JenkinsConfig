@@ -20,6 +20,7 @@
 &#xd;
 6. Wait all branches compilation finished.&#xd;
 7. If one of the compilation is failed, Give to all participant commits of all branches Verified=-1, else give Verified=+1.&#xd;
+8. Do not give Verified=-1 in case this change has received already +1&#xd;
 &#xd;
    </description>
   <keepDependencies>false</keepDependencies>
@@ -101,7 +102,7 @@
       </gerritProjects>
       <dynamicGerritProjects class="empty-list"/>
       <skipVote>
-        <onSuccessful>false</onSuccessful>
+        <onSuccessful>true</onSuccessful>
         <onFailed>true</onFailed>
         <onUnstable>true</onUnstable>
         <onNotBuilt>false</onNotBuilt>
@@ -171,17 +172,21 @@ fi
 rm -rf repo_manifests
 git -c http.sslverify=false clone https://gerrit/IPP/Android/repo_manifests repo_manifests
 cd repo_manifests
-xmlFile=&quot;default.xml&quot;
 
 # The goal of this parameter is giving score to all changes that participate in this review
 # This variable should contains all changes exclude the change that wake up this job
 CHANGES=&quot;&quot;
+CompiledOnBranch=&quot;&quot;
 
 # Add the branch that wake up this job in case this branch exist in repo_manifests
-main_branches=(&quot;master&quot; &quot;android-9&quot; &quot;audc-rk3399&quot;)
+main_branches=(&quot;master&quot; &quot;android-9&quot; &quot;audc-rk3399&quot; &quot;audc-px30&quot;)
 branches_to_check=${main_branches[*]}
 if [[ ! ${main_branches[*]} =~ $GERRIT_BRANCH ]] &amp;&amp; git branch -a | grep -q origin/$GERRIT_BRANCH; then
   branches_to_check+=($GERRIT_BRANCH)
+fi
+
+if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+  FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
 fi
 
 # The gaol of this loop is to found right manifest for each branch
@@ -197,7 +202,7 @@ do
   Manifests=&quot;&quot;
   echo ------- Check the change that wake up this job for branch $branch -------
   if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
-    if [ &quot;$GERRIT_BRANCH&quot; == $branch ]; then 
+    if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ $branch ]]; then 
       Manifests=$GERRIT_REFSPEC
       echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
     fi
@@ -208,9 +213,17 @@ do
       commitBranch=$(echo $allSameISSUE | cut -d: -f2)
       revision=$(echo $allSameISSUE | cut -d: -f3)
       echo Check: $repo, $commitBranch, $revision
-      if [[ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; &amp;&amp; \
-            &quot;$commitBranch&quot; == &quot;$branch&quot; ]]; then
-        Manifests=$revision
+      if [ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+        changePS=$(echo $revision | cut -d/ -f4)
+        eval FilesList=\${FilesList$changePS}
+        if [ -z &quot;$FilesList&quot; ]; then
+          SHA1=$(ssh -p 29418 yossim@gerrit gerrit query --current-patch-set $changePS | grep revision: | cut -d: -f2)
+          FilesList=$(git show --pretty=&quot;&quot; --name-only $SHA1)
+          eval FilesList$changePS=$FilesList
+        fi
+        if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$commitBranch&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ $branch ]]; then
+          Manifests=$revision
+        fi
       fi 
     done
   fi
@@ -228,18 +241,24 @@ do
     eval Manifests=\${Manifests_$branchVariable}
     
     if [ &quot;$Manifests&quot; == &quot;$branch&quot; ]; then
-	  git checkout ${branch}
+      if [ ! -f $branch.xml ]; then git checkout ${branch}; fi
     else if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
       git fetch &quot;ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests&quot; $Manifests &amp;&amp; git checkout FETCH_HEAD
     else
       continue
     fi; fi
+
+    xmlFile=&quot;default.xml&quot;
+    if [ -f $branch.xml ]; then
+      echo Use $branch.xml file instead of checkout to branch $branch
+      xmlFile=$branch.xml
+    fi
     
     commits=&quot;&quot;
     
     # Check the wake up commit if destination branch equel to its branch
     if [ &quot;$GERRIT_PROJECT&quot; != &quot;IPP/Android/repo_manifests&quot; ]; then
-      destBranch=$(grep $GERRIT_PROJECT $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+      destBranch=$(grep $GERRIT_PROJECT\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
       echo Check destination branch: $destBranch, if equel to: $GERRIT_BRANCH
       if [ &quot;$destBranch&quot; == &quot;$GERRIT_BRANCH&quot; ]; then
         commits=&quot;$GERRIT_PROJECT:$GERRIT_BRANCH:$GERRIT_REFSPEC&quot;
@@ -259,7 +278,7 @@ do
       echo Check: $repo, $commitBranch, $revision
       if [ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then continue; fi
       if [[ ! &quot;$commits&quot; =~ &quot;$repo&quot; ]]; then
-        destBranch=$(grep $repo $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+        destBranch=$(grep $repo\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
         echo Check destination branch: $destBranch, if equel to: $commitBranch
         if [ &quot;$destBranch&quot; == &quot;$commitBranch&quot; ]; then
           echo Fetch this change $revision for project $repo
@@ -277,10 +296,12 @@ do
     echo Check if you need to execute compilation for branch $branch
     if [ ! -z &quot;$commits&quot; ]; then
       echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+      CompiledOnBranch=&quot;$CompiledOnBranch $branch&quot;
       echo CHANGES_$branchVariable=${commits} &gt;&gt; ${WORKSPACE}/generated_android.properties
     fi
 done
 
+echo CompiledOnBranch=${CompiledOnBranch} &gt;&gt; ${WORKSPACE}/generated_android.properties
 echo CHANGES=${CHANGES} &gt;&gt; ${WORKSPACE}/generated_android.properties
 cat ${WORKSPACE}/generated_android.properties
 </command>
@@ -373,6 +394,32 @@ change=${change}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp-android-child-review</jobName>
+          <jobAlias>branch audc-px30</jobAlias>
+          <currParams>true</currParams>
+          <aggregatedTestResults>false</aggregatedTestResults>
+          <exposedSCM>false</exposedSCM>
+          <disableJob>false</disableJob>
+          <parsingRulesPath></parsingRulesPath>
+          <maxRetries>0</maxRetries>
+          <enableRetryStrategy>false</enableRetryStrategy>
+          <enableCondition>true</enableCondition>
+          <abortAllJob>true</abortAllJob>
+          <condition>&quot;${branch_audc_px30}&quot; == &quot;True&quot;</condition>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+              <properties>GERRIT_BRANCH=audc-px30
+manifestsBranch=${Manifests_audc_px30}
+CHANGES=${CHANGES_audc_px30}
+change=${change}</properties>
+              <textParamValueOnNewLine>false</textParamValueOnNewLine>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <killPhaseOnJobResultCondition>NEVER</killPhaseOnJobResultCondition>
+          <buildOnlyIfSCMChanges>false</buildOnlyIfSCMChanges>
+          <applyConditionOnlyIfNoSCMChanges>false</applyConditionOnlyIfNoSCMChanges>
+        </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+        <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
+          <jobName>ipp-android-child-review</jobName>
           <jobAlias>branch OTHER</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
@@ -449,12 +496,24 @@ change=${change}</properties>
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>for rep in $CHANGES $change; do
+                        <command>if [ -z &quot;$CompiledOnBranch&quot; ]; then
+  message=&quot;This change was not compiled at all because it does not appear in any manifest, see build $BUILD_URL&quot;
+else
+  if [ -z &quot;$CHANGES&quot; ]; then
+    message=&quot;This change was compiled successfully in $BUILD_URL, without other changes. \
+      Compiled on the following branches: $CompiledOnBranch&quot;
+  else
+    message=&quot;This change was compiled successfully also with the following changes: \
+      $CHANGES in $BUILD_URL, \
+      which was triggered by change: $change \
+      Compiled on the following branches: $CompiledOnBranch&quot;
+  fi
+fi
+
+for rep in $CHANGES $change; do
   echo Send OK message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
-  --message &quot;&apos;This change was compiled successfully also with the following changes: \
-  $CHANGES in $BUILD_URL, \
-  which was triggered by change: $change&apos;&quot; \
+  --message &quot;&apos;$message&apos;&quot; \
   --notify OWNER \
   --label Verified=1 \
   $rep
@@ -470,22 +529,32 @@ done
                     <role>BOTH</role>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>for rep in $CHANGES $change; do
+                        <command>
+if [ -z &quot;$CHANGES&quot; ]; then
+  message=&quot;This change has failed to compile in $BUILD_URL, without other changes. \
+    Compiled on the following branches: $CompiledOnBranch&quot;
+else
+  message=&quot;This change has failed to compile with the following changes: \
+    $CHANGES in $BUILD_URL, \
+    which was triggered by change: $change \
+    Compiled on the following branches: $CompiledOnBranch&quot;
+fi
+
+
+for rep in $CHANGES $change; do
 
   score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
         | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
   verified=&quot;--label Verified=-1&quot;
-  message=&quot;Give Verified=-1&quot;
+  VerifiedMessage=&quot;Give Verified=-1&quot;
   if [ &quot;$score&quot; == 1 ]; then 
     verified=&quot;&quot;
-    message=&quot;(Do not give Verified=-1 in case this change has received +1 already)&quot;
+    VerifiedMessage=&quot;(Do not give Verified=-1 in case this change has received +1 already)&quot;
   fi
 
   echo Send OK message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
-  --message &quot;&apos;This change has failed to compile with the following changes: \
-  $CHANGES in $BUILD_URL, \
-  which was triggered by change: $change -- $message&apos;&quot; \
+  --message &quot;&apos;$message -- $VerifiedMessage&apos;&quot; \
   --notify OWNER $verified \
   $rep
 done
