@@ -174,6 +174,7 @@ git -c http.sslverify=false clone https://gerrit/IPP/Android/repo_manifests repo
 cd repo_manifests
 
 git branch -vv --no-color
+git checkout master
 
 # The goal of this parameter is giving score to all changes that participate in this review
 # This variable should contains all changes exclude the change that wake up this job
@@ -210,7 +211,11 @@ do
       echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
     fi
   else
-    Manifests=$branch
+    if [ -f $branch.xml ]; then
+      Manifests=&quot;master -m $branch.xml&quot;
+    else
+      Manifests=$branch
+    fi
     for allSameISSUE in $AllCommits; do 
       repo=$(echo $allSameISSUE | cut -d: -f1)
       commitBranch=$(echo $allSameISSUE | cut -d: -f2)
@@ -245,10 +250,10 @@ do
     eval Manifests=\${Manifests_$branchVariable}
     
     Manifests=$(echo $Manifests | cut -d&quot; &quot; -f1)
-    if [ &quot;$Manifests&quot; == &quot;$branch&quot; ]; then
-      if [ ! -f $branch.xml ]; then git checkout ${branch}; fi
-    else if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
+    if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
       git fetch &quot;ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests&quot; $Manifests &amp;&amp; git checkout FETCH_HEAD
+    else if [ &quot;$Manifests&quot; != &quot;&quot; ]; then
+      if [ ! -f $branch.xml ]; then git checkout ${branch}; fi
     else
       continue
     fi; fi
