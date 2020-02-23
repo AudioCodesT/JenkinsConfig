@@ -173,6 +173,8 @@ rm -rf repo_manifests
 git -c http.sslverify=false clone https://gerrit/IPP/Android/repo_manifests repo_manifests
 cd repo_manifests
 
+git branch -vv --no-color
+
 # The goal of this parameter is giving score to all changes that participate in this review
 # This variable should contains all changes exclude the change that wake up this job
 CHANGES=&quot;&quot;
@@ -202,8 +204,9 @@ do
   Manifests=&quot;&quot;
   echo ------- Check the change that wake up this job for branch $branch -------
   if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
-    if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ $branch ]]; then 
+    if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ &quot;$branch&quot; ]]; then 
       Manifests=$GERRIT_REFSPEC
+      if [[ &quot;$FilesList&quot; =~ $branch ]]; then Manifests=&quot;$Manifests -m $branch.xml&quot;; fi
       echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
     fi
   else
@@ -221,8 +224,9 @@ do
           FilesList=$(git show --pretty=&quot;&quot; --name-only $SHA1)
           eval FilesList$changePS=$FilesList
         fi
-        if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$commitBranch&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ $branch ]]; then
+        if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$commitBranch&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ &quot;$branch&quot; ]]; then
           Manifests=$revision
+          if [[ &quot;$FilesList&quot; =~ $branch ]]; then Manifests=&quot;$Manifests -m $branch.xml&quot;; fi
         fi
       fi 
     done
@@ -240,6 +244,7 @@ do
     if [[ ! ${main_branches[*]} =~ $branch ]]; then branchVariable=other; fi
     eval Manifests=\${Manifests_$branchVariable}
     
+    Manifests=$(echo $Manifests | cut -d&quot; &quot; -f1)
     if [ &quot;$Manifests&quot; == &quot;$branch&quot; ]; then
       if [ ! -f $branch.xml ]; then git checkout ${branch}; fi
     else if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
