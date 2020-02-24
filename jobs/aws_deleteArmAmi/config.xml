@@ -90,24 +90,44 @@ filters = [{&apos;Name&apos;:&apos;owner-id&apos;, &apos;Values&apos;:[&apos;858
 images = ec2.images.filter(Filters=filters)
 # Select all snapshots owned by me
 snapshots = ec.describe_snapshots(MaxResults=1000, OwnerIds=[&apos;858367874798&apos;])[&apos;Snapshots&apos;]
-imagesListArmConf = []
-imagesListArmRouter = []
+imagesListArmConf_8_6 = []
+imagesListArmRouter_8_6 = []
+imagesListArmConf_8_8 = []
+imagesListArmRouter_8_8 = []
+imagesListArmConf_9_0 = []
+imagesListArmRouter_9_0 = []
 # Loop through each image of our current instance
 print &quot;start searching for images&quot;
 for image in images:
                 if image.tags is not None:
                                 for tag in image.tags:
-                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Configurator_&apos;):
-                                                                imagesListArmConf.append(image)
-                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_&apos;):
-                                                                imagesListArmRouter.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Configurator_8.6&apos;):
+                                                                imagesListArmConf_8_6.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_8.6&apos;):
+                                                                imagesListArmRouter_8_6.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Configurator_8.8&apos;):
+                                                                imagesListArmConf_8_8.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_8.8&apos;):
+                                                                imagesListArmRouter_8_8.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Configurator_9.0&apos;):
+                                                                imagesListArmConf_9_0.append(image)
+                                                if tag[&apos;Key&apos;] == &apos;Name&apos; and tag[&apos;Value&apos;].startswith(&apos;ARM-Router_9.0&apos;):
+                                                                imagesListArmRouter_9_0.append(image)
 
 
 
-print &quot;images of ARM Router&quot;
-deleteAmis(imagesListArmRouter)
-print &quot;images of ARM Configurator&quot;
-deleteAmis(imagesListArmConf)
+#print &quot;images of ARM 8.6&quot;
+#deleteAmis(imagesListArmConf_8_6)
+#deleteAmis(imagesListArmRouter_8_6)
+#print &quot;images of ARM 8.8&quot;
+#deleteAmis(imagesListArmConf_8_8)
+#deleteAmis(imagesListArmRouter_8_8)
+print &quot;images of ARM 9.0&quot;
+#deleteAmis(imagesListArmConf_9_0)
+#deleteAmis(imagesListArmRouter_9_0)
+
+
+
 
 EOF</command>
     </hudson.tasks.Shell>
