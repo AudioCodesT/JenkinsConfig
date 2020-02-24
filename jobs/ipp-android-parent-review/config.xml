@@ -46,6 +46,18 @@
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>mainBranch</name>
+          <description>This branch in the manifast repository contain all xml files for all others branches.
+Each xml name is &lt;branch name&gt;.xml
+The default.xml is simbol link to master.xml</description>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <maxConcurrentPerNode>0</maxConcurrentPerNode>
       <maxConcurrentTotal>0</maxConcurrentTotal>
@@ -174,7 +186,7 @@ git -c http.sslverify=false clone https://gerrit/IPP/Android/repo_manifests repo
 cd repo_manifests
 
 git branch -vv --no-color
-git checkout master
+git checkout $mainBranch
 
 # The goal of this parameter is giving score to all changes that participate in this review
 # This variable should contains all changes exclude the change that wake up this job
@@ -212,7 +224,7 @@ do
     fi
   else
     if [ -f $branch.xml ]; then
-      Manifests=&quot;master -m $branch.xml&quot;
+      Manifests=&quot;$mainBranch -m $branch.xml&quot;
     else
       Manifests=$branch
     fi
@@ -249,6 +261,7 @@ do
     if [[ ! ${main_branches[*]} =~ $branch ]]; then branchVariable=other; fi
     eval Manifests=\${Manifests_$branchVariable}
     
+    git checkout $mainBranch
     Manifests=$(echo $Manifests | cut -d&quot; &quot; -f1)
     if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
       git fetch &quot;ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests&quot; $Manifests &amp;&amp; git checkout FETCH_HEAD
