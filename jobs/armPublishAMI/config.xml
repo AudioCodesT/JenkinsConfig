@@ -72,6 +72,9 @@ currentRegion=&quot;eu-central-1&quot;
 ConfImageName=&quot;ARM-Configurator_${TAG}&quot;
 RouterImageName=&quot;ARM-Router_${TAG}&quot;
 
+BRANCH=${TAG:0:3}
+echo &quot;BRANCH=${BRANCH}&quot; &gt; prop
+
 #Get Image Id
 ConfImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$ConfImageName --output text --query &apos;Images[*].ImageId&apos;)
 RouterImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$RouterImageName --output text --query &apos;Images[*].ImageId&apos;)
@@ -128,6 +131,11 @@ do
         printf &quot;%-30s%-10s${RouterNewRegionAmiId}\n&quot; &quot;${destRegionName}&quot; &quot; &quot; &gt;&gt; RouterRegionsNameAndIds.txt
 done</command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
@@ -138,6 +146,48 @@ done</command>
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <publisherList>
+            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+              <recipientList>Ben.Magriso,Shuky.Riechard</recipientList>
+              <configuredTriggers>
+                <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+                  <email>
+                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+                    <body>$PROJECT_DEFAULT_CONTENT</body>
+                    <recipientProviders>
+                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+                    </recipientProviders>
+                    <attachmentsPattern></attachmentsPattern>
+                    <attachBuildLog>false</attachBuildLog>
+                    <compressBuildLog>false</compressBuildLog>
+                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+                    <contentType>project</contentType>
+                  </email>
+                </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+              </configuredTriggers>
+              <contentType>text/html</contentType>
+              <defaultSubject>ARM Major version ${BRANCH} is released</defaultSubject>
+              <defaultContent>edit &lt;a href=&quot;https://jenkins/view/admin/job/aws_deleteArmAmi/&quot;&gt;aws_deleteArmAmi&lt;/a&gt; jenkins job to not delete AMIs in version ${BRANCH}</defaultContent>
+              <attachmentsPattern></attachmentsPattern>
+              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+              <attachBuildLog>false</attachBuildLog>
+              <compressBuildLog>false</compressBuildLog>
+              <replyTo>$DEFAULT_REPLYTO</replyTo>
+              <from></from>
+              <saveOutput>false</saveOutput>
+              <disabled>false</disabled>
+            </hudson.plugins.emailext.ExtendedEmailPublisher>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
