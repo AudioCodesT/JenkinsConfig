@@ -101,7 +101,7 @@ echo &quot;CUSTOM_WORKSPACE=${CUSTOM_WORKSPACE}&quot; &gt; prop
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
+  <concurrentBuild>true</concurrentBuild>
   <customWorkspace>${CUSTOM_WORKSPACE}</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
@@ -113,11 +113,7 @@ xmlFile=&quot;.repo/manifests/default.xml&quot;
 
 #**************** clean workspace before starting repo init and repo sync ***************
 echo Clean workspace
-find . -name index.lock -print
-find . -name index.lock -exec rm -f {} \;
 repo forall -c &apos;git reset --hard; git clean -ffdx&apos;
-find . -name index.lock -print
-find . -name index.lock -exec rm -f {} \;
 rm -rf hardware
 cd .repo/manifests
 git checkout -- default.xml
