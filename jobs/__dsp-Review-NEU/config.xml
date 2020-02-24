@@ -123,6 +123,7 @@ echo “Successful completion”</command>
   </builders>
   <publishers/>
   <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
