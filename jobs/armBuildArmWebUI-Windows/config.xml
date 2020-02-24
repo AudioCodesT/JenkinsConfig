@@ -86,8 +86,8 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
           <pattern>web-ui/arm</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
+              <compareType>REG_EXP</compareType>
+              <pattern>^((?!master).)*$</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
