@@ -112,8 +112,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>@echo on&#xd;
-cd %WORKSPACE%\packages\ti\mas\swtools&#xd;
+      <command>cd %WORKSPACE%\packages\ti\mas\swtools&#xd;
 .\setenv.bat&#xd;
 cd %WORKSPACE%\packages\ti\mas\neu&#xd;
 xdc clean -PD .&#xd;
