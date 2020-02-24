@@ -74,7 +74,7 @@ use JSON qw( decode_json );
 my $job =  $JobName;
 my $gerritChange =  $GERRIT_CHANGE;
 
-my $user = &quot;compile:1084-po-&quot;;
+my $user = &quot;compile:$CompileJenkinsPass&quot;;
 my $URL=&quot;https://jenkins&quot;;
 
 my $json=`curl -ks -X GET \&quot;$URL/queue/api/json\&quot;`;
@@ -110,6 +110,16 @@ exit 0;
   </builders>
   <publishers/>
   <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>CompileJenkinsPass</name>
+          <value>{AQAAABAAAAAQ207/akHZSr6fRpj6SuHZr+DhM097891PZDUXKh61uuw=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} ${JobName} $GERRIT_CHANGE</template>
       <runAtStart>true</runAtStart>
