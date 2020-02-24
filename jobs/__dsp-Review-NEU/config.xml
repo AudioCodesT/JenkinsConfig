@@ -113,16 +113,14 @@
   <builders>
     <hudson.tasks.BatchFile>
       <command>cd &quot;%WORKSPACE%\packages\ti\mas\swtools&quot;&#xd;
-echo &quot;before setenv.bat&quot;&#xd;
 call setenv.bat&#xd;
-echo &quot;after setenv.bat&quot;&#xd;
 cd &quot;%WORKSPACE%\packages\ti\mas\neu&quot;&#xd;
 xdc clean -PD .&#xd;
 xdc XDCARGS=&quot;c64Ple obj&quot; –PD .&#xd;
 &#xd;
 &#xd;
 if %ERRORLEVEL% NEQ 2 exit &#xd;
-echo “Successful completion”</command>
+echo &quot;Successful completion&quot;</command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers/>
