@@ -113,8 +113,9 @@
   <builders>
     <hudson.tasks.BatchFile>
       <command>cd &quot;%WORKSPACE%\packages\ti\mas\swtools&quot;&#xd;
+echo &quot;before setenv.bat&quot;&#xd;
 setenv.bat&#xd;
-&#xd;
+echo &quot;after setenv.bat&quot;&#xd;
 cd &quot;%WORKSPACE%\packages\ti\mas\neu&quot;&#xd;
 xdc clean -PD .&#xd;
 xdc XDCARGS=&quot;c64Ple obj&quot; –PD .&#xd;
