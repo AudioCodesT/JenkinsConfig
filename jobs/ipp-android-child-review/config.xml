@@ -113,7 +113,7 @@ xmlFile=&quot;.repo/manifests/default.xml&quot;
 
 #**************** clean workspace before starting repo init and repo sync ***************
 echo Clean workspace
-repo forall -c &apos;git reset --hard; git clean -ffdx&apos;
+repo forall -c &apos;git reset --hard; git clean -ffdx&apos; -j$(nproc)
 rm -rf hardware
 cd .repo/manifests
 git checkout -- default.xml
@@ -133,8 +133,8 @@ for change in $CHANGES; do
 done
 
 # second need to sync on latest changes off all other repositories
-echo ----- repo sync -c --no-clone-bundle -j16 --force-sync
-repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
+echo ----- repo sync -c --no-clone-bundle -j16$(nproc) --force-sync
+repo sync -c --no-tags --no-clone-bundle -j$(nproc) --force-sync
 if [ $? -ne 0 ]; then 
   echo Repo sync failed... exit with error
   exit 3
