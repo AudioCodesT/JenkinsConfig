@@ -118,8 +118,9 @@ cd .repo/manifests
 git checkout -- default.xml
 cd $WORKSPACE
 #**************** clean workspace before starting repo init and repo sync ***************
-
+find . -name index.lock -exec rm -f {} \;
 rm -f *.zip
+
 repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $manifestsBranch
 
 for change in $CHANGES; do
