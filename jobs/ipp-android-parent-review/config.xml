@@ -249,8 +249,8 @@ do
     done
   fi
   echo Manifests for $branch is: $Manifests
-  echo Manifests_$branchVariable=${Manifests} &gt;&gt; ${WORKSPACE}/generated_android.properties
-  eval Manifests_$branchVariable=$Manifests
+  echo Manifests_$branchVariable=&quot;${Manifests}&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+  eval Manifests_$branchVariable=&quot;$Manifests&quot;
 done
 
 #Find all changes
