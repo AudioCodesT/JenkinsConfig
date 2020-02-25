@@ -109,7 +109,8 @@ echo &quot;CUSTOM_WORKSPACE=${CUSTOM_WORKSPACE}&quot; &gt; prop
 #the above line is needed because we are going to use &quot;source&quot; command
 
 pwd
-xmlFile=&quot;.repo/manifests/default.xml&quot;
+xmlFile=&quot;default.xml&quot;
+if [[ &quot;$manifestsBranch&quot; =~ &quot;-m&quot; ]]; then xmlFile=$(echo $manifestsBranch | cut -d&quot; &quot; -f 3); fi
 
 #**************** clean workspace before starting repo init and repo sync ***************
 echo Clean workspace
@@ -128,8 +129,8 @@ for change in $CHANGES; do
    repo=$(echo $change | cut -d: -f1)
    revision=$(echo $change | cut -d: -f3)
    echo Find $repo in default.xml and replace to the change revision $revision
-   sed -i.bak -e &apos;s:\(.*&apos;$repo&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1&apos;$revision&apos;\2:&apos; $xmlFile
-   grep $repo $xmlFile
+   sed -i.bak -e &apos;s:\(.*&apos;$repo&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1&apos;$revision&apos;\2:&apos; .repo/manifests/$xmlFile
+   grep $repo .repo/manifests/$xmlFile
 done
 
 # second need to sync on latest changes off all other repositories
