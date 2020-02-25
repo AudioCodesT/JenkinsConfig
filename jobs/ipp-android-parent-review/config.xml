@@ -239,7 +239,7 @@ do
         eval FilesList=\${FilesList$changeNumber}
         if [ -z &quot;$FilesList&quot; ]; then
           FilesList=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set --files $changeNumber | grep file: | grep -v COMMIT_MSG | cut -d: -f2)
-          eval FilesList$changeNumber=$FilesList
+          eval FilesList$changeNumber=&apos;$FilesList&apos;
         fi
         if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$commitBranch&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ &quot;$branch&quot; ]]; then
           Manifests=$revision
@@ -250,7 +250,7 @@ do
   fi
   echo Manifests for $branch is: $Manifests
   echo Manifests_$branchVariable=&quot;${Manifests}&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
-  eval Manifests_$branchVariable=&quot;$Manifests&quot;
+  eval Manifests_$branchVariable=&apos;$Manifests&apos;
 done
 
 #Find all changes
@@ -259,7 +259,7 @@ for branch in ${branches_to_check[@]}
 do
     branchVariable=$(echo $branch | sed &apos;s:-:_:&apos;)
     if [[ ! ${main_branches[*]} =~ $branch ]]; then branchVariable=other; fi
-    eval Manifests=&quot;\${Manifests_$branchVariable}&quot;
+    eval Manifests=\${Manifests_$branchVariable}
     
     git checkout $mainBranch
     Manifests=$(echo $Manifests | cut -d&quot; &quot; -f1)
