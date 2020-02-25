@@ -535,11 +535,23 @@ else
 fi
 
 for rep in $CHANGES $change; do
+
+  score=&quot;&quot;
+  if [ &quot;$rep&quot; != &quot;$change&quot; ]; then
+    score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
+        | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
+  fi
+  verified=&quot;--label Verified=1&quot;
+  VerifiedMessage=&quot;Give Verified=1&quot;
+  if [ &quot;$score&quot; == -1 ]; then 
+    verified=&quot;--label Verified=0&quot;
+    VerifiedMessage=&quot;Can not give +1 due to Verified was -1. Cleared Verified, please retrigger it&quot;
+  fi
+
   echo Send OK message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
-  --message &quot;&apos;$message&apos;&quot; \
-  --notify OWNER \
-  --label Verified=1 \
+  --message &quot;&apos;$message -- $VerifiedMessage&apos;&quot; \
+  --notify OWNER $verified \
   $rep
 done
 </command>
@@ -567,8 +579,11 @@ fi
 
 for rep in $CHANGES $change; do
 
-  score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
+  score=&quot;&quot;
+  if [ &quot;$rep&quot; != &quot;$change&quot; ]; then
+    score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
         | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
+  fi
   verified=&quot;--label Verified=-1&quot;
   VerifiedMessage=&quot;Give Verified=-1&quot;
   if [ &quot;$score&quot; == 1 ]; then 
