@@ -222,6 +222,7 @@ do
       Manifests=$GERRIT_REFSPEC
       if [[ &quot;$FilesList&quot; =~ $branch ]]; then Manifests=&quot;$Manifests -m $branch.xml&quot;; fi
       echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+      CompiledOnBranch=&quot;$CompiledOnBranch $branch&quot;
     fi
   else
     if [ -f $branch.xml ]; then
@@ -319,9 +320,9 @@ do
     echo Check if you need to execute compilation for branch $branch
     if [ ! -z &quot;$commits&quot; ]; then
       echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
-      CompiledOnBranch=&quot;$CompiledOnBranch $branch&quot;
-      echo CHANGES_$branchVariable=${commits} &gt;&gt; ${WORKSPACE}/generated_android.properties
+      if [[ ! &quot;$CompiledOnBranch&quot; =~ &quot;$branch&quot; ]]; then CompiledOnBranch=&quot;$CompiledOnBranch $branch&quot;; fi
     fi
+    echo CHANGES_$branchVariable=${commits} &gt;&gt; ${WORKSPACE}/generated_android.properties
 done
 
 echo CompiledOnBranch=${CompiledOnBranch} &gt;&gt; ${WORKSPACE}/generated_android.properties
