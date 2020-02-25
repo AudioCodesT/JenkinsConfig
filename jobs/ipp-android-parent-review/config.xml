@@ -201,7 +201,8 @@ if [[ ! ${main_branches[*]} =~ $GERRIT_BRANCH ]] &amp;&amp; git branch -a | grep
 fi
 
 if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
-  FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
+  #FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
+  FilesList=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set --files $GERRIT_CHANGE_NUMBER | grep file: | grep -v COMMIT_MSG | cut -d: -f2)
 fi
 
 # The gaol of this loop is to found right manifest for each branch
@@ -234,12 +235,11 @@ do
       revision=$(echo $allSameISSUE | cut -d: -f3)
       echo Check: $repo, $commitBranch, $revision
       if [ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
-        changePS=$(echo $revision | cut -d/ -f4)
-        eval FilesList=\${FilesList$changePS}
+        changeNumber=$(echo $revision | cut -d/ -f4)
+        eval FilesList=\${FilesList$changeNumber}
         if [ -z &quot;$FilesList&quot; ]; then
-          SHA1=$(ssh -p 29418 yossim@gerrit gerrit query --current-patch-set $changePS | grep revision: | cut -d: -f2)
-          FilesList=$(git show --pretty=&quot;&quot; --name-only $SHA1)
-          eval FilesList$changePS=$FilesList
+          FilesList=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set --files $changeNumber | grep file: | grep -v COMMIT_MSG | cut -d: -f2)
+          eval FilesList$changeNumber=$FilesList
         fi
         if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$commitBranch&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ &quot;$branch&quot; ]]; then
           Manifests=$revision
