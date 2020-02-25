@@ -259,7 +259,7 @@ for branch in ${branches_to_check[@]}
 do
     branchVariable=$(echo $branch | sed &apos;s:-:_:&apos;)
     if [[ ! ${main_branches[*]} =~ $branch ]]; then branchVariable=other; fi
-    eval Manifests=\${Manifests_$branchVariable}
+    eval Manifests=&quot;\${Manifests_$branchVariable}&quot;
     
     git checkout $mainBranch
     Manifests=$(echo $Manifests | cut -d&quot; &quot; -f1)
