@@ -120,7 +120,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!C:\Program Files\Git\bin -xe
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+cd $WORKSPACE
+set -xe
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; prop</command>
     </hudson.tasks.Shell>
