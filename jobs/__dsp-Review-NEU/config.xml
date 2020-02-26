@@ -146,6 +146,16 @@ exit&#xd;
 echo &quot;compilation passed&quot;&#xd;
 </command>
     </hudson.tasks.BatchFile>
+    <hudson.tasks.Shell>
+      <command>#!C:\Program Files\Git\bin -xe
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+echo TARGET=${TARGET} &gt; prop</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers/>
   <buildWrappers>
@@ -215,18 +225,6 @@ echo &quot;compilation passed&quot;&#xd;
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
-      <info>
-        <scriptContent>#!/bin/bash
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET}</scriptContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-    </EnvInjectBuildWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}__${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
