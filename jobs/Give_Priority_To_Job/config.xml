@@ -61,7 +61,10 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE&quot;</command>
+      <command>echo &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE&quot;
+
+echo &quot;\$JobName: &apos;$JobName&apos;&quot; &gt; properties.txt
+echo &quot;\$GERRIT_CHANGE: &apos;$GERRIT_CHANGE&apos;&quot; &gt;&gt; properties.txt</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#!/usr/bin/perl $JobName $GERRIT_CHANGE
@@ -74,7 +77,12 @@
 use MIME::Base64;
 use JSON qw( decode_json );
 
-my $gerritChange =  $GERRIT_CHANGE;
+my $config_file = &quot;properties.txt&quot;;
+open CONFIG, &quot;$config_file&quot; or die &quot;Program stopping, couldn&apos;t open the configuration file &apos;$config_file&apos;.\n&quot;;
+my $config = join &quot;&quot;, &lt;CONFIG&gt;;
+close CONFIG;
+eval $config;
+print &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE\n&quot;;
 
 my $user = &quot;compile:$CompileJenkinsPass&quot;;
 my $URL=&quot;https://jenkins&quot;;
@@ -86,7 +94,6 @@ my $parametersLine = &quot;&quot;;
 
 my $countJobs = keys $decoded-&gt;{&apos;items&apos;};
 
-print &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE\n&quot;;
 print &quot;Count Jobs in queue: $countJobs\n&quot;;
 
 for my $i (0..$countJobs-1) {
