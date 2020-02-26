@@ -83,6 +83,9 @@ my $decoded = decode_json($json);
 my $parametersLine = &quot;&quot;;
 
 my $countJobe = keys $decoded-&gt;{&apos;items&apos;};
+
+print &quot;countJobe: $countJobe\n&quot;;
+
 for my $i (0..$countJobe-1) {
   my $fields = $decoded-&gt;{&apos;items&apos;}[$i];
   my $jobName = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
