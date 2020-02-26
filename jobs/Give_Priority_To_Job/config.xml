@@ -82,13 +82,14 @@ my $json=`curl -ks -X GET \&quot;$URL/queue/api/json\&quot;`;
 my $decoded = decode_json($json);
 my $parametersLine = &quot;&quot;;
 
-my $countJobe = keys $decoded-&gt;{&apos;items&apos;};
+my $countJobs = keys $decoded-&gt;{&apos;items&apos;};
 
-print &quot;countJobe: $countJobe\n&quot;;
+print &quot;count Jobs: $countJobs\n&quot;;
 
-for my $i (0..$countJobe-1) {
+for my $i (0..$countJobs-1) {
   my $fields = $decoded-&gt;{&apos;items&apos;}[$i];
   my $jobName = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
+  print &quot;Check job name: $jobName if equel to $job\n&quot;;
   if ($jobName eq $job) {
     $parametersLine = &quot;&quot;;
     my $countParameters = keys $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;};
