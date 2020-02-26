@@ -147,7 +147,7 @@ echo &quot;compilation passed&quot;&#xd;
 </command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
-      <command>#!C:\Program Files\Git\bin -xe
+      <command>#!C:\Program Files\Git\bin
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; prop</command>
     </hudson.tasks.Shell>
