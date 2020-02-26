@@ -15,8 +15,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>-1</daysToKeep>
-        <numToKeep>30</numToKeep>
+        <daysToKeep>15</daysToKeep>
+        <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -99,26 +99,41 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cat &lt;&lt; EOF &gt; ~/.netrc
-machine gerrit login ${jenkins_user} password ${jenkins_password}
-EOF
+      <command>#cat &lt;&lt; EOF &gt; ~/.netrc
+#machine gerrit login ${jenkins_user} password ${jenkins_password}
+#EOF
 #check which branches in dsp/gen/repo_manifests in default.xml file contain the module that triggered
-branches_to_check=(&quot;710&quot; &quot;722&quot; &quot;723&quot;)
-rm -rf Gen5_Modules_repo_manifests
-git -c http.sslverify=false clone https://gerrit/DSP/Gen5/repo_manifests Gen5_Modules_repo_manifests
-cd Gen5_Modules_repo_manifests
-for branch in ${branches_to_check[@]}
-do
-	module_found=0
-	git checkout ${branch}
-    cat default.xml | grep &quot;\&quot;${GERRIT_PROJECT}\&quot;&quot; || module_found=$?
-    if [[ $module_found == &quot;0&quot; ]]
-    then
-    	declare branch_${branch}=&quot;True&quot;
-        echo &quot;branch_${branch}=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
-    fi
-done
 module=$(echo $GERRIT_PROJECT | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
+
+#if [[ $module == &quot;NEU&quot; ]]
+#then
+#	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;700&quot; ]]
+#    then
+#    	branch_710=&quot;True&quot;
+#        branch_723=&quot;True&quot;
+#    fi
+#    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
+#    then
+#    	branch_722=&quot;True&quot;
+#    fi
+#
+#else
+    branches_to_check=(&quot;710&quot; &quot;722&quot; &quot;723&quot;)
+    rm -rf Gen5_Modules_repo_manifests
+    git -c http.sslverify=false clone https://gerrit/DSP/Gen5/repo_manifests Gen5_Modules_repo_manifests
+    cd Gen5_Modules_repo_manifests
+    for branch in ${branches_to_check[@]}
+    do
+        module_found=0
+        git checkout ${branch}
+        cat default.xml | grep &quot;\&quot;${GERRIT_PROJECT}\&quot;&quot; || module_found=$?
+        if [[ $module_found == &quot;0&quot; ]]
+        then
+            declare branch_${branch}=&quot;True&quot;
+            echo &quot;branch_${branch}=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
+        fi
+    done
+#fi
 echo &quot;module=${module}&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
@@ -131,7 +146,7 @@ echo &quot;module=${module}&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>dsp-Review-Modules-Gen5</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>710</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -156,7 +171,7 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>dsp-Review-Modules-Gen5</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>722</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -181,7 +196,7 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
         </com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>dsp-Review-Modules-Gen5</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias>723</jobAlias>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
@@ -211,7 +226,7 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
   </builders>
   <publishers>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>Edgar.Barber@audiocodes.com,Shay.Karuchi@audiocodes.com,cc:Ben.Magriso@audiocodes.com</recipientList>
+      <recipientList>${GERRIT_CHANGE_OWNER_EMAIL},Oren.Klimker@audiocodes.com,Doron.Flint@audiocodes.com,Shay.Karuchi@audiocodes.com,cc:Ben.Magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
           <email>
@@ -219,7 +234,6 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
             <body>$PROJECT_DEFAULT_CONTENT</body>
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-              <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
             </recipientProviders>
             <attachmentsPattern></attachmentsPattern>
             <attachBuildLog>false</attachBuildLog>
