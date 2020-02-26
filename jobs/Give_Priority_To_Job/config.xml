@@ -64,7 +64,9 @@
       <command>echo &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE&quot;
 
 echo &quot;\$JobName= &apos;$JobName&apos;;&quot; &gt; properties.txt
-echo &quot;\$GERRIT_CHANGE= &apos;$GERRIT_CHANGE&apos;;&quot; &gt;&gt; properties.txt</command>
+echo &quot;\$GERRIT_CHANGE= &apos;$GERRIT_CHANGE&apos;;&quot; &gt;&gt; properties.txt
+echo &quot;\$CompileJenkinsPass= &apos;$CompileJenkinsPass&apos;;&quot; &gt;&gt; properties.txt
+</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#!/usr/bin/perl
