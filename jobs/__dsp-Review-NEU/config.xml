@@ -119,6 +119,16 @@
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>#!C:\Program Files\Git\bin -xe
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+echo TARGET=${TARGET} &gt; prop</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
     <hudson.tasks.BatchFile>
       <command>cd &quot;%WORKSPACE%\packages\ti\mas\swtools&quot;&#xd;
 call setenv.bat&#xd;
@@ -146,16 +156,6 @@ exit&#xd;
 echo &quot;compilation passed&quot;&#xd;
 </command>
     </hudson.tasks.BatchFile>
-    <hudson.tasks.Shell>
-      <command>#!C:\Program Files\Git\bin
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt; prop</command>
-    </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>prop</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
   </builders>
   <publishers/>
   <buildWrappers>
