@@ -67,7 +67,7 @@ echo &quot;\$JobName: &apos;$JobName&apos;&quot; &gt; properties.txt
 echo &quot;\$GERRIT_CHANGE: &apos;$GERRIT_CHANGE&apos;&quot; &gt;&gt; properties.txt</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>#!/usr/bin/perl $JobName $GERRIT_CHANGE
+      <command>#!/usr/bin/perl
 
 # This perl script is executed by the Jenkins job: Shift_All_Queued_Tasks
 # Input: the job name
