@@ -96,9 +96,9 @@ for my $i (0..$countJobe-1) {
     if (!($parametersLine =~ /\/$gerritChange\//)) {
       my $id = $fields-&gt;{&apos;id&apos;};
       print &quot;Stop $parametersLine\n&quot;;
-      `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;      
+      print &quot;`curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`\n&quot;;      
       $parametersLine =~ s/^&amp;/?/;
-      `curl -ks -u $user -X POST \&quot;$URL/job/$job/buildWithParameters$parametersLine\&quot;`;
+      print &quot;`curl -ks -u $user -X POST \&quot;$URL/job/$job/buildWithParameters$parametersLine\&quot;`\n&quot;;
     }
   }
 }
@@ -116,7 +116,7 @@ exit 0;
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>CompileJenkinsPass</name>
-          <value>{AQAAABAAAAAQ207/akHZSr6fRpj6SuHZr+DhM097891PZDUXKh61uuw=}</value>
+          <value>{AQAAABAAAAAQiOkiKNkvn4b54/FHo8NOPlfjaNBRy/pU6ehHawS1HL0=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
