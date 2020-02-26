@@ -71,7 +71,6 @@
 use MIME::Base64;
 use JSON qw( decode_json );
 
-my $job =  $JobName;
 my $gerritChange =  $GERRIT_CHANGE;
 
 my $user = &quot;compile:$CompileJenkinsPass&quot;;
@@ -88,9 +87,9 @@ print &quot;count Jobs: $countJobs\n&quot;;
 
 for my $i (0..$countJobs-1) {
   my $fields = $decoded-&gt;{&apos;items&apos;}[$i];
-  my $jobName = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
-  print &quot;Check job name: $jobName if equel to $job\n&quot;;
-  if ($jobName eq $job) {
+  my $findJob = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
+  print &quot;Check job name: $findJob if equel to $JobName\n&quot;;
+  if ($findJob eq $JobName) {
     $parametersLine = &quot;&quot;;
     my $countParameters = keys $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;};
     for my $j (0..$countParameters-1) {
@@ -102,7 +101,7 @@ for my $i (0..$countJobs-1) {
       print &quot;Stop $parametersLine\n&quot;;
       print &quot;`curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`\n&quot;;      
       $parametersLine =~ s/^&amp;/?/;
-      print &quot;`curl -ks -u $user -X POST \&quot;$URL/job/$job/buildWithParameters$parametersLine\&quot;`\n&quot;;
+      print &quot;`curl -ks -u $user -X POST \&quot;$URL/job/$JobName/buildWithParameters$parametersLine\&quot;`\n&quot;;
     }
   }
 }
