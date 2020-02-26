@@ -61,6 +61,9 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>echo &quot;Job: $JobName, priority the Gerrit change: $gerritChange&quot;</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command>#!/usr/bin/perl
 
 # This perl script is executed by the Jenkins job: Shift_All_Queued_Tasks
@@ -83,7 +86,8 @@ my $parametersLine = &quot;&quot;;
 
 my $countJobs = keys $decoded-&gt;{&apos;items&apos;};
 
-print &quot;count Jobs: $countJobs\n&quot;;
+print &quot;Job: $JobName, priority the Gerrit change: $gerritChange\n&quot;;
+print &quot;Count Jobs in queue: $countJobs\n&quot;;
 
 for my $i (0..$countJobs-1) {
   my $fields = $decoded-&gt;{&apos;items&apos;}[$i];
