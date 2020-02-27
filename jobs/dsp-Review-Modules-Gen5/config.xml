@@ -149,8 +149,8 @@ then
     	files_to_download=(&quot;neu_gmac_c.a64P&quot; &quot;pktutl_c.a64P&quot; &quot;util_a.a64P&quot; &quot;util_c.a64P&quot;)
         for file in ${files_to_download[@]}
     	do
-    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib&quot; || artifactory_download_failed=&quot;True&quot;
-            curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib&quot; || artifactory_download_failed=&quot;True&quot;
+    		curl -ku ${artifactory_user}:${artifactory_password} -O &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib&quot; || artifactory_download_failed=&quot;True&quot;
+            curl -ku ${artifactory_user}:${artifactory_password} -O &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib&quot; || artifactory_download_failed=&quot;True&quot;
    	 	done
     fi
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
@@ -158,13 +158,14 @@ then
     	files_to_download=(&quot;neu_gmac_c.ae66&quot; &quot;pktutl_c.ae66&quot; &quot;util_a.ae66&quot; &quot;util_c.ae66&quot;)
         for file in ${files_to_download[@]}
     	do
-    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_66x/Lib&quot; || artifactory_download_failed=&quot;True&quot;
+    		curl -ku ${artifactory_user}:${artifactory_password} -O &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network_66x/Lib&quot; || artifactory_download_failed=&quot;True&quot;
    	 	done
     fi
     if [[ &quot;$artifactory_download_failed&quot; == &quot;True&quot; ]]
     then
-    echo &quot;failed to download NEU lib files, exit the build&quot;
-    exit 1
+    	echo &quot;failed to download NEU lib files, exit the build&quot;
+    	exit 1
+    fi
 else
 	# cd to releant path
 	cd Modules/${module}
