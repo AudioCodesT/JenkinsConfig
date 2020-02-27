@@ -116,7 +116,8 @@ then
     then
     	echo &quot;branch_722=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
     fi
-
+#sleep 100 before it&apos;s starting the build to let it finish dsp-Review-NEU job
+sleep 100
 else
     branches_to_check=(&quot;710&quot; &quot;722&quot; &quot;723&quot;)
     rm -rf Gen5_Modules_repo_manifests
