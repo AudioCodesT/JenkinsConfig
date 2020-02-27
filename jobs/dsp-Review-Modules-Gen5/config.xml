@@ -252,6 +252,7 @@ repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRAN
 echo &quot;repo sync&quot;
 repo sync -j$(nproc) --force-sync
 
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 # get the module name
 module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
@@ -358,7 +359,7 @@ fi
 wait
 echo &quot;Finish running make for SoftDsp and SoftHost&quot;
 
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+
 echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties
 
 echo &quot;******************* Set ${CHIP_NAME} Extended Attributes  ***************************&quot;
@@ -397,6 +398,8 @@ repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRAN
 echo &quot;repo sync&quot;
 repo sync -j$(nproc) --force-sync
 
+
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 # get the module name
 module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
@@ -479,7 +482,7 @@ echo &quot;*********************************************************************
 
 
 sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+
 echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
       </buildStep>
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
