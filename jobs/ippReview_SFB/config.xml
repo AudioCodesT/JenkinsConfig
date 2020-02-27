@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.13">
+<matrix-project plugin="matrix-project@1.14">
   <actions/>
   <description>Activated by after “Push to Gerrit”:&#xd;
 </description>
@@ -265,12 +265,17 @@ if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRA
 fi
 git status || echo &quot;failed&quot;
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
+
+
+#clean untracked submodules and files
+git clean -ffdx -e &quot;sysprobe*&quot;
 #**********************************************************************************************
 #***********************  ***************************************************
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;release/3.4&quot;* ]]
 then
 	git submodule foreach git status || echo &quot;failed&quot;
     git submodule foreach git clean -fdx || echo &quot;failed&quot;
+    git submodule foreach git reset --hard HEAD || echo &quot;failed&quot;
     git submodule foreach git checkout -- . || echo &quot;failed&quot;
 	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
 	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
@@ -420,6 +425,7 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
       <cleanupParameter></cleanupParameter>
       <externalDelete></externalDelete>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh
 FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
@@ -430,6 +436,7 @@ if [[ ! $GERRIT_BRANCH =~ private ]]; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
       message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
 fi
+if [[ ! $GERRIT_BRANCH =~ feature ]]; then
 if [[ $FilesList =~ src/dspg_kernel|src/u-boot ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q &quot;$Owner&quot;;
 then
       echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
@@ -440,6 +447,7 @@ if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/e
 then
       echo  ------------   You do not have permission to change the reference to  the IPP-SFB SubModule ----------------
       message=&quot;You do not have permission to change the reference to  the IPP-SFB SubModule&quot;
+fi
 fi
 
 if [ ! -z &quot;$message&quot; ]; then
