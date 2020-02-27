@@ -134,7 +134,8 @@ else
         fi
     done
 fi
-echo &quot;module=${module}&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
+echo &quot;module=${module}&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
+#${GERRIT_CHANGE_OWNER_EMAIL},Oren.Klimker@audiocodes.com,Doron.Flint@audiocodes.com,Shay.Karuchi@audiocodes.com,cc:Ben.Magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
@@ -226,7 +227,7 @@ GERRIT_REFSPEC=${GERRIT_REFSPEC}</properties>
   </builders>
   <publishers>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>${GERRIT_CHANGE_OWNER_EMAIL},Oren.Klimker@audiocodes.com,Doron.Flint@audiocodes.com,Shay.Karuchi@audiocodes.com,cc:Ben.Magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</recipientList>
+      <recipientList></recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
           <email>
