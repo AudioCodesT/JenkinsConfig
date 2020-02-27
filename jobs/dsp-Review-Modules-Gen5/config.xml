@@ -149,14 +149,14 @@ then
     	files_to_download=(&quot;neu_gmac_c.a64P&quot; &quot;pktutl_c.a64P&quot; &quot;util_a.a64P&quot; &quot;util_c.a64P&quot;)
         for file in ${files_to_download[@]}
     	do
-    		curl -ku ${artifactory_user}:${artifactory_password} -X GET &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib/${file}&quot;
+    		curl -ku ${artifactory_user}:${artifactory_password} -X GET &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/700/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib/${file}&quot;
             local_md5=$(md5sum &quot;${WORKSPACE}/Gen5/Modules/Network/Lib/${file}&quot; | cut -d&apos; &apos; -f1 | cut -d&apos;\&apos; -f2)
-            remote_md5=$(curl -ku  ${artifactory_user}:${artifactory_password} -X GET -I &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file}&quot; 2&gt;/dev/null | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
+            remote_md5=$(curl -ku  ${artifactory_user}:${artifactory_password} -X GET -I &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/700/${TARGET}/NEU/${file}&quot; 2&gt;/dev/null | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
           	if [ &quot;$local_md5&quot; != &quot;$remote_md5&quot; ]; then
                 echo local md5: $local_md5 and remote md5 $remote_md5: $uri is different - No delete and exit......
             	exit 1
           	fi
-            curl -ku ${artifactory_user}:${artifactory_password} -X GET &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib/${file}&quot;
+            curl -ku ${artifactory_user}:${artifactory_password} -X GET &quot;https://artifactory/dsp-review/com/ac/dsp/Gen5/700/${TARGET}/NEU/${file}&quot; --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib/${file}&quot;
             local_md5=$(md5sum &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib/${file}&quot; | cut -d&apos; &apos; -f1 | cut -d&apos;\&apos; -f2)
           	if [ &quot;$local_md5&quot; != &quot;$remote_md5&quot; ]; then
                 echo local md5: $local_md5 and remote md5 $remote_md5: $uri is different - No delete and exit......
