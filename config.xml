@@ -246,12 +246,15 @@
           <sid>#IP Phone Automation</sid>
         </assignedSIDs>
       </role>
-      <role name="manage_AT_queue" pattern="test_ipp_AT_parent">
+      <role name="manage_AT_queue" pattern="ipp_AT_parent">
         <permissions>
           <permission>hudson.model.Item.Cancel</permission>
           <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Run.Delete</permission>
           <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Run.Replay</permission>
           <permission>hudson.model.Item.Discover</permission>
+          <permission>hudson.model.Run.Update</permission>
         </permissions>
         <assignedSIDs>
           <sid>compile</sid>
