@@ -129,7 +129,7 @@
           <command>#!c:\cygwin64\bin\bash --login -i
 set -ex
 cd ${WORKSPACE}
-
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
@@ -197,7 +197,7 @@ sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
 echo &quot;*******************************************************************************************&quot;
 
 
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+
 echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
