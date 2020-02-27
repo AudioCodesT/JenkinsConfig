@@ -105,19 +105,19 @@
 #check which branches in dsp/gen/repo_manifests in default.xml file contain the module that triggered
 module=$(echo $GERRIT_PROJECT | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-#if [[ $module == &quot;NEU&quot; ]]
-#then
-#	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;700&quot; ]]
-#    then
-#    	branch_710=&quot;True&quot;
-#        branch_723=&quot;True&quot;
-#    fi
-#    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
-#    then
-#    	branch_722=&quot;True&quot;
-#    fi
-#
-#else
+if [[ $module == &quot;NEU&quot; ]]
+then
+	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;700&quot; ]]
+    then
+    	branch_710=&quot;True&quot;
+        branch_723=&quot;True&quot;
+    fi
+    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
+    then
+    	branch_722=&quot;True&quot;
+    fi
+
+else
     branches_to_check=(&quot;710&quot; &quot;722&quot; &quot;723&quot;)
     rm -rf Gen5_Modules_repo_manifests
     git -c http.sslverify=false clone https://gerrit/DSP/Gen5/repo_manifests Gen5_Modules_repo_manifests
@@ -133,7 +133,7 @@ module=$(echo $GERRIT_PROJECT | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
             echo &quot;branch_${branch}=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
         fi
     done
-#fi
+fi
 echo &quot;module=${module}&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
