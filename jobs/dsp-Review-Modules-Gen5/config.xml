@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.13">
+<matrix-project plugin="matrix-project@1.14">
   <actions/>
   <description>triggered by &quot;dsp-Review-Modules&quot;&#xd;
 1. preparing workspace (with repo init, repo sync)&#xd;
@@ -16,8 +16,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>-1</daysToKeep>
-        <numToKeep>30</numToKeep>
+        <daysToKeep>15</daysToKeep>
+        <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -129,23 +129,51 @@
           <command>#!c:\cygwin64\bin\bash --login -i
 set -ex
 cd ${WORKSPACE}
-if [[ -e .repo ]]
-then 
-rm -rf .repo
-fi
+
+
+
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
 echo &quot;repo sync&quot;
-repo sync
+repo sync -j$(nproc) --force-sync
 
 # get the module name
 module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-# cd to releant path
-cd Modules/${module}
+#*******************************************************************************************************************************
+if [[ &quot;$module&quot; == &quot;NEU&quot; ]]
+then
+	artifactory_user=admin
+	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;710&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;723&quot; ]]
+    then
+    	files_to_download=(&quot;neu_gmac_c.a64P&quot; &quot;pktutl_c.a64P&quot; &quot;util_a.a64P&quot; &quot;util_c.a64P&quot;)
+        for file in ${files_to_download[@]}
+    	do
+    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib&quot;
+            curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib&quot;
+   	 	done
+    fi
+    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
+    then
+    	files_to_download=(&quot;neu_gmac_c.ae66&quot; &quot;pktutl_c.ae66&quot; &quot;util_a.ae66&quot; &quot;util_c.ae66&quot;)
+        for file in ${files_to_download[@]}
+    	do
+    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_66x/Lib&quot;
+   	 	done
+    fi
+else
+	# cd to releant path
+	cd Modules/${module}
+	echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+	git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+fi
+#*******************************************************************************************************************************
+# cd to releant path
+#cd Modules/${module}
+
+#echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+#git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 cd ${WORKSPACE}/Gen5
 echo &quot;sh copyModules.sh&quot;
@@ -205,16 +233,48 @@ set -xe
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
 echo &quot;repo sync&quot;
-repo sync
+repo sync -j$(nproc) --force-sync
 
 # get the module name
 module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-# cd to releant path
-cd Modules/${module}
+#*******************************************************************************************************************************
+if [[ &quot;$module&quot; == &quot;NEU&quot; ]]
+then
+	artifactory_user=admin
+	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;710&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;723&quot; ]]
+    then
+    	files_to_download=(&quot;neu_gmac_c.a64P&quot; &quot;pktutl_c.a64P&quot; &quot;util_a.a64P&quot; &quot;util_c.a64P&quot;)
+        for file in ${files_to_download[@]}
+    	do
+    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib&quot;
+            curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib&quot;
+   	 	done
+    fi
+    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
+    then
+    	files_to_download=(&quot;neu_gmac_c.ae66&quot; &quot;pktutl_c.ae66&quot; &quot;util_a.ae66&quot; &quot;util_c.ae66&quot;)
+        for file in ${files_to_download[@]}
+    	do
+    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_66x/Lib&quot;
+   	 	done
+    fi
+else
+	# cd to releant path
+	cd Modules/${module}
+	echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+	git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+fi
+#*******************************************************************************************************************************
+
+
+
+# cd to releant path
+#cd Modules/${module}
+
+#echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+#git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 cd ${WORKSPACE}/Gen5
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
@@ -265,7 +325,18 @@ wait
 echo &quot;Finish running make for SoftDsp and SoftHost&quot;
 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties
+
+echo &quot;******************* Set ${CHIP_NAME} Extended Attributes  ***************************&quot;
+files_to_set_attributes=(&quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;)
+for file_to_set_attribue in ${files_to_set_attributes[@]}
+do
+	setfattr -n user.Version -v ${VERSION} ${file_to_set_attribue}
+	setfattr -n user.SubVersion -v ${SUBVERSION}  ${file_to_set_attribue}
+	setfattr -n user.Date -v ${RELEASE_DATE}  ${file_to_set_attribue}
+	setfattr -n user.Revision -v 0 ${file_to_set_attribue}
+done
+echo &quot;*******************************************************************************************&quot;</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
@@ -290,16 +361,46 @@ set -xe
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
 echo &quot;repo sync&quot;
-repo sync
+repo sync -j$(nproc) --force-sync
 
 # get the module name
 module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
-# cd to releant path
-cd Modules/${module}
+#*******************************************************************************************************************************
+if [[ &quot;$module&quot; == &quot;NEU&quot; ]]
+then
+	artifactory_user=admin
+	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;710&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;723&quot; ]]
+    then
+    	files_to_download=(&quot;neu_gmac_c.a64P&quot; &quot;pktutl_c.a64P&quot; &quot;util_a.a64P&quot; &quot;util_c.a64P&quot;)
+        for file in ${files_to_download[@]}
+    	do
+    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network/Lib&quot;
+            curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_6486/Lib&quot;
+   	 	done
+    fi
+    if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
+    then
+    	files_to_download=(&quot;neu_gmac_c.ae66&quot; &quot;pktutl_c.ae66&quot; &quot;util_a.ae66&quot; &quot;util_c.ae66&quot;)
+        for file in ${files_to_download[@]}
+    	do
+    		curl -ku ${artifactory_user}:${artifactory_password} -O https://artifactory/dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/NEU/${file} --output &quot;${WORKSPACE}/Gen5/Modules/Network_66x/Lib&quot;
+   	 	done
+    fi
+else
+	# cd to releant path
+	cd Modules/${module}
+	echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+	git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+fi
+#*******************************************************************************************************************************
+
+# cd to releant path
+#cd Modules/${module}
+
+#echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
+#git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 cd ${WORKSPACE}/Gen5
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
@@ -337,13 +438,7 @@ echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
       </info>
     </EnvInjectBuilder>
   </builders>
-  <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>ben.magriso</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
@@ -453,6 +548,10 @@ echo &quot;module=${module}&quot;</script>
         <EnvInjectPasswordEntry>
           <name>jpass</name>
           <value>{AQAAABAAAAAQXE33New0y0o/0ChYBDNqb2U4iLYw1MB/TBcPh10LRxI=}</value>
+        </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQTt8JWIAywZYc+LAouCyjb0x3ajj8eKm1obYgLMoc53U=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
