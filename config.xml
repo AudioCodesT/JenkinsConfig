@@ -246,7 +246,7 @@
           <sid>#IP Phone Automation</sid>
         </assignedSIDs>
       </role>
-      <role name="manage_AT_queue" pattern="ipp_AT_parent">
+      <role name="manage_AT_queue" pattern="(ipp_.*)">
         <permissions>
           <permission>hudson.model.Item.Cancel</permission>
           <permission>hudson.model.Item.Read</permission>
