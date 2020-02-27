@@ -103,12 +103,13 @@ for my $i (0..$countJobs-1) {
   my $findJob = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
   print &quot;Check job name: $findJob if equel to $JobName\n&quot;;
   if ($findJob eq $JobName) {
-    $parametersLine = &quot;&quot;;
-    my $countParameters = keys $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;};
-    for my $j (0..$countParameters-1) {
-      my $parameters = $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;}[$j];
-      $parametersLine .= &quot;&amp;$parameters-&gt;{&apos;name&apos;}=$parameters-&gt;{&apos;value&apos;}&quot;;
-    }
+    #my $countParameters = keys $fields-&gt;{&apos;actions&apos;}[1]{&apos;parameters&apos;};
+    #for my $j (0..$countParameters-1) {
+    #  my $parameters = $fields-&gt;{&apos;actions&apos;}[0]{&apos;parameters&apos;}[$j];
+    #  $parametersLine .= &quot;&amp;$parameters-&gt;{&apos;name&apos;}=$parameters-&gt;{&apos;value&apos;}&quot;;
+    #}
+    ($parametersLine = $fields-&gt;{&apos;params&apos;}) =~ s/\n/&amp;/g;
+    print &quot;Params: $parametersLine\n&quot;;
     if (!($parametersLine =~ /\/$GERRIT_CHANGE\//)) {
       my $id = $fields-&gt;{&apos;id&apos;};
       print &quot;Stop $parametersLine\n&quot;;
