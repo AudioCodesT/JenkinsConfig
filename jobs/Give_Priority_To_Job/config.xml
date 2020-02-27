@@ -115,6 +115,7 @@ for my $i (0..$countJobs-1) {
       print &quot;Stop $parametersLine\n&quot;;
       print &quot;`curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`\n&quot;;      
       $parametersLine =~ s/^&amp;/?/;
+      $parametersLine =~ s/\&quot;/\\\&quot;/g;
       print &quot;`curl -ks -u $user -X POST \&quot;$URL/job/$JobName/buildWithParameters$parametersLine\&quot;`\n&quot;;
     }
   }
