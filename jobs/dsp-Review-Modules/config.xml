@@ -109,12 +109,12 @@ if [[ $module == &quot;NEU&quot; ]]
 then
 	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;700&quot; ]]
     then
-    	branch_710=&quot;True&quot;
-        branch_723=&quot;True&quot;
+    	echo &quot;branch_710=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
+        echo &quot;branch_723=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
     fi
     if [[ &quot;$GERRIT_BRANCH&quot; == &quot;722&quot; ]]
     then
-    	branch_722=&quot;True&quot;
+    	echo &quot;branch_722=True&quot; &gt;&gt; ${WORKSPACE}/generated_dsp.properties
     fi
 
 else
