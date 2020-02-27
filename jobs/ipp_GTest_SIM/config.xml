@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.13">
+<matrix-project plugin="matrix-project@1.14">
   <actions/>
   <description>Triggered by “Push to Gerrit”&#xd;
 Matrix job&#xd;
@@ -199,9 +199,12 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
 
 git status || echo &quot;failed&quot;
 cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
+
+#clean untracked submodules and files
+git clean -ffdx 
 #**********************************************************************************************
 #***********************  ***************************************************
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;testBranch&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;release/3.4&quot;* ]]
 then
 	git submodule foreach git status || echo &quot;failed&quot;
     git submodule foreach git clean -fdx || echo &quot;failed&quot;
