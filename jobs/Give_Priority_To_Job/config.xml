@@ -107,7 +107,7 @@ for my $i (0..$countJobs-1) {
   if ($findJob eq $JobName) {
     ($parametersLine = $fields-&gt;{&apos;params&apos;}) =~ s/\n/&amp;/g;
     print &quot;Params: $parametersLine\n&quot;;
-    if (!($parametersLine =~ /\/$GERRIT_CHANGE\//)) {
+    if (!($parametersLine =~ /$GERRIT_CHANGE/)) {
       my $id = $fields-&gt;{&apos;id&apos;};
       print &quot;Stop job $JobName with the following parameters: $parametersLine\n&quot;;
       `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;      
