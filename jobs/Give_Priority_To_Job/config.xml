@@ -106,7 +106,7 @@ for my $i (0..$countJobs-1) {
   print &quot;Check job name: $findJob if equel to $JobName\n&quot;;
   if ($findJob eq $JobName) {
     ($parametersLine = $fields-&gt;{&apos;params&apos;}) =~ s/\n/&amp;/g;
-    print &quot;Params: $parametersLine\n&quot;;
+    print &quot;Params: $parametersLine\nCheck it ...\n&quot;;
     if (!($parametersLine =~ /$GERRIT_CHANGE/)) {
       my $id = $fields-&gt;{&apos;id&apos;};
       print &quot;Stop job $JobName with the following parameters: $parametersLine\n&quot;;
@@ -116,6 +116,8 @@ for my $i (0..$countJobs-1) {
       print &quot;Start it again\n&quot;;
       print &quot;curl -ks -u $user -X POST \&quot;$URL/job/$JobName/buildWithParameters$parametersLine\&quot;\n&quot;;
       `curl -ks -u $user -X POST \&quot;$URL/job/$JobName/buildWithParameters$parametersLine\&quot;`;
+    } else {
+      print &quot;Lets this job as is, the &apos;$GERRIT_CHANGE&apos; was found in parameter list\n&quot;;
     }
   }
 }
