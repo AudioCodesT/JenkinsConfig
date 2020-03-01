@@ -1,7 +1,8 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>This job find all the &quot;waiting in queue&quot; jobs.&#xd;
+In case one the found job is equel to $JobName so this job will be canceled and launched again unless the $GERRIT_CHANGE string was found in its parameters list.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -35,7 +36,8 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_CHANGE</name>
-          <description></description>
+          <description>Give the change number of the job you want to give priorit.
+All other jobs will be canceled and triggered again</description>
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -107,11 +109,12 @@ for my $i (0..$countJobs-1) {
     print &quot;Params: $parametersLine\n&quot;;
     if (!($parametersLine =~ /\/$GERRIT_CHANGE\//)) {
       my $id = $fields-&gt;{&apos;id&apos;};
-      print &quot;Stop $parametersLine\n&quot;;
+      print &quot;Stop job $JobName with the following parameters: $parametersLine\n&quot;;
       `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;      
       $parametersLine =~ s/^&amp;/?/;
       $parametersLine =~ s/\&quot;/\\\&quot;/g;
-      print &quot;Start this job again\n&quot;;
+      print &quot;Start it again\n&quot;;
+      print &quot;curl -ks -u $user -X POST \&quot;$URL/job/$JobName/buildWithParameters$parametersLine\&quot;\n&quot;;
       `curl -ks -u $user -X POST \&quot;$URL/job/$JobName/buildWithParameters$parametersLine\&quot;`;
     }
   }
