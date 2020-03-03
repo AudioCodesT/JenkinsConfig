@@ -205,7 +205,7 @@ echo &quot;compilation passed&quot;&#xd;
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}__${GERRIT_BRANCH}__${NEWTAG}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
