@@ -65,8 +65,7 @@ All other builds will be canceled and triggered again</description>
     <hudson.tasks.Shell>
       <command>echo &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE&quot;
 
-echo &quot;\$JobName= &apos;$JobName&apos;;&quot; &gt; properties.txt
-echo &quot;\$GERRIT_CHANGE= &apos;$GERRIT_CHANGE&apos;;&quot; &gt;&gt; properties.txt
+echo &quot;\$GERRIT_CHANGE= &apos;$GERRIT_CHANGE&apos;;&quot; &gt; properties.txt
 echo &quot;\$CompileJenkinsPass= &apos;$CompileJenkinsPass&apos;;&quot; &gt;&gt; properties.txt
 </command>
     </hudson.tasks.Shell>
@@ -75,21 +74,22 @@ echo &quot;\$CompileJenkinsPass= &apos;$CompileJenkinsPass&apos;;&quot; &gt;&gt;
 
 # This perl script is executed by the Jenkins job: Shift_All_Queued_Tasks
 # Input: the job name
-# Is located in the Sanjer server under the following directory: /opt/devops/tools
 # The queued tasks of this job with shift cerculary 
 # No output
 use MIME::Base64;
 use JSON qw( decode_json );
 
-my $config_file = &quot;properties.txt&quot;;
-open CONFIG, &quot;$config_file&quot; or die &quot;Program stopping, couldn&apos;t open the configuration file &apos;$config_file&apos;.\n&quot;;
-my $config = join &quot;&quot;, &lt;CONFIG&gt;;
-close CONFIG;
-eval $config;
-print &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE\n&quot;;
+#my $config_file = &quot;properties.txt&quot;;
+#open CONFIG, &quot;$config_file&quot; or die &quot;Program stopping, couldn&apos;t open the configuration file &apos;$config_file&apos;.\n&quot;;
+#my $config = join &quot;&quot;, &lt;CONFIG&gt;;
+#close CONFIG;
+#eval $config;
 
+print &quot;Gerrit: $ENV{&apos;GERRIT_CHANGE&apos;}/n&quot;; 
 my $user = &quot;compile:$CompileJenkinsPass&quot;;
 my $URL=&quot;https://jenkins&quot;;
+my $JobName=&quot;ipp_AT_parent&quot;;
+print &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE\n&quot;;
 
 my $json=`curl -ks -X GET \&quot;$URL/queue/api/json\&quot;`;
 
