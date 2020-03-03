@@ -81,9 +81,11 @@ my $parametersLine = &quot;&quot;;
 my $countJobs = keys $decoded-&gt;{&apos;items&apos;};
 
 print &quot;Count Jobs in queue: $countJobs\n&quot;;
+print &quot;Sorted .....\n&quot;;
+my @sorted = sort { $a-&gt;{id} &lt;=&gt; $b-&gt;{id} } @{$decoded-&gt;{&apos;items&apos;}};
 
 for my $i (0..$countJobs-1) {
-  my $fields = $decoded-&gt;{&apos;items&apos;}[$i];
+  my $fields = $sorted[$i];
   my $findJob = $fields-&gt;{&apos;task&apos;}{&apos;name&apos;};
   print &quot;Check job name: $findJob if equel to $JobName\n&quot;;
   if ($findJob eq $JobName) {
@@ -128,7 +130,7 @@ exit 0;
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} ${JobName} $GERRIT_CHANGE</template>
+      <template>#${BUILD_NUMBER} $GERRIT_CHANGE</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
