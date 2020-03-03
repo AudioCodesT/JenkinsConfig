@@ -85,7 +85,8 @@ use JSON qw( decode_json );
 #close CONFIG;
 #eval $config;
 
-print &quot;Gerrit: $ENV{&apos;GERRIT_CHANGE&apos;}/n&quot;; 
+print &quot;Gerrit change: $ENV{&apos;GERRIT_CHANGE&apos;}\n&quot;;
+print &quot;Pass change: $ENV{&apos;CompileJenkinsPass&apos;}\n&quot;; 
 my $user = &quot;compile:$CompileJenkinsPass&quot;;
 my $URL=&quot;https://jenkins&quot;;
 my $JobName=&quot;ipp_AT_parent&quot;;
