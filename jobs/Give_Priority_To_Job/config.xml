@@ -1,8 +1,8 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>This job find all the &quot;waiting in queue&quot; jobs.&#xd;
-In case one the found job is equel to $JobName so this job will be canceled and launched again unless the $GERRIT_CHANGE string was found in its parameters list.</description>
+  <description>This job find all the &quot;waiting in queue&quot; builds.&#xd;
+In case one of the found builds is equel to $JobName so this build will be canceled and launched again unless the $GERRIT_CHANGE string was found in its parameters list.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -36,8 +36,8 @@ In case one the found job is equel to $JobName so this job will be canceled and 
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_CHANGE</name>
-          <description>Give the change number of the job you want to give priorit.
-All other jobs will be canceled and triggered again</description>
+          <description>Give the change number of the build you want to give priority.
+All other builds will be canceled and triggered again</description>
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -63,7 +63,7 @@ All other jobs will be canceled and triggered again</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE&quot;
+      <command>echo &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE&quot;
 
 echo &quot;\$JobName= &apos;$JobName&apos;;&quot; &gt; properties.txt
 echo &quot;\$GERRIT_CHANGE= &apos;$GERRIT_CHANGE&apos;;&quot; &gt;&gt; properties.txt
@@ -86,7 +86,7 @@ open CONFIG, &quot;$config_file&quot; or die &quot;Program stopping, couldn&apos
 my $config = join &quot;&quot;, &lt;CONFIG&gt;;
 close CONFIG;
 eval $config;
-print &quot;Job: $JobName, priority the Gerrit change: $GERRIT_CHANGE\n&quot;;
+print &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE\n&quot;;
 
 my $user = &quot;compile:$CompileJenkinsPass&quot;;
 my $URL=&quot;https://jenkins&quot;;
@@ -127,7 +127,13 @@ exit 0;
       <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>yossim shukyr</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
       <injectGlobalPasswords>false</injectGlobalPasswords>
