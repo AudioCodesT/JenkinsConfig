@@ -94,7 +94,8 @@ for my $i (0..$countJobs-1) {
     if (!($parametersLine =~ /$GERRIT_CHANGE/)) {
       my $id = $fields-&gt;{&apos;id&apos;};
       print &quot;ID: $id\nStop job $JobName with the following parameters: $parametersLine\n&quot;;
-      `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;      
+      print &quot;curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;\n&quot;;
+      `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;     
       $parametersLine =~ s/^&amp;/?/;
       $parametersLine =~ s/\&quot;/\\\&quot;/g;
       print &quot;Start it again\n&quot;;
