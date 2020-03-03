@@ -29,12 +29,6 @@ In case one of the found builds is equel to $JobName so this build will be cance
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>JobName</name>
-          <description></description>
-          <defaultValue>ipp_AT_parent</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>GERRIT_CHANGE</name>
           <description>Give the change number of the build you want to give priority.
 All other builds will be canceled and triggered again</description>
@@ -63,13 +57,6 @@ All other builds will be canceled and triggered again</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE&quot;
-
-echo &quot;\$GERRIT_CHANGE= &apos;$GERRIT_CHANGE&apos;;&quot; &gt; properties.txt
-echo &quot;\$CompileJenkinsPass= &apos;$CompileJenkinsPass&apos;;&quot; &gt;&gt; properties.txt
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
       <command>#!/usr/bin/perl
 
 # This perl script is executed by the Jenkins job: Shift_All_Queued_Tasks
@@ -86,6 +73,7 @@ use JSON qw( decode_json );
 #eval $config;
 
 print &quot;Gerrit change: $ENV{&apos;GERRIT_CHANGE&apos;}\n&quot;;
+echo &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE&quot;
 print &quot;Pass change: $ENV{&apos;CompileJenkinsPass&apos;}\n&quot;; 
 my $user = &quot;compile:$CompileJenkinsPass&quot;;
 my $URL=&quot;https://jenkins&quot;;
