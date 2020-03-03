@@ -60,24 +60,16 @@ All other builds will be canceled and triggered again</description>
       <command>#!/usr/bin/perl
 
 # This perl script is executed by the Jenkins job: Shift_All_Queued_Tasks
-# Input: the job name
 # The queued tasks of this job with shift cerculary 
 # No output
 use MIME::Base64;
 use JSON qw( decode_json );
 
-#my $config_file = &quot;properties.txt&quot;;
-#open CONFIG, &quot;$config_file&quot; or die &quot;Program stopping, couldn&apos;t open the configuration file &apos;$config_file&apos;.\n&quot;;
-#my $config = join &quot;&quot;, &lt;CONFIG&gt;;
-#close CONFIG;
-#eval $config;
-
-print &quot;Gerrit change: $ENV{&apos;GERRIT_CHANGE&apos;}\n&quot;;
-echo &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE&quot;
-print &quot;Pass change: $ENV{&apos;CompileJenkinsPass&apos;}\n&quot;; 
-my $user = &quot;compile:$CompileJenkinsPass&quot;;
-my $URL=&quot;https://jenkins&quot;;
 my $JobName=&quot;ipp_AT_parent&quot;;
+my $GERRIT_CHANGE=$ENV{&apos;GERRIT_CHANGE&apos;}\n&quot;;
+my $user = &quot;compile:$ENV{&apos;CompileJenkinsPass&apos;}&quot;;
+my $URL=&quot;https://jenkins&quot;;
+
 print &quot;Job: $JobName, prioritize the Gerrit change: $GERRIT_CHANGE\n&quot;;
 
 my $json=`curl -ks -X GET \&quot;$URL/queue/api/json\&quot;`;
@@ -98,7 +90,7 @@ for my $i (0..$countJobs-1) {
     print &quot;Params: $parametersLine\nCheck it ...\n&quot;;
     if (!($parametersLine =~ /$GERRIT_CHANGE/)) {
       my $id = $fields-&gt;{&apos;id&apos;};
-      print &quot;Stop job $JobName with the following parameters: $parametersLine\n&quot;;
+      print &quot;ID: $id\nStop job $JobName with the following parameters: $parametersLine\n&quot;;
       `curl -ks -u $user -X POST \&quot;$URL/queue/cancelItem?id=$id\&quot;`;      
       $parametersLine =~ s/^&amp;/?/;
       $parametersLine =~ s/\&quot;/\\\&quot;/g;
