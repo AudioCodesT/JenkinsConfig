@@ -141,7 +141,7 @@ if &quot;%GERRIT_BRANCH%&quot;==&quot;700&quot; (echo &quot;Branch is 700&quot; 
 if &quot;%GERRIT_BRANCH%&quot;==&quot;722&quot; (echo &quot;Branch is 722&quot; &amp;&amp; xdc XDCARGS=&quot;c66le_elf obj&quot; -PD .)&#xd;
 &#xd;
 &#xd;
-rem check if output files exists, if yes the build passed succesfully&#xd;
+rem check if output files exists, if yes the build passed successfully&#xd;
 cd %WORKSPACE%&#xd;
 if &quot;%GERRIT_BRANCH%&quot;==&quot;700&quot; (&#xd;
     if exist packages\ti\mas\neu\c64P\neu_gmac_c.a64P if exist packages\ti\mas\pktutl\c64P\pktutl_c.a64P^&#xd;
@@ -228,7 +228,7 @@ echo &quot;compilation passed&quot;&#xd;
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}__${GERRIT_BRANCH}</template>
+      <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
