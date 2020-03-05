@@ -517,7 +517,13 @@ fi
 rm -f allChange.txt
 if [ -z &quot;$score&quot; ]; then score=0; fi
 
-if [ $score  = -1 ]; then
+if curl -ks -u $GerritUserPass -X GET &quot;https://gerrit/a/changes/?q=$change&amp;o=LABELS&quot; | \
+   grep -A1 Automation-Test | grep -q rejected; then
+   echo Score is -1
+   score=-1
+fi
+
+if [ $score  == -1 ]; then
   labelGrade=&quot;&quot;
 else
   labelGrade=&quot;--label $labelName=1&quot;
@@ -654,6 +660,16 @@ $change,$newPS
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>GerritUserPass</name>
+          <value>{AQAAABAAAAAgE2t2ZdKjh0eJo8d5UvQq6iKv93eH03zZrwJtJs9FtH+0DpRH/ojFHIjtNgFTi2Xx}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER} ${REFSPEC} ${ServerType} ${GERRIT_BRANCH}</template>
       <runAtStart>true</runAtStart>
