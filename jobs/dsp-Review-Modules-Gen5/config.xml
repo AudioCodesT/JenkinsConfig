@@ -262,7 +262,7 @@ TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 module=$(echo $Module_Project | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
 
 if [[ &quot;$module&quot; != &quot;NEU&quot; ]]
-theb
+then
 	# cd to releant path
 	cd Modules/${module}
 	echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Modules/${module} $GERRIT_REFSPEC&quot;
