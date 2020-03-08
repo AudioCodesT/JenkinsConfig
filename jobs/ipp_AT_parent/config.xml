@@ -517,6 +517,9 @@ fi
 rm -f allChange.txt
 if [ -z &quot;$score&quot; ]; then score=0; fi
 
+echo curl -ks -u $GerritUserPass -X &quot;GET https://gerrit/a/changes/?q=$change&amp;o=LABELS&quot;
+curl -ks -u $GerritUserPass -X GET &quot;https://gerrit/a/changes/?q=$change&amp;o=LABELS&quot; | grep -A5 Automation-Test
+
 if curl -ks -u $GerritUserPass -X GET &quot;https://gerrit/a/changes/?q=$change&amp;o=LABELS&quot; | \
    grep -A1 Automation-Test | grep -q rejected; then
    echo Score is -1
