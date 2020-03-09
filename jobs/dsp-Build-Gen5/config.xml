@@ -376,10 +376,10 @@ git -c http.sslverify=false clone -n https://gerrit/DSP/Gen5/repo_manifests dsp_
 cd dsp_gen5_repo_manifests
 git checkout ${GERRIT_BRANCH}
 repoToTAG=&quot;DSP/Gen5&quot;
-#sed -i -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; default.xml
-#git add default.xml
-#git commit -m &quot;Jenkins auto update Gen5 to tag ${NEWTAG}&quot;
-#git push origin ${GERRIT_BRANCH}
+sed -i -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; default.xml
+git add default.xml
+git commit -m &quot;Jenkins auto update Gen5 to tag ${NEWTAG}&quot;
+git push origin ${GERRIT_BRANCH}
 head=$(git rev-parse HEAD)
 git tag -a -m &quot;Jenkins auto tag&quot; ${NEWTAG} ${head}
 git push origin ${NEWTAG}</command>
