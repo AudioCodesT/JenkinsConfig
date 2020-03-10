@@ -79,6 +79,8 @@ set -xe
 cd $WORKSPACE
 
 #development env parameters
+#subscription
+Dev_subscription_id=&quot;129ded1d-f31c-4cfd-aa04-9dfb9333aa2a&quot;
 #Backend:
 Dev_Backend_functionAppName=&quot;DevRedirectServerACBackend&quot;
 Dev_Backend_functionResourceGroup=&quot;DevRedirectServerResourceGroup&quot;
@@ -94,7 +96,7 @@ az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --ten
 
 #set az account subscription  as development env
 az account list --all --refresh
-az account set --subscription &quot;129ded1d-f31c-4cfd-aa04-9dfb9333aa2a&quot;
+az account set --subscription &quot;${Dev_subscription_id}&quot;
 az account show
 
 #change pom.xml to build development enviorment
