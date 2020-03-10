@@ -1,0 +1,306 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>30</daysToKeep>
+        <numToKeep>-1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_PROJECT</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_CHANGE_ID</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_PATCHSET_REVISION</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_CHANGE_NUMBER</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_PATCHSET_NUMBER</name>
+          <description>just need that for using only in build name</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <quietPeriod>120</quietPeriod>
+  <assignedNode>ipp-android-dynamic</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>ANT</compareType>
+          <pattern>IPP/Android/*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>REG_EXP</compareType>
+              <pattern>(master|android-9|audc-px30|audc-rk3399)</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>ANT</compareType>
+          <pattern>IPP/Lib/*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>REG_EXP</compareType>
+              <pattern>(master|android-9|audc-px30|audc-rk3399)</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/apps/emsc</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>REG_EXP</compareType>
+              <pattern>(master|android-9|audc-px30|audc-rk3399)</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <dynamicGerritProjects class="empty-list"/>
+      <skipVote>
+        <onSuccessful>true</onSuccessful>
+        <onFailed>true</onFailed>
+        <onUnstable>true</onUnstable>
+        <onNotBuilt>true</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>true</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>BASE64</commentTextParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>true</excludeNoCodeChange>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -x
+#list of branches, sort from older to newer
+declare -a IPPAndroid_branches=(&quot;master&quot; &quot;android-9&quot; &quot;audc-px30&quot; &quot;audc-rk3399&quot;)
+declare -a IPPAndroid_branches_B=(&quot;audc-rk3399&quot; &quot;audc-px30&quot; &quot;android-9&quot;)
+#if the current gerrit branch is the last on the list then exit:
+#because there is no need to cherry pick it to anywhere
+
+#check if android-9 exists in this repository -&gt; 0 not exists else exists
+branch_android9_exists=$(git ls-remote --heads ssh://jenkins@gerrit:29418/${GERRIT_PROJECT} | grep -c &quot;android-9&quot; || true)
+branch_audc_px30_exists=$(git ls-remote --heads ssh://jenkins@gerrit:29418/${GERRIT_PROJECT} | grep -c &quot;audc-px30&quot; || true)
+branch_audc_rk3399_exists=$(git ls-remote --heads ssh://jenkins@gerrit:29418/${GERRIT_PROJECT} | grep -c &quot;audc-rk3399&quot; || true)
+
+#if [ &quot;${IPPAndroid_branches[${#IPPAndroid_branches[@]}-1]}&quot; == &quot;${GERRIT_BRANCH}&quot; ]; then exit 0; fi
+
+#some init params
+url=&quot;https://gerrit/a/changes/?q=&quot;
+vote=1
+declare -a missingBranches
+
+#loop the branch list
+for i in &quot;${!IPPAndroid_branches[@]}&quot;; do
+   #find the gerrit branch in list
+   if [[ &quot;${IPPAndroid_branches[$i]}&quot; = &quot;${GERRIT_BRANCH}&quot; ]]; then
+	   echo &quot;***  IPPAndroid_branches[$i] is THE current branch  ***&quot;
+       index=${i};
+       continue;
+   else     
+   	   echo &quot;***  IPPAndroid_branches[$i] is not the current branch  ***&quot;
+   fi
+   #if gerrit branch was already found, then check if current branch has this change-ID
+   if [[ $index ]]; then
+      changeID_exist=$(curl -k -s --digest --basic -u jenkins:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${IPPAndroid_branches[$i]}\&quot;&quot; || true);
+      if [[ &quot;$changeID_exist&quot; == &quot;0&quot; &amp;&amp; &quot;$branch_android9_exists&quot; != &quot;0&quot; &amp;&amp; &quot;${IPPAndroid_branches[$i]}&quot; == &quot;android-9&quot; ]]
+      then
+        echo &quot;*** Change-ID was not found in branch ${IPPAndroid_branches[$i]} and branch android-9 exists in the project ${GERRIT_PROJECT} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${IPPAndroid_branches[$i]}&quot;)
+      elif [[ &quot;$changeID_exist&quot; == &quot;0&quot; &amp;&amp; &quot;$branch_audc_px30_exists&quot; != &quot;0&quot; &amp;&amp; &quot;${IPPAndroid_branches[$i]}&quot; == &quot;audc-px30&quot; ]]
+      then
+      	echo &quot;*** Change-ID was not found in branch ${IPPAndroid_branches[$i]} and branch audc-px30 exists in the project ${GERRIT_PROJECT} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${IPPAndroid_branches[$i]}&quot;)
+      elif [[ &quot;$changeID_exist&quot; == &quot;0&quot; &amp;&amp; &quot;$branch_audc_rk3399_exists&quot; != &quot;0&quot; &amp;&amp; &quot;${IPPAndroid_branches[$i]}&quot; == &quot;audc-rk3399&quot; ]]
+      then  
+        echo &quot;*** Change-ID was not found in branch ${IPPAndroid_branches[$i]} and branch audc-rk3399 exists in the project ${GERRIT_PROJECT} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${IPPAndroid_branches[$i]}&quot;)
+      else
+        echo &quot;*** Change-ID does exist in branch ${IPPAndroid_branches[$i]} ***&quot;
+      fi
+   fi
+done
+
+
+
+#loop the branch list
+for i in &quot;${!IPPAndroid_branches_B[@]}&quot;; do
+   #find the gerrit branch in list
+   if [[ &quot;${IPPAndroid_branches_B[$i]}&quot; = &quot;${GERRIT_BRANCH}&quot; ]]; then
+	   echo &quot;***  IPPAndroid_branches_B[$i] is THE current branch  ***&quot;
+       index_b=${i};
+       continue;
+   else     
+   	   echo &quot;***  IPPAndroid_branches_B[$i] is not the current branch  ***&quot;
+   fi
+   #if gerrit branch was already found, then check if current branch has this change-ID
+   if [[ $index_b ]]; then
+       changeID_exist=$(curl -k -s --digest --basic -u jenkins:$curl_pass $url$GERRIT_CHANGE_ID |grep -c &quot;\&quot;branch\&quot;: \&quot;${IPPAndroid_branches_B[$i]}\&quot;&quot; || true);
+      if [[ &quot;$changeID_exist&quot; == &quot;0&quot; &amp;&amp; &quot;$branch_android9_exists&quot; != &quot;0&quot; &amp;&amp; &quot;${IPPAndroid_branches_B[$i]}&quot; == &quot;android-9&quot; ]]
+      then
+        echo &quot;*** Change-ID was not found in branch ${IPPAndroid_branches_B[$i]} and branch android-9 exists in the project ${GERRIT_PROJECT} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${IPPAndroid_branches_B[$i]}&quot;)
+      elif [[ &quot;$changeID_exist&quot; == &quot;0&quot; &amp;&amp; &quot;$branch_audc_px30_exists&quot; != &quot;0&quot; &amp;&amp; &quot;${IPPAndroid_branches_B[$i]}&quot; == &quot;audc-px30&quot; ]]
+      then
+      	echo &quot;*** Change-ID was not found in branch ${IPPAndroid_branches_B[$i]} and branch audc-px30 exists in the project ${GERRIT_PROJECT} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${IPPAndroid_branches_B[$i]}&quot;)
+      elif [[ &quot;$changeID_exist&quot; == &quot;0&quot; &amp;&amp; &quot;$branch_audc_rk3399_exists&quot; != &quot;0&quot; &amp;&amp; &quot;${IPPAndroid_branches_B[$i]}&quot; == &quot;audc-rk3399&quot; ]]
+      then
+        echo &quot;*** Change-ID was not found in branch ${IPPAndroid_branches_B[$i]} and branch audc-rk3399 exists in the project ${GERRIT_PROJECT} ***&quot;
+        vote=-1;
+        missingBranches+=(&quot;${IPPAndroid_branches_B[$i]}&quot;)
+      else
+        echo &quot;*** Change-ID does exist in branch ${IPPAndroid_branches_B[$i]} ***&quot;
+      fi
+   fi
+done
+
+
+echo &quot;*** check was done. need to vote $vote to gerrit  ***&quot;
+echo &quot;*** these are the branched without cherry-pick:  ${missingBranches[@]}  ***&quot;
+##############################
+# TEMPORARY EXCEPTION according to Oriel
+# the following repository should not be verified: # IPP/Android/device_dspg_dvf101
+if [ &quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/device_dspg_dvf101&quot; ||  &quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then vote=1; fi
+
+#############################
+#reply vote to gerrit label Cherry-Pick + message
+if [[ &quot;$vote&quot; = &quot;-1&quot; ]]; then
+	message=&quot;missing cherry-pick to branch: ${missingBranches[@]}, please retry when done: ${BUILD_URL}&quot;
+    curl -k  -u jenkins:$curl_pass --basic -X POST https://gerrit/a/changes/${GERRIT_CHANGE_NUMBER}/revisions/${GERRIT_PATCHSET_REVISION}/review -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;labels\&quot;: {\&quot;Cherry-Pick\&quot;: \&quot;-1\&quot;}}&quot; -H &apos;Content-Type:application/json&apos;	
+else
+    curl -k  -u jenkins:$curl_pass --basic -X POST https://gerrit/a/changes/${GERRIT_CHANGE_NUMBER}/revisions/${GERRIT_PATCHSET_REVISION}/review -d &quot;{\&quot;message\&quot;: \&quot;No missing cherry-pick\&quot;, \&quot;labels\&quot;: {\&quot;Cherry-Pick\&quot;: \&quot;+1\&quot;}}&quot; -H &apos;Content-Type:application/json&apos;
+fi</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
+      <regexpForRerun></regexpForRerun>
+      <rerunIfUnstable>true</rerunIfUnstable>
+      <rerunMatrixPart>false</rerunMatrixPart>
+      <checkRegexp>false</checkRegexp>
+      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
+      <delay class="com.chikli.hudson.plugin.naginator.ProgressiveDelay">
+        <increment>60</increment>
+        <max>600</max>
+      </delay>
+      <maxSchedule>8</maxSchedule>
+    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+  </publishers>
+  <buildWrappers>
+    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>curl_pass</name>
+          <value>{AQAAABAAAAAQQaJNE27KDX2YVtejl0cv8qO+g5xlfhpJUNSXNYB3RZU=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+      <template>#${BUILD_NUMBER}_project:${GERRIT_PROJECT}_branch:${GERRIT_BRANCH}_change#${GERRIT_CHANGE_NUMBER}_${GERRIT_PATCHSET_NUMBER}</template>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+</project>
