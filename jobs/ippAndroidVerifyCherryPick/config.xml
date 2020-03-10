@@ -255,7 +255,7 @@ echo &quot;*** these are the branched without cherry-pick:  ${missingBranches[@]
 ##############################
 # TEMPORARY EXCEPTION according to Oriel
 # the following repository should not be verified: # IPP/Android/device_dspg_dvf101
-if [ &quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/device_dspg_dvf101&quot; ||  &quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then vote=1; fi
+if [[ &quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/device_dspg_dvf101&quot; ||  &quot;${GERRIT_PROJECT}&quot; == &quot;IPP/Android/repo_manifests&quot; ]]; then vote=1; fi
 
 #############################
 #reply vote to gerrit label Cherry-Pick + message
