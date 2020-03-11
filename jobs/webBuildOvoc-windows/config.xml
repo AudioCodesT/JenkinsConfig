@@ -95,8 +95,8 @@ if new code then build and deploy ovoc-7.6.zip</description>
           <pattern>web-ui/ovoc</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
+              <compareType>REG_EXP</compareType>
+              <pattern>^((7.8.1000_ng2|7.8.1000_ng7).+|(?!(7.8.1000_ng2|7.8.1000_ng7)).*)$</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
