@@ -255,7 +255,11 @@ then
                    fi
             fi
             echo &quot;RUN: yarn run distFull&quot;
-            yarn run distFull 
+            yarn run distFull
+            if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8.2000&quot; ]]
+            then
+            	perl -pi -e &quot;s/\&quot;%version%\&quot;/\&quot;${BUILD_NUMBER}\&quot;/g&quot; index.html
+            fi
             echo &quot;RUN:yarn run zip&quot;
             yarn run zip  
      fi
