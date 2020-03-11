@@ -82,8 +82,8 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
           <pattern>web-ui/ovoc</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
+              <compareType>REG_EXP</compareType>
+              <pattern>^((7.8.1000_ng2|7.8.1000_ng7).+|(?!(7.8.1000_ng2|7.8.1000_ng7)).*)$</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
