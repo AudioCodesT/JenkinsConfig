@@ -238,7 +238,11 @@ then
                   then
                         sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
                   else
-                        sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
+                  		#temporary
+        				if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.8.2000&quot; ]]
+            			then
+        					sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
+            			fi
                   fi
                         #change username and password
                         sed -i -- &apos;s/%username%/acladmin/g&apos; ${WORKSPACE}/cypress/support/config.ts
