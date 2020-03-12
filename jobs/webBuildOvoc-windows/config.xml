@@ -398,6 +398,10 @@ $BUILD_URL
           <pattern>.git/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>node_modules/**</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>true</deleteDirs>
       <skipWhenFailed>false</skipWhenFailed>
