@@ -140,7 +140,7 @@ do
   else
     echo  Patch set: $checkPS,  change kind: $value
     if [ &quot;$checkPS&quot; -gt &quot;$ps&quot; ]; then
-      if [ &quot;$value&quot; == &quot;REWORK&quot; ]; then
+      if [[ ! &quot;$value&quot; =~ &quot;_CHANGE&quot; ]]; then
         echo It is a newest patch-set... abort action
         echo -----------------------------------------
         ssh -p 29418 jenkins@gerrit gerrit review  --message &quot;&apos;Abort Automation-test $ServerType for PS $ps, the last PS is $checkPS - $BUILD_URL&apos;&quot; --tag &quot;&apos;Automation&apos;&quot; $change,$checkPS
@@ -368,7 +368,7 @@ else
     field=`echo $line | cut -d: -f1` # Could be: number or kind
     value=`echo $line | sed &apos;s/.*: //&apos;` # could be: REWORK, TRIVIAL_REBASE, MERGE_FIRST_PARENT_UPDATE, NO_CODE_CHANGE or NO_CHANGE
     if [ &quot;$field&quot; == &quot;number&quot; ]; then checkPS=$value; echo Check Patch set $value;
-    else if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; &quot;$value&quot; == &quot;REWORK&quot; ]]; then
+    else if [[ &quot;$checkPS&quot; -gt &quot;$ps&quot; &amp;&amp; ! &quot;$value&quot; =~ &quot;_CHANGE&quot; ]]; then
       NewPSwasNotChanged=0
     fi; fi
   done &lt;&lt;&lt; $(ssh -p 29418 jenkins@gerrit gerrit query --patch-sets $change | grep  &apos;kind:\|number:&apos; | tail -n +2)
