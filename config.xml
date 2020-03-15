@@ -170,6 +170,15 @@
           <sid># OVOC_UI</sid>
         </assignedSIDs>
       </role>
+      <role name="Execute_AutomationTest" pattern="ipp_AT_build">
+        <permissions>
+          <permission>hudson.model.Item.Cancel</permission>
+          <permission>hudson.model.Item.Read</permission>
+          <permission>hudson.model.Item.Build</permission>
+          <permission>hudson.model.Item.Discover</permission>
+        </permissions>
+        <assignedSIDs/>
+      </role>
       <role name="IT" pattern="(IT.*)">
         <permissions>
           <permission>hudson.model.Item.Read</permission>
