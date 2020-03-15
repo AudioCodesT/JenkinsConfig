@@ -137,12 +137,6 @@ set -e
 cd $WORKSPACE
 #yarn dist failing without this command (memory out of heap failure)
 export NODE_OPTIONS=&quot;--max_old_space_size=4096&quot;
-# adding ac-infra
-echo &quot;git submodule init&quot;
-git submodule init
-echo &quot;git submodule update&quot;
-git submodule update
-echo &quot;finish submodule&quot;
 
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
@@ -152,7 +146,7 @@ yarn config set strict-ssl false
 echo &quot;RUN: yarn install&quot;
 yarn install
 echo &quot;RUN: yarn dist&quot;
-yarn dist
+yarn build
 </command>
     </hudson.tasks.Shell>
   </builders>
