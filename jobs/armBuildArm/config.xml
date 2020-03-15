@@ -108,16 +108,26 @@ otherwise - it is a night build and there is no version name change</description
   <builders>
     <hudson.tasks.Shell>
       <command># Setting jdk version for branches
-# Default version is 1.8.0_162
-jdkver=&quot;1.8.0_162&quot;
-
 # Branch 7.8 needs version 1.8.0_92
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
+if [[ &quot;$BRANCH&quot; == &quot;7.8&quot; ]]
+then
 	jdkver=&quot;1.8.0_92&quot;
+elif [[ &quot;$BRANCH&quot; == &quot;7.4&quot; || &quot;$BRANCH&quot; == *&quot;8.&quot;* || &quot;$BRANCH&quot; == &quot;users&quot; || &quot;$BRANCH&quot; == &quot;9.0.init&quot; ]]
+then
+	# Default version is 1.8.0_162
+	jdkver=&quot;1.8.0_162&quot;
+
+else
+	jdkver=&quot;-11&quot;
 fi
 
-# Set Java
-sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
+
+if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;9.0.init&quot; ]]
+then
+	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
+else
+	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
+fi
 jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
 echo &quot;Java version set to: $jver&quot;
 
@@ -182,7 +192,12 @@ if [ $RELEASE_VMS == &quot;YES&quot; ]; then
 #create new tag in Arm UI
 	cd ..
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
-    git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
+	if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;9.0.init&quot; ]]
+	then
+    	git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
+    else
+        git clone ssh://jenkins@gerrit:29418/ARM/UI armUI
+    fi
     cd armUI
     git checkout $BRANCH
     git tag -d $VERSION_NAME || true
@@ -373,7 +388,7 @@ BRANCH=$BRANCH</properties>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>shuky.riechard</recipients>
+      <recipients>Shuky.Riechard,ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
