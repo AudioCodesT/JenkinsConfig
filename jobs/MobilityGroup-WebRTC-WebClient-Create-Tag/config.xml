@@ -3,7 +3,7 @@
   <actions/>
   <description>Manually triggered when the user want to create a new tag.&#xd;
 1. Promote version tag automatically (last Tag+1)&#xd;
-    For example: 1.1.2_5 promote to 1.1.3_6&#xd;
+    For example: 1.1.2 promote to 1.1.3&#xd;
 &#xd;
 </description>
   <keepDependencies>false</keepDependencies>
@@ -46,14 +46,13 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/MobilityGroup/MobilityPlus/Android</url>
+        <url>ssh://jenkins@gerrit:29418/MobilityGroup/WebRTC/WebClient</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -68,7 +67,7 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
     </extensions>
   </scm>
-  <assignedNode>MobilityPlus-android-build</assignedNode>
+  <assignedNode>MobilityGroup-android-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -78,33 +77,23 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -xe
-
+ 
 #get Last Tag and all the commits since the last tag in reverse list
 LastTag=$(git describe --tags --abbrev=0 --first-parent)
-LastVersionName=$(echo $LastTag | cut -d&apos;_&apos; -f1)
-echo $LastVersionName
-LastVersionCode=$(echo $LastTag | cut -d&apos;_&apos; -f2)
-echo $LastVersionCode
-NewVersionName=`echo $LastVersionName | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastVersionName | awk -F. &apos;{print $NF+1}&apos;`
-echo $NewVersionName
-((NewVersionCode=${LastVersionCode}+1))
-echo $NewVersionCode
+NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
+ 
 #if VersionName is not empty then push VersionName as the new Tag
-if [ -n &quot;$VersionName&quot; ]
+if [ -n &quot;$Version&quot; ]
 then
-	echo &quot;Version Name entered by the User&quot;
-    if [[ $VersionName =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]
+    echo &quot;Version Name entered by the User&quot;
+    if [[ $Version =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]
     then
-    	NewVersionName=${VersionName}
+        NEWTAG=${Version}
     else
-    	echo &quot;The VersionName parameter need to contain only version name, for example: 1.1.3&quot;
+        echo &quot;The VersionName parameter need to contain only version name, for example: 1.1.3&quot;
         exit 1
     fi
 fi
-
-echo &quot;NewVersionName_NewVersionCode: ${NewVersionName}_${NewVersionCode}&quot;
-NEWTAG=&quot;${NewVersionName}_${NewVersionCode}&quot;
-
 
 echo NEWTAG=$NEWTAG &gt; prop</command>
     </hudson.tasks.Shell>
