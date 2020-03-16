@@ -130,14 +130,27 @@
 #replace the version in package json
 sed  -r &quot;s/\&quot;version\&quot;:.*/\&quot;version\&quot;: \&quot;${NEWTAG}\&quot;/g&quot; package.json
 
+BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
+
 NAME=$(cat package.json | grep &apos;name&apos; | cut -d&apos;:&apos; -f2  | tr -d &apos;,&apos;&apos; &apos;&apos;&quot;&apos;)
 ZIP_NAME=&quot;${NAME}-v${NEWTAG}.zip&quot;
 
 npm install
 npm run build
 
-zip -r $ZIP_NAME ./build ./run-server.bat ./server.js</command>
+zip -r $ZIP_NAME ./build ./run-server.bat ./server.js
+
+
+echo &quot;NAME=${NAME}&quot; &gt; prop
+echo &quot;NEWTAG=${NEWTAG}&quot; &gt;&gt; prop
+</command>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.1.5">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers/>
   <buildWrappers>
@@ -145,17 +158,6 @@ zip -r $ZIP_NAME ./build ./run-server.bat ./server.js</command>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.5.3">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
-    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>#!/bin/bash -xe
-
-BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
-echo &quot;NEWTAG=${NEWTAG}&quot;
-echo &quot;BRANCH=$BRANCH&quot;</script>
-      <scriptType>unixScript</scriptType>
-      <runOnlyOnParent>false</runOnlyOnParent>
-      <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
-    </com.lookout.jenkins.EnvironmentScript>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
