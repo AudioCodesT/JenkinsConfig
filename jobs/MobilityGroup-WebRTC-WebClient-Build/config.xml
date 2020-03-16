@@ -128,13 +128,13 @@
       <command>#!/bin/bash -xe
 
 #replace the version in package json
-sed  -r &quot;s/\&quot;version\&quot;:.*/\&quot;version\&quot;: \&quot;222222\&quot;/g&quot; package.json
+sed  -r &quot;s/\&quot;version\&quot;:.*/\&quot;version\&quot;: \&quot;${NEWTAG}\&quot;/g&quot; package.json
 
 NAME=$(cat package.json | grep &apos;name&apos; | cut -d&apos;:&apos; -f2  | tr -d &apos;,&apos;&apos; &apos;&apos;&quot;&apos;)
 ZIP_NAME=&quot;${NAME}-v${NEWTAG}.zip&quot;
 
 npm install
-npm run-script build
+npm run build
 
 zip -r $ZIP_NAME ./build ./run-server.bat ./server.js</command>
     </hudson.tasks.Shell>
