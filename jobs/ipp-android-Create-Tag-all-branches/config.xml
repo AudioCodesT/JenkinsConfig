@@ -350,10 +350,15 @@ createLocalManifests() {
     git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
   fi
   cd repo_manifests
-  # Create a local branch and checkout to 
-  if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH master; fi
+  # Create a local branch and checkout to
+  git checkout $mainBranch
+  if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH $mainBranch; fi
   git reset --hard
   git pull --rebase
+  if [ ! -f &quot;$BRANCH.xml&quot; ]; then
+    echo Checkout Manifest to $BRANCH due to $BRANCH.xml doesn&apos;t exist
+    git checkout -f $BRANCH
+  fi
   LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
 }
 
@@ -369,6 +374,7 @@ git remote -v
 git clean -fd
 subject=&quot;&quot;
 LastManifestTag=&quot;&quot;
+mainBranch=master
 
 echo Sleep 5 minutes before starting check commits
 sleep 300
@@ -428,8 +434,7 @@ MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot
 echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
 if git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then exit 0; fi
 #if ! git describe --tags --first-parent $GERRIT_BRANCH | grep -q -; then exit 0; fi
-  
-echo Create &apos;repo_manifests&apos; and find the last TAG
+
 createLocalManifests
 echo Last TAG found is $LastManifestTag
 cd $WORKSPACE
