@@ -144,7 +144,7 @@ zip -r $ZIP_NAME ./build ./run-server.bat ./server.js
 
 echo &quot;NAME=${NAME}&quot; &gt; prop
 echo &quot;NEWTAG=${NEWTAG}&quot; &gt;&gt; prop
-</command>
+echo &quot;BRANCH=${BRANCH}&quot; &gt;&gt; prop</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
