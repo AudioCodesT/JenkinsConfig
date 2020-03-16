@@ -122,6 +122,8 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash -xe
 
+NAME=$(cat package.josn | jq -r .name`)
+
 npm install
 
 npm run-script build</command>
