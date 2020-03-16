@@ -122,7 +122,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash -xe
 
-NAME=$(cat package.josn | jq -r .name)
+NAME=$(cat package.json | jq -r .name)
 
 npm install
 
