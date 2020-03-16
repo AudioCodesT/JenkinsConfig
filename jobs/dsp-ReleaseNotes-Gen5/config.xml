@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>First, the user build manually the job  &quot;dsp-Build-Gen5-Android-Build&quot; in order to create a new TAG.&#xd;
+  <description>First, the user build manually the job  &quot;dsp-Build-Gen5&quot; in order to create a new TAG.&#xd;
 Then, this job automatically triggered by new TAG on DSP/Gen5.&#xd;
 &#xd;
 This job get all the information on the commits between the old tag to the new tag, and trigger the job &quot;UpdateVI-Jira&quot; which send an email to notify on the new TAG.</description>
@@ -20,6 +20,16 @@ This job get all the information on the commits between the old tag to the new t
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_REFNAME</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <maxConcurrentPerNode>0</maxConcurrentPerNode>
       <maxConcurrentTotal>0</maxConcurrentTotal>
