@@ -130,7 +130,7 @@
 #replace the version in package json
 sed  -r &quot;s/\&quot;version\&quot;:.*/\&quot;version\&quot;: \&quot;222222\&quot;/g&quot; package.json
 
-NAME=$(cat package.josn | jq -r .name`)
+NAME=$(cat package.json | grep &apos;name&apos; | cut -d&apos;:&apos; -f2  | tr -d &apos;,&apos;&apos; &apos;&apos;&quot;&apos;)
 ZIP_NAME=&quot;${NAME}-v${NEWTAG}.zip&quot;
 
 npm install
