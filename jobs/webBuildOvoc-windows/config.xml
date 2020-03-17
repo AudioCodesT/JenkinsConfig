@@ -239,7 +239,7 @@ then
                         sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
                   else
                   		#temporary
-        				if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.8.2000&quot; ]]
+        				if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;7.8.1000&quot; ]]
             			then
         					sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
             			fi
@@ -255,13 +255,16 @@ then
             fi
             echo &quot;RUN: yarn run distFull&quot;
             yarn run distFull
-            if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8.2000&quot; ]]
+            if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.4&quot;* &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.6&quot;* &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.8&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.8.1000&quot; ]]
             then
             	perl -pi -e &quot;s/%version%/${BUILD_NUMBER}/g&quot; dist/ovoc/index.html
                 cat dist/ovoc/index.html
+                PATH=${PATH}:&quot;/c/Program Files/7-Zip&quot;
+    			7z.exe a -r dist/ovoc-ui.zip dist/ovoc/.
+            elif
+            	echo &quot;RUN:yarn run zip&quot;
+            	yarn run zip 
             fi
-            echo &quot;RUN:yarn run zip&quot;
-            yarn run zip  
      fi
       
      
