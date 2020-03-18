@@ -285,8 +285,15 @@ createTag() {
     echo Check repository $eachRepo.......................................
     repoToTAG=$(echo $eachRepo | cut -d: -f2)
     localRepoName=$(echo $eachRepo | cut -d: -f1)
-    GERRIT_BRANCH=$localRepoName/$BRANCH
-    if [ &quot;$localRepoName&quot; != &quot;$MainlocalRepoName&quot; ]; then
+    if [ &quot;$localRepoName&quot; == &quot;$MainlocalRepoName&quot; ]; then continue; fi
+    lastDestBranch=&quot;&quot;
+    for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
+      echo -------------- $xmlFile -----------------
+      destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+      if [ &quot;$lastDestBranch&quot; == &quot;$destBranch&quot; ]; then continue; fi
+      lastDestBranch=$destBranch
+      GERRIT_BRANCH=$localRepoName/$destBranch
+
       # Check if this branch exist in this repository
       if ! git checkout $GERRIT_BRANCH; then 
         echo Branch $GERRIT_BRANCH does not exist
@@ -311,7 +318,7 @@ createTag() {
           commitToTAG=$LastSha1
         fi
       fi
-    fi
+    done
   done
   git checkout $MainlocalRepoName/$BRANCH
   (
@@ -381,8 +388,8 @@ sleep 300
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
-  echo &quot;No branch found, set to default branch: master&quot;
-  GERRIT_BRANCH=&quot;master&quot;
+  echo &quot;No branch found, set to main branch: $mainBranch&quot;
+  GERRIT_BRANCH=&quot;$mainBranch&quot;
 fi
 BRANCH=$GERRIT_BRANCH
 
