@@ -112,7 +112,7 @@ otherwise - it is a night build and there is no version name change</description
 if [[ &quot;$BRANCH&quot; == &quot;7.8&quot; ]]
 then
 	jdkver=&quot;1.8.0_92&quot;
-elif [[ &quot;$BRANCH&quot; == &quot;7.4&quot; || &quot;$BRANCH&quot; == *&quot;8.&quot;* || &quot;$BRANCH&quot; == &quot;users&quot; || &quot;$BRANCH&quot; == &quot;9.0.init&quot; ]]
+elif [[ &quot;$BRANCH&quot; == &quot;7.4&quot; || &quot;$BRANCH&quot; == *&quot;8.&quot;* || &quot;$BRANCH&quot; == &quot;users&quot; ]]
 then
 	# Default version is 1.8.0_162
 	jdkver=&quot;1.8.0_162&quot;
@@ -122,7 +122,7 @@ else
 fi
 
 
-if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;9.0.init&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; ]]
 then
 	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
 else
@@ -192,7 +192,7 @@ if [ $RELEASE_VMS == &quot;YES&quot; ]; then
 #create new tag in Arm UI
 	cd ..
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
-	if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;9.0.init&quot; ]]
+	if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;9.0&quot; ]]
 	then
     	git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
     else
