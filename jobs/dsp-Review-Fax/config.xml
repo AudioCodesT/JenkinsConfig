@@ -33,7 +33,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
@@ -41,7 +40,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>${GERRIT_REFSPEC}</refspec>
-        <url>ssh://jenkins@gerrit:29418/DSP/Modules/NEU</url>
+        <url>ssh://jenkins@gerrit:29418/DSP/Modules/FaxEngine</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -61,7 +60,7 @@
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
-  <assignedNode>dsp-neu-win-dynamic</assignedNode>
+  <assignedNode>dsp-win-dynamic</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -72,7 +71,7 @@
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
-          <pattern>DSP/Modules/NEU</pattern>
+          <pattern>DSP/Modules/FaxEngine</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -133,31 +132,7 @@ echo TARGET=${TARGET} &gt; prop</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.BatchFile>
-      <command>cd &quot;%WORKSPACE%\packages\ti\mas\swtools&quot;&#xd;
-call setenv.bat&#xd;
-cd &quot;%WORKSPACE%\packages\ti\mas\neu&quot;&#xd;
-xdc clean -PD .&#xd;
-&#xd;
-if &quot;%GERRIT_BRANCH%&quot;==&quot;700&quot; (echo &quot;Branch is 700&quot; &amp;&amp; xdc XDCARGS=&quot;c64Ple obj&quot; -PD .)&#xd;
-if &quot;%GERRIT_BRANCH%&quot;==&quot;722&quot; (echo &quot;Branch is 722&quot; &amp;&amp; xdc XDCARGS=&quot;c66le_elf obj&quot; -PD .)&#xd;
-&#xd;
-&#xd;
-rem check if output files exists, if yes the build passed successfully&#xd;
-cd %WORKSPACE%&#xd;
-if &quot;%GERRIT_BRANCH%&quot;==&quot;700&quot; (&#xd;
-    if exist packages\ti\mas\neu\c64P\neu_gmac_c.a64P if exist packages\ti\mas\pktutl\c64P\pktutl_c.a64P^&#xd;
-    if exist packages\ti\mas\util\c64P\util_a.a64P if exist packages\ti\mas\util\c64P\util_c.a64P goto :successful &#xd;
-)&#xd;
-&#xd;
-if &quot;%GERRIT_BRANCH%&quot;==&quot;722&quot; (&#xd;
-    if exist packages\ti\mas\neu\ce66\neu_gmac_c.ae66 if exist packages\ti\mas\pktutl\ce66\pktutl_c.ae66^&#xd;
-    if exist packages\ti\mas\util\ce66\util_a.ae66 if exist packages\ti\mas\util\ce66\util_c.ae66 goto :successful &#xd;
-)&#xd;
-echo &quot;compilation failed, exit the build&quot;&#xd;
-exit&#xd;
-:successful&#xd;
-echo &quot;compilation passed&quot;&#xd;
-</command>
+      <command></command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers/>
