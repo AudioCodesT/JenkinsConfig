@@ -124,7 +124,30 @@
 cd $WORKSPACE
 set -xe
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt; prop</command>
+echo TARGET=${TARGET} &gt; prop
+
+#create all modules folder ready
+modules=(&quot;FaxEngine&quot; &quot;DataPump&quot; &quot;VfdSwitch&quot; &quot;Ip2IpFax&quot;)
+for module in ${modules[@]}
+do
+	file_name=Gen5_LinkedSources_${module}.txt
+    gen5ModuleName=$(head -n 1 ${file_name})
+    moduleFolder=&quot;${WORKSPACE}/${gen5ModuleName}&quot;
+    echo &quot;Copy Module $gen5ModuleName&quot;
+    mkdir $moduleFolder || true
+    #start to read file from second line (first line is the module name)
+    tail -n +2 ${file_name} | while IFS= read -r line
+    do
+    	#source and destination paths to copy the files
+        sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
+        sourcePath=$(echo $sourcePath | awk -F &apos;[.][/]&apos; &apos;{print $2}&apos;)
+        destPath=$(echo $line | cut -d&apos; &apos; -f2)
+        destPath=$(echo $destPath | awk -F &apos;[.][/]&apos; &apos;{print $2}&apos;)
+        cp &quot;${sourcePath}&quot; &quot;${moduleFolder}/${destPath}&quot;
+    done
+done
+
+ls -al</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
