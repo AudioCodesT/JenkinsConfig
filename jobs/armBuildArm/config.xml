@@ -120,7 +120,7 @@ else
 fi
 
 
-if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; ]]
+if [[ &quot;$BRANCH&quot; == *&quot;7.&quot;* || &quot;$BRANCH&quot; == *&quot;8.&quot;* || &quot;$BRANCH&quot; == &quot;users&quot; ]]
 then
 	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
 else
@@ -190,7 +190,7 @@ if [ $RELEASE_VMS == &quot;YES&quot; ]; then
 #create new tag in Arm UI
 	cd ..
     if [ -d &quot;armUI&quot; ]; then rm -rf armUI; fi
-	if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;7.&quot;* || &quot;$GERRIT_BRANCH&quot; == *&quot;8.&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;users&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;9.0&quot; ]]
+	if [[ &quot;$BRANCH&quot; == *&quot;7.&quot;* || &quot;$BRANCH&quot; == *&quot;8.&quot;* || &quot;$BRANCH&quot; == &quot;users&quot; || &quot;$BRANCH&quot; == &quot;9.0&quot; ]]
 	then
     	git clone ssh://jenkins@gerrit:29418/web-ui/arm armUI
     else
