@@ -370,6 +370,22 @@ createLocalManifests() {
 }
 
 #######################################################################################
+# Create (if not exist yet) the repo_manifests and find the last TAG
+# Output = LastManifestTag
+AddAndFetchRepository() {
+    
+  for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
+    echo -------------- $xmlFile -----------------
+    destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+    if [ &quot;$lastDestBranch&quot; == &quot;$destBranch&quot; ]; then continue; fi
+
+git config remote.wpaSupplicant8.url ssh://jenkins@gerrit:29418/IPP/Android/external_wpa_supplicant_8
+git fetch --tags --progress ssh://jenkins@gerrit:29418/IPP/Android/external_wpa_supplicant_8 +refs/heads/*:refs/remotes/wpaSucant8/* +refs/tags/*:refs/tags/wpaSupplicant8/*
+
+
+}
+
+#######################################################################################
 # The main program
 # If found new commit, execute &apos;createTag&apos;
 
