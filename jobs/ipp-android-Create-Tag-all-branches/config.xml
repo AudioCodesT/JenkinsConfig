@@ -373,8 +373,13 @@ createLocalManifests() {
 # Create (if not exist yet) the repo_manifests and find the last TAG
 # Output = LastManifestTag
 AddAndFetchRepository() {
-    
-  for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
+
+  allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
+  for Repo in $allRepos; do 
+    shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+  done
+  
+for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
     echo -------------- $xmlFile -----------------
     destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
     if [ &quot;$lastDestBranch&quot; == &quot;$destBranch&quot; ]; then continue; fi
