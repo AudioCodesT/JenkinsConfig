@@ -420,18 +420,19 @@ date</command>
                         <command>#!c:\cygwin\bin\bash  --login
 
 echo Start give score
+labelName=&quot;Automation-Test&quot;
+labelGrade=&quot;--label $labelName=-1&quot;
+
 date
 if [ &quot;$REFSPEC&quot; == &quot;&quot; ]; then exit 1; fi
 if [ &quot;$NAGINATOR_COUNT&quot; != 1 ]; then
   echo Skip vote, give another chance
-  exit 1
+  labelName=&quot;Automation-Test (Skip vote, give another chance)&quot;
+  labelGrade=&quot;&quot;
 fi
 
 change=`echo $REFSPEC | cut -d/ -f4`
 # ps=`echo $REFSPEC | cut -d/ -f5`
-labelName=&quot;Automation-Test&quot;
-
-labelGrade=&quot;--label $labelName=-1&quot;
 
 # No score if this patch-set was merged already
 if [ &quot;$merged&quot; == &quot;yes&quot; ]; then labelGrade=&quot;&quot;; fi
