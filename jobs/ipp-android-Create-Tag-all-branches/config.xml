@@ -377,8 +377,9 @@ AddAndFetchRepository() {
   allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | \
              sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
   for Repo in $allRepos; do 
-    shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
-    echo $shortName
+    shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | \
+                awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+    echo Config $Repo to be $shortName
     git config remote.$shortName.url ssh://jenkins@gerrit:29418/$Repo
     git fetch --tags --progress ssh://jenkins@gerrit:29418/$Repo \
       +refs/heads/*:refs/remotes/$shortName/* \
