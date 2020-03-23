@@ -374,21 +374,16 @@ createLocalManifests() {
 # Output = LastManifestTag
 AddAndFetchRepository() {
 
-  allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
+  allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | \
+             sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
   for Repo in $allRepos; do 
     shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
     echo $shortName
+    git config remote.$shortName.url ssh://jenkins@gerrit:29418/$Repo
+    git fetch --tags --progress ssh://jenkins@gerrit:29418/$Repo \
+      +refs/heads/*:refs/remotes/$shortName/* \
+      +refs/tags/*:refs/tags/$shortName/*
   done
-  
-for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
-    echo -------------- $xmlFile -----------------
-    destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
-    if [ &quot;$lastDestBranch&quot; == &quot;$destBranch&quot; ]; then continue; fi
-
-git config remote.wpaSupplicant8.url ssh://jenkins@gerrit:29418/IPP/Android/external_wpa_supplicant_8
-git fetch --tags --progress ssh://jenkins@gerrit:29418/IPP/Android/external_wpa_supplicant_8 +refs/heads/*:refs/remotes/wpaSucant8/* +refs/tags/*:refs/tags/wpaSupplicant8/*
-
-
 }
 
 #######################################################################################
