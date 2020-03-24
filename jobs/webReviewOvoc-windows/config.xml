@@ -132,6 +132,8 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
 set -e
 cd $WORKSPACE
 
+id
+
 chrome_version=$(cmd.exe /C &apos;wmic datafile where name=&quot;C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe&quot; get Version /value&apos;)
 
 echo &quot;*********************************************************************************************************************&quot;
