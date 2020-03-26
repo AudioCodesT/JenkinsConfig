@@ -287,9 +287,11 @@ createLocalManifests() {
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
-  for job in $(curl -ks https://$jenkins/queue/api/json | grep $JOB_NAME); do
-    echo Found $job ... Exit without error
-    exit 0;
+  for job in $(curl -ks https://jenkins/queue/api/json); do
+    if echo $job | grep -q $JOB_NAME; then
+      echo Found $job ... Exit without error
+      exit 0;
+    fi
   done
 }
 
