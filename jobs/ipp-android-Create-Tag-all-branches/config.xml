@@ -162,6 +162,8 @@ updateManifests() {
   (
   echo Update $xmlFile file, create a new Commit and create this TAG in repo_manifests too
   cd ../repo_manifests
+  git config --global user.name &quot;Jenkins&quot;
+  git config --global user.email devops@audiocodes.com
   
   for xmlFile in $(find . -name &quot;*.xml&quot; -type f -print); do
     echo -------------- $xmlFile -----------------
@@ -296,9 +298,8 @@ checkTheQueue() {
 }
 
 #######################################################################################
-# Create (if not exist yet) the repo_manifests and find the last TAG
-# Output = LastManifestTag
-AddAndFetchRepository() {
+# Add all repositories according all the xml files
+AddAndFetchAllRepository() {
 
   allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | \
              sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
@@ -314,11 +315,39 @@ AddAndFetchRepository() {
 }
 
 #######################################################################################
+# Add and fetch a repository
+# Input: repoName
+AddAndFetchRepository() {
+    
+  shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev | \
+              awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+  echo Config $repoName to be $shortName
+  git config remote.$shortName.url ssh://jenkins@gerrit:29418/$repoName
+  git fetch --tags --progress ssh://jenkins@gerrit:29418/$repoName \
+      +refs/heads/*:refs/remotes/$shortName/* \
+      +refs/tags/*:refs/tags/$shortName/*
+}
+
+#######################################################################################
+# Check if another change (submit) was done and add these repositories to TAG them 
+checkOldSubmit() {
+  echo Check old builds...
+  
+  previousBuild=$((BUILD_ID-1))
+  displayName=&quot;&quot;
+  while [ -z &quot;$displayName&quot; ]; do
+    displayName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/$previousBuild/api/json?tree=displayName | \
+                  sed &apos;s:.*#$previousBuild -::; s:&quot;.*::&apos;)
+    repoName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/$previousBuild/injectedEnvVars/export | \
+               grep GERRIT_PROJECT  | cut -d&apos;=&apos; -f2)
+    AddAndFetchRepository         
+  done
+}
+
+#######################################################################################
 # The main program
 # If found new commit, execute &apos;createTag&apos;
 
-git config --global user.name &quot;Jenkins&quot;
-git config --global user.email devops@audiocodes.com
 echo Starting...
 git status
 git clean -fd
@@ -333,17 +362,11 @@ echo Check the queue, if found exit ...
 checkTheQueue
 
 echo Config and fetch the wake up repository
-shortName=$(echo $GERRIT_PROJECT | rev | cut -d/ -f 1 | rev | \
-                awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
-echo Config $GERRIT_PROJECT to be $shortName
-git config remote.$shortName.url ssh://jenkins@gerrit:29418/$GERRIT_PROJECT
-git fetch --tags --progress ssh://jenkins@gerrit:29418/$GERRIT_PROJECT \
-    +refs/heads/*:refs/remotes/$shortName/* \
-    +refs/tags/*:refs/tags/$shortName/*
+repoName=$GERRIT_PROJECT
+AddAndFetchRepository
     
 git remote -v
 
-displayName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/1641/api/json?tree=displayName | sed &apos;s:.*#1641 -::; s:&quot;.*::&apos;)
 
 exit 0;
 
