@@ -329,6 +329,7 @@ mainBranch=master
 echo Sleep 5 minutes before starting check commits
 sleep 300
 
+echo Check the queue, if found exit ...
 checkTheQueue
 
 echo Config and fetch the wake up repository
@@ -341,6 +342,8 @@ git fetch --tags --progress ssh://jenkins@gerrit:29418/$GERRIT_PROJECT \
     +refs/tags/*:refs/tags/$shortName/*
     
 git remote -v
+
+displayName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/1641/api/json?tree=displayName | sed &apos;s:.*#1641 -::; s:&quot;.*::&apos;)
 
 exit 0;
 
