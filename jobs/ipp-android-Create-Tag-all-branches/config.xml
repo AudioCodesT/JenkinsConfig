@@ -335,12 +335,16 @@ checkOldSubmit() {
   
   previousBuild=$((BUILD_ID-1))
   displayName=&quot;&quot;
-  while [ -z &quot;$displayName&quot; ]; do
+  counter=0
+  while [ $counter -lt 10 ]; do
     displayName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/$previousBuild/api/json?tree=displayName | \
                   sed &apos;s:.*#$previousBuild -::; s:&quot;.*::&apos;)
+    if [ -n &quot;$displayName&quot; ]; then break; fi
     repoName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/$previousBuild/injectedEnvVars/export | \
                grep GERRIT_PROJECT  | cut -d&apos;=&apos; -f2)
-    AddAndFetchRepository         
+    if [ -z &quot;$repoName&quot; ]; then AddAndFetchRepository; fi
+    previousBuild=$((previousBuild-1))
+    counter=$((counter+1))
   done
 }
 
