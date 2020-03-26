@@ -110,7 +110,7 @@ python arm_azure_image_prepare.py $Router_vmIP after_reboot
 python arm_azure_image_prepare.py $Router_vmIP finish_install
 sleep 60
 
-#Lina.Fine@audiocodes.com,Moshe.Ben-Eliezer@audiocodes.com,Liav.Elias@audiocodes.com,cc:ben.magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com
+#
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
@@ -151,7 +151,8 @@ azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=
 
 
 Write-Output &quot;Create a new container&quot;
-az storage container create --account-name ${vhd_storage_account} --name ${container_name}
+az storage container create  --connection-string ${connection_string} --name ${container_name}
+
 
 Write-Output &quot;copy to azure storage&quot;
 azcopy copy &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite &quot;true&quot;
@@ -194,7 +195,7 @@ Write-Output &quot;Output Download SAS URL to file&quot;
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>cc:ben.magriso@audiocodes.com</recipientList>
+      <recipientList>Lina.Fine@audiocodes.com,Moshe.Ben-Eliezer@audiocodes.com,Liav.Elias@audiocodes.com,cc:ben.magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
