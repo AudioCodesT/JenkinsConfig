@@ -85,6 +85,8 @@ imagesListOf7_6 = []
 imagesListOf7_6_1000 = []
 imagesListOf7_6_2000 = []
 imagesListOf7_8 = []
+imagesListOf7_8_1000 = []
+imagesListOf7_8_2000 = []
 # Loop through each image of our current instance
 print &quot;Start to check from all the images for ovoc AMIs&quot;
 for image in images:
@@ -100,6 +102,10 @@ for image in images:
         for tag in image.tags:
              if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.8&apos;:
                 imagesListOf7_8.append(image)
+             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.8.1000&apos;:
+                imagesListOf7_8_1000.append(image)
+             if tag[&apos;Key&apos;] == &apos;Branch&apos; and tag[&apos;Value&apos;] == &apos;7.8.2000&apos;:
+                imagesListOf7_8_2000.append(image)                
  
 #print &quot;images in Branch 7.6&quot;
 #deleteAmis(imagesListOf7_6)
@@ -107,9 +113,12 @@ for image in images:
 #deleteAmis(imagesListOf7_6_1000) 
 #print &quot;images in Branch 7.6.2000&quot;
 #deleteAmis(imagesListOf7_6_2000)  
-print &quot;images in Branch 7.8&quot;
-deleteAmis(imagesListOf7_8)   
- 
+#print &quot;images in Branch 7.8&quot;
+#deleteAmis(imagesListOf7_8)   
+#print &quot;images in Branch 7.8.1000&quot;
+#deleteAmis(imagesListOf7_8_1000)   
+#print &quot;images in Branch 7.8.2000&quot;
+deleteAmis(imagesListOf7_8_2000)   
 EOS</command>
     </hudson.tasks.Shell>
   </builders>
