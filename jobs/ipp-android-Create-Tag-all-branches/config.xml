@@ -56,181 +56,76 @@ uboot/c450hd_uboot</description>
       <paramsToUseForLimit></paramsToUseForLimit>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>dvf101</name>
-        <refspec>+refs/heads/*:refs/remotes/dvf101/* +refs/tags/*:refs/tags/dvf101/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>dvf101-kernel</name>
-        <refspec>+refs/heads/*:refs/remotes/dvf101-kernel/* +refs/tags/*:refs/tags/dvf101-kernel/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>pkgSettings</name>
-        <refspec>+refs/heads/*:refs/remotes/pkgSettings/* +refs/tags/*:refs/tags/pkgSettings/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_apps_Settings</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>pkgMSPartner</name>
-        <refspec>+refs/heads/*:refs/remotes/pkgMSPartner/* +refs/tags/*:refs/tags/pkgMSPartner/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_services_MSPartner</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>systemEngine</name>
-        <refspec>+refs/heads/*:refs/remotes/systemEngine/* +refs/tags/*:refs/tags/systemEngine/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_update_engine</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>systemCrt</name>
-        <refspec>+refs/heads/*:refs/remotes/systemCrt/* +refs/tags/*:refs/tags/systemCrt/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_ca_certificates</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>platformNetd</name>
-        <refspec>+refs/heads/*:refs/remotes/platformNetd/* +refs/tags/*:refs/tags/platformNetd/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/platform_system_netd</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>platformBuild</name>
-        <refspec>+refs/heads/*:refs/remotes/platformBuild/* +refs/tags/*:refs/tags/platformBuild/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/platform_build</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>pkgLatinIME</name>
-        <refspec>+refs/heads/*:refs/remotes/pkgLatinIME/* +refs/tags/*:refs/tags/pkgLatinIME/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_inputmethods_LatinIME</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>frameworksAV</name>
-        <refspec>+refs/heads/*:refs/remotes/frameworksAV/* +refs/tags/*:refs/tags/frameworksAV/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_av</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>frameworksBase</name>
-        <refspec>+refs/heads/*:refs/remotes/frameworksBase/* +refs/tags/*:refs/tags/frameworksBase/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_base</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>frameworksNtv</name>
-        <refspec>+refs/heads/*:refs/remotes/frameworksNtv/* +refs/tags/*:refs/tags/frameworksNtv/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_native</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>frameworksNet</name>
-        <refspec>+refs/heads/*:refs/remotes/frameworksNet/* +refs/tags/*:refs/tags/frameworksNet/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_opt_net_ethernet</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>tinyalsa</name>
-        <refspec>+refs/heads/*:refs/remotes/tinyalsa/* +refs/tags/*:refs/tags/tinyalsa/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/external_tinyalsa</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>common</name>
-        <refspec>+refs/heads/*:refs/remotes/common/* +refs/tags/*:refs/tags/common/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_audiocodes_common</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>uboot</name>
-        <refspec>+refs/heads/*:refs/remotes/uboot/* +refs/tags/*:refs/tags/uboot/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/C450/C450-uboot</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>x86emu</name>
-        <refspec>+refs/heads/*:refs/remotes/x86emu/* +refs/tags/*:refs/tags/x86emu/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/device_generic_x86emu</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>system_core</name>
-        <refspec>+refs/heads/*:refs/remotes/system_core/* +refs/tags/*:refs/tags/system_core/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/system_core</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>legacy</name>
-        <refspec>+refs/heads/*:refs/remotes/legacy/* +refs/tags/*:refs/tags/legacy/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/hardware_libhardware_legacy</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>Lib-ev-app</name>
-        <refspec>+refs/heads/*:refs/remotes/Lib-ev-app/* +refs/tags/*:refs/tags/Lib-ev-app/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Lib/Lib-ev-app</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>Lib-app</name>
-        <refspec>+refs/heads/*:refs/remotes/Lib-app/* +refs/tags/*:refs/tags/Lib-app/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Lib/Lib-app</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>Bluetooth</name>
-        <refspec>+refs/heads/*:refs/remotes/Bluetooth/* +refs/tags/*:refs/tags/Bluetooth/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/packages_apps_Bluetooth</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>Telephony</name>
-        <refspec>+refs/heads/*:refs/remotes/Telephony/* +refs/tags/*:refs/tags/Telephony/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/frameworks_opt_telephony</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-      <hudson.plugins.git.UserRemoteConfig>
-        <name>linphone</name>
-        <refspec>+refs/heads/*:refs/remotes/linphone/* +refs/tags/*:refs/tags/linphone/*</refspec>
-        <url>ssh://jenkins@gerrit:29418/IPP/Android/linphone-android</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>**</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
-      <hudson.plugins.git.extensions.impl.CloneOption>
-        <shallow>false</shallow>
-        <noTags>false</noTags>
-        <reference></reference>
-        <timeout>20</timeout>
-        <depth>0</depth>
-        <honorRefspec>false</honorRefspec>
-      </hudson.plugins.git.extensions.impl.CloneOption>
-    </extensions>
-  </scm>
+  <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>REG_EXP</compareType>
+          <pattern>IPP\/Android\/?.*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>REG_EXP</compareType>
+          <pattern>IPP\/Lib\/Lib-.*</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <dynamicGerritProjects class="empty-list"/>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>false</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>BASE64</commentTextParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents class="linked-list">
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>false</excludeNoCodeChange>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -403,6 +298,8 @@ mainBranch=master
 
 echo Sleep 5 minutes before starting check commits
 sleep 300
+
+exit 0;
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
