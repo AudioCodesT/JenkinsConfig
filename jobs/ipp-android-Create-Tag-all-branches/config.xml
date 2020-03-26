@@ -88,6 +88,28 @@ uboot/c450hd_uboot</description>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/C450/C450-uboot</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>*/c450hd_uboot</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/apps/emsc</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
       </gerritProjects>
       <dynamicGerritProjects class="empty-list"/>
       <skipVote>
@@ -260,6 +282,18 @@ createLocalManifests() {
 }
 
 #######################################################################################
+# Check if another job is waiting in queue, 
+# If yes, exit and give the new build running - it will include this change too
+# If no, continue this build 
+checkTheQueue() {
+  echo Check the queue...
+  for job in $(curl -ks https://$jenkins/queue/api/json | grep $JOB_NAME); do
+    echo Found $job ... Exit without error
+    exit 0;
+  done
+}
+
+#######################################################################################
 # Create (if not exist yet) the repo_manifests and find the last TAG
 # Output = LastManifestTag
 AddAndFetchRepository() {
@@ -285,7 +319,6 @@ git config --global user.name &quot;Jenkins&quot;
 git config --global user.email devops@audiocodes.com
 echo Starting...
 git status
-git remote -v
 git clean -fd
 subject=&quot;&quot;
 LastManifestTag=&quot;&quot;
@@ -293,6 +326,19 @@ mainBranch=master
 
 echo Sleep 5 minutes before starting check commits
 sleep 300
+
+checkTheQueue
+
+echo Config and fetch the wake up repository
+shortName=$(echo $GERRIT_PROJECT | rev | cut -d/ -f 1 | rev | \
+                awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+echo Config $GERRIT_PROJECT to be $shortName
+git config remote.$shortName.url ssh://jenkins@gerrit:29418/$GERRIT_PROJECT
+git fetch --tags --progress ssh://jenkins@gerrit:29418/$GERRIT_PROJECT \
+    +refs/heads/*:refs/remotes/$shortName/* \
+    +refs/tags/*:refs/tags/$shortName/*
+    
+git remote -v
 
 exit 0;
 
