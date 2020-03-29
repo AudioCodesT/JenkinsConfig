@@ -277,10 +277,10 @@ createLocalManifests() {
   git reset --hard
   git pull --rebase
   if [ ! -f &quot;$BRANCH.xml&quot; ]; then
-    echo Checkout Manifest to $BRANCH due to $BRANCH.xml doesn&apos;t exist
+    echo Checkout Manifest to $BRANCH due to $BRANCH.xml does not exist
     git checkout -f $BRANCH
   fi
-  LastManifestTag=`git describe --tags --abbrev=0 --first-parent`
+  LastManifestTag=$(git describe --tags --abbrev=0 --first-parent)
 }
 
 #######################################################################################
