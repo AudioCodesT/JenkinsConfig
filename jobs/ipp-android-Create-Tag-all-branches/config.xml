@@ -352,6 +352,7 @@ checkOldSubmit() {
 #######################################################################################
 # The main program
 # If found new commit, execute &apos;createTag&apos;
+# What
 
 echo Starting...
 git status
@@ -374,7 +375,7 @@ checkOldSubmit
 
 git remote -v
 
-exit 0;
+exit 0
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
