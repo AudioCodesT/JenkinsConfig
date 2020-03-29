@@ -59,7 +59,7 @@ uboot/c450hd_uboot</description>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -343,6 +343,7 @@ checkOldSubmit() {
                grep GERRIT_PROJECT  | cut -d&apos;=&apos; -f2)
     if [ -z &quot;$repoName&quot; ]; then AddAndFetchRepository; fi
     previousBuild=$((previousBuild-1))
+    if [ $previousBuild -eq 0 ]; then break; fi
     counter=$((counter+1))
   done
 }
