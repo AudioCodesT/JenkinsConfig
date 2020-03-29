@@ -317,6 +317,7 @@ AddAndFetchAllRepository() {
 #######################################################################################
 # Add and fetch a repository
 # Input: repoName
+#
 AddAndFetchRepository() {
     
   shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev | \
@@ -360,7 +361,7 @@ LastManifestTag=&quot;&quot;
 mainBranch=master
 
 echo Sleep 5 minutes before starting check commits
-sleep 300
+#sleep 300
 
 echo Check the queue, if found exit ...
 checkTheQueue
@@ -477,7 +478,7 @@ echo Create TAG for the last user
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
           <email>
-            <recipientList>yossim,Shuky.Riechard</recipientList>
+            <recipientList>yossim</recipientList>
             <subject>A commit to repo_manifests was done</subject>
             <body>Add the new repo into $BUILD_URL (If needed)</body>
             <recipientProviders/>
@@ -518,7 +519,7 @@ echo Create TAG for the last user
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
-      <recipients>shuky.riechard yossim ben.magriso</recipients>
+      <recipients>yossim</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
