@@ -356,10 +356,13 @@ echo Starting...
 subject=&quot;&quot;
 LastManifestTag=&quot;&quot;
 mainBranch=master
-git init 
+git init
+
+echo Clean all old previous repositories
+for all in $(git remote); do git remote remove $all; done
 
 echo Sleep 5 minutes before starting check commits
-#sleep 300
+sleep 300
 
 echo Check the queue, if found exit ...
 checkTheQueue
