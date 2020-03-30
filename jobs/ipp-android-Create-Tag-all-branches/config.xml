@@ -1,7 +1,14 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests</description>
+  <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests&#xd;
+1) Config and fetch the wake up repository&#xd;
+2) Check previous builds that were not TAGed and config and fetch them too&#xd;
+3) If it is a Manifest, TAG it and exit&#xd;
+4) Check the last Manifest TAG and increase it by one&#xd;
+5) TAG the new commit and create a new Commit in Manifest after updating all relevant xml files&#xd;
+6) Go over all previous repositories builds and repeat #5 (use the same new Commit)&#xd;
+7) TAG the manifest repository</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
@@ -148,7 +155,7 @@ uboot/c450hd_uboot</description>
     <hudson.tasks.Shell>
       <command>
 #######################################################################################
-# Create the new TAG in the repository and update the relevant line of this repository in the default.xml file
+# Create the new TAG in the repository and update the relevant line of this repository in all xml files
 # Input = The local repository name: $localRepoName, and the full repository name: $repoToTAG
 # Output = No output
 updateManifests() {
@@ -285,12 +292,12 @@ createLocalManifests() {
 
 #######################################################################################
 # Check if another job is waiting in queue, 
-# If yes, exit and give the new build running - it will include this change too
+# If yes, exit and let the newer build run - it will include this current change too
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
   if $(curl -ks https://jenkins/queue/api/json | grep -q $JOB_NAME); then
-    echo Found $JOB_NAME ... Exit without error
+    echo Found a newer build of job $JOB_NAME ... Exit without error
     exit 0;
   fi
 }
@@ -320,6 +327,7 @@ AddAndFetchRepository() {
     
   shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev | \
               awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+  shortName=$shortName
   echo Config $repoName to be $shortName
   git config remote.$shortName.url ssh://jenkins@gerrit:29418/$repoName
   git fetch --tags --progress ssh://jenkins@gerrit:29418/$repoName \
@@ -330,17 +338,17 @@ AddAndFetchRepository() {
 #######################################################################################
 # Check if another change (submit) was done and add these repositories to TAG them 
 checkOldSubmit() {
-  echo Check old builds...
+  echo Check previous builds...
   
   previousBuild=$((BUILD_ID-1))
   counter=0
-  while [ $counter -lt 10 ]; do
+  while [ $counter -lt 30 ]; do
     displayName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/api/json?tree=displayName | \
                   sed &apos;s:.*displayName&quot;::; s: ::g&apos; | cut -d&apos;&quot;&apos; -f2 | cut -d- -f2)
     if [ -n &quot;$displayName&quot; ]; then break; fi
     repoName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/injectedEnvVars/export | \
                grep GERRIT_PROJECT  | cut -d&apos;=&apos; -f2)
-    if [ -z &quot;$repoName&quot; ]; then AddAndFetchRepository; fi
+    if [ -n &quot;$repoName&quot; ]; then AddAndFetchRepository; fi
     previousBuild=$((previousBuild-1))
     if [ $previousBuild -eq 0 ]; then break; fi
     counter=$((counter+1))
@@ -350,7 +358,6 @@ checkOldSubmit() {
 #######################################################################################
 # The main program
 # If found new commit, execute &apos;createTag&apos;
-# What
 
 echo Starting...
 subject=&quot;&quot;
@@ -364,16 +371,6 @@ for all in $(git remote); do git remote remove $all; done
 echo Sleep 5 minutes before starting check commits
 sleep 300
 
-echo Check the queue, if found exit ...
-checkTheQueue
-
-echo Config and fetch the wake up repository
-repoName=$GERRIT_PROJECT
-AddAndFetchRepository
-
-checkOldSubmit    
-git remote -v
-
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
   echo &quot;No branch found, set to main branch: $mainBranch&quot;
@@ -384,12 +381,13 @@ BRANCH=$GERRIT_BRANCH
 # If the job was executed manually, $PROJECT should be defined
 if [ ! -z &quot;$PROJECT&quot; ]; then GERRIT_PROJECT=$PROJECT; fi
 
-exit 0
-
 if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
   #Create a TAG on manifests and exit
   createLocalManifests
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
+  
+  exit 0
+  
   git tag -a -m &quot;Jenkins auto tag&quot; $NEWTAG
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
@@ -399,6 +397,18 @@ if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; th
   git diff $LastManifestTag..$NEWTAG
   exit 0
 fi
+
+echo Check the queue, if found exit ...
+checkTheQueue
+
+echo Config and fetch the wake up repository
+repoName=$GERRIT_PROJECT
+AddAndFetchRepository
+
+checkOldSubmit    
+git remote -v
+
+exit 0
 
 # If the job was automatically triggered, the $GERRIT_PROJECT should be defined.
 # If not (no matter, automatically or manually), skip this &apos;checkout&apos; and hope the next commands will find the $MainlocalRepoName
