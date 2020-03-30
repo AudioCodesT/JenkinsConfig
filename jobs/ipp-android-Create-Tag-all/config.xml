@@ -325,9 +325,7 @@ AddAndFetchAllRepository() {
 #
 AddAndFetchRepository() {
     
-  shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev | \
-              awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
-  shortName=$shortName
+  shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)
   echo Config $repoName to be $shortName
   git config remote.$shortName.url ssh://jenkins@gerrit:29418/$repoName
   git fetch --tags --progress ssh://jenkins@gerrit:29418/$repoName \
