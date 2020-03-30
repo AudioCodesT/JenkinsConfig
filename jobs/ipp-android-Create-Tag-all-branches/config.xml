@@ -335,10 +335,10 @@ checkOldSubmit() {
   previousBuild=$((BUILD_ID-1))
   counter=0
   while [ $counter -lt 10 ]; do
-    displayName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/$previousBuild/api/json?tree=displayName | \
+    displayName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/api/json?tree=displayName | \
                   sed &apos;s:.*displayName&quot;::; s: ::g&apos; | cut -d&apos;&quot;&apos; -f2 | cut -d- -f2)
     if [ -n &quot;$displayName&quot; ]; then break; fi
-    repoName=$(curl -ks https://jenkins/job/ipp-android-Create-Tag/$previousBuild/injectedEnvVars/export | \
+    repoName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/injectedEnvVars/export | \
                grep GERRIT_PROJECT  | cut -d&apos;=&apos; -f2)
     if [ -z &quot;$repoName&quot; ]; then AddAndFetchRepository; fi
     previousBuild=$((previousBuild-1))
@@ -372,10 +372,7 @@ repoName=$GERRIT_PROJECT
 AddAndFetchRepository
 
 checkOldSubmit    
-
 git remote -v
-
-exit 0
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
@@ -386,6 +383,8 @@ BRANCH=$GERRIT_BRANCH
 
 # If the job was executed manually, $PROJECT should be defined
 if [ ! -z &quot;$PROJECT&quot; ]; then GERRIT_PROJECT=$PROJECT; fi
+
+exit 0
 
 if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
   #Create a TAG on manifests and exit
