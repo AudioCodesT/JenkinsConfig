@@ -303,23 +303,6 @@ checkTheQueue() {
 }
 
 #######################################################################################
-# Add all repositories according all the xml files
-AddAndFetchAllRepository() {
-
-  allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | \
-             sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
-  for Repo in $allRepos; do 
-    shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | \
-                awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
-    echo Config $Repo to be $shortName
-    git config remote.$shortName.url ssh://jenkins@gerrit:29418/$Repo
-    git fetch --tags --progress ssh://jenkins@gerrit:29418/$Repo \
-      +refs/heads/*:refs/remotes/$shortName/* \
-      +refs/tags/*:refs/tags/$shortName/*
-  done
-}
-
-#######################################################################################
 # Add and fetch a repository
 # Input: repoName
 #
@@ -475,6 +458,23 @@ echo Create TAG for the last user
 #  exit 2
 #fi
 
+#######################################################################################
+# Add all repositories according all the xml files
+# Currently not in use at all
+AddAndFetchAllRepository() {
+
+  allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | \
+             sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
+  for Repo in $allRepos; do 
+    shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | \
+                awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+    echo Config $Repo to be $shortName
+    git config remote.$shortName.url ssh://jenkins@gerrit:29418/$Repo
+    git fetch --tags --progress ssh://jenkins@gerrit:29418/$Repo \
+      +refs/heads/*:refs/remotes/$shortName/* \
+      +refs/tags/*:refs/tags/$shortName/*
+  done
+}
 
 </command>
       <unstableReturn>2</unstableReturn>
