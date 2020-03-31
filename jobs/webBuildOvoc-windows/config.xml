@@ -250,8 +250,11 @@ then
                         sed -i -- &quot;s/%version%/${BUILD_NUMBER}/g&quot; ${WORKSPACE}/cypress/support/config.ts
                         echo &quot;RUN: yarn run proxyServer&quot;
                         yarn run proxyServer &amp; sleep 15
-                        echo &quot;RUN: yarn test:jenkins&quot;
-                        yarn test:jenkins
+                        if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.8.2000&quot; ]]
+                        then
+                        	echo &quot;RUN: yarn test:jenkins&quot;
+                        	yarn test:jenkins
+                        fi
             fi
             echo &quot;RUN: yarn run distFull&quot;
             yarn run distFull
