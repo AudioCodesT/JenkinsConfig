@@ -296,10 +296,12 @@ createLocalManifests() {
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
-  if $(curl -ks https://jenkins/queue/api/json | grep -q $JOB_NAME); then
-    echo Found a newer build of job $JOB_NAME ... Exit without error
-    exit 0;
-  fi
+   for repoName in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
+                 sed &apos;s:ipp-android-Create-Tag:\n:g&apos; | grep GERRIT_PROJECT | \
+                 sed &apos;s:.*GERRIT_PROJECT=::; s:\\n.*::&apos;); do
+    echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
+    AddAndFetchRepository
+  done
 }
 
 #######################################################################################
