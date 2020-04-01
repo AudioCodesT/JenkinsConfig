@@ -153,7 +153,7 @@ echo &quot;finish submodule&quot;
 fi
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
-
+git config core.longpaths=true
 # checking if the private-bower is running
 if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.4&quot;* ]] || [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6&quot;* ]]
 then
