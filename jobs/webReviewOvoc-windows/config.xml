@@ -178,8 +178,8 @@ else
 
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
- 	echo &quot;RUN: npm install&quot;
-    npm install
+ 	echo &quot;RUN: yarn install&quot;
+    yarn install
     echo &quot;RUN: yarn run distTest&quot;
     yarn run distTest 
    #kill the Proxy Server process
