@@ -2,7 +2,8 @@
 <project>
   <actions/>
   <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests&#xd;
-1) Config and fetch the wake up repository&#xd;
+1) Config and fetch the wake up repositoryand wait 5 minutes&#xd;
+2) Check newer builds waiting in queue and add and fetch their repositories&#xd;
 2) Check previous builds that were not TAGed and config and fetch them too&#xd;
 3) If it is a Manifest, TAG it and exit&#xd;
 4) Check the last Manifest TAG and increase it by one&#xd;
@@ -368,9 +369,6 @@ if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; th
   #Create a TAG on manifests and exit
   createLocalManifests
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
-  
-  exit 0
-  
   git tag -a -m &quot;Jenkins auto tag&quot; $NEWTAG
   manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
   git push origin HEAD:$manifestBranch
@@ -390,8 +388,6 @@ AddAndFetchRepository
 
 checkOldSubmit    
 git remote -v
-
-exit 0
 
 # If the job was automatically triggered, the $GERRIT_PROJECT should be defined.
 # If not (no matter, automatically or manually), skip this &apos;checkout&apos; and hope the next commands will find the $MainlocalRepoName
