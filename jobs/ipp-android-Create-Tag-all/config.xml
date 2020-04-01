@@ -4,12 +4,12 @@
   <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests&#xd;
 1) Config and fetch the wake up repositoryand wait 5 minutes&#xd;
 2) Check newer builds waiting in queue and add and fetch their repositories&#xd;
-2) Check previous builds that were not TAGed and config and fetch them too&#xd;
-3) If it is a Manifest, TAG it and exit&#xd;
-4) Check the last Manifest TAG and increase it by one&#xd;
-5) TAG the new commit and create a new Commit in Manifest after updating all relevant xml files&#xd;
-6) Go over all previous repositories builds and repeat #5 (use the same new Commit)&#xd;
-7) TAG the manifest repository</description>
+3) Check previous builds that were not TAGed and config and fetch them too&#xd;
+4) If it is a Manifest, TAG it and exit&#xd;
+5) Check the last Manifest TAG and increase it by one&#xd;
+6) TAG the new commit and create a new Commit in Manifest after updating all relevant xml files&#xd;
+7) Go over all previous repositories builds and repeat #5 (use the same new Commit)&#xd;
+8) TAG the manifest repository</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
