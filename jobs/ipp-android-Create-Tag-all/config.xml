@@ -297,7 +297,7 @@ createLocalManifests() {
 checkTheQueue() {
   echo Check the queue...
    for repoName in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
-                 sed &apos;s:ipp-android-Create-Tag:\n:g&apos; | grep GERRIT_PROJECT | \
+                 sed &quot;s:$JOB_NAME:\n:g&quot; | grep GERRIT_PROJECT | \
                  sed &apos;s:.*GERRIT_PROJECT=::; s:\\n.*::&apos;); do
     echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
     AddAndFetchRepository
@@ -381,7 +381,7 @@ if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; th
   exit 0
 fi
 
-echo Check the queue, if found exit ...
+echo Check the queue, if found than add and fetch them
 checkTheQueue
 
 echo Config and fetch the wake up repository
