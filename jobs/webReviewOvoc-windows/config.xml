@@ -180,7 +180,7 @@ else
 	yarn config set strict-ssl false
  	echo &quot;RUN: npm install&quot;
     npm install
-    echo &quot;RUN: yarn run dist&quot;
+    echo &quot;RUN: yarn run distTest&quot;
     yarn run distTest 
    #kill the Proxy Server process
    pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
