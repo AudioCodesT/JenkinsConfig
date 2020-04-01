@@ -208,12 +208,10 @@ createTag() {
     repoToTAG=$(echo $eachRepo | cut -d: -f2)
     localRepoName=$(echo $eachRepo | cut -d: -f1)
     if [ &quot;$localRepoName&quot; == &quot;$MainlocalRepoName&quot; ]; then continue; fi
-    lastDestBranch=&quot;&quot;
     for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
       echo -------------- $xmlFile -----------------
       destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
-      if [ &quot;$lastDestBranch&quot; == &quot;$destBranch&quot; ]; then continue; fi
-      lastDestBranch=$destBranch
+      if [ &quot;$BRANCH&quot; != &quot;$destBranch&quot; ]; then continue; fi
       GERRIT_BRANCH=$localRepoName/$destBranch
 
       # Check if this branch exist in this repository
