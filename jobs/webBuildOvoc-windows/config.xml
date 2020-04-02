@@ -263,11 +263,12 @@ then
             then
             	perl -pi -e &quot;s/%version%/${BUILD_NUMBER}/g&quot; dist/ovoc/index.html
                 cat dist/ovoc/index.html
-                #PATH=${PATH}:&quot;/c/Program Files/7-Zip&quot;
-    			#7z.exe a -r dist/ovoc-ui.zip dist/ovoc/.
-            fi
+                PATH=${PATH}:&quot;/c/Program Files/7-Zip&quot;
+    			7z.exe a -r dist/ovoc-ui.zip dist/ovoc/.
+            else
             	echo &quot;RUN:yarn run zip&quot;
             	yarn run zip 
+            fi
      fi
       
      
