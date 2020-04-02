@@ -138,7 +138,6 @@ set -e
 cd $WORKSPACE
 #yarn dist failing without this command (memory out of heap failure)
 export NODE_OPTIONS=&quot;--max_old_space_size=4096&quot;
-rm -rf package-lock.json yarn.lock
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
