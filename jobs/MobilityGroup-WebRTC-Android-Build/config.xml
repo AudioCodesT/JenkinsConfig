@@ -56,7 +56,7 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
 ANDROID_HOME=/home/ubuntu/android-sdk-linux
 PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
 </propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.54.2">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
@@ -168,7 +168,7 @@ echo NEWTAG=$NEWTAG &gt; prop</command>
 cd SDK
 zip -r Javadocs.zip Javadocs
 cd ${WORKSPACE}
-zip -r -x=&apos;*prop*&apos; -x=&apos;*.git*&apos; -x=&apos;*SDK*&apos; -x=&apos;*DemoClient/.gradle*&apos; -x=&apos;*DemoClient/.idea*&apos; -x=&apos;*DemoClient/webrtcclient/build*&apos; -x=&apos;*DemoClient/webrtcclient/webrtcclient.iml*&apos; -x=&apos;*DemoClient/DemoClient.iml*&apos;  DemoClient.zip *</command>
+zip -r -x=&apos;*prop*&apos; -x=&apos;*.git*&apos; -x=&apos;*SDK*&apos; -x=&apos;*DemoClient/.gradle*&apos; -x=&apos;*DemoClient/.idea*&apos; -x=&apos;*DemoClient/webrtcclient/build&apos; -x=&apos;*DemoClient/webrtcclient/webrtcclient.iml*&apos; -x=&apos;*DemoClient/DemoClient.iml*&apos;  DemoClient.zip *</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.1.5">
       <info>
