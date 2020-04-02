@@ -33,10 +33,10 @@
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>VersionName</name>
+          <name>GERRIT_REFNAME</name>
           <description>Insert value only if you need to jump in version name !
 Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.1.3)</description>
-          <defaultValue></defaultValue>
+          <defaultValue>refs/tags/1.1.5_12</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -49,7 +49,6 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -73,14 +72,13 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <refspec>+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}</refspec>
         <url>ssh://jenkins@gerrit:29418/MobilityGroup/WebRTC/Android</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>refs/heads/${GERRIT_BRANCH}</name>
+        <name>${GERRIT_REFNAME}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -117,27 +115,11 @@ cp SDK/webrtcsdk/build/outputs/aar/webrtcsdk-release.aar DemoClient/webrtcsdk-re
 
 #get Last Tag and all the commits since the last tag in reverse list
 
-LastTag=$(git describe --tags --abbrev=0 --first-parent)
-LastVersionName=$(echo $LastTag | cut -d&apos;_&apos; -f1)
-echo $LastVersionName
-LastVersionCode=$(echo $LastTag | cut -d&apos;_&apos; -f2)
-echo $LastVersionCode
-NewVersionName=`echo $LastVersionName | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastVersionName | awk -F. &apos;{print $NF+1}&apos;`
+
+NEWTAG=&quot;1.1.5_12&quot;
+NewVersionName=$(echo $NEWTAG | cut -d&apos;_&apos; -f1)
 echo $NewVersionName
-((NewVersionCode=${LastVersionCode}+1))
-echo $NewVersionCode
-#if VersionName is not empty then push VersionName as the new Tag
-if [ -n &quot;$VersionName&quot; ]
-then
-	echo &quot;Version Name entered by the User&quot;
-    if [[ $VersionName =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]
-    then
-    	NewVersionName=${VersionName}
-    else
-    	echo &quot;The VersionName parameter need to contain only version name, for example: 1.1.3&quot;
-        exit 1
-    fi
-fi
+NewVersionCode=$(echo $NEWTAG | cut -d&apos;_&apos; -f2)
 echo &quot;NewVersionName_NewVersionCode: ${NewVersionName}_${NewVersionCode}&quot;
 NEWTAG=&quot;${NewVersionName}_${NewVersionCode}&quot;
 
@@ -178,37 +160,11 @@ zip -r -x=&apos;*prop*&apos; -x=&apos;*.git*&apos; -x=&apos;*SDK*&apos; -x=&apos
     </EnvInjectBuilder>
   </builders>
   <publishers>
-    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
-      <configVersion>2</configVersion>
-      <pushMerge>false</pushMerge>
-      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
-      <forcePush>false</forcePush>
-      <tagsToPush>
-        <hudson.plugins.git.GitPublisher_-TagToPush>
-          <targetRepoName>origin</targetRepoName>
-          <tagName>${NEWTAG}</tagName>
-          <tagMessage>Jenkins Auto tagging</tagMessage>
-          <createTag>true</createTag>
-          <updateTag>true</updateTag>
-        </hudson.plugins.git.GitPublisher_-TagToPush>
-      </tagsToPush>
-    </hudson.plugins.git.GitPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.21">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo &apos;origin&apos;).*</regexpForRerun>
-      <rerunIfUnstable>false</rerunIfUnstable>
-      <rerunMatrixPart>false</rerunMatrixPart>
-      <checkRegexp>true</checkRegexp>
-      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
-      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>5</delay>
-      </delay>
-      <maxSchedule>3</maxSchedule>
-    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
