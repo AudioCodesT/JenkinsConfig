@@ -151,7 +151,7 @@ echo &quot;git submodule update&quot;
 git submodule update
 echo &quot;finish submodule&quot;
 # delete yarn.lock file which failing the build (auto generated in yarn install)
-rm -rf yarn.lock
+#rm -rf yarn.lock
 fi
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
@@ -180,7 +180,6 @@ else
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
  	echo &quot;RUN: yarn install&quot;
-    yarn cache clean
     yarn install
     echo &quot;RUN: yarn run distTest&quot;
     yarn run distTest 
