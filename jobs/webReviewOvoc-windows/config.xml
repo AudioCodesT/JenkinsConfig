@@ -179,6 +179,7 @@ else
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
  	echo &quot;RUN: yarn install&quot;
+    yarn cache clean
     yarn install
     echo &quot;RUN: yarn run distTest&quot;
     yarn run distTest 
