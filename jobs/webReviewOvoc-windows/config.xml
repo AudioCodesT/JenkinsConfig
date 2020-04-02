@@ -129,8 +129,9 @@ Jenkins reply to gerrit code review Verify+1 if build  has been succeed or Verif
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!C:\Program Files\Git\bin\bash --login -i
-##!c:\cygwin64\bin\bash --login -i
+      <command>#!c:\cygwin64\bin\bash --login -i
+##!C:\Program Files\Git\bin\bash --login -i
+
 set -e
 cd $WORKSPACE
 
