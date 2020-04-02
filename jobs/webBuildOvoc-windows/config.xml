@@ -260,6 +260,7 @@ then
             echo &quot;RUN: yarn run distFull&quot;
             yarn run distFull
             #create zip files
+            echo &quot;generating zip file&quot;
             if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.4&quot;* &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.6&quot;* &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.8&quot; ]]
             then
             	PATH=${PATH}:&quot;/c/Program Files/7-Zip&quot;
