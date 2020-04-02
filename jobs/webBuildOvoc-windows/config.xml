@@ -270,7 +270,6 @@ then
                 	perl -pi -e &quot;s/%version%/${BUILD_NUMBER}/g&quot; dist/ovoc/index.html
                     7z.exe a -r dist/ovoc-ui.zip dist/ovoc/.
                 fi
-    			7z.exe a -r dist/ovoc-ui.zip dist/ovoc/.
             else
             	echo &quot;RUN:yarn run zip&quot;
             	yarn run zip 
