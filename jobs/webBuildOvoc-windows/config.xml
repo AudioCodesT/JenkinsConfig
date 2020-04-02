@@ -263,7 +263,7 @@ then
             echo &quot;generating zip file&quot;
             if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.4&quot;* &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.6&quot;* &amp;&amp; &quot;$GERRIT_BRANCH&quot; != &quot;7.8&quot; ]]
             then
-            	PATH=${PATH}:&quot;/c/Program Files/7-Zip&quot;
+            	PATH=${PATH}:&quot;/cygdrive/c/Program Files/7-Zip&quot;
             	if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8.1000&quot; ]]
                 then
                 	7z.exe a -r dist/ovoc-ui.zip build/.
