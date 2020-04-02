@@ -212,11 +212,13 @@ else
             echo &quot;no commits in 7.6.1000&quot;
         elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.6.2000&quot; ]]
         then
+        	echo &quot;172.17.118.92&quot;
        		sed -i -- &apos;s/%serverName%/172.17.118.92/g&apos; ${WORKSPACE}/proxyServer.js
         else
         	#temporary
         	if [[ &quot;$GERRIT_BRANCH&quot; != &quot;7.8.2000&quot; ]]
             then
+            	echo &quot;172.17.118.95&quot;
         		sed -i -- &apos;s/%serverName%/172.17.118.95/g&apos; ${WORKSPACE}/proxyServer.js
             fi
         fi
