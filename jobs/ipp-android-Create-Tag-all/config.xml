@@ -176,7 +176,7 @@ updateManifests() {
   for xmlFile in $(find . -name &quot;*.xml&quot; -type f -print); do
     echo -------------- $xmlFile -----------------
     destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
-    if [ &quot;$(echo $GERRIT_BRANCH | cut -d/ -f2)&quot; == &quot;$destBranch&quot; ]; then
+    if [ &quot;$BRANCH&quot; == &quot;$destBranch&quot; ]; then
       echo Find $repoToTAG in $xmlFile and replace the revision to be the new TAG
       sed -i.bak -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAG&apos;\2:&apos; $xmlFile
       # sed -i.bak -e &quot;s:\(.*$repoToTAG\&quot;.* revision=\&quot;\)[^&apos; &apos;]*\(\&quot; .*\):\1refs/tags/$NEWTAG\2:&quot; $xmlFile
