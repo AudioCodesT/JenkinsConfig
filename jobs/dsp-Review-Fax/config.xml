@@ -155,7 +155,7 @@ TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; prop</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
-          <command>cd &quot;%WORKSPACE%/FaxFix&#xd;
+          <command>cd &quot;%WORKSPACE%/FaxFix&quot;&#xd;
 NMAKE.EXE /f FaxC6xSim.mak Rebuild&#xd;
 &#xd;
 if %ERRORLEVEL% NEQ 0 exit &#xd;
@@ -163,7 +163,7 @@ echo &quot;Successful completion&quot;&#xd;
 &#xd;
 perl -pi.bak -e &apos;s/TARGET_C66 = 0/TARGET_C66 = 1/&apos; FaxC6xSim.mak&#xd;
 &#xd;
-cd &quot;%WORKSPACE%/FaxFix&#xd;
+cd &quot;%WORKSPACE%/FaxFix&quot;&#xd;
 NMAKE.EXE /f FaxC6xSim.mak Rebuild&#xd;
 &#xd;
 if %ERRORLEVEL% NEQ 0 exit &#xd;
