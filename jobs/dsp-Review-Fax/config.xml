@@ -159,7 +159,9 @@ echo TARGET=${TARGET} &gt; prop</command>
 NMAKE.EXE /f FaxC6xSim.mak Rebuild&#xd;
 &#xd;
 if %ERRORLEVEL% NEQ 0 exit &#xd;
-echo “Successful completion”</command>
+echo “Successful completion”&#xd;
+&#xd;
+perl -pi.bak -e &apos;s/TARGET_C66 = 0/TARGET_C66 = 1/&apos; &quot;%WORKSPACE%/FaxFix/FaxC6xSim.mak</command>
         </hudson.tasks.BatchFile>
         <EnvInjectBuilder plugin="envinject@2.1.5">
           <info>
