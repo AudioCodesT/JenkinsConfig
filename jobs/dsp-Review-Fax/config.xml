@@ -156,7 +156,7 @@ echo TARGET=${TARGET} &gt; prop</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
           <command>cd &quot;%WORKSPACE%/FaxFix&#xd;
-NMAKE.EXE /f FaxC6xSim.mak ReBuild&#xd;
+NMAKE.EXE /f FaxC6xSim.mak Rebuild&#xd;
 &#xd;
 if %ERRORLEVEL% NEQ 0 exit &#xd;
 echo “Successful completion”</command>
