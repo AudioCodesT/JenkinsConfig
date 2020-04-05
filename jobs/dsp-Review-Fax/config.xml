@@ -149,7 +149,7 @@ set -xe
 cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/FaxFix/NMAKE.EXE
 
 #delete all Makefile  to enable compilation
-find . -name *Makefile* -delete
+find . -type f -name Makefile -delete
 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt; prop</command>
