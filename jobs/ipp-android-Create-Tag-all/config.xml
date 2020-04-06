@@ -223,6 +223,7 @@ createTag() {
         # Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
         if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then continue; fi
         createCommitFileList
+        subject=&quot;&quot;
         while IFS=_ read -r Sha1 User When; do
           if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
             subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG) %n%b %n&quot; $Sha1 -n1)&quot;
@@ -231,10 +232,8 @@ createTag() {
             break
           fi              
         done &lt; ${localRepoName}_$checkBRANCH.list
-        if [ &quot;$commitToTAG&quot; != &quot;$LastSha1&quot; ]; then
+        if [ -n &quot;$subject&quot; ]; then
           updateManifests
-          # $commitToTAG =! $LastSha1 in case a commit was found only, set it again for the next repository
-          commitToTAG=$LastSha1
         fi
       fi
     done
