@@ -227,7 +227,7 @@ createTag() {
         commitToTAG=&quot;&quot;
         while IFS=_ read -r Sha1 User When; do
           if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
-            subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG) %n%b %n&quot; $Sha1 -n1)&quot;
+            subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG - branch: $checkBRANCH) %n%b %n&quot; $Sha1 -n1)&quot;
             commitToTAG=$Sha1
           fi              
         done &lt; ${localRepoName}_$checkBRANCH.list
