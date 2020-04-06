@@ -427,21 +427,11 @@ echo Last TAG found is $LastManifestTag
 cd $WORKSPACE
 
 git checkout $GERRIT_BRANCH
-localRepoName=$MainlocalRepoName
-checkBRANCH=$BRANCH
-echo Find the last TAG name in repository $localRepoName
-LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
-# Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
-createCommitFileList
-  
-LastUser=&quot;&quot;
-while IFS=_ read -r Sha1 User When
-do
-    if [ -n &quot;$LastUser&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
-    LastUser=$User
-done &lt; ${MainlocalRepoName}_$checkBRANCH.list
 
-echo Create TAG for the last user
+echo Wake up by repository $MainlocalRepoName
+LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
+LastUser=$(git log -1 --pretty=format:&quot;%cn&quot; ${GERRIT_PATCHSET_REVISION})
+echo Create TAG for the user $LastUser, last TAG was $LastTag
 createTag
 
 
