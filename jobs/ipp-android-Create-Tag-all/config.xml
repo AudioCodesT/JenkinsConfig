@@ -199,7 +199,8 @@ createTag() {
   fi
   echo Add one to the last TAG
   NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
-
+  
+  subject=&quot;&quot;
   for eachRepo in $(git remote -v | grep &quot;(push)&quot; | sed &apos;s:\(.*\)\sssh.*29418/\(.*\) .*:\1\:\2:&apos;); do
     # repoToTAG represent the full repository name, we need it to find it in the default.xml file
     echo Check repository $eachRepo.......................................
@@ -223,7 +224,6 @@ createTag() {
         # Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
         if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then continue; fi
         createCommitFileList
-        subject=&quot;&quot;
         while IFS=_ read -r Sha1 User When; do
           if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
             subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG) %n%b %n&quot; $Sha1 -n1)&quot;
