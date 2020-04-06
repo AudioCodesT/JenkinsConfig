@@ -230,7 +230,7 @@ createTag() {
           else 
             break
           fi              
-        done &lt; $localRepoName.list
+        done &lt; ${localRepoName}_$checkBRANCH.list
         if [ &quot;$commitToTAG&quot; != &quot;$LastSha1&quot; ]; then
           updateManifests
           # $commitToTAG =! $LastSha1 in case a commit was found only, set it again for the next repository
@@ -261,8 +261,8 @@ createCommitFileList() {
   if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then LastTag=&quot;$GERRIT_BRANCH^&quot;; fi
   if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
   echo Check $LastTag..$GERRIT_BRANCH
-  git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; $localRepoName.list
-  echo &gt;&gt; $localRepoName.list
+  git log --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
+  echo &gt;&gt; ${localRepoName}_$checkBRANCH.list
 }
 
 #######################################################################################
@@ -425,6 +425,7 @@ cd $WORKSPACE
 
 git checkout $GERRIT_BRANCH
 localRepoName=$MainlocalRepoName
+checkBRANCH=$BRANCH
 echo Find the last TAG name in repository $localRepoName
 LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
 # Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
@@ -438,7 +439,7 @@ do
     LastSha1=$Sha1
     subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $MainRepoName) %n%b %n&quot; $LastSha1 -n1)&quot;
     LastWhen=`echo $When | cut -d&quot; &quot; -f1`
-done &lt; $MainlocalRepoName.list
+done &lt; ${MainlocalRepoName}_$checkBRANCH.list
 
 echo Check the last commit if 5 minutes passed...
 date
