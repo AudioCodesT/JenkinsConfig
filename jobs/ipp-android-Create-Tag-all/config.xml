@@ -433,15 +433,9 @@ createCommitFileList
 LastUser=&quot;&quot;
 while IFS=_ read -r Sha1 User When
 do
-    if [ &quot;$LastUser&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; subject=&quot;&quot;; fi
+    if [ -n &quot;$LastUser&quot; ] &amp;&amp; [ &quot;$LastUser&quot; != &quot;$User&quot; ]; then createTag; fi
     LastUser=$User
-    LastSha1=$Sha1
-    subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $MainRepoName) %n%b %n&quot; $LastSha1 -n1)&quot;
-    LastWhen=`echo $When | cut -d&quot; &quot; -f1`
 done &lt; ${MainlocalRepoName}_$checkBRANCH.list
-
-echo Check the last commit if 5 minutes passed...
-date
 
 echo Create TAG for the last user
 createTag
