@@ -259,7 +259,7 @@ createCommitFileList() {
   #If no TAGS exist at all in this branch, check the last commit only
   if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then LastTag=&quot;$GERRIT_BRANCH^&quot;; fi
   if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
-  if [ $(git log --first-parent --oneline $LastTag..$GERRIT_BRANCH | wc -l) -gt 10 ]; then 
+  if [ $(git log --first-parent --oneline $LastTag..$GERRIT_BRANCH | wc -l) -gt 2 ]; then 
     LastTag=&quot;$GERRIT_BRANCH^&quot;
   fi
   echo Check $LastTag..$GERRIT_BRANCH
