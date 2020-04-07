@@ -314,7 +314,7 @@ createLocalManifests() {
   if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH origin/$mainBranch; fi
   git reset --hard
   git pull --rebase
-  if [ ! -f &quot;$BRANCH.xml&quot; ] &amp;&amp; git branch -a | grep -q $BRANCH; then
+  if [ ! -f &quot;$BRANCH.xml&quot; ] &amp;&amp; git branch -a --remotes | grep -q $BRANCH; then
     echo Checkout Manifest to $BRANCH due to $BRANCH.xml does not exist
     git checkout -f $BRANCH
     manifestBranch=$BRANCH
