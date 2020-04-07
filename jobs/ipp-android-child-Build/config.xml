@@ -63,7 +63,7 @@ android-9</description>
       <info>
         <propertiesFilePath>prop</propertiesFilePath>
         <scriptContent>#!/bin/bash
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;android-9&quot;  || &quot;$GERRIT_BRANCH&quot; == &quot;audc-px30&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;audc-rk3399&quot; ]];
+if [[ &quot;$MANIFEST&quot; == &quot;android-9&quot;  || &quot;$MANIFEST&quot; == &quot;audc-px30&quot; || &quot;$MANIFEST&quot; == &quot;audc-rk3399&quot; ]];
 then
 CUSTOM_WORKSPACE=&quot;/home/ubuntu/jenkinsslave/workspace/ipp-android_android9&quot;
 else
