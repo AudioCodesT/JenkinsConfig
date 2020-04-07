@@ -311,7 +311,7 @@ createLocalManifests() {
   cd repo_manifests
   # Create a local branch and checkout to
   git checkout $mainBranch
-  if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH $mainBranch; fi
+  if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH origin/$mainBranch; fi
   git reset --hard
   git pull --rebase
   if [ ! -f &quot;$BRANCH.xml&quot; ]; then
