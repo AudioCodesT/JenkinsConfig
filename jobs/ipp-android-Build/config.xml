@@ -117,10 +117,10 @@ repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/
 #fi
 
 # second need to sync on latest changes off all other repositories
-echo ----- repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
+echo ----- repo sync -c --no-tags --no-clone-bundle -j$(nproc) --force-sync
 # The first execution only need the flag: &quot;--no-tags&quot; 
 # to save 50G of disk space of all TAGS in the entire project
-repo sync -c --no-clone-bundle -j16 --force-sync
+repo sync -c --no-clone-bundle -j$(nproc) --force-sync
 
 #./build/tools/make_c450hd.sh --clean --zip-images
 ./build/tools/make.sh --zip-images --clean --release
