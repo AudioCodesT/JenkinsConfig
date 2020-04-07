@@ -82,6 +82,18 @@ uboot/c450hd_uboot</description>
               <compareType>PLAIN</compareType>
               <pattern>master</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>android-9</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>audc-px30.xml</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>audc-rk3399.xml</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -92,6 +104,18 @@ uboot/c450hd_uboot</description>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
               <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>android-9</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>audc-px30.xml</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>audc-rk3399.xml</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -114,6 +138,18 @@ uboot/c450hd_uboot</description>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
               <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>android-9</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>audc-px30.xml</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>audc-rk3399.xml</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -176,7 +212,7 @@ updateManifests() {
   git config --global user.email devops@audiocodes.com
   
   for xmlFile in $(find . -name &quot;*.xml&quot; -type f -print); do
-    echo -------------- $xmlFile -----------------
+    echo -------------- $xmlFile for branch $checkBRANCH -----------------
     destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
     if [ &quot;$checkBRANCH&quot; == &quot;$destBranch&quot; ]; then
       echo Find $repoToTAG in $xmlFile and replace the revision to be the new TAG
@@ -208,7 +244,7 @@ createTag() {
     localRepoName=$(echo $eachRepo | cut -d: -f1)
     checkedBranch=&quot;&quot;
     for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
-      echo -------------- $xmlFile -----------------
+      echo --- $xmlFile for repository $localRepoName ---
       checkBRANCH=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
       if [[ -z $checkBRANCH || &quot;$checkedBranch&quot; =~ &quot;$checkBRANCH&quot; ]]; then continue; fi
       checkedBranch=&quot;$checkedBranch $checkBRANCH&quot;
