@@ -39,6 +39,15 @@
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MANIFEST</name>
+          <description>master
+audc-rk3399
+audc-px30
+android-9</description>
+          <defaultValue>default</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -49,7 +58,6 @@
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.1.5">
       <info>
@@ -101,21 +109,7 @@ repo forall -c &apos;git reset --hard;git clean -ffdx&apos;  || echo &quot;not f
 rm -rf hardware || echo &quot;not fail the build if clean fails&quot;
 cd ${WORKSPACE}
 #**************** clean workspace before starting repo init and repoy sync ***************
-repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/$NEWTAG
-
-#GERRIT_BRANCH=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | sed &apos;s:.*origin/::&apos;)
-#if [ $(echo $GERRIT_BRANCH | wc -w) -gt 1 ]; then
-#    header=$(git log -1 --pretty=format:%d)
-#    if echo $header | grep -q origin/; then
-#      GERRIT_BRANCH=$(echo $header | sed &apos;s:.* origin/::; s:\()\|,\).*::&apos; | cut -d&quot; &quot; -f1)
-#    else
-#      GERRIT_BRANCH=$(echo $GERRIT_BRANCH | cut -d&quot; &quot; -f1)
-#    fi
-#fi
-
-#if [ -f $GERRIT_BRANCH.xml ]; then 
-#  repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -m $GERRIT_BRANCH.xml
-#fi
+repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b refs/tags/$NEWTAG -m $MANIFEST.xml
 
 # second need to sync on latest changes off all other repositories
 echo ----- repo sync -c --no-tags --no-clone-bundle -j$(nproc) --force-sync
@@ -207,10 +201,10 @@ repo sync -c --no-clone-bundle -j$(nproc) --force-sync
       <downloadSpec>
         <spec></spec>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/${NEWTAG}.android_images.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/${NEWTAG}.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/*.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
-${WORKSPACE}/MSPartner.apk=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
+      <deployPattern>${WORKSPACE}/${NEWTAG}.android_images.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}/$MANIFEST
+${WORKSPACE}/${NEWTAG}.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}/$MANIFEST
+${WORKSPACE}/*.zip=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}/$MANIFEST
+${WORKSPACE}/MSPartner.apk=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}/$MANIFEST
 </deployPattern>
       <resolvePattern></resolvePattern>
       <deploymentProperties></deploymentProperties>
@@ -228,7 +222,7 @@ ${WORKSPACE}/MSPartner.apk=&gt;com/ac/ipp/Android/${BUILD_BRANCH}/${NEWTAG}
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} ${NEWTAG}</template>
+      <template>#${BUILD_NUMBER} ${NEWTAG} $MANIFEST</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
