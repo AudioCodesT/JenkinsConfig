@@ -168,7 +168,7 @@ NMAKE.EXE /f FaxC6xSim.mak Rebuild&#xd;
 if %ERRORLEVEL% NEQ 0 exit &#xd;
 echo &quot;Successful completion&quot;&#xd;
 &#xd;
-&#xd;
+perl -pi.bak -e &quot;s/TARGET_C66 = 1/TARGET_C66 = 0/&quot; FaxC6xSim.mak&#xd;
 perl -pi.bak -e &quot;s/TARGET_C67 = 0/TARGET_C67 = 1/&quot; FaxC6xSim.mak&#xd;
 &#xd;
 NMAKE.EXE /f FaxC6xSim.mak Rebuild&#xd;
