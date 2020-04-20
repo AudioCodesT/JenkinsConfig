@@ -196,8 +196,17 @@ echo &quot;Successful completion&quot;</command>
 cd ${WORKSPACE}/FaxEngine/Release64
 make all
 cd ${WORKSPACE}/FaxEngine/DataPump/Release64
-make all</command>
+make all
+
+
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+echo TARGET=${TARGET} &gt; prop</command>
         </hudson.tasks.Shell>
+        <EnvInjectBuilder plugin="envinject@2.1.5">
+          <info>
+            <propertiesFilePath>prop</propertiesFilePath>
+          </info>
+        </EnvInjectBuilder>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
