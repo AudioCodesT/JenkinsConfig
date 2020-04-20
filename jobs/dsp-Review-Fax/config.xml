@@ -200,7 +200,7 @@ make all
 
 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt; prop</command>
+echo TARGET=${TARGET} &gt; ${WORKSPACE}/prop</command>
         </hudson.tasks.Shell>
         <EnvInjectBuilder plugin="envinject@2.1.5">
           <info>
@@ -224,11 +224,11 @@ set -xe
 sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/FaxFix;export STAGING_DIR=/usr/local/UGW7.2/staging_dir;export LD_LIBRARY_PATH=/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib;make clean;make;&quot;
 
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt; prop</command>
         </hudson.tasks.Shell>
         <EnvInjectBuilder plugin="envinject@2.1.5">
           <info>
-            <propertiesFilePath>generated_dsp.properties</propertiesFilePath>
+            <propertiesFilePath>prop</propertiesFilePath>
           </info>
         </EnvInjectBuilder>
       </conditionalbuilders>
