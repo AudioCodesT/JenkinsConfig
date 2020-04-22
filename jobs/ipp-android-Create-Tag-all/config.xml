@@ -227,7 +227,7 @@ updateManifests() {
 
 #######################################################################################
 # Create TAG in the main found repository (by the poll), search if others repositories were changed too 
-# Create a commit withh the commits detailed in $subject variable and TAG the repo_manifests
+# Create a commit with the commits detailed in $subject variable and TAG the repo_manifests
 createTag() {
   if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
     echo Do not create a TAG for DevOps commits
