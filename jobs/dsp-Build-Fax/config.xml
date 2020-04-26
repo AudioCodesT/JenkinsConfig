@@ -246,17 +246,18 @@ echo TARGET=${TARGET} &gt; prop</command>
                 <command>#if build pass successfully create commit in FaxLib and push all libs
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 cd ${WORKSPACE}/..
-mkdir libs &amp;&amp; cd libs
+mkdir fax_libs
+cd fax_libs
 curl -ku admin:password -X GET https://artifactory/api/archive/download/dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}?archiveType=tar.gz &gt; libs.tar.gz
 tar -xvf libs.tar.gz
 rm -rf libs.tar.gz
 cd ${WORKSPACE}/..
 git clone &quot;ssh://jenkins@gerrit:29418/DSP/Modules/FaxLib&quot; &amp;&amp; scp -p -P 29418 jenkins@gerrit:hooks/commit-msg &quot;FaxLib/.git/hooks/&quot;
 cd FaxLib
-cp ../libs/*.lib .
-cp ../libs/libDataPump.a Mips/.
-cp ../libs/libFaxEngine.a Mips/.
-cp ../libs/lib64* .
+cp ../fax_libs/*.lib .
+cp ../fax_libs/libDataPump.a Mips/.
+cp ../fax_libs/libFaxEngine.a Mips/.
+cp ../fax_libs/lib64* .
 #create new commit in FaxLib
 git add .
 git commit -m &quot;Automatic Commit created by Jenkins from change ${TARGET}&quot;
