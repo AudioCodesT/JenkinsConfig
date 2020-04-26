@@ -250,7 +250,7 @@ curl -ku admin:password -X GET https://artifactory/api/archive/download/dsp-rele
 tar -xvf libs.tar.gz
 rm -rf libs.tar.gz
 cd ${WORKSPACE}/..
-git clone ssh://jenkins@gerrit:29418/DSP/Modules/FaxLib
+git clone &quot;ssh://jenkins@gerrit:29418/DSP/Modules/FaxLib&quot; &amp;&amp; scp -p -P 29418 jenkins@gerrit:hooks/commit-msg &quot;FaxLib/.git/hooks/&quot;
 cd FaxLib
 cp ../libs/*.lib .
 cp ../libs/libDataPump.a Mips/.
@@ -259,7 +259,7 @@ cp ../libs/lib64* .
 #create new commit in FaxLib
 git add .
 git commit -m &quot;Automatic Commit created by Jenkins from change ${TARGET}&quot;
-git push origin HEAD:refs/for/${GERRIT_BRANCH}</command>
+git push origin HEAD:refs/for/master</command>
               </hudson.tasks.Shell>
             </buildSteps>
           </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
