@@ -74,7 +74,8 @@
     <submoduleCfg class="list"/>
     <extensions/>
   </scm>
-  <canRoam>true</canRoam>
+  <assignedNode>arm_build_esxi_6.5</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -95,7 +96,7 @@ fi
 
 #sh -x ArmCommon/Common/.deploy/aws_buildTopologyVM.sh $VERSION_NAME
 #sh -x ArmCommon/Common/.deploy/aws_buildRouterVM.sh $VERSION_NAME
-cd /root/jenkinsslave
+#cd /root/jenkinsslave
 sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH $JAVA_PATH
 sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
 
