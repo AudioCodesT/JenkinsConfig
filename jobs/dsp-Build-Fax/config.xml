@@ -244,6 +244,7 @@ echo TARGET=${TARGET} &gt; prop</command>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>#if build pass successfully create commit in FaxLib and push all libs
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 cd ${WORKSPACE}/..
 mkdir libs &amp;&amp; cd libs
 curl -ku admin:password -X GET https://artifactory/api/archive/download/dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}?archiveType=tar.gz &gt; libs.tar.gz
