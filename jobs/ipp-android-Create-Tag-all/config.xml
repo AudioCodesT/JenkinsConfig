@@ -291,12 +291,15 @@ createTag() {
 # Output = the file &lt;reposiroty name&gt;.list
 createCommitFileList() {
   echo TAG: $LastTag ------------------- on: $localRepoName -------------------
-  maximumCommits=-20
   #If no TAGS exist at all in this branch, check the last commit only
-  if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then maximumCommits=-3; fi
   if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
-  echo Check $LastTag..$GERRIT_BRANCH for last $maximumCommits changes
-  git log $maximumCommits --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
+  if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then
+    echo No found TAGS, check $GERRIT_BRANCH for last 3 changes
+    git log -3 --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
+  else
+    echo Found TAG $LastTag, check $LastTag..$GERRIT_BRANCH for last 20 changes
+    git log -20 --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
+  fi 
   echo &gt;&gt; ${localRepoName}_$checkBRANCH.list
 }
 
