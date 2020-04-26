@@ -267,6 +267,11 @@ git push origin HEAD:refs/for/${GERRIT_BRANCH}</command>
         <markBuildUnstable>false</markBuildUnstable>
       </config>
     </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
+    <hudson.tasks.Mailer plugin="mailer@1.21">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
