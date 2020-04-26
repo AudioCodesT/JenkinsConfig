@@ -29,14 +29,12 @@
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <refspec>${GERRIT_REFSPEC}</refspec>
         <url>ssh://jenkins@gerrit:29418/DSP/Modules/FaxEngine</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
@@ -103,11 +101,7 @@
       <customUrl></customUrl>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>true</excludeNoCodeChange>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
       <triggerConfigURL></triggerConfigURL>
@@ -235,7 +229,45 @@ echo TARGET=${TARGET} &gt; prop</command>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.6.0">
+      <config>
+        <scriptFiles/>
+        <groovyScripts/>
+        <buildSteps>
+          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+            <results>
+              <string>SUCCESS</string>
+            </results>
+            <role>BOTH</role>
+            <executeOn>MATRIX</executeOn>
+            <buildSteps>
+              <hudson.tasks.Shell>
+                <command>#if build pass successfully create commit in FaxLib and push all libs
+cd ${WORKSPACE}/..
+mkdir libs &amp;&amp; cd libs
+curl -ku admin:password -X GET https://artifactory/api/archive/download/dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}?archiveType=tar.gz &gt; libs.tar.gz
+tar -xvf libs.tar.gz
+rm -rf libs.tar.gz
+cd ${WORKSPACE}/..
+git clone ssh://jenkins@gerrit:29418/DSP/Modules/FaxLib
+cd FaxLib
+cp ../libs/*.lib .
+cp ../libs/libDataPump.a Mips/.
+cp ../libs/libFaxEngine.a Mips/.
+cp ../libs/lib64* .
+#create new commit in FaxLib
+git add .
+git commit -m &quot;Automatic Commit created by Jenkins from change ${TARGET}&quot;
+git push origin HEAD:refs/for/${GERRIT_BRANCH}</command>
+              </hudson.tasks.Shell>
+            </buildSteps>
+          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+        </buildSteps>
+        <markBuildUnstable>false</markBuildUnstable>
+      </config>
+    </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.5.3">
@@ -276,22 +308,22 @@ echo TARGET=${TARGET} &gt; prop</command>
     &quot;files&quot;: [
         {
             &quot;pattern&quot;: &quot;FaxFix/Release/*.lib&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
+            &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
              &quot;recursive&quot;: &quot;true&quot;
         },
         {
             &quot;pattern&quot;: &quot;FaxFix/Debug/lib*.a&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
+            &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
             &quot;recursive&quot;: &quot;true&quot;
         },
         {
             &quot;pattern&quot;: &quot;FaxEngine/Release64/lib*.a&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
+            &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
             &quot;recursive&quot;: &quot;true&quot;
         },
         {
             &quot;pattern&quot;: &quot;FaxEngine/DataPump/Release64/lib*.a&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
+            &quot;target&quot;: &quot;dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}/&quot;,
             &quot;recursive&quot;: &quot;true&quot;
         }
     ]
