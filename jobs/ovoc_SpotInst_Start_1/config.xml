@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>this job is triggered from URL&#xd;
-purpose: start forHadas_ovoc_jenkinsSalve instances &#xd;
+purpose: start forHadas_ovoc_sanityInstall_Slave_1 instances &#xd;
 No build job. Only start the instance.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -35,7 +35,6 @@ No build job. Only start the instance.</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -58,7 +57,7 @@ echo &quot;Starting 1 instance of STATEFUL_ipp_android-Tests&quot;
 echo &quot;***********************************************************************************&quot;
 
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
-MI_ID=&quot;smi-42567847&quot;
+MI_ID=&quot;smi-a6bd06b4&quot;
 
 curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 &quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/resume?accountId=${ACCOUNT_ID}&quot;
