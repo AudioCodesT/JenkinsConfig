@@ -35,7 +35,6 @@ No build job. Only start the instance.</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -61,7 +60,7 @@ ACCOUNT_ID=&quot;act-1fd9f587&quot;
 MI_ID=&quot;smi-74cb2eac&quot;
 
 curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-&quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/resume?accountId=${ACCOUNT_ID}&quot;
+&quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/pause?accountId=${ACCOUNT_ID}&quot;
 
 
 </command>
