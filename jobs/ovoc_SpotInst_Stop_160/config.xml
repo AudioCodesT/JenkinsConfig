@@ -35,7 +35,6 @@ No build job. Only start the instance.</description>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -54,14 +53,14 @@ No build job. Only start the instance.</description>
 #-d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
 #&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true&quot;
 echo &quot;***********************************************************************************&quot;
-echo &quot;Starting 1 instance of STATEFUL_ipp_android-Tests&quot;
+echo &quot;Starting 1 instance&quot;
 echo &quot;***********************************************************************************&quot;
 
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
 MI_ID=&quot;smi-a6bd06b4&quot;
 
 curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-&quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/resume?accountId=${ACCOUNT_ID}&quot;
+&quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/pause?accountId=${ACCOUNT_ID}&quot;
 
 
 </command>
