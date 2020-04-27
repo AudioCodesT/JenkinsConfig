@@ -53,7 +53,7 @@ No build job. Only start the instance.</description>
 #-d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
 #&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true&quot;
 echo &quot;***********************************************************************************&quot;
-echo &quot;Starting 1 instance&quot;
+echo &quot;Stopping 1 instance&quot;
 echo &quot;***********************************************************************************&quot;
 
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
