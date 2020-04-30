@@ -383,11 +383,12 @@ subject=&quot;&quot;
 LastManifestTag=&quot;&quot;
 mainBranch=master
 manifestBranch=master
-git init
 
 echo Clean all old previous repositories
 for all in $(git remote); do git remote remove $all; done
+rm -rf * .git
 
+git init
 echo Sleep 5 minutes before starting check commits
 sleep 300
 
