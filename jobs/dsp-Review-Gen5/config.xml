@@ -432,7 +432,7 @@ echo &quot;*********************************************************************
 sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
 if [[ $GERRIT_BRANCH == 723 ]]
 then
-	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.730.06 grxdsp fw_grx.map&quot;
+	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.730.06 grxdsp fw_grx.map&quot;
 fi
 #export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
 #export LD_LIBRARY_PATH=&quot;/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib&quot;
