@@ -12,8 +12,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>-1</daysToKeep>
-        <numToKeep>30</numToKeep>
+        <daysToKeep>15</daysToKeep>
+        <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -102,6 +102,14 @@ return map</script>
           </hudson.plugins.git.extensions.impl.SparseCheckoutPath>
         </sparseCheckoutPaths>
       </hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+      <hudson.plugins.git.extensions.impl.CloneOption>
+        <shallow>false</shallow>
+        <noTags>false</noTags>
+        <reference></reference>
+        <timeout>30</timeout>
+        <depth>0</depth>
+        <honorRefspec>false</honorRefspec>
+      </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
   <assignedNode>dsp-centos-dynamic</assignedNode>
@@ -123,7 +131,7 @@ return map</script>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
-              <pattern>feature/723_Gpu</pattern>
+              <pattern>feature/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -225,7 +233,8 @@ sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/Device/makefile
 sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
 echo &quot;*******************************************************************************************&quot;
 
-
+ls -al ${WORKSPACE}/Gen5/Modules/Ec
+ls -al ${WORKSPACE}/Gen5/Modules
 cd ${WORKSPACE}
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
@@ -263,6 +272,9 @@ make all
 
 cd ${WORKSPACE}
 set -xe
+
+
+
 
 
 echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
@@ -310,11 +322,16 @@ echo &quot;*********************************************************************
 
 
 
-
+	
+if [[ &quot;$GERRIT_REFSPEC&quot; == &quot;refs/changes/83/35183&quot;* ]]
+then
+	run_make=(&quot;GpuMaster/communicator_64&quot; &quot;SoftDsp/communicator_64&quot; &quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/communicator_64&quot; &quot;SoftHost/Hpi_64&quot;)
+else
+	run_make=(&quot;SoftDsp/communicator_64&quot; &quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/communicator_64&quot; &quot;SoftHost/Hpi_64&quot;)
+fi
 #run all 4 make in parallel (SoftDsp and SoftHost)
 if [[ ${CHIP_NAME} == &quot;Intel&quot; ]]
 then
-	run_make=(&quot;SoftDsp/communicator_64&quot; &quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/communicator_64&quot; &quot;SoftHost/Hpi_64&quot;)
 	for path_to_run_make in ${run_make[@]}
 	do
 		compile_intel $path_to_run_make
@@ -324,7 +341,20 @@ wait
 echo &quot;Finish running make for SoftDsp and SoftHost&quot;
 cd ${WORKSPACE}
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties
+
+echo &quot;******************* Set ${CHIP_NAME} Extended Attributes  ***************************&quot;
+#files_to_set_attributes=(&quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*&quot;)
+files_to_set_attributes=(&quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;)
+for file_to_set_attribue in ${files_to_set_attributes[@]}
+do
+	setfattr -n user.Version -v ${VERSION} ${file_to_set_attribue}
+	setfattr -n user.SubVersion -v ${SUBVERSION}  ${file_to_set_attribue}
+	setfattr -n user.Date -v ${RELEASE_DATE}  ${file_to_set_attribue}
+	setfattr -n user.Revision -v 0 ${file_to_set_attribue}
+    getfattr -d ${file_to_set_attribue}
+done
+echo &quot;*******************************************************************************************&quot;</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
@@ -505,6 +535,11 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         }, 
        {
             &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;,
+            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*&quot;,
             &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         }
