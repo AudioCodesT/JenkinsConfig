@@ -12,8 +12,8 @@
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>-1</daysToKeep>
-        <numToKeep>30</numToKeep>
+        <daysToKeep>15</daysToKeep>
+        <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -90,7 +90,7 @@
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>PLAIN</compareType>
-              <pattern>feature/723_Gpu</pattern>
+              <pattern>feature/**</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -226,16 +226,14 @@ make all
 
 cd ${WORKSPACE}
 set -xe
-echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
-repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_REFSPEC}&quot;
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_REFSPEC}
 echo &quot;repo sync&quot;
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd Gen5
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
@@ -283,7 +281,19 @@ wait
 echo &quot;Finish running make for SoftDsp and SoftHost&quot;
 cd ${WORKSPACE}
 TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
+echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties
+
+
+echo &quot;******************* Set ${CHIP_NAME} Extended Attributes  ***************************&quot;
+files_to_set_attributes=(&quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;)
+for file_to_set_attribue in ${files_to_set_attributes[@]}
+do
+	setfattr -n user.Version -v ${VERSION} ${file_to_set_attribue}
+	setfattr -n user.SubVersion -v ${SUBVERSION}  ${file_to_set_attribue}
+	setfattr -n user.Date -v ${RELEASE_DATE}  ${file_to_set_attribue}
+	setfattr -n user.Revision -v 0 ${file_to_set_attribue}
+done
+echo &quot;*******************************************************************************************&quot;</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
@@ -304,16 +314,14 @@ run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
 
 cd ${WORKSPACE}
 set -xe
-echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
-repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_REFSPEC}&quot;
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_REFSPEC}
 echo &quot;repo sync&quot;
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd Gen5
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
 sh copyModules.sh ${CHIP_NAME}
