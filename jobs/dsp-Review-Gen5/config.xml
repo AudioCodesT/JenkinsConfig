@@ -433,7 +433,7 @@ sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Ge
 if [[ $GERRIT_BRANCH == 723 || $GERRIT_BRANCH == 724 ]]
 then
 	GRX_SUBVERSION=$(echo ${SUBVERSION} | cut -d&apos;-&apos; -f2)
-	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.${VERSION}.${GRX_SUBVERSION} grxdsp fw_grx.map&quot;
+	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.${VERSION}.${GRX_SUBVERSION} grxdsp fw_grx.map;ls -al&quot;
 fi
 #export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
 #export LD_LIBRARY_PATH=&quot;/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib&quot;
@@ -544,7 +544,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
              &quot;recursive&quot;: &quot;false&quot;
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/AC506012ae3*&quot;,
+            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/AC506012ae3*&quot;,
             &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
              &quot;recursive&quot;: &quot;false&quot;
         },
