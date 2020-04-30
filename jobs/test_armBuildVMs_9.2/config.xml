@@ -83,16 +83,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [[ &quot;$BRANCH&quot; == &quot;7.8&quot; ]]
-then
-    JAVA_PATH=&quot;/usr/java/1.8.0_92/jre&quot;
-elif [[ &quot;$BRANCH&quot; == &quot;7.4&quot; || &quot;$BRANCH&quot; == *&quot;8.&quot;* || &quot;$BRANCH&quot; == &quot;users&quot; || &quot;$BRANCH&quot; == &quot;9.0.init&quot; ]]
-then
-	# Default version is 1.8.0_162
-	JAVA_PATH=&quot;/usr/java/jdk1.8.0_162/jre&quot;
-else
-	JAVA_PATH=&quot;/usr/java/jdk-11&quot;
-fi
+      <command>JAVA_PATH=&quot;/usr/java/jdk-11&quot;
+
 
 #sh -x ArmCommon/Common/.deploy/aws_buildTopologyVM.sh $VERSION_NAME
 #sh -x ArmCommon/Common/.deploy/aws_buildRouterVM.sh $VERSION_NAME
