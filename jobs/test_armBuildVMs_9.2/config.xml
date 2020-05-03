@@ -85,12 +85,292 @@
     <hudson.tasks.Shell>
       <command>JAVA_PATH=&quot;/usr/java/jdk-11&quot;
 
+#!/bin/sh
+#This script purpose:
+#build a new Conf VM
+
+#verify argument was provided
+if [ $# -eq 0 ]
+  then
+    echo &quot;Please supply Version Name, Branch and JAVA_PATH&quot;  | tee -a $logfile
+	exit
+fi
+
+# set logger ###############
+# Get ESXi password from encrypted file
+cd ~/.ssl
+vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
+
+cd ${WORKSPACE}
+
+# Create a new log file
+now=`date +&quot;%Y%m%d-%H%M%S&quot;`
+logfile=&quot;${WORKSPACE}/arm_configurator_$now.log&quot;
+[[ -f $logfile  ]] &amp;&amp; rm $logfile
+touch $logfile
+
+echo &quot;$(date) : *****************  START  ******************&quot; | tee -a $logfile
+
+VERSION_NAME=$1
+BRANCH=$2
+JAVA_PATH=$3
+vmHostIP=&quot;10.7.10.107&quot;
+vmHostPass=&quot;devops@AC&quot;
+
+echo &quot;$(date) : *****************  START  ******************&quot; &gt;&amp;3
+#check if VM name ARM-Conf_$VERSION_NAME is already exists
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-Conf_$VERSION_NAME&quot; | gawk &apos;{print $1}&apos;`
+if [ ! -z &quot;$list&quot; ]
+	then
+	    echo &quot;$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now&quot;  &gt;&amp;3
+		exit
+fi
+
+#create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
+echo &quot;$(date) : creating new Conf VM from image&quot; | tee -a $logfile
+OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
+ovftool --disableVerification --noSSLVerify --name=&quot;ARM-Conf_$VERSION_NAME&quot; --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+if [ $? -ne 0 ]; then
+    echo &quot;$(date) : Deploy new VM has failed - check arm_configurator_$now.log&quot; | tee -a $logfile
+    exit
+fi
+
+# find new vm id
+vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-Conf_$VERSION_NAME&quot; | gawk &apos;{print $1}&apos;`
+echo &quot;$(date) : vm id is $vmid&quot; | tee -a $logfile
+
+# Wait for arm server power on
+#isUp $vmHostIP $vmid || exit
+echo &quot;$(date) : sleep 5 min.&quot; | tee -a $logfile
+sleep 300
+
+
+# find new vm IPv4 address
+#vmip=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -m 1 &quot;ipAddress&quot; | cut -d&apos;&quot;&apos; -f2`
+vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -E &quot;ipAddress.*\[$&quot; -m 1 -A 5 | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot;`
+ipcalc -cs $vmIPaddress || ( echo &quot;$(date) : Invalid IP for $vmid&quot; | tee -a $logfile &amp;&amp; exit)
+echo &quot;$(date) : vm IP is $vmIPaddress&quot; | tee -a $logfile
+
+
+
+#the following function is getting IP address
+#ssh the VM
+#extract armDB.sql from common-xxx.jar to /root/sql
+#run sql init
+#extract mongo.js from common-xxx.jar to /root/mongo
+#run mongo.js
+#extract certificate from common-xxx.jar to /root/certificate
+#import the cert to java keystore
+function sqlInit () {
+	HOST=$1
+	ssh root@${HOST} &lt;&lt; EOF
+		jar xf common-*.jar sql/armDB.sql
+		/usr/bin/mysql &lt;/root/sql/armDB.sql
+		jar xf common-*.jar mongo/mongo.js
+		/usr/bin/mongo &lt;/root/mongo/mongo.js &gt;/dev/null
+		jar xf common-*.jar certificates/router/arm_default_router_certificate
+		${JAVA_PATH}/bin/keytool -import -alias arm_default_router_certificate -file certificates/router/arm_default_router_certificate -keystore ${JAVA_PATH}/lib/security/cacerts -storepass changeit -noprompt
+EOF
+	
+}
+
+function cleanTopologyFiles () {
+	HOST=$1
+	tomcatFolder=$2
+	ssh root@${HOST} &lt;&lt; EOF
+		service tomcat stop
+		chmod +x /opt/$tomcatFolder/webapps
+		rm -rf /root/.ssh
+		rm -rf /opt/tomcat/webapps/ARM
+		rm -rf /opt/tomcat/webapps/arm-frontend
+		rm -rf /opt/tomcat/webapps/ARM-UI
+		/var/spool/mail/root
+		rm -rf /opt/tomcat/logs/*
+		find /var/log -type f -delete
+		touch /var/log/mysqld.log
+		chown -R mysql:root /var/log/mysqld.log
+		semanage fcontext  -a -t  var_log_t -s system_u &apos;/opt/$tomcatFolder/logs(/.*)?&apos;
+		restorecon -Frvv /opt/$tomcatFolder/logs
+		TAB=$&apos;\t&apos;; sed -i &apos;/#\?PermitRootLogin[ ${TAB}]\+\w\+$/{ s//PermitRootLogin no/g; }&apos; /etc/ssh/sshd_config
+EOF
+}
+
+
+vmIPaddress=${newVmIpAddress:19}
+
+#first thing after VM is up: stop tomcat
+function stopTomcat () {
+	HOST=$1
+	ssh root@${HOST} service tomcat stop
+}
+stopTomcat $vmIPaddress
+sleep 3
+
+#define tomcat folder name per branch
+if [[ $BRANCH == 8.4 || $BRANCH == 8.6 || $BRANCH == 8.8 ]]
+	then
+	tomcatDir=apache-tomcat-9.0.8
+	else
+	tomcatDir=apache-tomcat-9.0.27
+fi
+
+
+# Artifactory location
+artifactoryServer=https://artifactory
+artifactoryRepo=libs-release-local
+#download artifact from artifactory
+#the following function is getting IP address and artifact details, ssh to VM and download artifact from artifactory
+function downloadArtifact () {
+	HOST=$1
+	URL=$2
+	TARGET_DIR=$3
+	ssh root@${HOST} &lt;&lt; EOF
+	wget --no-check-certificate --user arm-read --password AP3kEukcMwU8aATBs6d7AM4KMyR $URL -O $TARGET_DIR
+	if [ &quot;$?&quot; -ne &quot;0&quot; ];then echo &apos;wget failed&apos;;  exit 1; fi
+EOF
+
+
+}
+
+#***************************************************************TEMP******************************************************
+
+
+
+##Download arm_utils and 
+#-----------------
+#prepare parameters:
+arm_utils_file_name=arm_utils.tar.gz
+offile_repository_file_name=cent92install-repo.tar.gz
+url=&quot;https://artifactory/Devops/ARM/OVA/centOS8&quot;
+destPath=&quot;/tmp&quot;
+
+#ssh to Topology VM and download arm utils from Artifactory to /tmp folder
+echo &quot;$(date) : downloading $arm_utils_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+downloadArtifact $vmIPaddress ${url}/${arm_utils_file_name} ${destPath}/${arm_utils_file_name}
+	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
+        echo &apos;wget failed&apos;
+        exit 1
+	fi
+sleep 3
+
+
+#ssh to Topology VM and download the offline repository from Artifactory to /tmp folder
+echo &quot;$(date) : downloading $offile_repository_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+downloadArtifact $vmIPaddress ${url}/${offile_repository_file_name} ${destPath}/${offile_repository_file_name}
+	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
+        echo &apos;wget failed&apos;
+        exit 1
+	fi
+sleep 3
+
+echo &quot;$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils&quot;  | tee -a $logfile
+ssh root@${vmIPaddress} &lt;&lt; EOF
+	cd /tmp
+	tar -xvf arm_utils.tar.gz
+	cd arm_utils
+	python3  prepare_configurator_from_repo.py 
+EOF
+
+
+#***************************************************************TEMP***********************************************************
+
+#rsync all Linux VMFiles from the ARM repository to the Configurator VM
+#but exclude the tomcat dir
+cd $WORKSPACE/ArmCommon/Common/VMFiles/
+#first, sync all Linux files, without tomcat directory
+rsync -rlvtz --exclude &quot;opt/$tomcatDir&quot; -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/ root@$vmIPaddress:/
+#second, sync tomcat folder including deleted files
+rsync -rlvtz --delete -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/opt/$tomcatDir/ root@$vmIPaddress:/opt/$tomcatDir/
+
+
+
+#Download mySql db
+#-----------------
+#prepare parameters:
+artifactName=common
+artifact=com/ac/arm/$artifactName
+path=$artifactoryServer/$artifactoryRepo/$artifact
+version=$VERSION_NAME
+warName=$artifactName-$version.jar
+url=$path/$version/$warName
+destPath=&quot;/root/$artifactName-$version.jar&quot;
+
+#ssh to Topology VM and download sql file from Artifactory to /root folder
+echo &quot;$(date) : downloading $artifactName-$version.jar file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+downloadArtifact $vmIPaddress $url $destPath
+	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
+        echo &apos;wget failed&apos;
+        exit 1
+	fi
+sleep 3
+
+#ssh to VM and run sql init
+echo &quot;$(date) : ssh to Topology VM $vmIPaddress and run sql init&quot;  | tee -a $logfile
+sqlInit $vmIPaddress
+sleep 3
+
+#Download Topology war file to Topology VM
+#------------------------------------------
+#prepare parameters:
+artifactName=TopologyManagement
+artifact=com/ac/arm/$artifactName
+path=$artifactoryServer/$artifactoryRepo/$artifact
+version=$VERSION_NAME
+warName=$artifactName-$version.war
+url=$path/$version/$warName
+destPath=&quot;/opt/tomcat/webapps/ARM.war&quot;
+
+#ssh to Topology VM and download Topology war file from Artifactory to tomcat webapp folder
+echo &quot;$(date) : downloading Topology war file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+downloadArtifact $vmIPaddress $url $destPath
+	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
+        echo &apos;wget failed&apos;
+        exit 1
+	fi
+sleep 3
+
+#clean logs before shutdown. tomcat dir is per branch.
+echo &quot;$(date) : ssh to clean router webapp folder and log files and configure some tomcat files&quot;  | tee -a $logfile	
+cleanTopologyFiles $vmIPaddress $tomcatDir
+
+###########################
+#graceful shutdouwn this new VM with new war file in it
+echo &quot;$(date) : shutdown new VM&quot; | tee -a $logfile
+ssh root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
+sleep 30
+
+#export the new VM to an OVA file
+echo &quot;$(date) : export new VM to an OVA file&quot;  | tee -a $logfile
+mkdir $WORKSPACE/$VERSION_NAME/
+mkdir $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
+ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/ARM-Conf_$VERSION_NAME $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME/ARM-Conf_$VERSION_NAME.ova | tee -a $logfile
+ovfResult=`tail -1 $logfile | grep &quot;Completed&quot;`
+[[ &quot;${ovfResult}&quot; -eq &quot;Completed with errors&quot; ]] &amp;&amp; exit -1
+
+cd $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
+md5sum ARM-Conf_$VERSION_NAME.ova &gt; ARM-Conf_$VERSION_NAME.ova.md5
+#start the VM
+echo &quot;$(date) : start the new VM&quot;  | tee -a $logfile
+ssh root@${vmHostIP} vim-cmd vmsvc/power.on ${vmid}
+sleep 30
+
+#add configurator VM IP address to a properties file:
+echo Conf_IP_address=$vmIPaddress &gt; $WORKSPACE/params.properties
+
+#what left is to upload new OVA to Artifactory
+echo &quot;$(date) : ********        FINISH      ***********&quot;  | tee -a $logfile
+echo &quot;$(date) : what left is to upload new OVA to Artifactory&quot;  | tee -a $logfile
+echo &quot;$(date) : ********    **************   ***********&quot;  | tee -a $logfile
+
+
+
+
 
 #sh -x ArmCommon/Common/.deploy/aws_buildTopologyVM.sh $VERSION_NAME
 #sh -x ArmCommon/Common/.deploy/aws_buildRouterVM.sh $VERSION_NAME
 #cd /root/jenkinsslave
-sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH $JAVA_PATH
-sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
+#sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH $JAVA_PATH
+#sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
 
 #copy log files to workspace dir
 cp aws_buildRouterVM_log.out $WORKSPACE
@@ -114,64 +394,6 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
-      <deployerDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
-        <stagingPlugin/>
-      </deployerDetails>
-      <resolverDetails>
-        <artifactoryName>797876730@1453721585664</artifactoryName>
-        <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <stagingPlugin/>
-      </resolverDetails>
-      <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </resolverCredentialsConfig>
-      <useSpecs>false</useSpecs>
-      <uploadSpec>
-        <spec></spec>
-      </uploadSpec>
-      <downloadSpec>
-        <spec></spec>
-      </downloadSpec>
-      <deployPattern>$VERSION_NAME/**/*.ova=&gt;com/ac/arm/OVA/$VERSION_NAME
-</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
-      <deployBuildInfo>false</deployBuildInfo>
-      <includeEnvVars>false</includeEnvVars>
-      <envVarsPatterns>
-        <includePatterns></includePatterns>
-        <excludePatterns>*password*,*secret*</excludePatterns>
-      </envVarsPatterns>
-      <discardOldBuilds>false</discardOldBuilds>
-      <discardBuildArtifacts>true</discardBuildArtifacts>
-      <asyncBuildRetention>false</asyncBuildRetention>
-      <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
-      <overrideBuildName>false</overrideBuildName>
-    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}___${ENV,var=&quot;VERSION_NAME&quot;}</template>
       <runAtStart>true</runAtStart>
