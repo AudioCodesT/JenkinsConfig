@@ -317,7 +317,14 @@ echo &quot;*********************************************************************
 #******************************Finish temporary workaround*************************************
 
 #add neccessary toolchain to the slave machine
-sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;</command>
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
+if [[ $GERRIT_BRANCH == 723 || $GERRIT_BRANCH == 724 ]]
+then
+	GRX_SUBVERSION=$(echo ${SUBVERSION} | cut -d&apos;-&apos; -f1)
+	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.${VERSION}.${GRX_SUBVERSION} grxdsp fw_grx.map;rm -rf Soft*.bin Soft*.srec&quot;
+fi
+
+</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
