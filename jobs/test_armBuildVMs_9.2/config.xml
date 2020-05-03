@@ -22,7 +22,7 @@
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
           <description></description>
-          <defaultValue></defaultValue>
+          <defaultValue>9.2.4</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -89,12 +89,7 @@
 #This script purpose:
 #build a new Conf VM
 
-#verify argument was provided
-if [ $# -eq 0 ]
-  then
-    echo &quot;Please supply Version Name, Branch and JAVA_PATH&quot;  | tee -a $logfile
-	exit
-fi
+
 
 # set logger ###############
 # Get ESXi password from encrypted file
