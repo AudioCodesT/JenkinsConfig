@@ -432,7 +432,7 @@ echo &quot;*********************************************************************
 sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
 if [[ $GERRIT_BRANCH == 723 || $GERRIT_BRANCH == 724 ]]
 then
-	GRX_SUBVERSION=$(echo ${SUBVERSION} | cut -d&apos;-&apos; -f2)
+	GRX_SUBVERSION=$(echo ${SUBVERSION} | cut -d&apos;-&apos; -f1)
 	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.${VERSION}.${GRX_SUBVERSION} grxdsp fw_grx.map;ls -al&quot;
 fi
 #export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
