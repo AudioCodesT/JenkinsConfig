@@ -102,7 +102,7 @@ vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 cd ${WORKSPACE}
 
 # Create a new log file
-now=`date +&quot;%Y%m%d-%H%M%S&quot;`
+now=$(date +&quot;%Y%m%d-%H%M%S&quot;)
 logfile=&quot;${WORKSPACE}/arm_configurator_$now.log&quot;
 [[ -f $logfile  ]] &amp;&amp; rm $logfile
 touch $logfile
