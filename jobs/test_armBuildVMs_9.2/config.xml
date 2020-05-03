@@ -115,7 +115,7 @@ echo &quot;$(date) : *****************  START  ******************&quot; | tee -a
 vmHostIP=&quot;10.7.10.107&quot;
 
 
-echo &quot;$(date) : *****************  START  ******************&quot; &gt;&amp;3
+
 #check if VM name ARM-Conf_$VERSION_NAME is already exists
 vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-Conf_$VERSION_NAME&quot; | gawk &apos;{print $1}&apos;`
 if [ ! -z &quot;$list&quot; ]
