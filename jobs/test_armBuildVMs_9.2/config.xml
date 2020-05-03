@@ -109,11 +109,11 @@ touch $logfile
 
 echo &quot;$(date) : *****************  START  ******************&quot; | tee -a $logfile
 
-VERSION_NAME=$1
-BRANCH=$2
-JAVA_PATH=$3
+#VERSION_NAME=$1
+#BRANCH=$2
+#JAVA_PATH=$3
 vmHostIP=&quot;10.7.10.107&quot;
-vmHostPass=&quot;devops@AC&quot;
+
 
 echo &quot;$(date) : *****************  START  ******************&quot; &gt;&amp;3
 #check if VM name ARM-Conf_$VERSION_NAME is already exists
