@@ -211,6 +211,8 @@ function stopTomcat () {
 	sshpass -p password ssh root@${HOST} systemctl stop tomcat
 }
 
+stopTomcat $vmIPaddress
+sleep 3
 
 #define tomcat folder name per branch
 if [[ $BRANCH == 8.4 || $BRANCH == 8.6 || $BRANCH == 8.8 ]]
@@ -254,11 +256,11 @@ EOF
 
 #rsync all Linux VMFiles from the ARM repository to the Configurator VM
 #but exclude the tomcat dir
-cd $WORKSPACE/ArmCommon/Common/VMFiles/
-#first, sync all Linux files, without tomcat directory
-rsync -rlvtz --exclude &quot;opt/$tomcatDir&quot; -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/ root@$vmIPaddress:/
-#second, sync tomcat folder including deleted files
-rsync -rlvtz --delete -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/opt/$tomcatDir/ root@$vmIPaddress:/opt/$tomcatDir/
+#cd $WORKSPACE/ArmCommon/Common/VMFiles/
+##first, sync all Linux files, without tomcat directory
+#rsync -rlvtz --exclude &quot;opt/$tomcatDir&quot; -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/ root@$vmIPaddress:/
+##second, sync tomcat folder including deleted files
+#rsync -rlvtz --delete -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/opt/$tomcatDir/ root@$vmIPaddress:/opt/$tomcatDir/
 
 # Artifactory location
 artifactoryServer=https://artifactory
