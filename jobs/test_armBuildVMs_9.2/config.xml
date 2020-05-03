@@ -120,7 +120,7 @@ echo &quot;$(date) : *****************  START  ******************&quot; &gt;&amp
 vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-Conf_$VERSION_NAME&quot; | gawk &apos;{print $1}&apos;`
 if [ ! -z &quot;$list&quot; ]
 	then
-	    echo &quot;$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now&quot;  &gt;&amp;3
+	    echo &quot;$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now&quot;  | tee -a $logfile
 		exit
 fi
 
