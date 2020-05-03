@@ -207,11 +207,9 @@ EOF
 #first thing after VM is up: stop tomcat
 function stopTomcat () {
 	HOST=$1
-	sshpass -p password ssh root@${HOST} service tomcat stop
+	sshpass -p password ssh root@${HOST} systemctl stop tomcat
 }
-echo &quot;$(date) : Stopping Tomact service&quot; | tee -a $logfile
-stopTomcat $vmIPaddress
-sleep 3
+
 
 #define tomcat folder name per branch
 if [[ $BRANCH == 8.4 || $BRANCH == 8.6 || $BRANCH == 8.8 ]]
@@ -248,27 +246,14 @@ EOF
 #prepare parameters:
 arm_utils_file_name=arm_utils.tar.gz
 offile_repository_file_name=cent92install-repo.tar.gz
-url=&quot;https://artifactory/Devops/ARM/OVA/centOS8&quot;
-destPath=&quot;/tmp&quot;
+
 
 #ssh to Topology VM and download arm utils from Artifactory to /tmp folder
-echo &quot;$(date) : downloading $arm_utils_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
-downloadArtifact $vmIPaddress ${url}/${arm_utils_file_name} ${destPath}/${arm_utils_file_name}
-	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
-        echo &apos;wget failed&apos;
-        exit 1
-	fi
-sleep 3
+echo &quot;$(date) : copy $arm_utils_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+sshpass -p password scp ${WORKSPACE}/${arm_utils_file_name} root@10.7.2.5:/tmp/${arm_utils_file_name}
+sshpass -p password scp ${WORKSPACE}/${offile_repository_file_name} root@10.7.2.5:/tmp/${offile_repository_file_name}
 
 
-#ssh to Topology VM and download the offline repository from Artifactory to /tmp folder
-echo &quot;$(date) : downloading $offile_repository_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
-downloadArtifact $vmIPaddress ${url}/${offile_repository_file_name} ${destPath}/${offile_repository_file_name}
-	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
-        echo &apos;wget failed&apos;
-        exit 1
-	fi
-sleep 3
 
 echo &quot;$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils&quot;  | tee -a $logfile
 sshpass -p password ssh root@${vmIPaddress} &lt;&lt; EOF
@@ -401,6 +386,66 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentials>
+          <username></username>
+          <password></password>
+        </credentials>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>true</useSpecs>
+      <uploadSpec>
+        <spec></spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;Devops/ARM/OVA/centOS8/*.tar.gz&quot;,
+            &quot;target&quot;: &quot;${workspace}/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        }
+    ]
+}</spec>
+      </downloadSpec>
+      <deployPattern></deployPattern>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
       <template>#${BUILD_NUMBER}___${ENV,var=&quot;VERSION_NAME&quot;}</template>
       <runAtStart>true</runAtStart>
