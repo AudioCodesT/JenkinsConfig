@@ -87,7 +87,7 @@
 #This script purpose:
 #build a new Conf VM
 
-JAVA_PATH=&quot;/usr/java/jdk-11&quot;
+JAVA_PATH=&quot;/usr/lib/jvm/java-11-amazon-corretto&quot;
 
 
 
@@ -101,10 +101,10 @@ vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 cd ${WORKSPACE}
 
 # Create a new log file
-now=$(date +&quot;%Y%m%d-%H%M%S&quot;)
-logfile=&quot;${WORKSPACE}/arm_configurator_$now.log&quot;
-[[ -f $logfile  ]] &amp;&amp; rm $logfile
-touch $logfile
+  now=$(date +&quot;%Y%m%d-%H%M%S&quot;)
+  logfile=&quot;${WORKSPACE}/arm_configurator_$now.log&quot;
+  [[ -f $logfile  ]] &amp;&amp; rm $logfile
+  touch $logfile
 
 
 #verify argument was provided
@@ -170,6 +170,7 @@ echo &quot;$(date) : vm IP is $vmIPaddress&quot; | tee -a $logfile
 function sqlInit () {
 	HOST=$1
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
+    	systemctl start mysql
 		jar xf common-*.jar sql/armDB.sql
 		/usr/bin/mysql &lt;/root/sql/armDB.sql
 		jar xf common-*.jar mongo/mongo.js
@@ -184,7 +185,7 @@ function cleanTopologyFiles () {
 	HOST=$1
 	tomcatFolder=$2
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-		service tomcat stop
+		systemctl stop tomcat
 		chmod +x /opt/$tomcatFolder/webapps
 		rm -rf /root/.ssh
 		rm -rf /opt/tomcat/webapps/ARM
@@ -220,22 +221,7 @@ if [[ $BRANCH == 8.4 || $BRANCH == 8.6 || $BRANCH == 8.8 ]]
 fi
 
 
-# Artifactory location
-artifactoryServer=https://artifactory
-artifactoryRepo=libs-release-local
-#download artifact from artifactory
-#the following function is getting IP address and artifact details, ssh to VM and download artifact from artifactory
-function downloadArtifact () {
-	HOST=$1
-	URL=$2
-	TARGET_DIR=$3
-	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-	wget --no-check-certificate --user arm-read --password AP3kEukcMwU8aATBs6d7AM4KMyR $URL -O $TARGET_DIR
-	if [ &quot;$?&quot; -ne &quot;0&quot; ];then echo &apos;wget failed&apos;;  exit 1; fi
-EOF
 
-
-}
 
 #***************************************************************TEMP******************************************************
 
@@ -250,8 +236,8 @@ offile_repository_file_name=cent92install-repo.tar.gz
 
 #ssh to Topology VM and download arm utils from Artifactory to /tmp folder
 echo &quot;$(date) : copy $arm_utils_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
-sshpass -p password scp ${WORKSPACE}/${arm_utils_file_name} root@10.7.2.5:/tmp/${arm_utils_file_name}
-sshpass -p password scp ${WORKSPACE}/${offile_repository_file_name} root@10.7.2.5:/tmp/${offile_repository_file_name}
+sshpass -p password scp ${WORKSPACE}/${arm_utils_file_name} root@${vmIPaddress}:/tmp/${arm_utils_file_name}
+sshpass -p password scp ${WORKSPACE}/${offile_repository_file_name} root@${vmIPaddress}:/tmp/${offile_repository_file_name}
 
 
 
@@ -274,7 +260,22 @@ rsync -rlvtz --exclude &quot;opt/$tomcatDir&quot; -e &quot;ssh -o StrictHostKeyC
 #second, sync tomcat folder including deleted files
 rsync -rlvtz --delete -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/opt/$tomcatDir/ root@$vmIPaddress:/opt/$tomcatDir/
 
+# Artifactory location
+artifactoryServer=https://artifactory
+artifactoryRepo=libs-release-local
+#download artifact from artifactory
+#the following function is getting IP address and artifact details, ssh to VM and download artifact from artifactory
+function downloadArtifact () {
+	HOST=$1
+	URL=$2
+	TARGET_DIR=$3
+	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
+	 curl -ku arm-read:AP3kEukcMwU8aATBs6d7AM4KMyR $URL -o $TARGET_DIR
+	if [ &quot;$?&quot; -ne &quot;0&quot; ];then echo &apos;wget failed&apos;;  exit 1; fi
+EOF
 
+
+}
 
 #Download mySql db
 #-----------------
