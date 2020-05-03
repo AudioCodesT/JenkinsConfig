@@ -209,6 +209,7 @@ function stopTomcat () {
 	HOST=$1
 	ssh root@${HOST} service tomcat stop
 }
+echo &quot;$(date) : Stopping Tomact service&quot; | tee -a $logfile
 stopTomcat $vmIPaddress
 sleep 3
 
