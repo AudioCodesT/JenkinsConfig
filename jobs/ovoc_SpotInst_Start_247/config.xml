@@ -57,7 +57,7 @@ echo &quot;Starting 1 instance&quot;
 echo &quot;***********************************************************************************&quot;
 
 ACCOUNT_ID=&quot;act-1fd9f587&quot;
-MI_ID=&quot;smi-74cb2eac&quot;
+MI_ID=&quot;smi-79f08a58&quot;
 
 curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
 &quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/resume?accountId=${ACCOUNT_ID}&quot;
