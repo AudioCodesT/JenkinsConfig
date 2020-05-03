@@ -169,7 +169,7 @@ echo &quot;$(date) : vm IP is $vmIPaddress&quot; | tee -a $logfile
 #import the cert to java keystore
 function sqlInit () {
 	HOST=$1
-	ssh root@${HOST} &lt;&lt; EOF
+	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
 		jar xf common-*.jar sql/armDB.sql
 		/usr/bin/mysql &lt;/root/sql/armDB.sql
 		jar xf common-*.jar mongo/mongo.js
@@ -183,7 +183,7 @@ EOF
 function cleanTopologyFiles () {
 	HOST=$1
 	tomcatFolder=$2
-	ssh root@${HOST} &lt;&lt; EOF
+	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
 		service tomcat stop
 		chmod +x /opt/$tomcatFolder/webapps
 		rm -rf /root/.ssh
@@ -207,7 +207,7 @@ EOF
 #first thing after VM is up: stop tomcat
 function stopTomcat () {
 	HOST=$1
-	ssh root@${HOST} service tomcat stop
+	sshpass -p password ssh root@${HOST} service tomcat stop
 }
 echo &quot;$(date) : Stopping Tomact service&quot; | tee -a $logfile
 stopTomcat $vmIPaddress
@@ -231,7 +231,7 @@ function downloadArtifact () {
 	HOST=$1
 	URL=$2
 	TARGET_DIR=$3
-	ssh root@${HOST} &lt;&lt; EOF
+	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
 	wget --no-check-certificate --user arm-read --password AP3kEukcMwU8aATBs6d7AM4KMyR $URL -O $TARGET_DIR
 	if [ &quot;$?&quot; -ne &quot;0&quot; ];then echo &apos;wget failed&apos;;  exit 1; fi
 EOF
@@ -271,7 +271,7 @@ downloadArtifact $vmIPaddress ${url}/${offile_repository_file_name} ${destPath}/
 sleep 3
 
 echo &quot;$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils&quot;  | tee -a $logfile
-ssh root@${vmIPaddress} &lt;&lt; EOF
+sshpass -p password ssh root@${vmIPaddress} &lt;&lt; EOF
 	cd /tmp
 	tar -xvf arm_utils.tar.gz
 	cd arm_utils
