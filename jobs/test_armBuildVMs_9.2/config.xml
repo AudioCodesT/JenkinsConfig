@@ -201,18 +201,6 @@ EOF
 
 
 
-#first thing after VM is up: stop tomcat
-function stopTomcat () {
-	HOST=$1
-	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-    set -x
-    systemctl stop tomcat
-EOF
-}
-
-stopTomcat $vmIPaddress
-sleep 3
-
 #define tomcat folder name per branch
 tomcatDir=apache-tomcat-9.0.27
 
