@@ -44,20 +44,6 @@
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.3.0">
-      <info>
-        <propertiesContent>JAVA_HOME=/usr/java/jdk1.8.0_111</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.71">
-          <script/>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-      <on>true</on>
-      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
-      <keepBuildVariables>true</keepBuildVariables>
-      <overrideBuildParameters>false</overrideBuildParameters>
-    </EnvInjectJobProperty>
     
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
