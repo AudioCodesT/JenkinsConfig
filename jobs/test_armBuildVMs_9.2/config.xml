@@ -250,6 +250,7 @@ sshpass -p password scp ${WORKSPACE}/${offile_repository_file_name} root@${vmIPa
 
 echo "$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh root@${vmIPaddress} &lt;&lt; EOF
+	set -xe
 	cd /tmp
 	tar -xvf arm_utils.tar.gz
 	cd arm_utils
