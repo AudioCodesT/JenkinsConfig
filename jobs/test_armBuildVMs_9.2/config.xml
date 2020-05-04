@@ -1,19 +1,21 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -21,13 +23,13 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
-          <description></description>
+          <description/>
           <defaultValue>9.2.4</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BRANCH</name>
-          <description></description>
+          <description/>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -40,13 +42,13 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <propertiesContent>JAVA_HOME=/usr/java/jdk1.8.0_111</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -56,8 +58,9 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -87,8 +90,9 @@
 #This script purpose:
 #build a new Conf VM
 
-JAVA_PATH=&quot;/usr/lib/jvm/java-11-amazon-corretto&quot;
+JAVA_PATH="/usr/lib/jvm/java-11-amazon-corretto"
 
+#java_p=$(readlink -f $(which java) | awk -F 'jre' '{print $1}')
 
 
 
@@ -101,8 +105,8 @@ vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 cd ${WORKSPACE}
 
 # Create a new log file
-  now=$(date +&quot;%Y%m%d-%H%M%S&quot;)
-  logfile=&quot;${WORKSPACE}/arm_configurator_$now.log&quot;
+  now=$(date +"%Y%m%d-%H%M%S")
+  logfile="${WORKSPACE}/aws_buildConfiguratorVM.log"
   [[ -f $logfile  ]] &amp;&amp; rm $logfile
   touch $logfile
 
@@ -110,52 +114,52 @@ cd ${WORKSPACE}
 #verify argument was provided
 #if [ $# -eq 0 ]
 #  then
-#    echo &quot;Please supply Version Name, Branch and JAVA_PATH&quot;  | tee -a $logfile
+#    echo "Please supply Version Name, Branch and JAVA_PATH"  | tee -a $logfile
 #	exit
 #fi
 
 
-echo &quot;$(date) : *****************  START  ******************&quot; | tee -a $logfile
+echo "$(date) : *****************  START  ******************" | tee -a $logfile
 
 #VERSION_NAME=$1
 #BRANCH=$2
 #JAVA_PATH=$3
-vmHostIP=&quot;10.7.10.107&quot;
+vmHostIP="10.7.10.107"
 
 
 
 #check if VM name ARM-Conf_$VERSION_NAME is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-Conf_$VERSION_NAME&quot; | gawk &apos;{print $1}&apos;`
-if [ ! -z &quot;$list&quot; ]
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-Conf_$VERSION_NAME" | gawk '{print $1}'`
+if [ ! -z "$list" ]
 	then
-	    echo &quot;$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now&quot;  | tee -a $logfile
+	    echo "$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now"  | tee -a $logfile
 		exit
 fi
 
 #create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
-echo &quot;$(date) : creating new Conf VM from image&quot; | tee -a $logfile
+echo "$(date) : creating new Conf VM from image" | tee -a $logfile
 OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name=&quot;ARM-Conf_$VERSION_NAME&quot; --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+ovftool --disableVerification --noSSLVerify --name="ARM-Conf_$VERSION_NAME" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
 if [ $? -ne 0 ]; then
-    echo &quot;$(date) : Deploy new VM has failed - check arm_configurator_$now.log&quot; | tee -a $logfile
+    echo "$(date) : Deploy new VM has failed - check arm_configurator_$now.log" | tee -a $logfile
     exit
 fi
 
 # find new vm id
-vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-Conf_$VERSION_NAME&quot; | gawk &apos;{print $1}&apos;`
-echo &quot;$(date) : vm id is $vmid&quot; | tee -a $logfile
+vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-Conf_$VERSION_NAME" | gawk '{print $1}'`
+echo "$(date) : vm id is $vmid" | tee -a $logfile
 
 # Wait for arm server power on
 #isUp $vmHostIP $vmid || exit
-echo &quot;$(date) : sleep 5 min.&quot; | tee -a $logfile
+echo "$(date) : sleep 5 min." | tee -a $logfile
 sleep 300
 
 
 # find new vm IPv4 address
-#vmip=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -m 1 &quot;ipAddress&quot; | cut -d&apos;&quot;&apos; -f2`
-vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -E &quot;ipAddress.*\[$&quot; -m 1 -A 5 | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot;`
-ipcalc -cs $vmIPaddress || ( echo &quot;$(date) : Invalid IP for $vmid&quot; | tee -a $logfile &amp;&amp; exit)
-echo &quot;$(date) : vm IP is $vmIPaddress&quot; | tee -a $logfile
+#vmip=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -m 1 "ipAddress" | cut -d'"' -f2`
+vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $vmid" | tee -a $logfile &amp;&amp; exit)
+echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 
 
 
@@ -196,9 +200,9 @@ function cleanTopologyFiles () {
 		find /var/log -type f -delete
 		touch /var/log/mysqld.log
 		chown -R mysql:root /var/log/mysqld.log
-		semanage fcontext  -a -t  var_log_t -s system_u &apos;/opt/$tomcatFolder/logs(/.*)?&apos;
+		semanage fcontext  -a -t  var_log_t -s system_u '/opt/$tomcatFolder/logs(/.*)?'
 		restorecon -Frvv /opt/$tomcatFolder/logs
-		TAB=$&apos;\t&apos;; sed -i &apos;/#\?PermitRootLogin[ ${TAB}]\+\w\+$/{ s//PermitRootLogin no/g; }&apos; /etc/ssh/sshd_config
+		TAB=$'\t'; sed -i '/#\?PermitRootLogin[ ${TAB}]\+\w\+$/{ s//PermitRootLogin no/g; }' /etc/ssh/sshd_config
 EOF
 }
 
@@ -215,12 +219,8 @@ stopTomcat $vmIPaddress
 sleep 3
 
 #define tomcat folder name per branch
-if [[ $BRANCH == 8.4 || $BRANCH == 8.6 || $BRANCH == 8.8 ]]
-	then
-	tomcatDir=apache-tomcat-9.0.8
-	else
-	tomcatDir=apache-tomcat-9.0.27
-fi
+tomcatDir=apache-tomcat-9.0.27
+
 
 
 
@@ -237,13 +237,13 @@ offile_repository_file_name=cent92install-repo.tar.gz
 
 
 #ssh to Topology VM and download arm utils from Artifactory to /tmp folder
-echo &quot;$(date) : copy $arm_utils_file_name file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+echo "$(date) : copy $arm_utils_file_name file from Artifactory to Topology VM $vmIPaddress"  | tee -a $logfile
 sshpass -p password scp ${WORKSPACE}/${arm_utils_file_name} root@${vmIPaddress}:/tmp/${arm_utils_file_name}
 sshpass -p password scp ${WORKSPACE}/${offile_repository_file_name} root@${vmIPaddress}:/tmp/${offile_repository_file_name}
 
 
 
-echo &quot;$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils&quot;  | tee -a $logfile
+echo "$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh root@${vmIPaddress} &lt;&lt; EOF
 	cd /tmp
 	tar -xvf arm_utils.tar.gz
@@ -258,9 +258,9 @@ EOF
 #but exclude the tomcat dir
 #cd $WORKSPACE/ArmCommon/Common/VMFiles/
 ##first, sync all Linux files, without tomcat directory
-#rsync -rlvtz --exclude &quot;opt/$tomcatDir&quot; -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/ root@$vmIPaddress:/
+#rsync -rlvtz --exclude "opt/$tomcatDir" -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no" Configurator/ root@$vmIPaddress:/
 ##second, sync tomcat folder including deleted files
-#rsync -rlvtz --delete -e &quot;ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no&quot; Configurator/opt/$tomcatDir/ root@$vmIPaddress:/opt/$tomcatDir/
+#rsync -rlvtz --delete -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GSSAPIAuthentication=no" Configurator/opt/$tomcatDir/ root@$vmIPaddress:/opt/$tomcatDir/
 
 # Artifactory location
 artifactoryServer=https://artifactory
@@ -273,7 +273,7 @@ function downloadArtifact () {
 	TARGET_DIR=$3
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
 	 curl -ku arm-read:AP3kEukcMwU8aATBs6d7AM4KMyR $URL -o $TARGET_DIR
-	if [ &quot;$?&quot; -ne &quot;0&quot; ];then echo &apos;wget failed&apos;;  exit 1; fi
+	if [ "$?" -ne "0" ];then echo 'wget failed';  exit 1; fi
 EOF
 
 
@@ -288,19 +288,19 @@ path=$artifactoryServer/$artifactoryRepo/$artifact
 version=$VERSION_NAME
 warName=$artifactName-$version.jar
 url=$path/$version/$warName
-destPath=&quot;/root/$artifactName-$version.jar&quot;
+destPath="/root/$artifactName-$version.jar"
 
 #ssh to Topology VM and download sql file from Artifactory to /root folder
-echo &quot;$(date) : downloading $artifactName-$version.jar file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+echo "$(date) : downloading $artifactName-$version.jar file from Artifactory to Topology VM $vmIPaddress"  | tee -a $logfile
 downloadArtifact $vmIPaddress $url $destPath
-	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
-        echo &apos;wget failed&apos;
+	if [ "$?" -ne "0" ];then
+        echo 'wget failed'
         exit 1
 	fi
 sleep 3
 
 #ssh to VM and run sql init
-echo &quot;$(date) : ssh to Topology VM $vmIPaddress and run sql init&quot;  | tee -a $logfile
+echo "$(date) : ssh to Topology VM $vmIPaddress and run sql init"  | tee -a $logfile
 sqlInit $vmIPaddress
 sleep 3
 
@@ -313,39 +313,39 @@ path=$artifactoryServer/$artifactoryRepo/$artifact
 version=$VERSION_NAME
 warName=$artifactName-$version.war
 url=$path/$version/$warName
-destPath=&quot;/opt/tomcat/webapps/ARM.war&quot;
+destPath="/opt/tomcat/webapps/ARM.war"
 
 #ssh to Topology VM and download Topology war file from Artifactory to tomcat webapp folder
-echo &quot;$(date) : downloading Topology war file from Artifactory to Topology VM $vmIPaddress&quot;  | tee -a $logfile
+echo "$(date) : downloading Topology war file from Artifactory to Topology VM $vmIPaddress"  | tee -a $logfile
 downloadArtifact $vmIPaddress $url $destPath
-	if [ &quot;$?&quot; -ne &quot;0&quot; ];then
-        echo &apos;wget failed&apos;
+	if [ "$?" -ne "0" ];then
+        echo 'wget failed'
         exit 1
 	fi
 sleep 3
 
 #clean logs before shutdown. tomcat dir is per branch.
-echo &quot;$(date) : ssh to clean router webapp folder and log files and configure some tomcat files&quot;  | tee -a $logfile	
+echo "$(date) : ssh to clean router webapp folder and log files and configure some tomcat files"  | tee -a $logfile	
 cleanTopologyFiles $vmIPaddress $tomcatDir
 
 ###########################
 #graceful shutdouwn this new VM with new war file in it
-echo &quot;$(date) : shutdown new VM&quot; | tee -a $logfile
+echo "$(date) : shutdown new VM" | tee -a $logfile
 ssh root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
 sleep 30
 
 #export the new VM to an OVA file
-echo &quot;$(date) : export new VM to an OVA file&quot;  | tee -a $logfile
+echo "$(date) : export new VM to an OVA file"  | tee -a $logfile
 mkdir $WORKSPACE/$VERSION_NAME/
 mkdir $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
 ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/ARM-Conf_$VERSION_NAME $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME/ARM-Conf_$VERSION_NAME.ova | tee -a $logfile
-ovfResult=`tail -1 $logfile | grep &quot;Completed&quot;`
-[[ &quot;${ovfResult}&quot; -eq &quot;Completed with errors&quot; ]] &amp;&amp; exit -1
+ovfResult=`tail -1 $logfile | grep "Completed"`
+[[ "${ovfResult}" -eq "Completed with errors" ]] &amp;&amp; exit -1
 
 cd $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
 md5sum ARM-Conf_$VERSION_NAME.ova &gt; ARM-Conf_$VERSION_NAME.ova.md5
 #start the VM
-echo &quot;$(date) : start the new VM&quot;  | tee -a $logfile
+echo "$(date) : start the new VM"  | tee -a $logfile
 ssh root@${vmHostIP} vim-cmd vmsvc/power.on ${vmid}
 sleep 30
 
@@ -353,9 +353,9 @@ sleep 30
 echo Conf_IP_address=$vmIPaddress &gt; $WORKSPACE/params.properties
 
 #what left is to upload new OVA to Artifactory
-echo &quot;$(date) : ********        FINISH      ***********&quot;  | tee -a $logfile
-echo &quot;$(date) : what left is to upload new OVA to Artifactory&quot;  | tee -a $logfile
-echo &quot;$(date) : ********    **************   ***********&quot;  | tee -a $logfile
+echo "$(date) : ********        FINISH      ***********"  | tee -a $logfile
+echo "$(date) : what left is to upload new OVA to Artifactory"  | tee -a $logfile
+echo "$(date) : ********    **************   ***********"  | tee -a $logfile
 
 
 
@@ -372,7 +372,7 @@ cp aws_buildRouterVM_log.out $WORKSPACE
 cp aws_buildTopologyVM_log.out $WORKSPACE
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>params.properties</propertiesFilePath>
       </info>
@@ -380,7 +380,7 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>aws_buildRouterVM_log.out, aws_buildTopologyVM_log.out</artifacts>
+      <artifacts>aws_buildRouterVM.log, aws_buildConfiguratorVM.log</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
@@ -389,7 +389,7 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -401,56 +401,49 @@ cp aws_buildTopologyVM_log.out $WORKSPACE
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;Devops/ARM/OVA/centOS8/*.tar.gz&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "Devops/ARM/OVA/centOS8/*.tar.gz",
+            "target": "${workspace}/",
+            "flat": "true"
         }
     ]
 }</spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deployPattern/>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER}___${ENV,var=&quot;VERSION_NAME&quot;}</template>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+      <template>#${BUILD_NUMBER}___${ENV,var="VERSION_NAME"}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
