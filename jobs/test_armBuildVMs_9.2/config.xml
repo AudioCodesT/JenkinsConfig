@@ -80,7 +80,7 @@
 #This script purpose:
 #build a new Conf VM
 
-JAVA_PATH="/usr/lib/jvm/java-11-amazon-corretto"
+#JAVA_PATH="/usr/lib/jvm/java-11-amazon-corretto"
 
 #java_p=$(readlink -f $(which java) | awk -F 'jre' '{print $1}')
 
@@ -152,7 +152,9 @@ ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $vmid" | tee -a $log
 echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 
 
-
+#define java path
+JAVA_PATH=$(sshpass -p password ssh root@${vmIPaddress} echo $JAVA_HOME)
+echo $JAVA_PATH
 #the following function is getting IP address
 #ssh the VM
 #extract armDB.sql from common-xxx.jar to /root/sql
