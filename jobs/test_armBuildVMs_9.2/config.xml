@@ -174,6 +174,7 @@ echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 function sqlInit () {
 	HOST=$1
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
+    	set -xe
     	systemctl start mysql
 		jar xf common-*.jar sql/armDB.sql
 		/usr/bin/mysql &lt;/root/sql/armDB.sql
@@ -189,6 +190,7 @@ function cleanTopologyFiles () {
 	HOST=$1
 	tomcatFolder=$2
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
+    	set -xe
 		systemctl stop tomcat
 		chmod +x /opt/$tomcatFolder/webapps
 		rm -rf /root/.ssh
@@ -212,7 +214,10 @@ EOF
 #first thing after VM is up: stop tomcat
 function stopTomcat () {
 	HOST=$1
-	sshpass -p password ssh root@${HOST} systemctl stop tomcat
+	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
+    set -xe
+    systemctl stop tomcat
+EOF
 }
 
 stopTomcat $vmIPaddress
@@ -272,8 +277,8 @@ function downloadArtifact () {
 	URL=$2
 	TARGET_DIR=$3
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-	 curl -ku arm-read:AP3kEukcMwU8aATBs6d7AM4KMyR $URL -o $TARGET_DIR
-	if [ "$?" -ne "0" ];then echo 'wget failed';  exit 1; fi
+    set -xe
+	curl -ku arm-read:AP3kEukcMwU8aATBs6d7AM4KMyR $URL -o $TARGET_DIR
 EOF
 
 
