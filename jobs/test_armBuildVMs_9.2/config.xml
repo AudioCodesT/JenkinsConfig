@@ -86,7 +86,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/sh
+      <command>#!/bin/sh -xe
 #This script purpose:
 #build a new Conf VM
 
@@ -339,8 +339,11 @@ echo "$(date) : export new VM to an OVA file"  | tee -a $logfile
 mkdir $WORKSPACE/$VERSION_NAME/
 mkdir $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
 ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/ARM-Conf_$VERSION_NAME $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME/ARM-Conf_$VERSION_NAME.ova | tee -a $logfile
-ovfResult=`tail -1 $logfile | grep "Completed"`
-[[ "${ovfResult}" -eq "Completed with errors" ]] &amp;&amp; exit -1
+ovfResult=$(tail -1 $logfile | grep "Completed")
+if [[ "${ovfResult}" -eq "Completed with errors" ]] 
+then
+	exit 1
+fi
 
 cd $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
 md5sum ARM-Conf_$VERSION_NAME.ova &gt; ARM-Conf_$VERSION_NAME.ova.md5
