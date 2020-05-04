@@ -367,9 +367,7 @@ echo "$(date) : ********    **************   ***********"  | tee -a $logfile
 #sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH $JAVA_PATH
 #sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
 
-#copy log files to workspace dir
-cp aws_buildRouterVM_log.out $WORKSPACE
-cp aws_buildTopologyVM_log.out $WORKSPACE
+
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
