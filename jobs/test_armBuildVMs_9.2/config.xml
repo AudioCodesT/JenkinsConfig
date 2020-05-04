@@ -164,7 +164,7 @@ echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 function sqlInit () {
 	HOST=$1
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-    	set -xe
+    	set -x
     	systemctl start mysql
 		jar xf common-*.jar sql/armDB.sql
 		/usr/bin/mysql &lt;/root/sql/armDB.sql
@@ -180,7 +180,7 @@ function cleanTopologyFiles () {
 	HOST=$1
 	tomcatFolder=$2
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-    	set -xe
+    	set -x
 		systemctl stop tomcat
 		chmod +x /opt/$tomcatFolder/webapps
 		rm -rf /root/.ssh
@@ -205,7 +205,7 @@ EOF
 function stopTomcat () {
 	HOST=$1
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-    set -xe
+    set -x
     systemctl stop tomcat
 EOF
 }
@@ -240,7 +240,7 @@ sshpass -p password scp ${WORKSPACE}/${offile_repository_file_name} root@${vmIPa
 
 echo "$(date) : run prepare_configurator_from_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh root@${vmIPaddress} &lt;&lt; EOF
-	set -xe
+	set -x
 	cd /tmp
 	tar -xvf arm_utils.tar.gz
 	cd arm_utils
@@ -268,7 +268,7 @@ function downloadArtifact () {
 	URL=$2
 	TARGET_DIR=$3
 	sshpass -p password ssh root@${HOST} &lt;&lt; EOF
-    set -xe
+    set -x
 	curl -ku arm-read:AP3kEukcMwU8aATBs6d7AM4KMyR $URL -o $TARGET_DIR
 EOF
 
@@ -290,7 +290,7 @@ destPath="/root/$artifactName-$version.jar"
 echo "$(date) : downloading $artifactName-$version.jar file from Artifactory to Topology VM $vmIPaddress"  | tee -a $logfile
 downloadArtifact $vmIPaddress $url $destPath
 	if [ "$?" -ne "0" ];then
-        echo 'wget failed'
+        echo 'curl failed'
         exit 1
 	fi
 sleep 3
@@ -315,7 +315,7 @@ destPath="/opt/tomcat/webapps/ARM.war"
 echo "$(date) : downloading Topology war file from Artifactory to Topology VM $vmIPaddress"  | tee -a $logfile
 downloadArtifact $vmIPaddress $url $destPath
 	if [ "$?" -ne "0" ];then
-        echo 'wget failed'
+        echo 'curl failed'
         exit 1
 	fi
 sleep 3
