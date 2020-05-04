@@ -324,7 +324,7 @@ mkdir $WORKSPACE/$VERSION_NAME/
 mkdir $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME
 ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/ARM-Conf_$VERSION_NAME $WORKSPACE/$VERSION_NAME/ARM-Conf_$VERSION_NAME/ARM-Conf_$VERSION_NAME.ova | tee -a $logfile
 ovfResult=$(tail -1 $logfile | grep "Completed")
-if [[ "${ovfResult}" -eq "Completed with errors" ]] 
+if [[ "${ovfResult}" == "Completed with errors" ]] 
 then
 	exit 1
 fi
