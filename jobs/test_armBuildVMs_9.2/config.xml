@@ -152,9 +152,7 @@ ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $vmid" | tee -a $log
 echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 
 
-#define java path
-JAVA_PATH=$(sshpass -p password ssh root@${vmIPaddress} echo $JAVA_HOME)
-echo $JAVA_PATH
+
 #the following function is getting IP address
 #ssh the VM
 #extract armDB.sql from common-xxx.jar to /root/sql
@@ -239,6 +237,11 @@ EOF
 
 
 #***************************************************************TEMP***********************************************************
+
+#define java path
+JAVA_PATH=$(sshpass -p password ssh root@${vmIPaddress} echo $JAVA_HOME)
+echo $JAVA_PATH
+
 
 #rsync all Linux VMFiles from the ARM repository to the Configurator VM
 #but exclude the tomcat dir
