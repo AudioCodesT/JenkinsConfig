@@ -173,12 +173,12 @@ sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH
     "files": [
         {
             "pattern": "${WORKSPACE}/${VERSION_NAME}/ARM-Conf_${VERSION_NAME}/ARM-Conf_${VERSION_NAME}.ova",
-            "target": "libs-release-local/com/ac/arm/OVA/$VERSION_NAME",
+            "target": "libs-release-local/com/ac/arm/OVA/$VERSION_NAME/",
             "flat": "true"
         },
         {
             "pattern": "${WORKSPACE}/${VERSION_NAME}/ARM-router_${VERSION_NAME}/ARM-Router_${VERSION_NAME}.ova",
-            "target": "libs-release-local/com/ac/arm/OVA/$VERSION_NAME",
+            "target": "libs-release-local/com/ac/arm/OVA/$VERSION_NAME/",
             "flat": "true"
         }
     ]
