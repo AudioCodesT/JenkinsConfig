@@ -46,27 +46,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://jenkins@gerrit:29418/ARM/Arm</url>
-        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>refs/tags/${VERSION_NAME}</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
-        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
-      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
-    </extensions>
-  </scm>
+  <scm class="hudson.scm.NullSCM"/>
   <assignedNode>arm_build_esxi_6.5</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
@@ -81,10 +61,10 @@
 
 
 
-cp ${WORKSPACE}/../*.sh ${WORKSPACE}/.
+#cp ${WORKSPACE}/../*.sh ${WORKSPACE}/.
 
-sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
-sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH 
+#sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
+#sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH 
 
 
 
