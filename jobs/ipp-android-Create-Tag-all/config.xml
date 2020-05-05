@@ -1,22 +1,24 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests&#xd;
-1) Config and fetch the wake up repositoryand wait 5 minutes&#xd;
-2) Check newer builds waiting in queue and add and fetch their repositories&#xd;
-3) Check previous builds that were not TAGed and config and fetch them too&#xd;
-4) If it is a Manifest, TAG it and exit&#xd;
-5) Check the last Manifest TAG and increase it by one&#xd;
-6) TAG the new commit and create a new Commit in Manifest after updating all relevant xml files&#xd;
-7) Go over all previous repositories builds and repeat #5 (use the same new Commit)&#xd;
+  <description>This job raise after every Submit and create a new TAG by increment the last TAG in IPP/Android/repo_manifests&#13;
+1) Config and fetch the wake up repositoryand wait 5 minutes&#13;
+2) Check newer builds waiting in queue and add and fetch their repositories&#13;
+3) Check previous builds that were not TAGed and config and fetch them too&#13;
+4) If it is a Manifest, TAG it and exit&#13;
+5) Check the last Manifest TAG and increase it by one&#13;
+6) TAG the new commit and create a new Commit in Manifest after updating all relevant xml files&#13;
+7) Go over all previous repositories builds and repeat #5 (use the same new Commit)&#13;
 8) TAG the manifest repository</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -29,7 +31,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -38,7 +40,7 @@
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
           <description>you must provide the branch name when you execute it manually</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -49,7 +51,7 @@ Could be for examples:
 IPP/Android/device_dspg_dvf101-kernel
 IPP/Android/device_audiocodes_common
 uboot/c450hd_uboot</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -61,8 +63,9 @@ uboot/c450hd_uboot</description>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -71,8 +74,8 @@ uboot/c450hd_uboot</description>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>REG_EXP</compareType>
@@ -163,27 +166,27 @@ uboot/c450hd_uboot</description>
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -197,27 +200,27 @@ uboot/c450hd_uboot</description>
 # Output = No output
 updateManifests() {
 
-  NEWTAGinRepo=&quot;${NEWTAG}_$checkBRANCH&quot;
+  NEWTAGinRepo="${NEWTAG}_$checkBRANCH"
   echo Create new TAG $NEWTAGinRepo
 
   # Need to delete the TAG before creating it again in another repository
-  if git tag --list | grep -q &quot;$(echo $NEWTAGinRepo | sed &apos;s:\.:\\\.:g&apos;)&quot;; then git tag -d &quot;$NEWTAGinRepo&quot;; fi
-  git tag -a -m &quot;Jenkins auto tag after $LastUser commit&quot; $NEWTAGinRepo $commitToTAG
+  if git tag --list | grep -q "$(echo $NEWTAGinRepo | sed 's:\.:\\\.:g')"; then git tag -d "$NEWTAGinRepo"; fi
+  git tag -a -m "Jenkins auto tag after $LastUser commit" $NEWTAGinRepo $commitToTAG
   git push $localRepoName $NEWTAGinRepo
   
   (
   echo Update $xmlFile file, create a new Commit and create this TAG in repo_manifests too
   cd ../repo_manifests
-  git config --global user.name &quot;Jenkins&quot;
+  git config --global user.name "Jenkins"
   git config --global user.email devops@audiocodes.com
   
-  for xmlFile in $(find . -name &quot;*.xml&quot; -type f -print); do
+  for xmlFile in $(find . -name "*.xml" -type f -print); do
     echo -------------- $xmlFile for branch $checkBRANCH -----------------
-    destBranch=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
-    if [ &quot;$checkBRANCH&quot; == &quot;$destBranch&quot; ]; then
+    destBranch=$(grep $repoToTAG\" $xmlFile | grep dest-branch | sed 's:.*dest-branch="::; s:".*::;')
+    if [ "$checkBRANCH" == "$destBranch" ]; then
       echo Find $repoToTAG in $xmlFile and replace the revision to be the new TAG
-      sed -i.bak -e &apos;s:\(.*&apos;$repoToTAG&apos;\&quot;.* revision=\&quot;\)[^&quot;]*\(\&quot; .*\):\1refs/tags/&apos;$NEWTAGinRepo&apos;\2:&apos; $xmlFile
-      # sed -i.bak -e &quot;s:\(.*$repoToTAG\&quot;.* revision=\&quot;\)[^&apos; &apos;]*\(\&quot; .*\):\1refs/tags/$NEWTAGinRepo\2:&quot; $xmlFile
+      sed -i.bak -e 's:\(.*'$repoToTAG'\".* revision=\"\)[^"]*\(\" .*\):\1refs/tags/'$NEWTAGinRepo'\2:' $xmlFile
+      # sed -i.bak -e "s:\(.*$repoToTAG\".* revision=\"\)[^' ']*\(\" .*\):\1refs/tags/$NEWTAGinRepo\2:" $xmlFile
       rm -f $xmlFile.bak
       git add $xmlFile
     fi
@@ -229,25 +232,25 @@ updateManifests() {
 # Create TAG in the main found repository (by the poll), search if others repositories were changed too 
 # Create a commit with the commits detailed in $subject variable and TAG the repo_manifests
 createTag() {
-  if git log --pretty=format:%B -n1 $LastSha1 | grep -q &quot;DevOps admin change&quot;; then
+  if git log --pretty=format:%B -n1 $LastSha1 | grep -q "DevOps admin change"; then
     echo Do not create a TAG for DevOps commits
     return
   fi
   echo Add one to the last TAG
-  NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
+  NEWTAG=`echo $LastManifestTag | sed -r 's/(.*)\.[^\d]+$/\1/'`.`echo $LastManifestTag | awk -F. '{print $NF+1}'`
   
-  subject=&quot;&quot;
-  for eachRepo in $(git remote -v | grep &quot;(push)&quot; | sed &apos;s:\(.*\)\sssh.*29418/\(.*\) .*:\1\:\2:&apos;); do
+  subject=""
+  for eachRepo in $(git remote -v | grep "(push)" | sed 's:\(.*\)\sssh.*29418/\(.*\) .*:\1\:\2:'); do
     # repoToTAG represent the full repository name, we need it to find it in the default.xml file
     echo Check repository $eachRepo.......................................
     repoToTAG=$(echo $eachRepo | cut -d: -f2)
     localRepoName=$(echo $eachRepo | cut -d: -f1)
-    checkedBranch=&quot;&quot;
-    for xmlFile in $(find ../repo_manifests -name &quot;*.xml&quot; -type f -print); do
+    checkedBranch=""
+    for xmlFile in $(find ../repo_manifests -name "*.xml" -type f -print); do
       echo --- $xmlFile for repository $localRepoName ---
-      checkBRANCH=$(grep $repoToTAG\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
-      if [[ -z $checkBRANCH || &quot;$checkedBranch&quot; =~ &quot;$checkBRANCH&quot; ]]; then continue; fi
-      checkedBranch=&quot;$checkedBranch $checkBRANCH&quot;
+      checkBRANCH=$(grep $repoToTAG\" $xmlFile | grep dest-branch | sed 's:.*dest-branch="::; s:".*::;')
+      if [[ -z $checkBRANCH || "$checkedBranch" =~ "$checkBRANCH" ]]; then continue; fi
+      checkedBranch="$checkedBranch $checkBRANCH"
       GERRIT_BRANCH=$localRepoName/$checkBRANCH
 
       # Check if this branch exist in this repository
@@ -257,17 +260,22 @@ createTag() {
       fi
       if ! git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then
         LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
-        # Check if it a TAG or the last SHA1 (&quot;--always&quot; option give the last commit SHA1 if no TAG exist)
-        #if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then continue; fi
+        # Check if it a TAG or the last SHA1 ("--always" option give the last commit SHA1 if no TAG exist)
+        #if [ ! $(git tag -l "$LastTag") ]; then continue; fi
         createCommitFileList
-        commitToTAG=&quot;&quot;
+        othersSubject=""
+        commitToTAG=""
         while IFS=_ read -r Sha1 User When; do
-          if [ &quot;$LastUser&quot; = &quot;$User&quot; ]; then
-            subject=&quot;$subject$(git log --pretty=format:&quot;--Hash:%h %n%s (repo: $repoToTAG - branch: $checkBRANCH) %n%b %n&quot; $Sha1 -n1)&quot;
+          thisSubject="$(git log --pretty=format:"--Hash:%h %n%s (repo: $repoToTAG - branch: $checkBRANCH) %n%b %n" $Sha1 -n1)"
+          if [ "$LastUser" = "$User" ]; then
+            subject="$othersSubject$subject$thisSubject"
             commitToTAG=$Sha1
+            othersSubject=""
+          else
+            othersSubject="$othersSubject$thisSubject"
           fi              
         done &lt; ${localRepoName}_$checkBRANCH.list
-        if [ -n &quot;$commitToTAG&quot; ]; then
+        if [ -n "$commitToTAG" ]; then
           updateManifests
         fi
       fi
@@ -277,8 +285,8 @@ createTag() {
   (
   
   cd ../repo_manifests
-  git commit -m &quot;Change in: $MainRepoName, User: $LastUser&quot; -m &quot;$subject&quot; -m &quot;Promote tag to $NEWTAG&quot;
-  git tag -a -m &quot;Jenkins auto tag for $MainRepoName by $LastUser&quot; $NEWTAG
+  git commit -m "Change in: $MainRepoName, User: $LastUser" -m "$subject" -m "Promote tag to $NEWTAG"
+  git tag -a -m "Jenkins auto tag for $MainRepoName by $LastUser" $NEWTAG
   git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
   )
@@ -293,12 +301,12 @@ createCommitFileList() {
   echo TAG: $LastTag ------------------- on: $localRepoName -------------------
   #If no TAGS exist at all in this branch, check the last commit only
   if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
-  if [ ! $(git tag -l &quot;$LastTag&quot;) ]; then
+  if [ ! $(git tag -l "$LastTag") ]; then
     echo No found TAGS, check $GERRIT_BRANCH for last 3 changes
-    git log -3 --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
+    git log -3 --first-parent --reverse --date=raw --pretty=format:"%H_%cn_%cd" $GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
   else
     echo Found TAG $LastTag, check $LastTag..$GERRIT_BRANCH for last 20 changes
-    git log -20 --first-parent --reverse --date=raw --pretty=format:&quot;%H_%cn_%cd&quot; $LastTag..$GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
+    git log -20 --first-parent --reverse --date=raw --pretty=format:"%H_%cn_%cd" $LastTag..$GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
   fi 
   echo &gt;&gt; ${localRepoName}_$checkBRANCH.list
 }
@@ -307,7 +315,7 @@ createCommitFileList() {
 # Create (if not exist yet) the repo_manifests and find the last TAG
 # Output = LastManifestTag
 createLocalManifests() {
-  echo Create &apos;repo_manifests&apos; and find the last TAG 
+  echo Create 'repo_manifests' and find the last TAG 
   cd ..
   if [ ! -d repo_manifests ]; then
     git clone ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests
@@ -318,7 +326,7 @@ createLocalManifests() {
   if ! git branch | grep -q $BRANCH; then git checkout -f -B $BRANCH origin/$mainBranch; fi
   git reset --hard
   git pull --rebase
-  if [ ! -f &quot;$BRANCH.xml&quot; ] &amp;&amp; git branch -a --remotes | grep -q $BRANCH; then
+  if [ ! -f "$BRANCH.xml" ] &amp;&amp; git branch -a --remotes | grep -q $BRANCH; then
     echo Checkout Manifest to $BRANCH due to $BRANCH.xml does not exist
     git checkout -f $BRANCH
     manifestBranch=$BRANCH
@@ -333,8 +341,8 @@ createLocalManifests() {
 checkTheQueue() {
   echo Check the queue...
    for repoName in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
-                 sed &quot;s:$JOB_NAME:\n:g&quot; | grep GERRIT_PROJECT | \
-                 sed &apos;s:.*GERRIT_PROJECT=::; s:\\n.*::&apos;); do
+                 sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
+                 sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
     echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
     AddAndFetchRepository
   done
@@ -367,11 +375,11 @@ checkOldSubmit() {
   counter=0
   while [ $counter -lt 30 ]; do
     displayName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/api/json?tree=displayName | \
-                  sed &apos;s:.*displayName&quot;::; s: ::g&apos; | cut -d&apos;&quot;&apos; -f2 | cut -d- -f2)
-    if [ -n &quot;$displayName&quot; ]; then break; fi
+                  sed 's:.*displayName"::; s: ::g' | cut -d'"' -f2 | cut -d- -f2)
+    if [ -n "$displayName" ]; then break; fi
     repoName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/injectedEnvVars/export | \
-               grep GERRIT_PROJECT  | cut -d&apos;=&apos; -f2)
-    if [ -n &quot;$repoName&quot; ]; then AddAndFetchRepository; fi
+               grep GERRIT_PROJECT  | cut -d'=' -f2)
+    if [ -n "$repoName" ]; then AddAndFetchRepository; fi
     previousBuild=$((previousBuild-1))
     if [ $previousBuild -eq 0 ]; then break; fi
     counter=$((counter+1))
@@ -380,11 +388,11 @@ checkOldSubmit() {
 
 #######################################################################################
 # The main program
-# If found new commit, execute &apos;createTag&apos;
+# If found new commit, execute 'createTag'
 
 echo Starting...
-subject=&quot;&quot;
-LastManifestTag=&quot;&quot;
+subject=""
+LastManifestTag=""
 mainBranch=master
 manifestBranch=master
 
@@ -398,20 +406,20 @@ sleep 300
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
-  echo &quot;No branch found, set to main branch: $mainBranch&quot;
-  GERRIT_BRANCH=&quot;$mainBranch&quot;
+  echo "No branch found, set to main branch: $mainBranch"
+  GERRIT_BRANCH="$mainBranch"
 fi
 BRANCH=$GERRIT_BRANCH
 
 # If the job was executed manually, $PROJECT should be defined
-if [ ! -z &quot;$PROJECT&quot; ]; then GERRIT_PROJECT=$PROJECT; fi
+if [ ! -z "$PROJECT" ]; then GERRIT_PROJECT=$PROJECT; fi
 
-if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
   #Create a TAG on manifests and exit
   createLocalManifests
-  NEWTAG=`echo $LastManifestTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastManifestTag | awk -F. &apos;{print $NF+1}&apos;`
-  git tag -a -m &quot;Jenkins auto tag&quot; $NEWTAG
-  manifestBranch=$(git branch -a | grep &quot;origin.*$BRANCH&quot; | tail -1 | sed &apos;s:.*origin/::&apos;)
+  NEWTAG=`echo $LastManifestTag | sed -r 's/(.*)\.[^\d]+$/\1/'`.`echo $LastManifestTag | awk -F. '{print $NF+1}'`
+  git tag -a -m "Jenkins auto tag" $NEWTAG
+  manifestBranch=$(git branch -a | grep "origin.*$BRANCH" | tail -1 | sed 's:.*origin/::')
   git push origin HEAD:$manifestBranch
   git push origin $NEWTAG
   echo The TAG $NEWTAG was created in $GERRIT_PROJECT, including the following Commits:
@@ -431,14 +439,14 @@ checkOldSubmit
 git remote -v
 
 # If the job was automatically triggered, the $GERRIT_PROJECT should be defined.
-# If not (no matter, automatically or manually), skip this &apos;checkout&apos; and hope the next commands will find the $MainlocalRepoName
-if [ ! -z &quot;$GERRIT_PROJECT&quot; ]; then
-  echo &quot;Checkout to the right project/branch&quot;
+# If not (no matter, automatically or manually), skip this 'checkout' and hope the next commands will find the $MainlocalRepoName
+if [ ! -z "$GERRIT_PROJECT" ]; then
+  echo "Checkout to the right project/branch"
   # Most of case it was checkedout already to this project/branch
-  findProject=$(git remote -v | grep $GERRIT_PROJECT | head -1 | awk &apos;{print $1}&apos;)
-  if [ -z &quot;$findProject&quot; ]; then
-    # Probably this repository wasn&apos;t defined in this job
-    echo &quot;This local project was not defined in this job , exit with error&quot;
+  findProject=$(git remote -v | grep $GERRIT_PROJECT | head -1 | awk '{print $1}')
+  if [ -z "$findProject" ]; then
+    # Probably this repository wasn't defined in this job
+    echo "This local project was not defined in this job , exit with error"
     exit 1;  
   else 
     git checkout $findProject/$BRANCH
@@ -450,13 +458,13 @@ remote=$(git branch -a --contains HEAD | grep remotes | grep $BRANCH | head -1)
 MainlocalRepoName=$(echo $remote | cut -d/ -f2)
 
 if [ -z $MainlocalRepoName ]; then
-  echo &quot;No local project was found, exit with error&quot;
+  echo "No local project was found, exit with error"
   exit 1;
 fi
 
 GERRIT_BRANCH=$MainlocalRepoName/$BRANCH
 # Find real repository name - to find the line in default.xml 
-MainRepoName=$(git remote -v | grep push | grep &quot;^$MainlocalRepoName\s&quot; | sed &apos;s:.*29418/\(.*\) .*:\1:&apos;)
+MainRepoName=$(git remote -v | grep push | grep "^$MainlocalRepoName\s" | sed 's:.*29418/\(.*\) .*:\1:')
 
 echo Check branch $GERRIT_BRANCH if exist a new commit after the last TAG...
 if git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then exit 0; fi
@@ -470,7 +478,7 @@ git checkout $GERRIT_BRANCH
 
 echo Wake up by repository $MainlocalRepoName
 LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
-LastUser=$(git log -1 --pretty=format:&quot;%cn&quot; ${GERRIT_PATCHSET_REVISION})
+LastUser=$(git log -1 --pretty=format:"%cn" ${GERRIT_PATCHSET_REVISION})
 echo Create TAG for the user $LastUser, last TAG was $LastTag
 createTag
 
@@ -480,11 +488,11 @@ createTag
 # Currently not in use at all
 AddAndFetchAllRepository() {
 
-  allRepos=$(grep &quot;IPP/Android/&quot; ../repo_manifests/*.xml | \
-             sed &apos;s:.*name=&quot;::; s:\&quot;.*::&apos; | sort -u)
+  allRepos=$(grep "IPP/Android/" ../repo_manifests/*.xml | \
+             sed 's:.*name="::; s:\".*::' | sort -u)
   for Repo in $allRepos; do 
     shortName=$(echo $Repo | rev | cut -d/ -f 1 | rev | \
-                awk -F_ &apos;{print $1,$NF}&apos; | sed &apos;s: :_:g&apos;)
+                awk -F_ '{print $1,$NF}' | sed 's: :_:g')
     echo Config $Repo to be $shortName
     git config remote.$shortName.url ssh://jenkins@gerrit:29418/$Repo
     git fetch --depth=20 --tags --progress ssh://jenkins@gerrit:29418/$Repo \
@@ -507,14 +515,14 @@ AddAndFetchAllRepository() {
             <subject>A commit to repo_manifests was done</subject>
             <body>Add the new repo into $BUILD_URL (If needed)</body>
             <recipientProviders/>
-            <attachmentsPattern></attachmentsPattern>
+            <attachmentsPattern/>
             <attachBuildLog>true</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
             <contentType>project</contentType>
           </email>
-          <secureTriggerScript plugin="script-security@1.54.2">
-            <script>build.getBuildVariables().get(&quot;GERRIT_PROJECT&quot;) == &quot;IPP/Android/repo_manifests&quot;</script>
+          <secureTriggerScript plugin="script-security@1.71">
+            <script>build.getBuildVariables().get("GERRIT_PROJECT") == "IPP/Android/repo_manifests"</script>
             <sandbox>false</sandbox>
           </secureTriggerScript>
         </hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
@@ -522,13 +530,13 @@ AddAndFetchAllRepository() {
       <contentType>default</contentType>
       <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
       <defaultContent>$DEFAULT_CONTENT</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
+      <attachmentsPattern/>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
+      <from/>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
@@ -543,14 +551,14 @@ AddAndFetchAllRepository() {
       </delay>
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>yossim</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -560,8 +568,9 @@ AddAndFetchAllRepository() {
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
-      <template>#${BUILD_NUMBER} - ${BUILD_LOG_REGEX, regex=&quot;^.*NEWTAG=(\S*)&quot;,substText=&quot;$1&quot;,showTruncatedLines=false}</template>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+      <template>#${BUILD_NUMBER} - ${BUILD_LOG_REGEX, regex="^.*NEWTAG=(\S*)",substText="$1",showTruncatedLines=false}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
