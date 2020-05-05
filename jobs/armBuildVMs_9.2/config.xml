@@ -109,12 +109,12 @@ sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
       <recipientList>cc:Ben.Magriso</recipientList>
       <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
             <subject>$PROJECT_DEFAULT_SUBJECT</subject>
             <body>$PROJECT_DEFAULT_CONTENT</body>
             <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
             </recipientProviders>
             <attachmentsPattern/>
             <attachBuildLog>false</attachBuildLog>
@@ -122,7 +122,7 @@ sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
             <contentType>project</contentType>
           </email>
-        </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
       </configuredTriggers>
       <contentType>text/html</contentType>
       <defaultSubject>ARM $VERSION_NAME  -  New VMs are available</defaultSubject>
