@@ -1,16 +1,18 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Create &quot;ReleaseNote.txt&quot; &#xd;
-activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.2”, “3.0.4” and  &quot;3.0.6&quot;&#xd;
+  <description>Create "ReleaseNote.txt" &#13;
+activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.2”, “3.0.4” and  "3.0.6"&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -23,7 +25,7 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -37,7 +39,7 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_PROJECT</name>
-          <description></description>
+          <description/>
           <defaultValue>IPP/SFB</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -50,10 +52,11 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -69,11 +72,13 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <depth>50</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
@@ -87,8 +92,8 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -114,85 +119,85 @@ activated by new TAG on SFB “3.0.0.GA”, “3.0.0_450HD”, “3.0.1”, 3.0.
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginRefUpdatedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>IPP_VER=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
+      <command>IPP_VER=`echo $GERRIT_REFNAME | awk -F/ '{print $NF}'`
 
 IPP_VER_PREV=`git describe --first-parent --tags --abbrev=0 HEAD^` 
 
-FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | grep -v private | head -1`
-#FULL_BRANCH_NAME=&quot;origin/release/3.2.0/3.2.0.1003.X&quot;
+FULL_BRANCH_NAME=`git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' | grep -v private | head -1`
+#FULL_BRANCH_NAME="origin/release/3.2.0/3.2.0.1003.X"
 
-if [[ $FULL_BRANCH_NAME == &quot;&quot; ]]; then 
+if [[ $FULL_BRANCH_NAME == "" ]]; then 
   echo Branch name not found...   exit with error; 
   exit 1  
 fi
 
-GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
+GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | awk -F'/' '{print $NF}'`
 if [[ $FULL_BRANCH_NAME =~ (release|feature) ]]; then
-  GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | sed -r &apos;s|.*(release\|feature/.*)|\1|&apos;`
+  GERRIT_BRANCH=`echo $FULL_BRANCH_NAME | sed -r 's|.*(release\|feature/.*)|\1|'`
 fi
 #we deploy to artifactory to a specific folder $IPP_MAJOR_VER
 IPP_MAJOR_VER=${GERRIT_BRANCH}
 
-# If $GERRIT_BRANCH == &quot;3.0.0_450HD&quot;, replace the 3.0.0 by the 3 first digits in the TAG name (probably: 3.0.1)
-if [ $GERRIT_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;$(echo ${IPP_VER} | cut -d. -f1,2,3)_450HD&quot;; fi
-if [ $GERRIT_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_MAJOR_VER=&quot;3.0.0&quot;; fi;
+# If $GERRIT_BRANCH == "3.0.0_450HD", replace the 3.0.0 by the 3 first digits in the TAG name (probably: 3.0.1)
+if [ $GERRIT_BRANCH == "3.0.0_450HD" ]; then IPP_MAJOR_VER="$(echo ${IPP_VER} | cut -d. -f1,2,3)_450HD"; fi
+if [ $GERRIT_BRANCH == "3.0.0.GA" ]; then IPP_MAJOR_VER="3.0.0"; fi;
 
 #where to start history from?
-if [ $GERRIT_BRANCH == &quot;3.0.1&quot; ]; then IPP_FIRST_PREV=&quot;3.0.1.41&quot;
-else if [ $GERRIT_BRANCH == &quot;3.1.0&quot; ]; then IPP_FIRST_PREV=&quot;3.1.0.1&quot;
-else if [ $GERRIT_BRANCH == &quot;3.2&quot; ]; then IPP_FIRST_PREV=&quot;3.2.0.1&quot;
-else if [ $GERRIT_BRANCH == &quot;3.4.0&quot; ]; then IPP_FIRST_PREV=&quot;3.4.0.1&quot;
-else if [ $GERRIT_BRANCH == &quot;master&quot; ]; then IPP_FIRST_PREV=&quot;3.4.1.1&quot;
+if [ $GERRIT_BRANCH == "3.0.1" ]; then IPP_FIRST_PREV="3.0.1.41"
+else if [ $GERRIT_BRANCH == "3.1.0" ]; then IPP_FIRST_PREV="3.1.0.1"
+else if [ $GERRIT_BRANCH == "3.2" ]; then IPP_FIRST_PREV="3.2.0.1"
+else if [ $GERRIT_BRANCH == "3.4.0" ]; then IPP_FIRST_PREV="3.4.0.1"
+else if [ $GERRIT_BRANCH == "master" ]; then IPP_FIRST_PREV="3.4.1.1"
 else if [[ $FULL_BRANCH_NAME =~ (release|feature) ]];  then IPP_FIRST_PREV=$IPP_VER_PREV
 else exit 1;
 fi fi; fi; fi; fi; fi;
 
 echo git log --oneline --decorate ${IPP_FIRST_PREV}..${IPP_VER} &gt; UnixreleaseNotes.txt
 git log --oneline --decorate --no-color ${IPP_FIRST_PREV}..${IPP_VER} &gt;&gt; UnixreleaseNotes.txt
-sed &apos;s/$&apos;&quot;/`echo \\\r`/&quot; UnixreleaseNotes.txt &gt; releaseNotes.txt
+sed 's/$'"/`echo \\\r`/" UnixreleaseNotes.txt &gt; releaseNotes.txt
 
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 echo GERRIT_BRANCH=${GERRIT_BRANCH} &gt;&gt; generated_ipp_version.properties
 
-AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
-RN=&quot;&quot;
+AuthorCommitter=`git log --first-parent --pretty=format:"%aN%n%cN" $IPP_VER_PREV..$IPP_VER | grep -v Jenkins | sort -u | sed s/$/\;/g`
+RN=""
 while read -r hash; do 
-  subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
-  Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[I&quot; | sed &apos;s/^\[I/I/; s/\].*//&apos;)
+  subject=$(git log --pretty=format:"%s" $hash -n1 | sed 's/\"/`/g; s/---/_/g; s/::/;/g')
+  Jira=$(git log --pretty=format:"%B" $hash -n1 | grep "\[I" | sed 's/^\[I/I/; s/\].*//')
   RN+=---$subject::$hash::$Jira
-done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $IPP_VER_PREV..$IPP_VER)&quot;
+done &lt;&lt;&lt; "$(git log --first-parent --reverse --pretty=format:"%h" $IPP_VER_PREV..$IPP_VER)"
 
-EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
+EMAIL=`git log --pretty=format:"%ae%n%ce" $IPP_VER_PREV..$IPP_VER | grep -v devops | sort -u`
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
-DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$IPP_VER`
+DATE=`git for-each-ref --format '%(taggerdate)' refs/tags/$IPP_VER`
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
 echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; generated_ipp_version.properties
 echo EMAIL=${EMAIL} &gt;&gt; generated_ipp_version.properties
@@ -201,26 +206,29 @@ echo DATE=${DATE} &gt;&gt; generated_ipp_version.properties
 echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.properties
 
 #replace backslash with space, because it is not a valid properties file if it includes a backslash char
-#it save a &quot;&lt;name&gt;.bak&quot; backup file for debug if we will encounter problems
-sed -i.bak &apos;s/\\/ /g&apos; generated_ipp_version.properties
+#it save a "&lt;name&gt;.bak" backup file for debug if we will encounter problems
+sed -i.bak 's/\\/ /g' generated_ipp_version.properties
 
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token>Jira-update</token>
+    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@3.1.2">
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>Update-Jira</job>
+      <auth2 class="org.jenkinsci.plugins.ParameterizedRemoteTrigger.auth2.NullAuth"/>
       <shouldNotFailBuild>true</shouldNotFailBuild>
-      <pollInterval>3</pollInterval>
-      <connectionRetryLimit>5</connectionRetryLimit>
+      <trustAllCertificates>false</trustAllCertificates>
+      <overrideTrustAllCertificates>false</overrideTrustAllCertificates>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
+      <httpPostReadTimeout>30000</httpPostReadTimeout>
+      <httpGetReadTimeout>10000</httpGetReadTimeout>
+      <pollInterval>10</pollInterval>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
-      <enhancedLogging>false</enhancedLogging>
+      <job>Update-Jira</job>
+      <token>Jira-update</token>
       <parameters>NEWTAG=$IPP_VER
 RN=$RN
 GERRIT_HOST=$GERRIT_HOST
@@ -229,39 +237,27 @@ PROJECT=$PROJECT
 DATE=$DATE
 GERRIT_BRANCH=$GERRIT_BRANCH
 AuthorCommitter=$AuthorCommitter</parameters>
-      <parameterList>
-        <string>NEWTAG=$IPP_VER</string>
-        <string>RN=$RN</string>
-        <string>GERRIT_HOST=$GERRIT_HOST</string>
-        <string>EMAIL=$EMAIL</string>
-        <string>PROJECT=$PROJECT</string>
-        <string>DATE=$DATE</string>
-        <string>GERRIT_BRANCH=$GERRIT_BRANCH</string>
-        <string>AuthorCommitter=$AuthorCommitter</string>
-      </parameterList>
-      <overrideAuth>false</overrideAuth>
-      <auth>
-        <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-          <NONE>none</NONE>
-          <API__TOKEN>apiToken</API__TOKEN>
-          <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
-        </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-      </auth>
+      <enhancedLogging>true</enhancedLogging>
       <loadParamsFromFile>false</loadParamsFromFile>
-      <parameterFile></parameterFile>
-      <queryString></queryString>
+      <parameterFile/>
+      <maxConn>5</maxConn>
+      <useCrumbCache>true</useCrumbCache>
+      <useJobInfoCache>true</useJobInfoCache>
+      <abortTriggeredJob>false</abortTriggeredJob>
+      <disabled>false</disabled>
+      <hostPermits/>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0.0.GA&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0.1&quot;* ]]; then exit 1; fi
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.3">
+            <command>if [[ "$GERRIT_BRANCH" != *"3.0.0.GA"* ]] &amp;&amp; [[ "$GERRIT_BRANCH" != *"3.0.1"* ]]; then exit 1; fi
 </command>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -279,16 +275,16 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1.&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.2&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.4.0&quot;* ]] &amp;&amp; [[ &quot;$GERRIT_BRANCH&quot; != &quot;master&quot; ]]; then exit 1; fi
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.3">
+            <command>if [[ "$GERRIT_BRANCH" != *"3.1."* ]] &amp;&amp; [[ "$GERRIT_BRANCH" != *"3.2"* ]] &amp;&amp; [[ "$GERRIT_BRANCH" != *"3.4.0"* ]] &amp;&amp; [[ "$GERRIT_BRANCH" != "master" ]]; then exit 1; fi
 </command>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -306,18 +302,18 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; == *&quot;3.0&quot;* ]]
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.3">
+            <command>if [[ "$GERRIT_BRANCH" == *"3.0"* ]]
 then
 exit 1
 fi</command>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -335,18 +331,18 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.0">
-            <command>if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.0&quot;* ]]
+          <condition class="org.jenkins_ci.plugins.run_condition.contributed.ShellCondition" plugin="run-condition@1.3">
+            <command>if [[ "$GERRIT_BRANCH" != *"3.0"* ]]
 then
 exit 1
 fi</command>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -364,12 +360,12 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>yossim,Shuky.Riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
@@ -387,7 +383,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -404,48 +400,41 @@ BUILD_BRANCH=${GERRIT_BRANCH}</properties>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>false</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
       <template>#${BUILD_NUMBER} - ${IPP_VER}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
