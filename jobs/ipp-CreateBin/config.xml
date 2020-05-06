@@ -1,27 +1,29 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>purpose: create production binary file for spesific Model (if the model is C450HD then create dual bin binary file)&#xd;
-triggered: manually&#xd;
-steps:&#xd;
-if model c450HD:&#xd;
-1. clone repository emmc_tools and copy the files from there to main folder.&#xd;
-2. download all the needed files from artifactory by the chosen Android and SFB Tag.&#xd;
-3. unzip all the zip files downloaded from artifactory.&#xd;
-4. create the dual bin file.&#xd;
-5. upload the binary file to production folder in SFB TAG&#xd;
-else (all other models)&#xd;
-1. clone SFB Repository and checkout to chosen TAG&#xd;
-2. run compilation of the chosen Model&#xd;
-3. run &quot;make binary&quot; to create the bin file&#xd;
+  <description>purpose: create production binary file for spesific Model (if the model is C450HD then create dual bin binary file)&#13;
+triggered: manually&#13;
+steps:&#13;
+if model c450HD:&#13;
+1. clone repository emmc_tools and copy the files from there to main folder.&#13;
+2. download all the needed files from artifactory by the chosen Android and SFB Tag.&#13;
+3. unzip all the zip files downloaded from artifactory.&#13;
+4. create the dual bin file.&#13;
+5. upload the binary file to production folder in SFB TAG&#13;
+else (all other models)&#13;
+1. clone SFB Repository and checkout to chosen TAG&#13;
+2. run compilation of the chosen Model&#13;
+3. run "make binary" to create the bin file&#13;
 4. upload the file to artifactory</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -34,7 +36,7 @@ else (all other models)&#xd;
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -60,7 +62,7 @@ Else provide a tag only for SFB</description>
         <hudson.model.StringParameterDefinition>
           <name>SFB_VERSION</name>
           <description>SFB Tag (e.g.: 3.2.1.20)</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -68,7 +70,7 @@ Else provide a tag only for SFB</description>
           <description>Teams tag 
 Below tag 1.0.0 (e.g.: C450HD_TEAMS_0.190)
 Above tag 1.0.0 (e.g.: 1.0.60)</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -80,10 +82,11 @@ Above tag 1.0.0 (e.g.: 1.0.60)</description>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -107,7 +110,7 @@ Above tag 1.0.0 (e.g.: 1.0.60)</description>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>20</timeout>
         <depth>10</depth>
         <honorRefspec>false</honorRefspec>
@@ -124,11 +127,11 @@ Above tag 1.0.0 (e.g.: 1.0.60)</description>
   <customWorkspace>/opt/jenkinsslave/workspace/SFB</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
+      <command>if [[ "$Model" == "C450HD" ]]
 then
-	if [[ $ANDROID_VERSION == &quot;&quot; ]]
+	if [[ $ANDROID_VERSION == "" ]]
 	then
-		echo &quot;Android Version is empty, please run again with the android version.&quot;
+		echo "Android Version is empty, please run again with the android version."
 		exit 1
 	fi
 #create dualBin folder to copy all the files to this directory.
@@ -144,17 +147,17 @@ rm -rf emmc_tools
 git -c http.sslverify=false clone -n https://gerrit/IPP/emmc_tools
 cd emmc_tools
 git checkout origin/master
-cp -R * ${WORKSPACE}/dualBin
+cp -R dspg/* ${WORKSPACE}/dualBin
 
 cd ${WORKSPACE}
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># if Model is C450 make dual bin
-Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
-echo &quot;Branch=${Branch}&quot; &gt; properties
-echo &quot;Branch: ${Branch}&quot;
-if [[ &quot;$Model&quot; == &quot;C450HD&quot; ]]
+Branch=$(git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' |head -1 | cut -d'/' -f2-)
+echo "Branch=${Branch}" &gt; properties
+echo "Branch: ${Branch}"
+if [[ "$Model" == "C450HD" ]]
 then
 #check Android Branch
 cd ${WORKSPACE}/..
@@ -162,61 +165,61 @@ rm -rf repo_manifests
 git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
 cd repo_manifests
 git checkout ${ANDROID_VERSION}
-Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | cut -d&apos;/&apos; -f2-)
-curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} || curlFailed=&quot;True&quot;
-if [[ $curlFailed == &quot;True&quot; ]]
+Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' | head -1 | cut -d'/' -f2-)
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} || curlFailed="True"
+if [[ $curlFailed == "True" ]]
 then
 	Android_Branch=master
 fi
 cd ${WORKSPACE}
-echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}&quot; &gt; ${WORKSPACE}/artifactoryPath.txt
+echo "https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}" &gt; ${WORKSPACE}/artifactoryPath.txt
 cd ${WORKSPACE}/dualBin
 #mount aclnas03 to local directory
 #sudo mount -a
 #check if the Tags exists in artifactory or not
-SFB_exists_in_artifactory=&quot;False&quot;
-Android_exists_in_artifactory=&quot;False&quot;
-curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION} | grep &quot;Not Found&quot; || SFB_exists_in_artifactory=&quot;True&quot;
-curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} | grep &quot;Not Found&quot; || Android_exists_in_artifactory=&quot;True&quot;
+SFB_exists_in_artifactory="False"
+Android_exists_in_artifactory="False"
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION} | grep "Not Found" || SFB_exists_in_artifactory="True"
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} | grep "Not Found" || Android_exists_in_artifactory="True"
 #if SFB not in artifactory, copy files from aclnas03
-if [[ &quot;$SFB_exists_in_artifactory&quot; == &quot;False&quot; ]]
+if [[ "$SFB_exists_in_artifactory" == "False" ]]
 then
-	files_to_copy=(&quot;env.bin&quot; &quot;logo_image&quot; &quot;phone.bin&quot; &quot;rootfs.ext4&quot;)
-    echo &quot;Copy files for ${SFB_VERSION} from aclnas03&quot;
+	files_to_copy=("env.bin" "logo_image" "phone.bin" "rootfs.ext4" "UCC450HD_3.2.1.492.img")
+    echo "Copy files for ${SFB_VERSION} from aclnas03"
     for file in ${files_to_copy[@]}
     do
 		cp $HOME/aclnas03_ipp/SFB/${Branch}/${SFB_VERSION}/C450HD/$file ${WORKSPACE}/dualBin/$file
-        local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d&apos; &apos; -f1)
-        remote_md5=$(md5sum $HOME/aclnas03_ipp/SFB/${Branch}/${SFB_VERSION}/C450HD/$file | cut -d&apos; &apos; -f1)
+        local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d' ' -f1)
+        remote_md5=$(md5sum $HOME/aclnas03_ipp/SFB/${Branch}/${SFB_VERSION}/C450HD/$file | cut -d' ' -f1)
         if [[ $remote_md5 != $local_md5 ]]
 		then
-     		   echo &quot;Failed to copy file from aclnas03&quot;
+     		   echo "Failed to copy file from aclnas03"
        		   exit 1
 		fi
 	done
 fi
 
 # if tag is below 1.0.0 its contain C450HD_TEAMS in the tag
-	if [[ &quot;${ANDROID_VERSION}&quot; =~ &quot;C450HD_TEAMS&quot; ]]
+	if [[ "${ANDROID_VERSION}" =~ "C450HD_TEAMS" ]]
     then
     	android_file_name=${ANDROID_VERSION}
     else
-    	android_file_name=&quot;C450HD_TEAMS_${ANDROID_VERSION}&quot;
+    	android_file_name="C450HD_TEAMS_${ANDROID_VERSION}"
     fi
 
 
-if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;False&quot; ]]
+if [[ "$Android_exists_in_artifactory" == "False" ]]
 then
-    files_to_copy=(&quot;${android_file_name}.android_images.zip&quot; &quot;${android_file_name}.zip&quot;)
-    echo &quot;Copy files for ${ANDROID_VERSION} from aclnas03&quot;
+    files_to_copy=("${android_file_name}.android_images.zip" "${android_file_name}.zip")
+    echo "Copy files for ${ANDROID_VERSION} from aclnas03"
 	for file in ${files_to_copy[@]}
     do	
 		cp $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file ${WORKSPACE}/dualBin/$file
-        local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d&apos; &apos; -f1)
-        remote_md5=$(md5sum $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file | cut -d&apos; &apos; -f1)
+        local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d' ' -f1)
+        remote_md5=$(md5sum $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file | cut -d' ' -f1)
         if [[ $remote_md5 != $local_md5 ]]
 		then
-     		   echo &quot;Failed to copy file from aclnas03&quot;
+     		   echo "Failed to copy file from aclnas03"
        		   exit 1
 		fi
 	done
@@ -224,61 +227,71 @@ fi
 
 
 #download neccerray files from SFB Chosen Tag
-if [[ &quot;$SFB_exists_in_artifactory&quot; == &quot;True&quot; ]] 
+if [[ "$SFB_exists_in_artifactory" == "True" ]] 
 then
-    echo &quot;Copy files for ${SFB_VERSION} from artifactory&quot;
+    echo "Copy files for ${SFB_VERSION} from artifactory"
 	curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin
-	remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin| grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-	local_md5=$(md5sum env.bin| cut -d&apos; &apos; -f1)
+	remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/env.bin| grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+	local_md5=$(md5sum env.bin| cut -d' ' -f1)
 	if [[ $remote_md5 != $local_md5 ]]
 	then
-          echo &quot;Failed to download file from artifactory&quot;
+          echo "Failed to download file from artifactory"
           exit 1
 	fi
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum logo_image| cut -d&apos; &apos; -f1)
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/logo_image | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    local_md5=$(md5sum logo_image| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
-        echo &quot;Failed to download file from artifactory&quot;
+        echo "Failed to download file from artifactory"
         exit 1
     fi
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4 | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum rootfs.ext4| cut -d&apos; &apos; -f1)
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/rootfs.ext4 | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    local_md5=$(md5sum rootfs.ext4| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
-        echo &quot;Failed to download file from artifactory&quot;
+        echo "Failed to download file from artifactory"
         exit 1
     fi
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum phone.bin| cut -d&apos; &apos; -f1)
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/phone.bin | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    local_md5=$(md5sum phone.bin| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
-        echo &quot;Failed to download file from artifactory&quot;
+        echo "Failed to download file from artifactory"
+        exit 1
+    fi
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/UC${Model}_${SFB_VERSION}.img
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/UC${Model}_${SFB_VERSION}.img.md5
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/UC${Model}_${SFB_VERSION}.img | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    local_md5=$(md5sum UC${Model}_${SFB_VERSION}.img | cut -d' ' -f1)
+    if [[ $remote_md5 != $local_md5 ]]
+    then
+        echo "Failed to download file from artifactory"
         exit 1
     fi
 fi
 
 #download neccerray files from Android Chosen Tag
-if [[ &quot;$Android_exists_in_artifactory&quot; == &quot;True&quot; ]] 
+if [[ "$Android_exists_in_artifactory" == "True" ]] 
 then
-	echo &quot;Copy files for ${ANDROID_VERSION} from artifactory&quot;
+	echo "Copy files for ${ANDROID_VERSION} from artifactory"
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum ${android_file_name}.android_images.zip| cut -d&apos; &apos; -f1)
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    local_md5=$(md5sum ${android_file_name}.android_images.zip| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
-        echo &quot;Failed to download file from artifactory&quot;
+        echo "Failed to download file from artifactory"
         exit 1
     fi
     curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d&apos; &apos; -f2 | cut -c 1-32)
-    local_md5=$(md5sum ${android_file_name}.zip| cut -d&apos; &apos; -f1)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip.md5
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    local_md5=$(md5sum ${android_file_name}.zip| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
-        echo &quot;Failed to download file from artifactory&quot;
+        echo "Failed to download file from artifactory"
         exit 1
     fi
 fi
@@ -291,21 +304,41 @@ mv userdata_raw.img userdata.img
 make clean
 make
 ./gen_C450_bin -u 1 -e 1 -l 200 -p 250 -r 250
-zip mmc_bin.zip *mmc*.bin
+#create md5 file
+md5sum mmc_user.bin &gt; mmc_user.bin.md5
+md5sum mmc_boot.bin &gt; mmc_boot.bin.md5
+#create sha1 file
+sha1sum mmc_user.bin &gt; mmc_user.bin.sha1
+sha1sum mmc_boot.bin &gt; mmc_boot.bin.sha1
+#create sha256 file
+sha256sum mmc_user.bin &gt; mmc_user.bin.sha256
+sha256sum mmc_boot.bin &gt; mmc_boot.bin.sha256
+#zip for artifactory
+bootloader_version=$(cat uboot_version.txt)
+C450HD_android_file_name="${android_file_name}"
+C448HD_android_file_name="C448HD_TEAMS_${ANDROID_VERSION}"
+BIN_android_file_name="BIN_C450HD_C448HD_${SFB_VERSION}_TEAMS_${ANDROID_VERSION}"
+DUAL_BIN_ZIP="C450HD_C448HD_${SFB_VERSION}_TEAMS_${ANDROID_VERSION}_BL_${bootloader_version}"
+cp ${C450HD_android_file_name}.zip ${C448HD_android_file_name}.zip
+#cp ${C450HD_android_file_name}.zip.md5 ${C448HD_android_file_name}.zip.md5
+zip ${BIN_android_file_name}.zip *mmc*.bin*
+zip ${DUAL_BIN_ZIP}.zip ${BIN_android_file_name}.zip ${C450HD_android_file_name}.zip* ${C448HD_android_file_name}.zip* UC${Model}_${SFB_VERSION}.img*
+#zip mmc_bin.zip *mmc*.bin
+echo "DUAL_BIN_ZIP=${DUAL_BIN_ZIP}" &gt;&gt; ${WORKSPACE}/properties
 else
-echo &quot;https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production&quot; &gt; artifactoryPath.txt
+echo "https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production" &gt; artifactoryPath.txt
 #make normal bin 
 export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
-echo &quot;************************************ update submodules **********************************&quot;
-git submodule foreach git status || echo &quot;failed&quot;
-git submodule foreach git clean -fdx || echo &quot;failed&quot;
-git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-git submodule foreach git reset --hard HEAD || echo &quot;failed&quot;
-git submodule update || echo &quot;failed&quot;
+echo "************************************ update submodules **********************************"
+git submodule foreach git status || echo "failed"
+git submodule foreach git clean -fdx || echo "failed"
+git submodule init || ( echo "git submodule init FAILED, return code = $?"  &amp;&amp; exit 1 )
+git submodule update || ( echo "git submodule update FAILED, return code = $?" &amp;&amp; exit 1 )
+git submodule foreach git reset --hard HEAD || echo "failed"
+git submodule update || echo "failed"
 
 
 make auto AUTOPRD=${Model}
@@ -314,7 +347,7 @@ make binary
 rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
 fi</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>properties</propertiesFilePath>
       </info>
@@ -329,7 +362,7 @@ fi</command>
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
@@ -345,7 +378,7 @@ fi</command>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
               <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
             </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
+            <attachmentsPattern/>
             <attachBuildLog>false</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -357,26 +390,26 @@ fi</command>
       <defaultSubject>Production binary file for ${Model} was created successfully</defaultSubject>
       <defaultContent>bin file can be downloaded from this link:
 &lt;pre&gt;
-${FILE,path=&quot;artifactoryPath.txt&quot;}
+${FILE,path="artifactoryPath.txt"}
 &lt;/pre&gt;</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
+      <attachmentsPattern/>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
+      <from/>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
-          <keyFromText></keyFromText>
+          <keyFromText/>
           <keyFromSelect>ipp-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
@@ -388,61 +421,53 @@ ${FILE,path=&quot;artifactoryPath.txt&quot;}
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>false</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
-      <deployPattern>${WORKSPACE}/dualBin/*mmc*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}
-${WORKSPACE}/dualBin/mmc_bin.zip=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}
+      <deployPattern>${WORKSPACE}/dualBin/${DUAL_BIN_ZIP}.zip=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production/dualBin_${ANDROID_VERSION}
 ${WORKSPACE}/build/image/*${Model}*.bin=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
 ${WORKSPACE}/build/image/*${Model}*.bin.md5.txt=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
-${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production
+${WORKSPACE}/build/image/*${Model}*.img=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Model}/Production</deployPattern>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>artifactory_username=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -456,8 +481,9 @@ ${WORKSPACE}/build/image/*.def=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSION}/${Mod
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
       <template>#${BUILD_NUMBER}_${Model} SFB:${SFB_VERSION} Teams:${ANDROID_VERSION}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
