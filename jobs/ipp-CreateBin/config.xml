@@ -184,7 +184,7 @@ curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ip
 #if SFB not in artifactory, copy files from aclnas03
 if [[ "$SFB_exists_in_artifactory" == "False" ]]
 then
-	files_to_copy=("env.bin" "logo_image" "phone.bin" "rootfs.ext4" "UCC450HD_3.2.1.492.img")
+	files_to_copy=("env.bin" "logo_image" "phone.bin" "rootfs.ext4" "UC${Model}_${SFB_VERSION}.img")
     echo "Copy files for ${SFB_VERSION} from aclnas03"
     for file in ${files_to_copy[@]}
     do
