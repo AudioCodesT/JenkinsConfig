@@ -95,12 +95,7 @@ cd ${WORKSPACE}
   touch $logfile
 
 
-#verify argument was provided
-if [ $# -eq 0 ]
-then
-    echo "Please supply Version Name and Branch"  | tee -a $logfile
-	exit
-fi
+
 
 
 echo "$(date) : *****************  START  ******************" | tee -a $logfile
