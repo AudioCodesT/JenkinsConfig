@@ -106,7 +106,8 @@ sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
-      <recipientList>cc:shuky.riechard@audiocodes.com,cc:ben.magriso@audiocodes.com</recipientList>
+      <recipientList>#RnDARMUI@audiocodes.com, #RnDARMRouter@audiocodes.com, 
+cc:shuky.riechard@audiocodes.com,cc:ben.magriso@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
