@@ -109,7 +109,13 @@ Take the issue in commit message:  only IF status is In-Progress THEN move the i
 "$GERRIT_CHANGE_COMMIT_MESSAGE" "$GERRIT_PATCHSET_REVISION" "$JiraPass" "gerrit"</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.32">
+      <recipients>yossim Shuky.Riechard</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
