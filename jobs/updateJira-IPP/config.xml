@@ -92,7 +92,10 @@ Take the issue in commit message:  only IF status is In-Progress THEN move the i
       <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPrivateStateChangedEvent/>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginCommentAddedEvent>
+          <verdictCategory>Code-Review</verdictCategory>
+          <commentAddedTriggerApprovalValue>2</commentAddedTriggerApprovalValue>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginCommentAddedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
       <triggerConfigURL/>
