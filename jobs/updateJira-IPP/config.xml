@@ -138,7 +138,7 @@ Take the issue in commit message:  only IF status is In-Progress THEN move the i
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
-      <template>#${BUILD_NUMBER} - ${GERRIT_PROJECT}  - ${GERRIT_CHANGE_OWNER_NAME}</template>
+      <template>#${BUILD_NUMBER} - ${GERRIT_CHANGE_OWNER_NAME}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
