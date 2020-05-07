@@ -105,10 +105,8 @@ Take the issue in commit message:  only IF status is In-Progress THEN move the i
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo /opt/devops/tools/check_when_push_to_gerrit.pl \
-"$GERRIT_PROJECT" "$GERRIT_CHANGE_COMMIT_MESSAGE" \
-"$GERRIT_PATCHSET_REVISION" "$GERRIT_BRANCH" \
-"$GERRIT_CHANGE_OWNER_NAME" "Jira" "gerrit"</command>
+      <command>echo /opt/devops/tools/update-jira/update_Code-Review.pl \
+"$GERRIT_CHANGE_COMMIT_MESSAGE" "$GERRIT_PATCHSET_REVISION" "$JiraPass" "gerrit"</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
@@ -123,6 +121,16 @@ Take the issue in commit message:  only IF status is In-Progress THEN move the i
         </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
       </operationList>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>JiraPass</name>
+          <value>{AQAAABAAAAAQ3sEHmEPTej1lu9EeZWTBF3PiHkNH9VMsf0ueYmeVUok=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
       <template>#${BUILD_NUMBER} - ${GERRIT_PROJECT}  - ${GERRIT_CHANGE_OWNER_NAME}</template>
       <descriptionTemplate/>
