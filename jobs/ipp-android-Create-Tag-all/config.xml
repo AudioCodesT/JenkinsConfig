@@ -340,7 +340,7 @@ createLocalManifests() {
 # If no, continue this build 
 checkTheQueueOld() {
   echo Check the queue...
-   for repoName in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
+   for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
                  sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
     echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
@@ -354,7 +354,7 @@ checkTheQueueOld() {
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
-   for eachBuild in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
+   for eachBuild in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep 'GERRIT_PROJECT\|\"id\"' | \
                  sed 's%.*\"id\":%%; s:".*GERRIT_PROJECT=::; s:\\n.*::'); do
     repoName=$(echo $eachBuild | cut -d, -f2)
@@ -362,7 +362,7 @@ checkTheQueue() {
     AddAndFetchRepository
     id=$(echo $eachBuild | cut -d, -f1)
     echo Cancel build $id
-    #`curl -ks -u $user -X POST \"$URL/queue/cancelItem?id=$id\"`;
+    #`curl -ks -u $JenkinsUser -X POST \"$URL/queue/cancelItem?id=$id\"`;
   done
 }
 
@@ -392,7 +392,7 @@ checkOldSubmit() {
   previousBuild=$((BUILD_ID-1))
   counter=0
   while [ $counter -lt 30 ]; do
-    displayName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/api/json?tree=displayName | \
+    displayName=$(curl -ks -u $JenkinsUser https://jenkins/job/$JOB_NAME/$previousBuild/api/json?tree=displayName | \
                   sed 's:.*displayName"::; s: ::g' | cut -d'"' -f2 | cut -d- -f2)
     if [ -n "$displayName" ]; then break; fi
     repoName=$(curl -ks https://jenkins/job/$JOB_NAME/$previousBuild/injectedEnvVars/export | \
@@ -447,6 +447,7 @@ if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
 fi
 
 echo Check the queue, if found than add and fetch them
+JenkinsUser="compile:$jpass"
 checkTheQueue
 
 echo Config and fetch the wake up repository
