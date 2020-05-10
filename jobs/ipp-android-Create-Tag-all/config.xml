@@ -338,13 +338,30 @@ createLocalManifests() {
 # Check if another job is waiting in queue, 
 # If yes, exit and let the newer build run - it will include this current change too
 # If no, continue this build 
-checkTheQueue() {
+checkTheQueueOld() {
   echo Check the queue...
    for repoName in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
                  sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
     echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
     AddAndFetchRepository
+  done
+}
+
+#######################################################################################
+# Check if another job is waiting in queue, 
+# If yes, exit and let the newer build run - it will include this current change too
+# If no, continue this build 
+checkTheQueue() {
+  echo Check the queue...
+   for eachBuild in $(curl -ks https://jenkins/queue/api/json | grep $JOB_NAME | \
+                 sed "s:$JOB_NAME:\n:g" | grep 'GERRIT_PROJECT\|\"id\"' | \
+                 sed 's%.*\"id\":%%; s:".*GERRIT_PROJECT=::; s:\\n.*::'); do
+    repoName=$(echo $eachBuild | cut -d, -f2)
+    echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
+    AddAndFetchRepository
+    id=$(echo $eachBuild | cut -d, -f1)
+    echo Cancel build $id
     #`curl -ks -u $user -X POST \"$URL/queue/cancelItem?id=$id\"`;
   done
 }
