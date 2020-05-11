@@ -320,7 +320,25 @@ C448HD_android_file_name="C448HD_TEAMS_${ANDROID_VERSION}"
 BIN_android_file_name="BIN_C450HD_C448HD_${SFB_VERSION}_TEAMS_${ANDROID_VERSION}"
 DUAL_BIN_ZIP="C450HD_C448HD_${SFB_VERSION}_TEAMS_${ANDROID_VERSION}_BL_${bootloader_version}"
 cp ${C450HD_android_file_name}.zip ${C448HD_android_file_name}.zip
-#cp ${C450HD_android_file_name}.zip.md5 ${C448HD_android_file_name}.zip.md5
+
+#create md5,sha1,sha256
+md5sum ${C450HD_android_file_name}.zip &gt; ${C450HD_android_file_name}.zip.md5
+sha1sum ${C450HD_android_file_name}.zip &gt; ${C450HD_android_file_name}.zip.sha1
+sha256sum ${C450HD_android_file_name}.zip &gt; ${C450HD_android_file_name}.zip.sha256
+
+md5sum ${C448HD_android_file_name}.zip &gt; ${C448HD_android_file_name}.zip.md5
+sha1sum ${C448HD_android_file_name}.zip &gt; ${C448HD_android_file_name}.zip.sha1
+sha256sum ${C448HD_android_file_name}.zip &gt; ${C448HD_android_file_name}.zip.sha256
+
+md5sum ${C448HD_android_file_name}.zip &gt; ${C448HD_android_file_name}.zip.md5
+sha1sum ${C448HD_android_file_name}.zip &gt; ${C448HD_android_file_name}.zip.sha1
+sha256sum ${C448HD_android_file_name}.zip &gt; ${C448HD_android_file_name}.zip.sha256
+
+md5sum UC${Model}_${SFB_VERSION}.img &gt; UC${Model}_${SFB_VERSION}.img.md5
+sha1sum UC${Model}_${SFB_VERSION}.img &gt; UC${Model}_${SFB_VERSION}.img.sha1
+sha256sum UC${Model}_${SFB_VERSION}.img &gt; UC${Model}_${SFB_VERSION}.img.sha256
+
+
 zip ${BIN_android_file_name}.zip *mmc*.bin*
 zip ${DUAL_BIN_ZIP}.zip ${BIN_android_file_name}.zip ${C450HD_android_file_name}.zip* ${C448HD_android_file_name}.zip* UC${Model}_${SFB_VERSION}.img*
 #zip mmc_bin.zip *mmc*.bin
