@@ -115,14 +115,19 @@ pwd
 xmlFile="default.xml"
 if [[ "$manifestsBranch" =~ "-m" ]]; then xmlFile=$(echo $manifestsBranch | cut -d" " -f 3); fi
 
-#**************** clean workspace before starting repo init and repo sync ***************
-echo Clean workspace
-repo forall -c 'git reset --hard; git clean -ffdx' -j$(nproc)
-rm -rf hardware
-cd .repo/manifests
-git checkout -- default.xml
-cd $WORKSPACE
-#**************** clean workspace before starting repo init and repo sync ***************
+#**************** clean workspace before starting repo init and repoy sync ***************
+echo "cleaning ipp-android_android9 workspace"
+cd ${WORKSPACE}/..
+cd ipp-android_android9
+repo forall -c 'git reset --hard;git clean -ffdx'  || echo "not fail the build if clean fails"
+rm -rf hardware out || echo "not fail the build if clean fails"
+echo "cleaning ipp-android (branch master) workspace"
+cd ${WORKSPACE}/..
+cd ipp-android
+repo forall -c 'git reset --hard;git clean -ffdx'  || echo "not fail the build if clean fails"
+rm -rf hardware out || echo "not fail the build if clean fails"
+cd ${WORKSPACE}
+#**************** clean workspace before starting repo init and repoy sync ***************
 
 rm -f *.zip
 
