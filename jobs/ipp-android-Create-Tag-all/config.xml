@@ -258,7 +258,6 @@ createTag() {
         echo Branch $GERRIT_BRANCH does not exist
         continue
       fi
-      git pull
       if ! git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then
         LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
         # Check if it a TAG or the last SHA1 ("--always" option give the last commit SHA1 if no TAG exist)
