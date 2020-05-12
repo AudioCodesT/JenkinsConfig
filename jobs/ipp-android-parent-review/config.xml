@@ -1,35 +1,37 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.33">
   <actions/>
-  <description>Triggered by push to gerrit in &quot;Android&quot;, this job do all the following:&#xd;
-1. Find all commits with the same wake up commit issue.&#xd;
-2. The wake up commit is a manifest commit:&#xd;
-   2.1. Execute compilation on its branch only&#xd;
-   2.2. Add all &apos;none manifest&apos; commits found with the same jira issue that &apos;dest-branch&apos;=&lt;this branch&gt;&#xd;
-   2.3. Give score to all participant commits and exit job&#xd;
-&#xd;
-3. The wake up commit is not  a manifest commit:&#xd;
-4. If its branch exists in manifest repository, add this branch to the hard-coded branches: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; (if it is not one of these 3 exiting branches)&#xd;
- 5. Do the following for each following branches: &quot;master&quot;, &quot;android-9&quot;, &quot;audc-rk3399&quot; and &quot;other&quot; (if exist):&#xd;
-   5.1. Find manifest commit with the same issue and use it as your manifest xml file (repo init).&#xd;
-   5.2. If not found, use the branch name (repo init)&#xd;
-   5.3. Check if the &apos;dest-branch&apos; of the wake up commit equal to this branch:&#xd;
-          if not, do nothing and exit.&#xd;
-   5.4. Go over all found commits with the same issue and add all the commits that &apos;dest-branch&apos;=&lt;this branch&gt; to the compilation.&#xd;
-   5.5. Execute compilation for this branch.&#xd;
-&#xd;
-6. Wait all branches compilation finished.&#xd;
-7. If one of the compilation is failed, Give to all participant commits of all branches Verified=-1, else give Verified=+1.&#xd;
-8. Do not give Verified=-1 in case this change has received already +1&#xd;
-&#xd;
+  <description>Triggered by push to gerrit in "Android", this job do all the following:&#13;
+1. Find all commits with the same wake up commit issue.&#13;
+2. The wake up commit is a manifest commit:&#13;
+   2.1. Execute compilation on its branch only&#13;
+   2.2. Add all 'none manifest' commits found with the same jira issue that 'dest-branch'=&lt;this branch&gt;&#13;
+   2.3. Give score to all participant commits and exit job&#13;
+&#13;
+3. The wake up commit is not  a manifest commit:&#13;
+4. If its branch exists in manifest repository, add this branch to the hard-coded branches: "master", "android-9", "audc-rk3399" (if it is not one of these 3 exiting branches)&#13;
+ 5. Do the following for each following branches: "master", "android-9", "audc-rk3399" and "other" (if exist):&#13;
+   5.1. Find manifest commit with the same issue and use it as your manifest xml file (repo init).&#13;
+   5.2. If not found, use the branch name (repo init)&#13;
+   5.3. Check if the 'dest-branch' of the wake up commit equal to this branch:&#13;
+          if not, do nothing and exit.&#13;
+   5.4. Go over all found commits with the same issue and add all the commits that 'dest-branch'=&lt;this branch&gt; to the compilation.&#13;
+   5.5. Execute compilation for this branch.&#13;
+&#13;
+6. Wait all branches compilation finished.&#13;
+7. If one of the compilation is failed, Give to all participant commits of all branches Verified=-1, else give Verified=+1.&#13;
+8. Do not give Verified=-1 in case this change has received already +1&#13;
+&#13;
    </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -42,7 +44,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -65,8 +67,9 @@ The default.xml is simbol link to master.xml</description>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -75,8 +78,8 @@ The default.xml is simbol link to master.xml</description>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>ANT</compareType>
@@ -120,31 +123,33 @@ The default.xml is simbol link to master.xml</description>
         <onNotBuilt>true</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>PLAIN</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
           <excludeNoCodeChange>true</excludeNoCodeChange>
+          <excludePrivateState>false</excludePrivateState>
+          <excludeWipState>false</excludeWipState>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -152,33 +157,33 @@ The default.xml is simbol link to master.xml</description>
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
-#the above line is needed because we are going to use &quot;source&quot; command
-#normalize the gerrit change value from &quot;refs/for/xxxx&quot;. example:  change=32456,4
-echo change=$(echo $GERRIT_REFSPEC | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;) &gt; generated_android.properties
+#the above line is needed because we are going to use "source" command
+#normalize the gerrit change value from "refs/for/xxxx". example:  change=32456,4
+echo change=$(echo $GERRIT_REFSPEC | cut -d/ -f4,5 | sed 's:/:,:') &gt; generated_android.properties
 
-#******************** temporary not compile rockchip-px30  branch ******************************&quot;
-if [[ $GERRIT_BRANCH == &quot;rockchip-px30&quot; ]]
+#******************** temporary not compile rockchip-px30  branch ******************************"
+if [[ $GERRIT_BRANCH == "rockchip-px30" ]]
 then
-	echo &quot;temporary not compile rockchip-px30  branch&quot;
+	echo "temporary not compile rockchip-px30  branch"
 	exit 0
 fi
-#******************** temporary not compile rockchip-px30  branch ******************************&quot;
+#******************** temporary not compile rockchip-px30  branch ******************************"
 
 # Find all commits with the same wake up commit issue.
 echo find Jira Issue of this change
-ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
+ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep "\[IPP" | sed 's/.*\[IPP/IPP/; s/\].*//')
 echo found: $ISSUE
-echo &quot;ISSUE=$ISSUE&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
+echo "ISSUE=$ISSUE" &gt;&gt; ${WORKSPACE}/generated_android.properties
 # Find if this build should use another commit with the same Issue
-if [ ! -z &quot;$ISSUE&quot; ]; then 
+if [ ! -z "$ISSUE" ]; then 
     echo Search this Issue: $ISSUE...
     AllCommits=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
-     message:$ISSUE status:open | grep &apos;project:\|branch:\|ref:&apos; | \
-     sed &apos;s%project:%%; s% .*: %:%; s% :%:%g&apos;)
-    AllCommits=$(echo $AllCommits | sed &apos;s% :%:%g&apos;)
+     message:$ISSUE status:open | grep 'project:\|branch:\|ref:' | \
+     sed 's%project:%%; s% .*: %:%; s% :%:%g')
+    AllCommits=$(echo $AllCommits | sed 's% :%:%g')
 fi
 # example for the above:
-# AllCommits=&apos;IPP/Android/device_audiocodes_common:master:refs/changes/73/34773/2 IPP/apps/emsc:master:refs/changes/38/34738/2
+# AllCommits='IPP/Android/device_audiocodes_common:master:refs/changes/73/34773/2 IPP/apps/emsc:master:refs/changes/38/34738/2
 
 #check which branches in android/repo_manifests if default.xml file contain the module that triggered
 rm -rf repo_manifests
@@ -190,43 +195,43 @@ git checkout $mainBranch
 
 # The goal of this parameter is giving score to all changes that participate in this review
 # This variable should contains all changes exclude the change that wake up this job
-CHANGES=&quot;&quot;
-CompiledOnBranch=&quot;&quot;
+CHANGES=""
+CompiledOnBranch=""
 
 # Add the branch that wake up this job in case this branch exist in repo_manifests
-main_branches=(&quot;master&quot; &quot;android-9&quot; &quot;audc-rk3399&quot; &quot;audc-px30&quot;)
+main_branches=("master" "android-9" "audc-rk3399" "audc-px30")
 branches_to_check=${main_branches[*]}
 if [[ ! ${main_branches[*]} =~ $GERRIT_BRANCH ]] &amp;&amp; git branch -a | grep -q origin/$GERRIT_BRANCH; then
   branches_to_check+=($GERRIT_BRANCH)
 fi
 
-if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
-  #FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
+if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
+  #FilesList=$(git show --pretty="" --name-only $GERRIT_PATCHSET_REVISION)
   FilesList=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set --files $GERRIT_CHANGE_NUMBER | grep file: | grep -v COMMIT_MSG | cut -d: -f2)
 fi
 
 # The gaol of this loop is to found right manifest for each branch
 # If the manifest itself wake up the job - execute compilation to its branch only
 # Else, use the manifet change for each branch or use the branch name
-# Store it in &apos;Manifests_$branchVariable&apos; variable
+# Store it in 'Manifests_$branchVariable' variable
 echo ---------------------- Find manifests for each branch ----------------------------
 for branch in ${branches_to_check[@]}
 do
-  branchVariable=$(echo $branch | sed &apos;s:-:_:&apos;)
-  if [[ ! ${main_branches[*]} =~ &quot;$branch&quot; ]]; then branchVariable=other; fi
+  branchVariable=$(echo $branch | sed 's:-:_:')
+  if [[ ! ${main_branches[*]} =~ "$branch" ]]; then branchVariable=other; fi
 
-  Manifests=&quot;&quot;
+  Manifests=""
   echo ------- Check the change that wake up this job for branch $branch -------
-  if [ &quot;$GERRIT_PROJECT&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
-    if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$GERRIT_BRANCH&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ &quot;$branch&quot; ]]; then 
+  if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
+    if [[ ("$FilesList" == "default.xml" &amp;&amp; "$GERRIT_BRANCH" == "$branch") || "$FilesList" =~ "$branch" ]]; then 
       Manifests=$GERRIT_REFSPEC
-      if [[ &quot;$FilesList&quot; =~ $branch ]]; then Manifests=&quot;$Manifests -m $branch.xml&quot;; fi
-      echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
-      CompiledOnBranch=&quot;$CompiledOnBranch $branch&quot;
+      if [[ "$FilesList" =~ $branch ]]; then Manifests="$Manifests -m $branch.xml"; fi
+      echo "branch_${branchVariable}=True" &gt;&gt; ${WORKSPACE}/generated_android.properties
+      CompiledOnBranch="$CompiledOnBranch $branch"
     fi
   else
     if [ -f $branch.xml ]; then
-      Manifests=&quot;$mainBranch -m $branch.xml&quot;
+      Manifests="$mainBranch -m $branch.xml"
     else
       Manifests=$branch
     fi
@@ -235,59 +240,59 @@ do
       commitBranch=$(echo $allSameISSUE | cut -d: -f2)
       revision=$(echo $allSameISSUE | cut -d: -f3)
       echo Check: $repo, $commitBranch, $revision
-      if [ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then
+      if [ "$repo" == "IPP/Android/repo_manifests" ]; then
         changeNumber=$(echo $revision | cut -d/ -f4)
         eval FilesList=\${FilesList$changeNumber}
-        if [ -z &quot;$FilesList&quot; ]; then
+        if [ -z "$FilesList" ]; then
           FilesList=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set --files $changeNumber | grep file: | grep -v COMMIT_MSG | cut -d: -f2)
-          eval FilesList$changeNumber=&apos;$FilesList&apos;
+          eval FilesList$changeNumber='$FilesList'
         fi
-        if [[ (&quot;$FilesList&quot; == &quot;default.xml&quot; &amp;&amp; &quot;$commitBranch&quot; == &quot;$branch&quot;) || &quot;$FilesList&quot; =~ &quot;$branch&quot; ]]; then
+        if [[ ("$FilesList" == "default.xml" &amp;&amp; "$commitBranch" == "$branch") || "$FilesList" =~ "$branch" ]]; then
           Manifests=$revision
-          if [[ &quot;$FilesList&quot; =~ $branch ]]; then Manifests=&quot;$Manifests -m $branch.xml&quot;; fi
+          if [[ "$FilesList" =~ $branch ]]; then Manifests="$Manifests -m $branch.xml"; fi
         fi
       fi 
     done
   fi
   echo Manifests for $branch is: $Manifests
-  echo Manifests_$branchVariable=&quot;${Manifests}&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
-  eval Manifests_$branchVariable=&apos;$Manifests&apos;
+  echo Manifests_$branchVariable="${Manifests}" &gt;&gt; ${WORKSPACE}/generated_android.properties
+  eval Manifests_$branchVariable='$Manifests'
 done
 
 #Find all changes
 echo ---------------------- Find changes for each branch ----------------------------
 for branch in ${branches_to_check[@]}
 do
-    branchVariable=$(echo $branch | sed &apos;s:-:_:&apos;)
+    branchVariable=$(echo $branch | sed 's:-:_:')
     if [[ ! ${main_branches[*]} =~ $branch ]]; then branchVariable=other; fi
     eval Manifests=\${Manifests_$branchVariable}
     
     git checkout $mainBranch
-    Manifests=$(echo $Manifests | cut -d&quot; &quot; -f1)
-    if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
-      git fetch &quot;ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests&quot; $Manifests &amp;&amp; git checkout FETCH_HEAD
-    else if [ &quot;$Manifests&quot; != &quot;&quot; ]; then
+    Manifests=$(echo $Manifests | cut -d" " -f1)
+    if [[ "$Manifests" =~ "changes" ]]; then
+      git fetch "ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests" $Manifests &amp;&amp; git checkout FETCH_HEAD
+    else if [ "$Manifests" != "" ]; then
       if [ ! -f $branch.xml ]; then git checkout ${branch}; fi
     else
       continue
     fi; fi
 
-    xmlFile=&quot;default.xml&quot;
+    xmlFile="default.xml"
     if [ -f $branch.xml ]; then
       echo Use $branch.xml file instead of checkout to branch $branch
       xmlFile=$branch.xml
     fi
     
-    commits=&quot;&quot;
+    commits=""
     
     # Check the wake up commit if destination branch equel to its branch
-    if [ &quot;$GERRIT_PROJECT&quot; != &quot;IPP/Android/repo_manifests&quot; ]; then
-      destBranch=$(grep $GERRIT_PROJECT\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+    if [ "$GERRIT_PROJECT" != "IPP/Android/repo_manifests" ]; then
+      destBranch=$(grep $GERRIT_PROJECT\" $xmlFile | grep dest-branch | sed 's:.*dest-branch="::; s:".*::;')
       echo Check destination branch: $destBranch, if equel to: $GERRIT_BRANCH
-      if [ &quot;$destBranch&quot; == &quot;$GERRIT_BRANCH&quot; ]; then
-        commits=&quot;$GERRIT_PROJECT:$GERRIT_BRANCH:$GERRIT_REFSPEC&quot;
-        if [[ &quot;$Manifests&quot; =~ &quot;changes&quot; ]]; then
-          CHANGES=&quot;$CHANGES $(echo $Manifests | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;)&quot;
+      if [ "$destBranch" == "$GERRIT_BRANCH" ]; then
+        commits="$GERRIT_PROJECT:$GERRIT_BRANCH:$GERRIT_REFSPEC"
+        if [[ "$Manifests" =~ "changes" ]]; then
+          CHANGES="$CHANGES $(echo $Manifests | cut -d/ -f4,5 | sed 's:/:,:')"
         fi
       else
         continue
@@ -300,16 +305,16 @@ do
       commitBranch=$(echo $allSameISSUE | cut -d: -f2)
       revision=$(echo $allSameISSUE | cut -d: -f3)
       echo Check: $repo, $commitBranch, $revision
-      if [ &quot;$repo&quot; == &quot;IPP/Android/repo_manifests&quot; ]; then continue; fi
-      if [[ ! &quot;$commits&quot; =~ &quot;$repo&quot; ]]; then
-        destBranch=$(grep $repo\&quot; $xmlFile | grep dest-branch | sed &apos;s:.*dest-branch=&quot;::; s:&quot;.*::;&apos;)
+      if [ "$repo" == "IPP/Android/repo_manifests" ]; then continue; fi
+      if [[ ! "$commits" =~ "$repo" ]]; then
+        destBranch=$(grep $repo\" $xmlFile | grep dest-branch | sed 's:.*dest-branch="::; s:".*::;')
         echo Check destination branch: $destBranch, if equel to: $commitBranch
-        if [ &quot;$destBranch&quot; == &quot;$commitBranch&quot; ]; then
+        if [ "$destBranch" == "$commitBranch" ]; then
           echo Fetch this change $revision for project $repo
-          commits=&quot;$commits $allSameISSUE&quot;
-          change_API_format=$(echo $revision | cut -d/ -f4,5 | sed &apos;s:/:,:&apos;)
-          if [[ ! &quot;$CHANGES&quot; =~ &quot;$change_API_format&quot; ]]; then
-            CHANGES=&quot;$CHANGES $change_API_format&quot;
+          commits="$commits $allSameISSUE"
+          change_API_format=$(echo $revision | cut -d/ -f4,5 | sed 's:/:,:')
+          if [[ ! "$CHANGES" =~ "$change_API_format" ]]; then
+            CHANGES="$CHANGES $change_API_format"
           fi
         else
           echo Destination branch not equel - skip this change
@@ -318,9 +323,9 @@ do
     done
     
     echo Check if you need to execute compilation for branch $branch
-    if [ ! -z &quot;$commits&quot; ]; then
-      echo &quot;branch_${branchVariable}=True&quot; &gt;&gt; ${WORKSPACE}/generated_android.properties
-      if [[ ! &quot;$CompiledOnBranch&quot; =~ &quot;$branch&quot; ]]; then CompiledOnBranch=&quot;$CompiledOnBranch $branch&quot;; fi
+    if [ ! -z "$commits" ]; then
+      echo "branch_${branchVariable}=True" &gt;&gt; ${WORKSPACE}/generated_android.properties
+      if [[ ! "$CompiledOnBranch" =~ "$branch" ]]; then CompiledOnBranch="$CompiledOnBranch $branch"; fi
     fi
     echo CHANGES_$branchVariable=${commits} &gt;&gt; ${WORKSPACE}/generated_android.properties
 done
@@ -330,7 +335,7 @@ echo CHANGES=${CHANGES} &gt;&gt; ${WORKSPACE}/generated_android.properties
 cat ${WORKSPACE}/generated_android.properties
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>generated_android.properties</propertiesFilePath>
       </info>
@@ -345,14 +350,14 @@ cat ${WORKSPACE}/generated_android.properties
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition>&quot;${branch_master}&quot; == &quot;True&quot;</condition>
+          <condition>"${branch_master}" == "True"</condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>GERRIT_BRANCH=master
 manifestsBranch=${Manifests_master}
 CHANGES=${CHANGES_master}
@@ -371,14 +376,14 @@ change=${change}</properties>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition>&quot;${branch_android_9}&quot; == &quot;True&quot;</condition>
+          <condition>"${branch_android_9}" == "True"</condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>GERRIT_BRANCH=android-9
 manifestsBranch=${Manifests_android_9}
 CHANGES=${CHANGES_android_9}
@@ -397,14 +402,14 @@ change=${change}</properties>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition>&quot;${branch_audc_rk3399}&quot; == &quot;True&quot;</condition>
+          <condition>"${branch_audc_rk3399}" == "True"</condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>GERRIT_BRANCH=audc-rk3399
 manifestsBranch=${Manifests_audc_rk3399}
 CHANGES=${CHANGES_audc_rk3399}
@@ -423,14 +428,14 @@ change=${change}</properties>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition>&quot;${branch_audc_px30}&quot; == &quot;True&quot;</condition>
+          <condition>"${branch_audc_px30}" == "True"</condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>GERRIT_BRANCH=audc-px30
 manifestsBranch=${Manifests_audc_px30}
 CHANGES=${CHANGES_audc_px30}
@@ -449,14 +454,14 @@ change=${change}</properties>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>true</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition>&quot;${branch_other}&quot; == &quot;True&quot;</condition>
+          <condition>"${branch_other}" == "True"</condition>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>GERRIT_BRANCH=$GERRIT_BRANCH
 manifestsBranch=${Manifests_other}
 CHANGES=${CHANGES_other}
@@ -471,13 +476,14 @@ change=${change}</properties>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
+      <quietPeriodGroovy>index &lt; 5 ? 0 : 2 * 60</quietPeriodGroovy>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
   </builders>
   <publishers>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.3">
             <worstResult>
               <name>FAILURE</name>
               <ordinal>2</ordinal>
@@ -492,7 +498,7 @@ change=${change}</properties>
             </bestResult>
           </condition>
           <publisherList>
-            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.9.1">
               <config>
                 <scriptFiles/>
                 <groovyScripts/>
@@ -505,8 +511,9 @@ change=${change}</properties>
                       <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
-                      <EnvInjectBuilder plugin="envinject@2.1.5">
+                      <EnvInjectBuilder plugin="envinject@2.3.0">
                         <info>
                           <propertiesFilePath>generated_android.properties</propertiesFilePath>
                         </info>
@@ -518,39 +525,40 @@ change=${change}</properties>
                       <string>SUCCESS</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
-                        <command>if [ -z &quot;$CompiledOnBranch&quot; ]; then
-  message=&quot;This change was not compiled at all because it does not appear in any manifest, see build $BUILD_URL&quot;
+                        <command>if [ -z "$CompiledOnBranch" ]; then
+  message="This change was not compiled at all because it does not appear in any manifest, see build $BUILD_URL"
 else
-  if [ -z &quot;$CHANGES&quot; ]; then
-    message=&quot;This change was compiled successfully in $BUILD_URL, without other changes. \
-      Compiled on the following branches: $CompiledOnBranch&quot;
+  if [ -z "$CHANGES" ]; then
+    message="This change was compiled successfully in $BUILD_URL, without other changes. \
+      Compiled on the following branches: $CompiledOnBranch"
   else
-    message=&quot;This change was compiled successfully also with the following changes: \
+    message="This change was compiled successfully also with the following changes: \
       $CHANGES in $BUILD_URL, \
       which was triggered by change: $change \
-      Compiled on the following branches: $CompiledOnBranch&quot;
+      Compiled on the following branches: $CompiledOnBranch"
   fi
 fi
 
 for rep in $CHANGES $change; do
 
-  score=&quot;&quot;
-  if [ &quot;$rep&quot; != &quot;$change&quot; ]; then
+  score=""
+  if [ "$rep" != "$change" ]; then
     score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
-        | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
+        | grep -A3 'type: Verified' | grep value | cut -d: -f2)
   fi
-  verified=&quot;--label Verified=1&quot;
-  VerifiedMessage=&quot;Give Verified=1&quot;
-  if [ &quot;$score&quot; == -1 ]; then 
-    verified=&quot;--label Verified=0&quot;
-    VerifiedMessage=&quot;Can not give +1 due to Verified was -1. Cleared Verified, please retrigger it&quot;
+  verified="--label Verified=1"
+  VerifiedMessage="Give Verified=1"
+  if [ "$score" == -1 ]; then 
+    verified="--label Verified=0"
+    VerifiedMessage="Can not give +1 due to Verified was -1. Cleared Verified, please retrigger it"
   fi
 
   echo Send OK message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
-  --message &quot;&apos;$message -- $VerifiedMessage&apos;&quot; \
+  --message "'$message -- $VerifiedMessage'" \
   --notify OWNER $verified \
   $rep
 done
@@ -563,37 +571,38 @@ done
                       <string>FAILURE</string>
                     </results>
                     <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
                     <buildSteps>
                       <hudson.tasks.Shell>
                         <command>
-if [ -z &quot;$CHANGES&quot; ]; then
-  message=&quot;This change has failed to compile in $BUILD_URL, without other changes. \
-    Compiled on the following branches: $CompiledOnBranch&quot;
+if [ -z "$CHANGES" ]; then
+  message="This change has failed to compile in $BUILD_URL, without other changes. \
+    Compiled on the following branches: $CompiledOnBranch"
 else
-  message=&quot;This change has failed to compile with the following changes: \
+  message="This change has failed to compile with the following changes: \
     $CHANGES in $BUILD_URL, \
     which was triggered by change: $change \
-    Compiled on the following branches: $CompiledOnBranch&quot;
+    Compiled on the following branches: $CompiledOnBranch"
 fi
 
 
 for rep in $CHANGES $change; do
 
-  score=&quot;&quot;
-  if [ &quot;$rep&quot; != &quot;$change&quot; ]; then
+  score=""
+  if [ "$rep" != "$change" ]; then
     score=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set $(echo $rep | cut -d, -f1) \
-        | grep -A3 &apos;type: Verified&apos; | grep value | cut -d: -f2)
+        | grep -A3 'type: Verified' | grep value | cut -d: -f2)
   fi
-  verified=&quot;--label Verified=-1&quot;
-  VerifiedMessage=&quot;Give Verified=-1&quot;
-  if [ &quot;$score&quot; == 1 ]; then 
-    verified=&quot;&quot;
-    VerifiedMessage=&quot;(Do not give Verified=-1 in case this change has received +1 already)&quot;
+  verified="--label Verified=-1"
+  VerifiedMessage="Give Verified=-1"
+  if [ "$score" == 1 ]; then 
+    verified=""
+    VerifiedMessage="(Do not give Verified=-1 in case this change has received +1 already)"
   fi
 
-  echo Send OK message to Gerrit - $rep
+  echo Send Failed message to Gerrit - $rep
   ssh -p 29418  jenkins@gerrit gerrit review \
-  --message &quot;&apos;$message -- $VerifiedMessage&apos;&quot; \
+  --message "'$message -- $VerifiedMessage'" \
   --notify OWNER $verified \
   $rep
 done
@@ -606,14 +615,14 @@ done
               </config>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>**</pattern>
@@ -621,20 +630,21 @@ done
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>true</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>jenkins_user=jenkins</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -644,8 +654,9 @@ done
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
       <template>#${BUILD_NUMBER} $GERRIT_PROJECT $GERRIT_REFSPEC</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
