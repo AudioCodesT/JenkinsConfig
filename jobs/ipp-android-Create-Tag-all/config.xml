@@ -360,9 +360,11 @@ checkTheQueue() {
     repoName=$(echo $eachBuild | cut -d, -f2)
     echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
     AddAndFetchRepository
-    id=$(echo $eachBuild | cut -d, -f1)
-    echo Cancel build $id
-    #`curl -ks -u $JenkinsUser -X POST \"$URL/queue/cancelItem?id=$id\"`;
+    if [ "$repoName" == "$GERRIT_PROJECT" ]; then
+      id=$(echo $eachBuild | cut -d, -f1)
+      echo Cancel build $id
+      `curl -ks -u $JenkinsUser -X POST \"https://jenkins/queue/cancelItem?id=$id\"`;
+    fi
   done
 }
 
