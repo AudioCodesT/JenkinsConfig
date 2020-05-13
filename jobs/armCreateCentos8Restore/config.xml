@@ -135,9 +135,6 @@ zip backupAndRestore.zip backupCentos6.tar.gz restoreFromCentos6to8.tar.gz
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec/>
-      </uploadSpec>
-      <downloadSpec>
         <spec>{
     "files": [
         {
@@ -147,6 +144,9 @@ zip backupAndRestore.zip backupCentos6.tar.gz restoreFromCentos6to8.tar.gz
         }   
     ]
 }</spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec/>
       </downloadSpec>
       <deployPattern>tarFolder/upgrade_$VERSION_NAME.tar.gz=&gt;com/ac/arm/upgrade/$VERSION_NAME/
 </deployPattern>
