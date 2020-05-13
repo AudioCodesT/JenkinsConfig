@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
@@ -21,8 +23,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -34,9 +36,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -68,24 +70,43 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#if we need dos 2 unix then we run this sed pre-command
-#sed &apos;s/\r$//&apos; ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh &gt; ArmCommon/Common/.deploy/aws_createUpgradeTarball_unix.sh
-#sudo yum install -y  dos2unix
-#dos2unix ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh
-sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
+      <command>#create backupCentos6.tar.gz
+mkdir -p ${WORKSPACE}/my_backup_centos_6
+rm -rf ${WORKSPACE}/my_backup_centos_6/*
+cd ${WORKSPACE}/my_backup_centos_6
+cp ${WORKSPACE}/Common/VMFiles/Configurator/usr/local/bin/cacertsUtil.sh .
+cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.pl .
+cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.py .
+dos2unix backupCentos6.pl backupCentos6.py
+chmod a+x backupCentos6.pl backupCentos6.py
+tar cvfz backupCentos6.tar.gz * 
+
+
+#create  restoreFromCentos6to8.tar.gz
+mkdir -p ${WORKSPACE}/my_restore_centos_8
+rm -rf ${WORKSPACE}/my_restore_centos_8/*
+cd ${WORKSPACE}/my_restore_centos_8
+cp -r ${WORKSPACE}/Common/src/main/resources/upgrade/conversions .
+cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/restoreCentos8.pl .
+cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/restoreCentos8.py .
+dos2unix restoreCentos8.pl restoreCentos8.py
+chmod a+x restoreCentos8.pl restoreCentos8.py
+tar cvfz restoreFromCentos6to8.tar.gz conversions restoreCentos8.pl restoreCentos8.py
+
+
+
+mkdir -p ${WORKSPACE}/my_backup_and_restore
+rm -rf ${WORKSPACE}/my_backup_and_restore/*
+cd ${WORKSPACE}/my_backup_and_restore
+cp ${WORKSPACE}/my_backup_centos_6/backupCentos6.tar.gz .
+cp ${WORKSPACE}/my_restore_centos_8/restoreFromCentos6to8.tar.gz .
+zip backupAndRestore.zip backupCentos6.tar.gz restoreFromCentos6to8.tar.gz
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>*.out</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
-      <onlyIfSuccessful>false</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-      <caseSensitive>true</caseSensitive>
-    </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.32">
-      <recipients>shuky.riechard</recipients>
+      <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
@@ -95,11 +116,6 @@ sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
-        <deployReleaseRepository>
-          <keyFromText></keyFromText>
-          <keyFromSelect>libs-release-local</keyFromSelect>
-          <dynamicMode>false</dynamicMode>
-        </deployReleaseRepository>
         <stagingPlugin/>
       </deployerDetails>
       <resolverDetails>
@@ -108,37 +124,50 @@ sh -x ArmCommon/Common/.deploy/aws_createUpgradeTarball.sh</command>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
-      <resolverCredentialsConfig reference="../deployerCredentialsConfig"/>
-      <useSpecs>false</useSpecs>
+      <resolverCredentialsConfig>
+        <credentialsId/>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec>{
+    "files": [
+        {
+            "pattern": "${WORKSPACE}/my_backup_and_restore/backupAndRestore.zip",
+            "target": "libs-release-local/com/ac/arm/backupAndRestore/${VERSION_NAME}/",
+             "recursive": "false"
+        }   
+    ]
+}</spec>
       </downloadSpec>
       <deployPattern>tarFolder/upgrade_$VERSION_NAME.tar.gz=&gt;com/ac/arm/upgrade/$VERSION_NAME/
 </deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__$VERSION_NAME</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
