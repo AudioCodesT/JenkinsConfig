@@ -322,7 +322,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
+    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.5">
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/main/java</sourcePattern>
@@ -344,6 +344,7 @@ AuthorCommitter=$AuthorCommitter</parameters>
       <maximumMethodCoverage>0</maximumMethodCoverage>
       <maximumClassCoverage>0</maximumClassCoverage>
       <changeBuildStatus>false</changeBuildStatus>
+      <runAlways>false</runAlways>
       <deltaInstructionCoverage>0</deltaInstructionCoverage>
       <deltaBranchCoverage>0</deltaBranchCoverage>
       <deltaComplexityCoverage>0</deltaComplexityCoverage>
@@ -407,6 +408,18 @@ BRANCH=$BRANCH</properties>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                   </configs>
                   <projects>armBuildVMs, </projects>
+                  <condition>SUCCESS</condition>
+                  <triggerWithNoParameters>false</triggerWithNoParameters>
+                  <triggerFromChildProjects>false</triggerFromChildProjects>
+                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+                  <configs>
+                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                      <properties>VERSION_NAME=$VERSION_NAME</properties>
+                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  </configs>
+                  <projects>armCreateCentos8Restore</projects>
                   <condition>SUCCESS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                   <triggerFromChildProjects>false</triggerFromChildProjects>
@@ -536,7 +549,7 @@ latest_version.txt=&gt;com/ac/arm/</deployPattern>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${VERSION_NAME}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
