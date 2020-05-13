@@ -450,14 +450,16 @@ if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
   exit 0
 fi
 
-echo Check the queue, if found than add and fetch them
-JenkinsUser="compile:$jpass"
-checkTheQueue
 
 echo Config and fetch the wake up repository
 repoName=$GERRIT_PROJECT
 AddAndFetchRepository
 
+echo Check the queue, if found than add and fetch them
+JenkinsUser="compile:$jpass"
+checkTheQueue
+
+echo Check the old builds without TAG, if found than add and fetch them
 checkOldSubmit    
 git remote -v
 
@@ -529,7 +531,7 @@ AddAndFetchAllRepository() {
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>$DEFAULT_RECIPIENTS</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.ScriptTrigger>
@@ -591,7 +593,7 @@ AddAndFetchAllRepository() {
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER} - ${BUILD_LOG_REGEX, regex="^.*NEWTAG=(\S*)",substText="$1",showTruncatedLines=false}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
