@@ -70,7 +70,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#create backupCentos6.tar.gz
+      <command>sudo yum install -y dos2unix
+#create backupCentos6.tar.gz
 mkdir -p ${WORKSPACE}/my_backup_centos_6
 rm -rf ${WORKSPACE}/my_backup_centos_6/*
 cd ${WORKSPACE}/my_backup_centos_6
