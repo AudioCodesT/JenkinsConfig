@@ -74,9 +74,9 @@
 mkdir -p ${WORKSPACE}/my_backup_centos_6
 rm -rf ${WORKSPACE}/my_backup_centos_6/*
 cd ${WORKSPACE}/my_backup_centos_6
-cp ${WORKSPACE}/Common/VMFiles/Configurator/usr/local/bin/cacertsUtil.sh .
-cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.pl .
-cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.py .
+cp ${WORKSPACE}/ArmCommon/Common/VMFiles/Configurator/usr/local/bin/cacertsUtil.sh .
+cp ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.pl .
+cp ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.py .
 dos2unix backupCentos6.pl backupCentos6.py
 chmod a+x backupCentos6.pl backupCentos6.py
 tar cvfz backupCentos6.tar.gz * 
@@ -86,9 +86,9 @@ tar cvfz backupCentos6.tar.gz *
 mkdir -p ${WORKSPACE}/my_restore_centos_8
 rm -rf ${WORKSPACE}/my_restore_centos_8/*
 cd ${WORKSPACE}/my_restore_centos_8
-cp -r ${WORKSPACE}/Common/src/main/resources/upgrade/conversions .
-cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/restoreCentos8.pl .
-cp ${WORKSPACE}/Common/src/main/resources/upgrade/fromCentos6_to_8/restoreCentos8.py .
+cp -r ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/conversions .
+cp ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/fromCentos6_to_8/restoreCentos8.pl .
+cp ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/fromCentos6_to_8/restoreCentos8.py .
 dos2unix restoreCentos8.pl restoreCentos8.py
 chmod a+x restoreCentos8.pl restoreCentos8.py
 tar cvfz restoreFromCentos6to8.tar.gz conversions restoreCentos8.pl restoreCentos8.py
