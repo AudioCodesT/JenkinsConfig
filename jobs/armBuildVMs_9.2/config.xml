@@ -105,25 +105,9 @@ sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>#RnDARMUI@audiocodes.com, #RnDARMRouter@audiocodes.com, 
 cc:shuky.riechard@audiocodes.com,cc:ben.magriso@audiocodes.com</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-          <email>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-            </recipientProviders>
-            <attachmentsPattern/>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-      </configuredTriggers>
       <contentType>text/html</contentType>
       <defaultSubject>ARM $VERSION_NAME  -  New VMs are available</defaultSubject>
       <defaultContent>&lt;p&gt;&lt;span style="color: #003366;"&gt;Hi Guys,&lt;/span&gt;&lt;/p&gt;
@@ -146,7 +130,7 @@ cc:shuky.riechard@audiocodes.com,cc:ben.magriso@audiocodes.com</recipientList>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
@@ -212,7 +196,7 @@ cc:shuky.riechard@audiocodes.com,cc:ben.magriso@audiocodes.com</recipientList>
       <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}___${ENV,var="VERSION_NAME"}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
