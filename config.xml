@@ -509,6 +509,7 @@
             </hudson.plugins.ec2.EC2Tag>
           </tags>
           <connectionStrategy>PRIVATE_IP</connectionStrategy>
+          <hostKeyVerificationStrategy>CHECK_NEW_SOFT</hostKeyVerificationStrategy>
           <associatePublicIp>false</associatePublicIp>
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
@@ -566,6 +567,7 @@
             </hudson.plugins.ec2.EC2Tag>
           </tags>
           <connectionStrategy>PRIVATE_IP</connectionStrategy>
+          <hostKeyVerificationStrategy>CHECK_NEW_SOFT</hostKeyVerificationStrategy>
           <associatePublicIp>false</associatePublicIp>
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
@@ -623,6 +625,7 @@
             </hudson.plugins.ec2.EC2Tag>
           </tags>
           <connectionStrategy>PRIVATE_IP</connectionStrategy>
+          <hostKeyVerificationStrategy>CHECK_NEW_SOFT</hostKeyVerificationStrategy>
           <associatePublicIp>false</associatePublicIp>
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
@@ -680,6 +683,7 @@
             </hudson.plugins.ec2.EC2Tag>
           </tags>
           <connectionStrategy>PRIVATE_IP</connectionStrategy>
+          <hostKeyVerificationStrategy>CHECK_NEW_SOFT</hostKeyVerificationStrategy>
           <associatePublicIp>false</associatePublicIp>
           <useDedicatedTenancy>false</useDedicatedTenancy>
           <amiType class="hudson.plugins.ec2.UnixData">
@@ -716,11 +720,11 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>R42xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -728,11 +732,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -846,11 +850,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -999,18 +1003,7 @@
       <name>sig-8ac26a53</name>
       <accountId></accountId>
       <groupId>sig-8ac26a53</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-009ac1f528422d008</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-009ac1f528422d008</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-android-dynamic</requestedLabel>
-            <createdAt>2020-05-13 06:06:02.454 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-android-dynamic</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/home/ubuntu/jenkinsslave</workspaceDir>
@@ -1285,11 +1278,11 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1326,7 +1319,6 @@
           <templateDesc>azure test VM</templateDesc>
           <labels>azure_test_te</labels>
           <location>West Europe</location>
-          <availabilityType/>
           <virtualMachineSize>Standard_B1s</virtualMachineSize>
           <storageAccountNameReferenceType>existing</storageAccountNameReferenceType>
           <diskType>managed</diskType>
@@ -1512,11 +1504,11 @@ sudo yum install -y git-2.18.0</initScript>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
@@ -1555,11 +1547,11 @@ sudo yum install -y git-2.18.0</initScript>
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M5large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M5large</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>

@@ -1,5 +1,5 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<jenkins.plugins.publish__over__cifs.CifsPublisherPlugin_-Descriptor plugin="publish-over-cifs@0.9">
+<jenkins.plugins.publish__over__cifs.CifsPublisherPlugin_-Descriptor plugin="publish-over-cifs@0.13">
   <hostConfigurations>
     <jenkins.plugins.publish__over__cifs.CifsHostConfiguration>
       <name>netapp1</name>
@@ -10,6 +10,7 @@
       <port>445</port>
       <timeout>30000</timeout>
       <bufferSize>4096</bufferSize>
+      <smbVersion>CIFS_SMB_V1</smbVersion>
     </jenkins.plugins.publish__over__cifs.CifsHostConfiguration>
   </hostConfigurations>
   <defaults class="jenkins.plugins.publish_over_cifs.options.CifsPluginDefaults"/>
