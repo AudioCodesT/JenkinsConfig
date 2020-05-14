@@ -363,7 +363,7 @@ checkTheQueue() {
     if [ "$repoName" == "$GERRIT_PROJECT" ]; then
       id=$(echo $eachBuild | cut -d, -f1)
       echo Cancel build $id
-      `curl -ks -u $JenkinsUser -X POST \"https://jenkins/queue/cancelItem?id=$id\"`;
+      #`curl -ks -u $JenkinsUser -X POST \"https://jenkins/queue/cancelItem?id=$id\"`;
     fi
     echo Sleep again for 3 minutes
     sleep 180
