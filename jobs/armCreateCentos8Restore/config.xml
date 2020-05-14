@@ -101,7 +101,7 @@ rm -rf ${WORKSPACE}/my_backup_and_restore/*
 cd ${WORKSPACE}/my_backup_and_restore
 cp ${WORKSPACE}/my_backup_centos_6/backupCentos6.tar.gz .
 cp ${WORKSPACE}/my_restore_centos_8/restoreFromCentos6to8.tar.gz .
-zip backupAndRestore.zip backupCentos6.tar.gz restoreFromCentos6to8.tar.gz
+zip backupAndRestore_${VERSION_NAME}.zip backupCentos6.tar.gz restoreFromCentos6to8.tar.gz
 </command>
     </hudson.tasks.Shell>
   </builders>
