@@ -23,7 +23,7 @@
     <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.15">
       <enabledColorBlindSupport>false</enabledColorBlindSupport>
     </hudson.plugins.greenballs.ColorBlindProperty>
-    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
+    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.3.7">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
         <entry>
           <com.cloudbees.plugins.credentials.domains.Domain>
@@ -33,7 +33,7 @@
         </entry>
       </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
-    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.62">
+    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.69">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
@@ -42,6 +42,7 @@
         <string>SSL_NO_VPN</string>
         <string>authenticated</string>
         <string>365_Tas</string>
+        <string>365_Comeet</string>
         <string>Password Manager Apply</string>
         <string>AWS_Jira_Users</string>
         <string>365_Lucca</string>
@@ -53,6 +54,7 @@
         <string># IPP</string>
         <string>Linuxusers</string>
         <string>SSL_Ukraine_Chip</string>
+        <string>Allow Office365 Groups</string>
         <string># ClearCase R&amp;D</string>
         <string># RnD Israel</string>
         <string># IPP RnD</string>
@@ -61,7 +63,7 @@
         <string># IPP RnD – GL</string>
         <string>CatalogApps_Everyone</string>
       </roles>
-      <timestamp>1582554149526</timestamp>
+      <timestamp>1589463228362</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.model.MyViewsProperty>
       <primaryViewName></primaryViewName>
@@ -84,14 +86,15 @@
     <hudson.search.UserSearchProperty>
       <insensitiveSearch>false</insensitiveSearch>
     </hudson.search.UserSearchProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.32">
       <emailAddress>Oleksiy.Tsubera@audiocodes.com</emailAddress>
     </hudson.tasks.Mailer_-UserProperty>
-    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.2.0">
+    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.3.2">
       <providerId>default</providerId>
     </org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty>
     <jenkins.security.seed.UserSeedProperty>
       <seed>1f3add3eae8b959d</seed>
     </jenkins.security.seed.UserSeedProperty>
+    <hudson.model.TimeZoneProperty/>
   </properties>
 </user>
