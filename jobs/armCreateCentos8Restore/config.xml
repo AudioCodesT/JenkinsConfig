@@ -139,7 +139,7 @@ zip backupAndRestore_${VERSION_NAME}.zip backupCentos6.tar.gz restoreFromCentos6
         <spec>{
     "files": [
         {
-            "pattern": "${WORKSPACE}/my_backup_and_restore/backupAndRestore.zip",
+            "pattern": "${WORKSPACE}/my_backup_and_restore/backupAndRestore_${VERSION_NAME}.zip",
             "target": "libs-release-local/com/ac/arm/Upgrade/${VERSION_NAME}/",
              "recursive": "false"
         }   
