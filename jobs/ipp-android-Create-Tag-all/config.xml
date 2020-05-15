@@ -354,6 +354,7 @@ checkTheQueueOld() {
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
+   addSleep=0
    for eachBuild in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep 'GERRIT_PROJECT\|\"id\"' | \
                  sed 's%.*\"id\":%%; s:".*GERRIT_PROJECT=::; s:\\n.*::'); do
@@ -365,9 +366,10 @@ checkTheQueue() {
       echo Cancel build $id
       #`curl -ks -u $JenkinsUser -X POST \"https://jenkins/queue/cancelItem?id=$id\"`;
     fi
-    echo Sleep again for 3 minutes
-    sleep 180
+    addSleep=180
   done
+  echo Sleep again for $addSleep seconds
+  sleep $addSleep
 }
 
 #######################################################################################
