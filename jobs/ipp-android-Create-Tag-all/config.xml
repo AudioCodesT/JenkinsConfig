@@ -338,21 +338,25 @@ createLocalManifests() {
 # Check if another job is waiting in queue, 
 # If yes, exit and let the newer build run - it will include this current change too
 # If no, continue this build 
-checkTheQueueOld() {
+checkTheQueue() {
   echo Check the queue...
+   addSleep=0
    for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
                  sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
     echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
     AddAndFetchRepository
+    addSleep=180
   done
+  echo Sleep again for $addSleep seconds
+  sleep $addSleep
 }
 
 #######################################################################################
 # Check if another job is waiting in queue, 
 # If yes, exit and let the newer build run - it will include this current change too
 # If no, continue this build 
-checkTheQueue() {
+checkTheQueueNew() {
   echo Check the queue...
    addSleep=0
    for eachBuild in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
