@@ -59,11 +59,6 @@
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
         <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
       </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.30.5">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
   <assignedNode>arm_centos8</assignedNode>
@@ -71,60 +66,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
-      <spec/>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>ARM/Arm</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>ANT</compareType>
-              <pattern>**</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <dynamicGerritProjects class="empty-list"/>
-      <skipVote>
-        <onSuccessful>false</onSuccessful>
-        <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel/>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames/>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage/>
-      <buildFailureMessage/>
-      <buildSuccessfulMessage/>
-      <buildUnstableMessage/>
-      <buildNotBuiltMessage/>
-      <buildUnsuccessfulFilepath/>
-      <customUrl/>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>true</excludeNoCodeChange>
-          <excludePrivateState>false</excludePrivateState>
-          <excludeWipState>false</excludeWipState>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL/>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -229,28 +171,6 @@ sudo chmod 777 /usr/local/etc</command>
   </builders>
   <publishers>
     <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.5">
-      <healthReports>
-        <minClass>0</minClass>
-        <maxClass>0</maxClass>
-        <minMethod>0</minMethod>
-        <maxMethod>0</maxMethod>
-        <minLine>0</minLine>
-        <maxLine>0</maxLine>
-        <minBranch>0</minBranch>
-        <maxBranch>0</maxBranch>
-        <minInstruction>0</minInstruction>
-        <maxInstruction>0</maxInstruction>
-        <minComplexity>0</minComplexity>
-        <maxComplexity>0</maxComplexity>
-      </healthReports>
-      <deltaHealthReport>
-        <deltaInstruction>0.0</deltaInstruction>
-        <deltaBranch>0.0</deltaBranch>
-        <deltaComplexity>0.0</deltaComplexity>
-        <deltaLine>0.0</deltaLine>
-        <deltaMethod>0.0</deltaMethod>
-        <deltaClass>0.0</deltaClass>
-      </deltaHealthReport>
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/*/java</sourcePattern>
