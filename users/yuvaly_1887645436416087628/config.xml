@@ -23,7 +23,7 @@
     <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.15">
       <enabledColorBlindSupport>false</enabledColorBlindSupport>
     </hudson.plugins.greenballs.ColorBlindProperty>
-    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.16">
+    <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.3.7">
       <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash">
         <entry>
           <com.cloudbees.plugins.credentials.domains.Domain>
@@ -33,10 +33,10 @@
         </entry>
       </domainCredentialsMap>
     </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
-    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.21">
+    <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.32">
       <emailAddress>yuval.yosha@audiocodes.com</emailAddress>
     </hudson.tasks.Mailer_-UserProperty>
-    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.62">
+    <hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty plugin="email-ext@2.69">
       <triggers/>
     </hudson.plugins.emailext.watching.EmailExtWatchAction_-UserProperty>
     <jenkins.security.LastGrantedAuthoritiesProperty>
@@ -44,6 +44,7 @@
         <string># All Dinner</string>
         <string>authenticated</string>
         <string>Palo_AWS-RND-BKP_NTWS</string>
+        <string>365_Comeet</string>
         <string>AWS_Jira_Users</string>
         <string>AI-Engineering</string>
         <string># All Cars</string>
@@ -78,7 +79,7 @@
         <string>Palo_Access_To_Amazon_RnD_Admins</string>
         <string># R&amp;D DevOps</string>
       </roles>
-      <timestamp>1587920858224</timestamp>
+      <timestamp>1589692982514</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <hudson.model.MyViewsProperty>
       <primaryViewName></primaryViewName>
@@ -92,7 +93,7 @@
         </hudson.model.AllView>
       </views>
     </hudson.model.MyViewsProperty>
-    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.2.0">
+    <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.3.2">
       <providerId>default</providerId>
     </org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty>
     <hudson.model.PaneStatusProperties>
@@ -108,5 +109,6 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDa+v63AJvZHoJTm0T4MhOKJXz3qS9Jckwu67g/UlAk
     <jenkins.security.seed.UserSeedProperty>
       <seed>9b9dc1e52bbd196d</seed>
     </jenkins.security.seed.UserSeedProperty>
+    <hudson.model.TimeZoneProperty/>
   </properties>
 </user>
