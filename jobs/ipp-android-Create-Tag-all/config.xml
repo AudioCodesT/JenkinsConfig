@@ -353,30 +353,6 @@ checkTheQueue() {
 }
 
 #######################################################################################
-# Check if another job is waiting in queue, 
-# If yes, exit and let the newer build run - it will include this current change too
-# If no, continue this build 
-checkTheQueueNew() {
-  echo Check the queue...
-   addSleep=0
-   for eachBuild in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
-                 sed "s:$JOB_NAME:\n:g" | grep 'GERRIT_PROJECT\|\"id\"' | \
-                 sed 's%.*\"id\":%%; s:".*GERRIT_PROJECT=::; s:\\n.*::'); do
-    repoName=$(echo $eachBuild | cut -d, -f2)
-    echo Found a newer build of job $JOB_NAME ... Add and fetch $repoName 
-    AddAndFetchRepository
-    if [ "$repoName" == "$GERRIT_PROJECT" ]; then
-      id=$(echo $eachBuild | cut -d, -f1)
-      echo Cancel build $id
-      #`curl -ks -u $JenkinsUser -X POST \"https://jenkins/queue/cancelItem?id=$id\"`;
-    fi
-    addSleep=180
-  done
-  echo Sleep again for $addSleep seconds
-  sleep $addSleep
-}
-
-#######################################################################################
 # Add and fetch a repository
 # Input: repoName
 #
@@ -415,6 +391,20 @@ checkOldSubmit() {
 }
 
 #######################################################################################
+# Exit without error in case this change was done already
+checkIfDone() {
+
+  if echo $(git remote -v) | grep -q $GERRIT_PROJECT; then
+    echo Check if they are changes without TAG
+    git checkout $(echo $GERRIT_PROJECT | rev | cut -d/ -f 1 | rev)/$GERRIT_BRANCH 
+    if git log --decorate --oneline --no-color -1 | grep -q tag:; then
+      echo This change was done ... exit without error
+      exit 0
+    fi
+  fi
+}
+
+#######################################################################################
 # The main program
 # If found new commit, execute 'createTag'
 
@@ -423,6 +413,9 @@ subject=""
 LastManifestTag=""
 mainBranch=master
 manifestBranch=master
+
+echo Check if this change was done already, if yes, exit without error
+checkIfDone
 
 echo Clean all old previous repositories
 for all in $(git remote); do git remote remove $all; done
