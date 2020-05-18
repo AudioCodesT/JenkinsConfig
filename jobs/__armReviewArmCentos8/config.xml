@@ -160,15 +160,9 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 #adding permissions for Router to write into folder /usr/local/etc/
 sudo chmod 777 /usr/local/etc</command>
         </hudson.tasks.Shell>
-        <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
-          <mavenName>Maven_v325</mavenName>
-          <rootPom>pom.xml</rootPom>
-          <goals>clean install</goals>
-          <mavenOpts/>
-        </org.jfrog.hudson.maven3.Maven3Builder>
         <hudson.tasks.Maven>
           <targets>clean install</targets>
-          <mavenName>Maven_v325</mavenName>
+          <mavenName>Maven_v363</mavenName>
           <pom>pom.xml</pom>
           <usePrivateRepository>false</usePrivateRepository>
           <settings class="jenkins.mvn.DefaultSettingsProvider"/>
