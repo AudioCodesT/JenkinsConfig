@@ -92,7 +92,7 @@ echo "CUSTOM_WORKSPACE=${CUSTOM_WORKSPACE}" &gt; prop</scriptContent>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>false</concurrentBuild>
+  <concurrentBuild>true</concurrentBuild>
   <customWorkspace>${CUSTOM_WORKSPACE}</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
