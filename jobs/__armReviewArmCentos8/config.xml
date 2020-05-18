@@ -166,6 +166,17 @@ sudo chmod 777 /usr/local/etc</command>
           <goals>clean install</goals>
           <mavenOpts/>
         </org.jfrog.hudson.maven3.Maven3Builder>
+        <hudson.tasks.Maven>
+          <targets>clean install</targets>
+          <mavenName>Maven_v325</mavenName>
+          <pom>pom.xml</pom>
+          <usePrivateRepository>false</usePrivateRepository>
+          <settings class="jenkins.mvn.DefaultSettingsProvider"/>
+          <globalSettings class="org.jenkinsci.plugins.configfiles.maven.job.MvnGlobalSettingsProvider" plugin="config-file-provider@2.18">
+            <settingsConfigId>58cfb176-1f6a-4803-af9e-4dcd0167ca1a</settingsConfigId>
+          </globalSettings>
+          <injectBuildVariables>false</injectBuildVariables>
+        </hudson.tasks.Maven>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
@@ -283,6 +294,15 @@ cat arm-pmd.properties
     </hudson.plugins.postbuildtask.PostbuildTask>
   </publishers>
   <buildWrappers>
+    <org.jenkinsci.plugins.configfiles.buildwrapper.ConfigFileBuildWrapper plugin="config-file-provider@2.18">
+      <managedFiles>
+        <org.jenkinsci.plugins.configfiles.buildwrapper.ManagedFile>
+          <fileId>58cfb176-1f6a-4803-af9e-4dcd0167ca1a</fileId>
+          <targetLocation>${WORKSPACE}</targetLocation>
+          <replaceTokens>false</replaceTokens>
+        </org.jenkinsci.plugins.configfiles.buildwrapper.ManagedFile>
+      </managedFiles>
+    </org.jenkinsci.plugins.configfiles.buildwrapper.ConfigFileBuildWrapper>
     <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
