@@ -104,7 +104,7 @@ echo "CUSTOM_WORKSPACE=${CUSTOM_WORKSPACE}" &gt; prop
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>true</concurrentBuild>
+  <concurrentBuild>false</concurrentBuild>
   <customWorkspace>${CUSTOM_WORKSPACE}</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
@@ -119,12 +119,12 @@ if [[ "$manifestsBranch" =~ "-m" ]]; then xmlFile=$(echo $manifestsBranch | cut 
 echo "cleaning ipp-android_android9 workspace"
 cd ${WORKSPACE}/..
 cd ipp-android_android9
-repo forall -c 'git reset --hard;git clean -ffdx'  || echo "not fail the build if clean fails"
+repo forall -c 'git reset --hard;git clean -ffdx' -j$(nproc) || echo "not fail the build if clean fails"
 rm -rf hardware out || echo "not fail the build if clean fails"
 echo "cleaning ipp-android (branch master) workspace"
 cd ${WORKSPACE}/..
 cd ipp-android
-repo forall -c 'git reset --hard;git clean -ffdx'  || echo "not fail the build if clean fails"
+repo forall -c 'git reset --hard;git clean -ffdx' -j$(nproc) || echo "not fail the build if clean fails"
 rm -rf hardware out || echo "not fail the build if clean fails"
 cd ${WORKSPACE}
 #**************** clean workspace before starting repo init and repoy sync ***************
@@ -215,7 +215,7 @@ fi
       <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER} $GERRIT_BRANCH $change</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
