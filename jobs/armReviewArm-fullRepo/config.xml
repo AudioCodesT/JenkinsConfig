@@ -1,16 +1,18 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Static Code Analysis&#xd;
-java --&gt; pmd, findbugs&#xd;
+  <description>Static Code Analysis&#13;
+java --&gt; pmd, findbugs&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -23,7 +25,7 @@ java --&gt; pmd, findbugs&#xd;
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -34,10 +36,11 @@ java --&gt; pmd, findbugs&#xd;
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -53,11 +56,13 @@ java --&gt; pmd, findbugs&#xd;
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <depth>10</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
@@ -78,26 +83,36 @@ java --&gt; pmd, findbugs&#xd;
   <builders>
     <hudson.tasks.Shell>
       <command># Setting jdk version for branches
-# Default version is 1.8.0_162
-jdkver=&quot;1.8.0_162&quot;
-
 # Branch 7.8 needs version 1.8.0_92
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]; then
-	jdkver=&quot;1.8.0_92&quot;
+if [[ "$GERRIT_BRANCH" == "7.8" ]]
+then
+	jdkver="1.8.0_92"
+elif [[ "$GERRIT_BRANCH" == "7.4" || "$GERRIT_BRANCH" == *"8."* || "$GERRIT_BRANCH" == "users" || "$GERRIT_BRANCH" == "9.0.init" ]]
+then
+	# Default version is 1.8.0_162
+	jdkver="1.8.0_162"
+
+else
+	jdkver="-11"
 fi
-#jdkver=&quot;1.8.0_191&quot;
-# Set Java
-sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
-jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
-echo &quot;Java version set to: $jver&quot;
+
+
+if [[ "$GERRIT_BRANCH" == *"7."* || "$GERRIT_BRANCH" == *"8."* || "$GERRIT_BRANCH" == "users" || "$GERRIT_BRANCH" == "9.0.init" ]]
+then
+	sudo alternatives --set java /usr/java/jdk"$jdkver"/jre/bin/java
+else
+	sudo alternatives --set java /usr/java/jdk"$jdkver"/bin/java
+fi
+jver=$(java -version 2&gt;&amp;1 | grep version | cut -d '"' -f 2)
+echo "Java version set to: $jver"
 
 # Set JavaC
-sudo alternatives --set javac /usr/java/jdk&quot;$jdkver&quot;/bin/javac
-jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
-echo &quot;javac version set to: $jcver&quot;
+sudo alternatives --set javac /usr/java/jdk"$jdkver"/bin/javac
+jcver=$(javac -version 2&gt;&amp;1 | cut -d ' ' -f 2)
+echo "javac version set to: $jcver"
 
 # Set JAVA_HOME
-sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&gt; /etc/environment&quot;
+sudo sh -c "echo \"export JAVA_HOME=/usr/java/jdk$jdkver\" &gt;&gt; /etc/environment"
 . /etc/environment
 
 #new scrip to prepare database env
@@ -105,16 +120,15 @@ sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt;&g
 #It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
 bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 
-
 #Per Kobi Levi request:
 #adding permissions for Router to write into folder /usr/local/etc/
 sudo chmod 777 /usr/local/etc</command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>pom.xml</rootPom>
       <goals>clean install</goals>
-      <mavenOpts></mavenOpts>
+      <mavenOpts/>
     </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Shell>
       <command>## Run pmd on entire repository java files
@@ -138,7 +152,7 @@ cd ${WORKSPACE}
 
 /opt/pmd/bin/run.sh pmd -d . -f xml -language java -R audc-ruleset.xml -encoding UTF-8 -failOnViolation false &gt; pmd.xml
 
-/usr/bin/sed -i -n &apos;/xml/,$p&apos; pmd.xml
+/usr/bin/sed -i -n '/xml/,$p' pmd.xml
 
 
 ## Run FindBugs on entire repository java files
@@ -153,29 +167,33 @@ ${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <io.jenkins.plugins.analysis.core.steps.IssuesRecorder plugin="warnings-ng@3.0.3">
+    <io.jenkins.plugins.analysis.core.steps.IssuesRecorder plugin="warnings-ng@8.1.0">
       <analysisTools>
         <io.jenkins.plugins.analysis.warnings.Pmd>
-          <id></id>
-          <name></name>
+          <id/>
+          <name/>
           <pattern>**/pmd.xml</pattern>
           <reportEncoding>UTF-8</reportEncoding>
+          <skipSymbolicLinks>false</skipSymbolicLinks>
         </io.jenkins.plugins.analysis.warnings.Pmd>
-        <io.jenkins.plugins.analysis.warnings.FindBugs>
-          <id></id>
-          <name></name>
+        <io.jenkins.plugins.analysis.warnings.SpotBugs>
+          <id/>
+          <name/>
           <pattern>**/findbugs.xml</pattern>
-          <reportEncoding>UTF-8</reportEncoding>
-          <useRankAsPriority>false</useRankAsPriority>
-        </io.jenkins.plugins.analysis.warnings.FindBugs>
+          <reportEncoding/>
+          <skipSymbolicLinks>false</skipSymbolicLinks>
+          <useRankAsPriority>true</useRankAsPriority>
+        </io.jenkins.plugins.analysis.warnings.SpotBugs>
       </analysisTools>
-      <sourceCodeEncoding></sourceCodeEncoding>
+      <sourceCodeEncoding/>
+      <sourceDirectory/>
       <ignoreQualityGate>false</ignoreQualityGate>
       <ignoreFailedBuilds>true</ignoreFailedBuilds>
       <referenceJobName>-</referenceJobName>
+      <failOnError>false</failOnError>
       <healthy>0</healthy>
       <unhealthy>0</unhealthy>
-      <minimumSeverity plugin="analysis-model-api@2.1.2">
+      <minimumSeverity plugin="analysis-model-api@8.0.1">
         <name>LOW</name>
       </minimumSeverity>
       <filters>
@@ -186,14 +204,16 @@ ${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
       <isEnabledForFailure>true</isEnabledForFailure>
       <isAggregatingResults>false</isAggregatingResults>
       <isBlameDisabled>false</isBlameDisabled>
+      <isForensicsDisabled>false</isForensicsDisabled>
       <qualityGates/>
+      <trendChartType>AGGREGATION_TOOLS</trendChartType>
     </io.jenkins.plugins.analysis.core.steps.IssuesRecorder>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>Shuky.Riechard@audiocodes.com yuval.yosha@audiocodes.com ben.magriso@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>cc:Shuky.Riechard@audiocodes.com,Lina.Fine@audiocodes.com,Natan.Merfish@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
@@ -203,7 +223,7 @@ ${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
             </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
+            <attachmentsPattern/>
             <attachBuildLog>false</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -219,13 +239,13 @@ $JOB_URL
 Regards,
 DevOps Team
 </defaultContent>
-      <attachmentsPattern></attachmentsPattern>
+      <attachmentsPattern/>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
+      <from/>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
@@ -237,7 +257,7 @@ DevOps Team
       </strategy>
       <operationList/>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
