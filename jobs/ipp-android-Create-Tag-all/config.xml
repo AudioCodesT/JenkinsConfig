@@ -358,16 +358,16 @@ checkTheQueue() {
 #
 AddAndFetchRepository() {
 
-  if echo $(git remote -v) | grep -q $repoName; then
-    echo Do not fetch it again, $repoName exist already
-  else
+  #if echo $(git remote -v) | grep -q $repoName; then
+  #  echo Do not fetch it again, $repoName exist already
+  #else
     shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)  
     echo Config $repoName to be $shortName
     git config remote.$shortName.url ssh://jenkins@gerrit:29418/$repoName
     git fetch --tags --progress ssh://jenkins@gerrit:29418/$repoName \
       +refs/heads/*:refs/remotes/$shortName/* \
       +refs/tags/*:refs/tags/$shortName/*
-  fi
+  #fi
 }
 
 #######################################################################################
@@ -401,11 +401,16 @@ checkIfDone() {
     git clean -fdx    
     git fetch $shortRepoName
     git checkout $shortRepoName/$GERRIT_BRANCH
-    git log -3 --decorate --oneline
+    git log -4 --decorate --oneline
     if git log --decorate --oneline --no-color -1 | grep -q tag:; then
       echo This change was done ... exit without error
       exit 0
     fi
+  else
+    echo Clean all old previous repositories
+    for all in $(git remote); do git remote remove $all; done
+    rm -rf * .git*
+    git init
   fi
 }
 
@@ -422,11 +427,6 @@ manifestBranch=master
 echo Check if this change was done already, if yes, exit without error
 checkIfDone
 
-echo Clean all old previous repositories
-#for all in $(git remote); do git remote remove $all; done
-#rm -rf * .git*
-
-#git init
 echo Sleep 5 minutes before starting check commits
 #sleep 300
 
