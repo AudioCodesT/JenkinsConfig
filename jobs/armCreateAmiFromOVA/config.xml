@@ -265,7 +265,7 @@ main_workspace=$(pwd)
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
 disk_size=$(echo "$disk_size" | sed 's/ //g' | cut -d'G' -f1)
 disk_size=${disk_size%.*}
-if [[ $disk_size -le 3 ]]
+if [[ $disk_size -le 6 ]]
 then
 echo "******************not enough space to compile, deleting other workspaces******************"
 find ${main_workspace} -mindepth 1 ! -regex "^${WORKSPACE}\(/.*\)?" -delete || true
