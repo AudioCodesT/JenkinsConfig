@@ -111,14 +111,15 @@
       <buildUnsuccessfulFilepath/>
       <customUrl/>
       <serverName>gerritHost</serverName>
-      <triggerOnEvents>
+      <triggerOnEvents class="linked-list">
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>true</excludeNoCodeChange>
+          <excludeNoCodeChange>false</excludeNoCodeChange>
           <excludePrivateState>false</excludePrivateState>
           <excludeWipState>false</excludeWipState>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
       <triggerConfigURL/>
