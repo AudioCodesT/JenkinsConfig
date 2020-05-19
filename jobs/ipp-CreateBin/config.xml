@@ -73,6 +73,12 @@ Above tag 1.0.0 (e.g.: 1.0.60)</description>
           <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ANDROID_DEVICE</name>
+          <description/>
+          <defaultValue>master</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -165,8 +171,17 @@ rm -rf repo_manifests
 git -c http.sslverify=false clone -n https://gerrit/IPP/Android/repo_manifests
 cd repo_manifests
 git checkout ${ANDROID_VERSION}
+
 Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' | head -1 | cut -d'/' -f2-)
-curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} || curlFailed="True"
+#check if android version is bigger then 1.4.27 then add to artifactory url ANDROID_DEVICE
+ANDROID_VERSION_NODOTS=${ANDROID_VERSION//./}"
+if [[ ${ANDROID_E} -ge 1427 ]]
+then
+ANDROID_URL="${Android_Branch}/${ANDROID_VERSION}/${ANDROID_DEVICE}"
+else
+ANDROID_URL="${Android_Branch}/${ANDROID_VERSION}"
+fi
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL} || curlFailed="True"
 if [[ $curlFailed == "True" ]]
 then
 	Android_Branch=master
@@ -180,7 +195,7 @@ cd ${WORKSPACE}/dualBin
 SFB_exists_in_artifactory="False"
 Android_exists_in_artifactory="False"
 curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/SFB/${Branch}/${SFB_VERSION} | grep "Not Found" || SFB_exists_in_artifactory="True"
-curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION} | grep "Not Found" || Android_exists_in_artifactory="True"
+curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL} | grep "Not Found" || Android_exists_in_artifactory="True"
 #if SFB not in artifactory, copy files from aclnas03
 if [[ "$SFB_exists_in_artifactory" == "False" ]]
 then
@@ -214,7 +229,7 @@ then
     echo "Copy files for ${ANDROID_VERSION} from aclnas03"
 	for file in ${files_to_copy[@]}
     do	
-		cp $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file ${WORKSPACE}/dualBin/$file
+		cp $HOME/aclnas03_ipp/Android/${ANDROID_URL}/$file ${WORKSPACE}/dualBin/$file
         local_md5=$(md5sum ${WORKSPACE}/dualBin/$file | cut -d' ' -f1)
         remote_md5=$(md5sum $HOME/aclnas03_ipp/Android/${Android_Branch}/${ANDROID_VERSION}/$file | cut -d' ' -f1)
         if [[ $remote_md5 != $local_md5 ]]
@@ -277,17 +292,17 @@ fi
 if [[ "$Android_exists_in_artifactory" == "True" ]] 
 then
 	echo "Copy files for ${ANDROID_VERSION} from artifactory"
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL}/${android_file_name}.android_images.zip
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL}/${android_file_name}.android_images.zip | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
     local_md5=$(md5sum ${android_file_name}.android_images.zip| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
         echo "Failed to download file from artifactory"
         exit 1
     fi
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip
-    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip.md5
-    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${Android_Branch}/${ANDROID_VERSION}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL}/${android_file_name}.zip
+    curl -k -u $artifactory_username:$artifactory_password -O https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL}/${android_file_name}.zip.md5
+    remote_md5=$(curl -k -u $artifactory_username:$artifactory_password -I https://artifactory/ipp-release/com/ac/ipp/Android/${ANDROID_URL}/${android_file_name}.zip | grep X-Checksum-Md5 | cut -d' ' -f2 | cut -c 1-32)
     local_md5=$(md5sum ${android_file_name}.zip| cut -d' ' -f1)
     if [[ $remote_md5 != $local_md5 ]]
     then
@@ -385,7 +400,7 @@ fi</command>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>cc:ben.magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
@@ -498,7 +513,7 @@ ${WORKSPACE}/build/image/*${Model}*.img=&gt;com/ac/ipp/SFB/${Branch}/${SFB_VERSI
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}_${Model} SFB:${SFB_VERSION} Teams:${ANDROID_VERSION}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
