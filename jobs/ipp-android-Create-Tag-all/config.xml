@@ -398,6 +398,7 @@ checkIfDone() {
     echo Check if they are changes without TAG
     sleep 20
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
+    git clean -fdx    
     git fetch $shortRepoName
     git checkout $shortRepoName/$GERRIT_BRANCH
     git log -3 --decorate --oneline
@@ -422,12 +423,12 @@ echo Check if this change was done already, if yes, exit without error
 checkIfDone
 
 echo Clean all old previous repositories
-for all in $(git remote); do git remote remove $all; done
-rm -rf * .git*
+#for all in $(git remote); do git remote remove $all; done
+#rm -rf * .git*
 
-git init
+#git init
 echo Sleep 5 minutes before starting check commits
-sleep 300
+#sleep 300
 
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
