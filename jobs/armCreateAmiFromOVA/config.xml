@@ -269,6 +269,8 @@ if [[ $disk_size -le 6 ]]
 then
 echo "******************not enough space to compile, deleting other workspaces******************"
 find ${main_workspace} -mindepth 1 ! -regex "^${WORKSPACE}\(/.*\)?" -delete || true
+find $HOME -name *"*.zip" -delete || true
+find $HOME -name *"*.tar.gz" -delete || true
 df -h
 fi</script>
       <scriptType>unixScript</scriptType>
