@@ -396,10 +396,11 @@ checkIfDone() {
 
   if echo $(git remote -v) | grep -q $GERRIT_PROJECT; then
     echo Check if they are changes without TAG
+    sleep 20
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git fetch $shortRepoName
     git checkout $shortRepoName/$GERRIT_BRANCH
-    git log -4 --decorate --oneline
+    git log -3 --decorate --oneline
     if git log --decorate --oneline --no-color -1 | grep -q tag:; then
       echo This change was done ... exit without error
       exit 0
