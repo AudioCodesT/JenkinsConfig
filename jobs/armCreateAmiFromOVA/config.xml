@@ -1,24 +1,26 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>create Ami from Ova:&#xd;
-1. download from artifactory 2 OVA Files&#xd;
-2.copy both ova to S3 Bucket (arm-ova2ami)&#xd;
-3. import both OVA files to AMI (ARM_Configurator,arm_Router)&#xd;
-4.share both AMIs to QA&#xd;
-5. if &quot;PublishAMI&quot; is checked, then call the publish job</description>
+  <description>create Ami from Ova:&#13;
+1. download from artifactory 2 OVA Files&#13;
+2.copy both ova to S3 Bucket (arm-ova2ami)&#13;
+3. import both OVA files to AMI (ARM_Configurator,arm_Router)&#13;
+4.share both AMIs to QA&#13;
+5. if "PublishAMI" is checked, then call the publish job</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -27,7 +29,7 @@
         <hudson.model.StringParameterDefinition>
           <name>TAG</name>
           <description>Please provide the tag (version number) of the OVA we should convert to Amazon image (AMI)</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
@@ -50,13 +52,13 @@ Yes - will call another job that will copy AMI to all regions on the list</descr
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <propertiesContent>PATH=$PATH:/home/centos/.local/bin:/home/centos/bin:/usr/local/git/bin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -66,6 +68,7 @@ Yes - will call another job that will copy AMI to all regions on the list</descr
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>arm-build</assignedNode>
@@ -78,11 +81,11 @@ Yes - will call another job that will copy AMI to all regions on the list</descr
   <builders>
     <hudson.tasks.Shell>
       <command>#copy files 2 OVA FIles to S3 bucket
-if [[ ! -e &quot;ovaFiles&quot; ]]
+if [[ ! -e "ovaFiles" ]]
 then
-echo &quot;****************************************************************************&quot;
-echo &quot;FAILED to Download ${TAG} from artifactory,Please check if ${TAG} OVA Exists&quot;
-echo &quot;****************************************************************************&quot;
+echo "****************************************************************************"
+echo "FAILED to Download ${TAG} from artifactory,Please check if ${TAG} OVA Exists"
+echo "****************************************************************************"
 exit 1
 fi
 
@@ -93,11 +96,11 @@ aws s3 cp ovaFiles/ARM-Router_${TAG}.ova s3://arm-ova2ami/${TAG}/
 cat &lt;&lt; EOF &gt; containers_Conf.json 
 [
   {
-    &quot;Description&quot;: &quot;ARM Configurator ${TAG} OVA&quot;,
-    &quot;Format&quot;: &quot;ova&quot;,
-    &quot;UserBucket&quot;: {
-        &quot;S3Bucket&quot;: &quot;arm-ova2ami&quot;,
-        &quot;S3Key&quot;: &quot;${TAG}/ARM-Conf_${TAG}.ova&quot;
+    "Description": "ARM Configurator ${TAG} OVA",
+    "Format": "ova",
+    "UserBucket": {
+        "S3Bucket": "arm-ova2ami",
+        "S3Key": "${TAG}/ARM-Conf_${TAG}.ova"
     }
 }]
 EOF
@@ -105,31 +108,31 @@ EOF
 cat &lt;&lt; EOF &gt; containers_Router.json 
 [
   {
-    &quot;Description&quot;: &quot;ARM Router ${TAG} OVA&quot;,
-    &quot;Format&quot;: &quot;ova&quot;,
-    &quot;UserBucket&quot;: {
-        &quot;S3Bucket&quot;: &quot;arm-ova2ami&quot;,
-        &quot;S3Key&quot;: &quot;${TAG}/ARM-Router_${TAG}.ova&quot;
+    "Description": "ARM Router ${TAG} OVA",
+    "Format": "ova",
+    "UserBucket": {
+        "S3Bucket": "arm-ova2ami",
+        "S3Key": "${TAG}/ARM-Router_${TAG}.ova"
     }
 }]
 EOF
 #import OVA 2 AMI
-ImportTaskId_Conf=$(aws ec2 import-image --description &quot;ARM Configurator ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Conf.json)
+ImportTaskId_Conf=$(aws ec2 import-image --description "ARM Configurator ${TAG} OVA" --license-type BYOL --disk-containers file://containers_Conf.json)
 echo $ImportTaskId_Conf
-ImportTaskId_Conf=$(echo $ImportTaskId_Conf | cut -d&apos; &apos; -f5)
+ImportTaskId_Conf=$(echo $ImportTaskId_Conf | cut -d' ' -f5)
 echo $ImportTaskId_Conf
-ImportTaskId_Router=$(aws ec2 import-image --description &quot;ARM Router ${TAG} OVA&quot; --license-type BYOL --disk-containers file://containers_Router.json)
+ImportTaskId_Router=$(aws ec2 import-image --description "ARM Router ${TAG} OVA" --license-type BYOL --disk-containers file://containers_Router.json)
 echo $ImportTaskId_Router
-ImportTaskId_Router=$(echo $ImportTaskId_Router | cut -d&apos; &apos; -f5)
+ImportTaskId_Router=$(echo $ImportTaskId_Router | cut -d' ' -f5)
 echo $ImportTaskId_Router
 
 conf_status_ret=1
 router_status_ret=1
 #if return value in while is 1 =&gt;dont fail the build (true not good in this case)
 set +e
-while [[ &quot;$conf_status_ret&quot; != &quot;0&quot; ]] || [[ &quot;$router_status_ret&quot; != &quot;0&quot; ]]
+while [[ "$conf_status_ret" != "0" ]] || [[ "$router_status_ret" != "0" ]]
 do
-  echo &quot;importing both OVA files to AMI&quot;
+  echo "importing both OVA files to AMI"
   sleep 100
   #check if complete create AMI
 
@@ -140,7 +143,7 @@ do
 done
 set -e
 sleep 20
-echo &quot;finish importing both OVA Files to AMI&quot;
+echo "finish importing both OVA Files to AMI"
 confAmiID=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Conf}))
 confAmiID=${confAmiID[6]}
 routerAmiID=($(aws ec2 describe-import-image-tasks --import-task-ids ${ImportTaskId_Router}))
@@ -149,28 +152,28 @@ routerAmiID=${routerAmiID[6]}
 confSnapshotId=$(aws ec2 describe-images --image-ids $confAmiID --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 routerSnapshotId=$(aws ec2 describe-images --image-ids $routerAmiID --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
 #give tag name to the AMI 
-aws ec2 create-tags --resources $confAmiID --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
-aws ec2 create-tags --resources $routerAmiID --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
+aws ec2 create-tags --resources $confAmiID --tags Key=Name,Value="ARM-Configurator_${TAG}"
+aws ec2 create-tags --resources $routerAmiID --tags Key=Name,Value="ARM-Router_${TAG}"
 #give tag name to the snapshot 
-aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
-aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
+aws ec2 create-tags --resources $confSnapshotId --tags Key=Name,Value="ARM-Configurator_${TAG}"
+aws ec2 create-tags --resources $routerSnapshotId --tags Key=Name,Value="ARM-Router_${TAG}"
 #give description to the AMI
-aws ec2 modify-image-attribute --image-id $confAmiID --description &quot;ARM Configurator ${TAG}&quot;
-aws ec2 modify-image-attribute --image-id $routerAmiID --description &quot;ARM Router ${TAG}&quot;
+aws ec2 modify-image-attribute --image-id $confAmiID --description "ARM Configurator ${TAG}"
+aws ec2 modify-image-attribute --image-id $routerAmiID --description "ARM Router ${TAG}"
 #give permissions to QA
-qaAccount=&quot;191324562914&quot;
+qaAccount="191324562914"
 #give permissions to ovoc QA Account to the AMI
-aws ec2 modify-image-attribute --image-id $confAmiID --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
-aws ec2 modify-image-attribute --image-id $routerAmiID --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;UserId\&quot;:\&quot;$qaAccount\&quot;}]}&quot;
+aws ec2 modify-image-attribute --image-id $confAmiID --launch-permission "{\"Add\":[{\"UserId\":\"$qaAccount\"}]}"
+aws ec2 modify-image-attribute --image-id $routerAmiID --launch-permission "{\"Add\":[{\"UserId\":\"$qaAccount\"}]}"
 #give permissions to ovoc QA Account to the SNAPSHOT
 aws ec2 modify-snapshot-attribute --snapshot-id $confSnapshotId --attribute createVolumePermission --operation-type add --user-ids $qaAccount
 aws ec2 modify-snapshot-attribute --snapshot-id $routerSnapshotId --attribute createVolumePermission --operation-type add --user-ids $qaAccount
 
 
-echo &quot;confAmiID=${confAmiID}&quot; &gt; properties
-echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
+echo "confAmiID=${confAmiID}" &gt; properties
+echo "routerAmiID=${routerAmiID}" &gt;&gt; properties</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>properties</propertiesFilePath>
       </info>
@@ -180,13 +183,13 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
             <arg1>${PublishAMI}</arg1>
             <arg2>Yes</arg2>
             <ignoreCase>false</ignoreCase>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -203,17 +206,17 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Liav.Elias@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
@@ -224,7 +227,7 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
               <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
             </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
+            <attachmentsPattern/>
             <attachBuildLog>false</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -236,42 +239,43 @@ echo &quot;routerAmiID=${routerAmiID}&quot; &gt;&gt; properties</command>
       <defaultSubject>ARM ${TAG} AMIs were created successfully</defaultSubject>
       <defaultContent>Arm Configurator: ${confAmiID}
 Arm Router: ${routerAmiID}</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
+      <attachmentsPattern/>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
+      <from/>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh -xe
 cd ${WORKSPACE}/..
 main_workspace=$(pwd)
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
+disk_size=$(echo "$disk_size" | sed 's/ //g' | cut -d'G' -f1)
 disk_size=${disk_size%.*}
 if [[ $disk_size -le 3 ]]
 then
-echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
-find ${main_workspace} -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
+echo "******************not enough space to compile, deleting other workspaces******************"
+find ${main_workspace} -mindepth 1 ! -regex "^${WORKSPACE}\(/.*\)?" -delete || true
 df -h
 fi</script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>false</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
     </com.lookout.jenkins.EnvironmentScript>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -283,62 +287,55 @@ fi</script>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
+            "target": "${workspace}/ovaFiles/",
+            "flat": "true"
         },
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
+            "target": "${workspace}/ovaFiles/",
+            "flat": "true"
         }
     ]
 }</spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
+      <deployPattern/>
       <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
 libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles</resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deploymentProperties/>
       <deployBuildInfo>false</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
