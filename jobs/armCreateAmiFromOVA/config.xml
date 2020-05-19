@@ -272,6 +272,7 @@ find ${main_workspace} -mindepth 1 ! -regex "^${WORKSPACE}\(/.*\)?" -delete || t
 find $HOME -name *"*.zip" -delete || true
 find $HOME -name *"*.tar.gz" -delete || true
 find $HOME -name *"*.rpm" -delete || true
+rm -rf ${HOME}/.m2
 df -h
 fi</script>
       <scriptType>unixScript</scriptType>
