@@ -175,7 +175,7 @@ git checkout ${ANDROID_VERSION}
 Android_Branch=$(git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' | head -1 | cut -d'/' -f2-)
 #check if android version is bigger then 1.4.27 then add to artifactory url ANDROID_DEVICE
 ANDROID_VERSION_NODOTS=${ANDROID_VERSION//./}
-if [[ ${ANDROID_E} -ge 1427 ]]
+if [[ ${ANDROID_VERSION_NODOTS} -ge 1427 ]]
 then
 	ANDROID_URL="${Android_Branch}/${ANDROID_VERSION}/${ANDROID_DEVICE}"
 else
