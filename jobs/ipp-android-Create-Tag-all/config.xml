@@ -349,7 +349,7 @@ checkTheQueue() {
   done
   
   echo Find all these repositories: $repoList
-  for repoName in $repoList; do 
+  for repoName in $(echo $repoList | tr ' ' '\n' | sort -u); do 
     echo Add and fetch $repoName
     AddAndFetchRepository; 
   done
