@@ -340,18 +340,11 @@ createLocalManifests() {
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
-  repoList=""
   for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
                  sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
     echo Found a newer build of job $JOB_NAME ... $repoName
-    repoList="$repoName $repoList"
-  done
-  
-  echo Find all these repositories: $repoList
-  for repoName in $(echo $repoList | tr ' ' '\n' | sort -u); do 
-    echo Add and fetch $repoName
-    AddAndFetchRepository; 
+    AddAndFetchRepository
   done
 }
 
@@ -361,16 +354,16 @@ checkTheQueue() {
 #
 AddAndFetchRepository() {
 
-  #if echo $(git remote -v) | grep -q $repoName; then
-  #  echo Do not fetch it again, $repoName exist already
-  #else
+  if echo $(git remote -v) | grep -q $repoName; then
+    echo Do not fetch it again, $repoName exist already
+  else
     shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)  
     echo Config $repoName to be $shortName
     git config remote.$shortName.url ssh://jenkins@gerrit:29418/$repoName
     git fetch --tags --progress ssh://jenkins@gerrit:29418/$repoName \
       +refs/heads/*:refs/remotes/$shortName/* \
       +refs/tags/*:refs/tags/$shortName/*
-  #fi
+  fi
 }
 
 #######################################################################################
@@ -428,7 +421,7 @@ mainBranch=master
 manifestBranch=master
 
 echo Check if this change was done already, if yes, exit without error
-checkIfDone
+#checkIfDone
 
 echo Sleep 5 minutes before starting check commits
 #sleep 300
