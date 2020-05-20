@@ -355,15 +355,13 @@ checkTheQueue() {
 AddAndFetchRepository() {
 
   if echo $(git remote -v) | grep -q $repoName; then
-    echo Do not fetch it again, $repoName exist already
+    echo Do not define it again, $repoName exist already
   else
     shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)  
     echo Config $repoName to be $shortName
-    git config remote.$shortName.url ssh://jenkins@gerrit:29418/$repoName
-    git fetch --tags --progress ssh://jenkins@gerrit:29418/$repoName \
-      +refs/heads/*:refs/remotes/$shortName/* \
-      +refs/tags/*:refs/tags/$shortName/*
+    git remote add $shortName ssh://jenkins@gerrit:29418/$repoName
   fi
+  git fetch -f --progress --tags $shortName
 }
 
 #######################################################################################
