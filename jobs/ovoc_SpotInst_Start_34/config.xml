@@ -60,7 +60,7 @@ echo "Starting 1 instance of STATEFUL_ipp_android-Tests"
 echo "***********************************************************************************"
 
 ACCOUNT_ID="act-1fd9f587"
-MI_ID="smi-3dda181f"
+MI_ID="smi-773f66ce"
 
 curl -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer ${spotinst_token}" \
 "https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/resume?accountId=${ACCOUNT_ID}"
