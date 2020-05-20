@@ -339,9 +339,9 @@ createLocalManifests() {
 # If yes, exit and let the newer build run - it will include this current change too
 # If no, continue this build 
 checkTheQueue() {
-   echo Check the queue...
-   repoList=""
-   for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
+  echo Check the queue...
+  repoList=""
+  for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
                  sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
                  sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
     echo Found a newer build of job $JOB_NAME ... $repoName
