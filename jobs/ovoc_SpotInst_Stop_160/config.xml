@@ -1,16 +1,18 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>this job is triggered from URL&#xd;
-purpose: start forHadas_ovoc_sanityInstall_Slave_1 instances &#xd;
+  <description>this job is triggered from URL&#13;
+purpose: start forHadas_ovoc_sanityInstall_Slave_1 instances &#13;
 No build job. Only start the instance.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -23,7 +25,7 @@ No build job. Only start the instance.</description>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -34,8 +36,9 @@ No build job. Only start the instance.</description>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -49,32 +52,32 @@ No build job. Only start the instance.</description>
   <builders>
     <hudson.tasks.Shell>
       <command># resume all this group stateful
-#curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-#-d &apos;{&quot;capacity&quot;: {&quot;minimum&quot;: 0,&quot;maximum&quot;: 3,&quot;target&quot;: 3}}&apos; \
-#&quot;https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true&quot;
-echo &quot;***********************************************************************************&quot;
-echo &quot;Starting 1 instance&quot;
-echo &quot;***********************************************************************************&quot;
+#curl -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer ${spotinst_token}" \
+#-d '{"capacity": {"minimum": 0,"maximum": 3,"target": 3}}' \
+#"https://api.spotinst.io/aws/ec2/group/${GROUP_ID}/capacity?accountId=${ACCOUNT_ID}?shouldResumeStateful=true"
+echo "***********************************************************************************"
+echo "Starting 1 instance"
+echo "***********************************************************************************"
 
-ACCOUNT_ID=&quot;act-1fd9f587&quot;
-MI_ID=&quot;smi-febba828&quot;
+ACCOUNT_ID="act-1fd9f587"
+MI_ID="smi-eb9a77a2"
 
-curl -X PUT -H &quot;Content-Type: application/json&quot; -H &quot;Authorization: Bearer ${spotinst_token}&quot; \
-&quot;https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/pause?accountId=${ACCOUNT_ID}&quot;
+curl -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer ${spotinst_token}" \
+"https://api.spotinst.io/aws/ec2/managedInstance/${MI_ID}/pause?accountId=${ACCOUNT_ID}"
 
 
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
