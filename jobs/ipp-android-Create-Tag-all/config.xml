@@ -340,9 +340,9 @@ createLocalManifests() {
 # If no, continue this build 
 checkTheQueue() {
   echo Check the queue...
-  for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | grep $JOB_NAME | \
-                 sed "s:$JOB_NAME:\n:g" | grep GERRIT_PROJECT | \
-                 sed 's:.*GERRIT_PROJECT=::; s:\\n.*::'); do
+  for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | \
+                    sed 's:PROJECT=:\n:g' | grep $JOB_NAME | \
+                    sed 's:",".*::g'); do
     echo Found a newer build of job $JOB_NAME ... $repoName
     AddAndFetchRepository
   done
