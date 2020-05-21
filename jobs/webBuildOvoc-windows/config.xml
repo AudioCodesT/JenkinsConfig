@@ -153,6 +153,14 @@ if new code then build and deploy ovoc-7.6.zip</description>
 set -e
 cd $WORKSPACE
 
+#until branch 7.8.1000 (include) use nvm 12.16.1 (npm 12.16.1 and yarn 1.5.1) from 7.8.2000 use nvm 12.16.2(npm 12.16.2 and yarn 1.22.4)
+if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
+then
+	nvm use 12.16.1
+else
+	nvm use 12.16.2
+fi
+
 
 if [[ "$GERRIT_BRANCH" != "7.4"* ]] &amp;&amp; [[ "$GERRIT_BRANCH" != "7.6" ]]
 then
