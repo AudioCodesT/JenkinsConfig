@@ -392,6 +392,7 @@ checkIfDone() {
     echo Check if they are changes without TAG
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git clean -fdx
+    sleep 20
     git checkout $shortRepoName/$GERRIT_BRANCH
     git fetch -f --progress --tags $shortRepoName
     git log -4 --decorate --oneline
