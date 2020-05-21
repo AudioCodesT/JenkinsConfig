@@ -81,7 +81,7 @@
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>REG_EXP</compareType>
-              <pattern>^((7.*|8.*|users|9.0).+|(?!(7.*|8.*|users|9.0)).*)$</pattern>
+              <pattern>^(?!(7.*|8.*|users|9.0)$).+$</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
