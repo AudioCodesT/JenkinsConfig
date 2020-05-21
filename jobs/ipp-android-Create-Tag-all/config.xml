@@ -390,7 +390,6 @@ checkIfDone() {
 
   if echo $(git remote -v) | grep -q $GERRIT_PROJECT; then
     echo Check if they are changes without TAG
-    sleep 20
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git clean -fdx
     git checkout $shortRepoName/$GERRIT_BRANCH
