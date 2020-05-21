@@ -196,8 +196,14 @@ then
         
       	yarn config set registry https://artifactory/api/npm/npm/
 		yarn config set strict-ssl false
- 		echo "RUN: yarn install"
-    	yarn install
+    	if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
+		then 
+ 			echo "RUN: yarn install"
+    		yarn install
+    	else
+    		echo "RUN: yarn i"
+       	 	yarn i
+   		fi
       fi
       
       #update version number before grunt dist
@@ -380,7 +386,7 @@ fi</command>
       </delay>
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>OVOCWebUI@audiocodes.com, cc:ben.magriso@audiocodes.com, cc:Shuky.Riechard</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.StillFailingTrigger>
@@ -443,8 +449,8 @@ $BUILD_URL
     </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.5.3">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.6.3">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
@@ -510,7 +516,7 @@ $BUILD_URL
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}_branch:$GERRIT_BRANCH</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
