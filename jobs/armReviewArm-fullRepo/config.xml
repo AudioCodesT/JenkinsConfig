@@ -82,21 +82,6 @@ java --&gt; pmd, findbugs&#13;
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cd $HOMEDIR
-if [ ! -d /opt/spotbugs-4.0.3 ]; then
-	wget https://github.com/spotbugs/spotbugs/releases/download/4.0.3/spotbugs-4.0.3.tgz
-	tar zxfv spotbugs-4.0.3.tgz
-	sudo cp -R spotbugs-4.0.3 /opt/
-	cd /opt
-	sudo ln -s spotbugs-4.0.3 spotbugs
-	cd spotbugs/bin
-	sudo chmod +x *
-	ls -lh
-	cd ${WORKSPACE}
-fi
-/opt/spotbugs/bin/spotbugs -version</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
       <command># Setting jdk version for branches
 # Branch 7.8 needs version 1.8.0_92
 if [[ "$GERRIT_BRANCH" == "7.8" ]]
