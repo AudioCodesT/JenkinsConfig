@@ -398,7 +398,7 @@ checkIfDone() {
     git log -4 --decorate --oneline
     if git log --decorate --oneline --no-color -1 | grep -q tag:; then
       echo This change was done ... exit without error
-      exit 0
+      #exit 0
     fi
   else
     echo Clean all old previous repositories
