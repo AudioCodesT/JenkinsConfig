@@ -354,10 +354,10 @@ checkTheQueue() {
 #
 AddAndFetchRepository() {
 
+  shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)  
   if echo $(git remote -v) | grep -q $repoName; then
     echo Do not define it again, $repoName exist already
   else
-    shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)  
     echo Config $repoName to be $shortName
     git remote add $shortName ssh://jenkins@gerrit:29418/$repoName
   fi
