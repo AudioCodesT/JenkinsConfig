@@ -393,6 +393,7 @@ checkIfDone() {
     sleep 20
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git clean -fdx
+    git checkout $shortRepoName/$GERRIT_BRANCH
     git fetch -f --progress --tags $shortRepoName
     git log -4 --decorate --oneline
     if git log --decorate --oneline --no-color -1 | grep -q tag:; then
@@ -417,18 +418,18 @@ LastManifestTag=""
 mainBranch=master
 manifestBranch=master
 
-echo Check if this change was done already, if yes, exit without error
-checkIfDone
-
-echo Sleep 5 minutes before starting check commits
-sleep 300
-
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
   echo "No branch found, set to main branch: $mainBranch"
   GERRIT_BRANCH="$mainBranch"
 fi
 BRANCH=$GERRIT_BRANCH
+
+echo Check if this change was done already, if yes, exit without error
+checkIfDone
+
+echo Sleep 5 minutes before starting check commits
+sleep 300
 
 # If the job was executed manually, $PROJECT should be defined
 if [ ! -z "$PROJECT" ]; then GERRIT_PROJECT=$PROJECT; fi
