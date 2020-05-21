@@ -1,20 +1,22 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Gerrit Trigger&#xd;
+  <description>Gerrit Trigger&#13;
 every Submit - build and deploy arm-ui-x.x.zip</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -22,14 +24,14 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_PATCHSET_REVISION</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -41,10 +43,11 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -66,7 +69,7 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
     <extensions>
       <hudson.plugins.git.extensions.impl.WipeWorkspace/>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.30.5">
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -78,8 +81,8 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -101,27 +104,27 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -135,14 +138,15 @@ set -x
 
 cd $WORKSPACE
 #yarn dist failing without this command (memory out of heap failure)
-export NODE_OPTIONS=&quot;--max_old_space_size=4096&quot;
-
+export NODE_OPTIONS="--max_old_space_size=4096"
+#use nvm 12.16.1 (npm 12.16.1 and yarn 1.5.1)
+nvm use 12.16.1
 # adding ac-infra
-echo &quot;git submodule init&quot;
+echo "git submodule init"
 git submodule init
-echo &quot;git submodule update&quot;
+echo "git submodule update"
 git submodule update
-echo &quot;finish submodule&quot;
+echo "finish submodule"
 
 
 #connect repositories using https instead opf git:
@@ -153,10 +157,10 @@ git config url.https://.insteadOf git://
 # so we compare the SHA1 of last commit in remote repo to the SHA1 in this specofic build
 # if equal then build, else exit
 LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -f 1 | head -n 1 )
-if [ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]
+if [ "$LastGerritCommitHash" == "$GERRIT_PATCHSET_REVISION" ]
    then
     # if version is 8.2 or lower - use: npm / bower / privte bower / grunt
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.0&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;8.2&quot; ]]
+if [[ "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "8.0" || "$GERRIT_BRANCH" == "8.2" ]]
 then 
 	# checking if the private-bower is running
 	output=$( netstat -ano | grep 5678 ) || true
@@ -164,13 +168,13 @@ then
 	then private-bower &amp; sleep 15
 	fi
     
-	echo &quot;RUN: npm install&quot;
+	echo "RUN: npm install"
 	npm install
 
-	echo &quot;RUN: bower install --force-latest&quot;
+	echo "RUN: bower install --force-latest"
 	bower install --force-latest
 
-	echo &quot;RUN: grunt dist&quot;
+	echo "RUN: grunt dist"
 	grunt dist
 
 	#	if version is 8.4 or higher - use: yarn with npm on artifactory
@@ -178,45 +182,45 @@ else
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
 
-    echo &quot;RUN: yarn install&quot;
+    echo "RUN: yarn install"
     yarn install
 
-	echo &quot;RUN: yarn dist&quot;
+	echo "RUN: yarn dist"
 	yarn dist
     
     #kill the Proxy Server process
-#   pidNumber=$(netstat -ano | grep 9000 | awk &apos;{print $5}&apos; | head -n 1  | sed -e &quot;s/[[:space:]]\+/ /g&quot;)
-#   echo &quot;pidNumber = $pidNumber&quot;
-#   if [[ ! -z &quot;$pidNumber&quot; ]]
+#   pidNumber=$(netstat -ano | grep 9000 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
+#   echo "pidNumber = $pidNumber"
+#   if [[ ! -z "$pidNumber" ]]
 #   then
-#      echo &quot;killing the proccess of the protractor proxy server&quot;
-#	  taskkill /F /PID &quot;$pidNumber&quot;
+#      echo "killing the proccess of the protractor proxy server"
+#	  taskkill /F /PID "$pidNumber"
 #   fi
-#   echo &quot;RUN: yarn run protractorProxyServer&quot;
+#   echo "RUN: yarn run protractorProxyServer"
 #    yarn run protractorProxyServer &amp; sleep 15
-#    echo &quot;RUN: yarn run protractorServer&quot;
+#    echo "RUN: yarn run protractorServer"
 #    yarn run protractorServer &amp; sleep 15
-#    echo &quot;RUN: yarn run protractor&quot;
+#    echo "RUN: yarn run protractor"
 #    yarn run protractor
-#      echo &quot;RUN: yarn run replaceStrings&quot;
+#      echo "RUN: yarn run replaceStrings"
 #      yarn run replaceStrings 
-#      echo &quot;RUN:yarn run zip&quot;
+#      echo "RUN:yarn run zip"
 #      yarn run zip 
 
 fi
 
 
      #if branch is not master then copy the zip to a new zip with the branch name
-     if [ $GERRIT_BRANCH != &quot;master&quot; ]; then 
+     if [ $GERRIT_BRANCH != "master" ]; then 
           mv dist/arm*.zip dist/arm-web-ui-$GERRIT_BRANCH.zip -f
      else
           cp dist/arm.zip dist/arm-web-ui-9.0.zip -f
      fi
 
 else
-	echo &quot;************************************************************&quot;
-	echo &quot;This is not the Last commit  -  exiting now without building&quot;
-    echo &quot;************************************************************&quot;    
+	echo "************************************************************"
+	echo "This is not the Last commit  -  exiting now without building"
+    echo "************************************************************"    
 fi
 
 
@@ -230,13 +234,13 @@ fi
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso,devops@audiocodes.com,Shuky.Riechard</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo &apos;origin&apos;).*</regexpForRerun>
+      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo 'origin').*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
@@ -246,7 +250,7 @@ fi
       </delay>
       <maxSchedule>2</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
-    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.38">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>.git/**</pattern>
@@ -266,11 +270,12 @@ fi
       <cleanWhenAborted>false</cleanWhenAborted>
       <notFailBuild>false</notFailBuild>
       <cleanupMatrixParent>false</cleanupMatrixParent>
-      <externalDelete></externalDelete>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -282,63 +287,55 @@ fi
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/dist/arm-web-ui-9.0.zip&quot;,
-            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/arm-web-ui/9.0/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/dist/arm-web-ui-9.0.zip",
+            "target": "libs-release-local/com/ac/arm/arm-web-ui/9.0/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/dist/dist/arm-web-ui-$GERRIT_BRANCH.zip&quot;,
-            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/arm-web-ui/$GERRIT_BRANCH/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/dist/dist/arm-web-ui-$GERRIT_BRANCH.zip",
+            "target": "libs-release-local/com/ac/arm/arm-web-ui/$GERRIT_BRANCH/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
         }   
     ]
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
       <deployPattern>dist/arm-web-ui-8.8.zip=&gt;com/ac/arm/arm-web-ui/8.8/
 dist/arm-web-ui-$GERRIT_BRANCH.zip=&gt;com/ac/arm/arm-web-ui/$GERRIT_BRANCH/</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>false</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -348,8 +345,9 @@ dist/arm-web-ui-$GERRIT_BRANCH.zip=&gt;com/ac/arm/arm-web-ui/$GERRIT_BRANCH/</de
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch-${GERRIT_BRANCH}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
