@@ -300,7 +300,7 @@ createTag() {
 createCommitFileList() {
   echo TAG: $LastTag ------------------- on: $localRepoName -------------------
   #If no TAGS exist at all in this branch, check the last commit only
-  if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
+  #if ! echo $LastTag | grep -q $localRepoName; then LastTag=$localRepoName/$LastTag; fi
   if [ ! $(git tag -l "$LastTag") ]; then
     echo No found TAGS, check $GERRIT_BRANCH for last 3 changes
     git log -3 --first-parent --reverse --date=raw --pretty=format:"%H_%cn_%cd" $GERRIT_BRANCH &gt; ${localRepoName}_$checkBRANCH.list
