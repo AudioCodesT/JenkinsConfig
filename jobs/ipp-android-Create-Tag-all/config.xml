@@ -245,6 +245,7 @@ createTag() {
     echo Check repository $eachRepo.......................................
     repoToTAG=$(echo $eachRepo | cut -d: -f2)
     localRepoName=$(echo $eachRepo | cut -d: -f1)
+    git fetch -f --progress --tags $localRepoName
     checkedBranch=""
     for xmlFile in $(find ../repo_manifests -name "*.xml" -type f -print); do
       echo --- $xmlFile for repository $localRepoName ---
@@ -258,6 +259,7 @@ createTag() {
         echo Branch $GERRIT_BRANCH does not exist
         continue
       fi
+
       if ! git log --decorate --oneline --no-color -1 $GERRIT_BRANCH | grep -q tag:; then
         LastTag=$(git describe --tags --always --abbrev=0 --first-parent $GERRIT_BRANCH)
         # Check if it a TAG or the last SHA1 ("--always" option give the last commit SHA1 if no TAG exist)
