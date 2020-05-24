@@ -62,7 +62,10 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
+      <command>cat jenkins_sshkey &gt; ~/.ssh/id_rsa
+chmod 600  ~/.ssh/id_rsa
+
+git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
@@ -71,7 +74,7 @@
       <bindings>
         <org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
           <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
-          <keyFileVariable>id_rsa</keyFileVariable>
+          <keyFileVariable>jenkins_sshkey</keyFileVariable>
           <usernameVariable/>
           <passphraseVariable/>
         </org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
