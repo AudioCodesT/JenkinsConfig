@@ -68,7 +68,7 @@ uboot/c450hd_uboot</description>
     
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp-AutoNL1</assignedNode>
+  <assignedNode>sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -342,7 +342,7 @@ checkTheQueue() {
   echo Check the queue...
   for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | \
                     sed 's:PROJECT=:\n:g' | grep $JOB_NAME | \
-                    sed 's:",".*::g'); do
+                    sed 's:\\n.*::g'); do
     echo Found a newer build of job $JOB_NAME ... $repoName
     AddAndFetchRepository
   done
