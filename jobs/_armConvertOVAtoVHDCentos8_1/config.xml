@@ -59,85 +59,53 @@ steps:&#13;
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>python3.6 &lt;&lt; EOS
-import shlex
-import paramiko
-import select
-import time
-import re
-import sys
-import traceback
-import cnlsender
-import re
-import os
-import subprocess
-from subprocess import Popen, PIPE
+      <command>cd ~/.ssl
+vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 
-
-
-
+cd ${WORKSPACE}
 #esxi username and password
 vm_username='armAdmin'
 vm_password='Arm!default1'
 vm_root_password='password'
+vmHostIP="10.7.10.107"
 
-# Functions definitions for configuration
-def sendwait_conf(command, timeout=200.0, waitfor="#"):
-    return cnlsender.sendWait(channel_conf, command, timeout, waitfor)
- 
-def sendWithoutWait_conf(command):
-	return cnlsender.sendWithoutWait(channel_conf, command)
- 
-def justWait_conf(timeout=200.0, waitfor="#"):
-	return cnlsender.justWait(channel_conf, timeout, waitfor)
     
     
     
-# Functions definitions for router
-def sendwait_router(command, timeout=200.0, waitfor="#"):
-	return cnlsender.sendWait(channel_router, command, timeout, waitfor)
- 
-def sendWithoutWait_router(command):
-	return cnlsender.sendWithoutWait(channel_router, command)
- 
-def justWait_router(timeout=200.0, waitfor="#"):
-	return cnlsender.justWait(channel_router, timeout, waitfor)
-    
-    
-#Functions unite both functions
-def sendwait(command,timeout=200.0, waitfor="#"):
-	sendwait_conf(command,timeout, waitfor)
-	sendwait_router(command,timeout, waitfor)
-    
-def sendWithoutWait(command):
-	sendWithoutWait_conf(command)
-	sendWithoutWait_router(command)
-    
-def justWait(timeout,waitfor):
-	justWait_conf(timeout,waitfor)
-	justWait_router(timeout,waitfor)
+
 #check if VM name ARM-Conf_$TAG is already exists
-vm_list=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-if "VHD_ARM-Conf_${TAG}" in vm_list:
-	print("ARM-Conf already exist, I am exiting now")
-	sys.exit(1)
-    
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-Conf_$VERSION_NAME" | gawk '{print $1}'`
+if [ ! -z "$vms" ]
+	then
+	    echo "$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now"  | tee -a $logfile
+		exit 1
+fi
     
 #check if VM name ARM-Router_$TAG is already exists
-vm_list=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-if "VHD_ARM-Router_${TAG}" in vm_list:
-	print("ARM-Router already exist, I am exiting now")
-	sys.exit(1)    
-    
-#create a new VM from ARM-Conf_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print("creating new Conf VM from OVA")
-deploy_conf=Popen(shlex.split("ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101"),stdout=PIPE)
-#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print("creating new Router from OVA")
-deploy_router=Popen(shlex.split("ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101"),stdout=PIPE)
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-router_$TAG" | gawk '{print $1}'`
+if [ ! -z "$vms" ]
+	then
+	    echo "$(date) : ARM-router_$VERSION_NAME already exist, I am exiting now"  | tee -a $logfile
+		exit 1
+fi
 
-deploy_router.wait()
-deploy_conf.wait()
+
+#create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
+echo "$(date) : creating new Conf VM from image" | tee -a $logfile
+Conf_OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
+ovftool --disableVerification --noSSLVerify --name="ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+if [ $? -ne 0 ]; then
+    echo "$(date) : Deploy new VM has failed - check aws_buildTopologyVM.log" | tee -a $logfile
+    exit 1
+fi
+#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
+echo "$(date) : creating new Router VM from image" | tee -a $logfile
+Router_OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Router/Router_Centos8.ovf
+ovftool --disableVerification --noSSLVerify --name="ARM-router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+if [ $? -ne 0 ]; then
+    echo "$(date) : Deploy new VM has failed - check aws_buildRouterVM.log" | tee -a $logfile
+    exit 1
+fi
 
 #check if the new VM created
 check_if_conf_created=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
