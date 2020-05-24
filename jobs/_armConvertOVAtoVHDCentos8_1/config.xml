@@ -63,10 +63,6 @@ steps:&#13;
 vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 
 cd ${WORKSPACE}
-#esxi username and password
-vm_username='armAdmin'
-vm_password='Arm!default1'
-vm_root_password='password'
 vmHostIP="10.7.10.107"
 
 # Create a new log file
