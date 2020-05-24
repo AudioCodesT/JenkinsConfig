@@ -64,6 +64,9 @@ vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 
 cd ${WORKSPACE}
 vmHostIP="10.7.10.107"
+vm_username='armAdmin'
+vm_password='Arm!default1'
+vm_root_password='password'
 
 # Create a new log file
 now=$(date +"%Y%m%d-%H%M%S")
@@ -131,24 +134,28 @@ echo "$(date) : Router vm IP is $router_vmIPaddress"   | tee -a $logfile
 
 function installLisRpms () {
 	HOST=$1
-	sshpass -p password ssh -oStrictHostKeyChecking=no root@${HOST} &lt;&lt; EOF
-	set -xe
-    curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz
-    tar -xvzf lis-rpms-4.3.1-1.tar.gz
-    cd LISISO
-    ./install.sh
-    cd $HOME
-    rm -rf LISISO lis-rpms-*"
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
+	sudo -i -u root bash &lt;&lt; EOS
+    	set -xe
+    	curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz
+    	tar -xvzf lis-rpms-4.3.1-1.tar.gz
+    	cd LISISO
+    	./install.sh
+    	cd $HOME
+        rm -rf LISISO lis-rpms-*"
+    EOS
 EOF
 }
 
 function reduceVMSize () {
 	HOST=$1
-	sshpass -p password ssh -oStrictHostKeyChecking=no root@${HOST} &lt;&lt; EOF
-	set -xe
-	dd if=/dev/zero of=zeroFile.tmp || echo finished
-    rm -rf zeroFile.tmp
-    sudo reboot
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
+    sudo -i -u root bash &lt;&lt; EOS
+		set -xe
+		dd if=/dev/zero of=zeroFile.tmp || echo finished
+    	rm -rf zeroFile.tmp
+    	sudo reboot
+    EOS
 EOF
 }
 #install Linux Integration Services v4.3 for Hyper-V and Azure  for Configurator and Router VMS
