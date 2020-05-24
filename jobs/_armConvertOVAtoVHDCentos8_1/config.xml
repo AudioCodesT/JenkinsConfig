@@ -69,212 +69,165 @@ vm_password='Arm!default1'
 vm_root_password='password'
 vmHostIP="10.7.10.107"
 
-    
+# Create a new log file
+now=$(date +"%Y%m%d-%H%M%S")
+logfile="${WORKSPACE}/aws_armBuildVHD.log"
+[[ -f $logfile  ]] &amp;&amp; rm $logfile
+touch $logfile    
     
     
 
 #check if VM name ARM-Conf_$TAG is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-Conf_$VERSION_NAME" | gawk '{print $1}'`
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Conf_$TAG" | gawk '{print $1}'`
 if [ ! -z "$vms" ]
 	then
-	    echo "$(date) : ARM-Conf_$VERSION_NAME already exist, I am exiting now"  | tee -a $logfile
+	    echo "$(date) : VHD_ARM-Conf_$TAG already exist, I am exiting now"   | tee -a $logfile
 		exit 1
 fi
     
 #check if VM name ARM-Router_$TAG is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-router_$TAG" | gawk '{print $1}'`
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Router_$TAG" | gawk '{print $1}'`
 if [ ! -z "$vms" ]
 	then
-	    echo "$(date) : ARM-router_$VERSION_NAME already exist, I am exiting now"  | tee -a $logfile
+	    echo "$(date) : VHD_ARM-Router_$TAG already exist, I am exiting now"   | tee -a $logfile
 		exit 1
 fi
 
 
 #create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
-echo "$(date) : creating new Conf VM from image" | tee -a $logfile
-Conf_OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+echo "$(date) : creating new Conf VM from image"  | tee -a $logfile
+OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
+ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
-    echo "$(date) : Deploy new VM has failed - check aws_buildTopologyVM.log" | tee -a $logfile
+    echo "$(date) : Deploy new Configuator VM has failed"  | tee -a $logfile
     exit 1
 fi
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-echo "$(date) : creating new Router VM from image" | tee -a $logfile
-Router_OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Router/Router_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="ARM-router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+echo "$(date) : creating new Router VM from image" 
+OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Router/Router_Centos8.ovf
+ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
-    echo "$(date) : Deploy new VM has failed - check aws_buildRouterVM.log" | tee -a $logfile
+    echo "$(date) : Deploy new Router VM has failed"   | tee -a $logfile
     exit 1
 fi
 
-#check if the new VM created
-check_if_conf_created=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-if check_if_conf_created == "":
-	print("Failed to create Configurator VM")
-	sys.exit(1)
+# find new arm configurator vm id
+conf_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Conf_$TAG" | gawk '{print $1}'`
+echo "$(date) : vm id is $conf_vmid"  | tee -a $logfile
 
-print("Created New Configurator VM Successfully")
+# find new arm configurator vm id
+router_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Router_$TAG" | gawk '{print $1}'`
+echo "$(date) : vm id is $router_vmid"  | tee -a $logfile
 
-#check if the new VM created
-check_if_router_created=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-if check_if_router_created == "":
-	print("Failed to create Router VM")
-	sys.exit(1)
-print("Created New Router VM Successfully")
+# Wait for power on
+echo "$(date) : sleep 5 min."  | tee -a $logfile
+sleep 300
 
-#wait for Both VM will power on
-time.sleep(150)
-
-#find new VM Configurator location in the host
-newVmConfLocation=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-newVmConfLocation=newVmConfLocation.strip()
-#find new VM Router location in the host
-newVmRouterLocation=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-newVmRouterLocation=newVmRouterLocation.strip()
-#get ip address of the new VM Configurator
-vmConfIP=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip".format(newVmConfLocation),shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-#get only the IP Address
-vmConfIP=vmConfIP.split(' ')
-vmConfIP=vmConfIP[2]
-print("The Configurator VM IP is: "+vmConfIP)
-#get ip address of the new VM Router
-vmRouterIP=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip".format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-#get only the IP Address
-vmRouterIP=vmRouterIP.split(' ')
-vmRouterIP=vmRouterIP[2]
-print("The Router VM IP is: "+vmRouterIP)
-
-print("start SSH to the Configurator Server")
-#open SSH session to the Configurator server
-try:
-	paramiko.util.log_to_file("conf.log")
-	client_conf = paramiko.SSHClient()
-	client_conf.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	client_conf.connect(vmConfIP, port=22, username=vm_username,password=vm_password)
-	transport_conf = client_conf.get_transport()
-	channel_conf = transport_conf.open_session()
-	channel_conf.get_pty(term='xterm', width=80, height=24)
-	channel_conf.invoke_shell()
-except paramiko.ssh_exception.AuthenticationException:
-	print("We had an authentication exception!")
-	shell = None
-print("start SSH to the Router Server")
-	#open SSH session to the Configurator server
-try:
-	paramiko.util.log_to_file("router.log")
-	client_router = paramiko.SSHClient()
-	client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	client_router.connect(vmRouterIP, port=22, username=vm_username,password=vm_password)
-	transport_router = client_router.get_transport()
-	channel_router = transport_router.open_session()
-	channel_router.get_pty(term='xterm', width=80, height=24)
-	channel_router.invoke_shell()
-except paramiko.ssh_exception.AuthenticationException:
-	print("We had an authentication exception!")
-	shell = None   
+# find new arm configurator vm IPv4 address
+conf_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $conf_vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $conf_vmIPaddress || ( echo "$(date) : Invalid IP for $conf_vmid" | exit 1)
+echo "$(date) : Configurator vm IP is $vmIPaddress"  | tee -a $logfile 
 
 
-#switching user to a root user
-justWait(200.0,"\$")
-sendwait("su -",200.0,"Password:")
-sendwait(vm_root_password)
+# find new arm router vm IPv4 address
+router_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $router_vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $router_vmIPaddress || ( echo "$(date) : Invalid IP for $router_vmid" | exit 1)
+echo "$(date) : Router vm IP is $router_vmIPaddress"   | tee -a $logfile
 
-#make the build failed if one of the commands here failing
-sendwait("set -xe")
-sendwait("echo 'Start curl'")
-#download Linux Integration Services v4.2 for Hyper-V and Azure  for Configurator and Router VMS
-#sendwait("curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gz")
-sendwait("curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz")
-#wait for download will finish
-print("sleep 200")
-time.sleep(200)
-#extract to directory
-sendwait("tar -xvzf lis-rpms-4.3.1-1.tar.gz")
-#wait to extracting the file will finish
-print("sleep 30")
-time.sleep(30)
-#enter the directory
-sendwait("cd LISISO")
-#install the integration services
-print("Start installation on Both Servers")
-sendwait("./install.sh")
-#wait for installation will be complete
-print("sleep 700")
-time.sleep(700)
-#delete the files
-sendwait("cd ~/")
-sendwait("rm -rf LISISO")
-sendwait("rm -rf lis-rpms-*")
-time.sleep(30)
-#reduce size of the VMS
-print("START REDUCE the size of the VMS")
-sendwait("dd if=/dev/zero of=zeroFile.tmp || echo finished")
-time.sleep(1200)
-#print("Cancel filling the zeroFile.tmp if operation stuck")
-#sendwait('\x03')
-time.sleep(30)
-print("delete the files rm -rf zeroFile.tmp")
-sendwait("rm -rf zeroFile.tmp")
-time.sleep(30)
-print("Finish Reduce The Size of VMS")
+function installLisRpms () {
+	HOST=$1
+	sshpass -p password ssh -oStrictHostKeyChecking=no root@${HOST} &lt;&lt; EOF
+	set -xe
+    curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz
+    tar -xvzf lis-rpms-4.3.1-1.tar.gz
+    cd LISISO
+    ./install.sh
+    cd $HOME
+    rm -rf LISISO lis-rpms-*"
+EOF
+}
 
-#reboot VMs
-print("VMs going down for reboot...")
-sendWithoutWait("reboot")
+function reduceVMSize () {
+	HOST=$1
+	sshpass -p password ssh -oStrictHostKeyChecking=no root@${HOST} &lt;&lt; EOF
+	set -xe
+	dd if=/dev/zero of=zeroFile.tmp || echo finished
+    rm -rf zeroFile.tmp
+    sudo reboot
+EOF
+}
+#install Linux Integration Services v4.3 for Hyper-V and Azure  for Configurator and Router VMS
+echo "install lis-rpms.4.3.5 for Configurator VM"  | tee -a $logfile
+installLisRpms $conf_vmIPaddress
+
+echo "install lis-rpms.4.3.5 for Router VM"  | tee -a $logfile
+installLisRpms $router_vmIPaddress
+
+
+echo "Reduce Configurator VM Size"  | tee -a $logfile
+reduceVMSize $conf_vmIPaddress
+
+echo "Reduce Router VM Size"  | tee -a $logfile
+reduceVMSize $router_vmIPaddress
+
 #wait for VM to UP
-time.sleep(100)
+sleep 100
 
 
 #graceful shutdouwn BOTH VM
-print("shutdown new VMs")
-output_conf=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft".format(newVmConfLocation),shell=True,stdout=PIPE)
-output_router=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft".format(newVmRouterLocation),shell=True,stdout=PIPE)
-#wait for the VM to SHUT DOWN
-output_conf.wait()
-output_router.wait()
-time.sleep(30)
+echo "$(date) : shutdown new Configurator VM"  | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${conf_vmid}
+sleep 30
+
+echo "$(date) : shutdown new Router VM"   | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${Router_vmid}
+sleep 30
+
+
+
 
 #export both VMS to OVA
-print("export BOTH VMs to an OVA files")
-os.mkdir("newOVAs")
-output_conf=Popen(shlex.split("ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Conf_${TAG} ${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova"),stdout=PIPE)
-output_router=Popen(shlex.split("ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Router_${TAG} ${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova"),stdout=PIPE)
-#wait to it finish to create new OVA
-output_conf.wait()
-output_router.wait()
-time.sleep(150)
-print("Finish Exporting BOTH VMs to OVA")
-print("Deleting Both VMs")
-#terminate both VM MACHINES
-vmConfLocationDir=newVmConfLocation.rsplit('/',1)[0]
-vmConfLocationDir=vmConfLocationDir.strip()
-vmRouterLocationDir=newVmRouterLocation.rsplit('/',1)[0]
-vmRouterLocationDir=vmRouterLocationDir.strip()
-unregister_conf=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}".format(newVmConfLocation),shell=True,stdout=PIPE)
-unregister_router=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}".format(newVmRouterLocation),shell=True,stdout=PIPE)
-unregister_conf.wait()
-unregister_router.wait()
-delete_conf=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force".format(vmConfLocationDir),shell=True,stdout=PIPE)
-delete_Router=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force".format(vmRouterLocationDir),shell=True,stdout=PIPE)
-delete_conf.wait()
-delete_Router.wait()
-#check if really deleted
-check_if_conf_deleted=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir '[datastore2]' | grep VHD_ARM-Conf_${TAG}",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-check_if_router_deleted=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir '[datastore2]' | grep VHD_ARM-ROUTER_${TAG}",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
-# check if Deleted VM Successfully
-if check_if_conf_deleted != "" or check_if_router_deleted != "":
-	print("Failed to Delete VMs")
-	sys.exit(1)
-print("Successfully deleted BOTH VMs")
-channel_conf.close
-client_conf.close
-channel_router.close
-client_router.close
+mkdir $WORKSPACE/newOVAs
+echo "$(date) : export new Configurator VM to an OVA file"   | tee -a $logfile
+ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/VHD_ARM-Conf_$TAG $WORKSPACE/newOVAs/VHD_ARM-Conf_$TAG.ova  | tee -a $logfile
+ovfResult=$(tail -1 $logfile | grep "Completed")
+if [[ "${ovfResult}" == "Completed with errors" ]] 
+then
+	exit 1
+fi
+cd $WORKSPACE/newOVAs
+mv VHD_ARM-Conf_$TAG.ova ARM-Conf_$TAG.ova
 
-EOS</command>
+echo "$(date) : export new Router VM to an OVA file"   | tee -a $logfile
+ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/VHD_ARM-Router_$TAG $WORKSPACE/newOVAs/VHD_ARM-Router_$TAG.ova  | tee -a $logfile
+ovfResult=$(tail -1 $logfile | grep "Completed")
+if [[ "${ovfResult}" == "Completed with errors" ]] 
+then
+	exit 1
+fi
+cd $WORKSPACE/newOVAs
+mv VHD_ARM-Router_$TAG.ova ARM-Router_$TAG.ova
+
+
+#terminate both VM MACHINES
+echo "$(date) : delete new Configurator VM"   | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${conf_vmid}
+sleep 30
+
+echo "$(date) : delete new Router VM"   | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${Router_vmid}
+sleep 30</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>aws_armBuildVHD.log</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
