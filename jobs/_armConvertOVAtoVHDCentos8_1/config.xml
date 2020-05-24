@@ -90,18 +90,17 @@ if [ ! -z "$vms" ]
 fi
 
 
-#create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
+#create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave
 echo "$(date) : creating new Conf VM from image"  | tee -a $logfile
 OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} 
+ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
     echo "$(date) : Deploy new Configuator VM has failed"  | tee -a $logfile
     exit 1
 fi
-#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
+#create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave
 echo "$(date) : creating new Router VM from image" 
-OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Router/Router_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} 
+ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
     echo "$(date) : Deploy new Router VM has failed"   | tee -a $logfile
     exit 1
