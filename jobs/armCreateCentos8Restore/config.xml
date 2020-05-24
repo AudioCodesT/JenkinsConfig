@@ -1,6 +1,7 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
   <actions/>
-  <description/>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
@@ -10,7 +11,7 @@
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs/>
+      <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
@@ -23,8 +24,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
-          <description/>
-          <defaultValue/>
+          <description></description>
+          <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -36,9 +37,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit/>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -61,7 +62,7 @@
       </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
     </extensions>
   </scm>
-  <assignedNode>arm-centos8-build</assignedNode>
+  <assignedNode>arm-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -70,7 +71,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#create backupCentos6.tar.gz
+      <command>sudo yum install -y dos2unix
+#create backupCentos6.tar.gz
 mkdir -p ${WORKSPACE}/my_backup_centos_6
 rm -rf ${WORKSPACE}/my_backup_centos_6/*
 cd ${WORKSPACE}/my_backup_centos_6
@@ -124,50 +126,50 @@ zip backupAndRestore_${VERSION_NAME}.zip backupCentos6.tar.gz restoreFromCentos6
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    "files": [
+    &quot;files&quot;: [
         {
-            "pattern": "${WORKSPACE}/my_backup_and_restore/backupAndRestore_${VERSION_NAME}.zip",
-            "target": "libs-release-local/com/ac/arm/Upgrade/${VERSION_NAME}/",
-             "recursive": "false"
+            &quot;pattern&quot;: &quot;${WORKSPACE}/my_backup_and_restore/backupAndRestore_${VERSION_NAME}.zip&quot;,
+            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/Upgrade/${VERSION_NAME}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
         }   
     ]
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec/>
+        <spec></spec>
       </downloadSpec>
       <deployPattern>tarFolder/upgrade_$VERSION_NAME.tar.gz=&gt;com/ac/arm/upgrade/$VERSION_NAME/
 </deployPattern>
-      <resolvePattern/>
-      <deploymentProperties/>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns/>
+        <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName/>
+      <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__$VERSION_NAME</template>
-      <descriptionTemplate/>
+      <descriptionTemplate></descriptionTemplate>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
