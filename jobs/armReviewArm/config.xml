@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -21,7 +23,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -32,11 +34,12 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <org.jenkinsci.plugins.junitrealtimetestreporter.PerJobConfiguration plugin="junit-realtime-test-reporter@0.6"/>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -53,9 +56,11 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.30.5">
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -67,8 +72,8 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -76,7 +81,19 @@
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
-              <pattern>**</pattern>
+              <pattern>7.*</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>8.*</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>users</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>9.0</pattern>
             </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
           </branches>
           <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
@@ -90,31 +107,33 @@
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
           <excludeNoCodeChange>true</excludeNoCodeChange>
+          <excludePrivateState>false</excludePrivateState>
+          <excludeWipState>false</excludeWipState>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -122,69 +141,69 @@
   <builders>
     <hudson.tasks.Shell>
       <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they are different fail the build
-echo &quot;**************************************************************************************&quot;
-echo &quot;               COMPARING SOME FILES BETWEEN CONFIGURATOR AND ROUTER                   &quot;
-echo &quot;**************************************************************************************&quot;
+echo "**************************************************************************************"
+echo "               COMPARING SOME FILES BETWEEN CONFIGURATOR AND ROUTER                   "
+echo "**************************************************************************************"
 
-fileChanged=&quot;False&quot;
-echo &quot;The Following files are not identical in the directories VMFiles/Configurator and VMFiles/Router:&quot; &gt; changedFiles.txt
-configurator_path=&quot;ArmCommon/Common/VMFiles/Configurator&quot;
-router_path=&quot;ArmCommon/Common/VMFiles/Router&quot;
-files_to_compare=(&quot;usr/local/bin/cacertsUtil.sh&quot; &quot;/usr/local/bin/backup.pl&quot; &quot;/usr/local/bin/restore.pl&quot; &quot;/usr/local/bin/watchdog.pl&quot; &quot;/usr/local/bin/log_color.pl&quot; &quot;/usr/local/bin/log.pl&quot; &quot;/etc/bash_completion.d/log&quot;)
+fileChanged="False"
+echo "The Following files are not identical in the directories VMFiles/Configurator and VMFiles/Router:" &gt; changedFiles.txt
+configurator_path="ArmCommon/Common/VMFiles/Configurator"
+router_path="ArmCommon/Common/VMFiles/Router"
+files_to_compare=("usr/local/bin/cacertsUtil.sh" "/usr/local/bin/backup.pl" "/usr/local/bin/restore.pl" "/usr/local/bin/watchdog.pl" "/usr/local/bin/log_color.pl" "/usr/local/bin/log.pl" "/etc/bash_completion.d/log")
 for file in ${files_to_compare[@]}
 do
 	configurator_md5=$(md5sum ${configurator_path}/${file})
-    configurator_md5=$(echo $configurator_md5 | cut -d&apos; &apos; -f1)
+    configurator_md5=$(echo $configurator_md5 | cut -d' ' -f1)
 	router_md5=$(md5sum ${router_path}/${file})
-    router_md5=$(echo $router_md5 | cut -d&apos; &apos; -f1)
+    router_md5=$(echo $router_md5 | cut -d' ' -f1)
 	if [[ $configurator_md5 != $router_md5 ]]
 	then
-    	fileChanged=&quot;True&quot;
-		echo &quot;$file&quot; &gt;&gt; changedFiles.txt
+    	fileChanged="True"
+		echo "$file" &gt;&gt; changedFiles.txt
 	fi
 done
 #if at least 1 file is different, fail the build
-if [[ $fileChanged == &quot;True&quot; ]]
+if [[ $fileChanged == "True" ]]
 then
-	echo &quot;**************************************************************************************&quot;
+	echo "**************************************************************************************"
 	cat changedFiles.txt
-    echo &quot;**************************************************************************************&quot;
-    echo &quot;    FAILING THE BUILD      &quot;
-    echo &quot;**************************************************************************************&quot;
+    echo "**************************************************************************************"
+    echo "    FAILING THE BUILD      "
+    echo "**************************************************************************************"
     exit 1
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#check if need to Compile The project
-needToCompile=&quot;True&quot;
+needToCompile="True"
 #show all files that modified in the current change
 git diff --name-only HEAD~1 HEAD &gt; infile
 cat infile
 set +e
 #Remove all files That changed that they are in these paths from the list of all the changed files
-egrep -v &quot;ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/&quot; infile &gt; outfile
+egrep -v "ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/" infile &gt; outfile
 set -e
 cat outfile
 #check if the list of all the change files empty (if it does, there is no need to compile the project)
 if [[ ! -s outfile ]]
 then
-	echo &quot;changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl&quot;
-    echo &quot;&quot;
-    echo &quot;So its unnecessary to run build&quot;
-    needToCompile=&quot;False&quot;
+	echo "changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl"
+    echo ""
+    echo "So its unnecessary to run build"
+    needToCompile="False"
 fi
-echo &quot;needToCompile=$needToCompile&quot; &gt; properties
-echo &quot;needToCompile=$needToCompile&quot;
+echo "needToCompile=$needToCompile" &gt; properties
+echo "needToCompile=$needToCompile"
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
-      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.0"/>
-      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$DontRun" plugin="run-condition@1.3"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
         <arg1>$needToCompile</arg1>
         <arg2>True</arg2>
         <ignoreCase>false</ignoreCase>
@@ -193,34 +212,35 @@ echo &quot;needToCompile=$needToCompile&quot;
         <hudson.tasks.Shell>
           <command># Setting jdk version for branches
 # Branch 7.8 needs version 1.8.0_92
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;7.8&quot; ]]
+if [[ "$GERRIT_BRANCH" == "7.8" ]]
 then
-	jdkver=&quot;1.8.0_92&quot;
-elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
+	jdkver="1.8.0_92"
+elif [[ "$GERRIT_BRANCH" == "7.4" || "$GERRIT_BRANCH" == *"8."* || "$GERRIT_BRANCH" == "users" || "$GERRIT_BRANCH" == "9.0.init" ]]
 then
-	jdkver=&quot;-11&quot;
-else
 	# Default version is 1.8.0_162
-	jdkver=&quot;1.8.0_162&quot;
-fi
-#jdkver=&quot;1.8.0_191&quot;
-# Set Java
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; ]]
-then
-	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/bin/java
+	jdkver="1.8.0_162"
+
 else
-	sudo alternatives --set java /usr/java/jdk&quot;$jdkver&quot;/jre/bin/java
+	jdkver="-11"
 fi
-jver=$(java -version 2&gt;&amp;1 | grep version | cut -d &apos;&quot;&apos; -f 2)
-echo &quot;Java version set to: $jver&quot;
+
+
+if [[ "$GERRIT_BRANCH" == *"7."* || "$GERRIT_BRANCH" == *"8."* || "$GERRIT_BRANCH" == "users" || "$GERRIT_BRANCH" == "9.0.init" ]]
+then
+	sudo alternatives --set java /usr/java/jdk"$jdkver"/jre/bin/java
+else
+	sudo alternatives --set java /usr/java/jdk"$jdkver"/bin/java
+fi
+jver=$(java -version 2&gt;&amp;1 | grep version | cut -d '"' -f 2)
+echo "Java version set to: $jver"
 
 # Set JavaC
-sudo alternatives --set javac /usr/java/jdk&quot;$jdkver&quot;/bin/javac
-jcver=$(javac -version 2&gt;&amp;1 | cut -d &apos; &apos; -f 2)
-echo &quot;javac version set to: $jcver&quot;
+sudo alternatives --set javac /usr/java/jdk"$jdkver"/bin/javac
+jcver=$(javac -version 2&gt;&amp;1 | cut -d ' ' -f 2)
+echo "javac version set to: $jcver"
 
 # Set JAVA_HOME
-sudo sh -c &quot;echo \&quot;export JAVA_HOME=/usr/java/jdk$jdkver\&quot; &gt; /etc/environment&quot;
+sudo sh -c "echo \"export JAVA_HOME=/usr/java/jdk$jdkver\" &gt;&gt; /etc/environment"
 . /etc/environment
 
 #new scrip to prepare database env
@@ -232,24 +252,24 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 #adding permissions for Router to write into folder /usr/local/etc/
 sudo chmod 777 /usr/local/etc</command>
         </hudson.tasks.Shell>
-        <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
+        <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
           <mavenName>Maven_v325</mavenName>
           <rootPom>pom.xml</rootPom>
           <goals>clean install</goals>
-          <mavenOpts></mavenOpts>
+          <mavenOpts/>
         </org.jfrog.hudson.maven3.Maven3Builder>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
   </builders>
   <publishers>
-    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.4">
+    <hudson.plugins.jacoco.JacocoPublisher plugin="jacoco@3.0.5">
       <execPattern>**/**.exec</execPattern>
       <classPattern>**/target/**/classes</classPattern>
       <sourcePattern>**/src/*/java</sourcePattern>
       <sourceInclusionPattern>**/*.java</sourceInclusionPattern>
       <sourceExclusionPattern>com/ac/common/data/**/*,**/*Json.java</sourceExclusionPattern>
-      <inclusionPattern></inclusionPattern>
-      <exclusionPattern></exclusionPattern>
+      <inclusionPattern/>
+      <exclusionPattern/>
       <skipCopyOfSrcFiles>false</skipCopyOfSrcFiles>
       <minimumInstructionCoverage>0</minimumInstructionCoverage>
       <minimumBranchCoverage>0</minimumBranchCoverage>
@@ -264,6 +284,7 @@ sudo chmod 777 /usr/local/etc</command>
       <maximumMethodCoverage>0</maximumMethodCoverage>
       <maximumClassCoverage>0</maximumClassCoverage>
       <changeBuildStatus>false</changeBuildStatus>
+      <runAlways>false</runAlways>
       <deltaInstructionCoverage>0</deltaInstructionCoverage>
       <deltaBranchCoverage>0</deltaBranchCoverage>
       <deltaComplexityCoverage>0</deltaComplexityCoverage>
@@ -272,7 +293,7 @@ sudo chmod 777 /usr/local/etc</command>
       <deltaClassCoverage>0</deltaClassCoverage>
       <buildOverBuild>false</buildOverBuild>
     </hudson.plugins.jacoco.JacocoPublisher>
-    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+    <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.9.1">
       <config>
         <scriptFiles/>
         <groovyScripts/>
@@ -286,11 +307,12 @@ sudo chmod 777 /usr/local/etc</command>
               <string>UNSTABLE</string>
             </results>
             <role>BOTH</role>
+            <executeOn>BOTH</executeOn>
             <buildSteps>
               <hudson.tasks.Shell>
                 <command>######### OLD Sputnik #############
-#/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*** sputnik failed but exit 0 ***&quot; &amp;&amp; exit 0; }
-#echo &quot;exit 0 workaround&quot;
+#/home/centos/sputnik/bin/sputnik --conf /home/centos/sputnik/gerrit.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo "*** sputnik failed but exit 0 ***" &amp;&amp; exit 0; }
+#echo "exit 0 workaround"
 
 
 # Run Sputnik pmd
@@ -315,7 +337,7 @@ cd ${WORKSPACE}
 
 ## Run Sputnik
 cat arm-pmd.properties
-/home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pmd.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo &quot;*****   sputnik failed   *****&quot; &amp;&amp; exit 0; }
+/home/centos/sputnik/bin/sputnik --conf ${WORKSPACE}/arm-pmd.properties --changeId $GERRIT_CHANGE_ID --revisionId $GERRIT_PATCHSET_REVISION || { echo "*****   sputnik failed   *****" &amp;&amp; exit 0; }
 </command>
               </hudson.tasks.Shell>
             </buildSteps>
@@ -346,14 +368,14 @@ cat arm-pmd.properties
           </logTexts>
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done&#xd;
+          <script>for pid in $(ps -ef | grep surefire | grep -v grep | while read c1 c2 c3; do echo $c2; done); do kill -9 $pid; done&#13;
 </script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
   </publishers>
   <buildWrappers>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
