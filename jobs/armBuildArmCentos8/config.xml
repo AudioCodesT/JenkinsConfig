@@ -147,8 +147,15 @@ echo VERSION_NAME=${VERSION_NAME} &gt; ../armBuild.properties
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == "YES" ]; then
 	#use jenkins sshkey
-    mv ${jenkins_sshkey} ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
+	eval `ssh-agent -s`
+	ssh-add $jenkins_sshkey
+	cat &lt;&lt; EOF &gt; ~/.ssh/config
+	Host gerrit
+    	Hostname gerrit
+    	IdentityFile ~/.ssh/id_rsa_
+    	StrictHostKeyChecking no
+	EOF
+	chmod 600 ~/.ssh/config
 	git config --global user.name "Jenkins"
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
@@ -400,7 +407,7 @@ BRANCH=$BRANCH</properties>
     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.23">
       <bindings>
         <org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
-          <credentialsId>c1afc0c0-8ae7-4cfd-ac86-5f295ed013df</credentialsId>
+          <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
           <keyFileVariable>jenkins_sshkey</keyFileVariable>
           <usernameVariable/>
           <passphraseVariable/>
