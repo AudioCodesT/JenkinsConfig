@@ -70,6 +70,7 @@ Host gerrit
     IdentityFile ~/.ssh/id_rsa_
     UserKnownHostsFile no
 EOF
+chmod 600 ~/.ssh/config
 git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
