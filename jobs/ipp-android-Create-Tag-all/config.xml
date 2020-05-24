@@ -68,7 +68,7 @@ uboot/c450hd_uboot</description>
     
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>ipp-AutoNL1</assignedNode>
+  <assignedNode>Sanjer</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -341,8 +341,8 @@ createLocalManifests() {
 checkTheQueue() {
   echo Check the queue...
   for repoName in $(curl -ks -u $JenkinsUser https://jenkins/queue/api/json | \
-                    sed 's:PROJECT=:\n:g' | grep $JOB_NAME | \
-                    sed 's:\\n.*::g'); do
+                    sed 's:\"GERRIT_PROJECT\":\n:g' | grep $JOB_NAME | cut -d\" -f4); do
+                    # sed 's:PROJECT=:\n:g' | grep $JOB_NAME | sed 's:\\n.*::g'); do
     echo Found a newer build of job $JOB_NAME ... $repoName
     AddAndFetchRepository
   done
