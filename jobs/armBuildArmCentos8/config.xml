@@ -146,6 +146,9 @@ echo VERSION_NAME=${VERSION_NAME} &gt; ../armBuild.properties
 #if this is a new release, then
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == "YES" ]; then
+	#use jenkins sshkey
+    mv ${jenkins_sshkey} ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
 	git config --global user.name "Jenkins"
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
@@ -394,6 +397,16 @@ BRANCH=$BRANCH</properties>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.23">
+      <bindings>
+        <org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
+          <credentialsId>c1afc0c0-8ae7-4cfd-ac86-5f295ed013df</credentialsId>
+          <keyFileVariable>jenkins_sshkey</keyFileVariable>
+          <usernameVariable/>
+          <passphraseVariable/>
+        </org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
+      </bindings>
+    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
     <org.jenkinsci.plugins.configfiles.buildwrapper.ConfigFileBuildWrapper plugin="config-file-provider@2.18">
       <managedFiles>
         <org.jenkinsci.plugins.configfiles.buildwrapper.ManagedFile>
