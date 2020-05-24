@@ -62,8 +62,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>eval `ssh-agent -s`
-ssh-add $jenkins_sshkey
+      <command>cat $jenkins_sshkey &gt; ~/.ssh/id_rsa
+chmod 0600 ~/.ssh/id_rsa
 cat &lt;&lt; EOF &gt; ~/.ssh/config
 Host gerrit
     Hostname gerrit
