@@ -112,6 +112,16 @@ then
     exit 1
 fi
 
+eval `ssh-agent -s`
+ssh-add $jenkins_sshkey
+cat &lt;&lt; EOF &gt; ~/.ssh/config
+Host gerrit
+    Hostname gerrit
+    IdentityFile ~/.ssh/id_rsa_
+    StrictHostKeyChecking no
+EOF
+chmod 600 ~/.ssh/config
+
 jver=$(java -version 2&gt;&amp;1 | grep version | cut -d '"' -f 2)
 echo "Java version set to: $jver"
 
@@ -147,15 +157,6 @@ echo VERSION_NAME=${VERSION_NAME} &gt; ../armBuild.properties
 #create new tag in Arm repo:
 if [ $RELEASE_VMS == "YES" ]; then
 	#use jenkins sshkey
-	eval `ssh-agent -s`
-	ssh-add $jenkins_sshkey
-	cat &lt;&lt; EOF &gt; ~/.ssh/config
-	Host gerrit
-    	Hostname gerrit
-    	IdentityFile ~/.ssh/id_rsa_
-    	StrictHostKeyChecking no
-	EOF
-	chmod 600 ~/.ssh/config
 	git config --global user.name "Jenkins"
 	git config --global user.email devops@audiocodes.com
     git checkout $BRANCH
