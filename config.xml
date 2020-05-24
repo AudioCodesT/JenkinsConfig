@@ -2158,6 +2158,12 @@ sudo yum install -y git-2.18.0</initScript>
           <building>true</building>
           <inBuildQueue>false</inBuildQueue>
         </hudson.views.BuildStatusFilter>
+        <hudson.views.UpstreamDownstreamJobsFilter plugin="view-job-filters@2.1.1">
+          <includeDownstream>false</includeDownstream>
+          <includeUpstream>false</includeUpstream>
+          <recursive>true</recursive>
+          <excludeOriginals>false</excludeOriginals>
+        </hudson.views.UpstreamDownstreamJobsFilter>
       </jobFilters>
       <columns>
         <hudson.views.StatusColumn/>
