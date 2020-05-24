@@ -53,7 +53,7 @@
     
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>sanjer</assignedNode>
+  <assignedNode>arm-centos8-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -62,11 +62,11 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo "test"</command>
+      <command>git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>cc:ben.magriso@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
@@ -105,5 +105,16 @@
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.23">
+      <bindings>
+        <org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
+          <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+          <keyFileVariable>id_rsa</keyFileVariable>
+          <usernameVariable/>
+          <passphraseVariable/>
+        </org.jenkinsci.plugins.credentialsbinding.impl.SSHUserPrivateKeyBinding>
+      </bindings>
+    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+  </buildWrappers>
 </project>
