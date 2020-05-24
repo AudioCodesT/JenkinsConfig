@@ -64,6 +64,7 @@
     <hudson.tasks.Shell>
       <command>eval `ssh-agent -s`
 ssh-add $jenkins_sshkey
+rm -rf ~/.ssh/known_hosts
 git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
