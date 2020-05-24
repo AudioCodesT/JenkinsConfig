@@ -220,12 +220,6 @@ sed -i.bak 's/\\/ /g' ../armBuild.properties</command>
         <propertiesFilePath>../armBuild.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
-      <mavenName>Maven_v363</mavenName>
-      <rootPom>pom.xml</rootPom>
-      <goals>clean releaser:release -X -DforceRelease=parent,arm-reactor</goals>
-      <mavenOpts/>
-    </org.jfrog.hudson.maven3.Maven3Builder>
     <hudson.tasks.Maven>
       <targets>clean releaser:release -X -DforceRelease=parent,arm-reactor</targets>
       <mavenName>Maven_v363</mavenName>
