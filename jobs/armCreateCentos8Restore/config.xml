@@ -61,7 +61,7 @@
       </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
     </extensions>
   </scm>
-  <assignedNode>arm-build</assignedNode>
+  <assignedNode>arm-centos8-build</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -70,8 +70,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>sudo yum install -y dos2unix
-#create backupCentos6.tar.gz
+      <command>#create backupCentos6.tar.gz
 mkdir -p ${WORKSPACE}/my_backup_centos_6
 rm -rf ${WORKSPACE}/my_backup_centos_6/*
 cd ${WORKSPACE}/my_backup_centos_6
