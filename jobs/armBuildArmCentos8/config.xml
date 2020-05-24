@@ -112,8 +112,8 @@ then
     exit 1
 fi
 
-eval `ssh-agent -s`
-ssh-add $jenkins_sshkey
+cat $jenkins_sshkey &gt; ~/.ssh/id_rsa
+chmod 0600 ~/.ssh/id_rsa
 cat &lt;&lt; EOF &gt; ~/.ssh/config
 Host gerrit
     Hostname gerrit
