@@ -62,9 +62,10 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cat ${jenkins_sshkey} &gt; ~/.ssh/id_rsa
-chmod 600  ~/.ssh/id_rsa
-
+      <command>cat ${jenkins_sshkey} &gt; sshkey
+chmod 600  sshkey
+eval `ssh-agent -s`
+ssh-add sshkey
 git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
