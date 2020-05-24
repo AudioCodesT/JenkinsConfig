@@ -65,46 +65,7 @@
       <command>git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
-      <recipientList>cc:ben.magriso@audiocodes.com</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-          <email>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <recipientProviders>
-              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
-            </recipientProviders>
-            <attachmentsPattern/>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-            <contentType>project</contentType>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
-      </configuredTriggers>
-      <contentType>text/html</contentType>
-      <defaultSubject>ARM $VERSION_NAME  -  New VMs are available</defaultSubject>
-      <defaultContent>&lt;p&gt;&lt;span style="color: #003366;"&gt;Hi Guys,&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;New VMs are ready for the last ARM release $VERSION_NAME:&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;Configurator IP address:&amp;nbsp; $Conf_IP_address&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;Router IP address:&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; $Rout_IP_address&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;Enjoy,&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style="color: #003366;"&gt;Shuky&lt;/span&gt;&lt;/p&gt;</defaultContent>
-      <attachmentsPattern/>
-      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
-      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
-      <attachBuildLog>false</attachBuildLog>
-      <compressBuildLog>false</compressBuildLog>
-      <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from/>
-      <saveOutput>false</saveOutput>
-      <disabled>false</disabled>
-    </hudson.plugins.emailext.ExtendedEmailPublisher>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.23">
       <bindings>
