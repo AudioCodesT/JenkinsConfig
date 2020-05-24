@@ -68,7 +68,7 @@ cat &lt;&lt; EOF &gt; ~/.ssh/config
 Host gerrit
     Hostname gerrit
     IdentityFile ~/.ssh/id_rsa_
-    UserKnownHostsFile no
+    StrictHostKeyChecking no
 EOF
 chmod 600 ~/.ssh/config
 git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
