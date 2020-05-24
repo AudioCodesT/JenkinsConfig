@@ -65,6 +65,7 @@
       <command>eval `ssh-agent -s`
 ssh-add $jenkins_sshkey
 rm -rf ~/.ssh/known_hosts
+ssh-keyscan -H -t id_rsa gerrit  &gt;&gt; ~/.ssh/known_hosts
 git clone ssh://jenkins@gerrit:29418/ARM/UI armUI</command>
     </hudson.tasks.Shell>
   </builders>
