@@ -59,7 +59,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>mdkir ${PLATFORM}
+      <command>mkdir ${PLATFORM}
 if [[ "${PLATFORM}" == "VHDX" ]]
 then
 	cd ${WORKSPACE}/ovaFiles
