@@ -59,6 +59,7 @@ steps:&#13;
   <builders>
     <hudson.tasks.Shell>
       <command>#!C:\Program Files\Git\bin\bash --login -i
+mkdit ${WORKSPACE}/VHD
 cat &lt;&lt; EOF &gt; convertToVHD.ps1
 set-alias sz 'C:\Program Files\7-Zip\7z.exe'
 Import-Module 'C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1'
