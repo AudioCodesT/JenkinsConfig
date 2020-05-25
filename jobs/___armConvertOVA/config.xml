@@ -59,7 +59,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>mkdir ${PLATFORM}
+      <command>rm -rf ${PLATFORM}
+mkdir ${PLATFORM}
 if [[ "${PLATFORM}" == "VHDX" ]]
 then
 	cd ${WORKSPACE}/ovaFiles
