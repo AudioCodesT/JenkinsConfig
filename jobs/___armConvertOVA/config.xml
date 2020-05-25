@@ -66,7 +66,7 @@ then
 	cd ${WORKSPACE}/ovaFiles
     tar -xvf ARM-Conf_${TAG}.ova
     tar -xvf ARM-Router_${TAG}.ova
-    qemu-img convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/${PLATFORM}/ARM-Conf_${TAG}.vhdx
+    qemu-img convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/${PLATFORM}/ARM-Conf_${TAG}.vhdx -p
 fi</command>
     </hudson.tasks.Shell>
   </builders>
