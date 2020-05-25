@@ -81,7 +81,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>$NEWTAG</name>
+        <name>$TAG</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -141,7 +141,7 @@ fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Set the IPP_VER variable - first JOB project parameterized
-IPP_VER=$NEWTAG
+IPP_VER=$TAG
 # Insert it into the ipp_version.h_shipped file - the compilation need it
 # The following code are executing in 'scripts/repo_info.sh' by the make file, so it can be deleted
 #if [ -f ipp_version.in ]; then
@@ -378,7 +378,7 @@ ${WORKSPACE}/build/image/uImage=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
-      <template>#${BUILD_NUMBER}  Branch:${BUILD_BRANCH} -- ${NEWTAG}</template>
+      <template>#${BUILD_NUMBER}  Branch:${BUILD_BRANCH} -- ${TAG}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
