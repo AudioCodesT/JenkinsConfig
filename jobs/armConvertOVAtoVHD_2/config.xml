@@ -85,8 +85,25 @@ EOF
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>cc:Shuky.Riechard@audiocodes.com,cc:ben.magriso@audiocodes.com,Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+          <email>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+              <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern/>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+      </configuredTriggers>
       <contentType>default</contentType>
-      <defaultSubject>ARM Router &amp; Configurator ${TAG} VHD created successfully</defaultSubject>
+      <defaultSubject>ARM Router &amp; Configurator ${TAG} VHDX created successfully</defaultSubject>
       <defaultContent>ARM Router ${TAG} VHDX:
 https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}
 
