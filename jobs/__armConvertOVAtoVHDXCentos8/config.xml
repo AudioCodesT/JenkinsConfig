@@ -67,6 +67,7 @@ sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Router_$TAG.ova"
 #/c/bin/qemu-img/qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhdx 
 
 #convert to raw
+echo "Convert to Raw"
 qemu-img.exe convert -f vmdk -O raw ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.img
 qemu-img.exe convert -f vmdk -O raw ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.img
 
