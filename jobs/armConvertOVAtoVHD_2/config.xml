@@ -66,13 +66,12 @@ Import-Module 'C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.p
 Get-Module
 sz x -o"$WORKSPACE" "${WORKSPACE}\ovaFiles\ARM-Conf_${TAG}.ova"
 sz x -o"$WORKSPACE" "${WORKSPACE}\ovaFiles\ARM-Router_$TAG.ova"
-C:\bin\qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx
-C:\bin\qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}\ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx 
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath "${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk" -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath "${WORKSPACE}\VHD"
+ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath "${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk" -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath "${WORKSPACE}\VHD"
+Rename-Item -LiteralPath "${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vhdx" -NewName "${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx"
+Rename-Item -LiteralPath "${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vhdx" -NewName "${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx"
 EOF
-#ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath "${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk" -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath "${WORKSPACE}\VHD"
-#ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath "${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk" -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath "${WORKSPACE}\VHD"
-#Rename-Item -LiteralPath "${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vhdx" -NewName "${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx"
-#Rename-Item -LiteralPath "${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vhdx" -NewName "${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx"</command>
+</command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>.\convertToVHD.ps1</command>
@@ -166,9 +165,7 @@ https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec>
-
-{
+        <spec>{
     "files": [
         {
             "pattern": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
@@ -177,16 +174,6 @@ https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
         },
         {
             "pattern": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
-            "target": "${workspace}/ovaFiles/",
-            "flat": "true"
-        },
-        {
-            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
-            "target": "${workspace}/ovaFiles/",
-            "flat": "true"
-        },
-        {
-            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
             "target": "${workspace}/ovaFiles/",
             "flat": "true"
         }
