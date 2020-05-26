@@ -74,11 +74,11 @@ echo "Router Size = $ROUTER_SIZE"
 CONF_ROUNDED_SIZE=$(((CONF_SIZE/$MB + 1)*$MB))
 ROUTER_ROUNDED_SIZE=$(((CONF_SIZE/$MB + 1)*$MB))
 echo "Resize disk"
-qemu-img resize ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk $CONF_ROUNDED_SIZE
-qemu-img resize ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk $ROUTER_ROUNDED_SIZE
+/c/bin/qemu-img/qemu-img.exe resize ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk $CONF_ROUNDED_SIZE
+/c/bin/qemu-img/qemu-img.exe resize ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk $ROUTER_ROUNDED_SIZE
 echo "convert to VHD"
-qemu-img convert -f vmdk -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhd
-qemu-img convert -f vmdk -O vpc -o subformat=fixed ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhd
+/c/bin/qemu-img/qemu-img.exe convert -f vmdk -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhd
+/c/bin/qemu-img/qemu-img.exe convert -f vmdk -O vpc -o subformat=fixed ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhd
 </command>
     </hudson.tasks.Shell>
   </builders>
