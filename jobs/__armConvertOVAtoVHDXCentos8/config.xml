@@ -59,20 +59,28 @@ steps:&#13;
   <builders>
     <hudson.tasks.Shell>
       <command>#!C:\Program Files\Git\bin\bash --login -i
-cat &lt;&lt; EOF &gt; convertToVHD.ps1
 set-alias sz 'C:\Program Files\7-Zip\7z.exe'
-Import-Module 'C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1'
-Get-Module
-sz x -o"$WORKSPACE" "${WORKSPACE}\ovaFiles\ARM-Conf_${TAG}.ova"
-sz x -o"$WORKSPACE" "${WORKSPACE}\ovaFiles\ARM-Router_$TAG.ova"
-C:\bin\qemu-img\qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}\ARM-Conf_${TAG}.vhdx
-C:\bin\qemu-img\qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}\ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}\ARM-Router_${TAG}.vhdx 
-EOF
+sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova"
+sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Router_$TAG.ova"
+#/c/bin/qemu-img/qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhdx
+#/c/bin/qemu-img/qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhdx 
+
+# convert image to fixed VHD format aligned to 1 MB
+MB=$((1024*1024))
+CONF_SIZE=$(qemu-img info -f vmdk --output json ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
+ROUTER_SIZE=$(qemu-img info -f vmdk --output json ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
+echo "Conf Size = $CONF_SIZE"
+echo "Router Size = $ROUTER_SIZE"
+CONF_ROUNDED_SIZE=$(((CONF_SIZE/$MB + 1)*$MB))
+ROUTER_ROUNDED_SIZE=$(((CONF_SIZE/$MB + 1)*$MB))
+echo "Resize disk"
+qemu-img resize ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk $CONF_ROUNDED_SIZE
+qemu-img resize ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk $ROUTER_ROUNDED_SIZE
+echo "convert to VHD"
+qemu-img convert -f vmdk -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhd
+qemu-img convert -f vmdk -O vpc -o subformat=fixed ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhd
 </command>
     </hudson.tasks.Shell>
-    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>.\convertToVHD.ps1</command>
-    </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.32">
