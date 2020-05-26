@@ -395,10 +395,10 @@ checkIfDone() {
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git clean -fdx
     sleep 20
-    git checkout $shortRepoName/$GERRIT_BRANCH
     git fetch -f --progress --tags $shortRepoName
-    git log -4 --decorate --oneline
-    if git log --decorate --oneline --no-color -1 | grep -q tag:; then
+    branchName=$shortRepoName/$GERRIT_BRANCH    
+    git log -4 --decorate --oneline $branchName
+    if git log --decorate --oneline --no-color -1 $branchName | grep -q tag:; then
       echo This change was done ... exit without error
       exit 0
     fi
