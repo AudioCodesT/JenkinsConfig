@@ -1,0 +1,223 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>armConvertOVAtoVHD_2&#xd;
+triggered by the first job&#xd;
+purpose: convert temp OVA to vhdx&#xd;
+steps:&#xd;
+1. download from Arti&#xd;
+2. with power shell commands unzip ova and convert&#xd;
+3. deploy vhdx to artifactory&#xd;
+4. send email with links&#xd;
+</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>TAG</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>Web-UI-Win-Dynamic</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!C:\Program Files\Git\bin\bash --login -i
+mkdir ${WORKSPACE}/VHD
+cat &lt;&lt; EOF &gt; convertToVHD.ps1
+set-alias sz &apos;C:\Program Files\7-Zip\7z.exe&apos;
+Import-Module &apos;C:\Program Files\Microsoft Virtual Machine Converter\MvmcCmdlet.psd1&apos;
+Get-Module
+sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\ARM-Conf_${TAG}.ova&quot;
+sz x -o&quot;$WORKSPACE&quot; &quot;${WORKSPACE}\ovaFiles\ARM-Router_$TAG.ova&quot;
+C:\bin\qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx
+C:\bin\qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}\ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx 
+EOF
+#ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Router_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
+#ConvertTo-MvmcVirtualHardDisk -SourceLiteralPath &quot;${WORKSPACE}\ARM-Conf_${TAG}-disk1.vmdk&quot; -VhdType DynamicHardDisk -VhdFormat Vhdx -DestinationLiteralPath &quot;${WORKSPACE}\VHD&quot;
+#Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Conf_${TAG}.vhdx&quot;
+#Rename-Item -LiteralPath &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}-disk1.vhdx&quot; -NewName &quot;${WORKSPACE}\VHD\ARM-Router_${TAG}.vhdx&quot;</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
+      <command>.\convertToVHD.ps1</command>
+    </hudson.plugins.powershell.PowerShell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.32">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
+      <recipientList>cc:Shuky.Riechard@audiocodes.com,cc:ben.magriso@audiocodes.com,Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com</recipientList>
+      <contentType>default</contentType>
+      <defaultSubject>ARM Router &amp; Configurator ${TAG} VHD created successfully</defaultSubject>
+      <defaultContent>ARM Router ${TAG} VHDX:
+https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}
+
+ARM Configurator ${TAG} VHDX:
+https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
+</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.38">
+      <patterns class="empty-list"/>
+      <deleteDirs>false</deleteDirs>
+      <skipWhenFailed>false</skipWhenFailed>
+      <cleanWhenSuccess>true</cleanWhenSuccess>
+      <cleanWhenUnstable>true</cleanWhenUnstable>
+      <cleanWhenFailure>true</cleanWhenFailure>
+      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+      <cleanWhenAborted>true</cleanWhenAborted>
+      <notFailBuild>false</notFailBuild>
+      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <externalDelete></externalDelete>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.WsCleanup>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
+      <deleteDirs>false</deleteDirs>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentialsId></credentialsId>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>true</useSpecs>
+      <uploadSpec>
+        <spec>{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/VHD/ARM-Conf_${TAG}.vhdx&quot;,
+            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;${WORKSPACE}/VHD/ARM-Router_${TAG}.vhdx&quot;,
+            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
+        }   
+    ]
+}</spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec>
+
+{
+    &quot;files&quot;: [
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova&quot;,
+            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova&quot;,
+            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova&quot;,
+            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        },
+        {
+            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova&quot;,
+            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
+            &quot;flat&quot;: &quot;true&quot;
+        }
+    ]
+}</spec>
+      </downloadSpec>
+      <deployPattern>VHD/ARM-Conf_${TAG}.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}
+VHD/ARM-Router_${TAG}.vhdx=&gt;com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}</deployPattern>
+      <resolvePattern>libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
+libs-release-local:com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles
+</resolvePattern>
+      <deploymentProperties></deploymentProperties>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns></includePatterns>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <multiConfProject>false</multiConfProject>
+      <customBuildName></customBuildName>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
+      <template>#${BUILD_NUMBER}__${TAG}</template>
+      <descriptionTemplate></descriptionTemplate>
+      <runAtStart>true</runAtStart>
+      <runAtEnd>true</runAtEnd>
+    </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
+  </buildWrappers>
+</project>
