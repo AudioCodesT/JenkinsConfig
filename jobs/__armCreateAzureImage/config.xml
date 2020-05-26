@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
@@ -21,8 +23,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>TAG</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -34,9 +36,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>azure_arm_slave</assignedNode>
@@ -49,41 +51,41 @@
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
       <command>#parameters for the build
-Set-Variable -Name &quot;Configurator_vhd_name&quot; -Value &quot;ARM-Conf_$env:TAG&quot;
-Set-Variable -Name &quot;Configurator_VmName&quot; -Value &quot;ArmConf$env:TAG&quot;
-Set-Variable -Name &quot;Router_vhd_name&quot; -Value &quot;ARM-Router_$env:TAG&quot;
-Set-Variable -Name &quot;Router_VmName&quot; -Value &quot;ArmRouter$env:TAG&quot;
+Set-Variable -Name "Configurator_vhd_name" -Value "ARM-Conf_$env:TAG"
+Set-Variable -Name "Configurator_VmName" -Value "ArmConf$env:TAG"
+Set-Variable -Name "Router_vhd_name" -Value "ARM-Router_$env:TAG"
+Set-Variable -Name "Router_VmName" -Value "ArmRouter$env:TAG"
 
 
 
-Write-Output &quot;delete all vms if has&quot;
-Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
-Stop-VM -Name &quot;$Router_VmName&quot; -Force
-Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
-Remove-VM -Name &quot;$Router_VmName&quot; -Force
-Remove-Item -Force &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot;
-Remove-Item -Force &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot;
+Write-Output "delete all vms if has"
+Stop-VM -Name "$Configurator_VmName" -Force
+Stop-VM -Name "$Router_VmName" -Force
+Remove-VM -Name "$Configurator_VmName" -Force
+Remove-VM -Name "$Router_VmName" -Force
+Remove-Item -Force "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
+Remove-Item -Force "$env:WORKSPACE\${Router_vhd_name}.vhd"
 
-Write-Output &quot;Converting VHDX to VHD&quot;
-Convert-VHD -Path &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; -VHDType Fixed
-Write-Output &quot;After First Convert&quot;
-Convert-VHD -Path &quot;$env:WORKSPACE\${Router_vhd_name}.vhdx&quot; -DestinationPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; -VHDType Fixed
-Write-Output &quot;Creating 2 new VMs on hyper-v&quot;
-New-VM -Name &quot;${Configurator_VmName}&quot; -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot;
-New-VM -Name &quot;${Router_VmName}&quot; -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot;
-Write-Output &quot;starting the 2 VMs&quot;
+Write-Output "Converting VHDX to VHD"
+Convert-VHD -Path "$env:WORKSPACE\${Configurator_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd" -VHDType Fixed
+Write-Output "After First Convert"
+Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Router_vhd_name}.vhd" -VHDType Fixed
+Write-Output "Creating 2 new VMs on hyper-v"
+New-VM -Name "${Configurator_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
+New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath "$env:WORKSPACE\${Router_vhd_name}.vhd"
+Write-Output "starting the 2 VMs"
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
-Write-Output &quot;sleep 120&quot;
+Write-Output "sleep 120"
 Start-Sleep -s 120
-Write-Output &quot;Get VMs IP Address&quot;
+Write-Output "Get VMs IP Address"
 #get VMs IP Adress
 $Configurator_vmIP=(Get-VM -Name $Configurator_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
 $Router_vmIP=(Get-VM -Name $Router_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
 
-Write-Output &quot;writing IP of the VMS&quot;
-&quot;Configurator_vmIP=$Configurator_vmIP&quot; | Out-File prop -Encoding ascii
-&quot;Router_vmIP=$Router_vmIP&quot; | Out-File -append prop -Encoding ascii</command>
+Write-Output "writing IP of the VMS"
+"Configurator_vmIP=$Configurator_vmIP" | Out-File prop -Encoding ascii
+"Router_vmIP=$Router_vmIP" | Out-File -append prop -Encoding ascii</command>
     </hudson.plugins.powershell.PowerShell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
@@ -98,89 +100,89 @@ set -ex
 cd $WORKSPACE
 
 
-python arm_azure_image_prepare.py $Configurator_vmIP before_reboot
+python arm_azure_image_prepare_centos8.py $Configurator_vmIP before_reboot
 sleep 10
 python remote_reboot.py $Configurator_vmIP
-python arm_azure_image_prepare.py $Configurator_vmIP after_reboot
-python arm_azure_image_prepare.py $Configurator_vmIP finish_install
+python arm_azure_image_prepare_centos8.py $Configurator_vmIP after_reboot
+python arm_azure_image_prepare_centos8.py $Configurator_vmIP finish_install
 sleep 60
-python arm_azure_image_prepare.py $Router_vmIP before_reboot
+python arm_azure_image_prepare_centos8.py $Router_vmIP before_reboot
 sleep 10
 python remote_reboot.py $Router_vmIP
-python arm_azure_image_prepare.py $Router_vmIP after_reboot
-python arm_azure_image_prepare.py $Router_vmIP finish_install
+python arm_azure_image_prepare_centos8.py $Router_vmIP after_reboot
+python arm_azure_image_prepare_centos8.py $Router_vmIP finish_install
 sleep 60
 
 #
 </command>
     </hudson.tasks.Shell>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.3">
-      <command>$TAG=&quot;$env:TAG&quot;
-$connection_string=&quot;$env:connection_string&quot;
-$NEW_TAG_WithoutDots=$TAG -replace &quot;[.]&quot;,&quot;&quot;
-$Configurator_VmName=&quot;ArmConf${TAG}&quot;
-$Router_VmName=&quot;ArmRouter${TAG}&quot;
+      <command>$TAG="$env:TAG"
+$connection_string="$env:connection_string"
+$NEW_TAG_WithoutDots=$TAG -replace "[.]",""
+$Configurator_VmName="ArmConf${TAG}"
+$Router_VmName="ArmRouter${TAG}"
 $jenkins_secret_key=$env:jenkins_secret_key
-$jenkins_app_id=&quot;45249771-dc40-4782-b712-6a16c8af251c&quot;
-$jenkins_tenant_id=&quot;1911c65c-893b-42f9-83fa-66c1b86fdf85&quot;
-$admin_username=&quot;acarm&quot;
-$container_name=&quot;arm${NEW_TAG_WithoutDots}&quot;
-$VmSize=&quot;Standard_A2_v2&quot;
-$vhd_storage_account=&quot;ciresourcegroupstorage&quot;
-$subnet=&quot;Net_172.16.100.0&quot;
-$vnet_name=&quot;CI_Resource_Group&quot;
-$security_group=&quot;createOvocImageSG&quot;
-$Configurator_vhd_name=&quot;ARM-Conf_${TAG}&quot;
-$Router_vhd_name=&quot;ARM-Router_${TAG}&quot;
-$ResourceGroupName=&quot;CI_Resource_Group&quot;
-$conf_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot;
-$router_base_image=&quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot;
+$jenkins_app_id="45249771-dc40-4782-b712-6a16c8af251c"
+$jenkins_tenant_id="1911c65c-893b-42f9-83fa-66c1b86fdf85"
+$admin_username="acarm"
+$container_name="arm${NEW_TAG_WithoutDots}"
+$VmSize="Standard_A2_v2"
+$vhd_storage_account="ciresourcegroupstorage"
+$subnet="Net_172.16.100.0"
+$vnet_name="CI_Resource_Group"
+$security_group="createOvocImageSG"
+$Configurator_vhd_name="ARM-Conf_${TAG}"
+$Router_vhd_name="ARM-Router_${TAG}"
+$ResourceGroupName="CI_Resource_Group"
+$conf_base_image="https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd"
+$router_base_image="https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd"
 
-$ErrorActionPreference = &quot;Stop&quot;
+$ErrorActionPreference = "Stop"
 
-Write-Output &quot;Stop VMs&quot;
-Stop-VM -Name &quot;$Configurator_VmName&quot; -Force
-Stop-VM -Name &quot;$Router_VmName&quot; -Force
-Write-Output &quot;Delete VMs&quot;
-Remove-VM -Name &quot;$Configurator_VmName&quot; -Force
-Remove-VM -Name &quot;$Router_VmName&quot; -Force
+Write-Output "Stop VMs"
+Stop-VM -Name "$Configurator_VmName" -Force
+Stop-VM -Name "$Router_VmName" -Force
+Write-Output "Delete VMs"
+Remove-VM -Name "$Configurator_VmName" -Force
+Remove-VM -Name "$Router_VmName" -Force
 
-Write-Output &quot;login to az and azcopy&quot;
+Write-Output "login to az and azcopy"
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
-$env:AZCOPY_SPA_CLIENT_SECRET=&quot;${jenkins_secret_key}&quot;
+$env:AZCOPY_SPA_CLIENT_SECRET="${jenkins_secret_key}"
 azcopy login --service-principal --application-id=${jenkins_app_id} --tenant-id=${jenkins_tenant_id}
 
 
-Write-Output &quot;Create a new container&quot;
+Write-Output "Create a new container"
 az storage container create  --connection-string ${connection_string} --name ${container_name}
 
 
-Write-Output &quot;copy to azure storage&quot;
-azcopy copy &quot;$env:WORKSPACE\${Configurator_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite &quot;true&quot;
-azcopy copy &quot;$env:WORKSPACE\${Router_vhd_name}.vhd&quot; &quot;https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd&quot; --blob-type &quot;pageblob&quot; --overwrite &quot;true&quot;
+Write-Output "copy to azure storage"
+azcopy copy "$env:WORKSPACE\${Configurator_vhd_name}.vhd" "https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd" --blob-type "pageblob" --overwrite "true"
+azcopy copy "$env:WORKSPACE\${Router_vhd_name}.vhd" "https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd" --blob-type "pageblob" --overwrite "true"
 
-Write-Output &quot;create managed disk&quot;
-$conf_disk_id=(az disk create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source ${conf_base_image} --query &apos;id&apos; -o json)
-$router_disk_id=$(az disk create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_base_image} --query &apos;id&apos; -o json)
+Write-Output "create managed disk"
+$conf_disk_id=(az disk create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source ${conf_base_image} --query 'id' -o json)
+$router_disk_id=$(az disk create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_base_image} --query 'id' -o json)
 
-Write-Output &quot;Create Image from managed disk&quot;
+Write-Output "Create Image from managed disk"
 az image create --resource-group ${ResourceGroupName} --name $Configurator_vhd_name --source ${conf_disk_id} --os-type Linux
 az image create --resource-group ${ResourceGroupName} --name ${Router_vhd_name} --source ${router_disk_id} --os-type Linux
 
 
-Write-Output &quot;Create SAS URL&quot;
-$start_date=(get-date).AddDays(-1).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
-$expire_date=(get-date).AddDays(+60).ToString(&quot;yyyy-MM-ddThh:mm:ssZ&quot;)
-$CONF_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Configurator_vhd_name}.vhd&quot; -o tsv)
-$ROUTER_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n &quot;${Router_vhd_name}.vhd&quot; -o tsv)
-$SAS_URL=$(az storage container generate-sas --connection-string ${connection_string} --name ${container_name} --permissions rl --start &quot;${start_date}&quot; --expiry &quot;${expire_date}&quot; -o tsv)
-$conf_download_URL=&quot;${CONF_URL}?${SAS_URL}&quot;
-$router_download_URL=&quot;${ROUTER_URL}?${SAS_URL}&quot;
+Write-Output "Create SAS URL"
+$start_date=(get-date).AddDays(-1).ToString("yyyy-MM-ddThh:mm:ssZ")
+$expire_date=(get-date).AddDays(+60).ToString("yyyy-MM-ddThh:mm:ssZ")
+$CONF_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n "${Configurator_vhd_name}.vhd" -o tsv)
+$ROUTER_URL=$(az storage blob url --connection-string ${connection_string} -c ${container_name} -n "${Router_vhd_name}.vhd" -o tsv)
+$SAS_URL=$(az storage container generate-sas --connection-string ${connection_string} --name ${container_name} --permissions rl --start "${start_date}" --expiry "${expire_date}" -o tsv)
+$conf_download_URL="${CONF_URL}?${SAS_URL}"
+$router_download_URL="${ROUTER_URL}?${SAS_URL}"
 
 
-Write-Output &quot;Output Download SAS URL to file&quot;
-&quot;conf_download_URL=$conf_download_URL&quot; | Out-File prop_sas -Encoding ascii
-&quot;router_download_URL=$router_download_URL&quot; | Out-File -append prop_sas -Encoding ascii
+Write-Output "Output Download SAS URL to file"
+"conf_download_URL=$conf_download_URL" | Out-File prop_sas -Encoding ascii
+"router_download_URL=$router_download_URL" | Out-File -append prop_sas -Encoding ascii
 </command>
     </hudson.plugins.powershell.PowerShell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
@@ -205,7 +207,7 @@ Write-Output &quot;Output Download SAS URL to file&quot;
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
             </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
+            <attachmentsPattern/>
             <attachBuildLog>false</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -221,13 +223,13 @@ ${conf_download_URL}
 &lt;br&gt;
 ARM-Router_${TAG} vhd file can be downloaded here: 
 ${router_download_URL}</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
+      <attachmentsPattern/>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
+      <from/>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
@@ -249,50 +251,54 @@ ${router_download_URL}</defaultContent>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
-      <resolverCredentialsConfig reference="../deployerCredentialsConfig"/>
+      <resolverCredentialsConfig>
+        <credentialsId/>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.vhdx&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.vhdx",
+            "target": "${workspace}/",
+            "flat": "true"
         },
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.vhdx&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.vhdx",
+            "target": "${workspace}/",
+            "flat": "true"
         },
         {
-            &quot;pattern&quot;: &quot;Devops/Tools/Azure/arm/*.py&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "Devops/Tools/Azure/arm/CentOS8/*.py",
+            "target": "${workspace}/",
+            "flat": "true"
         }
     ]
 }</spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deployPattern/>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
@@ -315,6 +321,7 @@ ${router_download_URL}</defaultContent>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
