@@ -134,13 +134,20 @@ cd ${WORKSPACE}
 
 
 ## Run FindBugs on entire repository java files
-/opt/findbugs/bin/findbugs -textui -maxHeap 2048 -medium -xml -output findbugs.xml \
+#/opt/findbugs/bin/findbugs -textui -maxHeap 2048 -medium -xml -output findbugs.xml \
+#${WORKSPACE}/ArmCommon/Common/target/*.jar \
+#${WORKSPACE}/ArmCdrUtil/ArmCdrUtil/target/arm-cdr-util-*-SNAPSHOT.jar \
+#${WORKSPACE}/LdapConnector/LdapConnector/target/*.jar \
+#${WORKSPACE}/RoutingManager/RoutingManager/target/*.war \
+#${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
+
+## Run SpotBugs on entire repository java files
+/opt/spotbugs/bin/spotbugs -textui -maxHeap 2048 -medium -xml -output spotbugs.xml \
 ${WORKSPACE}/ArmCommon/Common/target/*.jar \
 ${WORKSPACE}/ArmCdrUtil/ArmCdrUtil/target/arm-cdr-util-*-SNAPSHOT.jar \
 ${WORKSPACE}/LdapConnector/LdapConnector/target/*.jar \
 ${WORKSPACE}/RoutingManager/RoutingManager/target/*.war \
 ${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
-
 </command>
     </hudson.tasks.Shell>
   </builders>
