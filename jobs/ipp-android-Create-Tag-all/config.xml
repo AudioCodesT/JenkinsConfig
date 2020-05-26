@@ -395,7 +395,7 @@ checkIfDone() {
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git clean -fdx
     sleep 20
-    git fetch -f --progress --tags $shortRepoName
+    git fetch --tags --progress $shortRepoName
     branchName=$shortRepoName/$GERRIT_BRANCH    
     git log -4 --decorate --oneline $branchName
     if git log --decorate --oneline --no-color -1 $branchName | grep -q tag:; then
