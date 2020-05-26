@@ -1,21 +1,23 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Static Code Analysis&#xd;
-java --&gt; pmd, findbugs&#xd;
+  <description>Static Code Analysis&#13;
+java --&gt; pmd, findbugs&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>30</daysToKeep>
-        <numToKeep>-1</numToKeep>
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -23,7 +25,7 @@ java --&gt; pmd, findbugs&#xd;
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -34,11 +36,11 @@ java --&gt; pmd, findbugs&#xd;
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -54,29 +56,58 @@ java --&gt; pmd, findbugs&#xd;
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <depth>10</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
-  <assignedNode>arm-build</assignedNode>
+  <assignedNode>arm-centos8-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.SCMTrigger>
-      <spec>H H(1-2) * * 0</spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>jver=$(java -version 2&gt;&amp;1 | grep version | cut -d '"' -f 2)
+echo "Java version set to: $jver"
+
+jcver=$(javac -version 2&gt;&amp;1 | cut -d ' ' -f 2)
+echo "javac version set to: $jcver"
+
+# Set JAVA_HOME
+JAVA_HOME=$(readlink -f $(which java) | awk -F '/bin' '{print $1}')
+sudo sh -c "echo \"export JAVA_HOME=${JAVA_HOME}\" &gt;&gt; /etc/environment"
+. /etc/environment
+
+#new scrip to prepare database env
+#this is per Igor request for his new trick to reduce unit-tests time
+#It is not Submitted yet so if there is no such file then exit 0 and continue to next build step
+bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
+
+#Per Kobi Levi request:
+#adding permissions for Router to write into folder /usr/local/etc/
+sudo chmod 777 /usr/local/etc</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Maven>
+      <targets>clean install</targets>
+      <mavenName>Maven_v363</mavenName>
+      <pom>pom.xml</pom>
+      <usePrivateRepository>false</usePrivateRepository>
+      <settings class="jenkins.mvn.DefaultSettingsProvider"/>
+      <globalSettings class="org.jenkinsci.plugins.configfiles.maven.job.MvnGlobalSettingsProvider" plugin="config-file-provider@2.18">
+        <settingsConfigId>58cfb176-1f6a-4803-af9e-4dcd0167ca1a</settingsConfigId>
+      </globalSettings>
+      <injectBuildVariables>false</injectBuildVariables>
+    </hudson.tasks.Maven>
     <hudson.tasks.Shell>
       <command>## Run pmd on entire repository java files
 cat &lt;&lt;-EOF &gt; ~/.netrc
@@ -99,55 +130,71 @@ cd ${WORKSPACE}
 
 /opt/pmd/bin/run.sh pmd -d . -f xml -language java -R audc-ruleset.xml -encoding UTF-8 -failOnViolation false &gt; pmd.xml
 
-/usr/bin/sed -i -n &apos;/xml/,$p&apos; pmd.xml
+/usr/bin/sed -i -n '/xml/,$p' pmd.xml
 
 
 ## Run FindBugs on entire repository java files
-/opt/findbugs/bin/findbugs -include audc-ruleset.xml -medium -xml -output findbugs.xml -textui .
+/opt/findbugs/bin/findbugs -textui -maxHeap 2048 -medium -xml -output findbugs.xml \
+${WORKSPACE}/ArmCommon/Common/target/*.jar \
+${WORKSPACE}/ArmCdrUtil/ArmCdrUtil/target/arm-cdr-util-*-SNAPSHOT.jar \
+${WORKSPACE}/LdapConnector/LdapConnector/target/*.jar \
+${WORKSPACE}/RoutingManager/RoutingManager/target/*.war \
+${WORKSPACE}/TopologyManager/TopologyManagement/target/*.war
+
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <io.jenkins.plugins.analysis.core.steps.IssuesRecorder plugin="warnings-ng@3.0.3">
+    <io.jenkins.plugins.analysis.core.steps.IssuesRecorder plugin="warnings-ng@8.1.0">
       <analysisTools>
         <io.jenkins.plugins.analysis.warnings.Pmd>
-          <id></id>
-          <name></name>
+          <id/>
+          <name/>
           <pattern>**/pmd.xml</pattern>
           <reportEncoding>UTF-8</reportEncoding>
+          <skipSymbolicLinks>false</skipSymbolicLinks>
         </io.jenkins.plugins.analysis.warnings.Pmd>
         <io.jenkins.plugins.analysis.warnings.FindBugs>
-          <id></id>
-          <name></name>
+          <id/>
+          <name/>
           <pattern>**/findbugs.xml</pattern>
           <reportEncoding>UTF-8</reportEncoding>
-          <useRankAsPriority>true</useRankAsPriority>
+          <skipSymbolicLinks>false</skipSymbolicLinks>
+          <useRankAsPriority>false</useRankAsPriority>
         </io.jenkins.plugins.analysis.warnings.FindBugs>
       </analysisTools>
-      <sourceCodeEncoding></sourceCodeEncoding>
+      <sourceCodeEncoding/>
+      <sourceDirectory/>
       <ignoreQualityGate>false</ignoreQualityGate>
       <ignoreFailedBuilds>true</ignoreFailedBuilds>
       <referenceJobName>-</referenceJobName>
+      <failOnError>false</failOnError>
       <healthy>0</healthy>
       <unhealthy>0</unhealthy>
-      <minimumSeverity plugin="analysis-model-api@2.1.2">
+      <minimumSeverity plugin="analysis-model-api@8.0.1">
         <name>LOW</name>
       </minimumSeverity>
-      <filters/>
+      <filters>
+        <io.jenkins.plugins.analysis.core.filter.IncludePackage>
+          <pattern>.*(com.ac|com.audioCodes).*</pattern>
+        </io.jenkins.plugins.analysis.core.filter.IncludePackage>
+      </filters>
       <isEnabledForFailure>true</isEnabledForFailure>
       <isAggregatingResults>false</isAggregatingResults>
       <isBlameDisabled>false</isBlameDisabled>
+      <isForensicsDisabled>false</isForensicsDisabled>
       <qualityGates/>
+      <trendChartType>AGGREGATION_TOOLS</trendChartType>
     </io.jenkins.plugins.analysis.core.steps.IssuesRecorder>
   </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
-        <timeoutMinutes>30</timeoutMinutes>
+        <timeoutMinutes>120</timeoutMinutes>
       </strategy>
       <operationList/>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
