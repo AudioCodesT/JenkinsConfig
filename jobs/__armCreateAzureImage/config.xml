@@ -68,6 +68,7 @@ Remove-Item -Force "$env:WORKSPACE\${Router_vhd_name}.vhd"
 
 Write-Output "Converting VHDX to VHD"
 Convert-VHD -Path "$env:WORKSPACE\${Configurator_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd" -VHDType Fixed
+Remove-Item -Force "$env:WORKSPACE\${Configurator_vhd_name}.vhdx"
 Write-Output "After First Convert"
 Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Router_vhd_name}.vhd" -VHDType Fixed
 Write-Output "Creating 2 new VMs on hyper-v"
