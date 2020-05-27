@@ -144,7 +144,7 @@ function installLisRpms () {
     	#./install.sh
     	#cd $HOME
         #rm -rf LISISO lis-rpms-*"
-    -EOS
+    EOS
 EOF
 }
 
@@ -156,7 +156,7 @@ function reduceVMSize () {
 		dd if=/dev/zero of=zeroFile.tmp || echo finished
     	rm -rf zeroFile.tmp
     	sudo reboot
-    -EOS
+    EOS
 EOF
 }
 #install Linux Integration Services v4.3 for Hyper-V and Azure  for Configurator and Router VMS
