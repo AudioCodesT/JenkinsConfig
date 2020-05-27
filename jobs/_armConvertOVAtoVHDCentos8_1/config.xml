@@ -1,15 +1,14 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>armConvertOVAtoVHD_1&#xd;
-this is the first job&#xd;
-purpose: add Linux integration for HyperV to the desired ARM OVA (by tag)&#xd;
-steps:&#xd;
-1. take OVA from Artifactory by tag&#xd;
-2. deploy in esxi&#xd;
-3. ssh and install the sw package&#xd;
-4. export to a new OVA&#xd;
-5. deploy to Artifactory to tempo folder&#xd;
+  <description>armConvertOVAtoVHD_1&#13;
+this is the first job&#13;
+purpose: add Linux integration for HyperV to the desired ARM OVA (by tag)&#13;
+steps:&#13;
+1. take OVA from Artifactory by tag&#13;
+2. deploy in esxi&#13;
+3. ssh and install the sw package&#13;
+4. export to a new OVA&#13;
+5. deploy to Artifactory to tempo folder&#13;
 6. call the second job that will convert the temp ova to VHD</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -20,7 +19,7 @@ steps:&#xd;
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
@@ -33,8 +32,8 @@ steps:&#xd;
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>TAG</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -46,9 +45,9 @@ steps:&#xd;
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>arm_build_esxi_6.5</assignedNode>
@@ -64,87 +63,88 @@ steps:&#xd;
 vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 
 cd ${WORKSPACE}
-vmHostIP=&quot;10.7.10.107&quot;
-vm_username=&apos;armAdmin&apos;
-vm_password=&apos;Arm!default1&apos;
-vm_root_password=&apos;password&apos;
+vmHostIP="10.7.10.107"
+vm_username='armAdmin'
+vm_password='Arm!default1'
+vm_root_password='password'
 
 # Create a new log file
-now=$(date +&quot;%Y%m%d-%H%M%S&quot;)
-logfile=&quot;${WORKSPACE}/aws_armBuildVHD.log&quot;
+now=$(date +"%Y%m%d-%H%M%S")
+logfile="${WORKSPACE}/aws_armBuildVHD.log"
 [[ -f $logfile  ]] &amp;&amp; rm $logfile
 touch $logfile    
     
     
 
 #check if VM name ARM-Conf_$TAG is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;VHD_ARM-Conf_$TAG&quot; | gawk &apos;{print $1}&apos;`
-if [ ! -z &quot;$vms&quot; ]
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Conf_$TAG" | gawk '{print $1}'`
+if [ ! -z "$vms" ]
 	then
-	    echo &quot;$(date) : VHD_ARM-Conf_$TAG already exist, I am exiting now&quot;   | tee -a $logfile
+	    echo "$(date) : VHD_ARM-Conf_$TAG already exist, I am exiting now"   | tee -a $logfile
 		exit 1
 fi
     
 #check if VM name ARM-Router_$TAG is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;VHD_ARM-Router_$TAG&quot; | gawk &apos;{print $1}&apos;`
-if [ ! -z &quot;$vms&quot; ]
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Router_$TAG" | gawk '{print $1}'`
+if [ ! -z "$vms" ]
 	then
-	    echo &quot;$(date) : VHD_ARM-Router_$TAG already exist, I am exiting now&quot;   | tee -a $logfile
+	    echo "$(date) : VHD_ARM-Router_$TAG already exist, I am exiting now"   | tee -a $logfile
 		exit 1
 fi
 
 
 #create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave
-echo &quot;$(date) : creating new Conf VM from image&quot;  | tee -a $logfile
+echo "$(date) : creating new Conf VM from image"  | tee -a $logfile
 OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name=&quot;VHD_ARM-Conf_$TAG&quot; --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://root:$vipw@${vmHostIP} 
+ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
-    echo &quot;$(date) : Deploy new Configuator VM has failed&quot;  | tee -a $logfile
+    echo "$(date) : Deploy new Configuator VM has failed"  | tee -a $logfile
     exit 1
 fi
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave
-echo &quot;$(date) : creating new Router VM from image&quot; 
-ovftool --disableVerification --noSSLVerify --name=&quot;VHD_ARM-Router_$TAG&quot; --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://root:$vipw@${vmHostIP} 
+echo "$(date) : creating new Router VM from image" 
+ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
-    echo &quot;$(date) : Deploy new Router VM has failed&quot;   | tee -a $logfile
+    echo "$(date) : Deploy new Router VM has failed"   | tee -a $logfile
     exit 1
 fi
 
 # find new arm configurator vm id
-conf_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;VHD_ARM-Conf_$TAG&quot; | gawk &apos;{print $1}&apos;`
-echo &quot;$(date) : vm id is $conf_vmid&quot;  | tee -a $logfile
+conf_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Conf_$TAG" | gawk '{print $1}'`
+echo "$(date) : vm id is $conf_vmid"  | tee -a $logfile
 
 # find new arm configurator vm id
-router_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;VHD_ARM-Router_$TAG&quot; | gawk &apos;{print $1}&apos;`
-echo &quot;$(date) : vm id is $router_vmid&quot;  | tee -a $logfile
+router_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Router_$TAG" | gawk '{print $1}'`
+echo "$(date) : vm id is $router_vmid"  | tee -a $logfile
 
 # Wait for power on
-echo &quot;$(date) : sleep 5 min.&quot;  | tee -a $logfile
+echo "$(date) : sleep 5 min."  | tee -a $logfile
 sleep 300
 
 # find new arm configurator vm IPv4 address
-conf_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $conf_vmid | grep -E &quot;ipAddress.*\[$&quot; -m 1 -A 5 | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot;`
-ipcalc -cs $conf_vmIPaddress || ( echo &quot;$(date) : Invalid IP for $conf_vmid&quot; | exit 1)
-echo &quot;$(date) : Configurator vm IP is $conf_vmIPaddress&quot;  | tee -a $logfile 
+conf_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $conf_vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $conf_vmIPaddress || ( echo "$(date) : Invalid IP for $conf_vmid" | exit 1)
+echo "$(date) : Configurator vm IP is $conf_vmIPaddress"  | tee -a $logfile 
 
 
 # find new arm router vm IPv4 address
-router_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $router_vmid | grep -E &quot;ipAddress.*\[$&quot; -m 1 -A 5 | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot;`
-ipcalc -cs $router_vmIPaddress || ( echo &quot;$(date) : Invalid IP for $router_vmid&quot; | exit 1)
-echo &quot;$(date) : Router vm IP is $router_vmIPaddress&quot;   | tee -a $logfile
+router_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $router_vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $router_vmIPaddress || ( echo "$(date) : Invalid IP for $router_vmid" | exit 1)
+echo "$(date) : Router vm IP is $router_vmIPaddress"   | tee -a $logfile
 
 function installLisRpms () {
 	HOST=$1
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
 	sudo -i -u root bash &lt;&lt;-EOS
     	set -xe
-    	curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.5.x86_64.tar.gz
-    	tar -xvzf lis-rpms-4.3.5.x86_64.tar.gz
-    	cd LISISO
-    	./install.sh
-    	cd $HOME
-        rm -rf LISISO lis-rpms-*&quot;
-    EOS
+        sudo dnf install -y hyperv-daemons
+    	#curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.5.x86_64.tar.gz
+    	#tar -xvzf lis-rpms-4.3.5.x86_64.tar.gz
+    	#cd LISISO
+    	#./install.sh
+    	#cd $HOME
+        #rm -rf LISISO lis-rpms-*"
+    -EOS
 EOF
 }
 
@@ -156,21 +156,21 @@ function reduceVMSize () {
 		dd if=/dev/zero of=zeroFile.tmp || echo finished
     	rm -rf zeroFile.tmp
     	sudo reboot
-    EOS
+    -EOS
 EOF
 }
 #install Linux Integration Services v4.3 for Hyper-V and Azure  for Configurator and Router VMS
-echo &quot;install lis-rpms.4.3.5 for Configurator VM&quot;  | tee -a $logfile
+echo "install lis-rpms.4.3.5 for Configurator VM"  | tee -a $logfile
 installLisRpms $conf_vmIPaddress
 
-echo &quot;install lis-rpms.4.3.5 for Router VM&quot;  | tee -a $logfile
+echo "install lis-rpms.4.3.5 for Router VM"  | tee -a $logfile
 installLisRpms $router_vmIPaddress
 
 
-echo &quot;Reduce Configurator VM Size&quot;  | tee -a $logfile
+echo "Reduce Configurator VM Size"  | tee -a $logfile
 reduceVMSize $conf_vmIPaddress
 
-echo &quot;Reduce Router VM Size&quot;  | tee -a $logfile
+echo "Reduce Router VM Size"  | tee -a $logfile
 reduceVMSize $router_vmIPaddress
 
 #wait for VM to UP
@@ -178,11 +178,11 @@ sleep 100
 
 
 #graceful shutdouwn BOTH VM
-echo &quot;$(date) : shutdown new Configurator VM&quot;  | tee -a $logfile
+echo "$(date) : shutdown new Configurator VM"  | tee -a $logfile
 ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${conf_vmid}
 sleep 30
 
-echo &quot;$(date) : shutdown new Router VM&quot;   | tee -a $logfile
+echo "$(date) : shutdown new Router VM"   | tee -a $logfile
 ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${Router_vmid}
 sleep 30
 
@@ -191,20 +191,20 @@ sleep 30
 
 #export both VMS to OVA
 mkdir $WORKSPACE/newOVAs
-echo &quot;$(date) : export new Configurator VM to an OVA file&quot;   | tee -a $logfile
+echo "$(date) : export new Configurator VM to an OVA file"   | tee -a $logfile
 ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/VHD_ARM-Conf_$TAG $WORKSPACE/newOVAs/VHD_ARM-Conf_$TAG.ova  | tee -a $logfile
-ovfResult=$(tail -1 $logfile | grep &quot;Completed&quot;)
-if [[ &quot;${ovfResult}&quot; == &quot;Completed with errors&quot; ]] 
+ovfResult=$(tail -1 $logfile | grep "Completed")
+if [[ "${ovfResult}" == "Completed with errors" ]] 
 then
 	exit 1
 fi
 cd $WORKSPACE/newOVAs
 mv VHD_ARM-Conf_$TAG.ova ARM-Conf_$TAG.ova
 
-echo &quot;$(date) : export new Router VM to an OVA file&quot;   | tee -a $logfile
+echo "$(date) : export new Router VM to an OVA file"   | tee -a $logfile
 ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/VHD_ARM-Router_$TAG $WORKSPACE/newOVAs/VHD_ARM-Router_$TAG.ova  | tee -a $logfile
-ovfResult=$(tail -1 $logfile | grep &quot;Completed&quot;)
-if [[ &quot;${ovfResult}&quot; == &quot;Completed with errors&quot; ]] 
+ovfResult=$(tail -1 $logfile | grep "Completed")
+if [[ "${ovfResult}" == "Completed with errors" ]] 
 then
 	exit 1
 fi
@@ -213,11 +213,11 @@ mv VHD_ARM-Router_$TAG.ova ARM-Router_$TAG.ova
 
 
 #terminate both VM MACHINES
-echo &quot;$(date) : delete new Configurator VM&quot;   | tee -a $logfile
+echo "$(date) : delete new Configurator VM"   | tee -a $logfile
 ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${conf_vmid}
 sleep 30
 
-echo &quot;$(date) : delete new Router VM&quot;   | tee -a $logfile
+echo "$(date) : delete new Router VM"   | tee -a $logfile
 ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${Router_vmid}
 sleep 30</command>
     </hudson.tasks.Shell>
@@ -259,7 +259,7 @@ sleep 30</command>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                   </configs>
-                  <projects>armConvertOVAtoVHD_2</projects>
+                  <projects>__armConvertOVAtoVHDXCentos8, </projects>
                   <condition>SUCCESS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                   <triggerFromChildProjects>false</triggerFromChildProjects>
@@ -288,15 +288,15 @@ sleep 30</command>
       <cleanWhenAborted>false</cleanWhenAborted>
       <notFailBuild>false</notFailBuild>
       <cleanupMatrixParent>false</cleanupMatrixParent>
-      <externalDelete></externalDelete>
+      <externalDelete/>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
     <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
@@ -312,28 +312,28 @@ sleep 30</command>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova",
+            "target": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova",
+            "target": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/",
+             "recursive": "false"
         }   
     ]
 }</spec>
@@ -342,16 +342,16 @@ sleep 30</command>
         <spec>
 
 {
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
+            "target": "${workspace}/ovaFiles/",
+            "flat": "true"
         },
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
+            "target": "${workspace}/ovaFiles/",
+            "flat": "true"
         }
     ]
 }</spec>
@@ -361,25 +361,25 @@ newOVAs/ARM-Router_${TAG}.ova=&gt;com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}</d
       <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
 libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles
 </resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>root_username=root</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
-          <script></script>
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -397,7 +397,7 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}</template>
-      <descriptionTemplate></descriptionTemplate>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
