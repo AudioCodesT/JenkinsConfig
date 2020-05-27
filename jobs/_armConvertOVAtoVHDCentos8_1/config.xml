@@ -134,8 +134,8 @@ echo "$(date) : Router vm IP is $router_vmIPaddress"   | tee -a $logfile
 
 function installLisRpms () {
 	HOST=$1
-	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
-	sudo -i -u root bash &lt;&lt;EOS
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
+	sudo -i -u root bash &lt;&lt; EOS
     	set -xe
     	sudo dnf install -y hyperv-daemons
     	#curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.5.x86_64.tar.gz
@@ -144,7 +144,7 @@ function installLisRpms () {
     	#./install.sh
     	#cd $HOME
         #rm -rf LISISO lis-rpms-*"
-	EOS
+EOS
 EOF
 }
 
@@ -152,11 +152,11 @@ function reduceVMSize () {
 	HOST=$1
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
 	sudo -i -u root bash &lt;&lt;EOS
-		set -xe
-		dd if=/dev/zero of=zeroFile.tmp || echo finished
-    	rm -rf zeroFile.tmp
-    	sudo reboot
-	EOS
+	set -xe
+	dd if=/dev/zero of=zeroFile.tmp || echo finished
+   	rm -rf zeroFile.tmp
+   	sudo reboot
+EOS
 EOF
 }
 #install Linux Integration Services v4.3 for Hyper-V and Azure  for Configurator and Router VMS
