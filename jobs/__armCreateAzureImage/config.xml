@@ -160,7 +160,7 @@ az storage container create  --connection-string ${connection_string} --name ${c
 
 Write-Output "copy to azure storage"
 azcopy copy "$env:WORKSPACE\${Configurator_vhd_name}.vhd" "https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Configurator_vhd_name}.vhd" --blob-type "pageblob" --overwrite "true"
-azcopy copy "$env:WORKSPACE\${Router_vhd_name}.vhd" "https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd" --blob-type "pageblob" --overwrite "true"
+azcopy copy "D:\${Router_vhd_name}.vhd" "https://${vhd_storage_account}.blob.core.windows.net/${container_name}/${Router_vhd_name}.vhd" --blob-type "pageblob" --overwrite "true"
 
 Write-Output "create managed disk"
 $conf_disk_id=(az disk create --resource-group ${ResourceGroupName} --name ${Configurator_vhd_name} --source ${conf_base_image} --query 'id' -o json)
