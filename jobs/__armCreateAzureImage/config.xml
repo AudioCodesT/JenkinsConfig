@@ -70,10 +70,10 @@ Write-Output "Converting VHDX to VHD"
 Convert-VHD -Path "$env:WORKSPACE\${Configurator_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd" -VHDType Fixed
 Remove-Item -Force "$env:WORKSPACE\${Configurator_vhd_name}.vhdx"
 Write-Output "After First Convert"
-Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Router_vhd_name}.vhd" -VHDType Fixed
+Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath "D:\${Router_vhd_name}.vhd" -VHDType Fixed
 Write-Output "Creating 2 new VMs on hyper-v"
 New-VM -Name "${Configurator_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
-New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath "$env:WORKSPACE\${Router_vhd_name}.vhd"
+New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -VHDPath "D:\${Router_vhd_name}.vhd"
 Write-Output "starting the 2 VMs"
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
