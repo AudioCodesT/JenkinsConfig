@@ -82,37 +82,15 @@ java --&gt; pmd, findbugs&#13;
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># Setting jdk version for branches
-# Branch 7.8 needs version 1.8.0_92
-if [[ "$GERRIT_BRANCH" == "7.8" ]]
-then
-	jdkver="1.8.0_92"
-elif [[ "$GERRIT_BRANCH" == "7.4" || "$GERRIT_BRANCH" == *"8."* || "$GERRIT_BRANCH" == "users" || "$GERRIT_BRANCH" == "9.0.init" ]]
-then
-	# Default version is 1.8.0_162
-	jdkver="1.8.0_162"
-
-else
-	jdkver="-11"
-fi
-
-
-if [[ "$GERRIT_BRANCH" == *"7."* || "$GERRIT_BRANCH" == *"8."* || "$GERRIT_BRANCH" == "users" || "$GERRIT_BRANCH" == "9.0.init" ]]
-then
-	sudo alternatives --set java /usr/java/jdk"$jdkver"/jre/bin/java
-else
-	sudo alternatives --set java /usr/java/jdk"$jdkver"/bin/java
-fi
-jver=$(java -version 2&gt;&amp;1 | grep version | cut -d '"' -f 2)
+      <command>jver=$(java -version 2&gt;&amp;1 | grep version | cut -d '"' -f 2)
 echo "Java version set to: $jver"
 
-# Set JavaC
-sudo alternatives --set javac /usr/java/jdk"$jdkver"/bin/javac
 jcver=$(javac -version 2&gt;&amp;1 | cut -d ' ' -f 2)
 echo "javac version set to: $jcver"
 
 # Set JAVA_HOME
-sudo sh -c "echo \"export JAVA_HOME=/usr/java/jdk$jdkver\" &gt;&gt; /etc/environment"
+JAVA_HOME=$(readlink -f $(which java) | awk -F '/bin' '{print $1}')
+sudo sh -c "echo \"export JAVA_HOME=${JAVA_HOME}\" &gt;&gt; /etc/environment"
 . /etc/environment
 
 #new scrip to prepare database env
@@ -124,12 +102,17 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 #adding permissions for Router to write into folder /usr/local/etc/
 sudo chmod 777 /usr/local/etc</command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
-      <mavenName>Maven_v325</mavenName>
-      <rootPom>pom.xml</rootPom>
-      <goals>clean install</goals>
-      <mavenOpts/>
-    </org.jfrog.hudson.maven3.Maven3Builder>
+    <hudson.tasks.Maven>
+      <targets>clean install</targets>
+      <mavenName>Maven_v363</mavenName>
+      <pom>pom.xml</pom>
+      <usePrivateRepository>false</usePrivateRepository>
+      <settings class="jenkins.mvn.DefaultSettingsProvider"/>
+      <globalSettings class="org.jenkinsci.plugins.configfiles.maven.job.MvnGlobalSettingsProvider" plugin="config-file-provider@2.18">
+        <settingsConfigId>58cfb176-1f6a-4803-af9e-4dcd0167ca1a</settingsConfigId>
+      </globalSettings>
+      <injectBuildVariables>false</injectBuildVariables>
+    </hudson.tasks.Maven>
     <hudson.tasks.Shell>
       <command>## Run pmd on entire repository java files
 cat &lt;&lt;-EOF &gt; ~/.netrc
