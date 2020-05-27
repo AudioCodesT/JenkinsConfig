@@ -83,6 +83,9 @@ Write-Output "Get VMs IP Address"
 #get VMs IP Adress
 $Configurator_vmIP=(Get-VM -Name $Configurator_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
 $Router_vmIP=(Get-VM -Name $Router_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
+Write-Output "Configurator IP Address: $Configurator_vmIP"
+Write-Output "Router IP Address: $Router_vmIP"
+
 
 Write-Output "writing IP of the VMS"
 "Configurator_vmIP=$Configurator_vmIP" | Out-File prop -Encoding ascii
