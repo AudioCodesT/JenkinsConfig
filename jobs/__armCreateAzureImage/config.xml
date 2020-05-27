@@ -77,8 +77,8 @@ New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB 
 Write-Output "starting the 2 VMs"
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
-Write-Output "sleep 120"
-Start-Sleep -s 120
+Write-Output "sleep 150"
+Start-Sleep -s 150
 Write-Output "Get VMs IP Address"
 #get VMs IP Adress
 $Configurator_vmIP=(Get-VM -Name $Configurator_VmName| Select -ExpandProperty Networkadapters | Select ipaddresses).IPAddresses[0]
