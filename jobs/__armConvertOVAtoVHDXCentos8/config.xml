@@ -63,29 +63,8 @@ alias sz='C:\\Program\ Files\\7-Zip\\7z.exe'
 export PATH=${PATH}:/c/bin/qemu-img
 sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova"
 sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Router_$TAG.ova"
-#/c/bin/qemu-img/qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhdx
-#/c/bin/qemu-img/qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhdx 
-
-#convert to raw
-echo "Convert to Raw"
-qemu-img.exe convert -f vmdk -O raw ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.img
-qemu-img.exe convert -f vmdk -O raw ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.img
-
-# convert image to fixed VHD format aligned to 1 MB
-MB=$((1024*1024))
-CONF_SIZE=$(qemu-img.exe info -f raw --output json ${WORKSPACE}/ARM-Conf_${TAG}.img | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
-ROUTER_SIZE=$(qemu-img.exe info -f raw --output json ${WORKSPACE}/ARM-Router_${TAG}.img | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
-echo "Conf Size = $CONF_SIZE"
-echo "Router Size = $ROUTER_SIZE"
-CONF_ROUNDED_SIZE=$(((CONF_SIZE/$MB + 1)*$MB))
-ROUTER_ROUNDED_SIZE=$(((CONF_SIZE/$MB + 1)*$MB))
-echo "Resize disk"
-qemu-img.exe resize ${WORKSPACE}/ARM-Conf_${TAG}.img $CONF_ROUNDED_SIZE
-qemu-img.exe resize ${WORKSPACE}/ARM-Router_${TAG}.img $ROUTER_ROUNDED_SIZE
-echo "convert to VHD"
-qemu-img.exe convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/ARM-Conf_${TAG}.vhd
-qemu-img.exe convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/ARM-Router_${TAG}.vhd
-</command>
+qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhdx
+qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhdx </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
