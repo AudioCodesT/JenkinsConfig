@@ -155,7 +155,6 @@ function reduceVMSize () {
 	set -xe
 	dd if=/dev/zero of=zeroFile.tmp || echo finished
    	rm -rf zeroFile.tmp
-   	sudo reboot
 EOS
 EOF
 }
