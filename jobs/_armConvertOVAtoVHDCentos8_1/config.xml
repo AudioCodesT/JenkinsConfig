@@ -182,7 +182,7 @@ ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${c
 sleep 30
 
 echo "$(date) : shutdown new Router VM"   | tee -a $logfile
-ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${Router_vmid}
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${router_vmid}
 sleep 30
 
 
