@@ -63,6 +63,8 @@ alias sz='C:\\Program\ Files\\7-Zip\\7z.exe'
 export PATH=${PATH}:'/c/Program Files/qemu'
 sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova"
 sz x -o"$WORKSPACE" "${WORKSPACE}/ovaFiles/ARM-Router_$TAG.ova"
+mv ${WORKSPACE}/VHD_ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk
+mv ${WORKSPACE}/VHD_ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk
 qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Conf_${TAG}.vhdx
 qemu-img.exe convert -O vhdx -o subformat=dynamic ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk ${WORKSPACE}/ARM-Router_${TAG}.vhdx </command>
     </hudson.tasks.Shell>
