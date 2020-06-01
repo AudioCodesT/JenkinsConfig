@@ -82,6 +82,26 @@ build_hyperv()
 	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
     qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
 }
+build_azure()
+{
+    # convert image to fixed VHD format aligned to 1 MB
+    MB=$((1024*1024))
+    CONF_SIZE=$(qemu-img info -f raw --output json ${WORKSPACE}/ARM-Conf_${TAG}.img | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
+    ROUTER_SIZE=$(qemu-img info -f raw --output json ${WORKSPACE}/ARM-Router_${TAG}.img | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
+    echo "Configurator Image Size = $CONF_SIZE"
+    echo "Router Image Size = $ROUTER_SIZE"
+    ROUNDED_SIZE=$((($SIZE/$MB + 1)*$MB))
+    echo "Rounded Size = $ROUNDED_SIZE"
+ 
+    echo "Resize image"
+    qemu-img resize ${WORKSPACE}/ARM-Conf_${TAG}.img $ROUNDED_SIZE
+ 	qemu-img resize ${WORKSPACE}/ARM-Router_${TAG}.img $ROUNDED_SIZE
+    cd $OUTPUT_DIR
+ 
+    echo "Convert image to VHD"
+    qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/ARM-Conf_${TAG}.vhd
+	qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/ARM-Router_${TAG}.vhd
+}
 
 open_ova
 build_raw
