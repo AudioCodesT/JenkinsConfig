@@ -100,8 +100,8 @@ build_azure()
  	qemu-img resize ${WORKSPACE}/ARM-Router_${TAG}.img $ROUTER_ROUNDED_SIZE
  
     echo "Convert image to VHD"
-    qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/ARM-Conf_${TAG}.vhd
-	qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/ARM-Router_${TAG}.vhd
+    qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhd
+	qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhd
 }
 
 open_ova
