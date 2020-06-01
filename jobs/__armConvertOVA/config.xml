@@ -68,7 +68,7 @@ build_raw()
 {
 
 	qemu-img convert -f vmdk ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Conf_${TAG}.img
-    qemu-img convert -f vmdk ${WORKSPACE}/ARM-Router_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Router_${TAG}.img
+    qemu-img convert -f vmdk ${WORKSPACE}/ARM-router_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Router_${TAG}.img
 }
 open_ova
 build_raw</command>
