@@ -38,6 +38,8 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -103,12 +105,12 @@ build_raw</command>
         <spec>{
     "files": [
         {
-            "pattern": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
             "target": "${workspace}/",
             "flat": "true"
         },
         {
-            "pattern": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
             "target": "${workspace}/",
             "flat": "true"
         }
