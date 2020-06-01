@@ -96,7 +96,6 @@ build_azure()
     echo "Resize image"
     qemu-img resize ${WORKSPACE}/ARM-Conf_${TAG}.img $ROUNDED_SIZE
  	qemu-img resize ${WORKSPACE}/ARM-Router_${TAG}.img $ROUNDED_SIZE
-    cd $OUTPUT_DIR
  
     echo "Convert image to VHD"
     qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/ARM-Conf_${TAG}.vhd
