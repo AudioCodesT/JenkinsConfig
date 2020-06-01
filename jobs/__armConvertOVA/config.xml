@@ -137,7 +137,20 @@ build_azure
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec/>
+        <spec>{
+    "files": [
+        {
+            "pattern": "${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhd",
+            "target": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/",
+             "recursive": "false"
+        },
+        {
+            "pattern": "${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhd",
+            "target": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/",
+             "recursive": "false"
+        }   
+    ]
+}</spec>
       </uploadSpec>
       <downloadSpec>
         <spec>{
