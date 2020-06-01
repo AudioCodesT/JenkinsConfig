@@ -66,10 +66,10 @@ Remove-VM -Name "$Router_VmName" -Force
 Remove-Item -Force "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
 Remove-Item -Force "$env:WORKSPACE\${Router_vhd_name}.vhd"
 
-Write-Output "Converting VHDX to VHD"
-Convert-VHD -Path "$env:WORKSPACE\${Configurator_vhd_name}.vhdx" -DestinationPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd" -VHDType Fixed
-Write-Output "After First Convert"
-Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath "D:\${Router_vhd_name}.vhd" -VHDType Fixed
+#Write-Output "Converting VHDX to VHD"
+#Convert-VHD -Path "$env:WORKSPACE\${Configurator_vhd_name}.vhdx" -DestinationPath #"$env:WORKSPACE\${Configurator_vhd_name}.vhd" -VHDType Fixed
+#Write-Output "After First Convert"
+#Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath #"D:\${Router_vhd_name}.vhd" -VHDType Fixed
 Write-Output "Creating 2 new VMs on hyper-v"
 New-VM -Name "${Configurator_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 8GB -Generation 1 -VHDPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
 New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -Generation 1 -VHDPath "D:\${Router_vhd_name}.vhd"
@@ -255,12 +255,12 @@ ${router_download_URL}</defaultContent>
         <spec>{
     "files": [
         {
-            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.vhdx",
+            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.vhd",
             "target": "${workspace}/",
             "flat": "true"
         },
         {
-            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.vhdx",
+            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.vhd",
             "target": "${workspace}/",
             "flat": "true"
         },
