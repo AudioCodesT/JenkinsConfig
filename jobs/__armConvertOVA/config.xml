@@ -60,8 +60,9 @@
     <hudson.tasks.Shell>
       <command>open_ova()
 {
-	tar -xvf ${WORKSPACE}/ARM-Conf_${TAG}.ova ${WORKSPACE}/ARM-Router_$TAG.ova
-    rename s/VHD_// VHD_ARM*
+	tar -xvf ${WORKSPACE}/ARM-Conf_${TAG}.ova
+    tar -xvf ${WORKSPACE}/ARM-Router_${TAG}.ova
+    #rename s/VHD_// VHD_ARM*
 }
 build_raw()
 {
