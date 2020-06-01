@@ -80,7 +80,11 @@ build_raw()
 build_hyperv()
 {
 	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
+    curl -kv -u ${artifactory_user}:${artifactory_password} -X PUT "https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/" -T ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
+    rm -rf ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
     qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
+    curl -kv -u ${artifactory_user}:${artifactory_password} -X PUT "https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/" -T ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
+    rm -rf ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
 }
 build_azure()
 {
@@ -184,6 +188,26 @@ build_azure
       <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
+      <info>
+        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>artifactory_password</name>
+          <value>{AQAAABAAAAAQjpwn9mxVDjkJumhhtSdcfWyyvWbr749h0nbwRsyQ6Z0=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}</template>
       <descriptionTemplate/>
