@@ -90,8 +90,10 @@ build_azure()
     ROUTER_SIZE=$(qemu-img info -f raw --output json ${WORKSPACE}/ARM-Router_${TAG}.img | gawk 'match($0, /"virtual-size": ([0-9]+),/, val) {print val[1]}')
     echo "Configurator Image Size = $CONF_SIZE"
     echo "Router Image Size = $ROUTER_SIZE"
-    ROUNDED_SIZE=$((($SIZE/$MB + 1)*$MB))
-    echo "Rounded Size = $ROUNDED_SIZE"
+    CONF_ROUNDED_SIZE=$((($CONF_SIZE/$MB + 1)*$MB))
+    ROUTER_ROUNDED_SIZE=$((($ROUTER_SIZE/$MB + 1)*$MB))
+    echo "Configurator Rounded Image Size = $CONF_ROUNDED_SIZE"
+    echo "Router Rounded Image Size = $ROUTER_ROUNDED_SIZE"
  
     echo "Resize image"
     qemu-img resize ${WORKSPACE}/ARM-Conf_${TAG}.img $ROUNDED_SIZE
