@@ -267,7 +267,11 @@ then
                   		#temporary
         				if [[ "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
             			then
+                       		 echo "172.17.118.95"
         					sed -i -- 's/%serverName%/172.17.118.95/g' ${WORKSPACE}/proxyServer.js
+            			else
+            				echo "172.17.118.93"
+        					sed -i -- 's/%serverName%/172.17.118.93/g' ${WORKSPACE}/proxyServer.js            
             			fi
                   fi
                         #change username and password
@@ -276,11 +280,8 @@ then
                         sed -i -- "s/%version%/${BUILD_NUMBER}/g" ${WORKSPACE}/cypress/support/config.ts
                         echo "RUN: yarn run proxyServer"
                         yarn run proxyServer &amp; sleep 15
-                        if [[ "$GERRIT_BRANCH" != "7.8.2000" ]]
-                        then
-                        	echo "RUN: yarn test:jenkins"
-                        	yarn test:jenkins
-                        fi
+                        echo "RUN: yarn test:jenkins"
+                        yarn test:jenkins
             fi
             echo "RUN: yarn run distFull"
             yarn run distFull
