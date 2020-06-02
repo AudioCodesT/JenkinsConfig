@@ -260,7 +260,7 @@ else
 	  			taskkill /F /PID "$pidNumber"
    			fi
         	echo "RUN: yarn run jenkinsServe"
-            yarn run jenkinsServe
+            yarn run jenkinsServe &amp; sleep 90
         fi
         echo "RUN: yarn test:jenkins"
         yarn test:jenkins
