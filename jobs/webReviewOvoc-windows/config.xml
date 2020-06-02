@@ -199,8 +199,11 @@ else
     	echo "RUN: yarn i"
         yarn i
    fi
-    #echo "RUN: yarn run distTest"
-    #yarn run distTest 
+   if [[ "$GERRIT_BRANCH" != "7.4"* &amp;&amp; "$GERRIT_BRANCH" != "7.6"*  &amp;&amp; "$GERRIT_BRANCH" != "7.8" &amp;&amp; "$GERRIT_BRANCH" != "7.8.1000" ]]
+   then
+    	echo "RUN: yarn run distTest"
+    	yarn run distTest
+    fi
    #kill the Proxy Server process
    pidNumber=$(netstat -ano | grep 9000 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
   echo "pidNumber = $pidNumber"
