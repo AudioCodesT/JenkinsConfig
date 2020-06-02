@@ -253,6 +253,12 @@ else
   	    yarn run proxyServer &amp; sleep 15
         if [[ "$GERRIT_BRANCH" != "7.4"* &amp;&amp; "$GERRIT_BRANCH" != "7.6"*  &amp;&amp; "$GERRIT_BRANCH" != "7.8" &amp;&amp; "$GERRIT_BRANCH" != "7.8.1000" ]]
         then
+        	pidNumber=$(netstat -ano | grep 4200 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
+            if [[ ! -z "$pidNumber" ]]
+   			then
+      			echo "killing the proccess of the ng server"
+	  			taskkill /F /PID "$pidNumber"
+   			fi
         	echo "RUN: yarn run jenkinsServe"
             yarn run jenkinsServe
         fi
