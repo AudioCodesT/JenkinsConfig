@@ -251,8 +251,14 @@ else
         echo "build number is: ${BUILD_NUMBER}"
         echo "cat ${WORKSPACE}/cypress/support/config.ts"
         cat ${WORKSPACE}/cypress/support/config.ts
-        echo "RUN: yarn run proxyServer"
-  	    yarn run proxyServer &amp; sleep 15
+        if [[ "$GERRIT_BRANCH" == "7.6"* || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
+        then
+        	echo "RUN: yarn run proxyServer"
+  	    	yarn run proxyServer &amp; sleep 15
+        else
+        	echo "RUN: yarn run p &amp;&amp; sleep 15"
+  	    	yarn run p &amp;&amp; sleep 15
+        fi
         echo "RUN: yarn test:jenkins"
         yarn test:jenkins
         echo "finish run yarn test:jenkins"
