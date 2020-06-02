@@ -278,14 +278,8 @@ then
                         sed -i -- 's/%username%/acladmin/g' ${WORKSPACE}/cypress/support/config.ts
                         sed -i -- 's/%password%/pass_1234/g' ${WORKSPACE}/cypress/support/config.ts
                         sed -i -- "s/%version%/${BUILD_NUMBER}/g" ${WORKSPACE}/cypress/support/config.ts
-        				if [[ "$GERRIT_BRANCH" == "7.6"* || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
-       					then
-        					echo "RUN: yarn run proxyServer"
-  	    					yarn run proxyServer &amp; sleep 15
-        				else
-        					echo "RUN: yarn run p &amp;&amp; sleep 15"
-  	    					yarn run p &amp;&amp; sleep 15
-        				fi
+                        echo "RUN: yarn run proxyServer"
+                        yarn run proxyServer &amp; sleep 15
                         echo "RUN: yarn test:jenkins"
                         yarn test:jenkins
             fi
