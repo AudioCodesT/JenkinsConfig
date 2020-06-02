@@ -108,10 +108,10 @@ build_azure()
 	qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhd
 }
 
-#open_ova
-#build_raw
-#clean_workspace
-#build_azure
+open_ova
+build_raw
+clean_workspace
+build_azure
 #build_hyperv</command>
     </hudson.tasks.Shell>
   </builders>
