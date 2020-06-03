@@ -24,7 +24,7 @@
         <hudson.model.StringParameterDefinition>
           <name>VERSION_NAME</name>
           <description/>
-          <defaultValue>9.2.4</defaultValue>
+          <defaultValue>9.2.7</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -157,7 +157,7 @@ sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH
       <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}___${ENV,var="VERSION_NAME"}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
