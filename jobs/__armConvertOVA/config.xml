@@ -106,13 +106,16 @@ build_azure()
     echo "Convert image to VHD"
     qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhd
 	qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhd
+    
+    zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhd
+    zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhd
 }
 
 open_ova
 build_raw
 clean_workspace
-#build_azure
-build_hyperv</command>
+build_azure
+#build_hyperv</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
@@ -144,13 +147,13 @@ build_hyperv</command>
         <spec>{
     "files": [
         {
-            "pattern": "${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhd",
-            "target": "Devops/VHD/${TAG}/ARM-Conf_${TAG}/",
+            "pattern": "${WORKSPACE}/artifacts/ARM-Conf_${TAG}.zip",
+            "target": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/",
              "recursive": "false"
         },
         {
-            "pattern": "${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhd",
-            "target": "Devops/VHD/${TAG}/ARM-Router_${TAG}/",
+            "pattern": "${WORKSPACE}/artifacts/ARM-Router_${TAG}.zip",
+            "target": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/",
              "recursive": "false"
         }   
     ]
