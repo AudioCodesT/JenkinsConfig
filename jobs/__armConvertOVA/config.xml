@@ -107,6 +107,7 @@ build_azure()
     qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Conf_${TAG}.img ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhd
 	qemu-img convert -f raw -O vpc -o subformat=fixed ${WORKSPACE}/ARM-Router_${TAG}.img ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhd
     
+    cd ${WORKSPACE}/artifacts
     zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhd
     zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhd
 }
