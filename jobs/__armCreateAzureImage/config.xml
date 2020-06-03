@@ -72,8 +72,8 @@ Remove-Item -Force "$env:WORKSPACE\${Router_vhd_name}.vhd"
 #Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath #"D:\${Router_vhd_name}.vhd" -VHDType Fixed
 
 Write-Output "Unzip VHD FILES"
-Expand-Archive -path "$env:WORKSPACE\${Configurator_vhd_name}.zip -destinationPath "$env:WORKSPACE"
-Expand-Archive -path "$env:WORKSPACE\${Router_vhd_name}.zip -destinationPath "$env:WORKSPACE"
+Expand-Archive -Path "$env:WORKSPACE\${Configurator_vhd_name}.zip -destinationPath "$env:WORKSPACE"
+Expand-Archive -Path "$env:WORKSPACE\${Router_vhd_name}.zip -destinationPath "$env:WORKSPACE"
 
 Write-Output "Creating 2 new VMs on hyper-v"
 New-VM -Name "${Configurator_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 8GB -Generation 1 -VHDPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
