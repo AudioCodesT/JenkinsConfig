@@ -74,7 +74,7 @@
 mkdir -p ${WORKSPACE}/my_backup_centos_6
 rm -rf ${WORKSPACE}/my_backup_centos_6/*
 cd ${WORKSPACE}/my_backup_centos_6
-cp ${WORKSPACE}/ArmCommon/Common/VMFiles/Configurator/usr/local/bin/cacertsUtil.sh .
+cp ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/usr/local/bin/cacertsUtil.sh .
 cp ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.pl .
 cp ${WORKSPACE}/ArmCommon/Common/src/main/resources/upgrade/fromCentos6_to_8/backupCentos6.py .
 dos2unix backupCentos6.pl backupCentos6.py
