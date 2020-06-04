@@ -135,8 +135,8 @@ set -x
 cd $WORKSPACE
 #yarn dist failing without this command (memory out of heap failure)
 export NODE_OPTIONS="--max_old_space_size=4096"
-#use nvm 12.16.1 (npm 12.16.1 and yarn 1.5.1)
-nvm use 12.16.1
+#use nvm 12.16.2 (npm 12.16.2 and yarn 1.22.4)
+nvm use 12.16.2
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
 
@@ -153,8 +153,14 @@ then
 	yarn i
 	echo "RUN: yarn build"
 	yarn build
-	echo "RUN: yarn start:prod"
-	yarn start:prod
+	pidNumber=$(netstat -ano | grep 4200 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
+	if [[ ! -z "$pidNumber" ]]
+	then
+		echo "killing the proccess of the ng server"
+		taskkill /F /PID "$pidNumber"
+	fi
+	echo "RUN: yarn start:prod" 
+	yarn start:prod &amp; sleep 120
 	echo "RUN: yarn e2e:prod"
 	yarn e2e:prod
 
