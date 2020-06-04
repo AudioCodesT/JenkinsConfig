@@ -161,7 +161,7 @@ then
 	taskkill /F /PID "$pidNumber"
 fi
 echo "RUN: yarn start:prod" 
-yarn start:prod &amp; sleep 15
+yarn start:prod &amp; sleep 120
 echo "RUN: yarn e2e:prod"
 yarn e2e:prod
 </command>
