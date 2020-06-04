@@ -150,7 +150,6 @@ git config url.https://.insteadOf git://
 
 yarn config set registry https://artifactory/api/npm/npm/
 yarn config set strict-ssl false
-rm -rf node_modules
 echo "RUN: yarn i"
 yarn i
 echo "RUN: yarn build"
