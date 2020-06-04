@@ -154,6 +154,12 @@ echo "RUN: yarn i"
 yarn i
 echo "RUN: yarn build"
 yarn build
+pidNumber=$(netstat -ano | grep 4200 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
+if [[ ! -z "$pidNumber" ]]
+then
+	echo "killing the proccess of the ng server"
+	taskkill /F /PID "$pidNumber"
+fi
 echo "RUN: yarn start:prod"
 yarn start:prod
 echo "RUN: yarn e2e:prod"
