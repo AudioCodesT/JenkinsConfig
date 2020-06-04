@@ -150,10 +150,14 @@ git config url.https://.insteadOf git://
 
 yarn config set registry https://artifactory/api/npm/npm/
 yarn config set strict-ssl false
-echo "RUN: yarn install"
-yarn install
+echo "RUN: yarn i"
+yarn i
 echo "RUN: yarn build"
 yarn build
+echo "RUN: yarn start:prod"
+yarn start:prod
+echo "RUN: yarn e2e:prod"
+yarn e2e:prod
 </command>
     </hudson.tasks.Shell>
   </builders>
