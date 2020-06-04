@@ -149,10 +149,15 @@ if [ "$LastGerritCommitHash" == "$GERRIT_PATCHSET_REVISION" ]
 then
 	yarn config set registry https://artifactory/api/npm/npm/
 	yarn config set strict-ssl false
-	echo "RUN: yarn install"
-	yarn install
+	echo "RUN: yarn i"
+	yarn i
 	echo "RUN: yarn build"
-    yarn build
+	yarn build
+	echo "RUN: yarn start:prod"
+	yarn start:prod
+	echo "RUN: yarn e2e:prod"
+	yarn e2e:prod
+
 
      #if branch is not master then copy the zip to a new zip with the branch name
 	if [ $GERRIT_BRANCH == "master" ] 
