@@ -1,12 +1,11 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>triggered by Submit in project C450-linux-kernel&#xd;
-1. compile kernel on project C450-linux-kernel&#xd;
-2. copy the binaries created from previous step to android directory&#xd;
-3. enter to android directory and create from the binaries --&gt; uimage-dtb&#xd;
-4. compile full android&#xd;
-5. create new commit  in project: IPP/Android/device_dspg_dvg101-kernel with the new binaries and update the submodule to current change (PATCHSET_REVISION)&#xd;
+  <description>triggered by Submit in project C450-linux-kernel&#13;
+1. compile kernel on project C450-linux-kernel&#13;
+2. copy the binaries created from previous step to android directory&#13;
+3. enter to android directory and create from the binaries --&gt; uimage-dtb&#13;
+4. compile full android&#13;
+5. create new commit  in project: IPP/Android/device_dspg_dvg101-kernel with the new binaries and update the submodule to current change (PATCHSET_REVISION)&#13;
 6. push commit directly to git</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -17,7 +16,7 @@
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -41,9 +40,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -78,7 +77,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
-      <spec></spec>
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -100,27 +99,27 @@
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginChangeMergedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -133,9 +132,9 @@
 LastGerritCommitHash=$( git ls-remote  | grep refs/heads/$GERRIT_BRANCH  | cut -f 1 | head -n 1 )
 echo $LastGerritCommitHash
 echo $GERRIT_PATCHSET_REVISION
-if [[ &quot;$LastGerritCommitHash&quot; == &quot;$GERRIT_PATCHSET_REVISION&quot; ]]
+if [[ "$LastGerritCommitHash" == "$GERRIT_PATCHSET_REVISION" ]]
 then
-    file_path=&quot;${WORKSPACE}/binaries_list.txt&quot;
+    file_path="${WORKSPACE}/binaries_list.txt"
     #compile c450hd kernel
     source make_c450hd_kernel.sh
     
@@ -148,18 +147,18 @@ then
     #copy all files from list to android dir (ipp-android-review/....)
     tail -n +1 ${file_path} | while IFS= read -r line
     do
-        sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
+        sourcePath=$(echo $line | cut -d' ' -f1)
         sourcePath=${WORKSPACE}/${sourcePath}
-        destPath=$(echo $line | cut -d&apos; &apos; -f2)
+        destPath=$(echo $line | cut -d' ' -f2)
         destPath=${destPath}
         cp ${sourcePath} ${destPath}
     done
     
     uImage_filename=$(cat ${file_path} | head -1 | tail -1)
-    uImage_filename=$(echo $uImage_filename | cut -d&apos; &apos; -f1)
+    uImage_filename=$(echo $uImage_filename | cut -d' ' -f1)
     uImage_filename=${uImage_filename##*/}
     dvf101_filename=$(cat ${file_path} | head -2 | tail -1)
-    dvf101_filename=$(echo $dvf101_filename | cut -d&apos; &apos; -f1)
+    dvf101_filename=$(echo $dvf101_filename | cut -d' ' -f1)
     dvf101_filename=${dvf101_filename##*/}
     cat device/dspg/c450hd-kernel/${uImage_filename} device/dspg/c450hd-kernel/divider.txt device/dspg/c450hd-kernel/${dvf101_filename} &gt; device/dspg/c450hd-kernel/uImage-dtb
     
@@ -176,7 +175,7 @@ then
     fi
     git clone ssh://jenkins@gerrit:29418/IPP/Android/device_dspg_dvf101-kernel
     cd device_dspg_dvf101-kernel
-    git checkout master || echo &quot;already on master&quot;
+    git checkout master || echo "already on master"
     #update submodule to the current GERRIT_PATCHSET_REVISION of this change
     git submodule init
     git submodule update
@@ -187,7 +186,7 @@ then
     #copy files to IPP/Android/device_dspg_dvg101-kernel
     tail -n +1 ${file_path} | while IFS= read -r line
     do
-        sourcePath=$(echo $line | cut -d&apos; &apos; -f1)
+        sourcePath=$(echo $line | cut -d' ' -f1)
         sourcePath=${WORKSPACE}/${sourcePath}
         cp ${sourcePath} .
     done
@@ -196,38 +195,38 @@ then
     #get all commit messages between the last commit in  IPP/Android/device_dspg_dvg101-kernel (${commitToCompareWith}) to
     #all commits that were submitted in IPP/C450/C450-linux-kernel
     commit_msg_in_kernel=$(git log --format=%s -n 1 HEAD)
-    commitToCompareWith=$(echo $commit_msg_in_kernel | cut -d&apos;:&apos; -f2-)
-    commitToCompareWith=$(echo $commitToCompareWith | sed -e &apos;s/^[ \t]*//&apos;)
-    commiterName=$(echo $commit_msg_in_kernel | cut -d&apos;:&apos; -f1)
+    commitToCompareWith=$(echo $commit_msg_in_kernel | cut -d':' -f2-)
+    commitToCompareWith=$(echo $commitToCompareWith | sed -e 's/^[ \t]*//')
+    commiterName=$(echo $commit_msg_in_kernel | cut -d':' -f1)
     #enter to C450-linux-kernel to check all the commits messages that submited
     cd ..
     index=1
     commit_msg=$(git log --format=%s -n 1 HEAD~0)
-	last_commit=&quot;${GERRIT_CHANGE_OWNER_NAME}: ${commit_msg}&quot;
-    commitMsgs=&quot;&quot;
+	last_commit="${GERRIT_CHANGE_OWNER_NAME}: ${commit_msg}"
+    commitMsgs=""
     #add all the commits messages to String until it will be equal to the last commit in  IPP/Android/device_dspg_dvg101-kernel
-    while [[ &quot;${commit_msg}&quot; != &quot;${commitToCompareWith}&quot; ]]
+    while [[ "${commit_msg}" != "${commitToCompareWith}" ]]
 	do
 		commit_msg=$(git log --format=%s -n 1 HEAD~${index})
        commiterName=$(git log --format=%an -n 1 HEAD~${index})
 		((index+=1))
-		if [[ &quot;${commit_msg}&quot; != &quot;${commitToCompareWith}&quot; ]]
+		if [[ "${commit_msg}" != "${commitToCompareWith}" ]]
 		then
-			commitMsgs=&quot;$(printf &quot;${commitMsgs}\n${commiterName}: ${commit_msg}&quot;)&quot;
+			commitMsgs="$(printf "${commitMsgs}\n${commiterName}: ${commit_msg}")"
 		fi
 	done
-    echo &quot;******************************&quot;
-    printf &apos;%s&apos; &quot;$commitMsgs&quot;
-    echo &quot;******************************&quot;
+    echo "******************************"
+    printf '%s' "$commitMsgs"
+    echo "******************************"
     
     #create the new commit
     cd device_dspg_dvf101-kernel
     git add .
-    git commit -m &quot;${last_commit}&quot; -m &quot;${commitMsgs}&quot;
+    git commit -m "${last_commit}" -m "${commitMsgs}"
 	git push
     
 else
-echo &quot;****************** This is not the last commit, Exit the Build ******************&quot;
+echo "****************** This is not the last commit, Exit the Build ******************"
 fi
 </command>
     </hudson.tasks.Shell>
@@ -239,7 +238,7 @@ fi
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
               <properties>GERRIT_BRANCH=master
-PROJECT=${GERRIT_PROJECT}</properties>
+PROJECT=IPP/Android/device_dspg_dvf101-kernel</properties>
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
