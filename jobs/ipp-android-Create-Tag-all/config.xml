@@ -357,7 +357,7 @@ checkTheQueue() {
 AddAndFetchRepository() {
 
   shortName=$(echo $repoName | rev | cut -d/ -f 1 | rev)  
-  if echo $(git remote -v) | grep -q $repoName; then
+  if echo $(git remote -v) | grep -q "$repoName "; then
     echo Do not define it again, $repoName exist already
   else
     echo Config $repoName to be $shortName
@@ -390,7 +390,7 @@ checkOldSubmit() {
 # Exit without error in case this change was done already
 checkIfDone() {
 
-  if echo $(git remote -v) | grep -q $GERRIT_PROJECT; then
+  if echo $(git remote -v) | grep -q "$GERRIT_PROJECT "; then
     echo Check if they are changes without TAG
     shortRepoName=$(git remote -v | grep $GERRIT_PROJECT | head -1 | cut -f1)
     git clean -fdx
