@@ -133,7 +133,7 @@ echo "**************************************************************************
 echo "    COMPARING SOME FILES BETWEEN CONFIGURATOR AND ROUTER TO the Developers Environment               "
 echo "**************************************************************************************"
 
-exit 0
+#exit 0
 
 
 fileChanged="False"
@@ -146,6 +146,7 @@ do
 	find ${WORKSPACE}/${folders_to_compare1[${i}]} -type f -exec md5sum {} + | sort -k 2 &gt; compare1.txt
     find ${WORKSPACE}/${folders_to_compare2[${i}]} -type f -exec md5sum {} + | sort -k 2 &gt; compare2.txt
     diff -u compare1.txt compare2.txt
+    echo "exit code is: $?"
 done
 
 
