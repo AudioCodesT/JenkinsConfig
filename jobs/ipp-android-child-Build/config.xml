@@ -113,7 +113,7 @@ rm -rf hardware out || echo "not fail the build if clean fails"
 cd ${WORKSPACE}
 
 cd .repo/manifests
-git reset –hard HEAD
+git reset --hard HEAD
 git clean -f
 cd ../../
 
