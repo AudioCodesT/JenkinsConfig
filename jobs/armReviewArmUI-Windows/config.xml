@@ -160,10 +160,10 @@ then
 	echo "killing the proccess of the ng server"
 	taskkill /F /PID "$pidNumber"
 fi
-#echo "RUN: yarn start:prod" 
-#yarn start:prod &amp; sleep 120
-#echo "RUN: yarn e2e:prod"
-#yarn e2e:prod
+echo "RUN: yarn start:prod" 
+yarn start:prod &amp; sleep 120
+echo "RUN: yarn e2e:prod"
+yarn e2e:prod
 </command>
     </hudson.tasks.Shell>
   </builders>
