@@ -127,8 +127,7 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>##!C:\Program Files\Git\bin\bash --login -i
-#!c:\cygwin64\bin\bash --login -i
+      <command>#!c:\cygwin64\bin\bash --login -i
 set -e
 set -x
 
