@@ -127,8 +127,8 @@ every Submit - build and deploy arm-ui-x.x.zip</description>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!C:\Program Files\Git\bin\bash --login -i
-##!c:\cygwin64\bin\bash --login -i
+      <command>##!C:\Program Files\Git\bin\bash --login -i
+#!c:\cygwin64\bin\bash --login -i
 set -e
 set -x
 
@@ -153,16 +153,16 @@ then
 	yarn i
 	echo "RUN: yarn build"
 	yarn build
-#	pidNumber=$(netstat -ano | grep 4200 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
-#	if [[ ! -z "$pidNumber" ]]
-#	then
-#		echo "killing the proccess of the ng server"
-#		taskkill /F /PID "$pidNumber"
-#	fi
-#	echo "RUN: yarn start:prod" 
-#	yarn start:prod &amp; sleep 120
-#	echo "RUN: yarn e2e:prod"
-#	yarn e2e:prod
+	pidNumber=$(netstat -ano | grep 4200 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
+	if [[ ! -z "$pidNumber" ]]
+	then
+		echo "killing the proccess of the ng server"
+		taskkill /F /PID "$pidNumber"
+	fi
+	echo "RUN: yarn start:prod" 
+	yarn start:prod &amp; sleep 120
+	echo "RUN: yarn e2e:prod"
+	yarn e2e:prod
 
 
      #if branch is not master then copy the zip to a new zip with the branch name
