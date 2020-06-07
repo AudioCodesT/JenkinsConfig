@@ -72,16 +72,16 @@ Remove-Item -Force "$env:WORKSPACE\${Router_vhd_name}.vhd"
 #Convert-VHD -Path "$env:WORKSPACE\${Router_vhd_name}.vhdx" -DestinationPath #"D:\${Router_vhd_name}.vhd" -VHDType Fixed
 
 Write-Output "Unzip VHD FILES"
-Expand-Archive -Path "$env:WORKSPACE\${Configurator_vhd_name}.zip" -destinationPath "$env:WORKSPACE"
-Expand-Archive -Path "$env:WORKSPACE\${Router_vhd_name}.zip" -destinationPath "D:\"
+Expand-Archive -Path "$env:WORKSPACE\${Configurator_vhd_name}_vhdx.zip" -destinationPath "$env:WORKSPACE"
+Expand-Archive -Path "$env:WORKSPACE\${Router_vhd_name}_vhdx.zip" -destinationPath "D:\"
 
 Write-Output "Creating 2 new VMs on hyper-v"
-New-VM -Name "${Configurator_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 8GB -Generation 1 -VHDPath "$env:WORKSPACE\${Configurator_vhd_name}.vhd"
-New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -Generation 1 -VHDPath "D:\${Router_vhd_name}.vhd"
+New-VM -Name "${Configurator_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 8GB -Generation 2 -VHDPath "$env:WORKSPACE\${Configurator_vhd_name}.vhdx"
+New-VM -Name "${Router_VmName}" -SwitchName InternalNAT -MemoryStartupBytes 4GB -Generation 2 -VHDPath "D:\${Router_vhd_name}.vhdx"
 Write-Output "starting the 2 VMs"
 Start-VM -name $Configurator_VmName
 Start-VM -name $Router_VmName
-Write-Output "sleep 150"
+Write-Output "sleep 300"
 Start-Sleep -s 150
 Write-Output "Get VMs IP Address"
 #get VMs IP Adress
@@ -260,12 +260,12 @@ ${router_download_URL}</defaultContent>
         <spec>{
     "files": [
         {
-            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.zip",
+            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}*.zip",
             "target": "${workspace}/",
             "flat": "true"
         },
         {
-            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.zip",
+            "pattern": "libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}*.zip",
             "target": "${workspace}/",
             "flat": "true"
         },
