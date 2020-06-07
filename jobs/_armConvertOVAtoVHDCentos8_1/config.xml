@@ -164,9 +164,8 @@ function updateYum  () {
 	HOST=$1
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
 	sudo -i -u root bash &lt;&lt; EOS
-    	set -x
-    	sudo yum clean all
-        sudo yum -y update
+    	set -e
+		sudo dnf clean all &amp;&amp; rm -r /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
         sudo reboot
 EOS
 EOF
@@ -215,7 +214,7 @@ function disableSwap () {
 	HOST=$1
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
 	sudo -i -u root bash &lt;&lt;EOS
-	set -x
+	set -e
 	swapoff -a
     sed -i '/swap/ s/^/#/' /etc/fstab
     sudo reboot
