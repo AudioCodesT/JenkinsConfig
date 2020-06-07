@@ -167,7 +167,7 @@ then
      #if branch is not master then copy the zip to a new zip with the branch name
 	if [ $GERRIT_BRANCH == "master" ] 
     then
-    	PATH=${PATH}:"/c/Program Files/7-Zip"
+    	PATH=${PATH}:"/cygdrive/c/Program Files/7-Zip"
     	7z.exe a -r arm-web-ui-9.2.zip dist/armui/.
     fi
 
