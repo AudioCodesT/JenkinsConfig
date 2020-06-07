@@ -211,6 +211,50 @@ EOS
 EOF
 }
 
+function disableSwap () {
+	HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
+	sudo -i -u root bash &lt;&lt;EOS
+	set -x
+	swapoff -a
+    sed -i '/swap/ s/^/#/' /etc/fstab
+    sudo reboot
+EOS
+EOF
+}
+
+function clearHistory () {
+	HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
+	sudo -i -u root bash &lt;&lt;EOS
+	set -xe
+	history -w
+    history -c
+EOS
+EOF
+}
+
+function prepareForAzure () {
+	HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
+	sudo -i -u root bash &lt;&lt;EOS
+	set -xe
+	sudo waagent -deprovision+user -force
+    export HISTSIZE=0
+EOS
+EOF
+}
+
+function blockRootAccess () {
+	HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
+	sudo -i -u root bash &lt;&lt;EOS
+	set -xe
+	sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+EOS
+EOF
+}
+
 
 function reduceVMSize () {
 	HOST=$1
@@ -222,19 +266,28 @@ function reduceVMSize () {
 EOS
 EOF
 }
-#install Linux Integration Services v4.3 for Hyper-V and Azure  for Configurator and Router VMS
-echo "install lis-rpms.4.3.5 for Configurator VM"  | tee -a $logfile
-installLisRpms $conf_vmIPaddress
-
-echo "install lis-rpms.4.3.5 for Router VM"  | tee -a $logfile
-installLisRpms $router_vmIPaddress
 
 
-echo "Reduce Configurator VM Size"  | tee -a $logfile
-reduceVMSize $conf_vmIPaddress
+function prepareMachine () {
+	HOST=$1
+	modifyNetwork $HOST
+    modifyUdevRules $HOST
+    updateYum $HOST
+    echo "sleep 120 seconds after reboot"
+    sleep 120
+    modifyKernelBoot $HOST
+    installWaagent $HOST
+    blockRootAccess $HOST
+    disableSwap $HOST
+    echo "sleep 120 seconds after reboot"
+    sleep 120
+    clearHistory $HOST
+    prepareForAzure $HOST
 
-echo "Reduce Router VM Size"  | tee -a $logfile
-reduceVMSize $router_vmIPaddress
+}
+
+prepareMachine $conf_vmIPaddress
+prepareMachine $router_vmIPaddress
 
 #wait for VM to UP
 sleep 100
