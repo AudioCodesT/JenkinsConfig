@@ -141,7 +141,7 @@ folders_to_compare1=("ArmCommon/Common/VMFiles/Configurator/opt/apache-tomcat-9.
 folders_to_compare2=("ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/conf" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/bin" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/conf" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/webapps/host-manager/META-INF" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/webapps/manager/META-INF")
 
 folders_to_compare_size=${#folders_to_compare1[@]}
-for i in {1..${folders_to_compare_size}}
+for i in  $(seq 1 ${folders_to_compare_size})
 do
 	find ${WORKSPACE}/${folders_to_compare1[${i}]} -type f -exec md5sum {} + | sort -k 2 &gt; compare1.txt
     find ${WORKSPACE}/${folders_to_compare2[${i}]} -type f -exec md5sum {} + | sort -k 2 &gt; compare2.txt
