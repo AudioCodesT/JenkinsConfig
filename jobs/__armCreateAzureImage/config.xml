@@ -150,11 +150,11 @@ $router_base_image="https://${vhd_storage_account}.blob.core.windows.net/${conta
 $ErrorActionPreference = "Stop"
 
 Write-Output "Stop VMs"
-Stop-VM -Name "$Configurator_VmName" -Force
-Stop-VM -Name "$Router_VmName" -Force
+#Stop-VM -Name "$Configurator_VmName" -Force
+#Stop-VM -Name "$Router_VmName" -Force
 Write-Output "Delete VMs"
-Remove-VM -Name "$Configurator_VmName" -Force
-Remove-VM -Name "$Router_VmName" -Force
+#Remove-VM -Name "$Configurator_VmName" -Force
+#Remove-VM -Name "$Router_VmName" -Force
 
 Write-Output "login to az and azcopy"
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
