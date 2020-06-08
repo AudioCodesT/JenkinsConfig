@@ -35,6 +35,17 @@
           <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>PLATFORM</name>
+          <description/>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Azure</string>
+              <string>HyperV</string>
+              <string>AWS</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -77,15 +88,22 @@ build_raw()
 	qemu-img convert -f vmdk ${WORKSPACE}/VHD_ARM-Conf_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Conf_${TAG}.img
     qemu-img convert -f vmdk ${WORKSPACE}/VHD_ARM-Router_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Router_${TAG}.img
 }
+
+build_aws()
+{
+	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O qcow2 -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.qcow2
+  	qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O qcow2 -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Router_${TAG}.qcow2
+    cd ${WORKSPACE}/artifacts
+	zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhdx
+    zip ARM-Router_${TAG}_vhdx.zip ARM-Router_${TAG}.vhdx
+}
 build_hyperv()
 {
 	cd ${WORKSPACE}/artifacts
 	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
     zip ARM-Conf_${TAG}_vhdx.zip ARM-Conf_${TAG}.vhdx
-    #curl -kv -u ${artifactory_user}:${artifactory_password} -X PUT "https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Conf_${TAG}/" -T ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
     rm -rf ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
     qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
-    #curl -kv -u ${artifactory_user}:${artifactory_password} -X PUT "https://artifactory/libs-release-local/com/ac/arm/VHD/${TAG}/ARM-Router_${TAG}/" -T ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
     zip ARM-Router_${TAG}_vhdx.zip ARM-Router_${TAG}.vhdx
     rm -rf ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
 }
@@ -118,8 +136,19 @@ build_azure()
 open_ova
 build_raw
 clean_workspace
-build_azure
-#build_hyperv</command>
+if [[ $PLATFORM == "HyperV" ]]
+then
+	build_hyperv
+elif [[ $PLATFORM == "Azure" ]]
+then
+	build_azure
+elif [[ $PLATFORM == "AWS" ]]
+then
+	build_aws
+fi
+
+
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
