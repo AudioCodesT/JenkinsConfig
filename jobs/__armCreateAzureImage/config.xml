@@ -57,6 +57,8 @@ Set-Variable -Name "Router_vhd_name" -Value "ARM-Router_$env:TAG"
 Set-Variable -Name "Router_VmName" -Value "ArmRouter$env:TAG"
 
 
+exit 0
+
 
 Write-Output "delete all vms if has"
 Stop-VM -Name "$Configurator_VmName" -Force
@@ -75,7 +77,7 @@ Write-Output "Unzip VHD FILES"
 Expand-Archive -Path "$env:WORKSPACE\${Configurator_vhd_name}.zip" -destinationPath "$env:WORKSPACE"
 Expand-Archive -Path "$env:WORKSPACE\${Router_vhd_name}.zip" -destinationPath "D:\"
 
-exit 0
+
 
 
 Write-Output "Creating 2 new VMs on hyper-v"
@@ -98,11 +100,6 @@ Write-Output "writing IP of the VMS"
 "Configurator_vmIP=$Configurator_vmIP" | Out-File prop -Encoding ascii
 "Router_vmIP=$Router_vmIP" | Out-File -append prop -Encoding ascii</command>
     </hudson.plugins.powershell.PowerShell>
-    <EnvInjectBuilder plugin="envinject@2.3.0">
-      <info>
-        <propertiesFilePath>prop</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
     <hudson.tasks.Shell>
       <command>#!C:\Program Files\Git\bin\bash --login -i
 ##!c:\cygwin64\bin\bash --login -i
