@@ -73,6 +73,13 @@ $router_base_image="https://${vhd_storage_account}.blob.core.windows.net/${conta
 
 $ErrorActionPreference = "Stop"
 
+Write-Output "Unzip VHD FILES"
+37	
+Expand-Archive -Path "$env:WORKSPACE\${Configurator_vhd_name}.zip" -destinationPath "$env:WORKSPACE"
+38	
+Expand-Archive -Path "$env:WORKSPACE\${Router_vhd_name}.zip" -destinationPath "D:\"
+
+
 Write-Output "login to az and azcopy"
 az login --service-principal -u ${jenkins_app_id} -p ${jenkins_secret_key} --tenant ${jenkins_tenant_id}
 $env:AZCOPY_SPA_CLIENT_SECRET="${jenkins_secret_key}"
