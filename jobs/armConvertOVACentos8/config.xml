@@ -63,11 +63,11 @@ Please notice to run Azure you need to run first the jenkins job armConvertOVAto
       <info>
         <scriptContent>if [[ ${PLATFORM} == "Azure" ]]
 then
-      ovaPath=tempOVA
+      echo "ovaPath=tempOVA"
 else
-     ovaPath=OVA
+      echo "ovaPath=OVA"
 fi
-echo ovaPath=${ovaPath}
+
 </scriptContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
