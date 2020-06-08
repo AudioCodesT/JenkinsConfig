@@ -166,7 +166,7 @@ function updateYum  () {
 	sudo -i -u root bash &lt;&lt; EOS
     	set -e
 		sudo dnf clean all &amp;&amp; rm -r /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
-        sudo shutdown --reboot +0 &amp;&amp; exit
+        #sudo shutdown --reboot +0 &amp;&amp; exit
 EOS
 EOF
 }
@@ -217,7 +217,7 @@ function disableSwap () {
 	set -e
 	swapoff -a
     sed -i '/swap/ s/^/#/' /etc/fstab
-	sudo shutdown --reboot +0 &amp;&amp; exit
+	#sudo shutdown --reboot +0 &amp;&amp; exit
 EOS
 EOF
 }
