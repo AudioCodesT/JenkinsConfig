@@ -369,12 +369,13 @@ sleep 30</command>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>TAG=${TAG}</properties>
+                      <properties>TAG=${TAG}
+PLATFORM=Azure</properties>
                       <textParamValueOnNewLine>false</textParamValueOnNewLine>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                   </configs>
-                  <projects>__armConvertOVAtoVHDXCentos8, </projects>
+                  <projects>armConvertOVA, </projects>
                   <condition>SUCCESS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                   <triggerFromChildProjects>false</triggerFromChildProjects>
