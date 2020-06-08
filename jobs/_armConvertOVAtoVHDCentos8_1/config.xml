@@ -191,17 +191,17 @@ function installWaagent  () {
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
 	sudo -i -u root bash &lt;&lt; EOS
     	set -xe
-        sed -i '/ResourceDisk.Format=/d' /etc/waagent.conf
+        #sed -i '/ResourceDisk.Format=/d' /etc/waagent.conf
 		echo 'ResourceDisk.Format=y' &gt;&gt; /etc/waagent.conf
-        sed -i '/ResourceDisk.Filesystem=/d' /etc/waagent.conf
+        #sed -i '/ResourceDisk.Filesystem=/d' /etc/waagent.conf
        	echo 'ResourceDisk.Filesystem=ext4' &gt;&gt; /etc/waagent.conf 
-        sed -i '/ResourceDisk.MountPoint=/d' /etc/waagent.conf
+        #sed -i '/ResourceDisk.MountPoint=/d' /etc/waagent.conf
         echo 'ResourceDisk.MountPoint=/mnt/resource' &gt;&gt; /etc/waagent.conf
-        sed -i '/ResourceDisk.EnableSwap=/d' /etc/waagent.conf
+        #sed -i '/ResourceDisk.EnableSwap=/d' /etc/waagent.conf
         echo 'ResourceDisk.EnableSwap=y' &gt;&gt; /etc/waagent.conf
-        sed -i '/ResourceDisk.SwapSizeMB=/d' /etc/waagent.conf
+        #sed -i '/ResourceDisk.SwapSizeMB=/d' /etc/waagent.conf
         echo 'ResourceDisk.SwapSizeMB=4096' &gt;&gt; /etc/waagent.conf
-        sed -i '/Provisioning.DeleteRootPassword=/d' /etc/waagent.conf
+        #sed -i '/Provisioning.DeleteRootPassword=/d' /etc/waagent.conf
         echo 'Provisioning.DeleteRootPassword=n' &gt;&gt; /etc/waagent.conf
         sudo yum install python-pyasn1 WALinuxAgent
 		sudo systemctl enable waagent
