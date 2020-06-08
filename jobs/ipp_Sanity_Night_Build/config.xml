@@ -1,22 +1,24 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#xd;
-suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#xd;
-configName - name of the predefined session config, e.g. Sanity440LyncConfig&#xd;
-firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#xd;
-1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
-available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no &apos;HD&apos; in firmware name);&#xd;
-2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
-&#xd;
+  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#13;
+suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#13;
+configName - name of the predefined session config, e.g. Sanity440LyncConfig&#13;
+firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#13;
+1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#13;
+available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no 'HD' in firmware name);&#13;
+2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#13;
+&#13;
 Should work on 10.59.1.46 - ippAuto</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>NODE</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -29,7 +31,7 @@ Should work on 10.59.1.46 - ippAuto</description>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -55,19 +57,19 @@ Should work on 10.59.1.46 - ippAuto</description>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DelayTime</name>
-          <description></description>
+          <description/>
           <defaultValue>0</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>ATA_Home</name>
-          <description>if [ &quot;$PC2RUN&quot; == &quot;ippSanityTest01&quot; ]; then 
+          <description>if [ "$PC2RUN" == "ippSanityTest01" ]; then 
    C:/IpPhoneAutomation/ModifeidIterations/ATA
 else
   C:/IpPhoneAutomation/ATA (this is suitable for IGS)
@@ -87,7 +89,7 @@ ServerType ==NonLync for NonLync running (currently non implemented )
         </hudson.model.StringParameterDefinition>
         <org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition plugin="nodelabelparameter@1.7.2">
           <name>PC2RUN</name>
-          <description></description>
+          <description/>
           <allowedSlaves/>
           <defaultSlaves/>
           <triggerIfResult>allowMultiSelectionForConcurrentBuilds</triggerIfResult>
@@ -98,20 +100,20 @@ ServerType ==NonLync for NonLync running (currently non implemented )
         </org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>FeatureName</name>
-          <description>Name of the suite without config name , model , server type and &quot;.suite&quot;
-If suite file name is &quot;Sanity450Lync_Calendar.suite&quot; feature name will be &quot;Calendar&quot;</description>
+          <description>Name of the suite without config name , model , server type and ".suite"
+If suite file name is "Sanity450Lync_Calendar.suite" feature name will be "Calendar"</description>
           <defaultValue>basic</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>UserType</name>
           <description>Online/BossAdmin/ExtOrig...</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BUILD_PARENT</name>
-          <description></description>
+          <description/>
           <defaultValue>0</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -124,9 +126,9 @@ If suite file name is &quot;Sanity450Lync_Calendar.suite&quot; feature name will
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
@@ -145,10 +147,10 @@ sleep $DelayTime
 User=$artifactory_user:$artifactory_pass
 
 net use
-if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
+if ! net use | grep -iqE "OK .* z:.*Firmwares"; then
     echo confige again Z: ----------------------
     net use z: /delete
-    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+    net use z: "\\\\10.59.0.87\\Firmwares"
 fi
 
 line=$(curl -s http://${COMPUTERNAME}/index.php/status/show.xml | tail -1)
@@ -158,25 +160,25 @@ tclsh AtaExec.tcl -stop all
 
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 
-if [ &quot;$BuildRelease&quot; ==  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD C450HD&quot;
-else BoardsList=&quot;440HD 430HD 405HD C450HD 450HD 445HD &quot;
+if [ "$BuildRelease" ==  "3.0.1" ]; then BoardsList="440HD 430HD 420HD 405HD C450HD"
+else BoardsList="440HD 430HD 405HD C450HD 450HD 445HD "
 fi
 
-if [ &quot;$ServerType&quot; == &quot;IGS&quot; ]; then 
-  BoardsList=&quot;445HD C450HD 450HD&quot;
+if [ "$ServerType" == "IGS" ]; then 
+  BoardsList="445HD C450HD 450HD"
   # model=445
   ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 fi
 
-DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+DOWNLOAD=$(echo $ARTIFACTORY | sed 's|api/storage/||')
 
 echo LASTBL: $LASTBL
-if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
-  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+if [ "$LASTBL" = "None" ]; then
+  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d'"' -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
   echo Find: $LASTBL
 fi
 
-if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
+if [ "$LASTBL" == "" ]; then 
   echo Not find LASTBL - Exit with error
   exit 1
 fi
@@ -186,24 +188,24 @@ date
 for BOARD in $BoardsList; do
 
   # In case of 445HD_IGS, the image name is without the _IGS
-  #imageName=UC$(echo $BOARD | sed &apos;s:_IGS::&apos;)_$LASTBL.img
+  #imageName=UC$(echo $BOARD | sed 's:_IGS::')_$LASTBL.img
   
-  imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;.img&quot;
+  imageName="UC"$BOARD"_"$LASTBL".img"
   buildN=$LASTBL
-  if [ &quot;$BuildRelease&quot; == &quot;master&quot; ]; then
-  	if [ &quot;$BOARD&quot; == &quot;440HD&quot; ] || [ &quot;$BOARD&quot; == &quot;430HD&quot; ] || [ &quot;$BOARD&quot; == &quot;405HD&quot; ]; then
-    	if [ &quot;$ServetType&quot; == &quot;IGS&quot; ]; then 
-        	imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_IGS.img&quot;
-            buildN=&quot;${LASTBL}_IGS&quot;
+  if [ "$BuildRelease" == "master" ]||[ "$BuildRelease" == "release/3.4.3" ]; then
+  	if [ "$BOARD" == "440HD" ] || [ "$BOARD" == "430HD" ] || [ "$BOARD" == "405HD" ]; then
+    	if [ "$ServetType" == "IGS" ]; then 
+        	imageName="UC"$BOARD"_"$LASTBL"_IGS.img"
+            buildN="${LASTBL}_IGS"
     	else 
-        	imageName=&quot;UC&quot;$BOARD&quot;_&quot;$LASTBL&quot;_SFB.img&quot;
-            buildN=&quot;${LASTBL}_SFB&quot;
+        	imageName="UC"$BOARD"_"$LASTBL"_SFB.img"
+            buildN="${LASTBL}_SFB"
         fi
     fi
   fi
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/$imageName...
   
-  if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q ${buildN}.img\&quot;; then
+  if curl -ks -u $User -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q ${buildN}.img\"; then
     echo -- Check if $imageName exist in z:
     if [ ! -f z:/$imageName ]; then
       echo ----      Download $imageName to z:
@@ -213,10 +215,10 @@ for BOARD in $BoardsList; do
       # checksum the transfered file. If not equel, exit with error and the job will retry after 30 seconds
       checkSum1=$(curl -ks -u $User -X GET \
             $ARTIFACTORY/$LASTBL/$BOARD/$imageName | \
-            grep md5 | head -1 | cut -d\&quot; -f4)
-      checkSum2=$(md5sum z:/$imageName | cut -d&quot; &quot; -f1)
+            grep md5 | head -1 | cut -d\" -f4)
+      checkSum2=$(md5sum z:/$imageName | cut -d" " -f1)
       echo checksum: $checkSum1 and $checkSum2
-      if [ &quot;$checkSum1&quot; != &quot;$checkSum2&quot; ]; then
+      if [ "$checkSum1" != "$checkSum2" ]; then
         echo CheckSum is not equel.. abort
         rm -f z:/$imageName
         exit 1
@@ -230,16 +232,16 @@ for BOARD in $BoardsList; do
 done
 
 date
-# To solve the &quot;Process leaked file descriptors&quot; problem
+# To solve the "Process leaked file descriptors" problem
 # Or: BUILD_ID=dontKillMe nohup ./yourStartScript.sh &amp;
 # see: https://stackoverflow.com/questions/17024441/process-leaked-file-descriptors-error-on-jenkins
 BUILD_ID=dontKillMe
 export $BUILD_ID
 
 modelImage=UC${model}HD_${LASTBL}.img
-if [ &quot;$BuildRelease&quot; == &quot;master&quot; ]; then
-  	if [ &quot;$model&quot; == &quot;440&quot; ] || [ &quot;$model&quot; == &quot;430&quot; ] || [ &quot;$model&quot; == &quot;405&quot; ]; then
-    	if [ &quot;$ServetType&quot; == &quot;IGS&quot; ]; then 
+if [ "$BuildRelease" == "master" ]; then
+  	if [ "$model" == "440" ] || [ "$model" == "430" ] || [ "$model" == "405" ]; then
+    	if [ "$ServetType" == "IGS" ]; then 
         	modelImage=UC${model}HD_${LASTBL}_IGS.img
     	else 
         	modelImage=UC${model}HD_${LASTBL}_SFB.img
@@ -270,7 +272,7 @@ exit $?</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.3">
             <worstResult>
               <name>ABORTED</name>
               <ordinal>4</ordinal>
@@ -285,7 +287,7 @@ exit $?</command>
             </bestResult>
           </condition>
           <publisherList>
-            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.6.0">
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.9.1">
               <config>
                 <scriptFiles/>
                 <groovyScripts/>
@@ -304,12 +306,12 @@ date
 echo PS list
 pslist -t
 
-#ID=`grep &quot;session id:&quot; ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2`
-ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.xml | tail -1  | sed &apos;s:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::&apos;)
+#ID=`grep "session id:" ${WORKSPACE}/${IMAGENAMES}.${PHASE}.txt  | cut -d: -f2`
+ID=$(curl -s http://localhost/index.php/status/getSessionId/${REGRESSIONTYPE}${MODEL}${ServerType}_${SUITENAME}.xml | tail -1  | sed 's:.*&lt;Session-Id&gt;::; s:&lt;/Session-Id&gt;.*::')
 
 echo Find $ID
 
-if [ &quot;$ID&quot; == &quot;&quot; ]; then exit 1; fi
+if [ "$ID" == "" ]; then exit 1; fi
 
 cd ${ATA_Home}
 
@@ -318,7 +320,7 @@ echo ID=$ID &gt;&gt; $WORKSPACE/properties.txt
 echo CONFIGNAME=${CONFIGNAME} ATA-${ID} &gt;&gt; $WORKSPACE/properties.txt
 
 echo Stop Ata $ID
-if [ &quot;$ID&quot; != &quot;NotFound&quot; ]; then
+if [ "$ID" != "NotFound" ]; then
   tclsh AtaExec.tcl -stop $ID
 fi
 date</command>
@@ -330,7 +332,7 @@ date</command>
               </config>
             </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
@@ -354,17 +356,17 @@ date</command>
       </strategy>
       <operationList/>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -374,8 +376,9 @@ date</command>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER} ${ServerType} ${LASTBL} ${PC2RUN}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
