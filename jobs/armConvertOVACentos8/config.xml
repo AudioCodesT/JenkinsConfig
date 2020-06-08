@@ -1,6 +1,8 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description/>
+  <description>convert ARM Centos 8 OVA to Azure/HyperV/AWS&#13;
+&#13;
+Please notice to run Azure you need to run first the jenkins job armConvertOVAtoVHDCentos8_1</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
@@ -80,7 +82,7 @@ open_ova()
 {
 	tar -xvf ${WORKSPACE}/ARM-Conf_${TAG}.ova
     tar -xvf ${WORKSPACE}/ARM-Router_${TAG}.ova
-    #rename s/VHD_// VHD_ARM*
+    rename s/VHD_// VHD_ARM* || true
 }
 build_raw()
 {
@@ -101,10 +103,10 @@ build_hyperv()
 {
 	cd ${WORKSPACE}/artifacts
 	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
-    zip ARM-Conf_${TAG}_vhdx.zip ARM-Conf_${TAG}.vhdx
+    zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhdx
     rm -rf ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.vhdx
     qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O vhdx -o subformat=dynamic ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
-    zip ARM-Router_${TAG}_vhdx.zip ARM-Router_${TAG}.vhdx
+    zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhdx
     rm -rf ${WORKSPACE}/artifacts/ARM-Router_${TAG}.vhdx
 }
 build_azure()
