@@ -1588,7 +1588,7 @@ sudo yum install -y git-2.18.0</initScript>
       <groupId>sig-affb05f6</groupId>
       <pendingInstances/>
       <labelString>arm-centos8-build</labelString>
-      <idleTerminationMinutes>15</idleTerminationMinutes>
+      <idleTerminationMinutes>3</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
       <labelSet class="sorted-set">
         <hudson.model.labels.LabelAtom>arm-centos8-build</hudson.model.labels.LabelAtom>
@@ -1645,7 +1645,6 @@ sudo yum install -y git-2.18.0</initScript>
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator"/>
         <string>__armConvertOVA</string>
-        <string>__armConvertOVAtoVHDXCentos8</string>
         <string>__armCreateAzureImage</string>
         <string>_armConvertOVAtoVHDCentos8_1</string>
         <string>armBuildArm</string>
