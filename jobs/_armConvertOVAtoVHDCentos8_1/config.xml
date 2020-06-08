@@ -203,7 +203,7 @@ function installWaagent  () {
         echo 'ResourceDisk.SwapSizeMB=4096' &gt;&gt; /etc/waagent.conf
         #sed -i '/Provisioning.DeleteRootPassword=/d' /etc/waagent.conf
         echo 'Provisioning.DeleteRootPassword=n' &gt;&gt; /etc/waagent.conf
-        sudo yum install python-pyasn1 WALinuxAgent
+        sudo dnf install -y python3-pyasn1 WALinuxAgent
 		sudo systemctl enable waagent
 
 EOS
