@@ -81,8 +81,8 @@
 
 cp ${WORKSPACE}/../*.sh ${WORKSPACE}/.
 
-sh -x aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
-sh -x aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
+sh -x aws_buildRouterVM.sh $VERSION_NAME $BRANCH
+sh -x aws_buildTopologyVM.sh $VERSION_NAME $BRANCH 
 
 
 
