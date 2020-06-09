@@ -1,24 +1,26 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>triggered by the job “ipp_GTest_SIM”&#xd;
-1. download logs for all 4 ipp models&#xd;
-2. run grep per model, per gtest, per valgrind&#xd;
-3. vote aggregated to GTest label&#xd;
-4. vote aggregated to Check-Valgrind label&#xd;
+  <description>triggered by the job “ipp_GTest_SIM”&#13;
+1. download logs for all 4 ipp models&#13;
+2. run grep per model, per gtest, per valgrind&#13;
+3. vote aggregated to GTest label&#13;
+4. vote aggregated to Check-Valgrind label&#13;
 5. post message to gerrit if failed with the models name and which test it failed (valgrind or gtest)</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -26,37 +28,37 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_PROJECT</name>
-          <description></description>
+          <description/>
           <defaultValue>IPP/SFB</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFSPEC</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_CHANGE_ID</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_PATCHSET_REVISION</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_HOST</name>
-          <description></description>
+          <description/>
           <defaultValue>gerrit</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -69,12 +71,12 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -84,6 +86,7 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ipp-centos7.4</assignedNode>
@@ -96,98 +99,98 @@
   <builders>
     <hudson.tasks.Shell>
       <command># parameters to post message and score to gerrit
-CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+CURL="curl -kn -u jenkins:${jenkins_pass} --silent"
 base=https://$GERRIT_HOST/a/changes
 id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
 idEscaped=${id////%2F}
-endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+endpoint="/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review"
 
 #parameters to check valgrind and gtest score
 artifactory_host=artifactory
-User=&quot;$artifactory_user:$artifactory_password&quot;
-NEWLINE=$&apos;\n&apos;
-gtest_message_to_send=&quot;&quot;
-valgrind_message_to_send=&quot;&quot;
-gtestFailedAtLeastOnce=&quot;False&quot;
-valgrindFailedAtLeastOnce=&quot;False&quot;
-artifactory_url=&quot;https://$artifactory_host/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs&quot;
-models=(&quot;405HD__SIM&quot; &quot;430HD__SIM&quot; &quot;440HD__SIM&quot; &quot;450HD__SIM&quot;)
+User="$artifactory_user:$artifactory_password"
+NEWLINE=$'\n'
+gtest_message_to_send=""
+valgrind_message_to_send=""
+gtestFailedAtLeastOnce="False"
+valgrindFailedAtLeastOnce="False"
+artifactory_url="https://$artifactory_host/webapp/#/artifacts/browse/tree/General/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs"
+models=("405HD__SIM" "430HD__SIM" "440HD__SIM" "450HD__SIM")
 # run on all models and check if it passed or failed by grep, if failed at least one time, give score -1.
 for model in ${models[@]}
 do
 
   #fetch valgrind Errors
   valgrindRetValue=0
-  grep -E &apos;ERROR SUMMARY: [1-9]+ errors&apos; ${model}* || valgrindRetValue=$?
-  if [[ &quot;$valgrindRetValue&quot; == &quot;0&quot; ]]
+  grep -E 'ERROR SUMMARY: [1-9]+ errors' ${model}* || valgrindRetValue=$?
+  if [[ "$valgrindRetValue" == "0" ]]
   then
-  valgrindSign=&quot;-1&quot;
-  valgrind_message_to_send=&quot;${valgrind_message_to_send}${model} &quot;
-  valgrindFailedAtLeastOnce=&quot;True&quot;
-  elif [[ &quot;$valgrindRetValue&quot; == &quot;1&quot; ]]
+  valgrindSign="-1"
+  valgrind_message_to_send="${valgrind_message_to_send}${model} "
+  valgrindFailedAtLeastOnce="True"
+  elif [[ "$valgrindRetValue" == "1" ]]
   then
-  valgrindSign=&quot;1&quot;
+  valgrindSign="1"
   else
-  echo &quot;ERROR not found GTestLogs Files&quot;
+  echo "ERROR not found GTestLogs Files"
   exit 1
   fi
   
   
   #fetch gtest errors
   gtestRetValue=0
-  grep -E &apos;[1-9]+ FAILED TEST&apos; ${model}* || gtestRetValue=$?
-  if [[ &quot;$gtestRetValue&quot; == &quot;0&quot; ]]
+  grep -E '[1-9]+ FAILED TEST' ${model}* || gtestRetValue=$?
+  if [[ "$gtestRetValue" == "0" ]]
   then
-  gtestSign=&quot;-1&quot;
-  gtest_message_to_send=&quot;${gtest_message_to_send}${model} &quot;
-  gtestFailedAtLeastOnce=&quot;True&quot;
-  elif [[ &quot;$gtestRetValue&quot; == &quot;1&quot; ]]
+  gtestSign="-1"
+  gtest_message_to_send="${gtest_message_to_send}${model} "
+  gtestFailedAtLeastOnce="True"
+  elif [[ "$gtestRetValue" == "1" ]]
   then
-  gtestSign=&quot;1&quot;
+  gtestSign="1"
   else
-  echo &quot;ERROR not found GTestLogs Files&quot;
+  echo "ERROR not found GTestLogs Files"
   exit 1
   fi
 done
 #messages to post to gerrit
-gtest_message_to_send=&quot;${gtest_message_to_send} GTest Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
-valgrind_message_to_send=&quot;${valgrind_message_to_send} valgrind Failed.${NEWLINE}You can see the logs here: ${artifactory_url}&quot;
+gtest_message_to_send="${gtest_message_to_send} GTest Failed.${NEWLINE}You can see the logs here: ${artifactory_url}"
+valgrind_message_to_send="${valgrind_message_to_send} valgrind Failed.${NEWLINE}You can see the logs here: ${artifactory_url}"
 
 #Give Score for GTest
-if [[ $gtestFailedAtLeastOnce == &quot;True&quot; ]]
+if [[ $gtestFailedAtLeastOnce == "True" ]]
 then
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${gtest_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;-1\&quot;}}&quot;
+$CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8" -d "{\"message\": \"${gtest_message_to_send}\", \"tag\": \"jenkins\", \"notify\": \"NONE\",\"labels\": {\"GTest\": \"-1\"}}"
 else
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;GTest\&quot;: \&quot;1\&quot;}}&quot;
+$CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8" -d "{\"tag\": \"jenkins\", \"notify\": \"NONE\",\"labels\": {\"GTest\": \"1\"}}"
 fi
 #Give Score for Valgrind
-if [[ $valgrindFailedAtLeastOnce == &quot;True&quot; ]]
+if [[ $valgrindFailedAtLeastOnce == "True" ]]
 then
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;message\&quot;: \&quot;${valgrind_message_to_send}\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;-1\&quot;}}&quot;
+$CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8" -d "{\"message\": \"${valgrind_message_to_send}\", \"tag\": \"jenkins\", \"notify\": \"NONE\",\"labels\": {\"Valgrind-Check\": \"-1\"}}"
 else
-$CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot; -d &quot;{\&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;,\&quot;labels\&quot;: {\&quot;Valgrind-Check\&quot;: \&quot;1\&quot;}}&quot;
+$CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8" -d "{\"tag\": \"jenkins\", \"notify\": \"NONE\",\"labels\": {\"Valgrind-Check\": \"1\"}}"
 fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh 
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo &quot;TARGET=${TARGET}&quot;
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
+echo "TARGET=${TARGET}"
 </script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>false</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
     </com.lookout.jenkins.EnvironmentScript>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -199,65 +202,57 @@ echo &quot;TARGET=${TARGET}&quot;
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs/*&quot;,
-            &quot;target&quot;: &quot;${workspace}/&quot;,
-             &quot;flat&quot;: &quot;true&quot;
+            "pattern": "ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs/*",
+            "target": "${workspace}/",
+             "flat": "true"
         }   
     ]
 }</spec>
       </downloadSpec>
-      <deployPattern></deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deployPattern/>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -271,8 +266,9 @@ echo &quot;TARGET=${TARGET}&quot;
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}__change:${GERRIT_REFSPEC}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
