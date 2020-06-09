@@ -266,7 +266,6 @@ EOS
 EOF
 }
 
-
 function prepareMachine () {
 	HOST=$1
 	modifyNetwork $HOST
@@ -285,8 +284,72 @@ function prepareMachine () {
 
 }
 
-prepareMachine $conf_vmIPaddress
-prepareMachine $router_vmIPaddress
+
+function prepareMachineForAzure () {
+HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
+	sudo -i -u root bash &lt;&lt; EOS
+    	set -xe
+    	#Modify Network Rules
+        echo 'DEVICE=eth0' &gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'ONBOOT=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'BOOTPROTO=dhcp' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'TYPE=Ethernet' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'USERCTL=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'PEERDNS=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'IPV6INIT=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+        #Modify Udev Rules
+        sudo ln -s /dev/null /etc/udev/rules.d/75-persistent-net-generator.rules
+        #Update Yum
+        sudo dnf clean all &amp;&amp; rm -r /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
+        #Modify Kernel Boot
+        sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"/' /etc/default/grub
+    	sed -i 's/rhgb quiet//g' /etc/default/grub
+        sed -i 's/crashkernel=auto//g' /etc/default/grub
+        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+        echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
+        sudo dracut -f -v
+        #Install Waagent
+        #sed -i '/ResourceDisk.Format=/d' /etc/waagent.conf
+		echo 'ResourceDisk.Format=y' &gt;&gt; /etc/waagent.conf
+        #sed -i '/ResourceDisk.Filesystem=/d' /etc/waagent.conf
+       	echo 'ResourceDisk.Filesystem=ext4' &gt;&gt; /etc/waagent.conf 
+        #sed -i '/ResourceDisk.MountPoint=/d' /etc/waagent.conf
+        echo 'ResourceDisk.MountPoint=/mnt/resource' &gt;&gt; /etc/waagent.conf
+        #sed -i '/ResourceDisk.EnableSwap=/d' /etc/waagent.conf
+        echo 'ResourceDisk.EnableSwap=y' &gt;&gt; /etc/waagent.conf
+        #sed -i '/ResourceDisk.SwapSizeMB=/d' /etc/waagent.conf
+        echo 'ResourceDisk.SwapSizeMB=4096' &gt;&gt; /etc/waagent.conf
+        #sed -i '/Provisioning.DeleteRootPassword=/d' /etc/waagent.conf
+        echo 'Provisioning.DeleteRootPassword=n' &gt;&gt; /etc/waagent.conf
+        sudo dnf install -y python3-pyasn1 WALinuxAgent
+		sudo systemctl enable waagent
+        #block root Access
+        sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+        #disable swap
+        swapoff -a
+    	sed -i '/swap/ s/^/#/' /etc/fstab
+        #clean logs
+        systemctl stop tomcat
+        rm -rf /opt/tomcat/logs/*
+        find /var/log -type f -delete
+        semanage fcontext  -a -t  var_log_t -s system_u '/opt/$tomcatFolder/logs(/.*)?'
+        restorecon -Frvv /opt/$tomcatFolder/logs
+        #clear history
+        history -w
+    	history -c
+        #deprovision machine with waagent
+        sudo waagent -deprovision+user -force
+    	export HISTSIZE=0
+EOS
+EOF
+}
+
+
+
+prepareMachineForAzure $conf_vmIPaddress
+prepareMachineForAzure $router_vmIPaddress
 
 #wait for VM to UP
 sleep 100
