@@ -101,6 +101,11 @@ sh -x ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSION
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.Mailer plugin="mailer@1.32">
+      <recipients>ben.magriso</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>#RnDARMUI@audiocodes.com, #RnDARMRouter@audiocodes.com, 
 cc:shuky.riechard@audiocodes.com,cc:ben.magriso@audiocodes.com</recipientList>
