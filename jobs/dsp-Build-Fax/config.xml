@@ -268,10 +268,11 @@ git add .
 git commit -m "Automatic Commit created by Jenkins from change ${TARGET}"
 git push origin HEAD:refs/for/master
 
+ChangeID=$(git log -1 | grep Change-Id | awk -F 'Change-Id: ' '{print $2}')
 #add doron and Vladimir as reviewers
 ssh -p 29418 jenkins@gerrit gerrit set-reviewers \
 -a Doron.Flint@audiocodes.com -a Vladimir.Ulybin@audiocodes.com \
-${GERRIT_PATCHSET_REVISION}</command>
+${ChangeID}</command>
               </hudson.tasks.Shell>
             </buildSteps>
           </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
