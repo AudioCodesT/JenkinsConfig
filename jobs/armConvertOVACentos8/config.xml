@@ -118,8 +118,8 @@ build_aws()
 	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O qcow2  ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.qcow2
   	qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O qcow2 ${WORKSPACE}/artifacts/ARM-Router_${TAG}.qcow2
     cd ${WORKSPACE}/artifacts
-	zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhdx
-    zip ARM-Router_${TAG}_vhdx.zip ARM-Router_${TAG}.vhdx
+	zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.qcow2
+    zip ARM-Router_${TAG}_vhdx.zip ARM-Router_${TAG}.qcow2
 }
 build_vhdx()
 {
@@ -169,7 +169,6 @@ then
 elif [[ $PLATFORM == "AWS" ]]
 then
 	build_aws
-    deploy_to="AWS"
 fi
 
 echo deploy_to=${deploy_to} &gt; ${WORKSPACE}/prop
