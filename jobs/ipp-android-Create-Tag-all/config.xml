@@ -420,6 +420,9 @@ LastManifestTag=""
 mainBranch=master
 manifestBranch=master
 
+# If the job was executed manually, $PROJECT should be defined
+if [ ! -z "$PROJECT" ]; then GERRIT_PROJECT=$PROJECT; fi
+
 # All this job shoulde start in the repository and in the branch where the Submit was done
 if [ -z $GERRIT_BRANCH ]; then
   echo "No branch found, set to main branch: $mainBranch"
@@ -431,10 +434,7 @@ echo Check if this change was done already, if yes, exit without error
 checkIfDone
 
 echo Sleep 5 minutes before starting check commits
-sleep 300
-
-# If the job was executed manually, $PROJECT should be defined
-if [ ! -z "$PROJECT" ]; then GERRIT_PROJECT=$PROJECT; fi
+#sleep 300
 
 if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
   #Create a TAG on manifests and exit
