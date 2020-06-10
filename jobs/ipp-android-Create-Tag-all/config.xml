@@ -434,7 +434,7 @@ echo Check if this change was done already, if yes, exit without error
 checkIfDone
 
 echo Sleep 5 minutes before starting check commits
-#sleep 300
+sleep 300
 
 if [ "$GERRIT_PROJECT" == "IPP/Android/repo_manifests" ]; then
   #Create a TAG on manifests and exit
