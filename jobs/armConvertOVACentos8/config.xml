@@ -104,7 +104,7 @@ open_ova()
 {
 	tar -xvf ${WORKSPACE}/ARM-Conf_${TAG}.ova
     tar -xvf ${WORKSPACE}/ARM-Router_${TAG}.ova
-    rename s/VHD_// VHD_ARM* || true
+    #rename s/VHD_// VHD_ARM* || true
 }
 build_raw()
 {
