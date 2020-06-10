@@ -169,7 +169,7 @@ yarn e2e:prod
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>cypress\videos\**\*.mp4</artifacts>
+      <artifacts>cypress\videos\arm\**\*.mp4</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
