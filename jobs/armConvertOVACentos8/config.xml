@@ -115,11 +115,9 @@ build_raw()
 
 build_aws()
 {
-	qemu-img convert -f raw ${WORKSPACE}/ARM-Conf_${TAG}.img -O qcow2  ${WORKSPACE}/artifacts/ARM-Conf_${TAG}.qcow2
-  	qemu-img convert -f raw ${WORKSPACE}/ARM-Router_${TAG}.img -O qcow2 ${WORKSPACE}/artifacts/ARM-Router_${TAG}.qcow2
-    cd ${WORKSPACE}/artifacts
-	zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.qcow2
-    zip ARM-Router_${TAG}_vhdx.zip ARM-Router_${TAG}.qcow2
+	cp ${WORKSPACE}/../arm_build_aws.sh ${WORKSPACE}/
+    ./arm_build_aws.sh ARM-Conf_${TAG}
+    ./arm_build_aws.sh ARM-Router_${TAG}
 }
 build_vhdx()
 {
