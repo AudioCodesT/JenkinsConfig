@@ -104,13 +104,13 @@ open_ova()
 {
 	tar -xvf ${WORKSPACE}/ARM-Conf_${TAG}.ova
     tar -xvf ${WORKSPACE}/ARM-Router_${TAG}.ova
-    #rename s/VHD_// VHD_ARM* || true
+    rename "s/VHD_//" "VHD_ARM*" || true
 }
 build_raw()
 {
 
-	qemu-img convert -f vmdk ${WORKSPACE}/VHD_ARM-Conf_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Conf_${TAG}.img
-    qemu-img convert -f vmdk ${WORKSPACE}/VHD_ARM-Router_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Router_${TAG}.img
+	qemu-img convert -f vmdk ${WORKSPACE}/ARM-Conf_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Conf_${TAG}.img
+    qemu-img convert -f vmdk ${WORKSPACE}/ARM-Router_${TAG}-disk1.vmdk -O raw ${WORKSPACE}/ARM-Router_${TAG}.img
 }
 
 build_aws()
