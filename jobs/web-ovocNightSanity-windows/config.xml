@@ -81,9 +81,18 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin64\bin\bash --login -i
+##!C:\Program Files\Git\bin\bash --login -i
+
 set -e
 cd $WORKSPACE
 
+id
+
+chrome_version=$(cmd.exe /C 'wmic datafile where name="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" get Version /value')
+
+echo "*********************************************************************************************************************"
+echo "Google Chrome Version is: $chrome_version"
+echo "*********************************************************************************************************************"
 
 #until branch 7.8.1000 (include) use nvm 12.16.1 (npm 12.16.1 and yarn 1.5.1) from 7.8.2000 use nvm 12.16.2(npm 12.16.2 and yarn 1.22.4)
 if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
@@ -92,7 +101,6 @@ then
 else
 	nvm use 12.16.2
 fi
-
 if [[ "$GERRIT_BRANCH" != "7.4"* ]] &amp;&amp; [[ "$GERRIT_BRANCH" != "7.6" ]]
 then
 # adding ac-infra
@@ -106,6 +114,7 @@ echo "finish submodule"
 fi
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
+
 
 # checking if the private-bower is running
 if [[ "$GERRIT_BRANCH" == "7.4"* ]] || [[ "$GERRIT_BRANCH" == "7.6"* ]]
@@ -137,8 +146,11 @@ else
     	echo "RUN: yarn i"
         yarn i
    fi
-    echo "RUN: yarn run distTest"
-    yarn run distTest 
+   if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8"|| "$GERRIT_BRANCH" == "7.8.1000" ]]
+   then
+    	echo "RUN: yarn run distTest"
+    	yarn run distTest
+    fi
    #kill the Proxy Server process
    pidNumber=$(netstat -ano | grep 9000 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
   echo "pidNumber = $pidNumber"
@@ -172,28 +184,37 @@ else
        		sed -i -- 's/%serverName%/172.17.118.92/g' ${WORKSPACE}/proxyServer.js
         else
         	#temporary
-        	if [[ "$GERRIT_BRANCH" != "7.8.2000" ]]
+        	if [[ "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
             then
             	echo "172.17.118.95"
         		sed -i -- 's/%serverName%/172.17.118.95/g' ${WORKSPACE}/proxyServer.js
+            else
+            	echo "172.17.118.93"
+        		sed -i -- 's/%serverName%/172.17.118.93/g' ${WORKSPACE}/proxyServer.js            
             fi
         fi
         #change username and password
     	sed -i -- 's/%username%/acladmin/g' ${WORKSPACE}/cypress/support/config.ts
         sed -i -- 's/%password%/pass_1234/g' ${WORKSPACE}/cypress/support/config.ts 
-        echo "sed -i -- s/%version%/${BUILD_NUMBER}/g ${WORKSPACE}/cypress/support/config.ts"
      	sed -i -- "s/%version%/${BUILD_NUMBER}/g" ${WORKSPACE}/cypress/support/config.ts
-        echo "build number is: ${BUILD_NUMBER}"
         echo "cat ${WORKSPACE}/cypress/support/config.ts"
         cat ${WORKSPACE}/cypress/support/config.ts
         echo "RUN: yarn run proxyServer"
   	    yarn run proxyServer &amp; sleep 15
-        if [[ "$GERRIT_BRANCH" != "7.8.2000" ]]
+        if [[ "$GERRIT_BRANCH" != "7.4"* &amp;&amp; "$GERRIT_BRANCH" != "7.6"*  &amp;&amp; "$GERRIT_BRANCH" != "7.8" &amp;&amp; "$GERRIT_BRANCH" != "7.8.1000" ]]
         then
-        	echo "RUN: yarn test:jenkins"
-            yarn test:jenkins
-            echo "finish run yarn test:jenkins"
+        	pidNumber=$(netstat -ano | grep 4200 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
+            if [[ ! -z "$pidNumber" ]]
+   			then
+      			echo "killing the proccess of the ng server"
+	  			taskkill /F /PID "$pidNumber"
+   			fi
+        	echo "RUN: yarn run jenkinsServe"
+            yarn run jenkinsServe &amp; sleep 120
         fi
+        echo "RUN: yarn test:jenkins"
+        yarn test:jenkins
+        echo "finish run yarn test:jenkins"
     fi
 fi
 
