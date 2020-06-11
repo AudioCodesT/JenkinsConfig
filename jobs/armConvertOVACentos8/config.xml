@@ -157,9 +157,9 @@ build_vhd()
 
 if [[ ! -f prop ]];then touch prop;fi
 
-#open_ova
-#build_raw
-#clean_workspace
+open_ova
+build_raw
+clean_workspace
 if [[ $PLATFORM == "VHDX" ]]
 then
 	build_vhdx
@@ -168,8 +168,7 @@ then
 	build_vhd
 elif [[ $PLATFORM == "AWS" ]]
 then
-	echo "something"
-	#build_aws
+	build_aws
 fi
 #Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Liav.Elias@audiocodes.com, , cc:Shuky.Riechard@audiocodes.com
 </command>
