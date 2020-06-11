@@ -154,7 +154,8 @@ build_vhd()
     zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhd
     zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhd
 }
-if [[ ! -f ${WORKSPACE}/prop ]]
+
+if [ ! -f ${WORKSPACE}/prop ]
 then
 	touch ${WORKSPACE}/prop
 fi
