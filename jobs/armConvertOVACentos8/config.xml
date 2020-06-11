@@ -61,12 +61,12 @@ Please notice to run Azure you need to run first the jenkins job armConvertOVAto
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
-        <propertiesFilePath>prop</propertiesFilePath>
+        <propertiesFilePath>ova_prop</propertiesFilePath>
         <scriptContent>if [[ ${PLATFORM} == "Azure" ]]
 then
-      echo "ovaPath=tempOVA" &gt; prop
+      echo "ovaPath=tempOVA" &gt; ova_prop
 else
-      echo "ovaPath=OVA" &gt;prop
+      echo "ovaPath=OVA" &gt;ova_prop
 fi
 
 </scriptContent>
