@@ -154,7 +154,7 @@ build_vhd()
     zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhd
     zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhd
 }
-
+touch prop
 #open_ova
 #build_raw
 #clean_workspace
@@ -173,7 +173,7 @@ fi
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
-        <propertiesFilePath>${WORKSPACE}/a_prop</propertiesFilePath>
+        <propertiesFilePath>${WORKSPACE}/prop</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
   </builders>
