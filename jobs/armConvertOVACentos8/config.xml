@@ -271,7 +271,7 @@ fi
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
-      <template>#${BUILD_NUMBER}__${TAG}</template>
+      <template>#${BUILD_NUMBER}__${TAG}__${PLATFORM}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
