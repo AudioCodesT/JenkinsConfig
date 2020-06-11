@@ -155,9 +155,9 @@ build_vhd()
     zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhd
 }
 
-open_ova
-build_raw
-clean_workspace
+#open_ova
+#build_raw
+#clean_workspace
 if [[ $PLATFORM == "VHDX" ]]
 then
 	build_vhdx
