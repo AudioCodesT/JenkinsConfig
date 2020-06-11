@@ -174,7 +174,7 @@ fi
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
-        <propertiesFilePath>prop</propertiesFilePath>
+        <propertiesFilePath>${WORKSPACE}/a_prop</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
   </builders>
