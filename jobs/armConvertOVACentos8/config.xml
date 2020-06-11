@@ -154,7 +154,10 @@ build_vhd()
     zip ARM-Conf_${TAG}.zip ARM-Conf_${TAG}.vhd
     zip ARM-Router_${TAG}.zip ARM-Router_${TAG}.vhd
 }
-touch prop
+if [[ -z prop ]]
+then
+	touch prop
+fi
 #open_ova
 #build_raw
 #clean_workspace
