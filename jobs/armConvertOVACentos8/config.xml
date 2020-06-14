@@ -115,7 +115,6 @@ build_raw()
 
 build_aws()
 {
-	cp ${WORKSPACE}/../arm_build_aws.sh ${WORKSPACE}/
     ./arm_build_aws.sh ARM-Conf_${TAG}
     ./arm_build_aws.sh ARM-Router_${TAG}
 }
@@ -290,6 +289,11 @@ Arm Router: ${routerAmiID}</defaultContent>
         },
         {
             "pattern": "libs-release-local/com/ac/arm/${ovaPath}/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
+            "target": "${workspace}/",
+            "flat": "true"
+        },
+        {
+            "pattern": "Devops/ARM/OVA/centOS8/arm_build_aws.sh",
             "target": "${workspace}/",
             "flat": "true"
         }
