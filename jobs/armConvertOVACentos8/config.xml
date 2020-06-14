@@ -115,8 +115,8 @@ build_raw()
 
 build_aws()
 {
-    ./arm_build_aws.sh ARM-Conf_${TAG}
-    ./arm_build_aws.sh ARM-Router_${TAG}
+    ./arm_build_aws.sh ARM-Conf_${TAG} ${TAG}
+    ./arm_build_aws.sh ARM-Router_${TAG} ${TAG}
 }
 build_vhdx()
 {
