@@ -176,10 +176,12 @@ repo sync -c --no-clone-bundle -j$(nproc) --force-sync
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
-        <timeoutMinutes>240</timeoutMinutes>
+        <timeoutMinutes>120</timeoutMinutes>
       </strategy>
       <operationList>
-        <hudson.plugins.build__timeout.operations.FailOperation/>
+        <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
+          <maxRestarts>1</maxRestarts>
+        </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
       </operationList>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
