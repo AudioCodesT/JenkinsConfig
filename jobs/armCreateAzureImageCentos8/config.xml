@@ -122,7 +122,7 @@ $router_download_URL="${ROUTER_URL}?${SAS_URL}"
 Write-Output "Output Download SAS URL to file"
 "conf_download_URL=$conf_download_URL" | Out-File prop_sas -Encoding ascii
 "router_download_URL=$router_download_URL" | Out-File -append prop_sas -Encoding ascii
-</command>
+#Lina.Fine@audiocodes.com,Moshe.Ben-Eliezer@audiocodes.com,Liav.Elias@audiocodes.com,,cc:Shuky.Riechard@audiocodes.com</command>
     </hudson.plugins.powershell.PowerShell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
@@ -137,7 +137,7 @@ Write-Output "Output Download SAS URL to file"
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
-      <recipientList>Lina.Fine@audiocodes.com,Moshe.Ben-Eliezer@audiocodes.com,Liav.Elias@audiocodes.com,cc:ben.magriso@audiocodes.com,cc:Shuky.Riechard@audiocodes.com</recipientList>
+      <recipientList>cc:ben.magriso@audiocodes.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
