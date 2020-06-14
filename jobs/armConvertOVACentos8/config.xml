@@ -62,7 +62,7 @@ Please notice to run Azure you need to run first the jenkins job armConvertOVAto
     <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>ova_prop</propertiesFilePath>
-        <scriptContent>if [[ ${PLATFORM} == "Azure" ]]
+        <scriptContent>if [[ ${PLATFORM} == "Azure" || ${PLATFORM} == "AWS" ]]
 then
       echo "ovaPath=tempOVA" &gt; ova_prop
 else
