@@ -334,7 +334,7 @@ HOST=$1
         systemctl stop tomcat
         rm -rf /opt/tomcat/logs/* || true
         find /var/log -type f -delete || true
-        semanage fcontext  -a -t  var_log_t -s system_u '/opt/$tomcatFolder/logs(/.*)?' || true
+        semanage fcontext  -a -t  var_log_t -s system_u '/opt/tomcat/logs(/.*)?' || true
         restorecon -Frvv /opt/tomcat/logs || true
         #clear history
         history -w
