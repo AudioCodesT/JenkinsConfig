@@ -349,6 +349,7 @@ EOF
 
 
 prepareMachineForAzure $conf_vmIPaddress
+sleep 100
 prepareMachineForAzure $router_vmIPaddress
 
 #wait for VM to UP
