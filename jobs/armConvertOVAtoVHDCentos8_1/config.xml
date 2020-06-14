@@ -332,10 +332,10 @@ HOST=$1
     	sed -i '/swap/ s/^/#/' /etc/fstab
         #clean logs
         systemctl stop tomcat
-        rm -rf /opt/tomcat/logs/*
-        find /var/log -type f -delete
-        semanage fcontext  -a -t  var_log_t -s system_u '/opt/$tomcatFolder/logs(/.*)?'
-        restorecon -Frvv /opt/$tomcatFolder/logs
+        rm -rf /opt/tomcat/logs/* || true
+        find /var/log -type f -delete || true
+        semanage fcontext  -a -t  var_log_t -s system_u '/opt/$tomcatFolder/logs(/.*)?' || true
+        restorecon -Frvv /opt/tomcat/logs || true
         #clear history
         history -w
     	history -c
