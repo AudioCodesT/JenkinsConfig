@@ -301,12 +301,10 @@ HOST=$1
 		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
         #Modify Udev Rules
         sudo ln -s /dev/null /etc/udev/rules.d/75-persistent-net-generator.rules
-        #add epel release repository
-        sudo dnf install -y epel-release
         #Update Yum
         sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
         #Modify Kernel Boot
-        sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
+        sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
         #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
     	sed -i 's/rhgb quiet//g' /etc/default/grub
         sed -i 's/crashkernel=auto//g' /etc/default/grub
