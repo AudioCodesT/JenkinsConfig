@@ -307,6 +307,9 @@ HOST=$1
         sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"/' /etc/default/grub
     	sed -i 's/rhgb quiet//g' /etc/default/grub
         sed -i 's/crashkernel=auto//g' /etc/default/grub
+        echo "**************************************"
+        cat /etc/default/grub
+        echo "**************************************"
         sudo grub2-mkconfig -o /boot/grub2/grub.cfg
         echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
         sudo dracut -f -v
