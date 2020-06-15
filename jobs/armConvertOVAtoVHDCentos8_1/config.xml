@@ -378,6 +378,8 @@ HOST=$1
         sudo grub2-mkconfig -o /boot/grub2/grub.cfg
         echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
         sudo dracut -f -v
+EOS
+EOF
 }
 
 prepareMachineForAWS $conf_vmIPaddress
