@@ -303,8 +303,6 @@ HOST=$1
         sudo ln -s /dev/null /etc/udev/rules.d/75-persistent-net-generator.rules
         #Update Yum
         sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
-        #fix dracut issues on aws
-        sudo dnf install -y dracut-config-generic
         #Modify Kernel Boot
         sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"' /etc/default/grub
         #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
@@ -394,8 +392,8 @@ EOS
 EOF
 }
 
-prepareMachineForAzure $conf_vmIPaddress
-prepareMachineForAzure $router_vmIPaddress
+prepareMachineForAWS $conf_vmIPaddress
+prepareMachineForAWS $router_vmIPaddress
 
 #wait for VM to UP
 sleep 100
