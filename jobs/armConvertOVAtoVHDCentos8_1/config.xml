@@ -77,18 +77,18 @@ touch $logfile
     
 
 #check if VM name ARM-Conf_$TAG is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Conf_$TAG" | gawk '{print $1}'`
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "vhd_ARM-Conf_$TAG" | gawk '{print $1}'`
 if [ ! -z "$vms" ]
 	then
-	    echo "$(date) : VHD_ARM-Conf_$TAG already exist, I am exiting now"   | tee -a $logfile
+	    echo "$(date) : vhd_ARM-Conf_$TAG already exist, I am exiting now"   | tee -a $logfile
 		exit 1
 fi
     
 #check if VM name ARM-Router_$TAG is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Router_$TAG" | gawk '{print $1}'`
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "vhd_ARM-Router_$TAG" | gawk '{print $1}'`
 if [ ! -z "$vms" ]
 	then
-	    echo "$(date) : VHD_ARM-Router_$TAG already exist, I am exiting now"   | tee -a $logfile
+	    echo "$(date) : vhd_ARM-Router_$TAG already exist, I am exiting now"   | tee -a $logfile
 		exit 1
 fi
 
@@ -96,25 +96,25 @@ fi
 #create a new VM from ARM-Conf_image.ova (ova file is located on jenkins slave
 echo "$(date) : creating new Conf VM from image"  | tee -a $logfile
 OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://root:$vipw@${vmHostIP} 
+ovftool --disableVerification --noSSLVerify --name="vhd_ARM-Conf_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
     echo "$(date) : Deploy new Configuator VM has failed"  | tee -a $logfile
     exit 1
 fi
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave
 echo "$(date) : creating new Router VM from image" 
-ovftool --disableVerification --noSSLVerify --name="VHD_ARM-Router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://root:$vipw@${vmHostIP} 
+ovftool --disableVerification --noSSLVerify --name="vhd_ARM-Router_$TAG" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://root:$vipw@${vmHostIP} 
 if [ $? -ne 0 ]; then
     echo "$(date) : Deploy new Router VM has failed"   | tee -a $logfile
     exit 1
 fi
 
 # find new arm configurator vm id
-conf_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Conf_$TAG" | gawk '{print $1}'`
+conf_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "vhd_ARM-Conf_$TAG" | gawk '{print $1}'`
 echo "$(date) : vm id is $conf_vmid"  | tee -a $logfile
 
 # find new arm configurator vm id
-router_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "VHD_ARM-Router_$TAG" | gawk '{print $1}'`
+router_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "vhd_ARM-Router_$TAG" | gawk '{print $1}'`
 echo "$(date) : vm id is $router_vmid"  | tee -a $logfile
 
 # Wait for power on
@@ -303,6 +303,8 @@ HOST=$1
         sudo ln -s /dev/null /etc/udev/rules.d/75-persistent-net-generator.rules
         #Update Yum
         sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
+        #fix dracut issues on aws
+        sudo dnf install -y dracut-config-generic
         #Modify Kernel Boot
         sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"' /etc/default/grub
         #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
@@ -384,14 +386,16 @@ HOST=$1
         find /var/log -type f -delete
         semanage fcontext  -a -t  var_log_t -s system_u '/opt/tomcat/logs(/.*)?'
         restorecon -Frvv /opt/tomcat/logs 
+        #clear history
+        history -w
+    	history -c
+    	export HISTSIZE=0
 EOS
 EOF
 }
 
-prepareMachineForAWS $conf_vmIPaddress
-
-#prepareMachineForAzure $conf_vmIPaddress
-#prepareMachineForAzure $router_vmIPaddress
+prepareMachineForAzure $conf_vmIPaddress
+prepareMachineForAzure $router_vmIPaddress
 
 #wait for VM to UP
 sleep 100
@@ -412,24 +416,24 @@ sleep 30
 #export both VMS to OVA
 mkdir $WORKSPACE/newOVAs
 echo "$(date) : export new Configurator VM to an OVA file"   | tee -a $logfile
-ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/VHD_ARM-Conf_$TAG $WORKSPACE/newOVAs/VHD_ARM-Conf_$TAG.ova  | tee -a $logfile
+ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/vhd_ARM-Conf_$TAG $WORKSPACE/newOVAs/vhd_ARM-Conf_$TAG.ova  | tee -a $logfile
 ovfResult=$(tail -1 $logfile | grep "Completed")
 if [[ "${ovfResult}" == "Completed with errors" ]] 
 then
 	exit 1
 fi
 cd $WORKSPACE/newOVAs
-mv VHD_ARM-Conf_$TAG.ova ARM-Conf_$TAG.ova
+mv vhd_ARM-Conf_$TAG.ova ARM-Conf_$TAG.ova
 
 echo "$(date) : export new Router VM to an OVA file"   | tee -a $logfile
-ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/VHD_ARM-Router_$TAG $WORKSPACE/newOVAs/VHD_ARM-Router_$TAG.ova  | tee -a $logfile
+ovftool -o --noSSLVerify --powerOffSource vi://root:$vipw@${vmHostIP}/vhd_ARM-Router_$TAG $WORKSPACE/newOVAs/vhd_ARM-Router_$TAG.ova  | tee -a $logfile
 ovfResult=$(tail -1 $logfile | grep "Completed")
 if [[ "${ovfResult}" == "Completed with errors" ]] 
 then
 	exit 1
 fi
 cd $WORKSPACE/newOVAs
-mv VHD_ARM-Router_$TAG.ova ARM-Router_$TAG.ova
+mv vhd_ARM-Router_$TAG.ova ARM-Router_$TAG.ova
 
 
 #terminate both VM MACHINES
