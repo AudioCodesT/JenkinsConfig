@@ -350,9 +350,39 @@ EOS
 EOF
 }
 
+function prepareMachineForAWS () {
+HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
+	sudo -i -u root bash &lt;&lt; EOS
+    	set -xe
+    	#Modify Network Rules
+        echo 'DEVICE=eth0' &gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'ONBOOT=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'BOOTPROTO=dhcp' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'TYPE=Ethernet' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'USERCTL=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'PEERDNS=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+    	echo 'IPV6INIT=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+        #Update Yum
+        sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
+        sudo dnf install -y dracut-config-generic
+        #Modify Kernel Boot
+        sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
+        #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
+    	sed -i 's/rhgb quiet//g' /etc/default/grub
+        sed -i 's/crashkernel=auto//g' /etc/default/grub
+        echo "**************************************"
+        cat /etc/default/grub
+        echo "**************************************"
+        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+        echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
+        sudo dracut -f -v
+}
 
+prepareMachineForAWS $conf_vmIPaddress
 
-prepareMachineForAzure $conf_vmIPaddress
+#prepareMachineForAzure $conf_vmIPaddress
 #prepareMachineForAzure $router_vmIPaddress
 
 #wait for VM to UP
