@@ -302,7 +302,7 @@ HOST=$1
         #Modify Udev Rules
         sudo ln -s /dev/null /etc/udev/rules.d/75-persistent-net-generator.rules
         #add epel release repository
-        sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        sudo dnf install -y epel-release
         #Update Yum
         sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
         #Modify Kernel Boot
