@@ -104,7 +104,7 @@ open_ova()
 {
 	tar -xvf ${WORKSPACE}/ARM-Conf_${TAG}.ova
     tar -xvf ${WORKSPACE}/ARM-Router_${TAG}.ova
-    for file in VHD_*;do mv $file ${file//VHD_};done
+    for file in vhd_*;do mv $file ${file//vhd_};done
 }
 build_raw()
 {
