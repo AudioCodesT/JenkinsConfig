@@ -167,7 +167,6 @@ function updateYum  () {
     	set -e
 		sudo dnf clean all &amp;&amp; rm -r /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
         sudo dnf install -y dracut-config-generic
-        sudo systemctl enable sshd
         sudo shutdown --reboot +0 &amp;&amp; exit
 EOS
 EOF
