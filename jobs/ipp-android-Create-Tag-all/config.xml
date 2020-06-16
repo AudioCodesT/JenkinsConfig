@@ -472,8 +472,9 @@ if [ ! -z "$GERRIT_PROJECT" ]; then
     # Probably this repository wasn't defined in this job
     echo "This local project was not defined in this job , exit with error"
     exit 1;  
-  else 
-    git checkout $findProject/$BRANCH
+  else
+    git clean -fdx
+    git checkout -f $findProject/$BRANCH
   fi
 fi
 
