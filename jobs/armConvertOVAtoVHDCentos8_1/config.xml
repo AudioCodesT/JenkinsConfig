@@ -268,6 +268,19 @@ EOF
 }
 
 
+function cleanTomcatLogs () {
+	HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
+	sudo -i -u root bash &lt;&lt;EOS
+	set -xe
+    systemctl stop tomcat
+	rm -rf /opt/tomcat/logs/*
+    find /var/log -type f -delete
+	semanage fcontext  -a -t  var_log_t -s system_u '/opt/tomcat/logs(/.*)?'
+	restorecon -Frvv /opt/tomcat/logs
+EOS
+EOF
+}
 function reduceVMSize () {
 	HOST=$1
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt;EOF
@@ -288,6 +301,7 @@ function prepareMachineAWS () {
     sleep 120
     modifyKernelBoot $HOST
     blockRootAccess $HOST
+    cleanTomcatLogs $HOST
     clearHistory $HOST
 }
 
@@ -305,6 +319,7 @@ function prepareMachineAzure () {
     disableSwap $HOST
     echo "sleep 120 seconds after reboot"
     sleep 120
+    cleanTomcatLogs $HOST
     clearHistory $HOST
     prepareForAzure $HOST
 
