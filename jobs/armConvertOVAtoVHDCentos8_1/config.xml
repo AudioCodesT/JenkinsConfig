@@ -561,7 +561,7 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
       </passwordEntries>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
-      <template>#${BUILD_NUMBER}__${TAG}</template>
+      <template>#${BUILD_NUMBER}__${TAG}__${PLATFORM}</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
