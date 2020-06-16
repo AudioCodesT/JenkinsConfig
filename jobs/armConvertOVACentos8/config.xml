@@ -171,7 +171,7 @@ elif [[ $PLATFORM == "AWS" ]]
 then
 	build_aws
 fi
-#Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Liav.Elias@audiocodes.com, , cc:Shuky.Riechard@audiocodes.com
+
 </command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
@@ -191,7 +191,7 @@ fi
           </condition>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
-              <recipientList> cc:ben.magriso@audiocodes.com</recipientList>
+              <recipientList>Lina.Fine@audiocodes.com, Pavel.Smolyar@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Liav.Elias@audiocodes.com, cc:Shuky.Riechard@audiocodes.com, cc:ben.magriso@audiocodes.com</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
                   <email>
