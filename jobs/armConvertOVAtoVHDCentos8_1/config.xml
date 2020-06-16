@@ -276,11 +276,11 @@ function prepareMachine () {
     echo "sleep 120 seconds after reboot"
     sleep 120
     modifyKernelBoot $HOST
-    installWaagent $HOST
-    blockRootAccess $HOST
-    disableSwap $HOST
-    echo "sleep 120 seconds after reboot"
-    sleep 120
+#    installWaagent $HOST
+#    blockRootAccess $HOST
+#    disableSwap $HOST
+#    echo "sleep 120 seconds after reboot"
+#    sleep 120
     clearHistory $HOST
 #    prepareForAzure $HOST
 
