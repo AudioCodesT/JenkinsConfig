@@ -397,8 +397,8 @@ EOS
 EOF
 }
 
-prepareMachineForAWS $conf_vmIPaddress
-prepareMachineForAWS $router_vmIPaddress
+prepareMachine $conf_vmIPaddress
+prepareMachine $router_vmIPaddress
 
 #wait for VM to UP
 sleep 100
