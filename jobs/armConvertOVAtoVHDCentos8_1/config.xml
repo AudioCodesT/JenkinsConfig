@@ -36,6 +36,16 @@ steps:&#13;
           <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>PLATFORM</name>
+          <description/>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>VHD</string>
+              <string>AWS</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -177,8 +187,8 @@ function modifyKernelBoot  () {
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
 	sudo -i -u root bash &lt;&lt; EOS
     	set -xe
-        sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=tty0 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
-        #sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
+        #sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=tty0 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
+        sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
         #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=tty0 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"/' /etc/default/grub
     	sed -i 's/rhgb quiet//g' /etc/default/grub
         sed -i 's/crashkernel=auto//g' /etc/default/grub
@@ -220,7 +230,7 @@ function disableSwap () {
 	set -e
 	swapoff -a
     sed -i '/swap/ s/^/#/' /etc/fstab
-	#sudo shutdown --reboot +0 &amp;&amp; exit
+	sudo shutdown --reboot +1 &amp;&amp; exit
 EOS
 EOF
 }
@@ -269,7 +279,19 @@ EOS
 EOF
 }
 
-function prepareMachine () {
+function prepareMachineAWS () {
+	HOST=$1
+	modifyNetwork $HOST
+    modifyUdevRules $HOST
+    updateYum $HOST
+    echo "sleep 120 seconds after reboot"
+    sleep 120
+    modifyKernelBoot $HOST
+    blockRootAccess $HOST
+    clearHistory $HOST
+}
+
+function prepareMachineAzure () {
 	HOST=$1
 	modifyNetwork $HOST
     modifyUdevRules $HOST
@@ -278,129 +300,27 @@ function prepareMachine () {
     echo "sleep 120 seconds after reboot"
     sleep 120
     modifyKernelBoot $HOST
-#    installWaagent $HOST
+    installWaagent $HOST
     blockRootAccess $HOST
-#    disableSwap $HOST
-#    echo "sleep 120 seconds after reboot"
-#    sleep 120
+    disableSwap $HOST
+    echo "sleep 120 seconds after reboot"
+    sleep 120
     clearHistory $HOST
-#    prepareForAzure $HOST
+    prepareForAzure $HOST
 
 }
 
+if [[ "$PLATFORM" == "AWS" ]]
+then
+	prepareMachineAWS $conf_vmIPaddress
+	prepareMachineAWS $router_vmIPaddress
+elif [[ "$PLATFORM" == "VHD" ]]
+then
+	prepareMachineAzure $conf_vmIPaddress
+	prepareMachineAzure $router_vmIPaddress
+fi
 
-function prepareMachineForAzure () {
-HOST=$1
-	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
-	sudo -i -u root bash &lt;&lt; EOS
-    	set -xe
-    	#Modify Network Rules
-        echo 'DEVICE=eth0' &gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'ONBOOT=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'BOOTPROTO=dhcp' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'TYPE=Ethernet' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'USERCTL=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'PEERDNS=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'IPV6INIT=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-        #Modify Udev Rules
-        sudo ln -s /dev/null /etc/udev/rules.d/75-persistent-net-generator.rules
-        #Update Yum
-        sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
-        #Modify Kernel Boot
-        sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"' /etc/default/grub
-        #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
-    	sed -i 's/rhgb quiet//g' /etc/default/grub
-        sed -i 's/crashkernel=auto//g' /etc/default/grub
-        echo "**************************************"
-        cat /etc/default/grub
-        echo "**************************************"
-        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-        echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
-        sudo dracut -f -v
-        #Install Waagent
-        #sed -i '/ResourceDisk.Format=/d' /etc/waagent.conf
-		echo 'ResourceDisk.Format=y' &gt;&gt; /etc/waagent.conf
-        #sed -i '/ResourceDisk.Filesystem=/d' /etc/waagent.conf
-       	echo 'ResourceDisk.Filesystem=ext4' &gt;&gt; /etc/waagent.conf 
-        #sed -i '/ResourceDisk.MountPoint=/d' /etc/waagent.conf
-        echo 'ResourceDisk.MountPoint=/mnt/resource' &gt;&gt; /etc/waagent.conf
-        #sed -i '/ResourceDisk.EnableSwap=/d' /etc/waagent.conf
-        echo 'ResourceDisk.EnableSwap=y' &gt;&gt; /etc/waagent.conf
-        #sed -i '/ResourceDisk.SwapSizeMB=/d' /etc/waagent.conf
-        echo 'ResourceDisk.SwapSizeMB=4096' &gt;&gt; /etc/waagent.conf
-        #sed -i '/Provisioning.DeleteRootPassword=/d' /etc/waagent.conf
-        echo 'Provisioning.DeleteRootPassword=n' &gt;&gt; /etc/waagent.conf
-        sudo dnf install -y python3-pyasn1 WALinuxAgent
-		sudo systemctl enable waagent
-        #block root Access
-        sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-        #disable swap
-        swapoff -a
-    	sed -i '/swap/ s/^/#/' /etc/fstab
-        #clean logs
-        systemctl stop tomcat
-        rm -rf /opt/tomcat/logs/*
-        find /var/log -type f -delete
-        semanage fcontext  -a -t  var_log_t -s system_u '/opt/tomcat/logs(/.*)?'
-        restorecon -Frvv /opt/tomcat/logs 
-        #clear history
-        history -w
-    	history -c
-        #deprovision machine with waagent
-        sudo waagent -deprovision+user -force
-    	export HISTSIZE=0
-EOS
-EOF
-}
 
-function prepareMachineForAWS () {
-HOST=$1
-	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
-	sudo -i -u root bash &lt;&lt; EOS
-    	set -xe
-    	#Modify Network Rules
-        echo 'DEVICE=eth0' &gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'ONBOOT=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'BOOTPROTO=dhcp' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'TYPE=Ethernet' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'USERCTL=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'PEERDNS=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-    	echo 'IPV6INIT=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-        #Update Yum
-        sudo dnf clean all &amp;&amp; sudo rm -rf /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
-        sudo dnf install -y dracut-config-generic
-        #
-        sudo systemctl enable sshd
-        #Modify Kernel Boot
-        sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
-        #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"/' /etc/default/grub
-    	sed -i 's/rhgb quiet//g' /etc/default/grub
-        sed -i 's/crashkernel=auto//g' /etc/default/grub
-        echo "**************************************"
-        cat /etc/default/grub
-        echo "**************************************"
-        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-        echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
-        sudo dracut -f -v
-        
-        #clean tomcat logs
-        systemctl stop tomcat
-        rm -rf /opt/tomcat/logs/*
-        find /var/log -type f -delete
-        semanage fcontext  -a -t  var_log_t -s system_u '/opt/tomcat/logs(/.*)?'
-        restorecon -Frvv /opt/tomcat/logs 
-        #clear history
-        history -w
-    	history -c
-    	export HISTSIZE=0
-EOS
-EOF
-}
-
-prepareMachine $conf_vmIPaddress
-prepareMachine $router_vmIPaddress
 
 #wait for VM to UP
 sleep 100
@@ -484,21 +404,7 @@ sleep 30</command>
                   <configs>
                     <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                       <properties>TAG=${TAG}
-PLATFORM=VHD</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                    <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
-                  </configs>
-                  <projects>armConvertOVACentos8, </projects>
-                  <condition>SUCCESS</condition>
-                  <triggerWithNoParameters>false</triggerWithNoParameters>
-                  <triggerFromChildProjects>false</triggerFromChildProjects>
-                </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-                  <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>TAG=${TAG}
-PLATFORM=AWS</properties>
+PLATFORM=${PLATFORM}</properties>
                       <textParamValueOnNewLine>false</textParamValueOnNewLine>
                     </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
