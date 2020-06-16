@@ -167,6 +167,7 @@ function updateYum  () {
     	set -e
 		sudo dnf clean all &amp;&amp; rm -r /var/cache/dnf  &amp;&amp; sudo dnf upgrade -y &amp;&amp; sudo dnf update -y
         sudo dnf install -y dracut-config-generic
+        sudy systemctl enable sshd
         sudo shutdown --reboot +0 &amp;&amp; exit
 EOS
 EOF
@@ -273,6 +274,7 @@ function prepareMachine () {
 	modifyNetwork $HOST
     modifyUdevRules $HOST
     updateYum $HOST
+    
     echo "sleep 120 seconds after reboot"
     sleep 120
     modifyKernelBoot $HOST
