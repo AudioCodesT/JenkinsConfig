@@ -144,7 +144,7 @@ function modifyNetwork () {
     	echo 'USERCTL=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
     	echo 'PEERDNS=yes' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
     	echo 'IPV6INIT=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
-		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
+#		echo 'NM_CONTROLLED=no' &gt;&gt; "/etc/sysconfig/network-scripts/ifcfg-eth0"
 EOS
 EOF
 }
@@ -179,7 +179,7 @@ function modifyKernelBoot  () {
     	set -xe
         sed -i.bak '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX=\"rootdelay=300 console=ttyS0,115200n8 console=tty0 earlyprintk=ttyS0 net.ifnames=0 edd=off\"' /etc/default/grub
         #sed -i.bak '/GRUB_CMDLINE_LINUX/ s/$/ GRUB_CMDLINE_LINUX=\"rootdelay=300 console=tty0 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0\"/' /etc/default/grub
-    	sed -i 's/rhgb quiet/edd=off/g' /etc/default/grub
+    	sed -i 's/rhgb quiet//g' /etc/default/grub
         sed -i 's/crashkernel=auto//g' /etc/default/grub
         sudo grub2-mkconfig -o /boot/grub2/grub.cfg
         echo add_drivers+=\" hv_vmbus hv_netvsc hv_storvsc \" &gt;&gt; /etc/dracut.conf
