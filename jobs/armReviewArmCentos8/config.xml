@@ -139,7 +139,7 @@ folders_to_compare1=("ArmCommon/Common/VMFiles/Configurator/opt/apache-tomcat-9.
 folders_to_compare2=("ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/conf" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/bin" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/conf" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/webapps/host-manager/META-INF" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/webapps/manager/META-INF")
 
 folders_to_compare_size=${#folders_to_compare1[@]}
-for i in  $(seq 1 ${folders_to_compare_size})
+for i in  $(seq 0 ${folders_to_compare_size})
 do
 	files_diffrence=$(diff -bur ${WORKSPACE}/${folders_to_compare1[${i}]} ${WORKSPACE}/${folders_to_compare2[${i}]} | grep -v '^Only in')
     if [[ "${files_diffrence}" != "" ]]
