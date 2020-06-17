@@ -133,7 +133,7 @@ echo "**************************************************************************
 echo "    COMPARING SOME FILES BETWEEN CONFIGURATOR AND ROUTER TO the Developers Environment               "
 echo "**************************************************************************************"
 
-
+set +e
 fileChanged="False"
 folders_to_compare1=("ArmCommon/Common/VMFiles/Configurator/opt/apache-tomcat-9.0.27/conf" "ArmCommon/Common/VMFiles/Shared/opt/apache-tomcat-9.0.27/bin" "ArmCommon/Common/VMFiles/Shared/opt/apache-tomcat-9.0.27/conf" "ArmCommon/Common/VMFiles/Shared/opt/apache-tomcat-9.0.27/webapps/host-manager/META-INF" "ArmCommon/Common/VMFiles/Shared/opt/apache-tomcat-9.0.27/webapps/manager/META-INF")
 folders_to_compare2=("ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/conf" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/bin" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/conf" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/webapps/host-manager/META-INF" "ArmCommon/Common/DeveloperEnvironment/tomcat/apache-tomcat-9.0.27/webapps/manager/META-INF")
