@@ -144,9 +144,10 @@ do
 	files_diffrence=$(diff -bur ${WORKSPACE}/${folders_to_compare1[${i}]} ${WORKSPACE}/${folders_to_compare2[${i}]} | grep -v '^Only in')
     if [[ "${files_diffrence}" != "" ]]
     then
-    echo "There is a diffrence between the directories: ${WORKSPACE}/${folders_to_compare1[${i}]} ${WORKSPACE}/${folders_to_compare2[${i}]}" &gt; changedFiles.txt
-    echo "The difference is: ${files_diffrence}" &gt; changedFiles.txt
-    fileChanged=True
+    	echo "There is a diffrence between the directories: ${WORKSPACE}/${folders_to_compare1[${i}]} ${WORKSPACE}/${folders_to_compare2[${i}]}" &gt; changedFiles.txt
+    	echo "The difference is: ${files_diffrence}" &gt; changedFiles.txt
+    	fileChanged=True
+    fi
 done
 
 
