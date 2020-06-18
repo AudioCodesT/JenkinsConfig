@@ -230,11 +230,11 @@ then
                   echo "*** adding Jenkins BUILD_NUMBER as a version in file webpack.config.js ***"
                   perl -pi -e "s/\"%version%\"/\"${BUILD_NUMBER}\"/g" webpack.config.js
               fi
-   		    if [[ "$GERRIT_BRANCH" != "7.4"* &amp;&amp; "$GERRIT_BRANCH" != "7.6"*  &amp;&amp; "$GERRIT_BRANCH" != "7.8" &amp;&amp; "$GERRIT_BRANCH" != "7.8.1000" ]]
-   			then
-    			echo "RUN: yarn run distTest"
-    			yarn run distTest
-   			fi
+   		      if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8"|| "$GERRIT_BRANCH" == "7.8.1000" ]]
+   			  then
+    	      		echo "RUN: yarn run distTest"
+    				yarn run distTest
+    		  fi
             
              #kill the Proxy Server process
             pidNumber=$(netstat -ano | grep 9000 | awk '{print $5}' | head -n 1  | sed -e "s/[[:space:]]\+/ /g")
