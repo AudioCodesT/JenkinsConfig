@@ -105,7 +105,9 @@ Take the issue in commit message:  only IF status is In-Progress THEN move the i
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>/opt/devops/tools/update-jira/update_Code-Review.pl \
+      <command>if echo $GERRIT_BRANCH | grep -q ^private/; then exit 0; fi
+
+/opt/devops/tools/update-jira/update_Code-Review.pl \
 "$GERRIT_CHANGE_COMMIT_MESSAGE" "$GERRIT_CHANGE_URL" "$JiraPass"</command>
     </hudson.tasks.Shell>
   </builders>
