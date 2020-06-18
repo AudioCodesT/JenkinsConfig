@@ -270,7 +270,7 @@ then
                   		#temporary
         				if [[ "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
             			then
-                       		 echo "172.17.118.95"
+                       		 echo "172.17.118.92"
         					sed -i -- 's/%serverName%/172.17.118.92/g' ${WORKSPACE}/proxyServer.js
             			else
             				echo "172.17.118.93"
