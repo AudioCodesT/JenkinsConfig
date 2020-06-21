@@ -200,7 +200,7 @@ sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Com
 echo "$(date) : run create_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh -oStrictHostKeyChecking=no root@${vmIPaddress} &lt;&lt; EOF
 	set -xe
-    cat &lt;&lt; 'EOS' &gt; ${HOME}/AUDC2016.cer
+    cat &lt;&lt; 'EOS' &gt; /root/AUDC2016.cer
 -----BEGIN CERTIFICATE-----
 MIIFuDCCA6CgAwIBAgIQG5DSb8NKUYJK1U6xTLTlRTANBgkqhkiG9w0BAQ0FADBk
 MRMwEQYKCZImiZPyLGQBGRYDY29tMRowGAYKCZImiZPyLGQBGRYKYXVkaW9jb2Rl
@@ -235,7 +235,7 @@ peitA/lOlYGE3DAptUoSpBpHOsB1BJEJ4Hz7MYO7tA8kH00WzuEx5Kw93voG76JY
 TlFgcDc2WETWYgFeiv5Yx4AQsmbJtegjBcQJ6w==
 -----END CERTIFICATE-----
 EOS
-	sudo mv ${HOME}/AUDC2016.cer /etc/pki/ca-trust/source/anchors/AUDC2016.cer
+	sudo mv /root/AUDC2016.cer /etc/pki/ca-trust/source/anchors/AUDC2016.cer
     sudo update-ca-trust
 	cd /tmp
 	cd arm_utils
