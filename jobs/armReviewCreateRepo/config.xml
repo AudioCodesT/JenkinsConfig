@@ -242,7 +242,24 @@ EOS
 	python3 create_repo.py
     sudo rm -rf /etc/pki/ca-trust/source/anchors/AUDC2016.cer
     sudo update-ca-trust
-EOF</command>
+EOF
+
+echo "$(date) : copy offline_repo from $vmIPaddress /tmp to jenkins slave"  | tee -a $logfile
+sshpass -p password scp -oStrictHostKeyChecking=no root@${vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/cent92install-repo.tar.gz
+
+
+#graceful shutdouwn BOTH VM
+echo "$(date) : shutdown new  VM"  | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
+sleep 30
+
+#terminate  VM MACHINE
+echo "$(date) : delete new VM"   | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${vmid}
+sleep 30
+
+
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -276,7 +293,15 @@ EOF</command>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec/>
+        <spec>{
+    "files": [
+        {
+            "pattern": "${WORKSPACE}/cent92install-repo.tar.gz",
+            "target": "libs-release-local/com/ac/arm/offline_repo/review/${GERRIT_CHANGE_NUMBER}/",
+             "recursive": "false"
+        }
+]
+}</spec>
       </uploadSpec>
       <downloadSpec>
         <spec/>
