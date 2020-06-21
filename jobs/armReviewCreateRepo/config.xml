@@ -195,7 +195,7 @@ echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 
 #ssh to Router VM and copy arm_utils  to /tmp folder
 echo "$(date) : copy $arm_utils_file_name  and $offile_repository_file_name files to Router VM $vmIPaddress to /tmp"  | tee -a $logfile
-sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/arm_utils root@${vmIPaddress}:/tmp/arm_utils
+sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils root@${vmIPaddress}:/tmp/arm_utils
 
 echo "$(date) : run create_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh -oStrictHostKeyChecking=no root@${vmIPaddress} &lt;&lt; EOF
