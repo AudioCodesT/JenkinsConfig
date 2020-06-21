@@ -170,6 +170,17 @@ EOS
 EOF
 }
 
+function updateYumRepos  () {
+	HOST=$1
+	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
+	sudo -i -u root bash &lt;&lt; EOS
+    	set -xe
+        curl -ku devops_read:devops_read -X GET https://artifactory/Devops/Tools/Azure/arm/CentOS8/CentOS-Base.repo -o /etc/yum.repos.d/CentOS-Base.repo
+EOS
+EOF
+}
+
+
 function updateYum  () {
 	HOST=$1
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
@@ -309,6 +320,7 @@ function prepareMachineAzure () {
 	HOST=$1
 	modifyNetwork $HOST
     modifyUdevRules $HOST
+    updateYumRepos $HOST
     updateYum $HOST
     
     echo "sleep 120 seconds after reboot"
