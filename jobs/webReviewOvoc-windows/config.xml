@@ -199,7 +199,7 @@ else
     	echo "RUN: yarn i"
         yarn i
    fi
-   if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8"|| "$GERRIT_BRANCH" == "7.8.1000" ]]
+   if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" || "$GERRIT_BRANCH" == "7.8.2000" ]]
    then
     	echo "RUN: yarn run distTest"
     	yarn run distTest
