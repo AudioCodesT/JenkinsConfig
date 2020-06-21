@@ -197,8 +197,6 @@ echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
 echo "$(date) : copy $arm_utils_file_name  and $offile_repository_file_name files to Router VM $vmIPaddress to /tmp"  | tee -a $logfile
 sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/arm_utils root@${vmIPaddress}:/tmp/arm_utils
 
-exit 1
-
 echo "$(date) : run create_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh -oStrictHostKeyChecking=no root@${vmIPaddress} &lt;&lt; EOF
 	set -xe
@@ -236,7 +234,7 @@ vOq50OLigP9cF14t9xac12YzfqYEJ2CSdCNgD784+sBgsbf0711jmrTrwVXIwjk3
 peitA/lOlYGE3DAptUoSpBpHOsB1BJEJ4Hz7MYO7tA8kH00WzuEx5Kw93voG76JY
 TlFgcDc2WETWYgFeiv5Yx4AQsmbJtegjBcQJ6w==
 -----END CERTIFICATE-----
-EOF
+EOS
 	sudo mv ${HOME}/AUDC2016.cer /etc/pki/ca-trust/source/anchors/AUDC2016.cer
     sudo update-ca-trust
 	cd /tmp
