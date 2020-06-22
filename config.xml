@@ -810,7 +810,78 @@
       <name>sig-9290e243</name>
       <accountId></accountId>
       <groupId>sig-9290e243</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-04247b3c45dc1ed79</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-04247b3c45dc1ed79</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:38.51 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-08fc3566b43ecf170</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-08fc3566b43ecf170</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:46.504 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-04ed60da3381b8d00</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-04ed60da3381b8d00</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:38.51 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-0b7050db6fd1c09e2</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0b7050db6fd1c09e2</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:17.738 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-0fd09963bf1f1405c</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0fd09963bf1f1405c</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:38.51 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-0a4cc8213504dcafd</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0a4cc8213504dcafd</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:38.51 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+        <entry>
+          <string>i-04ac729c8a19c5552</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-04ac729c8a19c5552</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>ipp-centos7.4</requestedLabel>
+            <createdAt>2020-06-22 12:40:38.51 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>ipp-centos7.4</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/opt/jenkinsslave</workspaceDir>
@@ -1688,13 +1759,13 @@ sudo yum install -y git-2.18.0</initScript>
         <string>armConvertOVACentos8</string>
         <string>armConvertOVAtoVHD_1</string>
         <string>armConvertOVAtoVHD_2</string>
-        <string>armConvertOVAtoVHDCentos8_1</string>
         <string>armCreateAmiFromOVA</string>
         <string>armCreateAzureImage</string>
         <string>armCreateAzureImageCentos8</string>
         <string>armCreateCentos8Restore</string>
         <string>armCreateUpgradeTarball</string>
         <string>armPrepareNightSanity</string>
+        <string>armPrepareOVAforAMIorVHD</string>
         <string>armPromoteVersion</string>
         <string>armPublishAMI</string>
         <string>armReleaseSanity</string>
