@@ -431,14 +431,9 @@ sleep 30</command>
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
-                    <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-                      <properties>TAG=${TAG}
-PLATFORM=${PLATFORM}</properties>
-                      <textParamValueOnNewLine>false</textParamValueOnNewLine>
-                    </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
                     <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
                   </configs>
-                  <projects>armConvertOVACentos8, </projects>
+                  <projects>armConvertOVACentos8</projects>
                   <condition>SUCCESS</condition>
                   <triggerWithNoParameters>false</triggerWithNoParameters>
                   <triggerFromChildProjects>false</triggerFromChildProjects>
