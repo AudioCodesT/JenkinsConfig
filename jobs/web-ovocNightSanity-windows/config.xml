@@ -108,7 +108,7 @@ echo "git submodule update"
 git submodule update
 echo "finish submodule"
 # delete yarn.lock file which failing the build (auto generated in yarn install)
-#rm -rf yarn.lock
+rm -rf yarn.lock src/yarn.lock
 fi
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
