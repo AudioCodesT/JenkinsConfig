@@ -1,15 +1,15 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>armConvertOVAtoVHD_1&#13;
-this is the first job&#13;
-purpose: prepare ARM OVA to azure (by tag)&#13;
-steps:&#13;
+  <description>Centos 8 -  prepare ova before converting to aws or Azure or Hyper-V image&#13;
+this job is the first step&#13;
+the second step is to call a job that convert the ova to the relevant image.&#13;
+&#13;
 1. take OVA from Artifactory by tag&#13;
-2. deploy in esxi&#13;
-3. ssh and install the sw package&#13;
+2. deploy in esxi 6.5&#13;
+3. make many changes&#13;
 4. export to a new OVA&#13;
-5. deploy to Artifactory to tempo folder&#13;
-6. call the second job that will convert the temp ova to VHD</description>
+5. deploy to Artifactory to temp folder&#13;
+6. call the second job that will convert the temp ova to the relevant image</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
