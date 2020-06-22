@@ -13,7 +13,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -44,7 +44,7 @@
       <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -60,16 +60,18 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
     </extensions>
   </scm>
   <assignedNode>ipp-android-dynamic</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
       <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
@@ -193,21 +195,24 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.propertie
 
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@2.2.2">
-      <token>Jira-update</token>
+    <org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration plugin="Parameterized-Remote-Trigger@3.1.2">
       <remoteJenkinsName>test-jenkins</remoteJenkinsName>
-      <job>Update-Jira</job>
+      <auth2 class="org.jenkinsci.plugins.ParameterizedRemoteTrigger.auth2.NullAuth"/>
       <shouldNotFailBuild>true</shouldNotFailBuild>
-      <pollInterval>3</pollInterval>
-      <connectionRetryLimit>5</connectionRetryLimit>
+      <trustAllCertificates>false</trustAllCertificates>
+      <overrideTrustAllCertificates>false</overrideTrustAllCertificates>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
+      <httpPostReadTimeout>0</httpPostReadTimeout>
+      <httpGetReadTimeout>0</httpGetReadTimeout>
+      <pollInterval>3</pollInterval>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
-      <enhancedLogging>false</enhancedLogging>
+      <job>Update-Jira</job>
+      <token>Jira-update</token>
       <parameters>NEWTAG=$NEWTAG
 RN=$RN
 GERRIT_HOST=$GERRIT_HOST
@@ -216,31 +221,24 @@ PROJECT=$PROJECT
 DATE=$DATE
 GERRIT_BRANCH=$GERRIT_BRANCH
 AuthorCommitter=$AuthorCommitter</parameters>
-      <parameterList>
-        <string>NEWTAG=$NEWTAG</string>
-        <string>RN=$RN</string>
-        <string>GERRIT_HOST=$GERRIT_HOST</string>
-        <string>EMAIL=$EMAIL</string>
-        <string>PROJECT=$PROJECT</string>
-        <string>DATE=$DATE</string>
-        <string>GERRIT_BRANCH=$GERRIT_BRANCH</string>
-        <string>AuthorCommitter=$AuthorCommitter</string>
-      </parameterList>
-      <overrideAuth>false</overrideAuth>
-      <auth>
-        <org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-          <NONE>none</NONE>
-          <API__TOKEN>apiToken</API__TOKEN>
-          <CREDENTIALS__PLUGIN>credentialsPlugin</CREDENTIALS__PLUGIN>
-        </org.jenkinsci.plugins.ParameterizedRemoteTrigger.Auth>
-      </auth>
+      <enhancedLogging>false</enhancedLogging>
       <loadParamsFromFile>false</loadParamsFromFile>
       <parameterFile></parameterFile>
-      <queryString></queryString>
+      <maxConn>0</maxConn>
+      <useCrumbCache>false</useCrumbCache>
+      <useJobInfoCache>false</useJobInfoCache>
+      <abortTriggeredJob>false</abortTriggeredJob>
+      <disabled>false</disabled>
+      <hostPermits>
+        <entry>
+          <string>test-jenkins</string>
+          <int>0</int>
+        </entry>
+      </hostPermits>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
@@ -251,7 +249,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}
               <textParamValueOnNewLine>false</textParamValueOnNewLine>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>ipp-android-parent-Build,</projects>
+          <projects>ipp-android-parent-Build</projects>
           <condition>UNSTABLE_OR_BETTER</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
           <triggerFromChildProjects>false</triggerFromChildProjects>
@@ -260,7 +258,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -277,23 +275,11 @@ BUILD_BRANCH=${GERRIT_BRANCH}
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
         <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
-      <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
-        <overridingCredentials>false</overridingCredentials>
-        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
-      </resolverCredentialsConfig>
+      <resolverCredentialsConfig reference="../deployerCredentialsConfig"/>
       <useSpecs>false</useSpecs>
       <uploadSpec>
         <spec></spec>
@@ -317,7 +303,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}
       <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}___${NEWTAG}</template>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
