@@ -38,7 +38,9 @@ the second step is to call a job that convert the ova to the relevant image.&#13
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>PLATFORM</name>
-          <description/>
+          <description>VHD - is for Azure or Hyper-V
+AWS - is for Amazon AMI
+</description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>VHD</string>
