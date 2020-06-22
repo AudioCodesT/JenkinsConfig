@@ -564,16 +564,6 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
-      <injectGlobalPasswords>false</injectGlobalPasswords>
-      <maskPasswordParameters>true</maskPasswordParameters>
-      <passwordEntries>
-        <EnvInjectPasswordEntry>
-          <name>root_password</name>
-          <value>{AQAAABAAAAAQJpFlccuyfS37e8Cmeq34Bgx7Tai46uxM7sBwjKu3KLw=}</value>
-        </EnvInjectPasswordEntry>
-      </passwordEntries>
-    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}__${PLATFORM}</template>
       <descriptionTemplate/>
