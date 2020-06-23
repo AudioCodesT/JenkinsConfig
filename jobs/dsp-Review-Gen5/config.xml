@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.14">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.14">
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -21,7 +23,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -29,8 +31,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -46,20 +48,20 @@
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
+        <secureGroovyScript plugin="script-security@1.71">
           <script>import hudson.*
 import jenkins.model.*
 
 
 ProjectName=currentBuild.properties.environment.GERRIT_PROJECT
 map=null
-if (ProjectName.equals(&quot;DSP/Gen5/repo_manifests&quot;))
+if (ProjectName.equals("DSP/Gen5/repo_manifests"))
 {
-return [REFSPEC: &quot;+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}&quot;]
+return [REFSPEC: "+refs/heads/${GERRIT_BRANCH}:refs/remotes/origin/${GERRIT_BRANCH}"]
 }
 return map</script>
           <sandbox>false</sandbox>
@@ -71,8 +73,9 @@ return map</script>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -91,7 +94,7 @@ return map</script>
     <extensions>
       <hudson.plugins.git.extensions.impl.WipeWorkspace/>
       <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.27.5">
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.30.5">
           <separator>#</separator>
         </buildChooser>
       </hudson.plugins.git.extensions.impl.BuildChooserSetting>
@@ -105,7 +108,7 @@ return map</script>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>false</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>30</timeout>
         <depth>0</depth>
         <honorRefspec>false</honorRefspec>
@@ -118,8 +121,8 @@ return map</script>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -145,31 +148,33 @@ return map</script>
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
           <excludeNoCodeChange>true</excludeNoCodeChange>
+          <excludePrivateState>false</excludePrivateState>
+          <excludeWipState>false</excludeWipState>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -190,11 +195,11 @@ return map</script>
       </values>
     </hudson.matrix.LabelAxis>
   </axes>
-  <combinationFilter>(label == &apos;dsp-centos-dynamic&apos; &amp;&amp; CHIP_NAME == &apos;Intel&apos;) || (label == &apos;dsp-win-dynamic&apos; &amp;&amp; CHIP_NAME != &apos;Intel&apos; &amp;&amp; CHIP_NAME != &apos;GRX&apos;) || (label == &apos;dsp-grx-slave&apos; &amp;&amp; CHIP_NAME == &apos;GRX&apos;) </combinationFilter>
+  <combinationFilter>(label == 'dsp-centos-dynamic' &amp;&amp; CHIP_NAME == 'Intel') || (label == 'dsp-win-dynamic' &amp;&amp; CHIP_NAME != 'Intel' &amp;&amp; CHIP_NAME != 'GRX') || (label == 'dsp-grx-slave' &amp;&amp; CHIP_NAME == 'GRX') </combinationFilter>
   <builders>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
-      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
         <arg1>${label}</arg1>
         <arg2>dsp-win-dynamic</arg2>
         <ignoreCase>false</ignoreCase>
@@ -206,57 +211,57 @@ set -xe
 cd ${WORKSPACE}
 
 
-echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
+echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}"
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
-echo &quot;repo sync&quot;
+echo "repo sync"
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd Gen5
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
+echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC"
 git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
-echo &quot;sh copyModules.sh&quot;
+echo "sh copyModules.sh"
 sh copyModules.sh
-echo &quot;cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE&quot;
+echo "cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE"
 cp /cygdrive/c/TI/NMAKE/NMAKE.EXE ${WORKSPACE}/Gen5/${CHIP_NAME}/Device/NMAKE.EXE
 
 
-echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
-OLDTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
+echo "******************* change ${CHIP_NAME} makefile version number****************************"
+OLDTAG=$(git describe --first-parent --tags | sed 's/\(.*\)-.*/\1/')
 VER=${OLDTAG}
-VERSION=$(echo ${OLDTAG} | cut -d&apos;.&apos; -f1)
-SUBVERSION=$(echo ${OLDTAG} | cut -d&apos;.&apos; -f2)
-sed -i &quot;s/%major.minor%/${VER}/g&quot; ${CHIP_NAME}/Device/makefile
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/Device/makefile
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/Device/makefile
-echo &quot;*******************************************************************************************&quot;
+VERSION=$(echo ${OLDTAG} | cut -d'.' -f1)
+SUBVERSION=$(echo ${OLDTAG} | cut -d'.' -f2)
+sed -i "s/%major.minor%/${VER}/g" ${CHIP_NAME}/Device/makefile
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/Device/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/Device/makefile
+echo "*******************************************************************************************"
 
 ls -al ${WORKSPACE}/Gen5/Modules/Ec
 ls -al ${WORKSPACE}/Gen5/Modules
 cd ${WORKSPACE}
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
-          <command>cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Device&quot;&#xd;
-NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1&#xd;
-&#xd;
-if %ERRORLEVEL% NEQ 0 exit &#xd;
-echo “Successful completion”&#xd;
-&#xd;
-&#xd;
-cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Out&#xd;
-powershell Compress-Archive . Out.zip&#xd;
-cd &quot;%WORKSPACE%\Gen5\%CHIP_NAME%\Misc&#xd;
+          <command>cd "%WORKSPACE%\Gen5\%CHIP_NAME%\Device"&#13;
+NMAKE.EXE ReBuildAll BUILD_ON_MAKER_MACHINE=1&#13;
+&#13;
+if %ERRORLEVEL% NEQ 0 exit &#13;
+echo “Successful completion”&#13;
+&#13;
+&#13;
+cd "%WORKSPACE%\Gen5\%CHIP_NAME%\Out&#13;
+powershell Compress-Archive . Out.zip&#13;
+cd "%WORKSPACE%\Gen5\%CHIP_NAME%\Misc&#13;
 powershell Compress-Archive . Misc.zip</command>
         </hudson.tasks.BatchFile>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.3.6">
-      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
-      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
         <arg1>${label}</arg1>
         <arg2>dsp-centos-dynamic</arg2>
         <ignoreCase>false</ignoreCase>
@@ -265,7 +270,7 @@ powershell Compress-Archive . Misc.zip</command>
         <hudson.tasks.Shell>
           <command>compile_intel(){
 cd ${WORKSPACE}/Gen5/Intel/$1
-output_textfile_name=$(echo $1 | sed &apos;s/\//_/g&apos;)
+output_textfile_name=$(echo $1 | sed 's/\//_/g')
 make clean
 make all
 }
@@ -277,60 +282,60 @@ set -xe
 
 
 
-echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
+echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}"
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
-echo &quot;repo sync&quot;
+echo "repo sync"
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd Gen5
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
+echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC"
 git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
-echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
+echo "sh copyModules.sh ${CHIP_NAME}"
 sh copyModules.sh ${CHIP_NAME}
 
 
-echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
-OLDTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
-VERSION=$(echo ${OLDTAG} | cut -d&apos;.&apos; -f1)
-SUBVERSION=$(echo ${OLDTAG} | cut -d&apos;.&apos; -f2)
-RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
+echo "******************* change ${CHIP_NAME} makefile version number****************************"
+OLDTAG=$(git describe --first-parent --tags | sed 's/\(.*\)-.*/\1/')
+VERSION=$(echo ${OLDTAG} | cut -d'.' -f1)
+SUBVERSION=$(echo ${OLDTAG} | cut -d'.' -f2)
+RELEASE_DATE=$(date +"%Y%d%m")
 RELEASE_DATE=$(expr $RELEASE_DATE + 0)
-echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-sed -i &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-echo &quot;update ${CHIP_NAME}/SoftHost/Src/VersionInfo.h&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
-sed -i &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
-echo &quot;update ${CHIP_NAME}/SoftDsp/communicator_64/makefile&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/communicator_64/makefile
-echo &quot;update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
-echo &quot;update ${CHIP_NAME}/SoftHost/communicator_64/makefile&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/communicator_64/makefile
-echo &quot;update ${CHIP_NAME}/SoftHost/Hpi_64/makefile&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftHost/Hpi_64/makefile
-echo &quot;*******************************************************************************************&quot;
+echo "update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+sed -i "s/%RELEASE_DATE%/${RELEASE_DATE}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+echo "update ${CHIP_NAME}/SoftHost/Src/VersionInfo.h"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+sed -i "s/%RELEASE_DATE%/${RELEASE_DATE}/g" ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+echo "update ${CHIP_NAME}/SoftDsp/communicator_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+echo "update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+echo "update ${CHIP_NAME}/SoftHost/communicator_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftHost/communicator_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftHost/communicator_64/makefile
+echo "update ${CHIP_NAME}/SoftHost/Hpi_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+echo "*******************************************************************************************"
 
 
 
 	
-if [[ &quot;$GERRIT_REFSPEC&quot; == &quot;refs/changes/83/35183&quot;* ]]
+if [[ "$GERRIT_REFSPEC" == "refs/changes/83/35183"* ]]
 then
-	run_make=(&quot;GpuMaster/communicator_64&quot; &quot;SoftDsp/communicator_64&quot; &quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/communicator_64&quot; &quot;SoftHost/Hpi_64&quot;)
+	run_make=("GpuMaster/communicator_64" "SoftDsp/communicator_64" "SoftDsp/Hpi_64" "SoftHost/communicator_64" "SoftHost/Hpi_64")
 else
-	run_make=(&quot;SoftDsp/communicator_64&quot; &quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/communicator_64&quot; &quot;SoftHost/Hpi_64&quot;)
+	run_make=("SoftDsp/communicator_64" "SoftDsp/Hpi_64" "SoftHost/communicator_64" "SoftHost/Hpi_64")
 fi
 #run all 4 make in parallel (SoftDsp and SoftHost)
-if [[ ${CHIP_NAME} == &quot;Intel&quot; ]]
+if [[ ${CHIP_NAME} == "Intel" ]]
 then
 	for path_to_run_make in ${run_make[@]}
 	do
@@ -338,14 +343,14 @@ then
 	done
 fi
 wait
-echo &quot;Finish running make for SoftDsp and SoftHost&quot;
+echo "Finish running make for SoftDsp and SoftHost"
 cd ${WORKSPACE}
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties
 
-echo &quot;******************* Set ${CHIP_NAME} Extended Attributes  ***************************&quot;
-#files_to_set_attributes=(&quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*&quot;)
-files_to_set_attributes=(&quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot; &quot;${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;)
+echo "******************* Set ${CHIP_NAME} Extended Attributes  ***************************"
+#files_to_set_attributes=("${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*")
+files_to_set_attributes=("${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*")
 for file_to_set_attribue in ${files_to_set_attributes[@]}
 do
 	setfattr -n user.Version -v ${VERSION} ${file_to_set_attribue}
@@ -354,12 +359,12 @@ do
 	setfattr -n user.Revision -v 0 ${file_to_set_attribue}
     getfattr -d ${file_to_set_attribue}
 done
-echo &quot;*******************************************************************************************&quot;</command>
+echo "*******************************************************************************************"</command>
         </hudson.tasks.Shell>
       </conditionalbuilders>
     </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
     <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.3.6">
-      <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.0">
+      <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
         <arg1>${label}</arg1>
         <arg2>dsp-grx-slave</arg2>
         <ignoreCase>false</ignoreCase>
@@ -367,44 +372,44 @@ echo &quot;*********************************************************************
       <buildStep class="hudson.tasks.Shell">
         <command>compile_grx(){
 cd ${WORKSPACE}/Gen5/GRX/$1
-output_textfile_name=$(echo $1 | sed &apos;s/\//_/g&apos;)
+output_textfile_name=$(echo $1 | sed 's/\//_/g')
 make clean
 make all
 }
-run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
+run_make=("SoftDsp/Hpi_64" "SoftHost/Hpi_64")
 
 cd ${WORKSPACE}
 set -xe
 
-echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}&quot;
+echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}"
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
-echo &quot;repo sync&quot;
+echo "repo sync"
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd Gen5
 
-echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC&quot;
+echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC"
 git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
-echo &quot;sh copyModules.sh ${CHIP_NAME}&quot;
+echo "sh copyModules.sh ${CHIP_NAME}"
 sh copyModules.sh ${CHIP_NAME}
 
 
-echo &quot;******************* change ${CHIP_NAME} makefile version number****************************&quot;
-OLDTAG=$(git describe --first-parent --tags | sed &apos;s/\(.*\)-.*/\1/&apos;)
-VERSION=$(echo ${OLDTAG} | cut -d&apos;.&apos; -f1)
-SUBVERSION=$(echo ${OLDTAG} | cut -d&apos;.&apos; -f2)
-RELEASE_DATE=$(date +&quot;%Y%d%m&quot;)
+echo "******************* change ${CHIP_NAME} makefile version number****************************"
+OLDTAG=$(git describe --first-parent --tags | sed 's/\(.*\)-.*/\1/')
+VERSION=$(echo ${OLDTAG} | cut -d'.' -f1)
+SUBVERSION=$(echo ${OLDTAG} | cut -d'.' -f2)
+RELEASE_DATE=$(date +"%Y%d%m")
 RELEASE_DATE=$(expr $RELEASE_DATE + 0)
-echo &quot;update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-sed -i &quot;s/%RELEASE_DATE%/${RELEASE_DATE}/g&quot; ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
-echo &quot;update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile&quot;
-sed -i &quot;s/%major%/${VERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
-sed -i &quot;s/%minor%/${SUBVERSION}/g&quot; ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
-echo &quot;*******************************************************************************************&quot;
+echo "update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+sed -i "s/%RELEASE_DATE%/${RELEASE_DATE}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+echo "update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+echo "*******************************************************************************************"
 
 
 
@@ -429,33 +434,36 @@ echo &quot;*********************************************************************
 #******************************Finish temporary workaround*************************************
 
 #add neccessary toolchain to the slave machine
-sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx&quot;
+
+sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c "set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx" \
+|| sleep 10  &amp;&amp; sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c "set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx" \\
+|| sleep 10  &amp;&amp; sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c "set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;make clean;chmod 775 fwhostpkg/*;chmod 775 make_file_grx;./make_file_grx"
 if [[ $GERRIT_BRANCH == 723 || $GERRIT_BRANCH == 724 ]]
 then
-	GRX_SUBVERSION=$(echo ${SUBVERSION} | cut -d&apos;-&apos; -f1)
-	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c &quot;set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.${VERSION}.${GRX_SUBVERSION} grxdsp fw_grx.map;rm -rf Soft*.bin Soft*.srec&quot;
+	GRX_SUBVERSION=$(echo ${SUBVERSION} | cut -d'-' -f1)
+	sudo /dce/scripts/dce.sh -a chroot -e UGW7.2 -c "set -xe;cd ${WORKSPACE}/Gen5/GRX/SoftDsp/Hpi_64;chmod 775 GrxCreateVersion;ls -al;./GrxCreateVersion grx ac_fw_grx.fwb AC506012ae3.${VERSION}.${GRX_SUBVERSION} grxdsp fw_grx.map;rm -rf Soft*.bin Soft*.srec"
 fi
-#export STAGING_DIR=&quot;/usr/local/UGW7.2/staging_dir&quot;
-#export LD_LIBRARY_PATH=&quot;/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib&quot;
+#export STAGING_DIR="/usr/local/UGW7.2/staging_dir"
+#export LD_LIBRARY_PATH="/usr/local/UGW7.2/staging_dir/toolchain-mips_mips32_gcc-4.8-linaro_uClibc-0.9.33.2/lib"
 
 #run all 2 make in parallel (SoftDsp and SoftHost)
-#if [[ ${CHIP_NAME} == &quot;GRX&quot; ]]
+#if [[ ${CHIP_NAME} == "GRX" ]]
 #then
-#	run_make=(&quot;SoftDsp/Hpi_64&quot; &quot;SoftHost/Hpi_64&quot;)
+#	run_make=("SoftDsp/Hpi_64" "SoftHost/Hpi_64")
 #	for path_to_run_make in ${run_make[@]}
 #	do
 #		compile_grx $path_to_run_make
 #	done
 #fi
 #wait
-#echo &quot;Finish running make for GRX&quot;
+#echo "Finish running make for GRX"
 cd ${WORKSPACE}
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
       </buildStep>
-      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
     </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>generated_dsp.properties</propertiesFilePath>
       </info>
@@ -472,8 +480,8 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -485,103 +493,95 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/Out/Out.zip&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/Out/Out.zip",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/Misc/Misc.zip&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Misc/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/Misc/Misc.zip",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Misc/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         }, 
        {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         },
        {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/*.fwb&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/*.fwb",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/AC506012ae3*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/AC506012ae3*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/fw*.map&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/fw*.map",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         }, 
        {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*&quot;,
-            &quot;target&quot;: &quot;dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
         }
     ]
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
-      <deployPattern></deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deployPattern/>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>(label == &apos;dsp-win-dynamic&apos; || label == &apos;dsp-centos-dynamic&apos; || label == &apos;dsp-grx-slave&apos;)</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>(label == 'dsp-win-dynamic' || label == 'dsp-centos-dynamic' || label == 'dsp-grx-slave')</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -591,8 +591,9 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER} Branch:${GERRIT_BRANCH}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
