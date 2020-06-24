@@ -28,6 +28,8 @@
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
       <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
@@ -37,7 +39,8 @@
     
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>dsp-gen3-ipp-dvf</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -48,6 +51,17 @@
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
           <pattern>DSP/Gen3/IPP/DVF</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>DSP/Gen3/IPP/DVF/repo_manifests</pattern>
           <branches>
             <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
               <compareType>ANT</compareType>
@@ -101,16 +115,27 @@
       <command>cd ${WORKSPACE}
 set -xe
 
-echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${GERRIT_BRANCH}"
-repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+#if it's repo_manifests project then repo init the change, else repo init the branch
+if [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
+then
+	what_to_build=${GERRIT_BRANCH}
+elif [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
+	what_to_build=${GERRIT_REFSPEC}
+fi
+
+echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${what_to_build}"
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${what_to_build}
 echo "repo sync -j$(nproc) --force-sync"
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd DVF
+if [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
+then
+	echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC"
+	git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+fi
 
-echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC"
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 #copy all modules to relevant path in Gen5 Modules directory
 echo "sh copyModules.sh"
 sh copyModules.sh
