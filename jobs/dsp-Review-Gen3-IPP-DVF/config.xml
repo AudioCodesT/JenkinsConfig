@@ -163,8 +163,8 @@ make
 make headers
 make app_libs
 EOF
-
-elif [[ "$GERRIT_BRANCH" == "SDK80" ]]
+elif [[ "$GERRIT_BRANCH" == "SDK280" ]]
+then
 DVF99 -SDK280:
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash –norc &lt;&lt; EOF
 rm -rf output
