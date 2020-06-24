@@ -1660,6 +1660,41 @@ sudo yum install -y git-2.18.0</initScript>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
       </executorsForTypes>
     </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
+    <hudson.plugins.spotinst.cloud.AwsSpotinstCloud plugin="spotinst@2.0.20">
+      <name>sig-0a05afd7</name>
+      <accountId></accountId>
+      <groupId>sig-0a05afd7</groupId>
+      <pendingInstances/>
+      <labelString>dsp-gen3-ipp-dvf</labelString>
+      <idleTerminationMinutes>5</idleTerminationMinutes>
+      <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
+      <labelSet class="sorted-set">
+        <hudson.model.labels.LabelAtom>dsp-gen3-ipp-dvf</hudson.model.labels.LabelAtom>
+      </labelSet>
+      <usage>EXCLUSIVE</usage>
+      <tunnel></tunnel>
+      <vmargs></vmargs>
+      <executorsForInstanceType>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M5xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+        <entry>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M4Xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <int>1</int>
+        </entry>
+      </executorsForInstanceType>
+      <executorsForTypes>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M4Xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+        <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+          <awsInstanceType>M5xlarge</awsInstanceType>
+          <executors>1</executors>
+        </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
+      </executorsForTypes>
+    </hudson.plugins.spotinst.cloud.AwsSpotinstCloud>
   </clouds>
   <quietPeriod>5</quietPeriod>
   <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
