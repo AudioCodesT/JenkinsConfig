@@ -125,7 +125,7 @@ then
 fi
 
 echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${what_to_build}"
-repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${what_to_build}
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${what_to_build}
 echo "repo sync -j$(nproc) --force-sync"
 repo sync -j$(nproc) --force-sync
 
@@ -134,7 +134,7 @@ cd DVF
 if [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
 then
 	echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC"
-	git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+	git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 fi
 
 #copy all modules to relevant path in Gen5 Modules directory
