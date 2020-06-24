@@ -146,7 +146,7 @@ chmod -R 775 ${WORKSPACE}/DVF/delivery
 if [[ "$GERRIT_BRANCH" == "SDK135" ]]
 then
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
-cd ${WORKSPACE}/DVF/delivery
+cd ${WORKSPACE}/DVF/delivery/build
 rm -rf output
 make clean
 make config_evb99
@@ -157,7 +157,7 @@ EOF
 elif [[ "$GERRIT_BRANCH" == "SDK240" ]]
 then
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
-cd ${WORKSPACE}/DVF/delivery
+cd ${WORKSPACE}/DVF/delivery/build
 rm -rf output
 make clean
 make config_evb101
@@ -168,7 +168,7 @@ EOF
 elif [[ "$GERRIT_BRANCH" == "SDK280" ]]
 then
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
-cd ${WORKSPACE}/DVF/delivery
+cd ${WORKSPACE}/DVF/delivery/build
 rm -rf output
 make clean
 make config_evb99_split
