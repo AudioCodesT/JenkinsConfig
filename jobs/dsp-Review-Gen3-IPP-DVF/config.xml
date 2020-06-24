@@ -119,7 +119,7 @@ set -xe
 if [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
 then
 	what_to_build=${GERRIT_BRANCH}
-elif [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
+elif [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF/repo_manifests" ]]
 	what_to_build=${GERRIT_REFSPEC}
 fi
 
