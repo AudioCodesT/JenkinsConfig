@@ -94,9 +94,10 @@ build_raw()
 build_aws()
 {
 	export PATH=${PATH}:/usr/local/bin
+    qaAccount="191324562914"
 	chmod 777 arm_build_aws.sh
-    ./arm_build_aws.sh ARM-Conf_${TAG} ${TAG}
-    ./arm_build_aws.sh ARM-Router_${TAG} ${TAG}
+    ./arm_build_aws.sh ARM-Conf_${TAG} ${TAG} ${qaAccount}
+    ./arm_build_aws.sh ARM-Router_${TAG} ${TAG} ${qaAccount}
 }
 build_vhdx()
 {
