@@ -72,6 +72,7 @@ return map</script>
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
+      <contributors/>
     </EnvInjectJobProperty>
     
   </properties>
@@ -117,7 +118,7 @@ return map</script>
   </scm>
   <assignedNode>dsp-centos-dynamic</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -185,6 +186,12 @@ return map</script>
       <values>
         <string>chips2compile.yml</string>
       </values>
+      <computedValues>
+        <string>Ac501</string>
+        <string>Ac503</string>
+        <string>Intel</string>
+        <string>GRX</string>
+      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
