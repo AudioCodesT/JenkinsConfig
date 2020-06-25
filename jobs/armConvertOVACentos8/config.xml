@@ -61,7 +61,34 @@ Please notice to run Azure you need to run first the jenkins job: armPrepareOVAf
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     
   </properties>
-  <scm class="hudson.scm.NullSCM"/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://jenkins@gerrit:29418/devops/tools</url>
+        <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+      <hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+        <sparseCheckoutPaths>
+          <hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+            <path>scripts/arm</path>
+          </hudson.plugins.git.extensions.impl.SparseCheckoutPath>
+        </sparseCheckoutPaths>
+      </hudson.plugins.git.extensions.impl.SparseCheckoutPaths>
+    </extensions>
+  </scm>
   <assignedNode>arm-ConvertOVACentos8</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
@@ -148,6 +175,7 @@ then
 	build_vhd
 elif [[ $PLATFORM == "AWS" ]]
 then
+	cp ${WORKSPACE}/scripts/arm/arm_build_aws.sh ${WORKSPACE}/
 	build_aws
 fi
 
@@ -275,11 +303,6 @@ Arm Router: ${routerAmiID}</defaultContent>
         },
         {
             "pattern": "libs-release-local/com/ac/arm/tempOVA/${PLATFORM}/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
-            "target": "${workspace}/",
-            "flat": "true"
-        },
-        {
-            "pattern": "Devops/ARM/OVA/centOS8/arm_build_aws.sh",
             "target": "${workspace}/",
             "flat": "true"
         }
