@@ -282,6 +282,14 @@ $BUILD_URL
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+        <timeoutMinutes>90</timeoutMinutes>
+      </strategy>
+      <operationList>
+        <hudson.plugins.build__timeout.operations.AbortOperation/>
+      </operationList>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.6.3">
       <colorMapName>xterm</colorMapName>
