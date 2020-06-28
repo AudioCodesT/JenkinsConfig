@@ -1,22 +1,40 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>GERRIT_BRANCH</name>
+          <description/>
+          <defaultValue>723</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CHIP_NAME</name>
+          <description/>
+          <defaultValue>Intel</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
       <maxConcurrentPerNode>0</maxConcurrentPerNode>
       <maxConcurrentTotal>0</maxConcurrentTotal>
@@ -24,11 +42,12 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>dsp-test</assignedNode>
+  <assignedNode>dsp_centos8</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -37,19 +56,211 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!c:\cygwin64\bin\bash --login -i
-set -e
-cd $WORKSPACE
+      <command>compile_intel(){
+cd ${WORKSPACE}/Gen5/Intel/$1
+output_textfile_name=$(echo $1 | sed 's/\//_/g')
+make clean
+make all
+}
 
-repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b 722
-repo sync
+cd ${WORKSPACE}
+set -xe
+
+
+
+
+
+echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}"
+repo init -u ssh://jenkins@gerrit:29418/DSP/Gen5/repo_manifests -b ${GERRIT_BRANCH}
+echo "repo sync"
+repo sync -j$(nproc) --force-sync
+
+# cd to releant path
 cd Gen5
-sh copyModules.sh
-cp /c/TI/NMAKE/NMAKE.exe ${WORKSPACE}/Gen5/Ac505/Device/NMAKE.exe
-NMAKE.exe ReBuildAll BUILD_ON_MACHINE=1
-</command>
+
+echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC"
+git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+#copy all modules to relevant path in Gen5 Modules directory
+echo "sh copyModules.sh ${CHIP_NAME}"
+sh copyModules.sh ${CHIP_NAME}
+
+
+echo "******************* change ${CHIP_NAME} makefile version number****************************"
+OLDTAG=$(git describe --first-parent --tags | sed 's/\(.*\)-.*/\1/')
+VERSION=$(echo ${OLDTAG} | cut -d'.' -f1)
+SUBVERSION=$(echo ${OLDTAG} | cut -d'.' -f2)
+RELEASE_DATE=$(date +"%Y%d%m")
+RELEASE_DATE=$(expr $RELEASE_DATE + 0)
+echo "update ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+sed -i "s/%RELEASE_DATE%/${RELEASE_DATE}/g" ${CHIP_NAME}/SoftDsp/Src/VersionInfo.h
+echo "update ${CHIP_NAME}/SoftHost/Src/VersionInfo.h"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+sed -i "s/%RELEASE_DATE%/${RELEASE_DATE}/g" ${CHIP_NAME}/SoftHost/Src/VersionInfo.h
+echo "update ${CHIP_NAME}/SoftDsp/communicator_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/communicator_64/makefile
+echo "update ${CHIP_NAME}/SoftDsp/Hpi_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftDsp/Hpi_64/makefile
+echo "update ${CHIP_NAME}/SoftHost/communicator_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftHost/communicator_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftHost/communicator_64/makefile
+echo "update ${CHIP_NAME}/SoftHost/Hpi_64/makefile"
+sed -i "s/%major%/${VERSION}/g" ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+sed -i "s/%minor%/${SUBVERSION}/g" ${CHIP_NAME}/SoftHost/Hpi_64/makefile
+echo "*******************************************************************************************"
+
+
+
+	
+if [[ "$GERRIT_REFSPEC" == "refs/changes/83/35183"* ]]
+then
+	run_make=("GpuMaster/communicator_64" "SoftDsp/communicator_64" "SoftDsp/Hpi_64" "SoftHost/communicator_64" "SoftHost/Hpi_64")
+else
+	run_make=("SoftDsp/communicator_64" "SoftDsp/Hpi_64" "SoftHost/communicator_64" "SoftHost/Hpi_64")
+fi
+#run all 4 make in parallel (SoftDsp and SoftHost)
+if [[ ${CHIP_NAME} == "Intel" ]]
+then
+	for path_to_run_make in ${run_make[@]}
+	do
+		compile_intel $path_to_run_make
+	done
+fi
+wait
+echo "Finish running make for SoftDsp and SoftHost"
+cd ${WORKSPACE}
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
+if [[ "${label}" == "dsp-centos-dynamic" ]]
+then
+centos_ver=Centos7
+elif [[ "${label}" == "dsp-centos8-slave" ]]
+then
+centos_ver=Centos8
+fi
+
+echo centos_ver=${centos_ver} &gt;&gt; generated_dsp.properties
+echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties
+
+
+
+echo "******************* Set ${CHIP_NAME} Extended Attributes  ***************************"
+#files_to_set_attributes=("${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*")
+files_to_set_attributes=("${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*")
+for file_to_set_attribue in ${files_to_set_attributes[@]}
+do
+	setfattr -n user.Version -v ${VERSION} ${file_to_set_attribue}
+	setfattr -n user.SubVersion -v ${SUBVERSION}  ${file_to_set_attribue}
+	setfattr -n user.Date -v ${RELEASE_DATE}  ${file_to_set_attribue}
+	setfattr -n user.Revision -v 0 ${file_to_set_attribue}
+    getfattr -d ${file_to_set_attribue}
+done
+echo "*******************************************************************************************"</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
-  <buildWrappers/>
+  <buildWrappers>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
+      <deployerDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </deployerDetails>
+      <resolverDetails>
+        <artifactoryName>797876730@1453721585664</artifactoryName>
+        <artifactoryUrl>https://artifactory</artifactoryUrl>
+        <stagingPlugin/>
+      </resolverDetails>
+      <deployerCredentialsConfig>
+        <credentialsId/>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </deployerCredentialsConfig>
+      <resolverCredentialsConfig>
+        <credentialsId/>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
+      <useSpecs>true</useSpecs>
+      <uploadSpec>
+        <spec>{
+    "files": [
+        {
+            "pattern": "Gen5/${CHIP_NAME}/Out/Out.zip",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
+        },
+        {
+            "pattern": "Gen5/${CHIP_NAME}/Misc/Misc.zip",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Misc/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
+        },
+        {
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
+             "recursive": "false"
+        }, 
+       {
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
+             "recursive": "false"
+        },
+       {
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/*.fwb",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
+        },
+        {
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/AC506012ae3*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
+        },
+        {
+            "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/fw*.map",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
+        },
+        {
+            "pattern": "Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
+             "recursive": "false"
+        }, 
+       {
+            "pattern": "Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
+             "recursive": "false"
+        },
+        {
+            "pattern": "Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+             "recursive": "false"
+        }
+    ]
+}</spec>
+      </uploadSpec>
+      <downloadSpec>
+        <spec/>
+      </downloadSpec>
+      <deployPattern/>
+      <resolvePattern/>
+      <deploymentProperties/>
+      <deployBuildInfo>true</deployBuildInfo>
+      <includeEnvVars>false</includeEnvVars>
+      <envVarsPatterns>
+        <includePatterns/>
+        <excludePatterns>*password*,*secret*,*key*</excludePatterns>
+      </envVarsPatterns>
+      <discardOldBuilds>false</discardOldBuilds>
+      <discardBuildArtifacts>true</discardBuildArtifacts>
+      <asyncBuildRetention>false</asyncBuildRetention>
+      <multiConfProject>false</multiConfProject>
+      <customBuildName/>
+      <overrideBuildName>false</overrideBuildName>
+    </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+  </buildWrappers>
 </project>
