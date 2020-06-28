@@ -78,8 +78,7 @@ repo sync -j$(nproc) --force-sync
 # cd to releant path
 cd Gen5
 
-echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC"
-git fetch ssh://jenkins@gerrit:29418/DSP/Gen5 $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
+
 #copy all modules to relevant path in Gen5 Modules directory
 echo "sh copyModules.sh ${CHIP_NAME}"
 sh copyModules.sh ${CHIP_NAME}
