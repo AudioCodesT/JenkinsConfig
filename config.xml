@@ -1003,18 +1003,7 @@
       <name>sig-8ac26a53</name>
       <accountId></accountId>
       <groupId>sig-8ac26a53</groupId>
-      <pendingInstances>
-        <entry>
-          <string>i-0a16fbbe4c9224e4f</string>
-          <hudson.plugins.spotinst.cloud.PendingInstance>
-            <id>i-0a16fbbe4c9224e4f</id>
-            <status>INSTANCE_INITIATING</status>
-            <numOfExecutors>1</numOfExecutors>
-            <requestedLabel>ipp-android-dynamic</requestedLabel>
-            <createdAt>2020-06-28 06:51:46.256 UTC</createdAt>
-          </hudson.plugins.spotinst.cloud.PendingInstance>
-        </entry>
-      </pendingInstances>
+      <pendingInstances/>
       <labelString>ipp-android-dynamic</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>/home/ubuntu/jenkinsslave</workspaceDir>
@@ -1281,7 +1270,7 @@
       <vmargs></vmargs>
       <executorsForInstanceType>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>M52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
         <entry>
@@ -1293,13 +1282,13 @@
           <int>1</int>
         </entry>
         <entry>
-          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C32xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
+          <hudson.plugins.spotinst.common.AwsInstanceTypeEnum>C52xlarge</hudson.plugins.spotinst.common.AwsInstanceTypeEnum>
           <int>1</int>
         </entry>
       </executorsForInstanceType>
       <executorsForTypes>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>C32xlarge</awsInstanceType>
+          <awsInstanceType>C52xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
@@ -1307,7 +1296,7 @@
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
-          <awsInstanceType>M32xlarge</awsInstanceType>
+          <awsInstanceType>M52xlarge</awsInstanceType>
           <executors>1</executors>
         </hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
         <hudson.plugins.spotinst.cloud.SpotinstInstanceWeight>
