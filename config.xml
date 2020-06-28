@@ -2299,6 +2299,37 @@ sudo yum install -y git-2.18.0</initScript>
       </columns>
       <recurse>true</recurse>
     </listView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>DSP-Gen3</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+        <org.jenkins.plugins.builton.BuiltOnColumn plugin="built-on-column@1.1"/>
+        <io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn plugin="warnings-ng@8.1.0">
+          <selectTools>false</selectTools>
+          <tools/>
+          <name># Issues</name>
+          <labelProviderFactory>
+            <jenkins plugin="plugin-util-api@1.2.0"/>
+          </labelProviderFactory>
+          <type>TOTAL</type>
+        </io.jenkins.plugins.analysis.core.columns.IssuesTotalColumn>
+      </columns>
+      <recurse>false</recurse>
+    </listView>
   </views>
   <primaryView>all</primaryView>
   <slaveAgentPort>45374</slaveAgentPort>
