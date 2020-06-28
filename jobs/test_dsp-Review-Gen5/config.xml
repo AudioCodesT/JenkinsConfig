@@ -164,7 +164,7 @@ return map</script>
       <buildUnsuccessfulFilepath/>
       <customUrl/>
       <serverName>gerritHost</serverName>
-      <triggerOnEvents class="linked-list">
+      <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
@@ -351,7 +351,17 @@ wait
 echo "Finish running make for SoftDsp and SoftHost"
 cd ${WORKSPACE}
 TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
+if [[ "${label}" == "dsp-centos-dynamic" ]]
+then
+centos_ver=Centos7
+elif [[ "${label}" == "dsp-centos8-slave" ]]
+centos_ver=Centos8
+fi
+
+echo centos_ver=${centos_ver} &gt;&gt; generated_dsp.properties
 echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties
+
+
 
 echo "******************* Set ${CHIP_NAME} Extended Attributes  ***************************"
 #files_to_set_attributes=("${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*" "${WORKSPACE}/Gen5/${CHIP_NAME}/GpuMaster/communicator_64/GpuMaster*")
@@ -525,12 +535,12 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         },
         {
             "pattern": "Gen5/${CHIP_NAME}/SoftDsp/communicator_64/Soft*",
-            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
              "recursive": "false"
         }, 
        {
             "pattern": "Gen5/${CHIP_NAME}/SoftDsp/Hpi_64/Soft*",
-            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
              "recursive": "false"
         },
        {
@@ -550,12 +560,12 @@ echo TARGET=${TARGET} &gt;&gt; generated_dsp.properties</command>
         },
         {
             "pattern": "Gen5/${CHIP_NAME}/SoftHost/communicator_64/Soft*",
-            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
              "recursive": "false"
         }, 
        {
             "pattern": "Gen5/${CHIP_NAME}/SoftHost/Hpi_64/Soft*",
-            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/Out/",
+            "target": "dsp-review/com/ac/dsp/Gen5/${GERRIT_BRANCH}/${TARGET}/${CHIP_NAME}/${centos_ver}/Out/",
              "recursive": "false"
         },
         {
