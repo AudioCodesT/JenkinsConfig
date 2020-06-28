@@ -60,11 +60,11 @@
           <permission>hudson.model.Run.Update</permission>
         </permissions>
         <assignedSIDs>
-          <sid>yossim</sid>
-          <sid>yuvaly</sid>
-          <sid>shukyr</sid>
           <sid>benm</sid>
           <sid>natanm</sid>
+          <sid>shukyr</sid>
+          <sid>yossim</sid>
+          <sid>yuvaly</sid>
         </assignedSIDs>
       </role>
       <role name="spotinst" pattern=".*">
@@ -158,12 +158,12 @@
         </permissions>
         <assignedSIDs>
           <sid># DSP Beer Sheva</sid>
-          <sid># R&amp;D DSP</sid>
-          <sid># IPP RnD – SZ</sid>
-          <sid># IPP RnD</sid>
-          <sid># IPP Support</sid>
-          <sid># IPP Shai SW IL</sid>
           <sid># DSP RnD</sid>
+          <sid># IPP RnD</sid>
+          <sid># IPP RnD – SZ</sid>
+          <sid># IPP Shai SW IL</sid>
+          <sid># IPP Support</sid>
+          <sid># R&amp;D DSP</sid>
         </assignedSIDs>
       </role>
       <role name="CI_NSC_ADMINS" pattern="(nsc.*)">
@@ -248,8 +248,8 @@
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
-          <sid>CI_WEB-UI_developers</sid>
           <sid># OVOC_UI</sid>
+          <sid>CI_WEB-UI_developers</sid>
         </assignedSIDs>
       </role>
       <role name="Execute_AutomationTest" pattern="ipp_AT_build">
@@ -284,8 +284,8 @@
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
-          <sid>gilab</sid>
           <sid>einavl</sid>
+          <sid>gilab</sid>
           <sid>natalie</sid>
         </assignedSIDs>
       </role>
@@ -316,8 +316,8 @@
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
-          <sid>compile</sid>
           <sid>#IP Phone Automation</sid>
+          <sid>compile</sid>
         </assignedSIDs>
       </role>
       <role name="ipp_sanity" pattern="(ipp_Sanity.*)">
@@ -332,9 +332,9 @@
           <permission>hudson.model.Item.Discover</permission>
         </permissions>
         <assignedSIDs>
-          <sid>eyalc</sid>
-          <sid>compile</sid>
           <sid>#IP Phone Automation</sid>
+          <sid>compile</sid>
+          <sid>eyalc</sid>
         </assignedSIDs>
       </role>
       <role name="manage_AT_queue" pattern="(ipp.*)">
