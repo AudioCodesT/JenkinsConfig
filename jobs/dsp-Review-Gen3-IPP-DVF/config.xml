@@ -1,6 +1,7 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
   <actions/>
-  <description/>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
@@ -10,7 +11,7 @@
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs/>
+      <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -34,9 +35,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit/>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>dsp-gen3-ipp-dvf</assignedNode>
@@ -46,7 +47,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
-      <spec/>
+      <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -79,21 +80,21 @@
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel/>
+      <notificationLevel></notificationLevel>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames/>
+      <dependencyJobsNames></dependencyJobsNames>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage/>
-      <buildFailureMessage/>
-      <buildSuccessfulMessage/>
-      <buildUnstableMessage/>
-      <buildNotBuiltMessage/>
-      <buildUnsuccessfulFilepath/>
-      <customUrl/>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
@@ -105,7 +106,7 @@
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL/>
+      <triggerConfigURL></triggerConfigURL>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -115,37 +116,37 @@
       <command>cd ${WORKSPACE}
 set -xe
 
-#if it's repo_manifests project then repo init the change, else repo init the branch
-if [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
+#if it&apos;s repo_manifests project then repo init the change, else repo init the branch
+if [[ &quot;${GERRIT_PROJECT}&quot; == &quot;DSP/Gen3/IPP/DVF&quot; ]]
 then
 	what_to_build=${GERRIT_BRANCH}
-elif [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF/repo_manifests" ]]
+elif [[ &quot;${GERRIT_PROJECT}&quot; == &quot;DSP/Gen3/IPP/DVF/repo_manifests&quot; ]]
 then
 	what_to_build=${GERRIT_REFSPEC}
 fi
 
-echo "repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${what_to_build}"
+echo &quot;repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${what_to_build}&quot;
 repo init -u ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF/repo_manifests -b ${what_to_build}
-echo "repo sync -j$(nproc) --force-sync"
+echo &quot;repo sync -j$(nproc) --force-sync&quot;
 repo sync -j$(nproc) --force-sync
 
 # cd to releant path
 cd DVF
-if [[ "${GERRIT_PROJECT}" == "DSP/Gen3/IPP/DVF" ]]
+if [[ &quot;${GERRIT_PROJECT}&quot; == &quot;DSP/Gen3/IPP/DVF&quot; ]]
 then
-	echo "git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC"
+	echo &quot;git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC&quot;
 	git fetch ssh://jenkins@gerrit:29418/DSP/Gen3/IPP/DVF $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
 fi
 
 #copy all modules to relevant path in Gen5 Modules directory
-echo "sh copyModules.sh"
+echo &quot;sh copyModules.sh&quot;
 sh copyModules.sh
 
 chmod -R 775 ${WORKSPACE}/DVF/delivery
 
-if [[ "$GERRIT_BRANCH" == "SDK135" ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;SDK135&quot; ]]
 then
-/usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
+/usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain &quot;ARM Compiler 5 (DS-5 built-in)&quot; bash --norc &lt;&lt; EOF
 cd ${WORKSPACE}/DVF/delivery/build
 rm -rf output
 make clean
@@ -154,9 +155,9 @@ make
 make headers
 make app_libs
 EOF
-elif [[ "$GERRIT_BRANCH" == "SDK240" ]]
+elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;SDK240&quot; ]]
 then
-/usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
+/usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain &quot;ARM Compiler 5 (DS-5 built-in)&quot; bash --norc &lt;&lt; EOF
 cd ${WORKSPACE}/DVF/delivery/build
 rm -rf output
 make clean
@@ -165,9 +166,9 @@ make
 make headers
 make app_libs
 EOF
-elif [[ "$GERRIT_BRANCH" == "SDK280" ]]
+elif [[ &quot;$GERRIT_BRANCH&quot; == &quot;SDK280&quot; ]]
 then
-/usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
+/usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain &quot;ARM Compiler 5 (DS-5 built-in)&quot; bash --norc &lt;&lt; EOF
 cd ${WORKSPACE}/DVF/delivery/build
 rm -rf output
 make clean
@@ -195,41 +196,41 @@ fi
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
-        <spec/>
+        <spec></spec>
       </uploadSpec>
       <downloadSpec>
-        <spec/>
+        <spec></spec>
       </downloadSpec>
-      <deployPattern/>
-      <resolvePattern/>
-      <deploymentProperties/>
+      <deployPattern></deployPattern>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns/>
+        <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName/>
+      <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}</template>
-      <descriptionTemplate/>
+      <descriptionTemplate></descriptionTemplate>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
