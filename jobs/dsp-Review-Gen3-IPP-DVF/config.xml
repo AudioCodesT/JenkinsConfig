@@ -182,6 +182,18 @@ fi
   </builders>
   <publishers/>
   <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
+      <patterns>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>**</pattern>
+          <type>INCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+      </patterns>
+      <deleteDirs>true</deleteDirs>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
