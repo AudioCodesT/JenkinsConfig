@@ -55,7 +55,7 @@ armRunTopologyTest
   <builders>
     <hudson.tasks.Shell>
       <command>cp ${WORKSPACE}/../aws_releaseSanityCentos8.sh .
-sh -x aws_releaseSanityCentos8.sh ${TAG}
+sh -xe aws_releaseSanityCentos8.sh ${TAG}
 
 </command>
     </hudson.tasks.Shell>
