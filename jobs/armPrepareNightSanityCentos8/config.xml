@@ -1,13 +1,15 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>runs every night @ ~4:00 AM&#xd;
-Prepare VMs for the run: download last war files and restart tomcat&#xd;
-call armRunNightSanity job&#xd;
-&#xd;
+  <description>runs every night @ ~4:00 AM&#13;
+Prepare VMs for the run: download last war files and restart tomcat&#13;
+call armRunNightSanity job&#13;
+&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
@@ -32,9 +34,9 @@ armRunTopologyTest
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -53,22 +55,18 @@ armRunTopologyTest
     <submoduleCfg class="list"/>
     <extensions/>
   </scm>
-  <assignedNode>arm-build-esxi</assignedNode>
+  <assignedNode>arm_build_esxi_6.5</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.TimerTrigger>
-      <spec>H 0 * * 1-5</spec>
-    </hudson.triggers.TimerTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>export TERM=xterm
-cp /root/jenkinsslave/aws_nightSanity.sh .
-sh -x aws_nightSanity.sh
+      <command>cp ${WORKSPACE}/../aws_nightSanityCentos8.sh .
+sh -xe aws_nightSanityCentos8.sh
+
 </command>
     </hudson.tasks.Shell>
   </builders>
