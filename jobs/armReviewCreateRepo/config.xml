@@ -1,6 +1,7 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
   <actions/>
-  <description/>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
@@ -10,7 +11,7 @@
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs/>
+      <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
@@ -26,9 +27,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit/>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -64,7 +65,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
-      <spec/>
+      <spec></spec>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -92,21 +93,21 @@
         <onNotBuilt>true</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel/>
+      <notificationLevel></notificationLevel>
       <silentStartMode>true</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames/>
+      <dependencyJobsNames></dependencyJobsNames>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage/>
-      <buildFailureMessage/>
-      <buildSuccessfulMessage/>
-      <buildUnstableMessage/>
-      <buildNotBuiltMessage/>
-      <buildUnsuccessfulFilepath/>
-      <customUrl/>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
@@ -119,7 +120,7 @@
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL/>
+      <triggerConfigURL></triggerConfigURL>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -141,83 +142,122 @@ vipw=$(openssl rsautl -decrypt -inkey private.pem -in pw.esxi)
 cd ${WORKSPACE}
 
 # Create a new log file
-  now=$(date +"%Y%m%d-%H%M%S")
-  logfile="${WORKSPACE}/aws_CreateRepo.log"
+  now=$(date +&quot;%Y%m%d-%H%M%S&quot;)
+  logfile=&quot;${WORKSPACE}/aws_CreateRepo.log&quot;
   [[ -f $logfile  ]] &amp;&amp; rm $logfile
   touch $logfile
 
 
 
-echo "$(date) : *****************  START  ******************" | tee -a $logfile
+echo &quot;$(date) : *****************  START  ******************&quot; | tee -a $logfile
 
 VERSION_NAME=$1
 BRANCH=$2
-vmHostIP="10.7.10.107"
+vmHostIP=&quot;10.7.10.107&quot;
 
 
 
 #check if VM name ARM-router_$VERSION_NAME is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateCentos8Repo" | gawk '{print $1}'`
-if [ ! -z "$vms" ]
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-CreateCentos8Repo&quot; | gawk &apos;{print $1}&apos;`
+if [ ! -z &quot;$vms&quot; ]
 	then
-	    echo "$(date) : ARM-CreateCentos8Repo already exist, I am exiting now"  | tee -a $logfile
+	    echo &quot;$(date) : ARM-CreateCentos8Repo already exist, I am exiting now&quot;  | tee -a $logfile
 		exit 1
 fi
 
 #create a new VM from ARM-router_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
-echo "$(date) : creating new Router VM from image" | tee -a $logfile
+echo &quot;$(date) : creating new Router VM from image&quot; | tee -a $logfile
 OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Router/Router_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="ARM-CreateCentos8Repo" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+ovftool --disableVerification --noSSLVerify --name=&quot;ARM-CreateCentos8Repo&quot; --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
 if [ $? -ne 0 ]; then
-    echo "$(date) : Deploy new VM has failed - check aws_CreateRepo.log" | tee -a $logfile
+    echo &quot;$(date) : Deploy new VM has failed - check aws_CreateRepo.log&quot; | tee -a $logfile
     exit 1
 fi
 
 # find new vm id
-vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateCentos8Repo" | gawk '{print $1}'`
-echo "$(date) : vm id is $vmid" | tee -a $logfile
+vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep &quot;ARM-CreateCentos8Repo&quot; | gawk &apos;{print $1}&apos;`
+echo &quot;$(date) : vm id is $vmid&quot; | tee -a $logfile
 
 # Wait for arm server power on
 #isUp $vmHostIP $vmid || exit
-echo "$(date) : sleep 5 min." | tee -a $logfile
+echo &quot;$(date) : sleep 5 min.&quot; | tee -a $logfile
 sleep 300
 
 
 # find new vm IPv4 address
-#vmip=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -m 1 "ipAddress" | cut -d'"' -f2`
-vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
-ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $vmid" | tee -a $logfile &amp;&amp; exit)
-echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
+#vmip=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -m 1 &quot;ipAddress&quot; | cut -d&apos;&quot;&apos; -f2`
+vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -E &quot;ipAddress.*\[$&quot; -m 1 -A 5 | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot;`
+ipcalc -cs $vmIPaddress || ( echo &quot;$(date) : Invalid IP for $vmid&quot; | tee -a $logfile &amp;&amp; exit)
+echo &quot;$(date) : vm IP is $vmIPaddress&quot; | tee -a $logfile
 
 
 
 
 
 #ssh to Router VM and copy arm_utils  to /tmp folder
-echo "$(date) : copy $arm_utils_file_name  and $offile_repository_file_name files to Router VM $vmIPaddress to /tmp"  | tee -a $logfile
+echo &quot;$(date) : copy $arm_utils_file_name  and $offile_repository_file_name files to Router VM $vmIPaddress to /tmp&quot;  | tee -a $logfile
 sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils root@${vmIPaddress}:/tmp/arm_utils
 
-echo "$(date) : run create_repo.py from /tmp/arm_utils"  | tee -a $logfile
+echo &quot;$(date) : run create_repo.py from /tmp/arm_utils&quot;  | tee -a $logfile
 sshpass -p password ssh -oStrictHostKeyChecking=no root@${vmIPaddress} &lt;&lt; EOF
 	set -xe
+    cat &lt;&lt; &apos;EOS&apos; &gt; /root/AUDC2016.cer
+-----BEGIN CERTIFICATE-----
+MIIFuDCCA6CgAwIBAgIQG5DSb8NKUYJK1U6xTLTlRTANBgkqhkiG9w0BAQ0FADBk
+MRMwEQYKCZImiZPyLGQBGRYDY29tMRowGAYKCZImiZPyLGQBGRYKYXVkaW9jb2Rl
+czEUMBIGCgmSJomT8ixkARkWBGNvcnAxGzAZBgNVBAMTEkF1ZGlvQ29kZXMgQ0Eg
+MjAxNjAeFw0xNjA3MTgxNTE3MDdaFw0yNjA3MTgxNTI3MDNaMGQxEzARBgoJkiaJ
+k/IsZAEZFgNjb20xGjAYBgoJkiaJk/IsZAEZFgphdWRpb2NvZGVzMRQwEgYKCZIm
+iZPyLGQBGRYEY29ycDEbMBkGA1UEAxMSQXVkaW9Db2RlcyBDQSAyMDE2MIICIjAN
+BgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsRwzw6ZL5bHw91zCtH5pV3izRNRZ
+15BZQsKD7YHu0nuAzhicr6OcFdJQxVqKmNv67WieawwYzTtGpxBml4SBscmMVqoV
+8zVlPrvXkXXOOPRcS5iVt7XkP/euh5pbkB8LBY1XNmqf4vl3LlQPVQ5XIC4zZBzC
+HIzteCFX9IS5cx2b0dsoJDu/b4ey7NJhoRwmYsQWr5qJjXtqDfE83+pQEre/KBRR
+NEhK8rRBmuhBIQGn5j42YxUjGXXXSU6buSwYMulSN8PjBkhIkhquvEo2XNwwF34g
+A1vTLLbsCYLOjsQxbeJigkHWPQeJh7Z0CD7B1SoX5BPrvDigVYlljQuNelY0Pzw0
+eY0EKY0Mo7ErM+sIoZMrEnKzGmwYMAndYPMhfq16+49Xx7UPHuduf5/f8FzOkVF4
+NAeP2Lcx71V0iZR/urWFBZsLEtiUVv7CtPXUeBXluf3H/G8GVP1PyFe1tBFjxGOQ
+K+DXmgeSPg87bTRgMz4qoURNmsPKzpkvw+CEuCITCIqq0f0il13cW00el86vTdUx
+8auIK89Nb0gLvnGoXpMGiMRiD8SKA+8KsU+HTv8NsCxtQVGoicRCFBUNTIG4KkwH
+EfetYu6Nf4+gctCNPFHEX1Lju2lcJkTrhZvPCRkTRyPeQ0Ey2d8vBfmNJOMqPyqy
+IySNJgz4SCT5ricCAwEAAaNmMGQwEwYJKwYBBAGCNxQCBAYeBABDAEEwCwYDVR0P
+BAQDAgGGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFMDsJiUHoatHWLX6wXLC
+7SGIno0RMBAGCSsGAQQBgjcVAQQDAgEAMA0GCSqGSIb3DQEBDQUAA4ICAQAb/gMv
+PPmZD9Tmx8ktwEPMgiWOU77vjCnlNyhKk+tqXTj4mEXuFyFuy7ZxR4fmGBfe2BZE
+Yihw087NUCwftb+fEDlk1VEp0rCk1R07LBL5vjoJaoicUqcj83Junj5JVvjIN2ny
+ZCCXwt2sDJovHSJSdbhoo5h0kxLrqKZNnz18UWUDYG9/ZX8wfJLS9vW/Z+PfehgQ
+h0BsRwIRrSor6ifjtAXEMN4q+MwDzMYgXRXo5+TVVcLQ0DfQy8qWWGjHMIziaIv6
+ZDUrnr+9R+e6KWL5gzSlNENteK7QtvTi6EyB4+wO5OgTu5X2GkZGxTkXrX7zIie7
+IKqqO/OwLOXqZA+DwsiDdoAxmh7XrN1HX92we8ZIZyp53Ve/AWBfhXWcV1x6uTGP
+6c7V188fOxh9c8w1NZnCG9ZY6BB4A612CxPOVloyx5asNA1hnxzIFUNVaEmN5uHt
+8zToCQ/OiWjrIBdnjR3uFWKn4JMPIs7Mok8TYyFL4ys3WjIScjcY2wdBIkNRvcIR
+vOq50OLigP9cF14t9xac12YzfqYEJ2CSdCNgD784+sBgsbf0711jmrTrwVXIwjk3
+peitA/lOlYGE3DAptUoSpBpHOsB1BJEJ4Hz7MYO7tA8kH00WzuEx5Kw93voG76JY
+TlFgcDc2WETWYgFeiv5Yx4AQsmbJtegjBcQJ6w==
+-----END CERTIFICATE-----
+EOS
+	sudo mv /root/AUDC2016.cer /etc/pki/ca-trust/source/anchors/AUDC2016.cer
+    sudo update-ca-trust
 	cd /tmp
 	cd arm_utils
 	python3 create_repo.py
+    sudo rm -rf /etc/pki/ca-trust/source/anchors/AUDC2016.cer
+    sudo update-ca-trust
 EOF
 
-echo "$(date) : copy offline_repo from $vmIPaddress /tmp to jenkins slave"  | tee -a $logfile
+echo &quot;$(date) : copy offline_repo from $vmIPaddress /tmp to jenkins slave&quot;  | tee -a $logfile
 sshpass -p password scp -oStrictHostKeyChecking=no root@${vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/cent92install-repo.tar.gz
 
 
 #graceful shutdouwn BOTH VM
-#echo "$(date) : shutdown new  VM"  | tee -a $logfile
-#ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
-#sleep 30
+echo &quot;$(date) : shutdown new  VM&quot;  | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
+sleep 30
 
 #terminate  VM MACHINE
-#echo "$(date) : delete new VM"   | tee -a $logfile
-#ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${vmid}
-#sleep 30
+echo &quot;$(date) : delete new VM&quot;   | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${vmid}
+sleep 30
 
 
 </command>
@@ -243,50 +283,50 @@ sshpass -p password scp -oStrictHostKeyChecking=no root@${vmIPaddress}:/tmp/cent
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    "files": [
+    &quot;files&quot;: [
         {
-            "pattern": "${WORKSPACE}/cent92install-repo.tar.gz",
-            "target": "libs-release-local/com/ac/arm/offline_repo/review/${GERRIT_CHANGE_NUMBER}/",
-             "recursive": "false"
+            &quot;pattern&quot;: &quot;${WORKSPACE}/cent92install-repo.tar.gz&quot;,
+            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/offline_repo/review/${GERRIT_CHANGE_NUMBER}/&quot;,
+             &quot;recursive&quot;: &quot;false&quot;
         }
 ]
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec/>
+        <spec></spec>
       </downloadSpec>
       <deployPattern>tarFolder/upgrade*.tar.gz=&gt;com/ac/arm/upgrade/review/${GERRIT_CHANGE_NUMBER}
 </deployPattern>
-      <resolvePattern/>
-      <deploymentProperties/>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns/>
+        <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName/>
+      <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${GERRIT_CHANGE_NUMBER}_${GERRIT_CHANGE_OWNER_NAME}</template>
-      <descriptionTemplate/>
+      <descriptionTemplate></descriptionTemplate>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
