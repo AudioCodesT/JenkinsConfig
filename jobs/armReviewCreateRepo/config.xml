@@ -200,8 +200,7 @@ sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Com
 echo "$(date) : run create_repo.py from /tmp/arm_utils"  | tee -a $logfile
 sshpass -p password ssh -oStrictHostKeyChecking=no root@${vmIPaddress} &lt;&lt; EOF
 	set -xe
-	cd /tmp
-	cd arm_utils
+	cd /tmp/arm_utils
 	python3 create_repo.py
 EOF
 
