@@ -171,13 +171,13 @@ git diff --name-only HEAD~1 HEAD &gt; infile
 cat infile
 set +e
 #Remove all files That changed that they are in these paths from the list of all the changed files
-egrep -v "ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/" infile &gt; outfile
+egrep -v "ArmCommon/Common/VMFiles/|ArmCommon/Common/.deploy/|ArmCommon/Common/src/main/resources/upgrade/|ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils/" infile &gt; outfile
 set -e
 cat outfile
 #check if the list of all the change files empty (if it does, there is no need to compile the project)
 if [[ ! -s outfile ]]
 then
-	echo "changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl"
+	echo "changes was only modified in  ArmCommon/Common/VMFiles/** ,ArmCommon/Common/.deploy** ,ArmCommon/Common/src/main/resources/upgrade/upgrade.pl, ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils"
     echo ""
     echo "So its unnecessary to run build"
     needToCompile="False"
