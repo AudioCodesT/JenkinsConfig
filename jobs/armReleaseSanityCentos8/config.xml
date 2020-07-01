@@ -26,9 +26,9 @@ armRunTopologyTest
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>TAG</name>
+          <name>VERSION_NAME</name>
           <description/>
-          <defaultValue>9.2.11</defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -55,7 +55,7 @@ armRunTopologyTest
   <builders>
     <hudson.tasks.Shell>
       <command>cp ${WORKSPACE}/../aws_releaseSanityCentos8.sh .
-sh -xe aws_releaseSanityCentos8.sh ${TAG}
+sh -xe aws_releaseSanityCentos8.sh ${VERSION_NAME}
 
 </command>
     </hudson.tasks.Shell>
