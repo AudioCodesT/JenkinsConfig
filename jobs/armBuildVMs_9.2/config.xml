@@ -78,13 +78,10 @@
     <hudson.tasks.Shell>
       <command>#!/bin/sh -xe
 
-#sh -x ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
-#sh -x ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
+sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
+sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
 
-cp ${WORKSPACE}/../*.sh ${WORKSPACE}/.
 
-sh -x aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
-sh -x aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
 
 
 </command>
@@ -104,6 +101,19 @@ sh -x aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+          </configs>
+          <projects>armReleaseSanityCentos8, </projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
     <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
