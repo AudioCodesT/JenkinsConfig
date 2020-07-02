@@ -1,22 +1,24 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#xd;
-suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#xd;
-configName - name of the predefined session config, e.g. Sanity440LyncConfig&#xd;
-firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#xd;
-1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#xd;
-available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no &apos;HD&apos; in firmware name);&#xd;
-2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#xd;
-&#xd;
+  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#13;
+suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#13;
+configName - name of the predefined session config, e.g. Sanity440LyncConfig&#13;
+firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#13;
+1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#13;
+available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no 'HD' in firmware name);&#13;
+2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#13;
+&#13;
 Should work on 10.59.1.150 - ippSanityTest02</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -55,7 +57,7 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
-          <description></description>
+          <description/>
           <defaultValue>3.0.4.GA</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -66,7 +68,7 @@ to rerun failed:  -rerunMode failed
 to rerun last session: -rerunMode last
 
 </description>
-          <defaultValue>&quot;&quot;</defaultValue>
+          <defaultValue>""</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
@@ -76,7 +78,7 @@ to rerun last session: -rerunMode last
 ###########################################################################
 
 # forceUpgrade: 0|1
-# restoreDefaults&quot; 0|1
+# restoreDefaults" 0|1
 # signInMethod: 1 - URI, 2 - PIN, 3 - WEB
 # iterationPerScenario: digit
 # iterationPerSuite: digit
@@ -89,14 +91,14 @@ to rerun last session: -rerunMode last
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>restoreDefaults</name>
-          <description># restoreDefaults&quot; 0|1</description>
+          <description># restoreDefaults" 0|1</description>
           <defaultValue>0</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>FeatureName</name>
-          <description>Name of the suite without config name , model , server type and &quot;.suite&quot;
-If suite file name is &quot;Sanity450Lync_Calendar.suite&quot; feature name will be &quot;Calendar&quot;</description>
+          <description>Name of the suite without config name , model , server type and ".suite"
+If suite file name is "Sanity450Lync_Calendar.suite" feature name will be "Calendar"</description>
           <defaultValue>basic</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -117,9 +119,9 @@ ServerType ==NonLync for NonLync running (currently non implemented )</descripti
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippSanityTest02</assignedNode>
@@ -136,10 +138,10 @@ ServerType ==NonLync for NonLync running (currently non implemented )</descripti
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>curl -s http://ippauto1/index.php/status/show.xml &gt; show.xml&#xd;
-type show.xml&#xd;
-type show.xml | findstr status.free./status&#xd;
-if ErrorLevel 1 Exit 1&#xd;
+      <command>curl -s http://ippauto1/index.php/status/show.xml &gt; show.xml&#13;
+type show.xml&#13;
+type show.xml | findstr status.free./status&#13;
+if ErrorLevel 1 Exit 1&#13;
 </command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
@@ -150,25 +152,25 @@ if ErrorLevel 1 Exit 1&#xd;
 #fi
 
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
-DOWNLOAD=$(echo $ARTIFACTORY | sed &apos;s|api/storage/||&apos;)
+DOWNLOAD=$(echo $ARTIFACTORY | sed 's|api/storage/||')
 
-if [ &quot;$LASTBL&quot; = &quot;None&quot; ]; then
-  LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+if [ "$LASTBL" = "None" ]; then
+  LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d'"' -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
 fi
 echo Find: $LASTBL
 
-if [ &quot;$BuildRelease&quot; =  &quot;3.0.1&quot; ]; then BoardsList=&quot;440HD 430HD 420HD 405HD&quot;
-else BoardsList=&quot;450HD 445HD 440HD 430HD 420HD 405HD&quot;
+if [ "$BuildRelease" =  "3.0.1" ]; then BoardsList="440HD 430HD 420HD 405HD"
+else BoardsList="450HD 445HD 440HD 430HD 420HD 405HD"
 fi
 
 net use z: /DELETE
-net use z: &apos;\\10.59.0.87\Firmwares&apos;
+net use z: '\\10.59.0.87\Firmwares'
 net use y: /DELETE
-net use y: &apos;\\10.59.0.87\Resources&apos;
+net use y: '\\10.59.0.87\Resources'
 
 for BOARD in $BoardsList; do
   echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
-  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\&quot;; then
+  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\"; then
     echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
     if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
       echo ----      Download UC$BOARD_$LASTBL.img to z:
