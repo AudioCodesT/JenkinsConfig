@@ -1587,7 +1587,18 @@ sudo yum install -y git-2.18.0</initScript>
       <name>sig-affb05f6</name>
       <accountId></accountId>
       <groupId>sig-affb05f6</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-009667896918c6ab2</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-009667896918c6ab2</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>arm-centos8-build</requestedLabel>
+            <createdAt>2020-07-02 12:05:46.21 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>arm-centos8-build</labelString>
       <idleTerminationMinutes>3</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
@@ -2015,6 +2026,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>ipp_Sanity_Night_Build_IGS_Models</string>
         <string>ipp_Sanity_Night_Build_Models</string>
         <string>ipp_Sanity_Night_Feature_Modles</string>
+        <string>ipp_Sanity_python _NIL</string>
       </jobNames>
       <jobFilters/>
       <columns>
