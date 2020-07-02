@@ -29,7 +29,7 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -118,12 +118,13 @@ ServerType ==NonLync for NonLync running (currently non implemented )</descripti
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippSanityTest02</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
