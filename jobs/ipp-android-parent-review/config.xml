@@ -172,7 +172,11 @@ fi
 # Find all commits with the same wake up commit issue.
 echo find Jira Issue of this change
 ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep "\[IPP" | sed 's/.*\[IPP/IPP/; s/\].*//')
-echo found: $ISSUE
+echo ISSUE found: $ISSUE
+if ! echo $ISSUE | grep -q '\-[0-9]'; then
+  echo No correct ISSUE found
+  ISSUE=""; 
+fi
 echo "ISSUE=$ISSUE" &gt;&gt; ${WORKSPACE}/generated_android.properties
 # Find if this build should use another commit with the same Issue
 if [ ! -z "$ISSUE" ]; then 
@@ -654,7 +658,7 @@ done
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.0.4">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER} $GERRIT_PROJECT $GERRIT_REFSPEC</template>
       <descriptionTemplate/>
       <runAtStart>true</runAtStart>
