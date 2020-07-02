@@ -31,7 +31,7 @@ armReleaseSanity
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -43,9 +43,10 @@ armReleaseSanity
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -61,12 +62,14 @@ armReleaseSanity
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
     </extensions>
   </scm>
   <assignedNode>arm-build</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -129,13 +132,13 @@ EOD</command>
 EOD
 </command>
     </hudson.tasks.Shell>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean -U package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path} 333&quot;</goals>
       <mavenOpts></mavenOpts>
     </org.jfrog.hudson.maven3.Maven3Builder>
-    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.maven3.Maven3Builder plugin="artifactory@3.6.1">
       <mavenName>Maven_v325</mavenName>
       <rootPom>arm_topology_test/pom.xml</rootPom>
       <goals>clean package exec:java -Dexec.args=&quot;${config_file_path} ${logs_path}&quot;</goals>
@@ -151,7 +154,7 @@ EOD
       <defaultExcludes>true</defaultExcludes>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>Natali.Elashvili</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
@@ -169,13 +172,13 @@ EOD
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>TERM=xterm
 config_file_path=${WORKSPACE}/arm_topology_test/conf/arm_topology_test.conf
 logs_path=${WORKSPACE}/arm_topology_test/logs
 </propertiesContent>
-        <secureGroovyScript plugin="script-security@1.53">
+        <secureGroovyScript plugin="script-security@1.71">
           <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
