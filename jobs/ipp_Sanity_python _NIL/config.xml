@@ -1,14 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Following API: -suiteName, -configName, -firmwareVersionMain,&#13;
-suiteName - name of the predefined suite, e.g. Sanity440Lync_basic&#13;
-configName - name of the predefined session config, e.g. Sanity440LyncConfig&#13;
-firmwareVersionMain - name of the firmware file which should be test, e.g. UC430HD_2.0.3.16&#13;
-1. Before running, put a firmware version to \\isr0214-34401\firmwares  (isr0214-34401 = 10.59.0.87) , also it is need to put relevant firmwares for other phones. If tested firmware is UC440HD_3.0.0.65, it is need also to put all other &#13;
-available firmwares: UC430HD_3.0.0.65, UC420HD_3.0.0.65, UC405_3.0.0.65 (note that for 405 ther is no 'HD' in firmware name);&#13;
-2. Example for run: tclsh AtaExec.tcl -configName Sanity440LyncConfig.ACDev.tcl -suiteName Sanity440Lync_basic.suite -firmwareVersionMain UC440HD_3.0.0.65.img&#13;
-&#13;
-Should work on 10.59.1.150 - ippSanityTest02</description>
+  <description>Job for running pytest IPPPA tests</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
@@ -38,12 +30,6 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>ConfigName</name>
-          <description>Sanity or Full - The name should be Sanity440LyncConfig.ACDev.tcl or Full440LyncConfig.ACDev.tcl</description>
-          <defaultValue>Sanity</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
           <name>model</name>
           <description>model :450/440/430/320/440/405</description>
           <defaultValue>450</defaultValue>
@@ -53,61 +39,6 @@ Should work on 10.59.1.150 - ippSanityTest02</description>
           <name>LASTBL</name>
           <description>Example: 3.0.0.299</description>
           <defaultValue>None</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>BuildRelease</name>
-          <description/>
-          <defaultValue>3.0.4.GA</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>rerunMode</name>
-          <description>to run selected :  -rerunMode (empty)
-to rerun failed:  -rerunMode failed
-to rerun last session: -rerunMode last
-
-</description>
-          <defaultValue>""</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>forceUpgrade</name>
-          <description>###########################################################################
-# New params:
-###########################################################################
-
-# forceUpgrade: 0|1
-# restoreDefaults" 0|1
-# signInMethod: 1 - URI, 2 - PIN, 3 - WEB
-# iterationPerScenario: digit
-# iterationPerSuite: digit
-# federationUser: orig|term
-# externalUser: orig|term
-# speedDialMode: 1|0
-# traceError: 1|0</description>
-          <defaultValue>0</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>restoreDefaults</name>
-          <description># restoreDefaults" 0|1</description>
-          <defaultValue>0</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>FeatureName</name>
-          <description>Name of the suite without config name , model , server type and ".suite"
-If suite file name is "Sanity450Lync_Calendar.suite" feature name will be "Calendar"</description>
-          <defaultValue>basic</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>ServerType</name>
-          <description>ServerType == Lync for the lync running 
-ServerType==IGS for IGS running 
-ServerType ==NonLync for NonLync running (currently non implemented )</description>
-          <defaultValue>Lync</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -142,50 +73,7 @@ if ErrorLevel 1 Exit 1&#13;
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
-#if curl -s http://ippauto1/index.php/status/show.xml | grep -q status.busy./status; then 
-#  exit 1
-#fi
-
-ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
-DOWNLOAD=$(echo $ARTIFACTORY | sed 's|api/storage/||')
-
-if [ "$LASTBL" = "None" ]; then
-  LASTBL=`curl -ks -X GET $ARTIFACTORY | grep uri | cut -d'"' -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
-fi
-echo Find: $LASTBL
-
-if [ "$BuildRelease" =  "3.0.1" ]; then BoardsList="440HD 430HD 420HD 405HD"
-else BoardsList="450HD 445HD 440HD 430HD 420HD 405HD"
-fi
-
-net use z: /DELETE
-net use z: '\\10.59.0.87\Firmwares'
-net use y: /DELETE
-net use y: '\\10.59.0.87\Resources'
-
-for BOARD in $BoardsList; do
-  echo Searce $ARTIFACTORY/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img...
-  if curl -ks -X GET $ARTIFACTORY/$LASTBL/$BOARD | grep -q $LASTBL.img\"; then
-    echo -- Check if UC${BOARD}_$LASTBL.img exist in z:
-    if [ ! -f z:/UC${BOARD}_$LASTBL.img ]; then
-      echo ----      Download UC$BOARD_$LASTBL.img to z:
-      curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.img
-      curl -ks -X GET $DOWNLOAD/$LASTBL/$BOARD/UC${BOARD}_$LASTBL.img --output z:\UC${BOARD}_$LASTBL.sim.tgz
-    else echo ----      z:/UC$BOARD_$LASTBL.img already exist.. skip the download...
-    fi
-  else
-    echo Not exist in Artifactory: $ARTIFACTORY/$LASTBL/$BOARD...
-  fi
-done
-
-echo Check z:/UC${model}HD_$LASTBL.img if exist...
-if [ -f z:/UC${model}HD_$LASTBL.img ]; then
-  echo cd C:/IpPhoneAutomation/ATA
-  echo tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
-  echo $PATH
-  cd C:/IpPhoneAutomation/ATA
-  tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults
-fi</command>
+tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
