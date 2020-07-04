@@ -73,7 +73,8 @@ if ErrorLevel 1 Exit 1&#13;
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
-tclsh AtaExec.tcl -configName ${ConfigName}${model}LyncConfig.tcl -suiteName ${ConfigName}${model}${ServerType}_${FeatureName}.suite -firmwareVersionMain UC${model}HD_${LASTBL}.img #-rerunMode $rerunMode -forceUpgrade $forceUpgrade -restoreDefaults $restoreDefaults</command>
+cd cd C:/IpPhoneAutomation/IPPPA
+pytest --html=report.html --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
