@@ -107,7 +107,7 @@ sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSIO
           <configs>
             <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
           </configs>
-          <projects>armReleaseSanityCentos8, </projects>
+          <projects>armReleaseSanityCentos8,</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
           <triggerFromChildProjects>false</triggerFromChildProjects>
