@@ -1,16 +1,18 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>This job go over all the folders in the Artifactory and discard the old version instead of the &quot;Discard old builds&quot; plugin that deosn&apos;t work well in Matrix jobs.&#xd;
-Executed periodically every night.&#xd;
+  <description>This job go over all the folders in the Artifactory and discard the old version instead of the "Discard old builds" plugin that deosn't work well in Matrix jobs.&#13;
+Executed periodically every night.&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -23,7 +25,7 @@ Executed periodically every night.&#xd;
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -44,8 +46,9 @@ Executed periodically every night.&#xd;
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>sanjer</assignedNode>
@@ -63,7 +66,7 @@ Executed periodically every night.&#xd;
     <hudson.tasks.Shell>
       <command>
 # Calculate the date we are going to delete
-oldThan=$(date +&quot;%Y%m%d&quot; -d &quot;-$OLD days&quot;)
+oldThan=$(date +"%Y%m%d" -d "-$OLD days")
 User=admin:$Artifact_pass
 
 # this is a recursive function - check the last modified date, if old or equel to $oldThan than remove this folder from the Artifactory
@@ -72,30 +75,30 @@ function RemoveFolder() {
   ((deep+=1))
   local Folder=$1
   # The date format is: YYYYMMDD (Y=the year, M=Month, D=Day  - Example: 8 Jan 2018 should be 20180108
-  lastModified=$(curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
-  if [ &quot;$lastModified&quot; == &quot;&quot; ]; 
+  lastModified=$(curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder?lastModified | grep lastModified | cut -d'"' -f4 | cut -dT -f1 | sed s:-::g)
+  if [ "$lastModified" == "" ]; 
   then 
   ((deep-=1))
   return 0; 
   fi
 
-  if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
+  if [ "$lastModified" -le "$oldThan" ]; then
     echo Delete $Folder
     echo ---------------------
     curl -ks -u $User -X DELETE https://$ARTIFACTORY/$Folder
   else
     echo $Folder is not old - check its sub folders
-    curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*true&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
+    curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E 'folder.*true' | grep uri | cut -d'"' -f4 | while read uri
     do
       echo Execute this function again to check the following directory: ${Folder}$uri
       RemoveFolder ${Folder}$uri;
     done
     if [ $deep -eq 2 ]; then 
       echo Check its files
-      curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E &apos;folder.*false&apos; | grep uri | cut -d&apos;&quot;&apos; -f4 | while read uri
+      curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/$Folder | grep -B 1 -E 'folder.*false' | grep uri | cut -d'"' -f4 | while read uri
       do
-        lastModified=$(curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/${Folder}$uri?lastModified | grep lastModified | cut -d&apos;&quot;&apos; -f4 | cut -dT -f1 | sed s:-::g)
-        if [ &quot;$lastModified&quot; -le &quot;$oldThan&quot; ]; then
+        lastModified=$(curl -ks -u $User -X GET https://$ARTIFACTORY/api/storage/${Folder}$uri?lastModified | grep lastModified | cut -d'"' -f4 | cut -dT -f1 | sed s:-::g)
+        if [ "$lastModified" -le "$oldThan" ]; then
           echo Delete ${Folder}$uri
           echo ---------------------
           curl -ks -u $User -X DELETE https://$ARTIFACTORY/${Folder}$uri
@@ -125,28 +128,29 @@ RemoveFolder sbc-review/com/ac/sbc/OpenRG
 RemoveFolder sbc-review/com/ac/sbc/acLinux
 RemoveFolder sbc-review/com/ac/sbc/acLinux2.0
 RemoveFolder libs-release-local/com/ac/arm/tempOVA
+RemoveFolder libs-release-local/com/ac/arm/offline_repo
 RemoveFolder sbc-review/com/ac/sbc/Hosted02
 RemoveFolder sbc-review/com/ac/sbc/HostedBL
 RemoveFolder sbc-review/com/ac/sbc/OpenRG-UGW
 RemoveFolder sbc-review/com/ac/sbc/acLinux-UGW
-
+RemoveFolder dsp-review/com/ac/dsp/Gen5
 
 #delete only after 30 days
-echo &quot;Delete Only After 30 Days&quot;
+echo "Delete Only After 30 Days"
 OLD=30
-oldThan=$(date +&quot;%Y%m%d&quot; -d &quot;-$OLD days&quot;)
+oldThan=$(date +"%Y%m%d" -d "-$OLD days")
 RemoveFolder sbc-review/com/ac/sbc/user</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>shukyr,yossim,ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
