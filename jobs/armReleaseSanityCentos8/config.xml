@@ -61,6 +61,11 @@ sh -xe aws_releaseSanityCentos8.sh ${VERSION_NAME}
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.32">
+      <recipients>ben.magriso,Shuky.Riechard</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
     <hudson.tasks.ArtifactArchiver>
       <artifacts>*.log,*.out</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
