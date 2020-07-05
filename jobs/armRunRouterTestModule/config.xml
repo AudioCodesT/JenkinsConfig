@@ -109,7 +109,7 @@ EOD</command>
 	expect ']$'
     send "sudo -i\r"
     expect "]#"
-	send "service tomcat stop\r"
+	send "systemctl stop tomcat\r"
 	expect "]#"
 	send "mv -f conf.sql sql\r"
 	expect "]#"
@@ -118,7 +118,7 @@ EOD</command>
     expect "]#"
 	send "mysql &lt;sql/conf.sql\r"
 	expect "]#"
-	send "service tomcat start\r"
+	send "systemctl start tomcat\r"
 	expect "]#"
 	send "exit\r"
 EOD
