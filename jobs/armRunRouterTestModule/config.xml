@@ -103,7 +103,7 @@ EOD</command>
     <hudson.tasks.Shell>
       <command>#run sql init
 /usr/bin/expect&lt;&lt;EOD
-	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
+	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no armAdmin@10.7.20.150
 	expect "password:"
 	send "Arm!default1\r"
 	expect ']$'
