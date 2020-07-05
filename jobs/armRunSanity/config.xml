@@ -67,7 +67,8 @@ result=0
 #copy logs to workspace
 cp /opt/kobi/*.log $WORKSPACE
 # 
-exit $result</command>
+exit $result
+# shuky.riechard@audiocodes.com Moshe.Ben-Eliezer@audiocodes.com Kobi.Levi@audiocodes.com Pavel.Smolyar@audiocodes.com</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -80,7 +81,7 @@ exit $result</command>
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.32">
-      <recipients>ben.magriso@audiocodes.com shuky.riechard@audiocodes.com Moshe.Ben-Eliezer@audiocodes.com Kobi.Levi@audiocodes.com Pavel.Smolyar@audiocodes.com</recipients>
+      <recipients>ben.magriso@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
