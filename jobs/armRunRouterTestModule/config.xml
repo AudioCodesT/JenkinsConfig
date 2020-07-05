@@ -94,7 +94,6 @@ cp RouterTestModule/src/main/resources/sql/configuratorPredefineData.sql conf.sq
 	spawn sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no armAdmin@10.7.20.150
 	expect "password:"
 	send "Arm!default1\r"
-    expect "]#"
 	expect "sftp&gt;"
 	send "put -p conf.sql\r"
 	expect "sftp&gt;"
@@ -107,7 +106,9 @@ EOD</command>
 	spawn ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o GSSAPIAuthentication=no root@10.7.20.150
 	expect "password:"
 	send "Arm!default1\r"
-	expect "]#"
+	expect ']$'
+    send "sudo -i\r"
+    expect "]#"
 	send "service tomcat stop\r"
 	expect "]#"
 	send "mv -f conf.sql sql\r"
