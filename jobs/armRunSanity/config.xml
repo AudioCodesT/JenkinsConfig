@@ -1,8 +1,9 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
   <actions/>
-  <description>triggered by success end of armPrepareNightSanity job&#13;
-executes Pavel's python script&#13;
-notify on failure&#13;
+  <description>triggered by success end of armPrepareNightSanity job&#xd;
+executes Pavel&apos;s python script&#xd;
+notify on failure&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -41,9 +42,9 @@ armReleaseSanityCentos8
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit/>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ArmSanity</assignedNode>
@@ -67,8 +68,7 @@ result=0
 #copy logs to workspace
 cp /opt/kobi/*.log $WORKSPACE
 # 
-exit $result
-# shuky.riechard@audiocodes.com Moshe.Ben-Eliezer@audiocodes.com Kobi.Levi@audiocodes.com Pavel.Smolyar@audiocodes.com</command>
+exit $result</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -81,7 +81,7 @@ exit $result
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.Mailer plugin="mailer@1.32">
-      <recipients>ben.magriso@audiocodes.com</recipients>
+      <recipients>ben.magriso@audiocodes.com shuky.riechard@audiocodes.com Moshe.Ben-Eliezer@audiocodes.com Kobi.Levi@audiocodes.com Pavel.Smolyar@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
