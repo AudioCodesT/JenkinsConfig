@@ -62,7 +62,7 @@ armReleaseSanityCentos8
       <command>export TERM=xterm
 
 result=0
-/opt/kobi/sanity.py &gt; /opt/kobi/rest.log || result=1
+/opt/kobi/sanity.py &gt; ${WORKSPACE}/rest.log || result=1
 
 #copy logs to workspace
 cp /opt/kobi/*.log $WORKSPACE
