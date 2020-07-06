@@ -35,12 +35,6 @@
           <defaultValue>450</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>LASTBL</name>
-          <description>Example: 3.0.0.299</description>
-          <defaultValue>None</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
@@ -66,7 +60,7 @@
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
-cd cd C:/IpPhoneAutomation/IPPPA
+cd C:/IpPhoneAutomation/IPPPA
 pytest --html=report.html --junit-xml=results.xml --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
     </hudson.tasks.Shell>
   </builders>
