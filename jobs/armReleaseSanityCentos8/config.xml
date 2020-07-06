@@ -54,8 +54,7 @@ armRunTopologyTest
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cp ${WORKSPACE}/../aws_releaseSanityCentos8.sh .
-sh -xe aws_releaseSanityCentos8.sh ${VERSION_NAME}
+      <command>sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_releaseSanityCentos8.sh ${VERSION_NAME}
 
 </command>
     </hudson.tasks.Shell>
