@@ -515,6 +515,12 @@ echo TARGET=${TARGET} &gt;&gt; ${WORKSPACE}/generated_dsp.properties</command>
   </builders>
   <publishers/>
   <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+        <timeoutMinutes>180</timeoutMinutes>
+      </strategy>
+      <operationList/>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>module=$(echo $Module_Project | awk -F '/' '{print $NF}')
