@@ -63,18 +63,11 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.BatchFile>
-      <command>curl -s http://ippauto1/index.php/status/show.xml &gt; show.xml&#13;
-type show.xml&#13;
-type show.xml | findstr status.free./status&#13;
-if ErrorLevel 1 Exit 1&#13;
-</command>
-    </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
       <command>#!c:\cygwin\bin\bash  --login -i
 
 cd cd C:/IpPhoneAutomation/IPPPA
-pytest --html=report.html --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
+pytest --html=report.html --junit-xml=results.xml --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
