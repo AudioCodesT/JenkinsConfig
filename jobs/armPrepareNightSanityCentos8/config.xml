@@ -66,9 +66,7 @@ armReleaseSanityCentos8
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cp ${WORKSPACE}/../aws_nightSanityCentos8.sh .
-sh -xe aws_nightSanityCentos8.sh
-
+      <command>sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_nightSanityCentos8.sh
 </command>
     </hudson.tasks.Shell>
   </builders>
