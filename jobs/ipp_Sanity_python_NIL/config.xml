@@ -78,17 +78,12 @@ pytest --html=report.html --self-contained-html tests\ippsystem\core\ippservices
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>&lt;xml&gt;&lt;status&gt;busy&lt;/status&gt;&lt;/xml&gt;</regexpForRerun>
-      <rerunIfUnstable>false</rerunIfUnstable>
-      <rerunMatrixPart>false</rerunMatrixPart>
-      <checkRegexp>true</checkRegexp>
-      <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
-      <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>1800</delay>
-      </delay>
-      <maxSchedule>12</maxSchedule>
-    </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.29">
+      <testResults>results.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <healthScaleFactor>1.0</healthScaleFactor>
+      <allowEmptyResults>false</allowEmptyResults>
+    </hudson.tasks.junit.JUnitResultArchiver>
   </publishers>
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
