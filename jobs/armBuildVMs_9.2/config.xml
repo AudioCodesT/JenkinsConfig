@@ -78,9 +78,11 @@
     <hudson.tasks.Shell>
       <command>#!/bin/sh -xe
 
-
-sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
-sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
+cp ${WORKSPACE}/../.sh .
+sh -xe aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
+sh -xe aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH
+#sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
+#sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
 
 
 
