@@ -80,9 +80,11 @@
 
 
 cp ${WORKSPACE}/../*.sh ${WORKSPACE}/.
-cp ${WORKSPACE}/../*.py ${WORKSPACE}/.
-#sh -x aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
-sh -x aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
+sh -xe aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
+sh -xe aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH
+#sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildRouterVMCentos8.sh $VERSION_NAME $BRANCH
+#sh -xe ${WORKSPACE}/ArmCommon/Common/.deploy/aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH 
+
 
 
 
