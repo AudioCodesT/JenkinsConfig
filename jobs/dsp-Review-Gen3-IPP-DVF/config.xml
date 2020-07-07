@@ -147,7 +147,7 @@ if [[ "$GERRIT_BRANCH" == "SDK135" ]]
 then
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
 cd ${WORKSPACE}/DVF/delivery/build
-export ARMLMD_LICENSE_FILE=bsarmlm01
+export ARMLMD_LICENSE_FILE="8224@bsarmlm01"
 rm -rf output
 make clean
 make config_evb99
@@ -159,7 +159,7 @@ elif [[ "$GERRIT_BRANCH" == "SDK240" ]]
 then
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
 cd ${WORKSPACE}/DVF/delivery/build
-export ARMLMD_LICENSE_FILE=bsarmlm01
+export ARMLMD_LICENSE_FILE="8224@bsarmlm01"
 rm -rf output
 make clean
 make config_evb101
@@ -171,7 +171,7 @@ elif [[ "$GERRIT_BRANCH" == "SDK280" ]]
 then
 /usr/local/DS-5_v5.26.2/bin/suite_exec --toolchain "ARM Compiler 5 (DS-5 built-in)" bash --norc &lt;&lt; EOF
 cd ${WORKSPACE}/DVF/delivery/build
-export ARMLMD_LICENSE_FILE=bsarmlm01
+export ARMLMD_LICENSE_FILE="8224@bsarmlm01"
 rm -rf output
 make clean
 make config_evb99_split
