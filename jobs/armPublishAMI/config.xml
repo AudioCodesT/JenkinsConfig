@@ -1,19 +1,21 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -22,7 +24,7 @@
         <hudson.model.StringParameterDefinition>
           <name>TAG</name>
           <description>Version number of the ARM AMI that was already created</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -34,13 +36,13 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <propertiesContent>PATH=$PATH:/home/centos/.local/bin:/home/centos/bin:/usr/local/git/bin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -50,6 +52,7 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>arm-build</assignedNode>
@@ -61,46 +64,46 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>printf &quot;%-30s%10sami-id\n&quot; &quot;Region&quot; &quot; &quot; &gt; ConfRegionsNameAndIds.txt
-printf &quot;%-30s%10sami-id\n&quot; &quot;Region&quot; &quot; &quot; &gt; RouterRegionsNameAndIds.txt
-printf &quot;%s------------------------------------------------------------\n&quot; &gt;&gt; ConfRegionsNameAndIds.txt
-printf &quot;%s------------------------------------------------------------\n&quot; &gt;&gt; RouterRegionsNameAndIds.txt
+      <command>printf "%-30s%10sami-id\n" "Region" " " &gt; ConfRegionsNameAndIds.txt
+printf "%-30s%10sami-id\n" "Region" " " &gt; RouterRegionsNameAndIds.txt
+printf "%s------------------------------------------------------------\n" &gt;&gt; ConfRegionsNameAndIds.txt
+printf "%s------------------------------------------------------------\n" &gt;&gt; RouterRegionsNameAndIds.txt
 #list of other regions
-OTHER_REGIONS=&quot;eu-west-1 eu-west-2 us-east-1 us-east-2 us-west-1 us-west-2 ap-southeast-1&quot;
+OTHER_REGIONS="eu-west-1 eu-west-2 us-east-1 us-east-2 us-west-1 us-west-2 ap-southeast-1"
 OTHER_REGIONS=($OTHER_REGIONS) 
-currentRegion=&quot;eu-central-1&quot;
-ConfImageName=&quot;ARM-Configurator_${TAG}&quot;
-RouterImageName=&quot;ARM-Router_${TAG}&quot;
+currentRegion="eu-central-1"
+ConfImageName="AudioCodes ARM Configurator ${TAG}"
+RouterImageName="AudioCodes ARM Router ${TAG}"
 
 BRANCH=${TAG:0:3}
-echo &quot;BRANCH=${BRANCH}&quot; &gt; prop
+echo "BRANCH=${BRANCH}" &gt; prop
 
 #Get Image Id
-ConfImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$ConfImageName --output text --query &apos;Images[*].ImageId&apos;)
-RouterImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$RouterImageName --output text --query &apos;Images[*].ImageId&apos;)
+ConfImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$ConfImageName --output text --query 'Images[*].ImageId')
+RouterImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$RouterImageName --output text --query 'Images[*].ImageId')
 
 
-printf &quot;%-30s%-10s${ConfImageId}\n&quot; &quot;${currentRegion}&quot; &quot; &quot; &gt;&gt; ConfRegionsNameAndIds.txt
-printf &quot;%-30s%-10s${RouterImageId}\n&quot; &quot;${currentRegion}&quot; &quot; &quot; &gt;&gt; RouterRegionsNameAndIds.txt
+printf "%-30s%-10s${ConfImageId}\n" "${currentRegion}" " " &gt;&gt; ConfRegionsNameAndIds.txt
+printf "%-30s%-10s${RouterImageId}\n" "${currentRegion}" " " &gt;&gt; RouterRegionsNameAndIds.txt
 
 
 #make The Image Public
-aws ec2 modify-image-attribute --image-id ${ConfImageId} --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;Group\&quot;:\&quot;all\&quot;}]}&quot;
-aws ec2 modify-image-attribute --image-id ${RouterImageId} --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;Group\&quot;:\&quot;all\&quot;}]}&quot;
+aws ec2 modify-image-attribute --image-id ${ConfImageId} --launch-permission "{\"Add\":[{\"Group\":\"all\"}]}"
+aws ec2 modify-image-attribute --image-id ${RouterImageId} --launch-permission "{\"Add\":[{\"Group\":\"all\"}]}"
 
 #copy Image to other Regions
 for destRegionName in ${OTHER_REGIONS[@]}
 do
 		#copy both AMI to the new region
-    	ConfNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-Configurator_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${ConfImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
-        RouterNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name &quot;ARM-Router_${TAG}&quot; --description &quot;ARM AMI ${TAG}&quot; --source-image-id ${RouterImageId} --source-region ${currentRegion} --output text --query &quot;ImageId&quot;)
+    	ConfNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name "ARM-Configurator_${TAG}" --description "ARM AMI ${TAG}" --source-image-id ${ConfImageId} --source-region ${currentRegion} --output text --query "ImageId")
+        RouterNewRegionAmiId=$(aws ec2 copy-image --region ${destRegionName} --name "ARM-Router_${TAG}" --description "ARM AMI ${TAG}" --source-image-id ${RouterImageId} --source-region ${currentRegion} --output text --query "ImageId")
         sleep 20
         #wait for The image to Create
-        OLD_STATE=&quot;&quot;
+        OLD_STATE=""
         while true; do
             sleep 100
-            CONF_STATE=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${ConfNewRegionAmiId} --output text --query &quot;Images[0].State&quot;)
-            ROUTER_STATE=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${RouterNewRegionAmiId} --output text --query &quot;Images[0].State&quot;)
+            CONF_STATE=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${ConfNewRegionAmiId} --output text --query "Images[0].State")
+            ROUTER_STATE=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${RouterNewRegionAmiId} --output text --query "Images[0].State")
             if [[ $CONF_STATE != $CONF_OLD_STATE ]]
             then
                 echo $CONF_STATE
@@ -111,7 +114,7 @@ do
                 echo $ROUTER_STATE
                 ROUTER_OLD_STATE=$ROUTER_STATE
             fi
-            if [[ $CONF_STATE == &quot;available&quot; ]] &amp;&amp; [[ $ROUTER_STATE == &quot;available&quot; ]]
+            if [[ $CONF_STATE == "available" ]] &amp;&amp; [[ $ROUTER_STATE == "available" ]]
             then
                 break
             fi
@@ -121,17 +124,17 @@ do
         conf_snapshotId=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${ConfNewRegionAmiId} --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
         router_snapshotId=$(aws ec2 describe-images --region ${destRegionName} --image-ids ${RouterNewRegionAmiId} --output text --query Images[*].BlockDeviceMappings[*].Ebs.SnapshotId)
         #give name to the snapshot -
-        aws ec2 create-tags --region ${destRegionName} --resources $conf_snapshotId --tags Key=Name,Value=&quot;ARM-Configurator_${TAG}&quot;
-        aws ec2 create-tags --region ${destRegionName} --resources $router_snapshotId --tags Key=Name,Value=&quot;ARM-Router_${TAG}&quot;
+        aws ec2 create-tags --region ${destRegionName} --resources $conf_snapshotId --tags Key=Name,Value="ARM-Configurator_${TAG}"
+        aws ec2 create-tags --region ${destRegionName} --resources $router_snapshotId --tags Key=Name,Value="ARM-Router_${TAG}"
         # add public permissions to the rest of the regions
-        aws ec2 modify-image-attribute --region ${destRegionName} --image-id ${ConfNewRegionAmiId} --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;Group\&quot;:\&quot;all\&quot;}]}&quot;
-        aws ec2 modify-image-attribute --region ${destRegionName} --image-id ${RouterNewRegionAmiId} --launch-permission &quot;{\&quot;Add\&quot;:[{\&quot;Group\&quot;:\&quot;all\&quot;}]}&quot;
+        aws ec2 modify-image-attribute --region ${destRegionName} --image-id ${ConfNewRegionAmiId} --launch-permission "{\"Add\":[{\"Group\":\"all\"}]}"
+        aws ec2 modify-image-attribute --region ${destRegionName} --image-id ${RouterNewRegionAmiId} --launch-permission "{\"Add\":[{\"Group\":\"all\"}]}"
     	
-        printf &quot;%-30s%-10s${ConfNewRegionAmiId}\n&quot; &quot;${destRegionName}&quot; &quot; &quot; &gt;&gt; ConfRegionsNameAndIds.txt
-        printf &quot;%-30s%-10s${RouterNewRegionAmiId}\n&quot; &quot;${destRegionName}&quot; &quot; &quot; &gt;&gt; RouterRegionsNameAndIds.txt
+        printf "%-30s%-10s${ConfNewRegionAmiId}\n" "${destRegionName}" " " &gt;&gt; ConfRegionsNameAndIds.txt
+        printf "%-30s%-10s${RouterNewRegionAmiId}\n" "${destRegionName}" " " &gt;&gt; RouterRegionsNameAndIds.txt
 done</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>prop</propertiesFilePath>
       </info>
@@ -149,9 +152,9 @@ done</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.3"/>
           <publisherList>
-            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
               <recipientList>ben.magriso@audiocodes.com,Shuky.Riechard@audiocodes.com</recipientList>
               <configuredTriggers>
                 <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
@@ -161,7 +164,7 @@ done</command>
                     <recipientProviders>
                       <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
                     </recipientProviders>
-                    <attachmentsPattern></attachmentsPattern>
+                    <attachmentsPattern/>
                     <attachBuildLog>false</attachBuildLog>
                     <compressBuildLog>false</compressBuildLog>
                     <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -171,31 +174,31 @@ done</command>
               </configuredTriggers>
               <contentType>text/html</contentType>
               <defaultSubject>ARM version ${TAG} is released</defaultSubject>
-              <defaultContent>edit &lt;a href=&quot;https://jenkins/view/admin/job/aws_deleteArmAmi/&quot;&gt;aws_deleteArmAmi&lt;/a&gt; jenkins job to not delete AMIs in version ${TAG}
+              <defaultContent>edit &lt;a href="https://jenkins/view/admin/job/aws_deleteArmAmi/"&gt;aws_deleteArmAmi&lt;/a&gt; jenkins job to not delete AMIs in version ${TAG}
 
 send by ${BUILD_URL}</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
+              <attachmentsPattern/>
               <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
               <attachBuildLog>false</attachBuildLog>
               <compressBuildLog>false</compressBuildLog>
               <replyTo>$DEFAULT_REPLYTO</replyTo>
-              <from></from>
+              <from/>
               <saveOutput>false</saveOutput>
               <disabled>false</disabled>
             </hudson.plugins.emailext.ExtendedEmailPublisher>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.62">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
       <recipientList>Lina.Fine@audiocodes.com, Moshe.Ben-Eliezer@audiocodes.com, Pavel.Smolyar@audiocodes.com,
 cc:Ben.Magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <configuredTriggers>
@@ -207,7 +210,7 @@ cc:Ben.Magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
               <hudson.plugins.emailext.plugins.recipients.RequesterRecipientProvider/>
             </recipientProviders>
-            <attachmentsPattern></attachmentsPattern>
+            <attachmentsPattern/>
             <attachBuildLog>false</attachBuildLog>
             <compressBuildLog>false</compressBuildLog>
             <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -219,32 +222,34 @@ cc:Ben.Magriso@audiocodes.com, cc:Shuky.Riechard@audiocodes.com</recipientList>
       <defaultSubject>ARM ${TAG} : Router and Configurator AMIs were published successfully</defaultSubject>
       <defaultContent>ARM Configurator AMIs
 &lt;pre&gt;
-${FILE,path=&quot;ConfRegionsNameAndIds.txt&quot;}
+${FILE,path="ConfRegionsNameAndIds.txt"}
 &lt;/pre&gt;
 
 ARM Router AMIs
 &lt;pre&gt;
-${FILE,path=&quot;RouterRegionsNameAndIds.txt&quot;}
+${FILE,path="RouterRegionsNameAndIds.txt"}
 &lt;/pre&gt;</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
+      <attachmentsPattern/>
       <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
       <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
       <attachBuildLog>false</attachBuildLog>
       <compressBuildLog>false</compressBuildLog>
       <replyTo>$DEFAULT_REPLYTO</replyTo>
-      <from></from>
+      <from/>
       <saveOutput>false</saveOutput>
       <disabled>false</disabled>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
