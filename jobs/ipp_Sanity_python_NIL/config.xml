@@ -46,6 +46,20 @@
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
       <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
+      <info>
+        <propertiesContent>PATH=$PATH:/cygdrive/c/Users/qa-cmbu/AppData/Local/Programs/Python/Python38-32</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
+          <sandbox>true</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+      <on>true</on>
+      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
+      <keepBuildVariables>true</keepBuildVariables>
+      <overrideBuildParameters>false</overrideBuildParameters>
+    </EnvInjectJobProperty>
     
   </properties>
   <scm class="hudson.scm.NullSCM"/>
@@ -63,7 +77,7 @@
 cd C:/IpPhoneAutomation/IPPPA
 pwd
 echo $PATH
-pytest --html=report.html --junit-xml=results.xml --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
+python -m pytest --html=report.html --junit-xml=results.xml --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
