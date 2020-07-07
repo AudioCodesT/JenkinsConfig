@@ -61,6 +61,8 @@
       <command>#!c:\cygwin\bin\bash  --login -i
 
 cd C:/IpPhoneAutomation/IPPPA
+pwd
+echo $PATH
 pytest --html=report.html --junit-xml=results.xml --self-contained-html tests\ippsystem\core\ippservices\test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
     </hudson.tasks.Shell>
   </builders>
