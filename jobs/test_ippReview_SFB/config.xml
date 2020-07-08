@@ -1,15 +1,17 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.13">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.14">
   <actions/>
-  <description>Activated by after “Push to Gerrit”:&#xd;
+  <description>Activated by after “Push to Gerrit”:&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -22,7 +24,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -30,13 +32,13 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
+          <description/>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFSPEC</name>
-          <description></description>
+          <description/>
           <defaultValue>refs/changes/87/32287/3</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -53,12 +55,12 @@
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -68,12 +70,12 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <refspec>$GERRIT_REFSPEC:refs/remote/origin/$GERRIT_REFSPEC</refspec>
         <url>ssh://jenkins@gerrit:29418/IPP/SFB</url>
         <credentialsId>df9bd014-71c4-4f0e-8177-456e451a86c0</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
@@ -86,11 +88,13 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>20</timeout>
         <depth>80</depth>
         <honorRefspec>false</honorRefspec>
@@ -105,7 +109,7 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
-  <concurrentBuild>true</concurrentBuild>
+  <concurrentBuild>false</concurrentBuild>
   <axes>
     <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.0">
       <name>MAKE_CMD</name>
@@ -122,90 +126,150 @@
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>#check disk size if there is no enough space, delete all workspace
-set +e
-disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
-disk_size=${disk_size%.*}
-if [[ $disk_size -le 8 ]]
-then
-echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
-find /opt/jenkinsslave/workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
-df -h
-fi</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>#Find from the yml line the AUTOPRD name
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
-echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
-#In case the AUTOPRD name contain __IIM or something like that, remove it so we will find the image even if its name is _IIM (one underscore)
-echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_ipp_version.properties
-
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
-    </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
-      <info>
-        <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
-      </info>
-    </EnvInjectBuilder>
-    <hudson.tasks.Shell>
-      <command>
-
-User=&quot;$artifactory_user:$artifactory_password&quot;
-git fetch &quot;ssh://jenkins@gerrit:29418/IPP/SFB&quot; refs/changes/87/32287/3 &amp;&amp; git checkout FETCH_HEAD
-
-git status || echo &quot;failed&quot;
-cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
-#**********************************************************************************************
-#***********************  ***************************************************
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* ]]
-then
-	git submodule foreach git status || echo &quot;failed&quot;
-    git submodule foreach git clean -fdx || echo &quot;failed&quot;
-    git submodule foreach git checkout -- . || echo &quot;failed&quot;
-	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-    git submodule foreach git reset --hard HEAD
-	git submodule update
-fi
-#**********************************************************************************************
-#***********************  ***************************************************
-
-
-#if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
-#if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-    	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
-fi
-
-#compile:
-export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
-export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
-yes | make distclean
-
-NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
-
-for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  if [[ $PARAMS =~ &quot;LOG=1&quot; ]]; then
-    make $PARAMS
-  else
-    make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
-  fi
-done
-#change size_report name to 450HD_SIZE_REPORT.csv
-NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
-mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
-
-
-</command>
+      <command>echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed"
+11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4
+11:00:29 		at hudson.remoting.Channel.attachCallSiteStackTrace(Channel.java:1741)
+11:00:29 		at hudson.remoting.UserRequest$ExceptionResponse.retrieve(UserRequest.java:356)
+11:00:29 		at hudson.remoting.Channel.call(Channel.java:955)
+11:00:29 		at hudson.Launcher$RemoteLauncher.kill(Launcher.java:1086)
+11:00:29 		at hudson.model.AbstractBuild$AbstractBuildExecution.run(AbstractBuild.java:510)
+11:00:29 		at hudson.model.Run.execute(Run.java:1853)
+11:00:29 		at hudson.matrix.MatrixBuild.run(MatrixBuild.java:323)
+11:00:29 		at hudson.model.ResourceController.execute(ResourceController.java:97)
+11:00:29 		at hudson.model.Executor.run(Executor.java:427)
+11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer
+11:00:29 	at hudson.util.ProcessTree.get(ProcessTree.java:432)
+11:00:29 	at hudson.Launcher$RemoteLauncher$KillTask.call(Launcher.java:1103)
+11:00:29 	at hudson.Launcher$RemoteLauncher$KillTask.call(Launcher.java:1094)
+11:00:29 	at hudson.remoting.UserRequest.perform(UserRequest.java:211)
+11:00:29 	at hudson.remoting.UserRequest.perform(UserRequest.java:54)
+11:00:29 	at hudson.remoting.Request$2.run(Request.java:369)
+11:00:29 	at hudson.remoting.InterceptingExecutorService$1.call(InterceptingExecutorService.java:72)
+11:00:29 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+11:00:29 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+11:00:29 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+11:00:29 	at java.lang.Thread.run(Thread.java:748)
+11:00:29 Caused: java.io.IOException: Remote call on ipp-matrix-parents-centos7.4 failed
+11:00:29 	at hudson.remoting.Channel.call(Channel.java:961)
+11:00:29 	at hudson.Launcher$RemoteLauncher.kill(Launcher.java:1086)
+11:00:29 	at hudson.model.AbstractBuild$AbstractBuildExecution.run(AbstractBuild.java:510)
+11:00:29 	at hudson.model.Run.execute(Run.java:1853)
+11:00:29 	at hudson.matrix.MatrixBuild.run(MatrixBuild.java:323)
+11:00:29 	at hudson.model.ResourceController.execute(ResourceController.java:97)
+11:00:29 	at hudson.model.Executor.run(Executor.java:427)
+1</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.3"/>
+          <publisherList>
+            <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
+              <tasks>
+                <hudson.plugins.postbuildtask.TaskProperties>
+                  <logTexts>
+                    <hudson.plugins.postbuildtask.LogProperties>
+                      <logText>NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer</logText>
+                      <operator>AND</operator>
+                    </hudson.plugins.postbuildtask.LogProperties>
+                    <hudson.plugins.postbuildtask.LogProperties>
+                      <logText>Remote call on ipp-matrix-parents-centos7.4 failed</logText>
+                      <operator>AND</operator>
+                    </hudson.plugins.postbuildtask.LogProperties>
+                  </logTexts>
+                  <EscalateStatus>false</EscalateStatus>
+                  <RunIfJobSuccessful>false</RunIfJobSuccessful>
+                  <script>echo "PARENT_SLAVE_DEAD=TRUE" &gt; prop</script>
+                </hudson.plugins.postbuildtask.TaskProperties>
+              </tasks>
+            </hudson.plugins.postbuildtask.PostbuildTask>
+            <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.9.1">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <EnvInjectBuilder plugin="envinject@2.3.0">
+                        <info>
+                          <propertiesFilePath>prop</propertiesFilePath>
+                        </info>
+                      </EnvInjectBuilder>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
+            <arg1>$PARENT_SLAVE_DEAD</arg1>
+            <arg2>TRUE</arg2>
+            <ignoreCase>false</ignoreCase>
+          </condition>
+          <publisherList>
+            <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
+              <recipientList>ben.magriso</recipientList>
+              <configuredTriggers>
+                <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
+                  <email>
+                    <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+                    <body>$PROJECT_DEFAULT_CONTENT</body>
+                    <recipientProviders>
+                      <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+                    </recipientProviders>
+                    <attachmentsPattern/>
+                    <attachBuildLog>false</attachBuildLog>
+                    <compressBuildLog>false</compressBuildLog>
+                    <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+                    <contentType>project</contentType>
+                  </email>
+                </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
+              </configuredTriggers>
+              <contentType>default</contentType>
+              <defaultSubject>IPP Parent Slave DEAD</defaultSubject>
+              <defaultContent>warning!</defaultContent>
+              <attachmentsPattern/>
+              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+              <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+              <attachBuildLog>false</attachBuildLog>
+              <compressBuildLog>false</compressBuildLog>
+              <replyTo>$DEFAULT_REPLYTO</replyTo>
+              <from/>
+              <saveOutput>false</saveOutput>
+              <disabled>false</disabled>
+              <matrixTriggerMode>ONLY_PARENT</matrixTriggerMode>
+            </hudson.plugins.emailext.ExtendedEmailPublisher>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+          <aggregationCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
+            <arg1>$PARENT_SLAVE_DEAD</arg1>
+            <arg2>TRUE</arg2>
+            <ignoreCase>false</ignoreCase>
+          </aggregationCondition>
+          <aggregationRunner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+  </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>.git/index.lock</pattern>
@@ -213,40 +277,41 @@ mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh
-FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
+FilesList=$(git show --pretty="" --name-only $GERRIT_PATCHSET_REVISION)
 Owner=$GERRIT_PATCHSET_UPLOADER_NAME
-message=&quot;&quot;
+message=""
 if [[ ! $GERRIT_BRANCH =~ private ]]; then
-  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Shai Peretz&quot; ] ; then
+  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ "$Owner" != "Oleg Friedman" ] &amp;&amp; [ "$Owner" != "Oriel Krispin" ] &amp;&amp; [ "$Owner" != "Shai Peretz" ] ; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
-      message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
+      message="You do not have permission to change the following files: ipp_version.h_shipped or *.yml"
 fi
-if [[ $FilesList =~ src/dspg_kernel|src/u-boot ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q &quot;$Owner&quot;;
+if [[ $FilesList =~ src/dspg_kernel|src/u-boot ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q "$Owner";
 then
       echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
-      message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
+      message="You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux"
 fi
 
-if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/emsc/|ib/device_management/ ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q &quot;$Owner&quot;;
+if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/emsc/|ib/device_management/ ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q "$Owner";
 then
       echo  ------------   You do not have permission to change the reference to  the IPP-SFB SubModule ----------------
-      message=&quot;You do not have permission to change the reference to  the IPP-SFB SubModule&quot;
+      message="You do not have permission to change the reference to  the IPP-SFB SubModule"
 fi
 
-if [ ! -z &quot;$message&quot; ]; then
+if [ ! -z "$message" ]; then
       base=https://$GERRIT_HOST/a/changes
-      CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
-      #id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
+      CURL="curl -kn -u jenkins:${jenkins_pass} --silent"
+      #id=$($CURL "$base/?q=$GERRIT_PATCHSET_REVISION" | sed -nE 's/^.*"id": "(.*)",$/\1/p')
       id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
       idEscaped=${id////%2F}
 
-      endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
-      $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
+      endpoint="/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review"
+      $CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8"  -d "{\"message\": \"$message\", \"tag\": \"jenkins\", \"notify\": \"NONE\"}"
       exit 1;
   fi
 fi
@@ -255,17 +320,17 @@ fi
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>false</hideEnvironmentVariablesValues>
     </com.lookout.jenkins.EnvironmentScript>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -279,8 +344,9 @@ fi
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}_${GERRIT_REFSPEC}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
