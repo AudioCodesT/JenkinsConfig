@@ -150,6 +150,10 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                 <hudson.plugins.postbuildtask.TaskProperties>
                   <logTexts>
                     <hudson.plugins.postbuildtask.LogProperties>
+                      <logText>Triggering </logText>
+                      <operator>OR</operator>
+                    </hudson.plugins.postbuildtask.LogProperties>
+                    <hudson.plugins.postbuildtask.LogProperties>
                       <logText>NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer</logText>
                       <operator>AND</operator>
                     </hudson.plugins.postbuildtask.LogProperties>
