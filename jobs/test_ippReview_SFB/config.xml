@@ -175,7 +175,11 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                 <buildSteps>
                   <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                     <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>ABORTED</string>
                       <string>FAILURE</string>
+                      <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
                     <executeOn>MATRIX</executeOn>
