@@ -136,7 +136,7 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.3"/>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.NeverRun" plugin="run-condition@1.3"/>
           <publisherList>
             <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
               <tasks>
@@ -164,11 +164,7 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                 <buildSteps>
                   <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
                     <results>
-                      <string>SUCCESS</string>
-                      <string>NOT_BUILT</string>
-                      <string>ABORTED</string>
                       <string>FAILURE</string>
-                      <string>UNSTABLE</string>
                     </results>
                     <role>BOTH</role>
                     <executeOn>MATRIX</executeOn>
@@ -191,11 +187,7 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
-            <arg1>$PARENT_SLAVE_DEAD</arg1>
-            <arg2>TRUE</arg2>
-            <ignoreCase>false</ignoreCase>
-          </condition>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.NeverRun" plugin="run-condition@1.3"/>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
               <recipientList>ben.magriso</recipientList>
@@ -257,9 +249,9 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>set -xe
-echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed"
-echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4"
-echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"
+FATAL: Remote call on ipp-matrix-parents-centos7.4 failed
+11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4
+11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer
 </script>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
