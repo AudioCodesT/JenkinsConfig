@@ -158,8 +158,16 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                       <operator>OR</operator>
                     </hudson.plugins.postbuildtask.LogProperties>
                     <hudson.plugins.postbuildtask.LogProperties>
+                      <logText>a</logText>
+                      <operator>OR</operator>
+                    </hudson.plugins.postbuildtask.LogProperties>
+                    <hudson.plugins.postbuildtask.LogProperties>
+                      <logText>b</logText>
+                      <operator>OR</operator>
+                    </hudson.plugins.postbuildtask.LogProperties>
+                    <hudson.plugins.postbuildtask.LogProperties>
                       <logText>u</logText>
-                      <operator>AND</operator>
+                      <operator>OR</operator>
                     </hudson.plugins.postbuildtask.LogProperties>
                   </logTexts>
                   <EscalateStatus>false</EscalateStatus>
