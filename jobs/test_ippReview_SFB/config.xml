@@ -169,6 +169,12 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                     <role>BOTH</role>
                     <executeOn>MATRIX</executeOn>
                     <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>if [[ ! -f prop ]]
+then
+	touch prop
+fi</command>
+                      </hudson.tasks.Shell>
                       <EnvInjectBuilder plugin="envinject@2.3.0">
                         <info>
                           <propertiesFilePath>prop</propertiesFilePath>
