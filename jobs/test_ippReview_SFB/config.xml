@@ -256,9 +256,10 @@ fi</command>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/bash
 set -xe
-echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed"
-echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4"
-echo "1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"
+echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed" &gt; a
+echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4" &gt;&gt; a
+echo "1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer" &gt;&gt; a
+cat a
 
 </script>
       <scriptType>unixScript</scriptType>
