@@ -150,15 +150,15 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                 <hudson.plugins.postbuildtask.TaskProperties>
                   <logTexts>
                     <hudson.plugins.postbuildtask.LogProperties>
-                      <logText>Triggering </logText>
+                      <logText>NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer</logText>
                       <operator>OR</operator>
                     </hudson.plugins.postbuildtask.LogProperties>
                     <hudson.plugins.postbuildtask.LogProperties>
-                      <logText>NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer</logText>
-                      <operator>AND</operator>
+                      <logText>Remote call on ipp-matrix-parents-centos7.4 failed</logText>
+                      <operator>OR</operator>
                     </hudson.plugins.postbuildtask.LogProperties>
                     <hudson.plugins.postbuildtask.LogProperties>
-                      <logText>Remote call on ipp-matrix-parents-centos7.4 failed</logText>
+                      <logText>completed with result SUCCESS</logText>
                       <operator>AND</operator>
                     </hudson.plugins.postbuildtask.LogProperties>
                   </logTexts>
