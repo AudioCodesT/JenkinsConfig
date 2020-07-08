@@ -140,9 +140,7 @@
 
 npm config set registry https://artifactory/api/npm/npm/
 npm config set strict-ssl false
-rm -rf package-lock.json
-npm cache clean --force
-npm cache verify
+
 npm install
 
 npm run-script build</command>
