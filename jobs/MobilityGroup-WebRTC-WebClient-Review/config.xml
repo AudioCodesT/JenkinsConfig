@@ -137,7 +137,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash -xe
 
-
+npm install -g npm@latest
 npm config set registry https://artifactory/api/npm/npm/
 npm config set strict-ssl false
 
