@@ -59,6 +59,13 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
+        <scriptContent>#!/bin/bash
+set -xe
+echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed" 
+echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4"
+echo "1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer" 
+
+</scriptContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -254,14 +261,7 @@ fi</command>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script>#!/bin/bash
-set -xe
-echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed" &gt; a
-echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4" &gt;&gt; a
-echo "1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer" &gt;&gt; a
-cat a
-
-</script>
+      <script/>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>true</hideEnvironmentVariablesValues>
