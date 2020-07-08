@@ -78,7 +78,7 @@
 cd C:/IpPhoneAutomation/IPPPA
 pwd
 echo $PATH
-echo "Workspace: $WORKSPACE"
+echo $WORKSPACE
 py.test.exe --html=report.html --junit-xml=results.xml --self-contained-html tests/ippsystem/core/ippservices/test_basic_call_sanity.py::TestBasicCallSanity::test_basic_call_setup</command>
     </hudson.tasks.Shell>
   </builders>
