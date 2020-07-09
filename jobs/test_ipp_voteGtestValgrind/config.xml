@@ -137,7 +137,7 @@ do
   
   
   #fetch gtest errors
-  gtestRetValue=1
+  gtestRetValue=0
   grep -E '[1-9]+ FAILED TEST' ${model}* || gtestRetValue=$?
   if [[ "$gtestRetValue" == "0" ]]
   then
