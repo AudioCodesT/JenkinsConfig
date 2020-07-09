@@ -147,6 +147,8 @@ do
   elif [[ "$gtestRetValue" == "1" ]]
   then
   gtestSign="1"
+  grep -E '[  PASSED  ]' ${model}*
+  cat ${model}*  | grep 'PASSED'
   else
   echo "ERROR not found GTestLogs Files"
   exit 1
