@@ -156,25 +156,47 @@ vmHostIP="10.7.10.107"
 
 
 
-#check if VM name ARM-router_$VERSION_NAME is already exists
-vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateCentos8Repo" | gawk '{print $1}'`
+#check if VM name ARM-CreateRouterCentos8Repo is already exists
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateRouterCentos8Repo" | gawk '{print $1}'`
 if [ ! -z "$vms" ]
 	then
-	    echo "$(date) : ARM-CreateCentos8Repo already exist, I am exiting now"  | tee -a $logfile
+	    echo "$(date) : ARM-CreateRouterCentos8Repo already exist, I am exiting now"  | tee -a $logfile
+		exit 1
+fi
+
+#check if VM name ARM-CreateConfCentos8Repo is already exists
+vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateConfCentos8Repo" | gawk '{print $1}'`
+if [ ! -z "$vms" ]
+	then
+	    echo "$(date) : ARM-CreateConfCentos8Repo already exist, I am exiting now"  | tee -a $logfile
 		exit 1
 fi
 
 #create a new VM from ARM-router_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
 echo "$(date) : creating new Router VM from image" | tee -a $logfile
 OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Router/Router_Centos8.ovf
-ovftool --disableVerification --noSSLVerify --name="ARM-CreateCentos8Repo" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+ovftool --disableVerification --noSSLVerify --name="ARM-CreateRouterCentos8Repo" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
+if [ $? -ne 0 ]; then
+    echo "$(date) : Deploy new VM has failed - check aws_CreateRepo.log" | tee -a $logfile
+    exit 1
+fi
+
+
+#create a new VM from ARM-router_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
+echo "$(date) : creating new Configurator VM from image" | tee -a $logfile
+OVA=/home/centos/jenkinsslave_jenkins/arm_ova/Configurator/Configurator_Centos8.ovf
+ovftool --disableVerification --noSSLVerify --name="ARM-CreateConfCentos8Repo" --datastore=DataStore01 --diskMode=thin --acceptAllEulas --powerOn $OVA vi://root:$vipw@${vmHostIP} | tee -a $logfile
 if [ $? -ne 0 ]; then
     echo "$(date) : Deploy new VM has failed - check aws_CreateRepo.log" | tee -a $logfile
     exit 1
 fi
 
 # find new vm id
-vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateCentos8Repo" | gawk '{print $1}'`
+router_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateRouterCentos8Repo" | gawk '{print $1}'`
+echo "$(date) : vm id is $vmid" | tee -a $logfile
+
+
+conf_vmid=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateConfCentos8Repo" | gawk '{print $1}'`
 echo "$(date) : vm id is $vmid" | tee -a $logfile
 
 # Wait for arm server power on
@@ -185,37 +207,66 @@ sleep 300
 
 # find new vm IPv4 address
 #vmip=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -m 1 "ipAddress" | cut -d'"' -f2`
-vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
-ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $vmid" | tee -a $logfile &amp;&amp; exit)
-echo "$(date) : vm IP is $vmIPaddress" | tee -a $logfile
+router_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $router_vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $router_vmid" | tee -a $logfile &amp;&amp; exit)
+echo "$(date) : vm IP is $router_vmIPaddress" | tee -a $logfile
 
-
+conf_vmIPaddress=`ssh root@${vmHostIP} vim-cmd vmsvc/get.guest $conf_vmid | grep -E "ipAddress.*\[$" -m 1 -A 5 | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+ipcalc -cs $vmIPaddress || ( echo "$(date) : Invalid IP for $conf_vmid" | tee -a $logfile &amp;&amp; exit)
+echo "$(date) : vm IP is $conf_vmIPaddress" | tee -a $logfile
 
 
 
 #ssh to Router VM and copy arm_utils  to /tmp folder
 echo "$(date) : copy $arm_utils_file_name  and $offile_repository_file_name files to Router VM $vmIPaddress to /tmp"  | tee -a $logfile
-sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils root@${vmIPaddress}:/tmp/arm_utils
+sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils root@${router_vmIPaddress}:/tmp/arm_utils
 
-echo "$(date) : run create_repo.py from /tmp/arm_utils"  | tee -a $logfile
-sshpass -p password ssh -oStrictHostKeyChecking=no root@${vmIPaddress} &lt;&lt; EOF
+echo "$(date) : copy $arm_utils_file_name  and $offile_repository_file_name files to Configurator VM $vmIPaddress to /tmp"  | tee -a $logfile
+sshpass -p password scp -oStrictHostKeyChecking=no -r ${WORKSPACE}/ArmCommon/Common/VMFiles/Shared/usr/local/bin/arm_utils root@${conf_vmIPaddress}:/tmp/arm_utils
+
+echo "$(date) : run create_repo.py and prepare_router_from_repo.py"  | tee -a $logfile
+sshpass -p password ssh -oStrictHostKeyChecking=no root@${router_vmIPaddress} &lt;&lt; EOF
 	set -xe
 	cd /tmp/arm_utils
 	python3 create_repo.py
+    python3  prepare_router_from_repo.py
 EOF
 
-echo "$(date) : copy offline_repo from $vmIPaddress /tmp to jenkins slave"  | tee -a $logfile
-sshpass -p password scp -oStrictHostKeyChecking=no root@${vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/cent92install-repo.tar.gz
+echo "$(date) : run create_repo.py and prepare_configurator_from_repo.py"  | tee -a $logfile
+sshpass -p password ssh -oStrictHostKeyChecking=no root@${conf_vmIPaddress} &lt;&lt; EOF
+	set -xe
+	cd /tmp/arm_utils
+	python3 create_repo.py
+    python3  prepare_configurator_from_repo.py
+EOF
+
+
+
+echo "$(date) : copy offline_repo from Router VM /tmp to jenkins slave"  | tee -a $logfile
+sshpass -p password scp -oStrictHostKeyChecking=no root@${router_vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/router_cent92install-repo.tar.gz
+
+
+echo "$(date) : copy offline_repo from Configurator VM /tmp to jenkins slave"  | tee -a $logfile
+sshpass -p password scp -oStrictHostKeyChecking=no root@${conf_vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/conf_cent92install-repo.tar.gz
 
 
 #graceful shutdouwn BOTH VM
 echo "$(date) : shutdown new  VM"  | tee -a $logfile
-ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${conf_vmid}
+sleep 30
+
+
+echo "$(date) : shutdown new  VM"  | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${router_vmid}
 sleep 30
 
 #terminate  VM MACHINE
 echo "$(date) : delete new VM"   | tee -a $logfile
-ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${vmid}
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${router_vmid}
+sleep 30
+
+echo "$(date) : delete new VM"   | tee -a $logfile
+ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy  ${conf_vmid}
 sleep 30
 
 
