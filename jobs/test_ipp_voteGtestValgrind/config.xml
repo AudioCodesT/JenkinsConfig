@@ -147,7 +147,7 @@ do
   elif [[ "$gtestRetValue" == "1" ]]
   then
   gtestSign="1"
-  successfull_passed_count=$(grep -E '[  PASSED  ]' ${model}* | wc -l)
+  successfull_passed_count=$(grep -E 'PASSED' ${model}* | wc -l)
   num_of_files=$(ll ${model}* | wc -l)
   if [[ $successfull_passed_count != $num_of_files ]]
   then
