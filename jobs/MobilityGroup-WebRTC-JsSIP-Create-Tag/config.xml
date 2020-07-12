@@ -91,7 +91,7 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
 #get Last Tag and all the commits since the last tag in reverse list
 OLDTAG=$(git describe --tags --abbrev=0 --first-parent)
 echo $OLDTAG
-NEWTAG=`echo $$OLDTAG | sed -r 's/(.*)\.[^\d]+$/\1/'`.`echo $OLDTAG | awk -F. '{print $NF+1}'`
+NEWTAG=`echo $OLDTAG | sed -r 's/(.*)\.[^\d]+$/\1/'`.`echo $OLDTAG | awk -F. '{print $NF+1}'`
 echo $NEWTAG
 
 #if VersionName is not empty then push VersionName as the new Tag
