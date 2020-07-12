@@ -113,7 +113,6 @@ npm config set strict-ssl false
 sudo npm i -g npm@4.6.1
 #change package.json to the correct version
 sed  -ri "s/\"version\":.*/\"version\": \"${NEWTAG}\",/g" package.json
-cat package.json
 #run npm install
 npm install
 npm pack
@@ -176,7 +175,7 @@ sudo npm i -g npm@6.13.4
         <spec>{
     "files": [
         {
-            "pattern": "${WORKSPACE}/jssip-v${NEWTAG}.zip",
+            "pattern": "${WORKSPACE}/jssip-${NEWTAG}.tgz",
             "target": "npm-local/jssip/-/",
              "recursive": "false"
         }
