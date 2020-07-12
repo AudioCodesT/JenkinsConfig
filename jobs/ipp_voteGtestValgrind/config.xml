@@ -147,6 +147,12 @@ do
   elif [[ "$gtestRetValue" == "1" ]]
   then
   gtestSign="1"
+  successfull_passed_count=$(grep -E 'PASSED' ${model}* | wc -l)
+  num_of_files=$(ls -al ${model}* | wc -l)
+  if [[ $successfull_passed_count != $num_of_files ]]
+  then
+  		gtestSign="-1"
+  fi
   else
   echo "ERROR not found GTestLogs Files"
   exit 1
