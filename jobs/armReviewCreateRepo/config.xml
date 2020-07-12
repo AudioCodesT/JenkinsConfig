@@ -154,6 +154,16 @@ VERSION_NAME=$1
 BRANCH=$2
 vmHostIP="10.7.10.107"
 
+function rmVM () {
+    vmid=$1
+    vm=$2
+  echo "$(date) : stopping $vm VM"  | tee -a $logfile
+    ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/power.shutdown ${vmid}
+  sleep 60
+  echo "$(date) : deleting $vm VM"  | tee -a $logfile
+    ssh -oStrictHostKeyChecking=no root@${vmHostIP} vim-cmd vmsvc/destroy ${vmid}
+  sleep 60
+}
 
 
 #check if VM name ARM-CreateRouterCentos8Repo is already exists
@@ -161,7 +171,7 @@ vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateRouterCentos
 if [ ! -z "$vms" ]
 	then
 	    echo "$(date) : ARM-CreateRouterCentos8Repo already exist, I am exiting now"  | tee -a $logfile
-		exit 1
+        rmVM $vms Router
 fi
 
 #check if VM name ARM-CreateConfCentos8Repo is already exists
@@ -169,7 +179,7 @@ vms=`ssh root@${vmHostIP} vim-cmd vmsvc/getallvms | grep "ARM-CreateConfCentos8R
 if [ ! -z "$vms" ]
 	then
 	    echo "$(date) : ARM-CreateConfCentos8Repo already exist, I am exiting now"  | tee -a $logfile
-		exit 1
+		rmVM $vms Configurator
 fi
 
 #create a new VM from ARM-router_image.ova (ova file is located on jenkins slave /root/jenkinsslave/arm-ova)
