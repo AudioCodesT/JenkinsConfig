@@ -57,26 +57,6 @@
       </matrixOptions>
       <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.3.0">
-      <info>
-        <scriptContent>#!/bin/bash
-set -xe
-echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed" 
-echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4"
-echo "1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer" 
-
-</scriptContent>
-        <secureGroovyScript plugin="script-security@1.71">
-          <script/>
-          <sandbox>false</sandbox>
-        </secureGroovyScript>
-        <loadFilesFromMaster>false</loadFilesFromMaster>
-      </info>
-      <on>true</on>
-      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
-      <keepBuildVariables>true</keepBuildVariables>
-      <overrideBuildParameters>false</overrideBuildParameters>
-    </EnvInjectJobProperty>
     
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
