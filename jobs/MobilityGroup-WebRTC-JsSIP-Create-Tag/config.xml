@@ -1,8 +1,14 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>triggered automatically by pushed to gerrit&#13;
-1. Promote version tag automatically (last Tag+1)&#13;
+  <description>trigger manually by user&#13;
+1. change npm registry to artifactory&#13;
+2. edit the package.json file with the new TAG&#13;
+3. run npm install&#13;
+4. run npm pack (which create tgz file)&#13;
+5. deploy the tgz file to artifactory (npm-local)&#13;
+6. Promote version tag automatically (last Tag+1)&#13;
     For example: 1.1.2 promote to 1.1.3&#13;
+&#13;
 &#13;
 </description>
   <keepDependencies>false</keepDependencies>
@@ -70,11 +76,6 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
         <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
       </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
-      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
-        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.30.5">
-          <separator>#</separator>
-        </buildChooser>
-      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
   <assignedNode>MobilityGroup-android-build</assignedNode>
