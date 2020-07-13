@@ -196,7 +196,7 @@ fi
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|There appears to be trouble with the npm registry|JNLP4-connect connection|Error cloning remote repo 'origin').*</regexpForRerun>
+      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|There appears to be trouble with the npm registry|appears to be trouble with your network connection|JNLP4-connect connection|Error cloning remote repo 'origin').*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
