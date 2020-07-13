@@ -160,7 +160,7 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
                 <command>curl -k ${BUILD_URL}/consoleText -o build.log
 ret_code=0
 grep -E "NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"  build.log || ret_code=1
-if [[ ret_code == "0" ]]
+if [[ "${ret_code}" == "0" ]]
 then
 	echo "PARENT_SLAVE_DEAD=True" &gt; prop
 else
