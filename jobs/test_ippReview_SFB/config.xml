@@ -162,9 +162,9 @@ ret_code=0
 grep -E "NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"  build.log || ret_code=1
 if [[ ret_code == "0" ]]
 then
-	PARENT_SLAVE_DEAD="True"
+	echo "PARENT_SLAVE_DEAD=True" &gt; prop
 else
-	PARENT_SLAVE_DEAD="False"
+	echo "PARENT_SLAVE_DEAD=False" &gt; prop
 fi</command>
               </hudson.tasks.Shell>
               <EnvInjectBuilder plugin="envinject@2.3.0">
