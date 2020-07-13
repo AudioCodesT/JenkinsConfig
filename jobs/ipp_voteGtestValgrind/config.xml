@@ -152,6 +152,8 @@ do
   if [[ $successfull_passed_count != $num_of_files ]]
   then
   		gtestSign="-1"
+        gtest_message_to_send="${gtest_message_to_send}${model} "
+  		gtestFailedAtLeastOnce="True"
   fi
   else
   echo "ERROR not found GTestLogs Files"
