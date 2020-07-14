@@ -205,15 +205,14 @@ fi</command>
               <defaultSubject>warning!!</defaultSubject>
               <defaultContent>warning!</defaultContent>
               <attachmentsPattern/>
-              <presendScript>curl -k ${BUILD_URL}/consoleText -o build.log
-ret_code=0
-grep -E "NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"  build.log || ret_code=1
-if [[ "${ret_code}" == "0" ]]
-then
-	cancel=false
-else
-	cancel=true
-fi</presendScript>
+              <presendScript>def logFilePath = build.getLogFile().getPath();
+String logContent = new File(logFilePath).text;
+ if (logContent.find(/NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer/)) 
+{
+cancel=false;
+} else {
+cancel=true;
+}</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
               <attachBuildLog>false</attachBuildLog>
               <compressBuildLog>false</compressBuildLog>
