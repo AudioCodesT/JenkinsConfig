@@ -253,7 +253,7 @@ TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
 cd ${WORKSPACE}/..
 mkdir fax_libs
 cd fax_libs
-curl -ku admin:password -X GET https://artifactory/api/archive/download/dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}?archiveType=tar.gz &gt; libs.tar.gz
+curl -ku ${arti_username}:${arti_password} -X GET https://artifactory/api/archive/download/dsp-release/com/ac/dsp/Gen5/FaxLib/${GERRIT_BRANCH}/${TARGET}?archiveType=tar.gz &gt; libs.tar.gz
 tar -xvf libs.tar.gz
 rm -rf libs.tar.gz
 cd ${WORKSPACE}/..
@@ -359,6 +359,26 @@ ${ChangeID}</command>
       <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
+      <info>
+        <propertiesContent>arti_username=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>arti_password</name>
+          <value>{AQAAABAAAAAQ5uO/dv8v/Ant4F2F0n6y8jnCmOvu7Ql+/tJFusk6YUE=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
   </buildWrappers>
   <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
     <runSequentially>false</runSequentially>
