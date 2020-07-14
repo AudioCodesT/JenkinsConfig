@@ -248,7 +248,7 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
 #************************** Probe system status *****************************
 #****************************************************************************
 
-curl -k -O -u admin:$artifactory_password https://artifactory:443/Devops/Tools/AWS/Linux/sysprobe.sh
+curl -k -O -u $artifactory_user:$artifactory_password https://artifactory:443/Devops/Tools/AWS/Linux/sysprobe.sh
 
 chmod +x sysprobe.sh
 ./sysprobe.sh &amp;
@@ -328,7 +328,7 @@ kill -9 $(ps | grep sysprobe.sh | gawk '{print $1}')
 echo "Archive probe csv &amp; upload to Artifactory"
 mv sysprobe.csv ${BUILD_NUMBER}-${AUTOPRD}.csv
 tar zcfv ${BUILD_NUMBER}-${AUTOPRD}.tar.gz ${BUILD_NUMBER}-${AUTOPRD}.csv
-curl -u admin:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz "https://artifactory/Devops/Probes/ippReview_SFB/${BUILD_NUMBER}/${BUILD_NUMBER}-${AUTOPRD}.tar.gz"
+curl -u $artifactory_user:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz "https://artifactory/Devops/Probes/ippReview_SFB/${BUILD_NUMBER}/${BUILD_NUMBER}-${AUTOPRD}.tar.gz"
 
 #****************************************************************************
 #****************************************************************************
@@ -614,7 +614,7 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -628,7 +628,7 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQhYeTcVWTOs+2wXDu3jovLBzIUwyXm8elke2OBdOHbWQ=}</value>
+          <value>{AQAAABAAAAAQvr5w8ycn2R3ETtPeh2SX3TeMp9IwmEQf1FV2cLKsQfQ=}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>jenkins_pass</name>
