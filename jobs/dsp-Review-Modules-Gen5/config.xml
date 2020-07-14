@@ -164,7 +164,6 @@ sh copyModules.sh
 #*******************************************************************************************************************************
 if [[ "$module" == "NEU" ]]
 then
-	artifactory_user=admin
 	if [[ "$GERRIT_BRANCH" == "710" || "$GERRIT_BRANCH" == "723" ]]
     then
     	files_to_download=("neu_gmac_c.a64P" "pktutl_c.a64P" "util_a.a64P" "util_c.a64P")
@@ -286,7 +285,6 @@ sh copyModules.sh ${CHIP_NAME}
 #*******************************************************************************************************************************
 if [[ "$module" == "NEU" ]]
 then
-	artifactory_user=admin
 	if [[ "$GERRIT_BRANCH" == "710" || "$GERRIT_BRANCH" == "723" ]]
     then
     	files_to_download=("neu_gmac_c.a64P" "pktutl_c.a64P" "util_a.a64P" "util_c.a64P")
@@ -439,7 +437,6 @@ sh copyModules.sh ${CHIP_NAME}
 #*******************************************************************************************************************************
 if [[ "$module" == "NEU" ]]
 then
-	artifactory_user=admin
 	if [[ "$GERRIT_BRANCH" == "710" || "$GERRIT_BRANCH" == "723" ]]
     then
     	files_to_download=("neu_gmac_c.a64P" "pktutl_c.a64P" "util_a.a64P" "util_c.a64P")
@@ -629,6 +626,16 @@ echo "module=${module}"</script>
       <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
+      <info>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
     <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
@@ -639,7 +646,7 @@ echo "module=${module}"</script>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQTt8JWIAywZYc+LAouCyjb0x3ajj8eKm1obYgLMoc53U=}</value>
+          <value>{AQAAABAAAAAQSiNMWcoxpWN4dTQC7LptEKz/svb0lBUfwhdfnueMmKg=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
