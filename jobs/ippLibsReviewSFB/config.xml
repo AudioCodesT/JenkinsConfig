@@ -1,22 +1,24 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.13">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.14">
   <actions/>
-  <description>triggered by &quot;ippLibsReview&quot; job.&#xd;
-1. clone IPP/SFB to the latest in the BRANCH or to REFSPEC.&#xd;
-2. clone the project that triggered in  &quot;ippLibsReview&quot; job. (ipp/Libs/* , ipp/apps/emsc) and checkout to REFPSEC&#xd;
-3. copy all the files in that repository to the path of that submodule is. ( for example: src/apps/libs/libapp)&#xd;
+  <description>triggered by "ippLibsReview" job.&#13;
+1. clone IPP/SFB to the latest in the BRANCH or to REFSPEC.&#13;
+2. clone the project that triggered in  "ippLibsReview" job. (ipp/Libs/* , ipp/apps/emsc) and checkout to REFPSEC&#13;
+3. copy all the files in that repository to the path of that submodule is. ( for example: src/apps/libs/libapp)&#13;
 4. compile all models.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>10</daysToKeep>
+        <daysToKeep>15</daysToKeep>
         <numToKeep>-1</numToKeep>
         <artifactDaysToKeep>5</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
@@ -25,7 +27,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -33,32 +35,32 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>SFB_Revision</name>
-          <description></description>
+          <description/>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>SFB_REFSPEC</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LIB_PROJECT</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LIB_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LIB_REFSPEC</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -74,10 +76,11 @@
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -94,11 +97,13 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>20</timeout>
         <depth>80</depth>
         <honorRefspec>false</honorRefspec>
@@ -131,28 +136,32 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d" " -f1 | cut -d"&amp;" -f1`
 echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
 #In case the AUTOPRD name contain __IIM or something like that, remove it so we will find the image even if its name is _IIM (one underscore)
-echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_ipp_version.properties
+echo SHORTAUTOPRD=`echo $AUTOPRD | sed 's:_.*$::'` &gt;&gt; generated_ipp_version.properties
 
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
 echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+      <command>User="$artifactory_user:$artifactory_password"
 GERRIT_BRANCH=${LIB_BRANCH}
 
-git submodule foreach git status || echo &quot;failed&quot;
-git submodule foreach git clean -fdx || echo &quot;failed&quot;
-git submodule foreach git checkout -- . || echo &quot;failed&quot;
-git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+
+#clean untracked submodules and files
+git clean -ffdx 
+
+git submodule foreach git status || echo "failed"
+git submodule foreach git clean -fdx || echo "failed"
+git submodule foreach git checkout -- . || echo "failed"
+git submodule init || ( echo "git submodule init FAILED, return code = $?"  &amp;&amp; exit 1 )
+git submodule update || ( echo "git submodule update FAILED, return code = $?" &amp;&amp; exit 1 )
 git submodule foreach git reset --hard HEAD
 git submodule update
 
@@ -171,26 +180,26 @@ git -c http.sslverify=false clone --depth 10 -n https://gerrit/${LIB_PROJECT} sf
 cd sfb_lib_project
 git -c http.sslverify=false fetch https://gerrit/${LIB_PROJECT} ${LIB_REFSPEC} &amp;&amp; git checkout FETCH_HEAD
 
-if [[ ${LIB_PROJECT} =~ &quot;apps/emsc&quot; ]]
+if [[ ${LIB_PROJECT} =~ "apps/emsc" ]]
 then
 	cp -R * ${WORKSPACE}/src/apps/emsc
-elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-device-management&quot; ]]
+elif [[ ${LIB_PROJECT} =~ "Lib/Lib-device-management" ]]
 then
 	cp -R * ${WORKSPACE}/src/apps/lib/device_management
-elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-text&quot; ]]
+elif [[ ${LIB_PROJECT} =~ "Lib/Lib-text" ]]
 then
 	cp -R * ${WORKSPACE}/src/apps/lib/libtext
-elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-httpc&quot; ]]
+elif [[ ${LIB_PROJECT} =~ "Lib/Lib-httpc" ]]
 then
 	cp -R * ${WORKSPACE}/src/apps/lib/libhttpc
-elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-ev-app&quot; ]]
+elif [[ ${LIB_PROJECT} =~ "Lib/Lib-ev-app" ]]
 then
 	cp -R * ${WORKSPACE}/src/apps/lib/libev_app
-elif [[ ${LIB_PROJECT} =~ &quot;Lib/Lib-app&quot; ]]
+elif [[ ${LIB_PROJECT} =~ "Lib/Lib-app" ]]
 then
     cp -R * ${WORKSPACE}/src/apps/lib/libapp
 else
-echo &quot;None of the projects above... exiting the build&quot;
+echo "None of the projects above... exiting the build"
 exit 1
 fi
 cd ${WORKSPACE}
@@ -207,18 +216,18 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
-NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+NumExecuting=$(echo "$MAKE_CMD" |  awk -F '&amp;' '{print NF}')
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  if [[ $PARAMS =~ &quot;LOG=1&quot; ]]; then
+  PARAMS=`echo $MAKE_CMD | cut -d"&amp;" -f$i`
+  if [[ $PARAMS =~ "LOG=1" ]]; then
     make $PARAMS
   else
     make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
   fi
 done
 #change size_report name to 450HD_SIZE_REPORT.csv
-NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
+NEWTAGSizeReport=$(find | grep size_report.csv | cut -d'/' -f3) || true
 mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
 
 
@@ -240,7 +249,7 @@ mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
           <pattern>.git/index.lock</pattern>
@@ -248,28 +257,29 @@ mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin
+        <propertiesContent>artifactory_user=jenkins
 jenkins_user=jenkins</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQhYeTcVWTOs+2wXDu3jovLBzIUwyXm8elke2OBdOHbWQ=}</value>
+          <value>{AQAAABAAAAAQLY+0DgfzLJLq/FEeCvWfvfGeGnpvkBbivbJ/pXRl5Bc=}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>jenkins_pass</name>
@@ -277,8 +287,9 @@ jenkins_user=jenkins</propertiesContent>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch:${LIB_BRANCH}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
