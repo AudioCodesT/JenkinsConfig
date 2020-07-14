@@ -1,17 +1,19 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>for each children &#xd;
-1. it&apos;s downloading the size report of the latest tag and the size report of one tag before the latest one.&#xd;
-2. compare the two reports and check the size differences between them.&#xd;
+  <description>for each children &#13;
+1. it's downloading the size report of the latest tag and the size report of one tag before the latest one.&#13;
+2. compare the two reports and check the size differences between them.&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -24,7 +26,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -32,14 +34,14 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFSPEC</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -51,12 +53,12 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -66,8 +68,9 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -84,7 +87,9 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
     </extensions>
   </scm>
   <assignedNode>ipp-centos7.4</assignedNode>
@@ -100,26 +105,26 @@
       <command>change=`echo $GERRIT_REFSPEC | cut -d/ -f4`
 ps=`echo $GERRIT_REFSPEC | cut -d/ -f5`
 artifactory_host=artifactory
-failedAtLeastOnce=&quot;False&quot;
+failedAtLeastOnce="False"
 artifactory_url=https://$artifactory_host/ipp-release/com/ac/ipp/SFB
-failedToCurlOnceAtLeast=&quot;False&quot;
-User=&quot;$artifactory_user:$artifactory_password&quot;
-NEWLINE=$&apos;\n&apos;
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
-#OLDTAG=$(git describe | cut -d&apos;-&apos; -f1)
+failedToCurlOnceAtLeast="False"
+User="$artifactory_user:$artifactory_password"
+NEWLINE=$'\n'
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
+#OLDTAG=$(git describe | cut -d'-' -f1)
 OLDTAG=$(git describe --abbrev=0 --tags)
 echo $OLDTAG_TEST
-passAtLeastOnce=&quot;False&quot;
-localCurlFailed=&quot;False&quot;
+passAtLeastOnce="False"
+localCurlFailed="False"
 localCurlCount=2
 
 #get all childs names from the spesific TAG
-childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1)
+childs=$(cat boards2review.yml | sed s/.*AUTOPRD=// | cut -d" " -f1 | cut -d"&amp;" -f1)
 allChilds=($childs)
 allChildsLength=${#allChilds[@]}
 
 
-if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;&quot; ]]
+if [[ "$NAGINATOR_COUNT" == "" ]]
 then
 	NAGINATOR_COUNT=0
 fi
@@ -128,63 +133,63 @@ fi
 
 
 #get OLD TAG BRANCH (could been rebase from another branch)
-git fetch || echo &quot;git fetch has failed, not failing the build&quot;
+git fetch || echo "git fetch has failed, not failing the build"
 
 #get all the branches that contain that tag and check if the report exists
-branches_list=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e &apos;-&gt;&apos; | cut -d&apos;/&apos; -f2-)
+branches_list=$(git branch --no-color -r --contains ${OLDTAG} | grep -v -e '-&gt;' | cut -d'/' -f2-)
 for branch in ${branches_list[@]}
 do
-	oldTagBranchCurlFailed=&quot;False&quot;
-	curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${branch}/${OLDTAG}/${allChilds[2]}/${OLDTAG}_size_report.csv&quot; || oldTagBranchCurlFailed=&quot;True&quot;
-	if [[ &quot;$oldTagBranchCurlFailed&quot; == &quot;False&quot; ]]
+	oldTagBranchCurlFailed="False"
+	curl -k -u ${User} --insecure -fO "${artifactory_url}/${branch}/${OLDTAG}/${allChilds[2]}/${OLDTAG}_size_report.csv" || oldTagBranchCurlFailed="True"
+	if [[ "$oldTagBranchCurlFailed" == "False" ]]
 	then
 		OLDTAG_BRANCH=${branch}
 	fi
 done
-#if it&apos;s didnt find any branch from the list put the original branch
-if [[ &quot;$OLDTAG_BRANCH&quot; == &quot;&quot; ]]
+#if it's didnt find any branch from the list put the original branch
+if [[ "$OLDTAG_BRANCH" == "" ]]
 then
 	OLDTAG_BRANCH=$GERRIT_BRANCH
 fi
-echo &quot;branch is:$OLDTAG_BRANCH&quot;
+echo "branch is:$OLDTAG_BRANCH"
 
 
 
 # all tags before 3.4.0.24  are  getting the old tag in git describe
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;3.4.0&quot; ]]
+if [[ "$GERRIT_BRANCH" == "3.4.0" ]]
 then
-lastTagNumber=$(echo $OLDTAG | awk -F. &apos;{print $NF}&apos;)
+lastTagNumber=$(echo $OLDTAG | awk -F. '{print $NF}')
   if [[ $lastTagNumber -lt 24 ]]
   then
-  OLDTAG_BRANCH=&quot;4.0.0&quot;
+  OLDTAG_BRANCH="4.0.0"
   fi
 fi
 
 # get one tag before ${NEWTAG} to compare two newest size_report csv
-  echo &quot;In branch ${GERRIT_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:&quot; &gt; emailContent.txt
-  echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
+  echo "In branch ${GERRIT_BRANCH} between tags ${OLDTAG} and ${NEWTAG} the img size is different in the following models:" &gt; emailContent.txt
+  echo -e "\r\n" &gt;&gt; emailContent.txt
 
   for i in `seq 2 $(($allChildsLength-1))`
   do
-   echo &quot;*****************************************************${allChilds[i]}********************************************************************&quot;
+   echo "*****************************************************${allChilds[i]}********************************************************************"
    	  #get the New Tag
-      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO https://artifactory/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/${allChilds[i]}_size_report.csv || localCurlFailed="True"
       #get the OLDER CSV REPORT (NEWTAG -1)
-      curl -k -u ${User} --insecure -fO &quot;${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv&quot; || curlHasFailed=&quot;True&quot;
+      curl -k -u ${User} --insecure -fO "${artifactory_url}/${OLDTAG_BRANCH}/${OLDTAG}/${allChilds[i]}/${OLDTAG}_size_report.csv" || curlHasFailed="True"
       # if curl failed to download the report (not running the comparison)
-      if [[ &quot;$localCurlFailed&quot; == &quot;True&quot; ]]
+      if [[ "$localCurlFailed" == "True" ]]
       then
-      		echo &quot;Build Folder Doesnt Exists, doesn&apos;t have size_report&quot;
+      		echo "Build Folder Doesnt Exists, doesn't have size_report"
             ((localCurlCount+=1))
-            localCurlFailed=&quot;False&quot;
+            localCurlFailed="False"
       else
         
         
-          if [[ &quot;$curlHasFailed&quot; == &quot;True&quot; ]]
+          if [[ "$curlHasFailed" == "True" ]]
           then
-            failedToCurlOnceAtLeast=&quot;True&quot;
-            echo &quot;Failed to download sizeReport from Artifactory to ${allChilds[i]}&quot; &gt;&gt; size_report_${allChilds[i]}.txt
-            curlHasFailed=&quot;False&quot;
+            failedToCurlOnceAtLeast="True"
+            echo "Failed to download sizeReport from Artifactory to ${allChilds[i]}" &gt;&gt; size_report_${allChilds[i]}.txt
+            curlHasFailed="False"
           else
             
             # run comparison between the old csv to the new csv
@@ -193,31 +198,31 @@ fi
             RetunedValue=$?
             set -e
             #return 0 if the script succeseded else if failed
-            if [[ $RetunedValue == &quot;0&quot; ]]
+            if [[ $RetunedValue == "0" ]]
             then
-                passAtLeastOnce=&quot;True&quot;
-                echo &quot;${allChilds[i]} img size test passed&quot;
-            elif [[ $RetunedValue == &quot;1&quot; ]]
+                passAtLeastOnce="True"
+                echo "${allChilds[i]} img size test passed"
+            elif [[ $RetunedValue == "1" ]]
             then
-                failedAtLeastOnce=&quot;True&quot;
-                echo &quot;${allChilds[i]}  img size test failed&quot;
-                echo &quot;${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent.txt
-                echo -e &quot;\r\n&quot; &gt;&gt; emailContent.txt
-                message=&quot;size_diff Test has failed on model ${allChilds[i]}. You can see the output here: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.&quot;
-                if [[ ${allChilds[i]} == &quot;445HD_IGS&quot; ]]
+                failedAtLeastOnce="True"
+                echo "${allChilds[i]}  img size test failed"
+                echo "${allChilds[i]} img size test failed, You can see full report here ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt" &gt;&gt; emailContent.txt
+                echo -e "\r\n" &gt;&gt; emailContent.txt
+                message="size_diff Test has failed on model ${allChilds[i]}. You can see the output here: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt${NEWLINE}Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa."
+                if [[ ${allChilds[i]} == "445HD_IGS" ]]
                 then
-                	sed -i &quot;s/&apos;//g&quot; build/size_diff_report_445HD.txt
-                    report_output=$(echo &quot;$(cat build/size_diff_report_445HD.txt)&quot;)
+                	sed -i "s/'//g" build/size_diff_report_445HD.txt
+                    report_output=$(echo "$(cat build/size_diff_report_445HD.txt)")
                 else
-                	sed -i &quot;s/&apos;//g&quot; build/size_diff_report_${allChilds[i]}.txt
-                    report_output=$(echo &quot;$(cat build/size_diff_report_${allChilds[i]}.txt)&quot;)
+                	sed -i "s/'//g" build/size_diff_report_${allChilds[i]}.txt
+                    report_output=$(echo "$(cat build/size_diff_report_${allChilds[i]}.txt)")
                 fi
                 
-                message_with_report=&quot;size_diff test has failed on model ${allChilds[i]}. Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.${NEWLINE} You can see the output here:${report_output}&quot;
-                ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message_with_report}&apos;&quot; ${GIT_COMMIT}
+                message_with_report="size_diff test has failed on model ${allChilds[i]}. Please make sure this increased size can not be avoided.${NEWLINE}To approve this change please contact Arik Kabessa.${NEWLINE} You can see the output here:${report_output}"
+                ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message "'${message_with_report}'" ${GIT_COMMIT}
             else
-                needToSendEmail_reduced_size=&quot;True&quot;
-                echo &quot;${allChilds[i]} full report: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt&quot; &gt;&gt; emailContent_reduced_size.txt       
+                needToSendEmail_reduced_size="True"
+                echo "${allChilds[i]} full report: ${BUILD_URL}artifact/size_report_${allChilds[i]}.txt" &gt;&gt; emailContent_reduced_size.txt       
             fi
             if [[ -e build/size_diff_report_${allChilds[i]}.txt ]]
             then            
@@ -227,26 +232,26 @@ fi
       fi    
   done
 
-echo &quot;failedAtLeastOnce=$failedAtLeastOnce&quot; &gt; properties
-echo &quot;OLDTAG=$OLDTAG&quot; &gt;&gt; properties
-echo &quot;change=$change&quot; &gt;&gt; properties
+echo "failedAtLeastOnce=$failedAtLeastOnce" &gt; properties
+echo "OLDTAG=$OLDTAG" &gt;&gt; properties
+echo "change=$change" &gt;&gt; properties
 # If both conditions are true so i am failing the build because all moudules are failed to download size_report from artifactory
-if [[ &quot;$failedToCurlOnceAtLeast&quot; == &quot;True&quot; ]]
+if [[ "$failedToCurlOnceAtLeast" == "True" ]]
 then
-	 echo &quot;*************Not found in artifactory ${OLDTAG}******************&quot;
-     if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;$NAGINATOR_MAXCOUNT&quot; ]]
+	 echo "*************Not found in artifactory ${OLDTAG}******************"
+     if [[ "$NAGINATOR_COUNT" == "$NAGINATOR_MAXCOUNT" ]]
      then
      	#put me and jontan reviewrs
-		message=&quot;Size check report of the tag you are based on cannot be download, adding Ben/Jonatan to review&quot;
-     	#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
-     	ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; --label Size=-1 ${GIT_COMMIT}
-     	ssh -p 29418 jenkins@gerrit &quot;gerrit set-reviewers -a ben.magriso@audiocodes.com -a jonatan.reberger@audiocodes.com ${GIT_COMMIT}&quot;    
+		message="Size check report of the tag you are based on cannot be download, adding Ben/Jonatan to review"
+     	#ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message "'${message}'" $change,$ps
+     	ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message "'${message}'" --label Size=-1 ${GIT_COMMIT}
+     	ssh -p 29418 jenkins@gerrit "gerrit set-reviewers -a ben.magriso@audiocodes.com -a jonatan.reberger@audiocodes.com ${GIT_COMMIT}"    
      else
-     	message=&quot;Size check report of the tag you are based on cannot be download, retry again in 15 minutes&quot;
+     	message="Size check report of the tag you are based on cannot be download, retry again in 15 minutes"
         echo $message
-        if [[ &quot;$NAGINATOR_COUNT&quot; == &quot;1&quot; ]]
+        if [[ "$NAGINATOR_COUNT" == "1" ]]
         then
-			ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message &quot;&apos;${message}&apos;&quot; $change,$ps
+			ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --message "'${message}'" $change,$ps
         fi
         exit 1
      fi
@@ -254,24 +259,24 @@ then
 fi
 if [[ ${allChildsLength} == ${localCurlCount} ]]
 then
-	echo &quot;dont compiled any Model...keep same score&quot;
+	echo "dont compiled any Model...keep same score"
     exit 0
 fi
 
 
 #if at least one Models Are Failed put size-1
-if [[ &quot;$failedAtLeastOnce&quot; == &quot;True&quot; ]]
+if [[ "$failedAtLeastOnce" == "True" ]]
 then
-echo &quot;size=-1&quot;
+echo "size=-1"
 ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=-1 ${GIT_COMMIT}
 else
 #all True put size +1
-echo &quot;Size=+1&quot;
+echo "Size=+1"
 ssh -p 29418 jenkins@gerrit gerrit review --notify NONE --label Size=+1 ${GIT_COMMIT}
 fi
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>properties</propertiesFilePath>
       </info>
@@ -287,7 +292,7 @@ fi
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo &apos;origin&apos;).*</regexpForRerun>
+      <regexpForRerun>.*(ClosedChannel|no workspace from node|Workspace is not accessible|node is offline|Error fetching remote|JNLP4-connect connection|Error cloning remote repo 'origin').*</regexpForRerun>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>false</rerunMatrixPart>
       <checkRegexp>true</checkRegexp>
@@ -300,7 +305,7 @@ fi
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.0"/>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.3"/>
           <publisherList>
             <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
               <regexpForRerun>.*(retry again in 15 minutes).*</regexpForRerun>
@@ -314,36 +319,37 @@ fi
               <maxSchedule>3</maxSchedule>
             </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQw03EMTEOleY3v3dLAPYhfoJ+0gAn4qM6T5XCBfElcWQ=}</value>
+          <value>{AQAAABAAAAAQMDMwZummLi4shHctbQKkZ8r5xcjuez3AwSth0vpm2OQ=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${OLDTAG}_${change}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
