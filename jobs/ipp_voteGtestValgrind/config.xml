@@ -252,7 +252,7 @@ echo "TARGET=${TARGET}"
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -266,7 +266,7 @@ echo "TARGET=${TARGET}"
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQOLQPK2/p/BNkWlb5e9NyHjcLQKTRSor9hRSG6N90qUY=}</value>
+          <value>{AQAAABAAAAAQO9wG8TNOZ0dgm0M6rCnhilhTear847+p69V+NXzWEWE=}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>jenkins_pass</name>
