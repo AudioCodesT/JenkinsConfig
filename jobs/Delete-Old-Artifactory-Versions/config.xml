@@ -67,7 +67,7 @@ Executed periodically every night.&#13;
       <command>
 # Calculate the date we are going to delete
 oldThan=$(date +"%Y%m%d" -d "-$OLD days")
-User=admin:$Artifact_pass
+User=jenkins:$Artifact_pass
 
 # this is a recursive function - check the last modified date, if old or equel to $oldThan than remove this folder from the Artifactory
 function RemoveFolder() {
@@ -156,7 +156,7 @@ RemoveFolder sbc-review/com/ac/sbc/user</command>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>Artifact_pass</name>
-          <value>{AQAAABAAAAAQsSdkjy9+Zpb43qEPnLls0+/Fa73SCh6KQVLQXyTjnvo=}</value>
+          <value>{AQAAABAAAAAQzE+w/hzy9kUpWV0dSz8nP9ztKyk5U6pvSTZ0Q3U1d+g=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
