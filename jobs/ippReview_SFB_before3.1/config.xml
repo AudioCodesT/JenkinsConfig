@@ -405,7 +405,7 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -419,7 +419,7 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQhYeTcVWTOs+2wXDu3jovLBzIUwyXm8elke2OBdOHbWQ=}</value>
+          <value>{AQAAABAAAAAQAns3Aut00++XS0YLrLjr4qVqwD/PCpI8ClgczHtFfOg=}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>jenkins_pass</name>
