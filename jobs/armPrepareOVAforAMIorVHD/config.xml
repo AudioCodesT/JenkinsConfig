@@ -177,7 +177,7 @@ function updateYumRepos  () {
 	sshpass -p ${vm_password} ssh -oStrictHostKeyChecking=no ${vm_username}@${HOST} &lt;&lt; EOF
 	sudo -i -u root bash &lt;&lt; EOS
     	set -xe
-        curl -ku devops_read:devops_read -X GET https://artifactory/Devops/Tools/Azure/arm/CentOS8/CentOS-Base.repo -o /etc/yum.repos.d/CentOS-Base.repo
+        curl -ku ${arti_username}:${arti_password} -X GET https://artifactory/Devops/Tools/Azure/arm/CentOS8/CentOS-Base.repo -o /etc/yum.repos.d/CentOS-Base.repo
 EOS
 EOF
 }
@@ -551,7 +551,8 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>root_username=root</propertiesContent>
+        <propertiesContent>root_username=root
+arti_username=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -559,6 +560,16 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
+      <injectGlobalPasswords>false</injectGlobalPasswords>
+      <maskPasswordParameters>true</maskPasswordParameters>
+      <passwordEntries>
+        <EnvInjectPasswordEntry>
+          <name>arti_password</name>
+          <value>{AQAAABAAAAAQMrztjSP6WOBx8CH/ZsBPI+TrHvO6Urj7iy6M4Rxi0Sc=}</value>
+        </EnvInjectPasswordEntry>
+      </passwordEntries>
+    </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}__${PLATFORM}</template>
       <descriptionTemplate/>
