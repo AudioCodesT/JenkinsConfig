@@ -435,7 +435,7 @@ sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -449,7 +449,7 @@ sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQhYeTcVWTOs+2wXDu3jovLBzIUwyXm8elke2OBdOHbWQ=}</value>
+          <value>{AQAAABAAAAAQy6G1hlHSTAZB2rM682T99XUBV7gmoLTI8MiO/dbDbvE=}</value>
         </EnvInjectPasswordEntry>
         <EnvInjectPasswordEntry>
           <name>jenkins_pass</name>
