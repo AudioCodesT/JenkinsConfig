@@ -140,44 +140,6 @@ echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.9.1">
-      <config>
-        <scriptFiles/>
-        <groovyScripts/>
-        <buildSteps>
-          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-            <results>
-              <string>SUCCESS</string>
-              <string>NOT_BUILT</string>
-              <string>ABORTED</string>
-              <string>FAILURE</string>
-              <string>UNSTABLE</string>
-            </results>
-            <role>BOTH</role>
-            <executeOn>MATRIX</executeOn>
-            <buildSteps>
-              <hudson.tasks.Shell>
-                <command>curl -k ${BUILD_URL}/consoleText -o build.log
-ret_code=0
-grep -E "NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"  build.log || ret_code=1
-if [[ "${ret_code}" == "0" ]]
-then
-	echo "PARENT_SLAVE_DEAD=TRUE" &gt; prop
-else
-	echo "PARENT_SLAVE_DEAD=FALSE" &gt; prop
-fi</command>
-              </hudson.tasks.Shell>
-              <EnvInjectBuilder plugin="envinject@2.3.0">
-                <info>
-                  <propertiesFilePath>prop</propertiesFilePath>
-                </info>
-              </EnvInjectBuilder>
-            </buildSteps>
-          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-        </buildSteps>
-        <markBuildUnstable>false</markBuildUnstable>
-      </config>
-    </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
