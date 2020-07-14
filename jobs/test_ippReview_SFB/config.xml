@@ -1,7 +1,6 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.14">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.14">
   <actions/>
-  <description>Activated by after “Push to Gerrit”:&#xd;
+  <description>Activated by after “Push to Gerrit”:&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -12,7 +11,7 @@
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -33,13 +32,13 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
+          <description/>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFSPEC</name>
-          <description></description>
+          <description/>
           <defaultValue>refs/changes/87/32287/3</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -56,20 +55,19 @@
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <scriptContent>#!/bin/bash
 set -xe
-echo &quot;FATAL: Remote call on ipp-matrix-parents-centos7.4 failed&quot; 
-echo &quot;11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4&quot;
-echo &quot;1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer&quot; 
+echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed" 
+echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4"
+echo "1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer" 
 
 </scriptContent>
         <secureGroovyScript plugin="script-security@1.71">
-          <script></script>
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -79,6 +77,7 @@ echo &quot;1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hu
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -102,7 +101,7 @@ echo &quot;1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hu
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>20</timeout>
         <depth>80</depth>
         <honorRefspec>false</honorRefspec>
@@ -134,9 +133,9 @@ echo &quot;1:00:29 java.lang.NoClassDefFoundError: Could not initialize class hu
   </axes>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo &quot;FATAL: Remote call on ipp-matrix-parents-centos7.4 failed&quot;
-echo &quot;11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4&quot;
-echo &quot;11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer&quot;
+      <command>echo "FATAL: Remote call on ipp-matrix-parents-centos7.4 failed"
+echo "11:00:29 Also:   hudson.remoting.Channel$CallSiteStackTrace: Remote call to ipp-matrix-parents-centos7.4"
+echo "11:00:29 java.lang.NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -160,12 +159,12 @@ echo &quot;11:00:29 java.lang.NoClassDefFoundError: Could not initialize class h
               <hudson.tasks.Shell>
                 <command>curl -k ${BUILD_URL}/consoleText -o build.log
 ret_code=0
-grep -E &quot;NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer&quot;  build.log || ret_code=1
-if [[ &quot;${ret_code}&quot; == &quot;0&quot; ]]
+grep -E "NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"  build.log || ret_code=1
+if [[ "${ret_code}" == "0" ]]
 then
-	echo &quot;PARENT_SLAVE_DEAD=TRUE&quot; &gt; prop
+	echo "PARENT_SLAVE_DEAD=TRUE" &gt; prop
 else
-	echo &quot;PARENT_SLAVE_DEAD=FALSE&quot; &gt; prop
+	echo "PARENT_SLAVE_DEAD=FALSE" &gt; prop
 fi</command>
               </hudson.tasks.Shell>
               <EnvInjectBuilder plugin="envinject@2.3.0">
@@ -182,11 +181,7 @@ fi</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
-            <arg1>$PARENT_SLAVE_DEAD</arg1>
-            <arg2>TRUE</arg2>
-            <ignoreCase>true</ignoreCase>
-          </condition>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.AlwaysRun" plugin="run-condition@1.3"/>
           <publisherList>
             <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
               <recipientList>ben.magriso@audiocodes.com</recipientList>
@@ -198,7 +193,7 @@ fi</command>
                     <recipientProviders>
                       <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
                     </recipientProviders>
-                    <attachmentsPattern></attachmentsPattern>
+                    <attachmentsPattern/>
                     <attachBuildLog>false</attachBuildLog>
                     <compressBuildLog>false</compressBuildLog>
                     <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
@@ -209,13 +204,21 @@ fi</command>
               <contentType>default</contentType>
               <defaultSubject>warning!!</defaultSubject>
               <defaultContent>warning!</defaultContent>
-              <attachmentsPattern></attachmentsPattern>
-              <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+              <attachmentsPattern/>
+              <presendScript>curl -k ${BUILD_URL}/consoleText -o build.log
+ret_code=0
+grep -E "NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer"  build.log || ret_code=1
+if [[ "${ret_code}" == "0" ]]
+then
+	cancel=false
+else
+	cancel=true
+fi</presendScript>
               <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
               <attachBuildLog>false</attachBuildLog>
               <compressBuildLog>false</compressBuildLog>
               <replyTo>$DEFAULT_REPLYTO</replyTo>
-              <from></from>
+              <from/>
               <saveOutput>false</saveOutput>
               <disabled>false</disabled>
               <matrixTriggerMode>ONLY_PARENT</matrixTriggerMode>
@@ -238,12 +241,12 @@ fi</command>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
-      <script></script>
+      <script/>
       <scriptType>unixScript</scriptType>
       <runOnlyOnParent>true</runOnlyOnParent>
       <hideEnvironmentVariablesValues>true</hideEnvironmentVariablesValues>
@@ -252,7 +255,7 @@ fi</command>
       <info>
         <propertiesContent>artifactory_user=admin</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
-          <script></script>
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -274,7 +277,7 @@ fi</command>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}_${GERRIT_REFSPEC}</template>
-      <descriptionTemplate></descriptionTemplate>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
