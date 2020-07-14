@@ -359,7 +359,7 @@ ${WORKSPACE}/build/image/uImage=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
           <script/>
           <sandbox>false</sandbox>
@@ -373,7 +373,7 @@ ${WORKSPACE}/build/image/uImage=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQck6IKuyw7MRHoC+xi7F4z3t9Q50xeXU6sBFVhBpB9MY=}</value>
+          <value>{AQAAABAAAAAQGhklvABHU3TEviefycqIC4FKLgvD9cGmLbOd+EVfTh4=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
