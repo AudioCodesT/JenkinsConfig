@@ -1,28 +1,30 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>armConvertOVAtoVHD_1&#xd;
-this is the first job&#xd;
-purpose: add Linux integration for HyperV to the desired ARM OVA (by tag)&#xd;
-steps:&#xd;
-1. take OVA from Artifactory by tag&#xd;
-2. deploy in esxi&#xd;
-3. ssh and install the sw package&#xd;
-4. export to a new OVA&#xd;
-5. deploy to Artifactory to tempo folder&#xd;
+  <description>armConvertOVAtoVHD_1&#13;
+this is the first job&#13;
+purpose: add Linux integration for HyperV to the desired ARM OVA (by tag)&#13;
+steps:&#13;
+1. take OVA from Artifactory by tag&#13;
+2. deploy in esxi&#13;
+3. ssh and install the sw package&#13;
+4. export to a new OVA&#13;
+5. deploy to Artifactory to tempo folder&#13;
 6. call the second job that will convert the temp ova to VHD</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -30,8 +32,8 @@ steps:&#xd;
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>TAG</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -43,8 +45,9 @@ steps:&#xd;
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>arm-build-esxi</assignedNode>
@@ -64,50 +67,50 @@ import re
 import sys
 import traceback
  
-def sendWait(channel, command, timeout=20.0, waitfor=&quot;#&quot;):
-    channel.send(command + &quot;\n&quot;)
+def sendWait(channel, command, timeout=20.0, waitfor="#"):
+    channel.send(command + "\n")
     return justWait(channel, timeout, waitfor)
-def sendWithoutWait(channel, command, timeout=15.0, waitfor=&quot;#&quot;):
-    channel.send(command + &quot;\n&quot;)
-    return &quot;&quot;
+def sendWithoutWait(channel, command, timeout=15.0, waitfor="#"):
+    channel.send(command + "\n")
+    return ""
     
 def manualFlush(channel):
     for x in range(5):
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
-            line = channel.recv(1024).decode(&quot;utf-8&quot;)
+            line = channel.recv(1024).decode("utf-8")
             line = str(line)
             print(line)
     
-def justWait(channel, timeout=5.0, waitfor=&quot;#&quot;,root_password=&quot;root&quot;,acems_password=&quot;password&quot;):
+def justWait(channel, timeout=5.0, waitfor="#",root_password="root",acems_password="password"):
     t=time.time()
-    received=&quot;&quot;
+    received=""
     while True:
         rl, wl, xl = select.select([channel],[],[],1.0)
         if len(rl) &gt; 0:
-            line = channel.recv(1024).decode(&quot;utf-8&quot;)
+            line = channel.recv(1024).decode("utf-8")
             line = str(line)
             print(line)
             received+=line
-            if re.search(&quot;Press Enter to continue&quot;,line):
-                channel.send(&quot;\n&quot;)
-            if re.search(&quot;Press Enter to reboot...&quot;,line):
-                channel.send(&quot;\n&quot;)
+            if re.search("Press Enter to continue",line):
+                channel.send("\n")
+            if re.search("Press Enter to reboot...",line):
+                channel.send("\n")
                 time.sleep(200)
-                return &apos;reboot&apos;
-            if re.search(&quot;FATAL ERROR:&quot;,line):
-                return &apos;fatalerror&apos;
-            if re.search(&quot;patch installation may take up to&quot;,line):
+                return 'reboot'
+            if re.search("FATAL ERROR:",line):
+                return 'fatalerror'
+            if re.search("patch installation may take up to",line):
                 timeout=timeout+1800.0 # patch installation -- enlarge the timeout by 30 minutes
-            expression = r&quot;%s&quot; % waitfor
+            expression = r"%s" % waitfor
             if re.search(expression, line):
-                line_list=received.split(&apos;\n&apos;);
+                line_list=received.split('\n');
                 line_list.pop(0)
                 if len(line_list)&gt;0:
                     line_list.pop()
-                return &apos;\n&apos;.join(line_list)
+                return '\n'.join(line_list)
         if time.time()&gt;t+timeout:
-            print(&quot;\n\nTime out. Call stack:&quot;)
+            print("\n\nTime out. Call stack:")
             traceback.print_stack(file=sys.stdout)
             sys.exit(1)            
 
@@ -134,35 +137,35 @@ from subprocess import Popen, PIPE
 
 
 #esxi username and password
-vm_username=&apos;armAdmin&apos;
-vm_password=&apos;Arm!default1&apos;
-vm_root_password=&apos;password&apos;
+vm_username='armAdmin'
+vm_password='Arm!default1'
+vm_root_password='password'
 
 # Functions definitions for configuration
-def sendwait_conf(command, timeout=200.0, waitfor=&quot;#&quot;):
+def sendwait_conf(command, timeout=200.0, waitfor="#"):
     return cnlsender.sendWait(channel_conf, command, timeout, waitfor)
  
 def sendWithoutWait_conf(command):
 	return cnlsender.sendWithoutWait(channel_conf, command)
  
-def justWait_conf(timeout=200.0, waitfor=&quot;#&quot;):
+def justWait_conf(timeout=200.0, waitfor="#"):
 	return cnlsender.justWait(channel_conf, timeout, waitfor)
     
     
     
 # Functions definitions for router
-def sendwait_router(command, timeout=200.0, waitfor=&quot;#&quot;):
+def sendwait_router(command, timeout=200.0, waitfor="#"):
 	return cnlsender.sendWait(channel_router, command, timeout, waitfor)
  
 def sendWithoutWait_router(command):
 	return cnlsender.sendWithoutWait(channel_router, command)
  
-def justWait_router(timeout=200.0, waitfor=&quot;#&quot;):
+def justWait_router(timeout=200.0, waitfor="#"):
 	return cnlsender.justWait(channel_router, timeout, waitfor)
     
     
 #Functions unite both functions
-def sendwait(command,timeout=200.0, waitfor=&quot;#&quot;):
+def sendwait(command,timeout=200.0, waitfor="#"):
 	sendwait_conf(command,timeout, waitfor)
 	sendwait_router(command,timeout, waitfor)
     
@@ -174,187 +177,187 @@ def justWait(timeout,waitfor):
 	justWait_conf(timeout,waitfor)
 	justWait_router(timeout,waitfor)
 #check if VM name ARM-Conf_$TAG is already exists
-vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
-if &quot;VHD_ARM-Conf_${TAG}&quot; in vm_list:
-	print(&quot;ARM-Conf already exist, I am exiting now&quot;)
+vm_list=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
+if "VHD_ARM-Conf_${TAG}" in vm_list:
+	print("ARM-Conf already exist, I am exiting now")
 	sys.exit(1)
     
     
 #check if VM name ARM-Router_$TAG is already exists
-vm_list=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
-if &quot;VHD_ARM-Router_${TAG}&quot; in vm_list:
-	print(&quot;ARM-Router already exist, I am exiting now&quot;)
+vm_list=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
+if "VHD_ARM-Router_${TAG}" in vm_list:
+	print("ARM-Router already exist, I am exiting now")
 	sys.exit(1)    
     
 #create a new VM from ARM-Conf_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print(&quot;creating new Conf VM from OVA&quot;)
-deploy_conf=Popen(shlex.split(&quot;ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;),stdout=PIPE)
+print("creating new Conf VM from OVA")
+deploy_conf=Popen(shlex.split("ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Conf_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Conf_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101"),stdout=PIPE)
 #create a new VM from ARM-Router_$TAG.ova (ova file is located on jenkins slave /root/jenkinsslave/ovaFiles)
-print(&quot;creating new Router from OVA&quot;)
-deploy_router=Popen(shlex.split(&quot;ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101&quot;),stdout=PIPE)
+print("creating new Router from OVA")
+deploy_router=Popen(shlex.split("ovftool --disableVerification --noSSLVerify --name=VHD_ARM-Router_${TAG} --datastore=datastore2 -dm=thin --acceptAllEulas --powerOn ${WORKSPACE}/ovaFiles/ARM-Router_${TAG}.ova vi://${root_username}:${root_password}@10.7.20.101"),stdout=PIPE)
 
 deploy_router.wait()
 deploy_conf.wait()
 
 #check if the new VM created
-check_if_conf_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
-if check_if_conf_created == &quot;&quot;:
-	print(&quot;Failed to create Configurator VM&quot;)
+check_if_conf_created=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
+if check_if_conf_created == "":
+	print("Failed to create Configurator VM")
 	sys.exit(1)
 
-print(&quot;Created New Configurator VM Successfully&quot;)
+print("Created New Configurator VM Successfully")
 
 #check if the new VM created
-check_if_router_created=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
-if check_if_router_created == &quot;&quot;:
-	print(&quot;Failed to create Router VM&quot;)
+check_if_router_created=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
+if check_if_router_created == "":
+	print("Failed to create Router VM")
 	sys.exit(1)
-print(&quot;Created New Router VM Successfully&quot;)
+print("Created New Router VM Successfully")
 
 #wait for Both VM will power on
 time.sleep(150)
 
 #find new VM Configurator location in the host
-newVmConfLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+newVmConfLocation=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Conf_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
 newVmConfLocation=newVmConfLocation.strip()
 #find new VM Router location in the host
-newVmRouterLocation=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+newVmRouterLocation=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -l |grep VHD_ARM-Router_$TAG",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
 newVmRouterLocation=newVmRouterLocation.strip()
 #get ip address of the new VM Configurator
-vmConfIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmConfLocation),shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+vmConfIP=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip".format(newVmConfLocation),shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
 #get only the IP Address
-vmConfIP=vmConfIP.split(&apos; &apos;)
+vmConfIP=vmConfIP.split(' ')
 vmConfIP=vmConfIP[2]
-print(&quot;The Configurator VM IP is: &quot;+vmConfIP)
+print("The Configurator VM IP is: "+vmConfIP)
 #get ip address of the new VM Router
-vmRouterIP=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+vmRouterIP=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} getguestinfo ip".format(newVmRouterLocation),shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
 #get only the IP Address
-vmRouterIP=vmRouterIP.split(&apos; &apos;)
+vmRouterIP=vmRouterIP.split(' ')
 vmRouterIP=vmRouterIP[2]
-print(&quot;The Router VM IP is: &quot;+vmRouterIP)
+print("The Router VM IP is: "+vmRouterIP)
 
-print(&quot;start SSH to the Configurator Server&quot;)
+print("start SSH to the Configurator Server")
 #open SSH session to the Configurator server
 try:
-	paramiko.util.log_to_file(&quot;conf.log&quot;)
+	paramiko.util.log_to_file("conf.log")
 	client_conf = paramiko.SSHClient()
 	client_conf.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	client_conf.connect(vmConfIP, port=22, username=vm_username,password=vm_password)
 	transport_conf = client_conf.get_transport()
 	channel_conf = transport_conf.open_session()
-	channel_conf.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel_conf.get_pty(term='xterm', width=80, height=24)
 	channel_conf.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-	print(&quot;We had an authentication exception!&quot;)
+	print("We had an authentication exception!")
 	shell = None
-print(&quot;start SSH to the Router Server&quot;)
+print("start SSH to the Router Server")
 	#open SSH session to the Configurator server
 try:
-	paramiko.util.log_to_file(&quot;router.log&quot;)
+	paramiko.util.log_to_file("router.log")
 	client_router = paramiko.SSHClient()
 	client_router.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	client_router.connect(vmRouterIP, port=22, username=vm_username,password=vm_password)
 	transport_router = client_router.get_transport()
 	channel_router = transport_router.open_session()
-	channel_router.get_pty(term=&apos;xterm&apos;, width=80, height=24)
+	channel_router.get_pty(term='xterm', width=80, height=24)
 	channel_router.invoke_shell()
 except paramiko.ssh_exception.AuthenticationException:
-	print(&quot;We had an authentication exception!&quot;)
+	print("We had an authentication exception!")
 	shell = None   
 
 
 #switching user to a root user
-justWait(200.0,&quot;\$&quot;)
-sendwait(&quot;su -&quot;,200.0,&quot;Password:&quot;)
+justWait(200.0,"\$")
+sendwait("su -",200.0,"Password:")
 sendwait(vm_root_password)
 
 #make the build failed if one of the commands here failing
-sendwait(&quot;set -xe&quot;)
-sendwait(&quot;echo &apos;Start curl&apos;&quot;)
+sendwait("set -xe")
+sendwait("echo 'Start curl'")
 #download Linux Integration Services v4.2 for Hyper-V and Azure  for Configurator and Router VMS
-#sendwait(&quot;curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gz&quot;)
-sendwait(&quot;curl -ku devops_read:devops_read -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz&quot;)
+#sendwait("curl -fO https://download.microsoft.com/download/6/8/F/68FE11B8-FAA4-4F8D-8C7D-74DA7F2CFC8C/lis-rpms-4.2.8.tar.gz")
+sendwait("curl -ku ${arti_username}:${arti_password} -O https://artifactory/Devops/Tools/Azure/arm/lis-rpms-4.3.1-1.tar.gz")
 #wait for download will finish
-print(&quot;sleep 200&quot;)
+print("sleep 200")
 time.sleep(200)
 #extract to directory
-sendwait(&quot;tar -xvzf lis-rpms-4.3.1-1.tar.gz&quot;)
+sendwait("tar -xvzf lis-rpms-4.3.1-1.tar.gz")
 #wait to extracting the file will finish
-print(&quot;sleep 30&quot;)
+print("sleep 30")
 time.sleep(30)
 #enter the directory
-sendwait(&quot;cd LISISO&quot;)
+sendwait("cd LISISO")
 #install the integration services
-print(&quot;Start installation on Both Servers&quot;)
-sendwait(&quot;./install.sh&quot;)
+print("Start installation on Both Servers")
+sendwait("./install.sh")
 #wait for installation will be complete
-print(&quot;sleep 700&quot;)
+print("sleep 700")
 time.sleep(700)
 #delete the files
-sendwait(&quot;cd ~/&quot;)
-sendwait(&quot;rm -rf LISISO&quot;)
-sendwait(&quot;rm -rf lis-rpms-*&quot;)
+sendwait("cd ~/")
+sendwait("rm -rf LISISO")
+sendwait("rm -rf lis-rpms-*")
 time.sleep(30)
 #reduce size of the VMS
-print(&quot;START REDUCE the size of the VMS&quot;)
-sendwait(&quot;dd if=/dev/zero of=zeroFile.tmp || echo finished&quot;)
+print("START REDUCE the size of the VMS")
+sendwait("dd if=/dev/zero of=zeroFile.tmp || echo finished")
 time.sleep(1200)
-#print(&quot;Cancel filling the zeroFile.tmp if operation stuck&quot;)
-#sendwait(&apos;\x03&apos;)
+#print("Cancel filling the zeroFile.tmp if operation stuck")
+#sendwait('\x03')
 time.sleep(30)
-print(&quot;delete the files rm -rf zeroFile.tmp&quot;)
-sendwait(&quot;rm -rf zeroFile.tmp&quot;)
+print("delete the files rm -rf zeroFile.tmp")
+sendwait("rm -rf zeroFile.tmp")
 time.sleep(30)
-print(&quot;Finish Reduce The Size of VMS&quot;)
+print("Finish Reduce The Size of VMS")
 
 #reboot VMs
-print(&quot;VMs going down for reboot...&quot;)
-sendWithoutWait(&quot;reboot&quot;)
+print("VMs going down for reboot...")
+sendWithoutWait("reboot")
 #wait for VM to UP
 time.sleep(100)
 
 
 #graceful shutdouwn BOTH VM
-print(&quot;shutdown new VMs&quot;)
-output_conf=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmConfLocation),shell=True,stdout=PIPE)
-output_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE)
+print("shutdown new VMs")
+output_conf=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft".format(newVmConfLocation),shell=True,stdout=PIPE)
+output_router=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} {0} stop soft".format(newVmRouterLocation),shell=True,stdout=PIPE)
 #wait for the VM to SHUT DOWN
 output_conf.wait()
 output_router.wait()
 time.sleep(30)
 
 #export both VMS to OVA
-print(&quot;export BOTH VMs to an OVA files&quot;)
-os.mkdir(&quot;newOVAs&quot;)
-output_conf=Popen(shlex.split(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Conf_${TAG} ${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova&quot;),stdout=PIPE)
-output_router=Popen(shlex.split(&quot;ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Router_${TAG} ${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova&quot;),stdout=PIPE)
+print("export BOTH VMs to an OVA files")
+os.mkdir("newOVAs")
+output_conf=Popen(shlex.split("ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Conf_${TAG} ${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova"),stdout=PIPE)
+output_router=Popen(shlex.split("ovftool -o --noSSLVerify vi://${root_username}:${root_password}@10.7.20.101/VHD_ARM-Router_${TAG} ${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova"),stdout=PIPE)
 #wait to it finish to create new OVA
 output_conf.wait()
 output_router.wait()
 time.sleep(150)
-print(&quot;Finish Exporting BOTH VMs to OVA&quot;)
-print(&quot;Deleting Both VMs&quot;)
+print("Finish Exporting BOTH VMs to OVA")
+print("Deleting Both VMs")
 #terminate both VM MACHINES
-vmConfLocationDir=newVmConfLocation.rsplit(&apos;/&apos;,1)[0]
+vmConfLocationDir=newVmConfLocation.rsplit('/',1)[0]
 vmConfLocationDir=vmConfLocationDir.strip()
-vmRouterLocationDir=newVmRouterLocation.rsplit(&apos;/&apos;,1)[0]
+vmRouterLocationDir=newVmRouterLocation.rsplit('/',1)[0]
 vmRouterLocationDir=vmRouterLocationDir.strip()
-unregister_conf=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}&quot;.format(newVmConfLocation),shell=True,stdout=PIPE)
-unregister_router=Popen(&quot;vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}&quot;.format(newVmRouterLocation),shell=True,stdout=PIPE)
+unregister_conf=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}".format(newVmConfLocation),shell=True,stdout=PIPE)
+unregister_router=Popen("vmware-cmd -H 10.7.20.101 -U ${root_username} -P ${root_password} -s unregister {0}".format(newVmRouterLocation),shell=True,stdout=PIPE)
 unregister_conf.wait()
 unregister_router.wait()
-delete_conf=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmConfLocationDir),shell=True,stdout=PIPE)
-delete_Router=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force&quot;.format(vmRouterLocationDir),shell=True,stdout=PIPE)
+delete_conf=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force".format(vmConfLocationDir),shell=True,stdout=PIPE)
+delete_Router=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --rm {0} --force".format(vmRouterLocationDir),shell=True,stdout=PIPE)
 delete_conf.wait()
 delete_Router.wait()
 #check if really deleted
-check_if_conf_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-Conf_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
-check_if_router_deleted=Popen(&quot;vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir &apos;[datastore2]&apos; | grep VHD_ARM-ROUTER_${TAG}&quot;,shell=True,stdout=PIPE).communicate()[0].decode(&quot;utf-8&quot;)
+check_if_conf_deleted=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir '[datastore2]' | grep VHD_ARM-Conf_${TAG}",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
+check_if_router_deleted=Popen("vifs --server 10.7.20.101 --username ${root_username} --password ${root_password} --dir '[datastore2]' | grep VHD_ARM-ROUTER_${TAG}",shell=True,stdout=PIPE).communicate()[0].decode("utf-8")
 # check if Deleted VM Successfully
-if check_if_conf_deleted != &quot;&quot; or check_if_router_deleted != &quot;&quot;:
-	print(&quot;Failed to Delete VMs&quot;)
+if check_if_conf_deleted != "" or check_if_router_deleted != "":
+	print("Failed to Delete VMs")
 	sys.exit(1)
-print(&quot;Successfully deleted BOTH VMs&quot;)
+print("Successfully deleted BOTH VMs")
 channel_conf.close
 client_conf.close
 channel_router.close
@@ -367,7 +370,7 @@ EOS</command>
     <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
       <publishers>
         <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
-          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.0">
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.3">
             <worstResult>
               <name>SUCCESS</name>
               <ordinal>0</ordinal>
@@ -382,7 +385,7 @@ EOS</command>
             </bestResult>
           </condition>
           <publisherList>
-            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.36">
               <configs>
                 <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
                   <configs>
@@ -400,17 +403,17 @@ EOS</command>
               </configs>
             </hudson.plugins.parameterizedtrigger.BuildTrigger>
           </publisherList>
-          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.0"/>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
           <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.38">
       <patterns class="empty-list"/>
       <deleteDirs>false</deleteDirs>
       <skipWhenFailed>false</skipWhenFailed>
@@ -421,17 +424,19 @@ EOS</command>
       <cleanWhenAborted>false</cleanWhenAborted>
       <notFailBuild>false</notFailBuild>
       <cleanupMatrixParent>false</cleanupMatrixParent>
-      <externalDelete></externalDelete>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.WsCleanup>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.34">
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -443,36 +448,28 @@ EOS</command>
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/newOVAs/ARM-Conf_${TAG}.ova",
+            "target": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Conf_${TAG}/",
+             "recursive": "false"
         },
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/newOVAs/ARM-Router_${TAG}.ova",
+            "target": "libs-release-local/com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}/",
+             "recursive": "false"
         }   
     ]
 }</spec>
@@ -481,16 +478,16 @@ EOS</command>
         <spec>
 
 {
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova",
+            "target": "${workspace}/ovaFiles/",
+            "flat": "true"
         },
         {
-            &quot;pattern&quot;: &quot;libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova&quot;,
-            &quot;target&quot;: &quot;${workspace}/ovaFiles/&quot;,
-            &quot;flat&quot;: &quot;true&quot;
+            "pattern": "libs-release-local/com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova",
+            "target": "${workspace}/ovaFiles/",
+            "flat": "true"
         }
     ]
 }</spec>
@@ -500,31 +497,32 @@ newOVAs/ARM-Router_${TAG}.ova=&gt;com/ac/arm/tempOVA/${TAG}/ARM-Router_${TAG}</d
       <resolvePattern>libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Conf_${TAG}/ARM-Conf_${TAG}.ova=&gt;${workspace}/ovaFiles
 libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova=&gt;${workspace}/ovaFiles
 </resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>root_username=root</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <propertiesContent>root_username=root
+arti_username=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
@@ -532,10 +530,15 @@ libs-release-local:com/ac/arm/OVA/${TAG}/ARM-Router_${TAG}/ARM-Router_${TAG}.ova
           <name>root_password</name>
           <value>{AQAAABAAAAAQJpFlccuyfS37e8Cmeq34Bgx7Tai46uxM7sBwjKu3KLw=}</value>
         </EnvInjectPasswordEntry>
+        <EnvInjectPasswordEntry>
+          <name>arti_password</name>
+          <value>{AQAAABAAAAAQf4rf9A4fmu0TKVN9FJzPjpgRatdJMmGFHjhHLAw4ed8=}</value>
+        </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__${TAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
