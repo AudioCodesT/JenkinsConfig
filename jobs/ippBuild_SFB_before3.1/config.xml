@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.13">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.14">
   <actions/>
   <description>Activated by ippBuild_ReleaseNotes_SFB</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -21,7 +23,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -29,14 +31,14 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>NEWTAG</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BUILD_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -52,12 +54,12 @@
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -67,8 +69,9 @@
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -88,11 +91,13 @@
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+        <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
+      </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>20</timeout>
         <depth>10</depth>
         <honorRefspec>false</honorRefspec>
@@ -126,36 +131,36 @@
       <command># Set the IPP_VER variable - first JOB project parameterized
 IPP_VER=$NEWTAG
 # Insert it into the ipp_version.h_shipped file - the compilation need it
-# The following code are executing in &apos;scripts/repo_info.sh&apos; by the make file, so it can be deleted
+# The following code are executing in 'scripts/repo_info.sh' by the make file, so it can be deleted
 #if [ -f ipp_version.in ]; then
-#  sed &quot;s:%Ver%:$IPP_VER:&quot; ipp_version.in &gt; include/ipp_version.h_shipped
+#  sed "s:%Ver%:$IPP_VER:" ipp_version.in &gt; include/ipp_version.h_shipped
 #else
-#  sed -r -i &apos;s:(IP_Phone_ACL_VERSION\s+)&quot;.*&quot;:\1&quot;&apos;$IPP_VER&apos;&quot;:&apos; include/ipp_version.h_shipped
+#  sed -r -i 's:(IP_Phone_ACL_VERSION\s+)".*":\1"'$IPP_VER'":' include/ipp_version.h_shipped
 #fi
 echo IPP_VER=${IPP_VER} &gt; generated_ipp_version.properties
 
 # Set IPP_MAJOR_VER variable - second JOB project parameterized
 IPP_MAJOR_VER=${BUILD_BRANCH}
-# If $BUILD_BRANCH == &quot;3.0.0_450HD&quot;, replace the 3.0.0 by the 3 first digits in the TAG name (probably: 3.0.1)
-if [ $BUILD_BRANCH == &quot;3.0.0_450HD&quot; ]; then IPP_MAJOR_VER=&quot;$(echo ${IPP_VER} | cut -d. -f1,2,3)_450HD&quot;; fi
-if [ $BUILD_BRANCH == &quot;3.0.0.GA&quot; ]; then IPP_MAJOR_VER=&quot;3.0.0&quot;; fi;
+# If $BUILD_BRANCH == "3.0.0_450HD", replace the 3.0.0 by the 3 first digits in the TAG name (probably: 3.0.1)
+if [ $BUILD_BRANCH == "3.0.0_450HD" ]; then IPP_MAJOR_VER="$(echo ${IPP_VER} | cut -d. -f1,2,3)_450HD"; fi
+if [ $BUILD_BRANCH == "3.0.0.GA" ]; then IPP_MAJOR_VER="3.0.0"; fi;
 
 echo IPP_MAJOR_VER=${IPP_MAJOR_VER} &gt;&gt; generated_ipp_version.properties
 
 # Find the AUTOPRD value from the yml command line
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d" " -f1 | cut -d"&amp;" -f1`
 echo AUTOPRD=${AUTOPRD} &gt;&gt; generated_ipp_version.properties
-echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_ipp_version.properties
+echo SHORTAUTOPRD=`echo $AUTOPRD | sed 's:_.*$::'` &gt;&gt; generated_ipp_version.properties
 
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>generated_ipp_version.properties</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+      <command>User="$artifactory_user:$artifactory_password"
 
 # Check if the image exist already in the Artifactory - if exist, exit without error
 if curl -ks -u $User https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD/UC${AUTOPRD}_${IPP_VER}.img | grep -q uri; then
@@ -163,8 +168,8 @@ if curl -ks -u $User https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/
     exit 0
 fi
 
-#if branch name contain &quot;3.2&quot;, download C450HD_kernel submodule
-if [[ &quot;$SHORTAUTOPRD&quot; == &quot;C450HD&quot; ]]
+#if branch name contain "3.2", download C450HD_kernel submodule
+if [[ "$SHORTAUTOPRD" == "C450HD" ]]
 	then git submodule init || true
     	git submodule update || true 
 fi
@@ -174,19 +179,19 @@ export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
 #Works with the following yml file: boards2compile.yml
-#Every make command was separated by &apos;&amp;&apos;
-#Example: &apos;auto AUTOPRD=405HD &amp; binary&apos;, The number of the &apos;make&apos; execution will be 2
-#The first in the for loop will be &apos;make auto AUTOPRD=405HD`, the second &apos;make binary&apos;
-NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
+#Every make command was separated by '&amp;'
+#Example: 'auto AUTOPRD=405HD &amp; binary', The number of the 'make' execution will be 2
+#The first in the for loop will be 'make auto AUTOPRD=405HD`, the second 'make binary'
+NumExecuting=$(echo "$MAKE_CMD" |  awk -F '&amp;' '{print NF}')
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
-  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
+  PARAMS=`echo $MAKE_CMD | cut -d"&amp;" -f$i`
+  if [[ "$PARAMS" =~ SUBVERSION ]]; then mv build/image/build.tgz build.tgz; fi
   make $PARAMS
-  if [[ &quot;$PARAMS&quot; =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
+  if [[ "$PARAMS" =~ SUBVERSION ]]; then mv build.tgz build/image/build.tgz; fi
 done
 
-if [[ &quot;$AUTOPRD&quot; = &quot;C450HD&quot; &amp;&amp; &quot;$BUILD_BRANCH&quot; = &quot;3.2&quot; ]]; then
+if [[ "$AUTOPRD" = "C450HD" &amp;&amp; "$BUILD_BRANCH" = "3.2" ]]; then
   rm -f build/image/UCC450HD_*.bin*
 fi
 
@@ -196,13 +201,13 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>oleg.Friedman@audiocodes.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
     <com.chikli.hudson.plugin.naginator.NaginatorPublisher plugin="naginator@1.17.2">
-      <regexpForRerun></regexpForRerun>
+      <regexpForRerun/>
       <rerunIfUnstable>false</rerunIfUnstable>
       <rerunMatrixPart>true</rerunMatrixPart>
       <checkRegexp>false</checkRegexp>
@@ -215,12 +220,12 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
-          <keyFromText></keyFromText>
+          <keyFromText/>
           <keyFromSelect>ipp-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
@@ -232,29 +237,21 @@ rename md5 md5.txt ${WORKSPACE}/build/image/*.md5
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>false</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img.md5.txt=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
@@ -271,44 +268,45 @@ ${WORKSPACE}/build/image/logo_image=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VE
 ${WORKSPACE}/build/image/phone.bin=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 ${WORKSPACE}/build/image/rootfs.ext4=&gt;com/ac/ipp/SFB/${IPP_MAJOR_VER}/${IPP_VER}/$AUTOPRD
 </deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>false</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;ipp-build&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label=="ipp-build"</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQck6IKuyw7MRHoC+xi7F4z3t9Q50xeXU6sBFVhBpB9MY=}</value>
+          <value>{AQAAABAAAAAQ1mEhqm8HGawLr2WM88kEBxVNBxidsrKcRfaH4kL0pFs=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}  Branch:${BUILD_BRANCH} -- ${NEWTAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
