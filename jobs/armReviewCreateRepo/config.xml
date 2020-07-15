@@ -253,11 +253,11 @@ EOF
 
 
 echo "$(date) : copy offline_repo from Router VM /tmp to jenkins slave"  | tee -a $logfile
-sshpass -p password scp -oStrictHostKeyChecking=no root@${router_vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/router_cent92install-repo.tar.gz
+sshpass -p password scp -oStrictHostKeyChecking=no root@${router_vmIPaddress}:/tmp/arm_repo.tar.gz ${WORKSPACE}/router_arm_repo.tar.gz
 
 
 echo "$(date) : copy offline_repo from Configurator VM /tmp to jenkins slave"  | tee -a $logfile
-sshpass -p password scp -oStrictHostKeyChecking=no root@${conf_vmIPaddress}:/tmp/cent92install-repo.tar.gz ${WORKSPACE}/conf_cent92install-repo.tar.gz
+sshpass -p password scp -oStrictHostKeyChecking=no root@${conf_vmIPaddress}:/tmp/arm_repo.tar.gz ${WORKSPACE}/conf_arm_repo.tar.gz
 
 
 #graceful shutdouwn BOTH VM
