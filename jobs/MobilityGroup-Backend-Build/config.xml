@@ -1,23 +1,25 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Manually triggered when the user want to create a new tag.&#xd;
-1. Promote version tag automatically (last Tag+1)&#xd;
-    For example: 1.1.2 promote to 1.1.3&#xd;
-2. Deploy products to Artifactory&#xd;
+  <description>Manually triggered when the user want to create a new tag.&#13;
+1. Promote version tag automatically (last Tag+1)&#13;
+    For example: 1.1.2 promote to 1.1.3&#13;
+2. Deploy products to Artifactory&#13;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -29,16 +31,19 @@
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>MobilityGroup/Backend/AC-HASP-LICENSE</string>
+              <string>MobilityGroup/Backend/AC-TIGASE-PLUGIN</string>
               <string>MobilityGroup/Backend/MSGRT</string>
               <string>MobilityGroup/Backend/CRS</string>
               <string>MobilityGroup/Backend/CRS-HKP</string>
               <string>MobilityGroup/Backend/CMMS-IMS-PROVISIONING</string>
               <string>MobilityGroup/Backend/CMMS-COMMON</string>
               <string>MobilityGroup/Backend/CMMS-NEO4J</string>
+              <string>MobilityGroup/Backend/CMMS-PRESENCE</string>
               <string>MobilityGroup/Backend/CMMS-RAF</string>
               <string>MobilityGroup/Backend/CMMS-SERVER</string>
               <string>MobilityGroup/Backend/CMPNS-EDGE</string>
               <string>MobilityGroup/Backend/CMPNS-CORE</string>
+              <string>MobilityGroup/Backend/kinor</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
@@ -52,7 +57,7 @@
           <name>Version</name>
           <description>Insert value only if you need to jump in version!
 Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.1.3)</description>
-          <defaultValue></defaultValue>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -64,16 +69,16 @@ Example: last version was 1.1.2 but you want the next to be 2.0.0 (instead of 1.
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    <EnvInjectJobProperty plugin="envinject@2.1.5">
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <propertiesContent>JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ANDROID_HOME=/home/ubuntu/android-sdk-linux
 PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
 </propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -83,8 +88,9 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
     </EnvInjectJobProperty>
+    
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.9.3">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -120,17 +126,17 @@ PATH=${PATH}:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin:$ANDROID_HOME/t
 
 #get Last Tag and all the commits since the last tag in reverse list
 LastTag=$(git describe --tags --abbrev=0 --first-parent)
-NEWTAG=`echo $LastTag | sed -r &apos;s/(.*)\.[^\d]+$/\1/&apos;`.`echo $LastTag | awk -F. &apos;{print $NF+1}&apos;`
+NEWTAG=`echo $LastTag | sed -r 's/(.*)\.[^\d]+$/\1/'`.`echo $LastTag | awk -F. '{print $NF+1}'`
 
 #if VersionName is not empty then push VersionName as the new Tag
-if [ -n &quot;$Version&quot; ]
+if [ -n "$Version" ]
 then
-	echo &quot;Version Name entered by the User&quot;
+	echo "Version Name entered by the User"
     if [[ $Version =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]
     then
     	NEWTAG=${Version}
     else
-    	echo &quot;The VersionName parameter need to contain only version name, for example: 1.1.3&quot;
+    	echo "The VersionName parameter need to contain only version name, for example: 1.1.3"
         exit 1
     fi
 fi
@@ -140,36 +146,36 @@ fi
 echo NEWTAG=$NEWTAG &gt; prop
 
 
-project_name=$(echo $GERRIT_PROJECT | awk -F &apos;/&apos; &apos;{print $NF}&apos;)
-echo &quot;project_name=$project_name&quot; &gt;&gt; prop</command>
+project_name=$(echo $GERRIT_PROJECT | awk -F '/' '{print $NF}')
+echo "project_name=$project_name" &gt;&gt; prop</command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>prop</propertiesFilePath>
       </info>
     </EnvInjectBuilder>
-    <hudson.plugins.gradle.Gradle plugin="gradle@1.28">
-      <switches></switches>
+    <hudson.plugins.gradle.Gradle plugin="gradle@1.36">
+      <switches/>
       <tasks>release
 -Prelease.useAutomaticVersion=true
 -Prelease.releaseVersion=$NEWTAG
 -PJOB_NAME=$JOB_NAME
 -PBUILD_NUMBER=$BUILD_NUMBER
 -PBUILD_URL=$BUILD_URL</tasks>
-      <rootBuildScriptDir></rootBuildScriptDir>
-      <buildFile></buildFile>
+      <rootBuildScriptDir/>
+      <buildFile/>
       <gradleName>(Default)</gradleName>
       <useWrapper>true</useWrapper>
       <makeExecutable>false</makeExecutable>
       <useWorkspaceAsHome>false</useWorkspaceAsHome>
-      <wrapperLocation></wrapperLocation>
+      <wrapperLocation/>
       <passAllAsSystemProperties>false</passAllAsSystemProperties>
-      <projectProperties></projectProperties>
+      <projectProperties/>
       <passAllAsProjectProperties>false</passAllAsProjectProperties>
     </hudson.plugins.gradle.Gradle>
   </builders>
   <publishers>
-    <hudson.plugins.git.GitPublisher plugin="git@3.9.3">
+    <hudson.plugins.git.GitPublisher plugin="git@4.2.2">
       <configVersion>2</configVersion>
       <pushMerge>false</pushMerge>
       <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
@@ -184,39 +190,40 @@ echo &quot;project_name=$project_name&quot; &gt;&gt; prop</command>
         </hudson.plugins.git.GitPublisher_-TagToPush>
       </tagsToPush>
     </hudson.plugins.git.GitPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.9"/>
-    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.5.3">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.6.3">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_password</name>
-          <value>{AQAAABAAAAAQhe1YbALVPJabA+5Znh5YxOWjYUQjX0ZG0u2Raufh5LQ=}</value>
+          <value>{AQAAABAAAAAQ8oB7U8v+GYqMMS0fRNYyKhYm/5N4fJL9RKPmRAmJTFA=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__Project:${project_name}__${NEWTAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
