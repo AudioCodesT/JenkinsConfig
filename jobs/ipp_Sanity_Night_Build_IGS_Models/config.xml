@@ -1,19 +1,21 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.32">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><com.tikal.jenkins.plugins.multijob.MultiJobProject plugin="jenkins-multijob-plugin@1.33">
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -21,19 +23,19 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>ConfigName</name>
-          <description></description>
+          <description/>
           <defaultValue>Sanity</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>LASTBL</name>
-          <description></description>
+          <description/>
           <defaultValue>None</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>BuildRelease</name>
-          <description></description>
+          <description/>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -46,8 +48,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ippAuto1-CMBU</assignedNode>
@@ -63,8 +66,8 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>cd C:\IpPhoneAutomation\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#xd;
-&#xd;
+      <command>cd C:\IpPhoneAutomation\ATA &amp;&amp; tclsh AtaExec.tcl -stop all&#13;
+&#13;
 echo Finish stop all</command>
     </hudson.tasks.BatchFile>
     <hudson.tasks.Shell>
@@ -82,13 +85,13 @@ User=$artifactory_user:$artifactory_pass
 echo Find the Last TAG if None - $LASTBL
 ARTIFACTORY=https://artifactory/api/storage/ipp-release/com/ac/ipp/SFB/$BuildRelease
 
-if [ &quot;$LASTBL&quot; == &quot;None&quot; ]; then
-  echo curl -ks -u $User -X GET $ARTIFACTORY \| grep uri \| cut -d&apos;&quot;&apos; -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
-  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d&apos;&quot;&apos; -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
+if [ "$LASTBL" == "None" ]; then
+  echo curl -ks -u $User -X GET $ARTIFACTORY \| grep uri \| cut -d'"' -f4 \| grep -v https \| cut -c 2- \| sort -Vr \| head -1
+  LASTBL=`curl -ks -u $User -X GET $ARTIFACTORY | grep uri | cut -d'"' -f4 | grep -v https | cut -c 2- | sort -Vr | head -1`
 fi
 echo Find: $LASTBL
 
-if [ &quot;$LASTBL&quot; == &quot;&quot; ]; then 
+if [ "$LASTBL" == "" ]; then 
   echo Not find LASTBL - Exit with error
   exit 1
 fi
@@ -96,14 +99,14 @@ echo LASTBL=${LASTBL} &gt; ${WORKSPACE}/Sanity.prop
 
 net use
 echo ls z:/*$LASTBL*
-if ! net use | grep -iqE &quot;OK .* z:.*Firmwares&quot;; then
+if ! net use | grep -iqE "OK .* z:.*Firmwares"; then
     echo confige again Z: ----------------------
     net use z: /delete
-    net use z: &quot;\\\\10.59.0.87\\Firmwares&quot;
+    net use z: "\\\\10.59.0.87\\Firmwares"
 fi
 </command>
     </hudson.tasks.Shell>
-    <EnvInjectBuilder plugin="envinject@2.1.5">
+    <EnvInjectBuilder plugin="envinject@2.3.0">
       <info>
         <propertiesFilePath>Sanity.prop</propertiesFilePath>
       </info>
@@ -113,19 +116,19 @@ fi
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias/>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>false</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition></condition>
+          <condition/>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>ConfigName=${ConfigName}
 model=445
 LASTBL=${LASTBL}
@@ -148,25 +151,26 @@ FeatureName=basic</properties>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
+      <quietPeriodGroovy>index &lt; 5 ? 0 : 2 * 60</quietPeriodGroovy>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>C450</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias/>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>false</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition></condition>
+          <condition/>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>ConfigName=${ConfigName}
 model=C450
 LASTBL=${LASTBL}
@@ -189,25 +193,26 @@ FeatureName=basic</properties>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
+      <quietPeriodGroovy>index &lt; 5 ? 0 : 2 * 60</quietPeriodGroovy>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>450</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias/>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>false</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>false</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition></condition>
+          <condition/>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>ConfigName=${ConfigName}
 model=450
 LASTBL=${LASTBL}
@@ -230,25 +235,26 @@ FeatureName=basic</properties>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
+      <quietPeriodGroovy>index &lt; 5 ? 0 : 2 * 60</quietPeriodGroovy>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
     <com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
       <phaseName>440</phaseName>
       <phaseJobs>
         <com.tikal.jenkins.plugins.multijob.PhaseJobsConfig>
           <jobName>ipp_Sanity_Night_Build</jobName>
-          <jobAlias></jobAlias>
+          <jobAlias/>
           <currParams>true</currParams>
           <aggregatedTestResults>false</aggregatedTestResults>
           <exposedSCM>false</exposedSCM>
           <disableJob>true</disableJob>
-          <parsingRulesPath></parsingRulesPath>
+          <parsingRulesPath/>
           <maxRetries>0</maxRetries>
           <enableRetryStrategy>false</enableRetryStrategy>
           <enableCondition>false</enableCondition>
           <abortAllJob>true</abortAllJob>
-          <condition></condition>
+          <condition/>
           <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.35.2">
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters plugin="parameterized-trigger@2.36">
               <properties>ConfigName=${ConfigName}
 model=440
 LASTBL=${LASTBL}
@@ -271,6 +277,7 @@ FeatureName=basic</properties>
       </phaseJobs>
       <continuationCondition>ALWAYS</continuationCondition>
       <executionType>PARALLEL</executionType>
+      <quietPeriodGroovy>index &lt; 5 ? 0 : 2 * 60</quietPeriodGroovy>
     </com.tikal.jenkins.plugins.multijob.MultiJobBuilder>
   </builders>
   <publishers>
@@ -287,23 +294,23 @@ FeatureName=basic</properties>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
-    <EnvInjectBuildWrapper plugin="envinject@2.1.5">
+    <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
-        <propertiesContent>artifactory_user=admin</propertiesContent>
-        <secureGroovyScript plugin="script-security@1.54.2">
-          <script></script>
+        <propertiesContent>artifactory_user=jenkins</propertiesContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>
-    <EnvInjectPasswordWrapper plugin="envinject@2.1.5">
+    <EnvInjectPasswordWrapper plugin="envinject@2.3.0">
       <injectGlobalPasswords>false</injectGlobalPasswords>
       <maskPasswordParameters>true</maskPasswordParameters>
       <passwordEntries>
         <EnvInjectPasswordEntry>
           <name>artifactory_pass</name>
-          <value>{AQAAABAAAAAQ089sBmEKyg4r9HpaPR8+EhxoyF+XWQTxwhiajBitIpY=}</value>
+          <value>{AQAAABAAAAAQlILPwABjmWHBWWLpIzLdDJCPlW2smUw18/Xa3lcB7cI=}</value>
         </EnvInjectPasswordEntry>
       </passwordEntries>
     </EnvInjectPasswordWrapper>
