@@ -221,7 +221,7 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 sudo chmod 777 /usr/local/etc</command>
         </hudson.tasks.Shell>
         <hudson.tasks.Maven>
-          <targets>clean install</targets>
+          <targets>-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true clean install</targets>
           <mavenName>Maven_v363</mavenName>
           <jvmOptions>-Xmx4096m</jvmOptions>
           <pom>pom.xml</pom>
