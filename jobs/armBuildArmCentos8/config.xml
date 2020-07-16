@@ -232,7 +232,7 @@ sed -i.bak 's/\\/ /g' ../armBuild.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Maven>
-      <targets>clean releaser:release -X -DforceRelease=parent,arm-reactor</targets>
+      <targets>clean releaser:release -X -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true -DforceRelease=parent,arm-reactor</targets>
       <mavenName>Maven_v363</mavenName>
       <pom>pom.xml</pom>
       <usePrivateRepository>false</usePrivateRepository>
