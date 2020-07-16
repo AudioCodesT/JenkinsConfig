@@ -290,6 +290,49 @@ fi</command>
         </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
       </publishers>
     </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.69">
+      <recipientList>ben.magriso@audiocodes.com,Shuky.Riechard@audiocodes.com,Yossi.Merzbach@audiocodes.com,Yuval.Yosha@audiocodes.com</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
+          <email>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern/>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.AlwaysTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>***ERROR****IPP Jobs are failing because of the ipp-slave-for-matrix-parents-7.4 slave ***ERROR****</defaultSubject>
+      <defaultContent>The IPP matrix parent slave is failing.
+you can see here:
+${BUILD_URL}
+
+Please reboot the slave</defaultContent>
+      <attachmentsPattern/>
+      <presendScript>def logFilePath = build.getLogFile().getPath();
+String logContent = new File(logFilePath).text;
+ if (logContent.find(/NoClassDefFoundError: Could not initialize class hudson.slaves.SlaveComputer/)) 
+{
+cancel=false;
+} else {
+cancel=true;
+}</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from/>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+      <matrixTriggerMode>ONLY_PARENT</matrixTriggerMode>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
