@@ -1055,7 +1055,18 @@
       <name>sig-8bfe3a43</name>
       <accountId></accountId>
       <groupId>sig-8bfe3a43</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-07e2764212cfc3412</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-07e2764212cfc3412</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>dsp-win-dynamic</requestedLabel>
+            <createdAt>2020-07-16 08:02:40.657 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>dsp-win-dynamic</labelString>
       <idleTerminationMinutes>2</idleTerminationMinutes>
       <workspaceDir>c:\jenkins</workspaceDir>
@@ -1157,7 +1168,18 @@
       <name>sig-c9121eb6</name>
       <accountId></accountId>
       <groupId>sig-c9121eb6</groupId>
-      <pendingInstances/>
+      <pendingInstances>
+        <entry>
+          <string>i-0c57df02599d0df10</string>
+          <hudson.plugins.spotinst.cloud.PendingInstance>
+            <id>i-0c57df02599d0df10</id>
+            <status>INSTANCE_INITIATING</status>
+            <numOfExecutors>1</numOfExecutors>
+            <requestedLabel>dsp-grx-slave</requestedLabel>
+            <createdAt>2020-07-16 08:02:37.6 UTC</createdAt>
+          </hudson.plugins.spotinst.cloud.PendingInstance>
+        </entry>
+      </pendingInstances>
       <labelString>dsp-grx-slave</labelString>
       <idleTerminationMinutes>5</idleTerminationMinutes>
       <workspaceDir>/home/centos/jenkinsslave</workspaceDir>
@@ -1847,6 +1869,7 @@ sudo yum install -y git-2.18.0</initScript>
         <string>test_armCreateAzureImage_new</string>
         <string>test_armCreateAzureImage_temp</string>
         <string>test_armReviewArm-fullRepo</string>
+        <string>test_armReviewArmCentos8</string>
         <string>test_armuploadVHD</string>
         <string>test_auto07</string>
         <string>test_dsp-Review-Gen5</string>
