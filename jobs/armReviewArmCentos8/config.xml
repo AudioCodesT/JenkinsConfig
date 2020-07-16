@@ -128,6 +128,20 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
+      <command>#add AudioCodes Certificate
+audc_path=${HOME}/AUDC2016.cer
+java_path=$(readlink -f $(which java))
+if [[ $java_path =~ "jre" ]]
+then
+        java_path=$(readlink -f $(which java) | sed 's/jre.*/jre/')
+else
+	java_path=$(readlink -f $(which java) | awk -F 'bin' '{print $1}')
+fi
+cd $java_path
+sudo bin/keytool -import -storepass changeit -noprompt -alias audc2016 -keystore lib/security/cacerts -trustcacerts -file $audc_path
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
       <command># check spesific files in VMFiles/Configurator and VMFiles/Router, if they are different fail the build
 echo "**************************************************************************************"
 echo "    COMPARING SOME FILES BETWEEN CONFIGURATOR AND ROUTER TO the Developers Environment               "
@@ -221,7 +235,7 @@ bash ArmCommon/Common/.deploy/start_maraiadb_databases.sh || exit 0
 sudo chmod 777 /usr/local/etc</command>
         </hudson.tasks.Shell>
         <hudson.tasks.Maven>
-          <targets>-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true clean install</targets>
+          <targets>clean install</targets>
           <mavenName>Maven_v363</mavenName>
           <jvmOptions>-Xmx4096m</jvmOptions>
           <pom>pom.xml</pom>
