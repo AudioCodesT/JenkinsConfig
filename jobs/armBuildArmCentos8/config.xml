@@ -89,6 +89,9 @@ otherwise - it is a night build and there is no version name change</description
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
         <deleteUntrackedNestedRepositories>false</deleteUntrackedNestedRepositories>
       </hudson.plugins.git.extensions.impl.CleanBeforeCheckout>
+      <hudson.plugins.git.extensions.impl.CheckoutOption>
+        <timeout>20</timeout>
+      </hudson.plugins.git.extensions.impl.CheckoutOption>
     </extensions>
   </scm>
   <assignedNode>arm-centos8-build</assignedNode>
