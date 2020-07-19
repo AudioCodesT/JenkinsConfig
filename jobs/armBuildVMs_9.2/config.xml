@@ -111,7 +111,7 @@ sh -xe aws_buildTopologyVMCentos8.sh $VERSION_NAME $BRANCH
           <configs>
             <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
           </configs>
-          <projects>armReleaseSanityCentos8,</projects>
+          <projects>armReleaseSanityCentos8</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
           <triggerFromChildProjects>false</triggerFromChildProjects>

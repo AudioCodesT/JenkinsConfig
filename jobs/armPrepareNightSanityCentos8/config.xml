@@ -1,9 +1,10 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
   <actions/>
-  <description>runs every night @ ~4:00 AM&#13;
-Prepare VMs for the run: download last war files and restart tomcat&#13;
-call armRunNightSanity job&#13;
-&#13;
+  <description>runs every night @ ~4:00 AM&#xd;
+Prepare VMs for the run: download last war files and restart tomcat&#xd;
+call armRunNightSanity job&#xd;
+&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -32,9 +33,9 @@ armReleaseSanityCentos8
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit/>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -88,7 +89,7 @@ armReleaseSanityCentos8
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs class="empty-list"/>
-          <projects>armRunSanity, </projects>
+          <projects>armRunSanity,</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>true</triggerWithNoParameters>
           <triggerFromChildProjects>false</triggerFromChildProjects>
