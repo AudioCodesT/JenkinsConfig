@@ -252,60 +252,7 @@ done
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript plugin="postbuildscript@2.9.1">
-      <config>
-        <scriptFiles/>
-        <groovyScripts/>
-        <buildSteps>
-          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-            <results>
-              <string>FAILURE</string>
-            </results>
-            <role>BOTH</role>
-            <executeOn>MATRIX</executeOn>
-            <buildSteps>
-              <hudson.tasks.Shell>
-                <command>#!/bin/sh
-set -xe
-CURL="curl -kn -u jenkins:${jenkins_pass} --silent"
-base=https://$GERRIT_HOST/a/changes
-id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
-idEscaped=${id////%2F}
-endpoint="/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review"
-
-
-$CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8" -d "{\"message\": \"GTest SIM Compilation Failed.\n${BUILD_URL} \", \"tag\": \"jenkins\", \"notify\": \"NONE\",\"labels\": {\"GTest\": \"-1\"}}"
-
-
-</command>
-              </hudson.tasks.Shell>
-            </buildSteps>
-          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-          <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-            <results>
-              <string>SUCCESS</string>
-              <string>NOT_BUILT</string>
-              <string>ABORTED</string>
-              <string>FAILURE</string>
-              <string>UNSTABLE</string>
-            </results>
-            <role>BOTH</role>
-            <executeOn>AXES</executeOn>
-            <buildSteps>
-              <hudson.tasks.Shell>
-                <command>#!/bin/sh
-set -xe
-cd ${WORKSPACE}
-sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
-              </hudson.tasks.Shell>
-            </buildSteps>
-          </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
-        </buildSteps>
-        <markBuildUnstable>false</markBuildUnstable>
-      </config>
-    </org.jenkinsci.plugins.postbuildscript.MatrixPostBuildScript>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <patterns>
