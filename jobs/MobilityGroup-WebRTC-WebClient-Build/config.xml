@@ -195,6 +195,11 @@ echo "BRANCH=${BRANCH}" &gt;&gt; prop</command>
             "pattern": "${WORKSPACE}/${NAME}-v${NEWTAG}.zip",
             "target": "MobilityGroup/WebRTC/WebClient/${GERRIT_BRANCH}/${NEWTAG}/",
              "recursive": "false"
+        },
+        {
+            "pattern": "${WORKSPACE}/wde_extension/deploy/ac_webrtc_wde.zip",
+            "target": "MobilityGroup/WebRTC/WebClient/${GERRIT_BRANCH}/${NEWTAG}/",
+             "recursive": "false"
         }
 ]
 }</spec>
