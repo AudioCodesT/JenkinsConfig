@@ -169,6 +169,9 @@ then
     then
     	PATH=${PATH}:"/cygdrive/c/Program Files/7-Zip"
     	7z.exe a -r arm-web-ui-9.2.zip dist/armui/.
+    else
+    	PATH=${PATH}:"/cygdrive/c/Program Files/7-Zip"
+    	7z.exe a -r arm-web-ui-${GERRIT_BRANCH}.zip dist/armui/.
     fi
 
 else
@@ -263,6 +266,12 @@ fi
         {
             "pattern": "${WORKSPACE}/arm-web-ui-9.2.zip",
             "target": "libs-release-local/com/ac/arm/arm-web-ui/9.2/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
+        },
+        {
+            "pattern": "${WORKSPACE}/arm-web-ui-${GERRIT_BRANCH}.zip",
+            "target": "libs-release-local/com/ac/arm/arm-web-ui/${GERRIT_BRANCH}/",
             "props": "type=zip;status=ready",
              "recursive": "false"
         }
