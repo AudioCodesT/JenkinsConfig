@@ -238,6 +238,7 @@ yes | make distclean
 
 make GTEST=1 $MAKE_CMD
 #run valgrind script
+sudo xauth add $(xauth -f ~centos/.Xauthority list | tail -1)
 sudo ./vSFB.sh gtest_valgrind
 
 
