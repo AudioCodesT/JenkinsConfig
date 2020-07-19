@@ -147,11 +147,13 @@ do
   elif [[ "$gtestRetValue" == "1" ]]
   then
   gtestSign="1"
-  grep -E 'PASSED' ${model}* 
+  successfull_passed_count=$(grep -E 'PASSED' ${model}* | wc -l)
   num_of_files=$(ls -al ${model}* | wc -l)
   if [[ $successfull_passed_count != $num_of_files ]]
   then
   		gtestSign="-1"
+        gtest_message_to_send="${gtest_message_to_send}${model} "
+  		gtestFailedAtLeastOnce="True"
   fi
   else
   echo "ERROR not found GTestLogs Files"
@@ -161,17 +163,11 @@ done
 #messages to post to gerrit
 gtest_message_to_send="${gtest_message_to_send} GTest Failed.${NEWLINE}You can see the logs here: ${artifactory_url}"
 valgrind_message_to_send="${valgrind_message_to_send} valgrind Failed.${NEWLINE}You can see the logs here: ${artifactory_url}"
-echo $gtest_message_to_send
+
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.32">
-      <recipients>ben.magriso</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
