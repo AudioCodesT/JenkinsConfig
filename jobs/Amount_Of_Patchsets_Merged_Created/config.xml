@@ -72,7 +72,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#check if the project is in gerrit or in test-gerrit
-if [[ "$PROJECT_NAME" == "TP/GWApp"  || "$PROJECT_NAME" == "EMS/ovoc_server" ]]
+if [[ "$PROJECT_NAME" == "TP/GWApp" || "$PROJECT_NAME" == "EMS/ovoc_server" || "$PROJECT_NAME" == "SmartTAP/SmartTAP" ]]
 then
 SERVER=shukyr@test-gerrit
 else
