@@ -118,7 +118,7 @@ else
 	java_path=$(readlink -f $(which java) | awk -F 'bin' '{print $1}')
 fi
 cd $java_path
-sudo bin/keytool -import -storepass changeit -noprompt -alias audc2016 -keystore lib/security/cacerts -trustcacerts -file $audc_path
+sudo bin/keytool -import -storepass changeit -noprompt -alias audc2016 -keystore lib/security/cacerts -trustcacerts -file $audc_path || echo "cert already exists"
 </command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
