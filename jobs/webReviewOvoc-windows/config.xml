@@ -146,7 +146,7 @@ chrome_version=$(cmd.exe /C 'wmic datafile where name="C:\\Program Files (x86)\\
 echo "*********************************************************************************************************************"
 echo "Google Chrome Version is: $chrome_version"
 echo "*********************************************************************************************************************"
-
+taskkill /f /im node.exe || echo "failed to kill node"
 #until branch 7.8.1000 (include) use nvm 12.16.1 (npm 12.16.1 and yarn 1.5.1) from 7.8.2000 use nvm 12.16.2(npm 12.16.2 and yarn 1.22.4)
 if [[ "$GERRIT_BRANCH" == "7.4"* || "$GERRIT_BRANCH" == "7.6"*  || "$GERRIT_BRANCH" == "7.8" || "$GERRIT_BRANCH" == "7.8.1000" ]]
 then
