@@ -124,13 +124,13 @@ build_aws()
     qaAccount="191324562914"
     armAccount="516086831279"
 	chmod 777 arm_build_aws.sh
-    ./arm_build_aws.sh ARM-Conf_${TAG} ${TAG} ${qaAccount}
-    ./arm_build_aws.sh ARM-Router_${TAG} ${TAG} ${qaAccount}
-    #./arm_build_aws.sh ARM-Conf_${TAG} ${TAG} ${qaAccount} &amp;
-    #P1=$!
-    #./arm_build_aws.sh ARM-Router_${TAG} ${TAG} ${qaAccount} &amp;
-    #P2=$!
-    #wait $P1 $P2
+    #./arm_build_aws.sh ARM-Conf_${TAG} ${TAG} ${qaAccount}
+    #./arm_build_aws.sh ARM-Router_${TAG} ${TAG} ${qaAccount}
+    ./arm_build_aws.sh ARM-Conf_${TAG} ${TAG} ${qaAccount} ${armAccount} &amp;
+    P1=$!
+    ./arm_build_aws.sh ARM-Router_${TAG} ${TAG} ${qaAccount} ${armAccount} &amp;
+    P2=$!
+    wait $P1 $P2
 }
 build_vhdx()
 {
