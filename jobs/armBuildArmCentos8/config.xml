@@ -177,7 +177,7 @@ if [ $RELEASE_VMS == "YES" ]; then
 	#use jenkins sshkey
 	git config --global user.name "Jenkins"
 	git config --global user.email devops@audiocodes.com
-    git checkout $BRANCH
+    git checkout origin/$BRANCH
     git pull --rebase origin $BRANCH
     git tag -d $VERSION_NAME || true
     git tag -a $VERSION_NAME -m "automatic tag"
