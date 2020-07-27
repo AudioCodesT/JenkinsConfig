@@ -173,6 +173,7 @@ echo "finish submodule"
 #rm -rf yarn.lock
 fi
 
+taskkill /f /im node.exe || echo "failed to kill node"
 
 #connect repositories using https instead opf git:
 git config url.https://.insteadOf git://
@@ -242,7 +243,7 @@ then
             if [[ ! -z "$pidNumber" ]]
             then
               echo "killing the proccess of the protractor proxy server"
-              taskkill /F /PID "$pidNumber"
+              taskkill /F /PID "$pidNumber" || echo "failed to kill protractor proxy server"
             fi
             if [[ "$GERRIT_BRANCH" == "7.4.3000" ]]
             then
@@ -289,7 +290,7 @@ then
             				if [[ ! -z "$pidNumber" ]]
    							then
       							echo "killing the proccess of the ng server"
-	  							taskkill /F /PID "$pidNumber"
+	  							taskkill /F /PID "$pidNumber" || echo "failed to kill ng server"
    							fi
         					echo "RUN: yarn run jenkinsServe"
            					 yarn run jenkinsServe &amp; sleep 120
