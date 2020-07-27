@@ -206,7 +206,7 @@ if [ $RELEASE_VMS == "YES" ]; then
     if [ -d "armUI" ]; then rm -rf armUI; fi
     git clone ssh://jenkins@gerrit:29418/ARM/UI armUI
     cd armUI
-    git checkout $BRANCH
+    git checkout origin/$BRANCH
     git tag -d $VERSION_NAME || true
     git tag -a $VERSION_NAME -m "automatic tag"
     git push origin $VERSION_NAME
