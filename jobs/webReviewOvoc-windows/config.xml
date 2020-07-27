@@ -210,7 +210,7 @@ else
    if [[ ! -z "$pidNumber" ]]
    then
       echo "killing the proccess of the protractor proxy server"
-	  taskkill /F /PID "$pidNumber" || echo "not fail the build"
+	  taskkill /F /PID "$pidNumber" || echo "failed to kill protractor proxy server"
    fi
    if [[ "$GERRIT_BRANCH" == "7.4.3000" ]]
    then
@@ -260,7 +260,7 @@ else
             if [[ ! -z "$pidNumber" ]]
    			then
       			echo "killing the proccess of the ng server"
-	  			taskkill /F /PID "$pidNumber"
+	  			taskkill /F /PID "$pidNumber" || echo "failed to kill ng server"
    			fi
         	echo "RUN: yarn run jenkinsServe"
             yarn run jenkinsServe &amp; sleep 120
