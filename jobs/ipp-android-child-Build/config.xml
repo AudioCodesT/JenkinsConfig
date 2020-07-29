@@ -168,7 +168,7 @@ repo sync -c --no-clone-bundle -j$(nproc) --force-sync
       <checkRegexp>false</checkRegexp>
       <regexpForMatrixStrategy>TestParent</regexpForMatrixStrategy>
       <delay class="com.chikli.hudson.plugin.naginator.FixedDelay">
-        <delay>5</delay>
+        <delay>300</delay>
       </delay>
       <maxSchedule>3</maxSchedule>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
@@ -179,9 +179,7 @@ repo sync -c --no-clone-bundle -j$(nproc) --force-sync
         <timeoutMinutes>120</timeoutMinutes>
       </strategy>
       <operationList>
-        <hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
-          <maxRestarts>1</maxRestarts>
-        </hudson.plugins.build__timeout.operations.AbortAndRestartOperation>
+        <hudson.plugins.build__timeout.operations.FailOperation/>
       </operationList>
     </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
