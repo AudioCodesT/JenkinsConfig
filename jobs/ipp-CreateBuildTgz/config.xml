@@ -1,6 +1,10 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>job triggered manually by user.&#13;
+  <description>Background:&#13;
+we do not deploy build_tgz file to Artifactory on review job, but sometimes the developer needs it&#13;
+this job should add it to artifactory on demand&#13;
+&#13;
+job is triggered manually by user.&#13;
 run compilation and deploying to artifactory  to ipp-review build.tgz</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -15,8 +19,8 @@ run compilation and deploying to artifactory  to ipp-review build.tgz</descripti
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>14</daysToKeep>
-        <numToKeep>-1</numToKeep>
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>30</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -32,13 +36,19 @@ run compilation and deploying to artifactory  to ipp-review build.tgz</descripti
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description/>
+          <description>Branch name in your gerrit change</description>
           <defaultValue>master</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFSPEC</name>
-          <description/>
+          <description>example:  refs/changes/00/41500/2
+
+This value should be taken from your gerrit change menu&gt; Download Patch
+the full command is shown there:
+git fetch "ssh://USER@gerrit:29418/IPP/SFB" refs/changes/00/41500/2 &amp;&amp; git checkout FETCH_HEAD
+just cut the "refs/changes/xx/xxxxx/x"  string - as in the above example
+</description>
           <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -133,7 +143,13 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.32">
+      <recipients>ben.magriso, shuky.riechard</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
