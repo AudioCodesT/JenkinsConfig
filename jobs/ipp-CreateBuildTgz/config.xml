@@ -106,7 +106,7 @@ run compilation and deploying to artifactory  to ipp-review build.tgz</descripti
 #clean untracked submodules and files
 git clean -ffdx -e "sysprobe*"
 
-if [[ "$BUILD_BRANCH" == "master" || "$BUILD_BRANCH" == "feature/"* || "$BUILD_BRANCH" == "release/3.4"* ]]
+if [[ "$GERRIT_BRANCH" == "master" || "$GERRIT_BRANCH" == "feature/"* || "$GERRIT_BRANCH" == "release/3.4"* ]]
 then
 	git submodule foreach git status || echo "failed"
     git submodule foreach git clean -fdx || echo "failed"
