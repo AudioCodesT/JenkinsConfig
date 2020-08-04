@@ -114,7 +114,7 @@ valgrind_message_to_send=""
 gtestFailedAtLeastOnce="False"
 valgrindFailedAtLeastOnce="False"
 artifactory_url="https://$artifactory_host/webapp/#/artifacts/browse/tree/General/ipp-review/SFB/${GERRIT_BRANCH}/${TARGET}/GTestLogs"
-models=("405HD__SIM" "430HD__SIM" "440HD__SIM" "450HD__SIM")
+models=("405HD__SIM" "440HD__SIM" "450HD__SIM")
 # run on all models and check if it passed or failed by grep, if failed at least one time, give score -1.
 for model in ${models[@]}
 do
