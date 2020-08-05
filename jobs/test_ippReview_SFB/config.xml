@@ -175,8 +175,7 @@ git status || echo "failed"
 cat ${WORKSPACE}/.gitmodules || echo "failed"
 
 
-#clean untracked submodules and files
-git clean -ffdx -e "sysprobe*"
+
 #**********************************************************************************************
 #***********************  ***************************************************
 if [[ "$GERRIT_BRANCH" == "master" || "$GERRIT_BRANCH" == "feature/"* || "$GERRIT_BRANCH" == "release/3.4"* ]]
