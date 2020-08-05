@@ -171,7 +171,7 @@ fi
 
 # Find all commits with the same wake up commit issue.
 echo find Jira Issue of this change
-ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep "\[IPP" | sed 's/.*\[IPP/IPP/; s/\].*//')
+ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep "\[.*-[0-9]*\]" | sed 's/\].*//; s/.*\[//')
 echo ISSUE found: $ISSUE
 if ! echo $ISSUE | grep -q '\-[0-9]'; then
   echo No correct ISSUE found
