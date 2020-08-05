@@ -444,7 +444,9 @@ change=`echo $REFSPEC | cut -d/ -f4`
 # No score if this patch-set was merged already
 if [ "$merged" == "yes" ]; then labelGrade=""; fi
 
+cp -f $ATA_Home/$IMAGENAMES.txt $WORKSPACE/childsBuilds.txt
 ATRun=`cat $ATA_Home/$IMAGENAMES.txt`
+rm -f $ATA_Home/$IMAGENAMES.txt
 
 gerrit=$(ping jenkins -n 1 | grep "Reply from" | sed 's!^.*from !!; s!:.*!!')
 
@@ -625,14 +627,13 @@ $change,$newPS
                     <subject>$PROJECT_DEFAULT_SUBJECT</subject>
                     <body>$PROJECT_DEFAULT_CONTENT</body>
                     <recipientProviders>
-                      <hudson.plugins.emailext.plugins.recipients.DevelopersRecipientProvider/>
                       <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
                     </recipientProviders>
-                    <attachmentsPattern>$ATA_Home/$IMAGENAMES.txt</attachmentsPattern>
-                    <attachBuildLog>false</attachBuildLog>
+                    <attachmentsPattern>childsBuilds.txt</attachmentsPattern>
+                    <attachBuildLog>true</attachBuildLog>
                     <compressBuildLog>false</compressBuildLog>
                     <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
-                    <contentType>project</contentType>
+                    <contentType>both</contentType>
                   </email>
                 </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
               </configuredTriggers>
