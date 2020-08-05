@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -21,7 +23,7 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -32,18 +34,41 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    <EnvInjectJobProperty plugin="envinject@2.3.0">
+      <info>
+        <propertiesFilePath>prop</propertiesFilePath>
+        <scriptContent>#!/bin/bash
+if [[ "$GERRIT_BRANCH" == "android-9"  || "$GERRIT_BRANCH" == "audc-px30" || "$GERRIT_BRANCH" == "audc-rk3399" ]];
+then
+CUSTOM_WORKSPACE="/home/ubuntu/jenkinsslave/workspace/ipp-android_android9"
+else
+CUSTOM_WORKSPACE="/home/ubuntu/jenkinsslave/workspace/ipp-android"
+fi
+echo "CUSTOM_WORKSPACE=${CUSTOM_WORKSPACE}" &gt; prop</scriptContent>
+        <secureGroovyScript plugin="script-security@1.71">
+          <script/>
+          <sandbox>false</sandbox>
+        </secureGroovyScript>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+      <on>true</on>
+      <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
+      <keepBuildVariables>true</keepBuildVariables>
+      <overrideBuildParameters>false</overrideBuildParameters>
+    </EnvInjectJobProperty>
+    
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <assignedNode>ipp-android-dynamic</assignedNode>
   <canRoam>false</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.27.5">
-      <spec></spec>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>ANT</compareType>
@@ -83,80 +108,248 @@
       <skipVote>
         <onSuccessful>false</onSuccessful>
         <onFailed>false</onFailed>
-        <onUnstable>false</onUnstable>
-        <onNotBuilt>false</onNotBuilt>
+        <onUnstable>true</onUnstable>
+        <onNotBuilt>true</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <dependencyJobsNames/>
+      <commitMessageParameterMode>PLAIN</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
           <excludeDrafts>false</excludeDrafts>
           <excludeTrivialRebase>false</excludeTrivialRebase>
           <excludeNoCodeChange>true</excludeNoCodeChange>
+          <excludePrivateState>false</excludePrivateState>
+          <excludeWipState>false</excludeWipState>
         </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
-  <customWorkspace>/home/ubuntu/jenkinsslave/workspace/ipp-android</customWorkspace>
+  <customWorkspace>${CUSTOM_WORKSPACE}</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
-#the above line is needed because we are going to use &quot;source&quot; command
+#the above line is needed because we are going to use "source" command
 
-rm -f *.zip
-repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $GERRIT_BRANCH
+#******************** temporary not compile rockchip-px30  branch ******************************"
+if [[ $GERRIT_BRANCH == "rockchip-px30" ]]
+then
+	echo CHANGES=${CHANGES} &gt; ipp-android-review.txt
+	exit 0
+fi
+#******************** temporary not compile rockchip-px30  branch ******************************"
 
-# second need to sync on latest changes off all other repositories
+# NEED to find the branch and compare it to destBranch
+echo find Jira Issue of this change
+ISSUE=$(echo $GERRIT_CHANGE_COMMIT_MESSAGE | grep "\[.*-[0-9]*\]" | sed 's/\].*//; s/.*\[//')
+echo found: $ISSUE
+# Find if this build should use another commit with the same Issue
+if [ ! -z "$ISSUE" ]; then 
+    echo Search this Issue: $ISSUE...
+    AllCommits=$(ssh -p 29418 jenkins@gerrit gerrit query --current-patch-set \
+     message:$ISSUE status:open | grep 'project:\|branch:\|ref:' | \
+     sed 's%project:%%; s% .*: %:%; s% :%:%g')
+    AllCommits=$(echo $AllCommits | sed 's% :%:%g')
+fi
+
+pwd
+xmlFile=".repo/manifests/default.xml"
+
+#**************** clean workspace before starting repo init and repo sync ***************
+repo forall -c 'git reset --hard ; git clean -ffdx'
+rm -rf hardware
+cd .repo/manifests
+git checkout -- default.xml
+cd $WORKSPACE
+#**************** clean workspace before starting repo init and repo sync ***************
+
+if [ $GERRIT_PROJECT != "IPP/Android/repo_manifests" ]; then
+  rm -f *.zip
+  repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $GERRIT_BRANCH
+  echo Find $GERRIT_PROJECT in default.xml and replace to the change revision
+  sed -i.bak -e 's:\(.*'$GERRIT_PROJECT'\".* revision=\"\)[^"]*\(\" .*\):\1'$GERRIT_REFSPEC'\2:' $xmlFile
+  grep $GERRIT_PROJECT $xmlFile
+else
+  repo init -u ssh://jenkins@gerrit:29418/IPP/Android/repo_manifests -b $GERRIT_REFSPEC
+fi
+
+CHANGES=""
+for change in $AllCommits; do 
+  repo=$(echo $change | cut -d: -f1)
+  branch=$(echo $change | cut -d: -f2)
+  revision=$(echo $change | cut -d: -f3)
+  echo Check: $repo, $branch, $revision
+  if [[ ! $repo =~ "repo_manifests" &amp;&amp; $repo != "$GERRIT_PROJECT" ]]; then
+    destBranch=$(grep $repo $xmlFile | grep dest-branch | sed 's:.*dest-branch="::; s:".*::;')
+    echo Check destination branch: $destBranch, if equel to: $branch
+    if [ "$destBranch" == $branch ]; then
+      echo Find $repo in default.xml and replace to the change revision $revision
+      sed -i.bak -e 's:\(.*'$repo'\".* revision=\"\)[^"]*\(\" .*\):\1'$revision'\2:' $xmlFile
+      grep $repo $xmlFile
+      CHANGES="$CHANGES $(echo $revision | cut -d/ -f4,5 | sed 's:/:,:')"
+    else
+      echo Destination branch not equel - skip this change
+    fi
+  fi
+done
+echo CHANGES=${CHANGES} &gt; ipp-android-review.txt
+
 echo ----- repo sync -c --no-clone-bundle -j16 --force-sync
 repo sync -c --no-tags --no-clone-bundle -j16 --force-sync
-
-# cd to releant path
-echo Fetch this change $GERRIT_REFSPEC
-cd $(repo list | grep $GERRIT_PROJECT$ | cut -d: -f1)
-pwd
-echo ----- Fetch $GERRIT_PATCHSET_REVISION in branch $GERRIT_BRANCH
-echo ----- Change $GERRIT_REFSPEC
-git log -2 --oneline
-echo git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC
-git fetch ssh://jenkins@gerrit:29418/$GERRIT_PROJECT $GERRIT_REFSPEC &amp;&amp; git checkout FETCH_HEAD
-echo ----- git log after fetch
-git log -2 --oneline
-
-cd $WORKSPACE
-
-./build/tools/make_c450hd.sh --zip-images --clean
+if [ $? -ne 0 ]; then 
+  echo Repo sync failed... exit with error
+  exit 2
+fi
+echo "******************************************space left on machine***********************************"
+df -h
+./build/tools/make.sh --zip-images --clean
 </command>
+      <unstableReturn>2</unstableReturn>
     </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@2.3.0">
+      <info>
+        <propertiesFilePath>ipp-android-review.txt</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.21">
+    <org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher plugin="flexible-publish@0.15.2">
+      <publishers>
+        <org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+          <condition class="org.jenkins_ci.plugins.run_condition.core.StatusCondition" plugin="run-condition@1.3">
+            <worstResult>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </worstResult>
+            <bestResult>
+              <name>SUCCESS</name>
+              <ordinal>0</ordinal>
+              <color>BLUE</color>
+              <completeBuild>true</completeBuild>
+            </bestResult>
+          </condition>
+          <publisherList>
+            <org.jenkinsci.plugins.postbuildscript.PostBuildScript plugin="postbuildscript@2.9.1">
+              <config>
+                <scriptFiles/>
+                <groovyScripts/>
+                <buildSteps>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                      <string>NOT_BUILT</string>
+                      <string>FAILURE</string>
+                      <string>UNSTABLE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <EnvInjectBuilder plugin="envinject@2.3.0">
+                        <info>
+                          <propertiesFilePath>ipp-android-review.txt</propertiesFilePath>
+                        </info>
+                      </EnvInjectBuilder>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>SUCCESS</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>for rep in $CHANGES; do
+  echo Send OK message to Gerrit - $rep
+  ssh -p 29418  jenkins@gerrit gerrit review \
+  --message "'Review OK, score done manually by ipp-android-review - $BUILD_URL'" \
+  --notify OWNER \
+  --label Verified=1 \
+  $rep
+done
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                  <org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                    <results>
+                      <string>FAILURE</string>
+                    </results>
+                    <role>BOTH</role>
+                    <executeOn>BOTH</executeOn>
+                    <buildSteps>
+                      <hudson.tasks.Shell>
+                        <command>for rep in $CHANGES; do
+  echo Send Faild message to Gerrit - $rep
+  ssh -p 29418  jenkins@gerrit gerrit review \
+  --message "'Review failed, score done manually by ipp-android-review - $BUILD_URL'" \
+  --notify OWNER \
+  --label Verified=-1 \
+  $rep
+done
+</command>
+                      </hudson.tasks.Shell>
+                    </buildSteps>
+                  </org.jenkinsci.plugins.postbuildscript.model.PostBuildStep>
+                </buildSteps>
+                <markBuildUnstable>false</markBuildUnstable>
+              </config>
+            </org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+          </publisherList>
+          <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+          <executionStrategy class="org.jenkins_ci.plugins.flexible_publish.strategy.FailAtEndExecutionStrategy"/>
+        </org.jenkins__ci.plugins.flexible__publish.ConditionalPublisher>
+      </publishers>
+    </org.jenkins__ci.plugins.flexible__publish.FlexiblePublisher>
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.38">
+      <patterns>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>out/**</pattern>
+          <type>INCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+      </patterns>
+      <deleteDirs>true</deleteDirs>
+      <skipWhenFailed>false</skipWhenFailed>
+      <cleanWhenSuccess>true</cleanWhenSuccess>
+      <cleanWhenUnstable>true</cleanWhenUnstable>
+      <cleanWhenFailure>true</cleanWhenFailure>
+      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+      <cleanWhenAborted>true</cleanWhenAborted>
+      <notFailBuild>true</notFailBuild>
+      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <externalDelete/>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.WsCleanup>
+    <hudson.tasks.Mailer plugin="mailer@1.32">
       <recipients>yossim,ben.magriso</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers>
-    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.1.0">
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
+    <org.jfrog.hudson.generic.ArtifactoryGenericConfigurator plugin="artifactory@3.6.1">
       <deployerDetails>
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
@@ -168,57 +361,54 @@ cd $WORKSPACE
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentials>
-          <username></username>
-          <password></password>
-        </credentials>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/*.zip&quot;,
-            &quot;target&quot;: &quot;ipp-review/Android/${GERRIT_BRANCH}/${BUILD_NUMBER}/&quot;,
-            &quot;props&quot;: &quot;type=zip;status=ready&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/*.zip",
+            "target": "ipp-review/Android/${GERRIT_BRANCH}/${BUILD_NUMBER}/",
+            "props": "type=zip;status=ready",
+             "recursive": "false"
+        },
+        {
+            "pattern": "MSPartner.apk",
+            "target": "ipp-review/Android/${GERRIT_BRANCH}/${BUILD_NUMBER}/"
         }
     ]
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/*.zip=&gt;Android/${GERRIT_BRANCH}/${BUILD_NUMBER}</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*,*key*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
-    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@1.6.9">
+    <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}-$GERRIT_PROJECT</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
