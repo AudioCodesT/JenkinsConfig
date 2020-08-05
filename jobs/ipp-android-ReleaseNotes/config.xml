@@ -1,14 +1,16 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<project>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><project>
   <actions/>
-  <description>Create &quot;ReleaseNote.txt&quot;</description>
+  <description>Create "ReleaseNote.txt"</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13">
+      <siteName>http://acjira:8080/</siteName>
+    </hudson.plugins.jira.JiraProjectProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17.2">
       <optOut>false</optOut>
@@ -21,14 +23,14 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_REFNAME</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_PROJECT</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -40,9 +42,9 @@
       <throttleEnabled>false</throttleEnabled>
       <throttleOption>project</throttleOption>
       <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -72,7 +74,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
-      <spec></spec>
+      <spec/>
       <gerritProjects>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
           <compareType>PLAIN</compareType>
@@ -98,27 +100,27 @@
         <onNotBuilt>false</onNotBuilt>
       </skipVote>
       <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
+      <notificationLevel/>
       <silentStartMode>false</silentStartMode>
       <escapeQuotes>true</escapeQuotes>
       <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
+      <dependencyJobsNames/>
       <commitMessageParameterMode>BASE64</commitMessageParameterMode>
       <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
       <commentTextParameterMode>BASE64</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
+      <buildStartMessage/>
+      <buildFailureMessage/>
+      <buildSuccessfulMessage/>
+      <buildUnstableMessage/>
+      <buildNotBuiltMessage/>
+      <buildUnsuccessfulFilepath/>
+      <customUrl/>
       <serverName>gerritHost</serverName>
       <triggerOnEvents>
         <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginRefUpdatedEvent/>
       </triggerOnEvents>
       <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
+      <triggerConfigURL/>
       <triggerInformationAction/>
     </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
   </triggers>
@@ -127,63 +129,63 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash +e -x
 
-NEWTAG=`echo $GERRIT_REFNAME | awk -F/ &apos;{print $NF}&apos;`
+NEWTAG=`echo $GERRIT_REFNAME | awk -F/ '{print $NF}'`
 echo NEWTAG=${NEWTAG} &gt; generated_ipp_version.properties
 
 PreviousTAG=`git describe --first-parent --tags --abbrev=0 HEAD^`
 
-git log --first-parent --pretty=format:&quot;%B&quot; $PreviousTAG..$NEWTAG &gt; $NEWTAG.txt
+git log --first-parent --pretty=format:"%B" $PreviousTAG..$NEWTAG &gt; $NEWTAG.txt
 cp -f $NEWTAG.txt releaseNotes.txt
-AuthorCommitter=$(grep User: $NEWTAG.txt | sed &apos;s/.*User: //&apos; | sort -u )
+AuthorCommitter=$(grep User: $NEWTAG.txt | sed 's/.*User: //' | sort -u )
  
-if [ -z &quot;$AuthorCommitter&quot; ]; then AuthorCommitter=`git log --first-parent --pretty=format:&quot;%aN%n%cN&quot; $PreviousTAG..$NEWTAG | sort -u | sed s/$/\;/g`; fi
+if [ -z "$AuthorCommitter" ]; then AuthorCommitter=`git log --first-parent --pretty=format:"%aN%n%cN" $PreviousTAG..$NEWTAG | sort -u | sed s/$/\;/g`; fi
 
-RN=&quot;&quot;
-orgHash=&quot;&quot;
-IFS=&apos;&apos;
+RN=""
+orgHash=""
+IFS=''
 while read -r line; do
-    if [ ! -z &quot;$orgHash&quot; ]; then
+    if [ ! -z "$orgHash" ]; then
       if [[ ! -z $Jira &amp;&amp; ! -z $subject ]]; then
-        subject=$(echo $subject | sed &apos;s/Change-Id:.*(/(/&apos;)
+        subject=$(echo $subject | sed 's/Change-Id:.*(/(/')
         RN+=---$subject::$orgHash::$Jira
         echo $RN
-        orgHash=&quot;&quot;;
+        orgHash="";
       else
-        # Find the Jira issue and don&apos;t override it in others lines without it.
+        # Find the Jira issue and don't override it in others lines without it.
         if  [ -z $Jira ]; then
-          Jira=$(echo $line | grep &quot;\[IPP&quot; | sed &apos;s/.*\[IPP/IPP/; s/\].*//&apos;)
+          Jira=$(echo $line | grep "\[.*-[0-9]*\]" | sed 's/\].*//; s/.*\[//')
         fi
         # Take the subject line only
         if  [ -z $subject ]; then
-          subject=&quot;$(echo $line | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)&quot;
+          subject="$(echo $line | sed 's/\"/`/g; s/---/_/g; s/::/;/g')"
         fi
       fi
     fi
-    if echo $line | grep -q &quot;\-\-Hash:&quot;; then
+    if echo $line | grep -q "\-\-Hash:"; then
       orgHash=$(echo $line | cut -d: -f2);
       SaveOneHash=$orgHash
-      subject=&quot;&quot;
-      Jira=&quot;&quot;
+      subject=""
+      Jira=""
     fi
 done &lt; $NEWTAG.txt
 
-if [ -z &quot;$RN&quot; ]; then
+if [ -z "$RN" ]; then
   while read -r hash; do 
-    subject=$(git log --pretty=format:&quot;%s&quot; $hash -n1 | sed &apos;s/\&quot;/`/g; s/---/_/g; s/::/;/g&apos;)
-    Jira=$(git log --pretty=format:&quot;%B&quot; $hash -n1 | grep &quot;\[I&quot; | sed &apos;s/.*\[I/I/; s/\].*//&apos;)
+    subject=$(git log --pretty=format:"%s" $hash -n1 | sed 's/\"/`/g; s/---/_/g; s/::/;/g')
+    Jira=$(git log --pretty=format:"%B" $hash -n1 | grep "\[I" | sed 's/.*\[I/I/; s/\].*//')
     RN+=---$subject::$hash::$Jira
-  done &lt;&lt;&lt; &quot;$(git log --first-parent --reverse --pretty=format:&quot;%h&quot; $PreviousTAG..$NEWTAG)&quot;
+  done &lt;&lt;&lt; "$(git log --first-parent --reverse --pretty=format:"%h" $PreviousTAG..$NEWTAG)"
 fi
 
 echo Find the author email in Gerrit server according the commit SHA1 
-EMAIL=$(ssh -p 29418 jenkins@gerrit gerrit query $SaveOneHash | grep email | sed &apos;s/.*email: //&apos;)
-if [ -z &quot;$EMAIL&quot; ]; then EMAIL=`git log --pretty=format:&quot;%ae%n%ce&quot; $PreviousTAG..$NEWTAG | grep -v devops | sort -u`; fi
-if [ -z &quot;$EMAIL&quot; ]; then EMAIL=&quot;IppSwReleases@audiocodes.com&quot;; fi
+EMAIL=$(ssh -p 29418 jenkins@gerrit gerrit query $SaveOneHash | grep email | sed 's/.*email: //')
+if [ -z "$EMAIL" ]; then EMAIL=`git log --pretty=format:"%ae%n%ce" $PreviousTAG..$NEWTAG | grep -v devops | sort -u`; fi
+if [ -z "$EMAIL" ]; then EMAIL="IppSwReleases@audiocodes.com"; fi
 
 GERRIT_PROJECT=`echo $GIT_URL | cut -d/ -f4,5`
-DATE=`git for-each-ref --format &apos;%(taggerdate)&apos; refs/tags/$NEWTAG`
-#GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | head -1 | awk -F&apos;/&apos; &apos;{print $NF}&apos;`
-GERRIT_BRANCH=$(git branch --no-color -r --contains HEAD | grep -v -e &apos;-&gt;&apos; | sed &apos;s:.*origin/::&apos;)
+DATE=`git for-each-ref --format '%(taggerdate)' refs/tags/$NEWTAG`
+#GERRIT_BRANCH=`git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' | head -1 | awk -F'/' '{print $NF}'`
+GERRIT_BRANCH=$(git branch --no-color -r --contains HEAD | grep -v -e '-&gt;' | sed 's:.*origin/::')
 
 echo RN=${RN} &gt;&gt; generated_ipp_version.properties
 echo GERRIT_HOST=$(echo $GIT_URL | cut -d@ -f2 | cut -d: -f1) &gt;&gt; generated_ipp_version.properties
@@ -207,9 +209,9 @@ echo AuthorCommitter=${AuthorCommitter} &gt;&gt; generated_ipp_version.propertie
       <trustAllCertificates>false</trustAllCertificates>
       <overrideTrustAllCertificates>false</overrideTrustAllCertificates>
       <preventRemoteBuildQueue>false</preventRemoteBuildQueue>
-      <httpPostReadTimeout>0</httpPostReadTimeout>
-      <httpGetReadTimeout>0</httpGetReadTimeout>
-      <pollInterval>3</pollInterval>
+      <httpPostReadTimeout>30000</httpPostReadTimeout>
+      <httpGetReadTimeout>10000</httpGetReadTimeout>
+      <pollInterval>10</pollInterval>
       <blockBuildUntilComplete>false</blockBuildUntilComplete>
       <job>Update-Jira</job>
       <token>Jira-update</token>
@@ -223,18 +225,13 @@ GERRIT_BRANCH=$GERRIT_BRANCH
 AuthorCommitter=$AuthorCommitter</parameters>
       <enhancedLogging>false</enhancedLogging>
       <loadParamsFromFile>false</loadParamsFromFile>
-      <parameterFile></parameterFile>
+      <parameterFile/>
       <maxConn>0</maxConn>
       <useCrumbCache>false</useCrumbCache>
       <useJobInfoCache>false</useJobInfoCache>
       <abortTriggeredJob>false</abortTriggeredJob>
       <disabled>false</disabled>
-      <hostPermits>
-        <entry>
-          <string>test-jenkins</string>
-          <int>0</int>
-        </entry>
-      </hostPermits>
+      <hostPermits/>
     </org.jenkinsci.plugins.ParameterizedRemoteTrigger.RemoteBuildConfiguration>
   </builders>
   <publishers>
@@ -263,7 +260,7 @@ BUILD_BRANCH=${GERRIT_BRANCH}
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
-          <keyFromText></keyFromText>
+          <keyFromText/>
           <keyFromSelect>ipp-release</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
@@ -275,36 +272,41 @@ BUILD_BRANCH=${GERRIT_BRANCH}
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
-      <resolverCredentialsConfig reference="../deployerCredentialsConfig"/>
+      <resolverCredentialsConfig>
+        <credentialsId/>
+        <overridingCredentials>false</overridingCredentials>
+        <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
+      </resolverCredentialsConfig>
       <useSpecs>false</useSpecs>
       <uploadSpec>
-        <spec></spec>
+        <spec/>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/releaseNotes.txt=&gt;com/ac/ipp/Android/${GERRIT_BRANCH}/${NEWTAG}</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>false</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
       <multiConfProject>false</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}___${NEWTAG}</template>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
