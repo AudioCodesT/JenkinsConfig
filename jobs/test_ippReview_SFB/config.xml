@@ -1,6 +1,7 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.17">
+<?xml version='1.1' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.17">
   <actions/>
-  <description>Activated by after “Push to Gerrit”:&#13;
+  <description>Activated by after “Push to Gerrit”:&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -11,7 +12,7 @@
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs/>
+      <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -32,8 +33,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description/>
-          <defaultValue/>
+          <description></description>
+          <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -49,12 +50,13 @@
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit/>
+      <paramsToUseForLimit></paramsToUseForLimit>
+      <configVersion>1</configVersion>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     <EnvInjectJobProperty plugin="envinject@2.3.0">
       <info>
         <secureGroovyScript plugin="script-security@1.71">
-          <script/>
+          <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -63,8 +65,8 @@
       <keepJenkinsSystemVariables>true</keepJenkinsSystemVariables>
       <keepBuildVariables>true</keepBuildVariables>
       <overrideBuildParameters>false</overrideBuildParameters>
+      <contributors/>
     </EnvInjectJobProperty>
-    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -89,11 +91,16 @@
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference/>
+        <reference></reference>
         <timeout>20</timeout>
         <depth>80</depth>
         <honorRefspec>false</honorRefspec>
       </hudson.plugins.git.extensions.impl.CloneOption>
+      <hudson.plugins.git.extensions.impl.BuildChooserSetting>
+        <buildChooser class="com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTriggerBuildChooser" plugin="gerrit-trigger@2.30.5">
+          <separator>#</separator>
+        </buildChooser>
+      </hudson.plugins.git.extensions.impl.BuildChooserSetting>
     </extensions>
   </scm>
   <quietPeriod>90</quietPeriod>
@@ -103,7 +110,97 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
+      <spec></spec>
+      <gerritProjects>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+          <compareType>PLAIN</compareType>
+          <pattern>IPP/SFB</pattern>
+          <branches>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>feature/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>release/3.1*/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>release/3.2*/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>3.1**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>3.2</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>3.4**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>master</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>PLAIN</compareType>
+              <pattern>testBranch</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>release/3.4*/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+              <compareType>ANT</compareType>
+              <pattern>private/**</pattern>
+            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
+          </branches>
+          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
+      </gerritProjects>
+      <dynamicGerritProjects class="empty-list"/>
+      <skipVote>
+        <onSuccessful>false</onSuccessful>
+        <onFailed>false</onFailed>
+        <onUnstable>false</onUnstable>
+        <onNotBuilt>false</onNotBuilt>
+      </skipVote>
+      <silentMode>false</silentMode>
+      <notificationLevel></notificationLevel>
+      <silentStartMode>false</silentStartMode>
+      <escapeQuotes>true</escapeQuotes>
+      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
+      <dependencyJobsNames></dependencyJobsNames>
+      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
+      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
+      <commentTextParameterMode>PLAIN</commentTextParameterMode>
+      <buildStartMessage></buildStartMessage>
+      <buildFailureMessage></buildFailureMessage>
+      <buildSuccessfulMessage></buildSuccessfulMessage>
+      <buildUnstableMessage></buildUnstableMessage>
+      <buildNotBuiltMessage></buildNotBuiltMessage>
+      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
+      <customUrl></customUrl>
+      <serverName>gerritHost</serverName>
+      <triggerOnEvents>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+          <excludeDrafts>false</excludeDrafts>
+          <excludeTrivialRebase>false</excludeTrivialRebase>
+          <excludeNoCodeChange>true</excludeNoCodeChange>
+          <excludePrivateState>false</excludePrivateState>
+          <excludeWipState>false</excludeWipState>
+        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
+        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
+      </triggerOnEvents>
+      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
+      <triggerConfigURL></triggerConfigURL>
+      <triggerInformationAction/>
+    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
+  </triggers>
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <org.jenkinsci.plugins.yamlaxis.YamlAxis plugin="yaml-axis@0.2.2">
@@ -111,6 +208,15 @@
       <values>
         <string>boards2review.yml</string>
       </values>
+      <computedValues>
+        <string>auto AUTOPRD=405HD</string>
+        <string>auto AUTOPRD=430HD</string>
+        <string>auto AUTOPRD=440HD</string>
+        <string>auto AUTOPRD=445HD</string>
+        <string>auto AUTOPRD=450HD</string>
+        <string>auto AUTOPRD=C450HD</string>
+        <string>auto AUTOPRD=RX50</string>
+      </computedValues>
     </org.jenkinsci.plugins.yamlaxis.YamlAxis>
     <hudson.matrix.LabelAxis>
       <name>label</name>
@@ -124,23 +230,23 @@
       <command>#check disk size if there is no enough space, delete all workspace
 set +e
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo "$disk_size" | sed 's/ //g' | cut -d'G' -f1)
+disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
 disk_size=${disk_size%.*}
 if [[ $disk_size -le 8 ]]
 then
-echo "******************not enough space to compile, deleting other workspaces******************"
-find /opt/jenkinsslave/workspace -mindepth 1 ! -regex "^${WORKSPACE}\(/.*\)?" -delete || true
+echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
+find /opt/jenkinsslave/workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
 df -h
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d" " -f1 | cut -d"&amp;" -f1`
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
 echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
 #In case the AUTOPRD name contain __IIM or something like that, remove it so we will find the image even if its name is _IIM (one underscore)
-echo SHORTAUTOPRD=`echo $AUTOPRD | sed 's:_.*$::'` &gt;&gt; generated_ipp_version.properties
+echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_ipp_version.properties
 
-TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
+TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
 echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
@@ -162,31 +268,31 @@ chmod +x sysprobe.sh
 #****************************************************************************
 #****************************************************************************
 
-User="$artifactory_user:$artifactory_password"
+User=&quot;$artifactory_user:$artifactory_password&quot;
 
 # Check if the image exist already in the Artifactory - if exist, exit without error
 # The grep -v flag exclude the pattern, needed when the img name contains _logs_ in case of LOG=1
-if [[ "$MAKE_CMD" =~ "LOG=1" ]]; then LogFlag=""; else LogFlag="-v"; fi
+if [[ &quot;$MAKE_CMD&quot; =~ &quot;LOG=1&quot; ]]; then LogFlag=&quot;&quot;; else LogFlag=&quot;-v&quot;; fi
 if curl -ks -u $User https://artifactory/api/storage/ipp-review/SFB/${GERRIT_BRANCH}/$TARGET | grep img | grep $LogFlag _logs_ | grep -q UC${SHORTAUTOPRD}_; then
 	echo ${GERRIT_BRANCH}/$TARGET/$SHORTAUTOPRD exist already... Abort without error;
     exit 0
 fi
-git status || echo "failed"
-cat ${WORKSPACE}/.gitmodules || echo "failed"
+git status || echo &quot;failed&quot;
+cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
 
 
 #clean untracked submodules and files
-git clean -ffdx -e "sysprobe*"
+git clean -ffdx -e &quot;sysprobe*&quot;
 #**********************************************************************************************
 #***********************  ***************************************************
-if [[ "$GERRIT_BRANCH" == "master" || "$GERRIT_BRANCH" == "feature/"* || "$GERRIT_BRANCH" == "release/3.4"* ]]
+if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;release/3.4&quot;* ]]
 then
-	git submodule foreach git status || echo "failed"
-    git submodule foreach git clean -fdx || echo "failed"
-    git submodule foreach git reset --hard HEAD || echo "failed"
-    git submodule foreach git checkout -- . || echo "failed"
-	git submodule init || ( echo "git submodule init FAILED, return code = $?"  &amp;&amp; exit 1 )
-	git submodule update || ( echo "git submodule update FAILED, return code = $?" &amp;&amp; exit 1 )
+	git submodule foreach git status || echo &quot;failed&quot;
+    git submodule foreach git clean -fdx || echo &quot;failed&quot;
+    git submodule foreach git reset --hard HEAD || echo &quot;failed&quot;
+    git submodule foreach git checkout -- . || echo &quot;failed&quot;
+	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
+	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
     git submodule foreach git reset --hard HEAD
 	git submodule update
 fi
@@ -194,11 +300,11 @@ fi
 #***********************  ***************************************************
 
 
-#if branch name NOT contain "3.1", download C450HD_kernel submodule
-#if [[ ( "$GERRIT_BRANCH" == *"3.2"* || "$GERRIT_BRANCH" == "feature/EMS_Client" ) &amp;&amp; "$MAKE_CMD" == "auto AUTOPRD=C450HD" ]]
-if [[ "$GERRIT_BRANCH" != *"3.1"* &amp;&amp; "$MAKE_CMD" == "auto AUTOPRD=C450HD" ]]
-	then git submodule init || ( echo "git submodule init FAILED, return code = $?"  &amp;&amp; exit 1 )
-    	git submodule update || ( echo "git submodule update FAILED, return code = $?" &amp;&amp; exit 1 )
+#if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
+#if [[ ( &quot;$GERRIT_BRANCH&quot; == *&quot;3.2&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;feature/EMS_Client&quot; ) &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
+	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
+    	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
 fi
 
 #compile:
@@ -206,18 +312,18 @@ export PATH=/opt/ipp_toolchain/gcc-wrapper:$PATH
 export LD_LIBRARY_PATH=/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/lib/
 yes | make distclean
 
-NumExecuting=$(echo "$MAKE_CMD" |  awk -F '&amp;' '{print NF}')
+NumExecuting=$(echo &quot;$MAKE_CMD&quot; |  awk -F &apos;&amp;&apos; &apos;{print NF}&apos;)
 
 for ((i=1;i&lt;=$NumExecuting;i++)); do 
-  PARAMS=`echo $MAKE_CMD | cut -d"&amp;" -f$i`
-  if [[ $PARAMS =~ "LOG=1" ]]; then
+  PARAMS=`echo $MAKE_CMD | cut -d&quot;&amp;&quot; -f$i`
+  if [[ $PARAMS =~ &quot;LOG=1&quot; ]]; then
     make $PARAMS
   else
     make $PARAMS SUBVERSION=${GERRIT_CHANGE_NUMBER}.${GERRIT_PATCHSET_NUMBER}
   fi
 done
 #change size_report name to 450HD_SIZE_REPORT.csv
-NEWTAGSizeReport=$(find | grep size_report.csv | cut -d'/' -f3) || true
+NEWTAGSizeReport=$(find | grep size_report.csv | cut -d&apos;/&apos; -f3) || true
 mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
 
 
@@ -227,13 +333,13 @@ mv build/${NEWTAGSizeReport} build/${AUTOPRD}_size_report.csv || true
 
 cd ${WORKSPACE}
 
-echo "Kill probe process"
-kill -9 $(ps | grep sysprobe.sh | gawk '{print $1}')
+echo &quot;Kill probe process&quot;
+kill -9 $(ps | grep sysprobe.sh | gawk &apos;{print $1}&apos;)
 
-echo "Archive probe csv &amp; upload to Artifactory"
+echo &quot;Archive probe csv &amp; upload to Artifactory&quot;
 mv sysprobe.csv ${BUILD_NUMBER}-${AUTOPRD}.csv
 tar zcfv ${BUILD_NUMBER}-${AUTOPRD}.tar.gz ${BUILD_NUMBER}-${AUTOPRD}.csv
-curl -u $artifactory_user:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz "https://artifactory/Devops/Probes/ippReview_SFB/${BUILD_NUMBER}/${BUILD_NUMBER}-${AUTOPRD}.tar.gz"
+curl -u $artifactory_user:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.tar.gz &quot;https://artifactory/Devops/Probes/ippReview_SFB/${BUILD_NUMBER}/${BUILD_NUMBER}-${AUTOPRD}.tar.gz&quot;
 
 #****************************************************************************
 #****************************************************************************
@@ -250,44 +356,44 @@ curl -u $artifactory_user:$artifactory_password -T ${BUILD_NUMBER}-${AUTOPRD}.ta
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter/>
-      <externalDelete/>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
     <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.2.5">
       <script>#!/bin/sh
-FilesList=$(git show --pretty="" --name-only $GERRIT_PATCHSET_REVISION)
+FilesList=$(git show --pretty=&quot;&quot; --name-only $GERRIT_PATCHSET_REVISION)
 Owner=$GERRIT_PATCHSET_UPLOADER_NAME
-message=""
+message=&quot;&quot;
 if [[ ! $GERRIT_BRANCH =~ private ]]; then
-  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ "$Owner" != "Oleg Friedman" ] &amp;&amp; [ "$Owner" != "Oriel Krispin" ] &amp;&amp; [ "$Owner" != "Shai Peretz" ] ; then
+  if [[ $FilesList =~ ipp_version.h_shipped|boards2.*\.yml  ]] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oleg Friedman&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Oriel Krispin&quot; ] &amp;&amp; [ &quot;$Owner&quot; != &quot;Shai Peretz&quot; ] ; then
       echo  ------------   You do not have permission to change the following files: ipp_version.h_shipped or *.yml    ----------------
-      message="You do not have permission to change the following files: ipp_version.h_shipped or *.yml"
+      message=&quot;You do not have permission to change the following files: ipp_version.h_shipped or *.yml&quot;
 fi
 if [[ ! $GERRIT_BRANCH =~ feature ]]; then
-if [[ $FilesList =~ src/dspg_kernel|src/u-boot ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q "$Owner";
+if [[ $FilesList =~ src/dspg_kernel|src/u-boot ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_kernel_developers | grep -q &quot;$Owner&quot;;
 then
       echo  ------------   You do not have permission to change the reference to  the SubModule C450HD_kernel  ----------------
-      message="You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux"
+      message=&quot;You do not have permission to change the reference to  the SubModule src/dspg_kernel/4.9.79/linux&quot;
 fi
 
-if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/emsc/|ib/device_management/ ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q "$Owner";
+if [[ $FilesList =~ ib/libapp/|ib/libev_app/|ib/libhttpc/|ib/libtext/|src/apps/emsc/|ib/device_management/ ]] &amp;&amp;  ! ssh -p 29418 jenkins@gerrit gerrit ls-members ipp_emsc_developers | grep -q &quot;$Owner&quot;;
 then
       echo  ------------   You do not have permission to change the reference to  the IPP-SFB SubModule ----------------
-      message="You do not have permission to change the reference to  the IPP-SFB SubModule"
+      message=&quot;You do not have permission to change the reference to  the IPP-SFB SubModule&quot;
 fi
 fi
 
-if [ ! -z "$message" ]; then
+if [ ! -z &quot;$message&quot; ]; then
       base=https://$GERRIT_HOST/a/changes
-      CURL="curl -kn -u jenkins:${jenkins_pass} --silent"
-      #id=$($CURL "$base/?q=$GERRIT_PATCHSET_REVISION" | sed -nE 's/^.*"id": "(.*)",$/\1/p')
+      CURL=&quot;curl -kn -u jenkins:${jenkins_pass} --silent&quot;
+      #id=$($CURL &quot;$base/?q=$GERRIT_PATCHSET_REVISION&quot; | sed -nE &apos;s/^.*&quot;id&quot;: &quot;(.*)&quot;,$/\1/p&apos;)
       id=${GERRIT_PROJECT}~${GERRIT_BRANCH}~${GERRIT_CHANGE_ID}
       idEscaped=${id////%2F}
 
-      endpoint="/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review"
-      $CURL -X POST "$base/$endpoint" --header "Content-Type: application/json;charset=UTF-8"  -d "{\"message\": \"$message\", \"tag\": \"jenkins\", \"notify\": \"NONE\"}"
+      endpoint=&quot;/$idEscaped/revisions/$GERRIT_PATCHSET_REVISION/review&quot;
+      $CURL -X POST &quot;$base/$endpoint&quot; --header &quot;Content-Type: application/json;charset=UTF-8&quot;  -d &quot;{\&quot;message\&quot;: \&quot;$message\&quot;, \&quot;tag\&quot;: \&quot;jenkins\&quot;, \&quot;notify\&quot;: \&quot;NONE\&quot;}&quot;
       exit 1;
   fi
 fi
@@ -301,7 +407,7 @@ fi
         <artifactoryName>797876730@1453721585664</artifactoryName>
         <artifactoryUrl>https://artifactory</artifactoryUrl>
         <deployReleaseRepository>
-          <keyFromText/>
+          <keyFromText></keyFromText>
           <keyFromSelect>ipp-review</keyFromSelect>
           <dynamicMode>false</dynamicMode>
         </deployReleaseRepository>
@@ -313,21 +419,21 @@ fi
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentialsId/>
+        <credentialsId></credentialsId>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>false</useSpecs>
       <uploadSpec>
-        <spec/>
+        <spec></spec>
       </uploadSpec>
       <downloadSpec>
-        <spec/>
+        <spec></spec>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/build/*_size_report.csv=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/build/image/*$SHORTAUTOPRD*.img=&gt;SFB/${GERRIT_BRANCH}/$TARGET
@@ -335,27 +441,27 @@ ${WORKSPACE}/build/image/phone.bin=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/build/image/rootfs.ubifs=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/include/ipp_version.h_shipped=&gt;SFB/${GERRIT_BRANCH}/$TARGET
 ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
-      <resolvePattern/>
-      <deploymentProperties/>
+      <resolvePattern></resolvePattern>
+      <deploymentProperties></deploymentProperties>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns/>
+        <includePatterns></includePatterns>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>true</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label=="ipp-centos7.4"</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4&quot;</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
-      <customBuildName/>
+      <customBuildName></customBuildName>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
-          <script/>
+          <script></script>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -377,7 +483,7 @@ ${WORKSPACE}/GTestLogFile.txt=&gt;SFB/${GERRIT_BRANCH}/$TARGET</deployPattern>
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
-      <descriptionTemplate/>
+      <descriptionTemplate></descriptionTemplate>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
