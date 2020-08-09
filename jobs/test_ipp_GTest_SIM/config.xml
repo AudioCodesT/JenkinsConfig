@@ -1,11 +1,10 @@
-<?xml version='1.1' encoding='UTF-8'?>
-<matrix-project plugin="matrix-project@1.17">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><matrix-project plugin="matrix-project@1.17">
   <actions/>
-  <description>Triggered by “Push to Gerrit”&#xd;
-Matrix job&#xd;
-* Compile Gtest SIM for 4 ipp models (405HD,430HD,440HD,450HD)&#xd;
-* Run Valgrind script&#xd;
-* push logs to Artifactory per model&#xd;
+  <description>Triggered by “Push to Gerrit”&#13;
+Matrix job&#13;
+* Compile Gtest SIM for 4 ipp models (405HD,430HD,440HD,450HD)&#13;
+* Run Valgrind script&#13;
+* push logs to Artifactory per model&#13;
 if all models pass successfully Trigger another job: ipp_voteGtestValgrind</description>
   <keepDependencies>false</keepDependencies>
   <properties>
@@ -16,7 +15,7 @@ if all models pass successfully Trigger another job: ipp_voteGtestValgrind</desc
       <useBuildBlocker>false</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>DISABLED</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs/>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
@@ -37,8 +36,8 @@ if all models pass successfully Trigger another job: ipp_voteGtestValgrind</desc
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>GERRIT_BRANCH</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -54,9 +53,9 @@ if all models pass successfully Trigger another job: ipp_voteGtestValgrind</desc
         <throttleMatrixBuilds>true</throttleMatrixBuilds>
         <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
       </matrixOptions>
-      <paramsToUseForLimit></paramsToUseForLimit>
-      <configVersion>1</configVersion>
+      <paramsToUseForLimit/>
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
@@ -81,7 +80,7 @@ if all models pass successfully Trigger another job: ipp_voteGtestValgrind</desc
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
         <noTags>false</noTags>
-        <reference></reference>
+        <reference/>
         <timeout>20</timeout>
         <depth>80</depth>
         <honorRefspec>false</honorRefspec>
@@ -100,61 +99,7 @@ if all models pass successfully Trigger another job: ipp_voteGtestValgrind</desc
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger plugin="gerrit-trigger@2.30.5">
-      <spec></spec>
-      <gerritProjects>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-          <compareType>PLAIN</compareType>
-          <pattern>IPP/SFB</pattern>
-          <branches>
-            <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-              <compareType>PLAIN</compareType>
-              <pattern>master</pattern>
-            </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch>
-          </branches>
-          <disableStrictForbiddenFileVerification>false</disableStrictForbiddenFileVerification>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject>
-      </gerritProjects>
-      <dynamicGerritProjects class="empty-list"/>
-      <skipVote>
-        <onSuccessful>true</onSuccessful>
-        <onFailed>true</onFailed>
-        <onUnstable>true</onUnstable>
-        <onNotBuilt>true</onNotBuilt>
-      </skipVote>
-      <silentMode>false</silentMode>
-      <notificationLevel></notificationLevel>
-      <silentStartMode>false</silentStartMode>
-      <escapeQuotes>true</escapeQuotes>
-      <nameAndEmailParameterMode>PLAIN</nameAndEmailParameterMode>
-      <dependencyJobsNames></dependencyJobsNames>
-      <commitMessageParameterMode>BASE64</commitMessageParameterMode>
-      <changeSubjectParameterMode>PLAIN</changeSubjectParameterMode>
-      <commentTextParameterMode>PLAIN</commentTextParameterMode>
-      <buildStartMessage></buildStartMessage>
-      <buildFailureMessage></buildFailureMessage>
-      <buildSuccessfulMessage></buildSuccessfulMessage>
-      <buildUnstableMessage></buildUnstableMessage>
-      <buildNotBuiltMessage></buildNotBuiltMessage>
-      <buildUnsuccessfulFilepath></buildUnsuccessfulFilepath>
-      <customUrl></customUrl>
-      <serverName>gerritHost</serverName>
-      <triggerOnEvents>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-          <excludeDrafts>false</excludeDrafts>
-          <excludeTrivialRebase>false</excludeTrivialRebase>
-          <excludeNoCodeChange>false</excludeNoCodeChange>
-          <excludePrivateState>false</excludePrivateState>
-          <excludeWipState>false</excludeWipState>
-        </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginPatchsetCreatedEvent>
-        <com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.events.PluginDraftPublishedEvent/>
-      </triggerOnEvents>
-      <dynamicTriggerConfiguration>false</dynamicTriggerConfiguration>
-      <triggerConfigURL></triggerConfigURL>
-      <triggerInformationAction/>
-    </com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.GerritTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>true</concurrentBuild>
   <axes>
     <hudson.matrix.TextAxis>
@@ -177,23 +122,23 @@ if all models pass successfully Trigger another job: ipp_voteGtestValgrind</desc
       <command>#check disk size if there is no enough space, delete all workspace
 set +e
 disk_size=$(df -h /dev/xvda1 --output=avail | tail -1)
-disk_size=$(echo &quot;$disk_size&quot; | sed &apos;s/ //g&apos; | cut -d&apos;G&apos; -f1)
+disk_size=$(echo "$disk_size" | sed 's/ //g' | cut -d'G' -f1)
 disk_size=${disk_size%.*}
 if [[ $disk_size -le 8 ]]
 then
-echo &quot;******************not enough space to compile, deleting other workspaces******************&quot;
-find /opt/jenkinsslave/workspace -mindepth 1 ! -regex &quot;^${WORKSPACE}\(/.*\)?&quot; -delete || true
+echo "******************not enough space to compile, deleting other workspaces******************"
+find /opt/jenkinsslave/workspace -mindepth 1 ! -regex "^${WORKSPACE}\(/.*\)?" -delete || true
 df -h
 fi</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#Find from the yml line the AUTOPRD name
-AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d&quot; &quot; -f1 | cut -d&quot;&amp;&quot; -f1`
+AUTOPRD=`echo $MAKE_CMD | sed s/.*AUTOPRD=// | cut -d" " -f1 | cut -d"&amp;" -f1`
 echo AUTOPRD=${AUTOPRD} &gt; generated_ipp_version.properties
 #In case the AUTOPRD name contain __IIM or something like that, remove it so we will find the image even if its name is _IIM (one underscore)
-echo SHORTAUTOPRD=`echo $AUTOPRD | sed &apos;s:_.*$::&apos;` &gt;&gt; generated_ipp_version.properties
+echo SHORTAUTOPRD=`echo $AUTOPRD | sed 's:_.*$::'` &gt;&gt; generated_ipp_version.properties
 
-TARGET=`echo $GERRIT_REFSPEC | sed &apos;s:refs/changes/../::; s:/:-:g&apos;`
+TARGET=`echo $GERRIT_REFSPEC | sed 's:refs/changes/../::; s:/:-:g'`
 echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
     </hudson.tasks.Shell>
     <EnvInjectBuilder plugin="envinject@2.3.0">
@@ -202,33 +147,33 @@ echo TARGET=${TARGET} &gt;&gt; generated_ipp_version.properties</command>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>User=&quot;$artifactory_user:$artifactory_password&quot;
+      <command>User="$artifactory_user:$artifactory_password"
 
 
-git status || echo &quot;failed&quot;
-cat ${WORKSPACE}/.gitmodules || echo &quot;failed&quot;
+git status || echo "failed"
+cat ${WORKSPACE}/.gitmodules || echo "failed"
 
 #clean untracked submodules and files
 git clean -ffdx 
 #**********************************************************************************************
 #***********************  ***************************************************
-if [[ &quot;$GERRIT_BRANCH&quot; == &quot;master&quot; || &quot;$GERRIT_BRANCH&quot; == &quot;feature/&quot;* || &quot;$GERRIT_BRANCH&quot; == &quot;release/3.4&quot;* ]]
+if [[ "$GERRIT_BRANCH" == "master" || "$GERRIT_BRANCH" == "feature/"* || "$GERRIT_BRANCH" == "release/3.4"* ]]
 then
-	git submodule foreach git status || echo &quot;failed&quot;
-    git submodule foreach git clean -fdx || echo &quot;failed&quot;
-    git submodule foreach git checkout -- . || echo &quot;failed&quot;
-	git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+	git submodule foreach git status || echo "failed"
+    git submodule foreach git clean -fdx || echo "failed"
+    git submodule foreach git checkout -- . || echo "failed"
+	git submodule init || ( echo "git submodule init FAILED, return code = $?"  &amp;&amp; exit 1 )
+	git submodule update || ( echo "git submodule update FAILED, return code = $?" &amp;&amp; exit 1 )
     git submodule foreach git reset --hard HEAD
 	git submodule update
 fi
 #**********************************************************************************************
 #***********************  ***************************************************
 
-#if branch name NOT contain &quot;3.1&quot;, download C450HD_kernel submodule
-if [[ &quot;$GERRIT_BRANCH&quot; != *&quot;3.1&quot;* &amp;&amp; &quot;$MAKE_CMD&quot; == &quot;auto AUTOPRD=C450HD&quot; ]]
-	then git submodule init || ( echo &quot;git submodule init FAILED, return code = $?&quot;  &amp;&amp; exit 1 )
-    	git submodule update || ( echo &quot;git submodule update FAILED, return code = $?&quot; &amp;&amp; exit 1 )
+#if branch name NOT contain "3.1", download C450HD_kernel submodule
+if [[ "$GERRIT_BRANCH" != *"3.1"* &amp;&amp; "$MAKE_CMD" == "auto AUTOPRD=C450HD" ]]
+	then git submodule init || ( echo "git submodule init FAILED, return code = $?"  &amp;&amp; exit 1 )
+    	git submodule update || ( echo "git submodule update FAILED, return code = $?" &amp;&amp; exit 1 )
 fi
 
 #compile:
@@ -247,7 +192,7 @@ sudo ./vSFB.sh gtest_valgrind
 files=$(ls ${WORKSPACE}/build.${AUTOPRD}/GTestLogs)
 for file in $files
 do
-  file=$(echo &quot;$file&quot; | cut -d&apos;/&apos; -f1)
+  file=$(echo "$file" | cut -d'/' -f1)
   sudo mv ${WORKSPACE}/build.${AUTOPRD}/GTestLogs/$file ${WORKSPACE}/build.${AUTOPRD}/GTestLogs/${AUTOPRD}_${file}
 done
 
@@ -272,14 +217,14 @@ done
   <buildWrappers>
     <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
       <installationName>default</installationName>
-      <screen></screen>
+      <screen/>
       <debug>false</debug>
       <timeout>0</timeout>
       <displayNameOffset>0</displayNameOffset>
-      <additionalOptions></additionalOptions>
+      <additionalOptions/>
       <shutdownWithBuild>false</shutdownWithBuild>
       <autoDisplayName>false</autoDisplayName>
-      <assignedLabels></assignedLabels>
+      <assignedLabels/>
       <parallelBuild>false</parallelBuild>
     </org.jenkinsci.plugins.xvfb.Xvfb>
     <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
@@ -290,8 +235,8 @@ done
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
       <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
+      <cleanupParameter/>
+      <externalDelete/>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.11.3"/>
@@ -307,52 +252,52 @@ done
         <stagingPlugin/>
       </resolverDetails>
       <deployerCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </deployerCredentialsConfig>
       <resolverCredentialsConfig>
-        <credentialsId></credentialsId>
+        <credentialsId/>
         <overridingCredentials>false</overridingCredentials>
         <ignoreCredentialPluginDisabled>false</ignoreCredentialPluginDisabled>
       </resolverCredentialsConfig>
       <useSpecs>true</useSpecs>
       <uploadSpec>
         <spec>{
-    &quot;files&quot;: [
+    "files": [
         {
-            &quot;pattern&quot;: &quot;${WORKSPACE}/build.${AUTOPRD}/GTestLogs/*&quot;,
-            &quot;target&quot;: &quot;ipp-review/SFB/${GERRIT_BRANCH}/$TARGET/test_GTestLogs/&quot;,
-             &quot;recursive&quot;: &quot;false&quot;
+            "pattern": "${WORKSPACE}/build.${AUTOPRD}/GTestLogs/*",
+            "target": "ipp-review/SFB/${GERRIT_BRANCH}/$TARGET/test_GTestLogs/",
+             "recursive": "false"
         }   
     ]
 }</spec>
       </uploadSpec>
       <downloadSpec>
-        <spec></spec>
+        <spec/>
       </downloadSpec>
       <deployPattern>${WORKSPACE}/build.${AUTOPRD}/GTestLogs/*=&gt;SFB/${GERRIT_BRANCH}/$TARGET/Gtest-Logs/${AUTOPRD}</deployPattern>
-      <resolvePattern></resolvePattern>
-      <deploymentProperties></deploymentProperties>
+      <resolvePattern/>
+      <deploymentProperties/>
       <deployBuildInfo>true</deployBuildInfo>
       <includeEnvVars>false</includeEnvVars>
       <envVarsPatterns>
-        <includePatterns></includePatterns>
+        <includePatterns/>
         <excludePatterns>*password*,*secret*</excludePatterns>
       </envVarsPatterns>
       <discardOldBuilds>true</discardOldBuilds>
       <discardBuildArtifacts>true</discardBuildArtifacts>
       <asyncBuildRetention>false</asyncBuildRetention>
-      <artifactoryCombinationFilter>label==&quot;ipp-centos7.4_test&quot;</artifactoryCombinationFilter>
+      <artifactoryCombinationFilter>label=="ipp-centos7.4_test"</artifactoryCombinationFilter>
       <multiConfProject>true</multiConfProject>
-      <customBuildName></customBuildName>
+      <customBuildName/>
       <overrideBuildName>false</overrideBuildName>
     </org.jfrog.hudson.generic.ArtifactoryGenericConfigurator>
     <EnvInjectBuildWrapper plugin="envinject@2.3.0">
       <info>
         <propertiesContent>artifactory_user=jenkins</propertiesContent>
         <secureGroovyScript plugin="script-security@1.71">
-          <script></script>
+          <script/>
           <sandbox>false</sandbox>
         </secureGroovyScript>
         <loadFilesFromMaster>false</loadFilesFromMaster>
@@ -374,7 +319,7 @@ done
     </EnvInjectPasswordWrapper>
     <org.jenkinsci.plugins.buildnamesetter.BuildNameSetter plugin="build-name-setter@2.1.0">
       <template>#${BUILD_NUMBER}__branch:${GERRIT_BRANCH}</template>
-      <descriptionTemplate></descriptionTemplate>
+      <descriptionTemplate/>
       <runAtStart>true</runAtStart>
       <runAtEnd>true</runAtEnd>
     </org.jenkinsci.plugins.buildnamesetter.BuildNameSetter>
