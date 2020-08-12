@@ -79,8 +79,8 @@ BRANCH=${TAG:0:3}
 echo "BRANCH=${BRANCH}" &gt; prop
 
 #Get Image Id
-ConfImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$ConfImageName --output text --query 'Images[*].ImageId')
-RouterImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values=$RouterImageName --output text --query 'Images[*].ImageId')
+ConfImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values="$ConfImageName" --output text --query 'Images[*].ImageId')
+RouterImageId=$(aws ec2 describe-images --filters Name=tag:Name,Values="$RouterImageName" --output text --query 'Images[*].ImageId')
 
 
 printf "%-30s%-10s${ConfImageId}\n" "${currentRegion}" " " &gt;&gt; ConfRegionsNameAndIds.txt
