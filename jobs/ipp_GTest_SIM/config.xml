@@ -237,6 +237,7 @@ yes | make distclean
 
 make GTEST=1 $MAKE_CMD
 #run valgrind script
+sudo xauth add $(xauth -f ~centos/.Xauthority list | tail -1)
 sudo ./vSFB.sh gtest_valgrind
 
 
@@ -366,6 +367,18 @@ sudo rm -rf build.${AUTOPRD}/GTestLogs</command>
     </com.chikli.hudson.plugin.naginator.NaginatorPublisher>
   </publishers>
   <buildWrappers>
+    <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
+      <installationName>default</installationName>
+      <screen/>
+      <debug>false</debug>
+      <timeout>0</timeout>
+      <displayNameOffset>0</displayNameOffset>
+      <additionalOptions/>
+      <shutdownWithBuild>false</shutdownWithBuild>
+      <autoDisplayName>false</autoDisplayName>
+      <assignedLabels/>
+      <parallelBuild>false</parallelBuild>
+    </org.jenkinsci.plugins.xvfb.Xvfb>
     <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
